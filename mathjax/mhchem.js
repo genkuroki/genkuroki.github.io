@@ -1,3 +1,6 @@
+/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
+/* vim: set ts=2 et sw=2 tw=80: */
+
 /*************************************************************
  *
  *  MathJax/extensions/TeX/mhchem.js
@@ -22,315 +25,1691 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-MathJax.Extension["TeX/mhchem"]={version:"3.0.6"},MathJax.Hub.Register.StartupHook("TeX Jax Ready",
-function(){var n=MathJax.InputJax.TeX,r=MathJax.Object.Subclass({string:"",Init:
-function(n){this.string=n},Parse:
-function(r){try{return o.go(t.go(this.string,r))}catch(r){n.Error(r)}}}),t={};t.go=
-function(n,r){if(!n)return n;void 0===r&&(r="ce");var o="0",a={};a.pL=0,n=n.replace(/[\u2212\u2013\u2014\u2010]/g,"-"),n=n.replace(/[\u2026]/g,"...");for(var e,u,i=[];;){e!==n?(u=10,e=n):u--;var s=t.c[r],l=s.e.length;n:for(var h=0;h<l;h++){var p=s.e[h],c=p.g[o]||p.g["*"]||null;if(c){var f=t.h(p.h,n);if(f){for(var m=t.j([],c.k),k=m.length,d=0;d<k;d++){var g,q=m[d],v=void 0;if(q.l&&(v=q.m,q=q.l),"string"==typeof q)if(s.g[q])g=s.g[q](a,f.h,v);else{if(!t.g[q])throw["MhchemBugA","mhchem bug A. Please report. ("+q+")"];g=t.g[q](a,f.h,v)}else"function"==typeof q&&(g=q(a,f.h));i=t.j(i,g)}if(o=c.n||o,!(n.length>0))return i;if(c.s||(n=f.t),!c.u)break n}}}if(u<=0)throw["MhchemBugU","mhchem bug U. Please report."]}},
-t.j=
-function(n,r){return r?n?n.concat(r):[].concat(r):n},t.w={"~C":/^$/,"~A":/^./,"~B":/^./,"%m":/^\s/,"%l":/^\s(?=[A-Z\\$])/,"~@":/^[a-z]/,x:/^x/,x$:/^x$/,i$:/^i$/,"~M":/^(?:[a-zA-Z\u03B1-\u03C9\u0391-\u03A9?@]|(?:\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\s+|\{\}|(?![a-zA-Z]))))+/,"@z":/^\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\s+|\{\}|(?![a-zA-Z]))/,"~P":/^(?:([a-z])(?:$|[^a-zA-Z]))$/,"@%":/^\$(?:([a-z])(?:$|[^a-zA-Z]))\$$/,"~O":/^(?:\$?[\u03B1-\u03C9]\$?|\$?\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega)\s*\$?)(?:\s+|\{\}|(?![a-zA-Z]))$/,"~u":/^[0-9]+/,"@h":/^[+\-]?(?:[0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+))/,"@g":/^[+\-]?[0-9]+(?:[.,][0-9]+)?/,"%T":
-function(n){var r=n.match(/^(\+\-|\+\/\-|\+|\-|\\pm\s?)?([0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)(\((?:[0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)\))?(?:([eE]|\s*(\*|x|\\times|\u00D7)\s*10\^)([+\-]?[0-9]+|\{[+\-]?[0-9]+\}))?/);return r&&r[0]?{h:r.splice(1),t:n.substr(r[0].length)}:null},aj:
-function(n){var r=n.match(/^(\+\-|\+\/\-|\+|\-|\\pm\s?)?([0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)\^([+\-]?[0-9]+|\{[+\-]?[0-9]+\})/);return r&&r[0]?{h:r.splice(1),t:n.substr(r[0].length)}:null},"%n":
-function(n){var r=this["@W"](n,"",/^\([a-z]{1,3}(?=[\),])/,")","");if(r&&r.t.match(/^($|[\s,;\)\]\}])/))return r;var t=n.match(/^(?:\((?:\\ca\s?)?\$[amothc]\$\))/);return t?{h:t[0],t:n.substr(t[0].length)}:null},ae:/^_\{(\([a-z]{1,3}\))\}/,"@K":/^(?:\\\{|\[|\()/,"@c":/^(?:\)|\]|\\\})/,", ":/^[,;]\s*/,",":/^[,;]/,".":/^[.]/,". ":/^([.\u22C5\u00B7\u2022])\s*/,"@i":/^\.\.\.(?=$|[^.])/,"* ":/^([*])\s*/,"@P":
-function(n){return this["@W"](n,"^{","","","}")},"@L":
-function(n){return this["@W"](n,"^","$","$","")},"^a":/^\^([0-9]+|[^\\_])/,"@O":
-function(n){return this["@W"](n,"^",/^\\[a-zA-Z]+\{/,"}","","","{","}","",!0)},"@N":
-function(n){return this["@W"](n,"^",/^\\[a-zA-Z]+\{/,"}","")},"^\\x":/^\^(\\[a-zA-Z]+)\s*/,"%U":/^\^(-?\d+)/,"'":/^'/,"@Y":
-function(n){return this["@W"](n,"_{","","","}")},"@Q":
-function(n){return this["@W"](n,"_","$","$","")},_9:/^_([+\-]?[0-9]+|[^\\])/,"@T":
-function(n){return this["@W"](n,"_",/^\\[a-zA-Z]+\{/,"}","","","{","}","",!0)},"@S":
-function(n){return this["@W"](n,"_",/^\\[a-zA-Z]+\{/,"}","")},"@R":/^_(\\[a-zA-Z]+)\s*/,"^_":/^(?:\^(?=_)|\_(?=\^)|[\^_]$)/,"{}":/^\{\}/,"%B":
-function(n){return this["@W"](n,"","{","}","")},"%A":
-function(n){return this["@W"](n,"{","","","}")},"@~":
-function(n){return this["@W"](n,"","$","$","")},"@a":
-function(n){return this["@W"](n,"${","","","}$")},"@@":
-function(n){return this["@W"](n,"$","","","$")},"%D":/^[=<>]/,"#":/^[#\u2261]/,"+":/^\+/,"-$":/^-(?=[\s_},;\]\/]|$|\([a-z]+\))/,"-9":/^-(?=[0-9])/,"@f":/^-(?=(?:[spd]|sp)(?:$|[\s,;\)\]\}]))/,"-":/^-/,ai:/^(?:\\pm|\$\\pm\$|\+-|\+\/-)/,"~Q":/^(?:\+|(?:[\-=<>]|<<|>>|\\approx|\$\\approx\$)(?=\s|$|-?[0-9]))/,"~c":/^(?:v|\(v\)|\^|\(\^\))(?=$|[\s,;\)\]\}])/,"@r":
-function(n){return this["@W"](n,"\\bond{","","","}")},"->":/^(?:<->|<-->|->|<-|<=>>|<<=>|<=>|[\u2192\u27F6\u21CC])/,"@m":/^[CMT](?=\[)/,"@o":
-function(n){return this["@W"](n,"[","","","]")},al:/^(&|@q|\\hline)\s*/,"@p":/^(?:\\[,\ ;:])/,"@G":
-function(n){return this["@W"](n,"",/^\\[a-zA-Z]+\{/,"}","","","{","}","",!0)},"@F":
-function(n){return this["@W"](n,"",/^\\[a-zA-Z]+\{/,"}","")},"@t":/^\\ca(?:\s+|(?![a-zA-Z]))/,"@E":/^(?:\\[a-zA-Z]+\s*|\\[_&{}%])/,"~R":/^(?:[0-9]{1,2}[spdfgh]|[0-9]{0,2}sp)(?=$|[^a-zA-Z])/,"~S":/^[\/~|]/,"@y":
-function(n){return this["@W"](n,"\\frac{","","","}","{","","","}")},"@A":
-function(n){return this["@W"](n,"\\overset{","","","}","{","","","}")},"@C":
-function(n){return this["@W"](n,"\\underset{","","","}","{","","","}")},"@B":
-function(n){return this["@W"](n,"\\underbrace{","","","}_","{","","","}")},"@w":
-function(n){return this["@W"](n,"\\color{","","","}")},"@x":
-function(n){return this["@W"](n,"\\color{","","","}","{","","","}")},"@v":
-function(n){return this["@W"](n,"\\color","\\","",/^(?=\{)/,"{","","","}")},"@u":
-function(n){return this["@W"](n,"\\ce{","","","}")},"~Z":/^(?:[+-][IVX]+|\\pm\s*0|\$\\pm\$\s*0)$/,"a~":/^(?:[+-]?\s?[IVX]+|\\pm\s*0|\$\\pm\$\s*0)$/,"%d":/^[IVX]+/,"@j":/^[+\-]?(?:[0-9]+|\$[a-z]\$|[a-z])\/[0-9]+(?:\$[a-z]\$|[a-z])?$/,"~%":
-function(n){var r;if(r=n.match(/^(?:(?:(?:\([+\-]?[0-9]+\/[0-9]+\)|[+\-]?(?:[0-9]+|\$[a-z]\$|[a-z])\/[0-9]+|[+\-]?[0-9]+[.,][0-9]+|[+\-]?\.[0-9]+|[+\-]?[0-9]+)(?:[a-z](?=\s*[A-Z]))?)|[+\-]?[a-z](?=\s*[A-Z])|\+(?!\s))/))return{h:r[0],t:n.substr(r[0].length)};var t=this["@W"](n,"","$","$","");return t&&(r=t.h.match(/^\$(?:\(?[+\-]?(?:[0-9]*[a-z]?[+\-])?[0-9]*[a-z](?:[+\-][0-9]*[a-z]?)?\)?|\+|-)\$$/))?{h:r[0],t:n.substr(r[0].length)}:null},"~a":
-function(n){return this["~%"](n)},"@b":/^(?:[A-Z][a-z]{0,2}|i)(?=,)/,"~E":
-function(n){if(n.match(/^\([a-z]+\)$/))return null;var r=n.match(/^(?:[a-z]|(?:[0-9\ \+\-\,\.\(\)]+[a-z])+[0-9\ \+\-\,\.\(\)]*|(?:[a-z][0-9\ \+\-\,\.\(\)]+)+[a-z]?)$/);return r?{h:r[0],t:n.substr(r[0].length)}:null},"%z":/^(?:pH|pOH|pC|pK|iPr|iBu)(?=$|[^a-zA-Z])/,"~v":/^pK([abw]|eq|sp)(?=$|[^a-zA-Z0-9])/,"~w":/^pK_([abw])/,"~x":/^pK_{([abw]|eq|sp)}/,"pK(a1)":/^pK([ab])([123])(?=$|[^a-zA-Z0-9])/,"pK_{(a1)}":/^pK_{([ab])([123])}/,ab:/^K([abwfcp]|eq|sp)(?=$|[^a-zA-Z0-9])/,ac:/^K_([abwfcpCP])/,ad:/^K_{([abwfcpCP]|eq|sp)}/,"K(a1)":/^K([ab])([123])(?=$|[^a-zA-Z0-9])/,"K_{(a1)}":/^K_{([ab])([123])}/,"/":/^\s*(\/)\s*/,"//":/^\s*(\/\/)\s*/,"*":/^\s*\*\s*/,"@W":
-function(n,r,t,o,a,e,u,i,s,l){var h=this["@V"](n,r);if(null===h)return null;if(n=n.substr(h.length),h=this["@V"](n,t),null===h)return null;var p=this["@U"](n,h.length,o||a);if(null===p)return null;var c=n.substring(0,o?p.y:p.z);if(e||u){var f=this["@W"](n.substr(p.y),e,u,i,s);if(null===f)return null;var m=[c,f.h];return l&&(m=m.join("")),{h:m,t:f.t}}return{h:c,t:n.substr(p.y)}},
-"@V":
-function(n,r){if("string"==typeof r)return 0!==n.indexOf(r)?null:r;var t=n.match(r);return t?t[0]:null},"@U":
-function(n,r,t){for(var o=0;r<n.length;){var a=n.charAt(r),e=this["@V"](n.substr(r),t);if(null!==e&&0===o)return{z:r,y:r+e.length};if("{"===a)o++;else if("}"===a){if(0===o)throw["ExtraCloseMissingOpen","Extra close brace or missing open brace"];o--}r++}return null}},
-t.h=
-function(n,r){var o=t.w[n];if(void 0===o)throw["MhchemBugP","mhchem bug P. Please report. ("+n+")"];if("function"==typeof o)return t.w[n](r);var a=r.match(o);if(a){var e;return e=a[2]?[a[1],a[2]]:a[1]?a[1]:a[0],{h:e,t:r.substr(a[0].length)}}return null},t.g={"a=":
-function(n,r){n.a=(n.a||"")+r},"b=":
-function(n,r){n.b=(n.b||"")+r},"p=":
-function(n,r){n.p=(n.p||"")+r},"o=":
-function(n,r){n.o=(n.o||"")+r},"q=":
-function(n,r){n.q=(n.q||"")+r},"d=":
-function(n,r){n.d=(n.d||"")+r},"%c":
-function(n,r){n.rm=(n.rm||"")+r},"%t":
-function(n,r){n.text=(n.text||"")+r},"~J":
-function(n,r,t){return{l:t}},
-"~K":
-function(n,r,t){return{l:t,p1:r}},
-"~L":
-function(n,r,t){return{l:t,p1:r[0],p2:r[1]}},
-"~s":
-function(n,r){return r},rm:
-function(n,r){return{l:"rm",p1:r}},
-"%s":
-function(n,r){return t.go(r,"%s")},"%C":
-function(n,r){var o=["{"];return o=t.j(o,t.go(r,"%s")),o=t.j(o,"}")},"%r":
-function(n,r){return t.go(r,"%r")},"%q":
-function(n,r){return t.go(r,"%q")},"~f":
-function(n,r,t){return{l:"~f",A:t||r}},
-"~m":
-function(n,r){return{l:"~l",B:r[0]}},
-ce:
-function(n,r){return t.go(r)},"@k":
-function(n,r){var o;r.match(/^[+\-]/)&&(o=[r.substr(0,1)],r=r.substr(1));var a=r.match(/^([0-9]+|\$[a-z]\$|[a-z])\/([0-9]+)(\$[a-z]\$|[a-z])?$/);return a[1]=a[1].replace(/\$/g,""),o=t.j(o,{l:"~F",p1:a[1],p2:a[2]}),a[3]&&(a[3]=a[3].replace(/\$/g,""),o=t.j(o,{l:"%r",p1:a[3]})),o},"@l":
-function(n,r){return t.go(r,"@l")}},
-t.c={},t.C=
-function(n){var r,t,o,a,e={};for(r in n)if(r.indexOf("|")!==-1)for(o=r.split("|"),a=0;a<o.length;a++)e[o[a]]=n[r];else e[r]=n[r];var u=[];for(r in e){var i={},s=e[r];for(t in s)if(t.indexOf("|")!==-1)for(o=t.split("|"),a=0;a<o.length;a++)i[o[a]]=s[t];else i[t]=s[t];u.push({h:r,g:i})}return u},t.c.ce={e:t.C({"~C":{"*":{k:"~T"}},
-"~A":{"0|1|2":{k:"%F",s:!0,u:!0}},
-"~Z":{0:{k:"a%"}},
-"@m":{r:{k:"%b",n:"rt"},rd:{k:"%g",n:"%i"}},
-"~c":{"0|1|2|as":{k:["%j","~T","~Q"],n:"1"}},
-"~v|~w|~x":{"0|1|2":{k:[{l:"~T",m:1},{l:"~K",m:"aa"}],n:"1"}},
-"ab|ac|ad":{"0|1|2":{k:[{l:"~T",m:1},{l:"~K",m:"Ka"}],n:"1"}},
-"pK(a1)|pK_{(a1)}":{"0|1|2":{k:[{l:"~T",m:1},{l:"~L",m:"af"}],n:"1"}},
-"K(a1)|K_{(a1)}":{"0|1|2":{k:[{l:"~T",m:1},{l:"~L",m:"ag"}],n:"1"}},
-"%z":{"0|1|2":{k:["o=","~T"],n:"1"}},
-"~R":{"0|1|2|3":{k:"o=",n:"o"}},
-"->":{"0|1|2|3":{k:"r=",n:"r"},"a|as":{k:["~T","r="],n:"r"},"*":{k:["~T","r="],n:"r"}},
-"+":{o:{k:"~t",n:"d"},"d|D":{k:"d=",n:"d"},q:{k:"d=",n:"qd"},"qd|qD":{k:"d=",n:"qd"},dq:{k:["~T","d="],n:"d"},3:{k:["%j","~T","~Q"],n:"0"}},
-"~%":{"0|2":{k:"a=",n:"a"}},
-ai:{"0|1|2|a|as":{k:["%j","~T",{l:"~Q",m:"\\pm"}],n:"0"}},
-"~Q":{"0|1|2|a|as":{k:["%j","~T","~Q"],n:"0"}},
-"-$":{"o|q":{k:["~g","~T"],n:"qd"},d:{k:"d=",n:"d"},D:{k:["~T",{l:"~f",m:"-"}],n:"3"},q:{k:"d=",n:"qd"},qd:{k:"d=",n:"qd"},"qD|dq":{k:["~T",{l:"~f",m:"-"}],n:"3"}},
-"-9":{"3|o":{k:["~T",{l:"~J",m:"~I"}],n:"3"}},
-"@f":{o:{k:{l:"@e",m:!0},n:"2"},d:{k:{l:"@d",m:!0},n:"2"}},
-"-":{"0|1|2":{k:[{l:"~T",m:1},"%E",{l:"~f",m:"-"}],n:"3"},3:{k:{l:"~f",m:"-"}},
-a:{k:["~T",{l:"~J",m:"~I"}],n:"2"},as:{k:[{l:"~T",m:2},{l:"~f",m:"-"}],n:"3"},b:{k:"b="},o:{k:"@e",n:"2"},q:{k:"@e",n:"2"},"d|qd|dq":{k:"@d",n:"2"},"D|qD|p":{k:["~T",{l:"~f",m:"-"}],n:"3"}},
-"~a":{"1|3":{k:"a=",n:"a"}},
-"~M":{"0|1|2|3|a|as|b|p|bp|o":{k:"o=",n:"o"},"q|dq":{k:["~T","o="],n:"o"},"d|D|qd|qD":{k:"~N",n:"o"}},
-"~u":{o:{k:"q=",n:"q"},"d|D":{k:"q=",n:"dq"},q:{k:["~T","o="],n:"o"},a:{k:"o=",n:"o"}},
-"%l":{"b|p|bp":{}},
-"%m":{a:{n:"as"},0:{k:"%j"},"1|2":{k:"%k"},"r|rt|rd|%i|%h":{k:"~T",n:"0"},"*":{k:["~T","%k"],n:"1"}},
-al:{"1|2":{k:["~T",{l:"~K",m:"al"}]},
-"*":{k:["~T",{l:"~K",m:"al"}],n:"0"}},
-"@o":{"r|rt":{k:"%a",n:"rd"},"rd|%i":{k:"%f",n:"%h"}},
-"@i":{"o|d|D|dq|qd|qD":{k:["~T",{l:"~f",m:"..."}],n:"3"},"*":{k:[{l:"~T",m:1},{l:"~J",m:"~z"}],n:"1"}},
-". |* ":{"*":{k:["~T",{l:"~J",m:"~~"}],n:"1"}},
-"%n":{"*":{k:["~T","%p"],n:"1"}},
-"@K":{"a|as|o":{k:["o=","~T","%G"],n:"2"},"0|1|2|3":{k:["o=","~T","%G"],n:"2"},"*":{k:["~T","o=","~T","%G"],n:"2"}},
-"@c":{"0|1|2|3|b|p|bp|o":{k:["o=","%H"],n:"o"},"a|as|d|D|q|qd|qD|dq":{k:["~T","o=","%H"],n:"o"}},
-", ":{"*":{k:["~T","~q"],n:"0"}},
-"^_":{"*":{}},
-"@P|@L":{"0|1|2|as":{k:"b=",n:"b"},p:{k:"b=",n:"bp"},"3|o":{k:"~t",n:"D"},q:{k:"d=",n:"qD"},"d|D|qd|qD|dq":{k:["~T","d="],n:"D"}},
-"^a|@O|@N|^\\x|'":{"0|1|2|as":{k:"b=",n:"b"},p:{k:"b=",n:"bp"},"3|o":{k:"~t",n:"d"},q:{k:"d=",n:"qd"},"d|qd|D|qD":{k:"d="},dq:{k:["~T","d="],n:"d"}},
-ae:{"d|D|q|qd|qD|dq":{k:["~T","q="],n:"q"}},
-"@Y|@Q|_9|@T|@S|@R":{"0|1|2|as":{k:"p=",n:"p"},b:{k:"p=",n:"bp"},"3|o":{k:"q=",n:"q"},"d|D":{k:"q=",n:"dq"},"q|qd|qD|dq":{k:["~T","q="],n:"q"}},
-"%D":{"0|1|2|3|a|as|o|q|d|D|qd|qD|dq":{k:[{l:"~T",m:2},"~f"],n:"3"}},
-"#":{"0|1|2|3|a|as|o":{k:[{l:"~T",m:2},{l:"~f",m:"#"}],n:"3"}},
-"{}":{"*":{k:{l:"~T",m:1},n:"1"}},
-"%B":{"0|1|2|3|a|as|b|p|bp":{k:"o=",n:"o"},"o|d|D|q|qd|qD|dq":{k:["~T","o="],n:"o"}},
-"@~":{a:{k:"a="},"0|1|2|3|as|b|p|bp|o":{k:"o=",n:"o"},"as|o":{k:"o="},"q|d|D|qd|qD|dq":{k:["~T","o="],n:"o"}},
-"@r":{"*":{k:[{l:"~T",m:2},"~f"],n:"3"}},
-"@y":{"*":{k:[{l:"~T",m:1},"~H"],n:"3"}},
-"@A":{"*":{k:[{l:"~T",m:2},"~X"],n:"3"}},
-"@C":{"*":{k:[{l:"~T",m:2},"%y"],n:"3"}},
-"@B":{"*":{k:[{l:"~T",m:2},"%w"],n:"3"}},
-"@x|@v":{"*":{k:[{l:"~T",m:2},"~k"],n:"3"}},
-"@w":{"*":{k:[{l:"~T",m:2},"~m"]}},
-"@u":{"*":{k:[{l:"~T",m:2},"ce"],n:"3"}},
-"@p":{"*":{k:[{l:"~T",m:1},"~s"],n:"1"}},
-"@G|@F|@E":{"0|1|2|3|a|as|b|p|bp|o|c0":{k:["o=","~T"],n:"3"},"*":{k:["~T","o=","~T"],n:"3"}},
-"~S":{"*":{k:[{l:"~T",m:1},"~s"],n:"3"}},
-"~B":{a:{k:"@Z",n:"o",s:!0},as:{k:[{l:"~T"},"%k"],n:"1",s:!0},"r|rt|rd|%i|%h":{k:["~T"],n:"0",s:!0},"*":{k:["~T","~s"],n:"3"}}}),g:{"~N":
-function(n,r){var o;if(n.d.match(/^[0-9]+$/)){var a=n.d;n.d=void 0,o=this["~T"](n),n.b=a}else o=this["~T"](n);return t.g["o="](n,r),o},"~t":
-function(n,r){n.d=r,n["%I"]="kv"},"~g":
-function(n,r){if(n.yB){var o=t.j(o,this["~T"](n));return o=t.j(o,t.g["~f"](n,r,"-"))}n.d=r},"@e":
-function(n,r,o){var a=o||this["@X"](n,r),e=t.j(null,this["~T"](n,r));return e=a?t.j(e,{l:"~I"}):t.j(e,t.g["~f"](n,r,"-"))},"@d":
-function(n,r,o){var a,e=o||this["@X"](n,r);if(e)a=t.j(a,this["~T"](n,r)),a=t.j(a,{l:"~I"});else{var u=t.h("~u",n.d||"");u&&""===u.t?(a=t.j(null,t.g["d="](n,r)),a=t.j(a,this["~T"](n))):(a=t.j(a,this["~T"](n,r)),a=t.j(a,t.g["~f"](n,r,"-")))}return a},"@X":
-function(n,r){var o=t.h("~R",n.o||""),a=t.h("~O",n.o||""),e=t.h("~P",n.o||""),u=t.h("@%",n.o||""),i="-"===r&&(o&&""===o.t||a||e||u);return!i||n.a||n.b||n.p||n.d||n.q||o||!e||(n.o="$"+n.o+"$"),i},"@Z":
-function(n,r){n.o=n.a,n.a=void 0},"%k":
-function(n,r){n.sb=!0},"%j":
-function(n,r){n.sb=!1},"%E":
-function(n,r){n.yB=!0},"%F":
-function(n,r){n.yB=!1},"%G":
-function(n,r){n.pL++},"%H":
-function(n,r){n.pL--},"%p":
-function(n,r){return r=t.go(r,"o"),{l:"%p",p1:r}},
-"~q":
-function(n,r){var t=r.replace(/\s*$/,""),o=t!==r;return o&&0===n.pL?{l:"~n",p1:t}:{l:"~o",p1:t}},
-"~T":
-function(n,r,o){var a;n.r?("M"===n.rdt?n.rd=t.go(n.rd,"%r"):"T"===n.rdt?n.rd=[{l:"%s",p1:n.rd}]:n.rd=t.go(n.rd),"M"===n.rqt?n.rq=t.go(n.rq,"%r"):"T"===n.rqt?n.rq=[{l:"%s",p1:n.rq}]:n.rq=t.go(n.rq),a={l:"~b",r:n.r,rd:n.rd,rq:n.rq}):(a=[],n.a||n.b||n.p||n.o||n.q||n.d||o?(n.sb&&a.push({l:"~D"}),n.o||n.q||n.d||n.b||n.p||2===o?n.o||n.q||n.d||!n.b&&!n.p?n.o&&"kv"===n["%I"]&&t.h("a~",n.d||"")?n["%I"]="~Y":n.o&&"kv"===n["%I"]&&!n.q&&(n["%I"]=void 0):(n.o=n.a,n.d=n.b,n.q=n.p,n.a=n.b=n.p=void 0):(n.o=n.a,n.a=void 0),n.a=t.go(n.a,"a"),n.b=t.go(n.b,"bd"),n.p=t.go(n.p,"pq"),n.o=t.go(n.o,"o"),"~Y"===n["%I"]?n.d=t.go(n.d,"~Y"):n.d=t.go(n.d,"bd"),n.q=t.go(n.q,"pq"),a.push({l:"~h",a:n.a,b:n.b,p:n.p,o:n.o,q:n.q,d:n.d,"%I":n["%I"]})):a=null);for(var e in n)"pL"!==e&&"yB"!==e&&delete n[e];return a},"a%":
-function(n,r){var o=["{"];return o=t.j(o,t.go(r,"~Y")),o=o.concat(["}"])},"~H":
-function(n,r){return{l:"~G",p1:t.go(r[0]),p2:t.go(r[1])}},
-"~X":
-function(n,r){return{l:"~W",p1:t.go(r[0]),p2:t.go(r[1])}},
-"%y":
-function(n,r){return{l:"%x",p1:t.go(r[0]),p2:t.go(r[1])}},
-"%w":
-function(n,r){return{l:"%v",p1:t.go(r[0]),p2:t.go(r[1])}},
-"~k":
-function(n,r){return{l:"~j",F:r[0],G:t.go(r[1])}},
-"r=":
-function(n,r){n.r=(n.r||"")+r},"%b":
-function(n,r){n.rdt=(n.rdt||"")+r},"%a":
-function(n,r){n.rd=(n.rd||"")+r},"%g":
-function(n,r){n.rqt=(n.rqt||"")+r},"%f":
-function(n,r){n.rq=(n.rq||"")+r},"~Q":
-function(n,r,t){return{l:"~Q",A:t||r}}}},
-t.c.a={e:t.C({"~C":{"*":{}},
-"@j":{0:{k:"@k"}},
-"~A":{0:{n:"1",s:!0}},
-"@@":{"*":{k:"%q",n:"1"}},
-",":{"*":{k:{l:"~J",m:"~r"}}},
-"~B":{"*":{k:"~s"}}}),g:{}},
-t.c.o={e:t.C({"~C":{"*":{}},
-"@j":{0:{k:"@k"}},
-"~A":{0:{n:"1",s:!0}},
-"~M":{"*":{k:"rm"}},
-"@t":{"*":{k:{l:"~J",m:"~i"}}},
-"@G|@F|@E":{"*":{k:"~s"}},
-"@a|@@":{"*":{k:"%r"}},
-"%A":{"*":{k:"%C"}},
-"~B":{"*":{k:"~s"}}}),g:{}},
-t.c["%s"]={e:t.C({"~C":{"*":{k:"~T"}},
-"%B":{"*":{k:"%t"}},
-"@a|@@":{"*":{k:"%r"}},
-"@z":{"*":{k:["~T","rm"]}},
-"@p|@G|@F|@E":{"*":{k:["~T","~s"]}},
-"~A":{"*":{k:"%t"}}}),g:{"~T":
-function(n,r){if(n.text){var t={l:"%s",p1:n.text};for(var o in n)delete n[o];return t}return null}}},
-t.c.pq={e:t.C({"~C":{"*":{}},
-"%n":{"*":{k:"%p"}},
-i$:{0:{n:"!f",s:!0}},
-"@b":{0:{k:"rm",n:"0"}},
-"~E":{0:{n:"f",s:!0}},
-"@j":{0:{k:"@k"}},
-"~A":{0:{n:"!f",s:!0}},
-"@a|@@":{"*":{k:"%r"}},
-"%A":{"*":{k:"%s"}},
-"~@":{f:{k:"%r"}},
-"~M":{"*":{k:"rm"}},
-"@h":{"*":{k:"@l"}},
-",":{"*":{k:{l:"~K",m:"~p"}}},
-"@x|@v":{"*":{k:"~k"}},
-"@w":{"*":{k:"~m"}},
-"@u":{"*":{k:"ce"}},
-"@p|@G|@F|@E":{"*":{k:"~s"}},
-"~B":{"*":{k:"~s"}}}),g:{"%p":
-function(n,r){return r=t.go(r,"o"),{l:"%K",p1:r}},
-"~k":
-function(n,r){return{l:"~j",F:r[0],G:t.go(r[1],"pq")}}}},
-t.c.bd={e:t.C({"~C":{"*":{}},
-x$:{0:{n:"!f",s:!0}},
-"~E":{0:{n:"f",s:!0}},
-"~A":{0:{n:"!f",s:!0}},
-"@g":{"*":{k:"@l"}},
-".":{"*":{k:{l:"~J",m:"~y"}}},
-"~@":{f:{k:"%r"}},
-x:{"*":{k:{l:"~J",m:"@n"}}},
-"~M":{"*":{k:"rm"}},
-"'":{"*":{k:{l:"~J",m:"%%"}}},
-"@a|@@":{"*":{k:"%r"}},
-"%A":{"*":{k:"%s"}},
-"@x|@v":{"*":{k:"~k"}},
-"@w":{"*":{k:"~m"}},
-"@u":{"*":{k:"ce"}},
-"@p|@G|@F|@E":{"*":{k:"~s"}},
-"~B":{"*":{k:"~s"}}}),g:{"~k":
-function(n,r){return{l:"~j",F:r[0],G:t.go(r[1],"bd")}}}},
-t.c["~Y"]={e:t.C({"~C":{"*":{}},
-"%d":{"*":{k:"%e"}},
-"@a|@@":{"*":{k:"%r"}},
-"~A":{"*":{k:"~s"}}}),g:{"%e":
-function(n,r){return{l:"%d",p1:r}}}},
-t.c["%r"]={e:t.C({"~C":{"*":{k:"~T"}},
-"@u":{"*":{k:["~T","ce"]}},
-"%B|@p|@G|@F|@E":{"*":{k:"o="}},
-"~A":{"*":{k:"o="}}}),g:{"~T":
-function(n,r){if(n.o){var t={l:"%r",p1:n.o};for(var o in n)delete n[o];return t}return null}}},
-t.c["%q"]={e:t.C({"~C":{"*":{k:"~T"}},
-"@u":{"*":{k:["~T","ce"]}},
-"%B|@p|@G|@F|@E":{"*":{k:"o="}},
-"-|+":{"*":{k:"%u"}},
-"~A":{"*":{k:"o="}}}),g:{"%u":
-function(n,r){n.o=(n.o||"")+"{"+r+"}"},"~T":
-function(n,r){if(n.o){var t={l:"%r",p1:n.o};for(var o in n)delete n[o];return t}return null}}},
-t.c["@l"]={e:t.C({"~C":{"*":{}},
-",":{"*":{k:"~q"}},
-"~A":{"*":{k:"~s"}}}),g:{"~q":
-function(n,r){return{l:"~r"}}}},
-t.c.pu={e:t.C({"~C":{"*":{k:"~T"}},
-"@K|@c":{"0|a":{k:"~s"}},
-aj:{0:{k:"ak",n:"a"}},
-"%T":{0:{k:"%Z",n:"a"}},
-"%m":{"0|a":{}},
-ai:{"0|a":{k:{l:"~Q",m:"\\pm"},n:"0"}},
-"~Q":{"0|a":{k:"~s",n:"0"}},
-"//":{d:{k:"o=",n:"/"}},
-"/":{d:{k:"o=",n:"/"}},
-"%B|~A":{"0|d":{k:"d=",n:"d"},a:{k:["%m","d="],n:"d"},"/|q":{k:"q=",n:"q"}}}),g:{"%Z":
-function(n,r){var o=[];return"+-"===r[0]||"+/-"===r[0]?o.push("\\pm "):r[0]&&o.push(r[0]),r[1]&&(o=t.j(o,t.go(r[1],"%X")),r[2]&&(r[2].match(/[,.]/)?o=t.j(o,t.go(r[2],"%X")):o.push(r[2])),r[3]=r[4]||r[3],r[3]&&(r[3]=r[3].trim(),"e"===r[3]||"*"===r[3].substr(0,1)?o.push({l:"%N"}):o.push({l:"%P"}))),r[3]&&o.push("10^{"+r[5]+"}"),o},ak:
-function(n,r){var o=[];return"+-"===r[0]||"+/-"===r[0]?o.push("\\pm "):r[0]&&o.push(r[0]),o=t.j(o,t.go(r[1],"%X")),o.push("^{"+r[2]+"}"),o},"~Q":
-function(n,r,t){return{l:"~Q",A:t||r}},
-"%m":
-function(n,r){return{l:"%Q"}},
-"~T":
-function(n,r){var o,a=t.h("%A",n.d||"");a&&""===a.t&&(n.d=a.h);var e=t.h("%A",n.q||"");e&&""===e.t&&(n.q=e.h),n.d&&(n.d=n.d.replace(/\u00B0C|\^oC|\^{o}C/g,"{}^{\\circ}C"),n.d=n.d.replace(/\u00B0F|\^oF|\^{o}F/g,"{}^{\\circ}F")),n.q?(n.d=t.go(n.d,"pu"),n.q=n.q.replace(/\u00B0C|\^oC|\^{o}C/g,"{}^{\\circ}C"),n.q=n.q.replace(/\u00B0F|\^oF|\^{o}F/g,"{}^{\\circ}F"),n.q=t.go(n.q,"pu"),"//"===n.o?o={l:"%S",p1:n.d,p2:n.q}:(o=n.d,o=n.d.length>1||n.q.length>1?t.j(o,{l:"%V"}):t.j(o,{l:"/"}),o=t.j(o,n.q))):o=t.go(n.d,"%R");for(var u in n)delete n[u];return o}}},
-t.c["%R"]={e:t.C({"~C":{"*":{k:"~T"}},
-"*":{"*":{k:["~T","%N"],n:"0"}},
-"@E":{"*":{k:"%c"},n:"1"},"%m":{"*":{k:["~T","%m"],n:"0"}},
-"@P|%U":{1:{k:"%U"}},
-"@h":{0:{k:"%c",n:"0"},1:{k:"%U",n:"0"}},
-"%B|~A":{"*":{k:"%c",n:"1"}}}),g:{"%N":
-function(n,r){return{l:"%O"}},
-"%U":
-function(n,r){n.rm+="^{"+r+"}"},"%m":
-function(n,r){return{l:"ah"}},
-"~T":
-function(n,r){var o;if(n.rm){var a=t.h("%A",n.rm||"");o=a&&""===a.t?t.go(a.h,"pu"):{l:"rm",p1:n.rm}}for(var e in n)delete n[e];return o}}},
-t.c["%X"]={e:t.C({"~C":{0:{k:"~U"},o:{k:"~V"}},
-",":{0:{k:["~U","~q"],n:"o"}},
-".":{0:{k:["~U","~s"],n:"o"}},
-"~A":{"*":{k:"%t"}}}),g:{"~q":
-function(n,r){return{l:"~r"}},
-"~U":
-function(n,r){var t=[];if(n.text.length>4){var o=n.text.length%3;0===o&&(o=3);for(var a=n.text.length-3;a>0;a-=3)t.push(n.text.substr(a,3)),t.push({l:"%W"});t.push(n.text.substr(0,o)),t.reverse()}else t.push(n.text);for(var e in n)delete n[e];return t},"~V":
-function(n,r){var t=[];if(n.text.length>4){for(var o=n.text.length-3,a=0;a<o;a+=3)t.push(n.text.substr(a,3)),t.push({l:"%W"});t.push(n.text.substr(a))}else t.push(n.text);for(var e in n)delete n[e];return t}}};var o={H:{"~h":
-function(n){var r="";return n.a=o.go2(n.a),n.b=o.go2(n.b),n.p=o.go2(n.p),n.o=o.go2(n.o),n.q=o.go2(n.q),n.d=o.go2(n.d),n.a&&(n.a.match(/^[+\-]/)&&(n.a="{"+n.a+"}"),r+=n.a+"\\,"),(n.b||n.p)&&(r+="{\\vphantom{X}}",r+="^{\\hphantom{"+(n.b||"")+"}}_{\\hphantom{"+(n.p||"")+"}}",r+="{\\vphantom{X}}",r+="^{\\smash[t]{\\vphantom{2}}\\llap{"+(n.b||"")+"}}",r+="_{\\vphantom{2}\\llap{\\smash[t]{"+(n.p||"")+"}}}"),n.o&&(n.o.match(/^[+\-]/)&&(n.o="{"+n.o+"}"),r+=n.o),"kv"===n["%I"]?((n.d||n.q)&&(r+="{\\vphantom{X}}"),n.d&&(r+="^{"+n.d+"}"),n.q&&(r+="_{\\smash[t]{"+n.q+"}}")):"~Y"===n["%I"]?(n.d&&(r+="{\\vphantom{X}}",r+="^{"+n.d+"}"),n.q&&(r+="{\\vphantom{X}}",r+="_{\\smash[t]{"+n.q+"}}")):(n.q&&(r+="{\\vphantom{X}}",r+="_{\\smash[t]{"+n.q+"}}"),n.d&&(r+="{\\vphantom{X}}",r+="^{"+n.d+"}")),r},rm:
-function(n){return"\\mathrm{"+n.p1+"}"},"%s":
-function(n){return n.p1.match(/[\^_]/)?(n.p1=n.p1.replace(" ","~").replace("-","\\text{-}"),"\\mathrm{"+n.p1+"}"):"\\text{"+n.p1+"}"},"%d":
-function(n){return"\\mathrm{"+n.p1+"}"},"%p":
-function(n){return"\\mskip2mu "+o.go2(n.p1)},"%K":
-function(n){return"\\mskip1mu "+o.go2(n.p1)},"~f":
-function(n){var r=o.I[n.A];if(!r)throw["MhchemErrorBond","mhchem Error. Unknown bond type ("+n.A+")"];return r},"~F":
-function(n){var r="\\frac{"+n.p1+"}{"+n.p2+"}";return"\\mathchoice{\\textstyle"+r+"}{"+r+"}{"+r+"}{"+r+"}"},"%S":
-function(n){var r="\\frac{"+o.go2(n.p1)+"}{"+o.go2(n.p2)+"}";return"\\mathchoice{\\textstyle"+r+"}{"+r+"}{"+r+"}{"+r+"}"},"%r":
-function(n){return n.p1+" "},"~G":
-function(n){return"\\frac{"+o.go2(n.p1)+"}{"+o.go2(n.p2)+"}"},"~W":
-function(n){return"\\overset{"+o.go2(n.p1)+"}{"+o.go2(n.p2)+"}"},"%x":
-function(n){return"\\underset{"+o.go2(n.p1)+"}{"+o.go2(n.p2)+"}"},"%v":
-function(n){return"\\underbrace{"+o.go2(n.p1)+"}_{"+o.go2(n.p2)+"}"},"~j":
-function(n){return"{\\color{"+n.F+"}{"+o.go2(n.G)+"}}"},"~l":
-function(n){return"\\color{"+n.B+"}"},"~b":
-function(n){n.rd=o.go2(n.rd),n.rq=o.go2(n.rq);var r=o.J[n.r];return n.rd||n.rq?"<=>"===n.r||"<=>>"===n.r||"<<=>"===n.r||"<-->"===n.r?(r="\\long"+r,n.rd&&(r="\\overset{"+n.rd+"}{"+r+"}"),n.rq&&(r="\\underset{\\lower7mu{"+n.rq+"}}{"+r+"}"),r=" {}\\mathrel{"+r+"}{} "):(n.rq&&(r+="[{"+n.rq+"}]"),r+="{"+n.rd+"}",r=" {}\\mathrel{\\x"+r+"}{} "):r=" {}\\mathrel{\\long"+r+"}{} ",r},"~Q":
-function(n){return o.K[n.A]}},
-J:{"->":"rightarrow","\u2192":"rightarrow","\u27f6":"rightarrow","<-":"leftarrow","<->":"leftrightarrow","<-->":"leftrightarrows","<=>":"rightleftharpoons","\u21cc":"rightleftharpoons","<=>>":"Rightleftharpoons","<<=>":"Leftrightharpoons"},I:{"-":"{-}",1:"{-}","=":"{=}",2:"{=}","#":"{\\equiv}",3:"{\\equiv}","~":"{\\tripledash}","~-":"{\\rlap{\\lower.1em{-}}\\raise.1em{\\tripledash}}","~=":"{\\rlap{\\lower.2em{-}}\\rlap{\\raise.2em{\\tripledash}}-}","~--":"{\\rlap{\\lower.2em{-}}\\rlap{\\raise.2em{\\tripledash}}-}","-~-":"{\\rlap{\\lower.2em{-}}\\rlap{\\raise.2em{-}}\\tripledash}","...":"{{\\cdot}{\\cdot}{\\cdot}}","....":"{{\\cdot}{\\cdot}{\\cdot}{\\cdot}}","->":"{\\rightarrow}","<-":"{\\leftarrow}","<":"{<}",">":"{>}"},L:{"%m":" ","~D":"~","%Q":"~",ah:"\\mkern3mu ","%W":"\\mkern2mu ","~r":"{,}","~n":"{{0}}\\mkern6mu ","~o":"{{0}}\\mkern3mu ","~p":"{{0}}\\mkern1mu ","~I":"\\text{-}","~~":"\\,{\\cdot}\\,","~y":"\\mkern1mu \\bullet\\mkern1mu ","@n":"{\\times}","%%":"\\prime ","%N":"\\cdot ","%O":"\\mkern1mu{\\cdot}\\mkern1mu ","%P":"\\times ","~i":"{\\sim}","^":"uparrow",v:"downarrow","~z":"\\ldots ",aa:"\\mathrm{p}K_{\\mathrm{{0}}}",Ka:"K_{\\mathrm{{0}}}",af:"\\mathrm{p}K_{\\mathrm{{0}_{{1}}}}",ag:"K_{\\mathrm{{0}_{{1}}}}","/":"/","%V":"\\,/\\,",al:"{0} "},K:{"+":" {}+{} ","-":" {}-{} ","=":" {}={} ","<":" {}<{} ",">":" {}>{} ","<<":" {}\\ll{} ",">>":" {}\\gg{} ","\\pm":" {}\\pm{} ","\\approx":" {}\\approx{} ","$\\approx$":" {}\\approx{} ",v:" \\downarrow{} ","(v)":" \\downarrow{} ","^":" \\uparrow{} ","(^)":" \\uparrow{} "},go:
-function(n,r){if(!n)return n;for(var t="",o=!1,a=0;a<n.length;a++){var e=n[a];if("string"==typeof e)t+=e;else if(this.H[e.l])t+=this.H[e.l](e);else{if(!this.L[e.l])throw["MhchemBugT","mhchem bug T. Please report."];var u=this.L[e.l];u=u.replace("{0}",e.p1||""),u=u.replace("{1}",e.p2||""),t+=u,"al"===e.l&&(o=!0)}}return r||o||(t="{"+t+"}"),t},go2:
-function(n){return this.go(n,!0)}};MathJax.Extension["TeX/mhchem"].CE=r,n.Definitions.Add({macros:{ce:"CE",pu:"PU",xleftrightarrow:["Extension","AMSmath"],xrightleftharpoons:["Extension","AMSmath"],xRightleftharpoons:["Extension","AMSmath"],xLeftrightharpoons:["Extension","AMSmath"],longrightleftharpoons:["Macro","\\stackrel{\\textstyle{-}\\!\\!{\\rightharpoonup}}{\\smash{{\\leftharpoondown}\\!\\!{-}}}"],longRightleftharpoons:["Macro","\\stackrel{\\textstyle{-}\\!\\!{\\rightharpoonup}}{\\smash{\\leftharpoondown}}"],longLeftrightharpoons:["Macro","\\stackrel{\\textstyle\\vphantom{{-}}{\\rightharpoonup}}{\\smash{{\\leftharpoondown}\\!\\!{-}}}"],longleftrightarrows:["Macro","\\stackrel{\\longrightarrow}{\\smash{\\longleftarrow}\\Rule{0px}{.25em}{0px}}"],tripledash:["Macro","\\vphantom{-}\\raise2mu{\\kern2mu\\tiny\\text{-}\\kern1mu\\text{-}\\kern1mu\\text{-}\\kern2mu}"]}},
-null,!0),MathJax.Extension["TeX/AMSmath"]||n.Definitions.Add({macros:{xrightarrow:["Extension","AMSmath"],xleftarrow:["Extension","AMSmath"]}},
-null,!0),MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",
-function(){n.Definitions.Add({macros:{xleftrightarrow:["xArrow",8596,6,6],xrightleftharpoons:["xArrow",8652,5,7],xRightleftharpoons:["xArrow",8652,5,7],xLeftrightharpoons:["xArrow",8652,5,7]}},
-null,!0)}),n.Parse.Augment({CE:
-function(n){var t=this.GetArgument(n),o=r(t).Parse();this.string=o+this.string.substr(this.i),this.i=0},PU:
-function(n){var t=this.GetArgument(n),o=r(t).Parse("pu");this.string=o+this.string.substr(this.i),this.i=0}}),MathJax.Hub.Startup.signal.Post("TeX mhchem Ready")}),MathJax.Ajax.loadComplete("[Contrib]/mhchem/mhchem.js");
 
+//
+// Coding Style
+//   - use '' for identifiers that can by minified/uglified
+//   - use "" for strings that need to stay untouched
+
+
+MathJax.Extension["TeX/mhchem"] = {
+  version: "3.0.6"
+};
+
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+
+  var TEX = MathJax.InputJax.TeX;
+
+  //
+  //  This is the main class for handing the \ce and related commands.
+  //  Its main method is Parse() which takes the argument to \ce and
+  //  returns the corresponding TeX string.
+  //
+
+  var CE = MathJax.Object.Subclass({
+    string: "",   // the \ce string being parsed
+
+    //
+    //  Store the string when a CE object is created
+    //
+    Init: function (string) { this.string = string; },
+
+    //
+    //  This converts the CE string to a TeX string.
+    //
+    Parse: function (stateMachine) {
+      try {
+        return texify.go(mhchemParser.go(this.string, stateMachine));
+      } catch (ex) {
+        TEX.Error(ex);
+      }
+    }
+  });
+
+  //
+  // Core parser for mhchem syntax  (recursive)
+  //
+  var mhchemParser = {};
+  //
+  // Parses mchem \ce syntax
+  //
+  // Call like
+  //   go("H2O");
+  //
+  // Looks through mhchemParser.transitions, to execute a matching action
+  // (recursive)
+  //
+  mhchemParser.go = function(input, stateMachine) {
+    if (!input) { return input; }
+    if (stateMachine === undefined) { stateMachine = 'ce'; }
+    var state = '0';
+
+    //
+    // String buffers for parsing:
+    //
+    // buffer.a == amount
+    // buffer.o == element
+    // buffer.b == left-side superscript
+    // buffer.p == left-side subscript
+    // buffer.q == right-side subscript
+    // buffer.d == right-side superscript
+    //
+    // buffer.r == arrow
+    // buffer.rdt == arrow, script above, type
+    // buffer.rd == arrow, script above, content
+    // buffer.rqt == arrow, script below, type
+    // buffer.rq == arrow, script below, content
+    //
+    // buffer.text
+    // buffer.rm
+    // etc.
+    //
+    // buffer.parenthesisLevel == int, starting at 0
+    // buffer.sb == bool, space before
+    // buffer.beginsWithBond == bool
+    //
+    // These letters are also used as state names.
+    //
+    // Other states:
+    // 0 == begin of main part (arrow/operator unlikely)
+    // 1 == next entity
+    // 2 == next entity (arrow/operator unlikely)
+    // 3 == next atom
+    // c == macro
+    //
+    var buffer = {};
+    buffer['parenthesisLevel'] = 0;
+
+    input = input.replace(/[\u2212\u2013\u2014\u2010]/g, "-");
+    input = input.replace(/[\u2026]/g, "...");
+
+    var lastInput, watchdog;
+    var output = [];
+    while (true) {
+      if (lastInput !== input) {
+        watchdog = 10;
+        lastInput = input;
+      } else {
+        watchdog--;
+      }
+      //
+      // Look for matching string in transition table
+      //
+      var machine = mhchemParser.stateMachines[stateMachine];
+      var iTmax = machine.transitions.length;
+      iterateTransitions:
+      for (var iT=0; iT<iTmax; iT++) {  // Surprisingly, looping is not slower than another data structure with direct lookups.  635d910e-0a6d-45b4-8d38-2f98ac9d9a94
+        var t = machine.transitions[iT];
+        var tasks = t.actions[state]  ||  t.actions['*']  ||  null;
+        if (tasks) {  // testing tasks (actions) before matches is slightly faster
+          var matches = mhchemParser.matchh(t.matchh, input);
+          if (matches) {
+            //
+            // Execute action
+            //
+            var actions = mhchemParser.concatNotUndefined([], tasks.action);
+            var iAmax = actions.length;
+            for (var iA=0; iA<iAmax; iA++) {
+              var a = actions[iA];
+              var o;
+              var option = undefined;
+              if (a.type) {
+                option = a.option;
+                a = a.type;
+              }
+              if (typeof a === "string") {
+                if (machine.actions[a]) {
+                  o = machine.actions[a](buffer, matches.matchh, option);
+                } else if (mhchemParser.actions[a]) {
+                  o = mhchemParser.actions[a](buffer, matches.matchh, option);
+                } else {
+                  throw ["MhchemBugA", "mhchem bug A. Please report. (" + a + ")"];  // Trying to use non-existing action
+                }
+              } else if (typeof a === "function") {
+                o = a(buffer, matches.matchh);
+              }
+              output = mhchemParser.concatNotUndefined(output, o);
+            }
+            //
+            // Set next state,
+            // Shorten input,
+            // Continue with next character
+            //   (= apply only one transition per position)
+            //
+            state = tasks.nextState || state;
+            if (input.length > 0) {
+              if (!tasks.revisit) {
+                input = matches.remainder;
+              }
+              if (!tasks.toContinue) {
+                break iterateTransitions;
+              }
+            } else {
+              return output;
+            }
+          }
+        }
+      }
+      //
+      // Prevent infinite loop
+      //
+      if (watchdog <= 0) {
+        throw ["MhchemBugU", "mhchem bug U. Please report."];  // Unexpected character
+      }
+    }
+  };
+  mhchemParser.concatNotUndefined = function(a, b) {
+    if (!b) { return a; }
+    if (!a) { return [].concat(b); }
+    return a.concat(b);
+  };
+
+  //
+  // Matching patterns
+  // either regexps or function that return null or {match:"a", remainder:"bc"}
+  //
+  mhchemParser.patterns = {
+    // property names must not look like integers ("2") for correct property traversal order, later on
+    'empty': /^$/,
+    'else': /^./,
+    'else2': /^./,
+    'space': /^\s/,
+    'space A': /^\s(?=[A-Z\\$])/,
+    'a-z': /^[a-z]/,
+    'x': /^x/,
+    'x$': /^x$/,
+    'i$': /^i$/,
+    'letters': /^(?:[a-zA-Z\u03B1-\u03C9\u0391-\u03A9?@]|(?:\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\s+|\{\}|(?![a-zA-Z]))))+/,
+    '\\greek': /^\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)(?:\s+|\{\}|(?![a-zA-Z]))/,
+    'one lowercase latin letter $': /^(?:([a-z])(?:$|[^a-zA-Z]))$/,
+    '$one lowercase latin letter$ $': /^\$(?:([a-z])(?:$|[^a-zA-Z]))\$$/,
+    'one lowercase greek letter $': /^(?:\$?[\u03B1-\u03C9]\$?|\$?\\(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega)\s*\$?)(?:\s+|\{\}|(?![a-zA-Z]))$/,
+    'digits': /^[0-9]+/,
+    '-9.,9': /^[+\-]?(?:[0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+))/,
+    '-9.,9 no missing 0': /^[+\-]?[0-9]+(?:[.,][0-9]+)?/,
+    '(-)(9.,9)(e)(99)': function (input) {
+      var m = input.match(/^(\+\-|\+\/\-|\+|\-|\\pm\s?)?([0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)(\((?:[0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)\))?(?:([eE]|\s*(\*|x|\\times|\u00D7)\s*10\^)([+\-]?[0-9]+|\{[+\-]?[0-9]+\}))?/);
+      if (m && m[0]) {
+        return { matchh: m.splice(1), remainder: input.substr(m[0].length) };
+      }
+      return null;
+    },
+    '(-)(9)^(-9)':  function (input) {
+      var m = input.match(/^(\+\-|\+\/\-|\+|\-|\\pm\s?)?([0-9]+(?:[,.][0-9]+)?|[0-9]*(?:\.[0-9]+)?)\^([+\-]?[0-9]+|\{[+\-]?[0-9]+\})/);
+      if (m && m[0]) {
+        return { matchh: m.splice(1), remainder: input.substr(m[0].length) };
+      }
+      return null;
+    },
+    'state of aggregation $': function (input) {  // or crystal system
+      var a = this['_findObserveGroups'](input, "", /^\([a-z]{1,3}(?=[\),])/, ")", "");  // (aq), (aq,$\infty$), (aq, sat)
+      if (a  &&  a.remainder.match(/^($|[\s,;\)\]\}])/)) { return a; }  //  AND end of 'phrase'
+      var m = input.match(/^(?:\((?:\\ca\s?)?\$[amothc]\$\))/);  // OR crystal system ($o$) (\ca$c$)
+      if (m) {
+        return { matchh: m[0], remainder: input.substr(m[0].length) };
+      }
+      return null;
+    },
+    '_{(state of aggregation)}$': /^_\{(\([a-z]{1,3}\))\}/,
+    '\{[(': /^(?:\\\{|\[|\()/,
+    ')]\}': /^(?:\)|\]|\\\})/,
+    ', ': /^[,;]\s*/,
+    ',': /^[,;]/,
+    '.': /^[.]/,
+    '. ': /^([.\u22C5\u00B7\u2022])\s*/,
+    '...': /^\.\.\.(?=$|[^.])/,
+    '* ': /^([*])\s*/,
+    '^{(...)}': function (input) { return this['_findObserveGroups'](input, "^{", "", "", "}"); },
+    '^($...$)': function (input) { return this['_findObserveGroups'](input, "^", "$", "$", ""); },
+    '^a': /^\^([0-9]+|[^\\_])/,
+    '^\\x{}{}':  function (input) { return this['_findObserveGroups'](input, "^", /^\\[a-zA-Z]+\{/, "}", "", "", "{", "}", "", true); },
+    '^\\x{}':  function (input) { return this['_findObserveGroups'](input, "^", /^\\[a-zA-Z]+\{/, "}", ""); },
+    '^\\x': /^\^(\\[a-zA-Z]+)\s*/,
+    '^(-1)': /^\^(-?\d+)/,
+    '\'': /^'/,
+    '_{(...)}': function (input) { return this['_findObserveGroups'](input, "_{", "", "", "}"); },
+    '_($...$)': function (input) { return this['_findObserveGroups'](input, "_", "$", "$", ""); },
+    '_9': /^_([+\-]?[0-9]+|[^\\])/,
+    '_\\x{}{}':  function (input) { return this['_findObserveGroups'](input, "_", /^\\[a-zA-Z]+\{/, "}", "", "", "{", "}", "", true); },
+    '_\\x{}':  function (input) { return this['_findObserveGroups'](input, "_", /^\\[a-zA-Z]+\{/, "}", ""); },
+    '_\\x': /^_(\\[a-zA-Z]+)\s*/,
+    '^_': /^(?:\^(?=_)|\_(?=\^)|[\^_]$)/,
+    '{}': /^\{\}/,
+    '{...}': function (input) { return this['_findObserveGroups'](input, "", "{", "}", ""); },
+    '{(...)}': function (input) { return this['_findObserveGroups'](input, "{", "", "", "}"); },
+    '$...$': function (input) { return this['_findObserveGroups'](input, "", "$", "$", ""); },
+    '${(...)}$': function (input) { return this['_findObserveGroups'](input, "${", "", "", "}$"); },
+    '$(...)$': function (input) { return this['_findObserveGroups'](input, "$", "", "", "$"); },
+    '=<>': /^[=<>]/,
+    '#': /^[#\u2261]/,
+    '+': /^\+/,
+    '-$': /^-(?=[\s_},;\]/]|$|\([a-z]+\))/,  // -space -, -; -] -/ -$ -state-of-aggregation
+    '-9': /^-(?=[0-9])/,
+    '- orbital overlap': /^-(?=(?:[spd]|sp)(?:$|[\s,;\)\]\}]))/,
+    '-': /^-/,
+    'pm-operator': /^(?:\\pm|\$\\pm\$|\+-|\+\/-)/,
+    'operator': /^(?:\+|(?:[\-=<>]|<<|>>|\\approx|\$\\approx\$)(?=\s|$|-?[0-9]))/,
+    'arrowUpDown': /^(?:v|\(v\)|\^|\(\^\))(?=$|[\s,;\)\]\}])/,
+    '\\bond{(...)}': function (input) { return this['_findObserveGroups'](input, "\\bond{", "", "", "}"); },
+    '->': /^(?:<->|<-->|->|<-|<=>>|<<=>|<=>|[\u2192\u27F6\u21CC])/,
+    'CMT': /^[CMT](?=\[)/,
+    '[(...)]': function (input) { return this['_findObserveGroups'](input, "[", "", "", "]"); },
+    '1st-level escape': /^(&|\\\\|\\hline)\s*/,
+    '\\,': /^(?:\\[,\ ;:])/,  // \\x - but output no space before
+    '\\x{}{}':  function (input) { return this['_findObserveGroups'](input, "", /^\\[a-zA-Z]+\{/, "}", "", "", "{", "}", "", true); },
+    '\\x{}':  function (input) { return this['_findObserveGroups'](input, "", /^\\[a-zA-Z]+\{/, "}", ""); },
+    '\\ca': /^\\ca(?:\s+|(?![a-zA-Z]))/,
+    '\\x': /^(?:\\[a-zA-Z]+\s*|\\[_&{}%])/,
+    'orbital': /^(?:[0-9]{1,2}[spdfgh]|[0-9]{0,2}sp)(?=$|[^a-zA-Z])/,  // only those with numbers in front, because the others will be formatted correctly anyway
+    'others': /^[\/~|]/,
+    '\\frac{(...)}': function (input) { return this['_findObserveGroups'](input, "\\frac{", "", "", "}", "{", "", "", "}"); },
+    '\\overset{(...)}': function (input) { return this['_findObserveGroups'](input, "\\overset{", "", "", "}", "{", "", "", "}"); },
+    '\\underset{(...)}': function (input) { return this['_findObserveGroups'](input, "\\underset{", "", "", "}", "{", "", "", "}"); },
+    '\\underbrace{(...)}': function (input) { return this['_findObserveGroups'](input, "\\underbrace{", "", "", "}_", "{", "", "", "}"); },
+    '\\color{(...)}0': function (input) { return this['_findObserveGroups'](input, "\\color{", "", "", "}"); },
+    '\\color{(...)}{(...)}1': function (input) { return this['_findObserveGroups'](input, "\\color{", "", "", "}", "{", "", "", "}"); },
+    '\\color(...){(...)}2': function (input) { return this['_findObserveGroups'](input, "\\color", "\\", "", /^(?=\{)/, "{", "", "", "}"); },
+    '\\ce{(...)}': function (input) { return this['_findObserveGroups'](input, "\\ce{", "", "", "}"); },
+    'oxidation$': /^(?:[+-][IVX]+|\\pm\s*0|\$\\pm\$\s*0)$/,
+    'd-oxidation$': /^(?:[+-]?\s?[IVX]+|\\pm\s*0|\$\\pm\$\s*0)$/,  // 0 could be oxidation or charge
+    'roman numeral': /^[IVX]+/,
+    '1/2$': /^[+\-]?(?:[0-9]+|\$[a-z]\$|[a-z])\/[0-9]+(?:\$[a-z]\$|[a-z])?$/,
+    'amount': function (input) {
+      var matchh;
+      // e.g. 2, 0.5, 1/2, -2, n/2, +;  $a$ could be added later in parsing
+      matchh = input.match(/^(?:(?:(?:\([+\-]?[0-9]+\/[0-9]+\)|[+\-]?(?:[0-9]+|\$[a-z]\$|[a-z])\/[0-9]+|[+\-]?[0-9]+[.,][0-9]+|[+\-]?\.[0-9]+|[+\-]?[0-9]+)(?:[a-z](?=\s*[A-Z]))?)|[+\-]?[a-z](?=\s*[A-Z])|\+(?!\s))/);
+      if (matchh) {
+        return { matchh: matchh[0], remainder: input.substr(matchh[0].length) };
+      }
+      var a = this['_findObserveGroups'](input, "", "$", "$", "");
+      if (a) {  // e.g. $2n-1$, $-$
+        matchh = a.matchh.match(/^\$(?:\(?[+\-]?(?:[0-9]*[a-z]?[+\-])?[0-9]*[a-z](?:[+\-][0-9]*[a-z]?)?\)?|\+|-)\$$/);
+        if (matchh) {
+          return { matchh: matchh[0], remainder: input.substr(matchh[0].length) };
+        }
+      }
+      return null;
+    },
+    'amount2': function (input) { return this['amount'](input); },
+    '(KV letters),': /^(?:[A-Z][a-z]{0,2}|i)(?=,)/,
+    'formula$': function (input) {
+      if (input.match(/^\([a-z]+\)$/)) { return null; }  // state of aggregation = no formula
+      var matchh = input.match(/^(?:[a-z]|(?:[0-9\ \+\-\,\.\(\)]+[a-z])+[0-9\ \+\-\,\.\(\)]*|(?:[a-z][0-9\ \+\-\,\.\(\)]+)+[a-z]?)$/);
+      if (matchh) {
+        return { matchh: matchh[0], remainder: input.substr(matchh[0].length) };
+      }
+      return null;
+    },
+    'uprightEntities': /^(?:pH|pOH|pC|pK|iPr|iBu)(?=$|[^a-zA-Z])/,
+    'pK(a)': /^pK([abw]|eq|sp)(?=$|[^a-zA-Z0-9])/,  // acid/base dissociation constant, freezing/boiling-point depression, ionic product for water, equilibrium constants
+    'pK_(a)': /^pK_([abw])/,
+    'pK_{(a)}': /^pK_{([abw]|eq|sp)}/,
+    'pK(a1)': /^pK([ab])([123])(?=$|[^a-zA-Z0-9])/,
+    'pK_{(a1)}': /^pK_{([ab])([123])}/,
+    'K(a)': /^K([abwfcp]|eq|sp)(?=$|[^a-zA-Z0-9])/,
+    'K_(a)': /^K_([abwfcpCP])/,
+    'K_{(a)}': /^K_{([abwfcpCP]|eq|sp)}/,
+    'K(a1)': /^K([ab])([123])(?=$|[^a-zA-Z0-9])/,
+    'K_{(a1)}': /^K_{([ab])([123])}/,
+    '/': /^\s*(\/)\s*/,
+    '//': /^\s*(\/\/)\s*/,
+    '*': /^\s*\*\s*/,
+    '_findObserveGroups': function (input, begExcl, begIncl, endIncl, endExcl, beg2Excl, beg2Incl, end2Incl, end2Excl, combine) {
+      var matchh = this['__match'](input, begExcl);
+      if (matchh === null) { return null; }
+      input = input.substr(matchh.length);
+      matchh = this['__match'](input, begIncl);
+      if (matchh === null) { return null; }
+      var e = this['__findObserveGroups'](input, matchh.length, endIncl || endExcl);
+      if (e === null) { return null; }
+      var match1 = input.substring(0, (endIncl ? e.endMatchEnd : e.endMatchBegin));
+      if (!(beg2Excl || beg2Incl)) {
+        return {
+          matchh: match1,
+          remainder: input.substr(e.endMatchEnd)
+        };
+      } else {
+        var group2 = this['_findObserveGroups'](input.substr(e.endMatchEnd), beg2Excl, beg2Incl, end2Incl, end2Excl);
+        if (group2 === null) { return null; }
+        var matchRet = [match1, group2.matchh];
+        if (combine) { matchRet = matchRet.join(""); }
+        return {
+          matchh: matchRet,
+          remainder: group2.remainder
+        };
+      }
+    },
+    '__match': function (input, pattern) {
+      if (typeof pattern === "string") {
+        if (input.indexOf(pattern) !== 0) { return null; }
+        return pattern;
+      } else {
+        var matchh = input.match(pattern);
+        if (!matchh) { return null; }
+        return matchh[0];
+      }
+    },
+    '__findObserveGroups': function (input, i, endChars) {
+      var braces = 0;
+      while (i < input.length) {
+        var a = input.charAt(i);
+        var matchh = this['__match'](input.substr(i), endChars);
+        if (matchh !== null  &&  braces === 0) {
+          return { endMatchBegin: i, endMatchEnd: i + matchh.length };
+        } else if (a === "{") {
+          braces++;
+        } else if (a === "}") {
+          if (braces === 0) {
+            throw ["ExtraCloseMissingOpen", "Extra close brace or missing open brace"];
+          } else {
+            braces--;
+          }
+        }
+        i++;
+      }
+      if (braces > 0) {
+        return null;
+      }
+      return null;
+    }
+  };
+
+  //
+  // Matching function
+  // e.g. matchh("a", input) will look for the regexp called "a" and see if it matches
+  // returns null or {matchh:"a", remainder:"bc"}
+  //
+  mhchemParser.matchh = function (m, input) {
+    var pattern = mhchemParser.patterns[m];
+    if (pattern === undefined) {
+      throw ["MhchemBugP", "mhchem bug P. Please report. (" + m + ")"];  // Trying to use non-existing pattern
+    } else if (typeof pattern === "function") {
+      return mhchemParser.patterns[m](input);  // cannot use cached var pattern here, because some pattern functions need this===mhchemParser
+    } else {  // RegExp
+      var matchh = input.match(pattern);
+      if (matchh) {
+        var mm;
+        if (matchh[2]) {
+          mm = [ matchh[1], matchh[2] ];
+        } else if (matchh[1]) {
+          mm = matchh[1];
+        } else {
+          mm = matchh[0];
+        }
+        return { matchh: mm, remainder: input.substr(matchh[0].length) };
+      }
+      return null;
+    }
+  };
+
+  //
+  // Generic state machine actions
+  //
+  mhchemParser.actions = {
+    'a=': function (buffer, m) { buffer.a = (buffer.a || "") + m; },
+    'b=': function (buffer, m) { buffer.b = (buffer.b || "") + m; },
+    'p=': function (buffer, m) { buffer.p = (buffer.p || "") + m; },
+    'o=': function (buffer, m) { buffer.o = (buffer.o || "") + m; },
+    'q=': function (buffer, m) { buffer.q = (buffer.q || "") + m; },
+    'd=': function (buffer, m) { buffer.d = (buffer.d || "") + m; },
+    'rm=': function (buffer, m) { buffer.rm = (buffer.rm || "") + m; },
+    'text=': function (buffer, m) { buffer.text = (buffer.text || "") + m; },
+    'insert': function (buffer, m, a) { return { type: a }; },
+    'insert+p1': function (buffer, m, a) { return { type: a, p1: m }; },
+    'insert+p1+p2': function (buffer, m, a) { return { type: a, p1: m[0], p2: m[1] }; },
+    'copy': function (buffer, m) { return m; },
+    'rm': function (buffer, m) { return { type: 'rm', p1: m }; },
+    'text': function (buffer, m) { return mhchemParser.go(m, 'text'); },
+    '{text}': function (buffer, m) {
+      var ret = [ "{" ];
+      ret = mhchemParser.concatNotUndefined(ret, mhchemParser.go(m, 'text'));
+      ret = mhchemParser.concatNotUndefined(ret, "}");
+      return ret;
+    },
+    'tex-math': function (buffer, m) { return mhchemParser.go(m, 'tex-math'); },
+    'tex-math tight': function (buffer, m) { return mhchemParser.go(m, 'tex-math tight'); },
+    'bond': function (buffer, m, k) { return { type: 'bond', kind: k || m }; },
+    'color0-output': function (buffer, m) { return { type: 'color0', color: m[0] }; },
+    'ce': function (buffer, m) { return mhchemParser.go(m); },
+    '1/2': function (buffer, m) {
+      var ret;
+      if (m.match(/^[+\-]/)) {
+        ret = [ m.substr(0, 1) ];
+        m = m.substr(1);
+      }
+      var n = m.match(/^([0-9]+|\$[a-z]\$|[a-z])\/([0-9]+)(\$[a-z]\$|[a-z])?$/);
+      n[1] = n[1].replace(/\$/g, "");
+      ret = mhchemParser.concatNotUndefined(ret, { type: 'frac', p1: n[1], p2: n[2] } );
+      if (n[3]) {
+        n[3] = n[3].replace(/\$/g, "");
+        ret = mhchemParser.concatNotUndefined(ret, { type: 'tex-math', p1: n[3] } );
+      }
+      return ret;
+    },
+    '9,9': function (buffer, m) { return mhchemParser.go(m, '9,9'); }
+  };
+
+  //
+  // State machine definitions
+  //
+  mhchemParser.stateMachines = {};
+  //
+  // convert  { 'a': { '*': { action: 'output' } } }  to  [ { matchh: 'a', actions: { '*': { action: 'output' } } } ]
+  // with expansion of 'a|b' to 'a' and 'b' (at 2 places)
+  //
+  mhchemParser.createTransitions = function (o) {
+    var a, b, s, i;
+    //
+    // 1. o ==> oo, expanding 'a|b'
+    //
+    var oo = {};
+    for (a in o) {
+      if (a.indexOf("|") !== -1) {
+        s = a.split("|");
+        for (i=0; i<s.length; i++) {
+          oo[s[i]] = o[a];
+        }
+      } else {
+        oo[a] = o[a];
+      }
+    }
+    //
+    // 2. oo ==> transition array
+    //
+    var transitions = [];
+    for (a in oo) {
+      var actions = {};
+      var ooa = oo[a];
+      for (b in ooa) {
+        //
+        // expanding action-state:'a|b' if needed
+        //
+        if (b.indexOf("|") !== -1) {
+          s = b.split("|");
+          for (i=0; i<s.length; i++) {
+            actions[s[i]] = ooa[b];
+          }
+        } else {
+          actions[b] = ooa[b];
+        }
+      }
+      transitions.push( { matchh: a, actions: actions } );
+    }
+    return transitions;
+  };
+  //
+  //
+  // \ce state machines
+  //
+  //
+  // Transitions and actions of main parser
+  //
+  mhchemParser.stateMachines['ce'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': { action: 'output' } },
+      'else':  {
+        '0|1|2': { action: 'beginsWithBond=false', revisit: true, toContinue: true } },
+      'oxidation$': {
+        '0': { action: 'oxidation-output' } },
+      'CMT': {
+        'r': { action: 'rdt=', nextState: 'rt' },
+        'rd': { action: 'rqt=', nextState: 'rdt' } },
+      'arrowUpDown': {
+        '0|1|2|as': { action: [ 'sb=false', 'output', 'operator' ], nextState: '1' } },
+      'pK(a)|pK_(a)|pK_{(a)}': {
+        '0|1|2': { action: [ { type: 'output', option: 1 }, { type: 'insert+p1', option: 'pKa' } ], nextState: '1' } },
+      'K(a)|K_(a)|K_{(a)}': {
+        '0|1|2': { action: [ { type: 'output', option: 1 }, { type: 'insert+p1', option: 'Ka' } ], nextState: '1' } },
+      'pK(a1)|pK_{(a1)}': {
+        '0|1|2': { action: [ { type: 'output', option: 1 }, { type: 'insert+p1+p2', option: 'pKa1' } ], nextState: '1' } },
+      'K(a1)|K_{(a1)}': {
+        '0|1|2': { action: [ { type: 'output', option: 1 }, { type: 'insert+p1+p2', option: 'Ka1' } ], nextState: '1' } },
+      'uprightEntities': {
+        '0|1|2': { action: [ 'o=', 'output' ], nextState: '1' } },
+      'orbital': {
+        '0|1|2|3': { action: 'o=', nextState: 'o' } },
+      '->': {
+        '0|1|2|3': { action: 'r=', nextState: 'r' },
+        'a|as': { action: [ 'output', 'r=' ], nextState: 'r' },
+        '*': { action: [ 'output', 'r=' ], nextState: 'r' } },
+      '+': {
+        'o': { action: 'd= kv',  nextState: 'd' },
+        'd|D': { action: 'd=', nextState: 'd' },
+        'q': { action: 'd=',  nextState: 'qd' },
+        'qd|qD': { action: 'd=', nextState: 'qd' },
+        'dq': { action: [ 'output', 'd=' ], nextState: 'd' },
+        '3': { action: [ 'sb=false', 'output', 'operator' ], nextState: '0' } },
+      'amount': {
+        '0|2': { action: 'a=', nextState: 'a' } },
+      'pm-operator': {
+        '0|1|2|a|as': { action: [ 'sb=false', 'output', { type: 'operator', option: '\\pm' } ], nextState: '0' } },
+      'operator': {
+        '0|1|2|a|as': { action: [ 'sb=false', 'output', 'operator' ], nextState: '0' } },
+      '-$': {
+        'o|q': { action: [ 'charge or bond', 'output' ],  nextState: 'qd' },
+        'd': { action: 'd=', nextState: 'd' },
+        'D': { action: [ 'output', { type: 'bond', option: "-" } ], nextState: '3' },
+        'q': { action: 'd=',  nextState: 'qd' },
+        'qd': { action: 'd=', nextState: 'qd' },
+        'qD|dq': { action: [ 'output', { type: 'bond', option: "-" } ], nextState: '3' } },
+      '-9': {
+        '3|o': { action: [ 'output', { type: 'insert', option: 'hyphen' } ], nextState: '3' } },
+      '- orbital overlap': {
+        'o': { action: { type: '- after o', option: true }, nextState: '2' },
+        'd': { action: { type: '- after d', option: true }, nextState: '2' } },
+      '-': {
+        '0|1|2': { action: [ { type: 'output', option: 1 }, 'beginsWithBond=true', { type: 'bond', option: "-" } ], nextState: '3' },
+        '3': { action: { type: 'bond', option: "-" } },
+        'a': { action: [ 'output', { type: 'insert', option: 'hyphen' } ], nextState: '2' },
+        'as': { action: [ { type: 'output', option: 2 }, { type: 'bond', option: "-" } ], nextState: '3' },
+        'b': { action: 'b=' },
+        'o': { action: '- after o', nextState: '2' },
+        'q': { action: '- after o', nextState: '2' },
+        'd|qd|dq': { action: '- after d', nextState: '2' },
+        'D|qD|p': { action: [ 'output', { type: 'bond', option: "-" } ], nextState: '3' } },
+      'amount2': {
+        '1|3': { action: 'a=', nextState: 'a' } },
+      'letters': {
+        '0|1|2|3|a|as|b|p|bp|o': { action: 'o=', nextState: 'o' },
+        'q|dq': { action: ['output', 'o='], nextState: 'o' },
+        'd|D|qd|qD': { action: 'o after d', nextState: 'o' } },
+      'digits': {
+        'o': { action: 'q=', nextState: 'q' },
+        'd|D': { action: 'q=', nextState: 'dq' },
+        'q': { action: [ 'output', 'o=' ], nextState: 'o' },
+        'a': { action: 'o=', nextState: 'o' } },
+      'space A': {
+        'b|p|bp': {} },
+      'space': {
+        'a': { nextState: 'as' },
+        '0': { action: 'sb=false' },
+        '1|2': { action: 'sb=true' },
+        'r|rt|rd|rdt|rdq': { action: 'output', nextState: '0' },
+        '*': { action: [ 'output', 'sb=true' ], nextState: '1'} },
+      '1st-level escape': {
+        '1|2': { action: [ 'output', { type: 'insert+p1', option: '1st-level escape' } ] },
+        '*': { action: [ 'output', { type: 'insert+p1', option: '1st-level escape' } ], nextState: '0' } },
+      '[(...)]': {
+        'r|rt': { action: 'rd=', nextState: 'rd' },
+        'rd|rdt': { action: 'rq=', nextState: 'rdq' } },
+      '...': {
+        'o|d|D|dq|qd|qD': { action: [ 'output', { type: 'bond', option: "..." } ], nextState: '3' },
+        '*': { action: [ { type: 'output', option: 1 }, { type: 'insert', option: 'ellipsis' } ], nextState: '1' } },
+      '. |* ': {
+        '*': { action: [ 'output', { type: 'insert', option: 'addition compound' } ], nextState: '1' } },
+      'state of aggregation $': {
+        '*': { action: [ 'output', 'state of aggregation' ], nextState: '1' } },
+      '\{[(': {
+        'a|as|o': { action: [ 'o=', 'output', 'parenthesisLevel++' ], nextState: '2' },
+        '0|1|2|3': { action: [ 'o=', 'output', 'parenthesisLevel++' ], nextState: '2' },
+        '*': { action: [ 'output', 'o=', 'output', 'parenthesisLevel++' ], nextState: '2' } },
+      ')]\}': {
+        '0|1|2|3|b|p|bp|o': { action: [ 'o=', 'parenthesisLevel--' ], nextState: 'o' },
+        'a|as|d|D|q|qd|qD|dq': { action: [ 'output', 'o=', 'parenthesisLevel--' ], nextState: 'o' } },
+      ', ': {
+        '*': { action: [ 'output', 'comma' ], nextState: '0' } },
+      '^_': {  // ^ and _ without a sensible argument
+        '*': { } },
+      '^{(...)}|^($...$)': {
+        '0|1|2|as': { action: 'b=', nextState: 'b' },
+        'p': { action: 'b=', nextState: 'bp' },
+        '3|o': { action: 'd= kv', nextState: 'D' },
+        'q': { action: 'd=', nextState: 'qD' },
+        'd|D|qd|qD|dq': { action: [ 'output', 'd=' ], nextState: 'D' } },
+      '^a|^\\x{}{}|^\\x{}|^\\x|\'': {
+        '0|1|2|as': { action: 'b=', nextState: 'b' },
+        'p': { action: 'b=', nextState: 'bp' },
+        '3|o': { action: 'd= kv', nextState: 'd' },
+        'q': { action: 'd=', nextState: 'qd' },
+        'd|qd|D|qD': { action: 'd=' },
+        'dq': { action: [ 'output', 'd=' ], nextState: 'd' } },
+      '_{(state of aggregation)}$': {
+        'd|D|q|qd|qD|dq': { action: [ 'output', 'q=' ], nextState: 'q' } },
+      '_{(...)}|_($...$)|_9|_\\x{}{}|_\\x{}|_\\x': {
+        '0|1|2|as': { action: 'p=', nextState: 'p' },
+        'b': { action: 'p=', nextState: 'bp' },
+        '3|o': { action: 'q=', nextState: 'q' },
+        'd|D': { action: 'q=', nextState: 'dq' },
+        'q|qd|qD|dq': { action: [ 'output', 'q=' ], nextState: 'q' } },
+      '=<>': {
+        '0|1|2|3|a|as|o|q|d|D|qd|qD|dq': { action: [ { type: 'output', option: 2 }, 'bond' ], nextState: '3' } },
+      '#': {
+        '0|1|2|3|a|as|o': { action: [ { type: 'output', option: 2 }, { type: 'bond', option: "#" } ], nextState: '3' } },
+      '{}': {
+        '*': { action: { type: 'output', option: 1 },  nextState: '1' } },
+      '{...}': {
+        '0|1|2|3|a|as|b|p|bp': { action: 'o=', nextState: 'o' },
+        'o|d|D|q|qd|qD|dq': { action: [ 'output', 'o=' ], nextState: 'o' } },
+      '$...$': {
+        'a': { action: 'a=' },  // 2$n$
+        '0|1|2|3|as|b|p|bp|o': { action: 'o=', nextState: 'o' },  // not 'amount'
+        'as|o': { action: 'o=' },
+        'q|d|D|qd|qD|dq': { action: [ 'output', 'o=' ], nextState: 'o' } },
+      '\\bond{(...)}': {
+        '*': { action: [ { type: 'output', option: 2 }, 'bond' ], nextState: "3" } },
+      '\\frac{(...)}': {
+        '*': { action: [ { type: 'output', option: 1 }, 'frac-output' ], nextState: '3' } },
+      '\\overset{(...)}': {
+        '*': { action: [ { type: 'output', option: 2 }, 'overset-output' ], nextState: '3' } },
+      '\\underset{(...)}': {
+        '*': { action: [ { type: 'output', option: 2 }, 'underset-output' ], nextState: '3' } },
+      '\\underbrace{(...)}': {
+        '*': { action: [ { type: 'output', option: 2 }, 'underbrace-output' ], nextState: '3' } },
+      '\\color{(...)}{(...)}1|\\color(...){(...)}2': {
+        '*': { action: [ { type: 'output', option: 2 }, 'color-output' ], nextState: '3' } },
+      '\\color{(...)}0': {
+        '*': { action: [ { type: 'output', option: 2 }, 'color0-output' ] } },
+      '\\ce{(...)}': {
+        '*': { action: [ { type: 'output', option: 2 }, 'ce' ], nextState: '3' } },
+      '\\,': {
+        '*': { action: [ { type: 'output', option: 1 }, 'copy' ], nextState: '1' } },
+      '\\x{}{}|\\x{}|\\x': {
+        '0|1|2|3|a|as|b|p|bp|o|c0': { action: [ 'o=', 'output' ], nextState: '3' },
+        '*': { action: ['output', 'o=', 'output' ], nextState: '3' } },
+      'others': {
+        '*': { action: [ { type: 'output', option: 1 }, 'copy' ], nextState: '3' } },
+      'else2': {
+        'a': { action: 'a to o', nextState: 'o', revisit: true },
+        'as': { action: [ { type: 'output' }, 'sb=true' ], nextState: '1', revisit: true },
+        'r|rt|rd|rdt|rdq': { action: [ 'output' ], nextState: '0', revisit: true },
+        '*': { action: [ 'output', 'copy' ], nextState: '3' } }
+    }),
+    actions: {
+      'o after d': function (buffer, m) {
+        var ret;
+        if (buffer.d.match(/^[0-9]+$/)) {
+          var tmp = buffer.d;
+          buffer.d = undefined;
+          ret = this['output'](buffer);
+          buffer.b = tmp;
+        } else {
+          ret = this['output'](buffer);
+        }
+        mhchemParser.actions['o='](buffer, m);
+        return ret;
+      },
+      'd= kv': function (buffer, m) {
+        buffer.d = m;
+        buffer['d-type'] = 'kv';
+      },
+      'charge or bond': function (buffer, m) {
+        if (buffer['beginsWithBond']) {
+          var ret = mhchemParser.concatNotUndefined(ret, this['output'](buffer));
+          ret = mhchemParser.concatNotUndefined(ret, mhchemParser.actions['bond'](buffer, m, "-"));
+          return ret;
+        } else {
+          buffer.d = m;
+        }
+      },
+      '- after o': function (buffer, m, isOrbitalOverlap) {
+        var hyphenFollows = isOrbitalOverlap  ||  this['_hyphenFollows'](buffer, m);
+        var ret = mhchemParser.concatNotUndefined(null, this['output'](buffer, m));
+        if (hyphenFollows) {
+          ret = mhchemParser.concatNotUndefined(ret, { type: 'hyphen' });
+        } else {
+          ret = mhchemParser.concatNotUndefined(ret, mhchemParser.actions['bond'](buffer, m, "-"));
+        }
+        return ret;
+      },
+      '- after d': function (buffer, m, isOrbitalOverlap) {
+        var hyphenFollows = isOrbitalOverlap  ||  this['_hyphenFollows'](buffer, m);
+        var ret;
+        if (hyphenFollows) {
+          ret = mhchemParser.concatNotUndefined(ret, this['output'](buffer, m));
+          ret = mhchemParser.concatNotUndefined(ret, { type: 'hyphen' });
+        } else {
+          var c1 = mhchemParser.matchh('digits', buffer.d || "");
+          if (c1 && c1.remainder==='') {
+            ret = mhchemParser.concatNotUndefined(null, mhchemParser.actions['d='](buffer, m));
+            ret = mhchemParser.concatNotUndefined(ret, this['output'](buffer));
+          } else {
+            ret = mhchemParser.concatNotUndefined(ret, this['output'](buffer, m));
+            ret = mhchemParser.concatNotUndefined(ret, mhchemParser.actions['bond'](buffer, m, "-"));
+          }
+        }
+        return ret;
+      },
+      '_hyphenFollows': function (buffer, m) {
+        var c1 = mhchemParser.matchh('orbital', buffer.o || "");
+        var c2 = mhchemParser.matchh('one lowercase greek letter $', buffer.o || "");
+        var c3 = mhchemParser.matchh('one lowercase latin letter $', buffer.o || "");
+        var c4 = mhchemParser.matchh('$one lowercase latin letter$ $', buffer.o || "");
+        var hyphenFollows =  m==="-" && ( c1 && c1.remainder===''  ||  c2  ||  c3  ||  c4 );
+        if (hyphenFollows && !buffer.a && !buffer.b && !buffer.p && !buffer.d && !buffer.q && !c1 && c3) {
+          buffer.o = '$' + buffer.o + '$';
+        }
+        return hyphenFollows;
+      },
+      'a to o': function (buffer, m) {
+          buffer.o = buffer.a;
+          buffer.a = undefined;
+      },
+      'sb=true': function (buffer, m) { buffer.sb = true; },
+      'sb=false': function (buffer, m) { buffer.sb = false; },
+      'beginsWithBond=true': function (buffer, m) { buffer.beginsWithBond = true; },
+      'beginsWithBond=false': function (buffer, m) { buffer.beginsWithBond = false; },
+      'parenthesisLevel++': function (buffer, m) { buffer.parenthesisLevel++; },
+      'parenthesisLevel--': function (buffer, m) { buffer.parenthesisLevel--; },
+      'state of aggregation': function (buffer, m) {
+          m = mhchemParser.go(m, 'o');
+          return { type: 'state of aggregation', p1: m };
+      },
+      'comma': function (buffer, m) {
+        var a = m.replace(/\s*$/, '');
+        var withSpace = (a !== m);
+        if (withSpace  &&  buffer['parenthesisLevel'] === 0) {
+          return { type: 'comma enumeration L', p1: a };
+        } else {
+          return { type: 'comma enumeration M', p1: a };
+        }
+      },
+      'output': function (buffer, m, entityFollows) {
+        // entityFollows:
+        //   undefined = if we have nothing else to output, also ignore the just read space (buffer.sb)
+        //   1 = an entity follows, never omit the space if there was one just read before (can only apply to state 1)
+        //   2 = 1 + the entity can have an amount, so output a\, instead of converting it to o (can only apply to states a|as)
+        var ret;
+        if (!buffer.r) {
+          ret = [];
+          if (!buffer.a && !buffer.b && !buffer.p && !buffer.o && !buffer.q && !buffer.d && !entityFollows) {
+            ret = null;
+          } else {
+            if (buffer.sb) {
+              ret.push({ type: 'entitySkip' });
+            }
+            if (!buffer.o && !buffer.q && !buffer.d && !buffer.b && !buffer.p && entityFollows!==2) {
+              buffer.o = buffer.a;
+              buffer.a = undefined;
+            } else if (!buffer.o && !buffer.q && !buffer.d && (buffer.b || buffer.p)) {
+              buffer.o = buffer.a;
+              buffer.d = buffer.b;
+              buffer.q = buffer.p;
+              buffer.a = buffer.b = buffer.p = undefined;
+            } else {
+              if (buffer.o && buffer['d-type']==='kv' && mhchemParser.matchh('d-oxidation$', buffer.d || "")) {
+                buffer['d-type'] = 'oxidation';
+              } else if (buffer.o && buffer['d-type']==='kv' && !buffer.q) {
+                buffer['d-type'] = undefined;
+              }
+            }
+            buffer.a = mhchemParser.go(buffer.a, 'a');
+            buffer.b = mhchemParser.go(buffer.b, 'bd');
+            buffer.p = mhchemParser.go(buffer.p, 'pq');
+            buffer.o = mhchemParser.go(buffer.o, 'o');
+            if (buffer['d-type'] === 'oxidation') {
+              buffer.d = mhchemParser.go(buffer.d, 'oxidation');
+            } else {
+              buffer.d = mhchemParser.go(buffer.d, 'bd');
+            }
+            buffer.q = mhchemParser.go(buffer.q, 'pq');
+            ret.push({
+              type: 'chemfive',
+              a: buffer.a,
+              b: buffer.b,
+              p: buffer.p,
+              o: buffer.o,
+              q: buffer.q,
+              d: buffer.d,
+              'd-type': buffer['d-type']
+            });
+          }
+        } else {  // r
+          if (buffer.rdt === 'M') {
+            buffer.rd = mhchemParser.go(buffer.rd, 'tex-math');
+          } else if (buffer.rdt === 'T') {
+            buffer.rd = [ { type: 'text', p1: buffer.rd } ];
+          } else {
+            buffer.rd = mhchemParser.go(buffer.rd);
+          }
+          if (buffer.rqt === 'M') {
+            buffer.rq = mhchemParser.go(buffer.rq, 'tex-math');
+          } else if (buffer.rqt === 'T') {
+            buffer.rq = [ { type: 'text', p1: buffer.rq } ];
+          } else {
+            buffer.rq = mhchemParser.go(buffer.rq);
+          }
+          ret = {
+            type: 'arrow',
+            r: buffer.r,
+            rd: buffer.rd,
+            rq: buffer.rq
+          };
+        }
+        for (var p in buffer) {
+          if (p !== 'parenthesisLevel'  &&  p !== 'beginsWithBond') {
+            delete buffer[p];
+          }
+        }
+        return ret;
+      },
+      'oxidation-output': function (buffer, m) {
+          var ret = [ "{" ];
+          ret = mhchemParser.concatNotUndefined(ret, mhchemParser.go(m, 'oxidation'));
+          ret = ret.concat([ "}" ]);
+        return ret;
+      },
+      'frac-output': function (buffer, m) {
+        return { type: 'frac-ce', p1: mhchemParser.go(m[0]), p2: mhchemParser.go(m[1]) };
+      },
+      'overset-output': function (buffer, m) {
+        return { type: 'overset', p1: mhchemParser.go(m[0]), p2: mhchemParser.go(m[1]) };
+      },
+      'underset-output': function (buffer, m) {
+        return { type: 'underset', p1: mhchemParser.go(m[0]), p2: mhchemParser.go(m[1]) };
+      },
+      'underbrace-output': function (buffer, m) {
+        return { type: 'underbrace', p1: mhchemParser.go(m[0]), p2: mhchemParser.go(m[1]) };
+      },
+      'color-output': function (buffer, m) {
+        return { type: 'color', color1: m[0], color2: mhchemParser.go(m[1]) };
+      },
+      'r=': function (buffer, m) { buffer.r = (buffer.r || "") + m; },
+      'rdt=': function (buffer, m) { buffer.rdt = (buffer.rdt || "") + m; },
+      'rd=': function (buffer, m) { buffer.rd = (buffer.rd || "") + m; },
+      'rqt=': function (buffer, m) { buffer.rqt = (buffer.rqt || "") + m; },
+      'rq=': function (buffer, m) { buffer.rq = (buffer.rq || "") + m; },
+      'operator': function (buffer, m, p1) { return { type: 'operator', kind: (p1 || m) }; }
+    }
+  };
+  //
+  // Transitions and actions of a parser
+  //
+  mhchemParser.stateMachines['a'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': {} },
+      '1/2$': {
+        '0': { action: '1/2' } },
+      'else': {
+        '0': { nextState: '1', revisit: true } },
+      '$(...)$': {
+        '*': { action: 'tex-math tight', nextState: '1' } },
+      ',': {
+        '*': { action: { type: 'insert', option: 'commaDecimal' } } },
+      'else2': {
+        '*': { action: 'copy' } }
+    }),
+    actions: {}
+  };
+  //
+  // Transitions and actions of o parser
+  //
+  mhchemParser.stateMachines['o'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': {} },
+      '1/2$': {
+        '0': { action: '1/2' } },
+      'else': {
+        '0': { nextState: '1', revisit: true } },
+      'letters': {
+        '*': { action: 'rm' } },
+      '\\ca': {
+        '*': { action: { type: 'insert', option: 'circa' } } },
+      '\\x{}{}|\\x{}|\\x': {
+        '*': { action: 'copy' } },
+      '${(...)}$|$(...)$': {
+        '*': { action: 'tex-math' } },
+      '{(...)}': {
+        '*': { action: '{text}' } },
+      'else2': {
+        '*': { action: 'copy' } }
+    }),
+    actions: {}
+  };
+  //
+  // Transitions and actions of text parser
+  //
+  mhchemParser.stateMachines['text'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': { action: 'output' } },
+      '{...}': {
+        '*': { action: 'text=' } },
+      '${(...)}$|$(...)$': {
+        '*': { action: 'tex-math' } },
+      '\\greek': {
+        '*': { action: [ 'output', 'rm' ] } },
+      '\\,|\\x{}{}|\\x{}|\\x': {
+        '*': { action: [ 'output', 'copy' ] } },
+      'else': {
+        '*': { action: 'text=' } }
+    }),
+    actions: {
+      'output': function (buffer, m) {
+        if (buffer.text) {
+          var ret = { type: 'text', p1: buffer.text };
+          for (var p in buffer) { delete buffer[p]; }
+          return ret;
+        }
+        return null;
+      }
+    }
+  };
+  //
+  // Transitions and actions of pq parser
+  //
+  mhchemParser.stateMachines['pq'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': {} },
+      'state of aggregation $': {
+        '*': { action: 'state of aggregation' } },
+      'i$': {
+        '0': { nextState: '!f', revisit: true } },
+      '(KV letters),': {
+        '0': { action: 'rm', nextState: '0' } },
+      'formula$': {
+        '0': { nextState: 'f', revisit: true } },
+      '1/2$': {
+        '0': { action: '1/2' } },
+      'else': {
+        '0': { nextState: '!f', revisit: true } },
+      '${(...)}$|$(...)$': {
+        '*': { action: 'tex-math' } },
+      '{(...)}': {
+        '*': { action: 'text' } },
+      'a-z': {
+        'f': { action: 'tex-math' } },
+      'letters': {
+        '*': { action: 'rm' } },
+      '-9.,9': {
+        '*': { action: '9,9'  } },
+      ',': {
+        '*': { action: { type: 'insert+p1', option: 'comma enumeration S' } } },
+      '\\color{(...)}{(...)}1|\\color(...){(...)}2': {
+        '*': { action: 'color-output' } },
+      '\\color{(...)}0': {
+        '*': { action: 'color0-output' } },
+      '\\ce{(...)}': {
+        '*': { action: 'ce' } },
+      '\\,|\\x{}{}|\\x{}|\\x': {
+        '*': { action: 'copy' } },
+      'else2': {
+        '*': { action: 'copy' } }
+    }),
+    actions: {
+      'state of aggregation': function (buffer, m) {
+          m = mhchemParser.go(m, 'o');
+          return { type: 'state of aggregation subscript', p1: m };
+      },
+      'color-output': function (buffer, m) {
+        return { type: 'color', color1: m[0], color2: mhchemParser.go(m[1], 'pq') };
+      }
+    }
+  };
+  //
+  // Transitions and actions of bd parser
+  //
+  mhchemParser.stateMachines['bd'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': {} },
+      'x$': {
+        '0': { nextState: '!f', revisit: true } },
+      'formula$': {
+        '0': { nextState: 'f', revisit: true } },
+      'else': {
+        '0': { nextState: '!f', revisit: true } },
+      '-9.,9 no missing 0': {
+        '*': { action: '9,9' } },
+      '.': {
+        '*': { action: { type: 'insert', option: 'electron dot' } } },
+      'a-z': {
+        'f': { action: 'tex-math' } },
+      'x': {
+        '*': { action: { type: 'insert', option: 'KV x' } } },
+      'letters': {
+        '*': { action: 'rm' } },
+      '\'': {
+        '*': { action: { type: 'insert', option: 'prime' } } },
+      '${(...)}$|$(...)$': {
+        '*': { action: 'tex-math' } },
+      '{(...)}': {
+        '*': { action: 'text' } },
+      '\\color{(...)}{(...)}1|\\color(...){(...)}2': {
+        '*': { action: 'color-output' } },
+      '\\color{(...)}0': {
+        '*': { action: 'color0-output' } },
+      '\\ce{(...)}': {
+        '*': { action: 'ce' } },
+      '\\,|\\x{}{}|\\x{}|\\x': {
+        '*': { action: 'copy' } },
+      'else2': {
+        '*': { action: 'copy' } }
+    }),
+    actions: {
+      'color-output': function (buffer, m) {
+        return { type: 'color', color1: m[0], color2: mhchemParser.go(m[1], 'bd') };
+      }
+    }
+  };
+  //
+  // Transitions and actions of oxidation parser
+  //
+  mhchemParser.stateMachines['oxidation'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': {} },
+      'roman numeral': {
+        '*': { action: 'roman-numeral' } },
+      '${(...)}$|$(...)$': {
+        '*': { action: 'tex-math' } },
+      'else': {
+        '*': { action: 'copy' } }
+    }),
+    actions: {
+      'roman-numeral': function (buffer, m) { return { type: 'roman numeral', p1: m }; }
+    }
+  };
+  //
+  // Transitions and actions of tex-math parser
+  //
+  mhchemParser.stateMachines['tex-math'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': { action: 'output' } },
+      '\\ce{(...)}': {
+        '*': { action: [ 'output', 'ce' ] } },
+      '{...}|\\,|\\x{}{}|\\x{}|\\x': {
+        '*': { action: 'o=' } },
+      'else': {
+        '*': { action: 'o=' } }
+    }),
+    actions: {
+      'output': function (buffer, m) {
+        if (buffer.o) {
+          var ret = { type: 'tex-math', p1: buffer.o };
+          for (var p in buffer) { delete buffer[p]; }
+          return ret;
+        }
+        return null;
+      }
+    }
+  };
+  //
+  // Transitions and actions of tex-math-tight parser
+  //
+  mhchemParser.stateMachines['tex-math tight'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': { action: 'output' } },
+      '\\ce{(...)}': {
+        '*': { action: [ 'output', 'ce' ] } },
+      '{...}|\\,|\\x{}{}|\\x{}|\\x': {
+        '*': { action: 'o=' } },
+      '-|+': {
+        '*': { action: 'tight operator' } },
+      'else': {
+        '*': { action: 'o=' } }
+    }),
+    actions: {
+      'tight operator': function (buffer, m) { buffer.o = (buffer.o || "") + "{"+m+"}"; },
+      'output': function (buffer, m) {
+        if (buffer.o) {
+          var ret = { type: 'tex-math', p1: buffer.o };
+          for (var p in buffer) { delete buffer[p]; }
+          return ret;
+        }
+        return null;
+      }
+    }
+  };
+  //
+  // Transitions and actions of 9,9 parser
+  //
+  mhchemParser.stateMachines['9,9'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': {} },
+      ',': {
+        '*': { action: 'comma' } },
+      'else': {
+        '*': { action: 'copy' } }
+    }),
+    actions: {
+      'comma': function (buffer, m) { return { type: 'commaDecimal' }; }
+    }
+  };
+  //
+  //
+  // \pu state machines
+  //
+  //
+  // Transitions and actions of pu main parser
+  //
+  mhchemParser.stateMachines['pu'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': { action: 'output' } },
+      '\{[(|)]\}': {
+        '0|a': { action: 'copy' } },
+      '(-)(9)^(-9)': {
+        '0': { action: 'number^', nextState: 'a' } },
+      '(-)(9.,9)(e)(99)': {
+        '0': { action: 'enumber', nextState: 'a' } },
+      'space': {
+        '0|a': {} },
+      'pm-operator': {
+        '0|a': { action: { type: 'operator', option: '\\pm' }, nextState: '0' } },
+      'operator': {
+        '0|a': { action: 'copy', nextState: '0' } },
+      '//': {
+        'd': { action: 'o=', nextState: '/' } },
+      '/': {
+        'd': { action: 'o=', nextState: '/' } },
+      '{...}|else': {
+        '0|d': { action: 'd=', nextState: 'd' },
+        'a': { action: [ 'space', 'd=' ], nextState: 'd' },
+        '/|q': { action: 'q=', nextState: 'q' } }
+    }),
+    actions: {
+      'enumber': function (buffer, m) {
+        var ret = [];
+        if (m[0] === "+-"  ||  m[0] === "+/-") {
+          ret.push("\\pm ");
+        } else if (m[0]) {
+          ret.push(m[0]);
+        }
+        if (m[1]) {
+          ret = mhchemParser.concatNotUndefined(ret, mhchemParser.go(m[1], 'pu-9,9'));
+          if (m[2]) {
+            if (m[2].match(/[,.]/)) {
+              ret = mhchemParser.concatNotUndefined(ret, mhchemParser.go(m[2], 'pu-9,9'));
+            } else {
+              ret.push(m[2]);
+            }
+          }
+          m[3] = m[4] || m[3];
+          if (m[3]) {
+            m[3] = m[3].trim();
+            if (m[3] === "e"  ||  m[3].substr(0, 1) === "*") {
+              ret.push({ type: 'cdot' });
+            } else {
+                ret.push({ type: 'times' });
+            }
+          }
+        }
+        if (m[3]) {
+          ret.push("10^{"+m[5]+"}");
+        }
+        return ret;
+      },
+      'number^': function (buffer, m) {
+        var ret = [];
+        if (m[0] === "+-"  ||  m[0] === "+/-") {
+          ret.push("\\pm ");
+        } else if (m[0]) {
+          ret.push(m[0]);
+        }
+        ret = mhchemParser.concatNotUndefined(ret, mhchemParser.go(m[1], 'pu-9,9'));
+        ret.push("^{"+m[2]+"}");
+        return ret;
+      },
+      'operator': function (buffer, m, p1) { return { type: 'operator', kind: (p1 || m) }; },
+      'space': function (buffer, m) { return { type: 'pu-space-1' }; },
+      'output': function (buffer, m) {
+        var ret;
+        var md = mhchemParser.matchh('{(...)}', buffer.d || "");
+        if (md  &&  md.remainder === '') { buffer.d = md.matchh; }
+        var mq = mhchemParser.matchh('{(...)}', buffer.q || "");
+        if (mq  &&  mq.remainder === '') { buffer.q = mq.matchh; }
+        if (buffer.d) {
+            buffer.d = buffer.d.replace(/\u00B0C|\^oC|\^{o}C/g, "{}^{\\circ}C");
+            buffer.d = buffer.d.replace(/\u00B0F|\^oF|\^{o}F/g, "{}^{\\circ}F");
+        }
+        if (buffer.q) {  // fraction
+          buffer.d = mhchemParser.go(buffer.d, 'pu');
+          buffer.q = buffer.q.replace(/\u00B0C|\^oC|\^{o}C/g, "{}^{\\circ}C");
+          buffer.q = buffer.q.replace(/\u00B0F|\^oF|\^{o}F/g, "{}^{\\circ}F");
+          buffer.q = mhchemParser.go(buffer.q, 'pu');
+          if (buffer.o === '//') {
+            ret = { type: 'pu-frac', p1: buffer.d, p2: buffer.q };
+          } else {
+            ret = buffer.d;
+            if (buffer.d.length > 1  ||  buffer.q.length > 1) {
+              ret = mhchemParser.concatNotUndefined(ret, { type: ' / ' });
+            } else {
+              ret = mhchemParser.concatNotUndefined(ret, { type: '/' });
+            }
+            ret = mhchemParser.concatNotUndefined(ret, buffer.q);
+          }
+        } else {  // no fraction
+          ret = mhchemParser.go(buffer.d, 'pu-2');
+        }
+        for (var p in buffer) { delete buffer[p]; }
+        return ret;
+      }
+    }
+  };
+  //
+  // Transitions and actions of pu-2 parser
+  //
+  mhchemParser.stateMachines['pu-2'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '*': { action: 'output' } },
+      '*': {
+        '*': { action: [ 'output', 'cdot' ], nextState: '0' } },
+      '\\x': {
+        '*': { action: 'rm=' }, nextState: '1' },
+      'space': {
+        '*': { action: [ 'output', 'space' ], nextState: '0' } },
+      '^{(...)}|^(-1)': {
+        '1': { action: '^(-1)' } },
+      '-9.,9': {
+        '0': { action: 'rm=', nextState: '0' },
+        '1': { action: '^(-1)', nextState: '0' } },
+      '{...}|else': {
+        '*': { action: 'rm=', nextState: '1' } }
+    }),
+    actions: {
+      'cdot': function (buffer, m) { return { type: 'tight cdot' }; },
+      '^(-1)': function (buffer, m) { buffer.rm += "^{"+m+"}"; },
+      'space': function (buffer, m) { return { type: 'pu-space-2' }; },
+      'output': function (buffer, m) {
+        var ret;
+        if (buffer.rm) {
+          var mrm = mhchemParser.matchh('{(...)}', buffer.rm || "");
+          if (mrm  &&  mrm.remainder === '') {
+            ret = mhchemParser.go(mrm.matchh, 'pu');
+          } else {
+            ret = { type: 'rm', p1: buffer.rm };
+          }
+        }
+        for (var p in buffer) { delete buffer[p]; }
+        return ret;
+      }
+    }
+  };
+  //
+  // Transitions and actions of 9,9 parser
+  //
+  mhchemParser.stateMachines['pu-9,9'] = {
+    transitions: mhchemParser.createTransitions({
+      'empty': {
+        '0': { action: 'output-0' },
+        'o': { action: 'output-o' } },
+      ',': {
+        '0': { action: [ 'output-0', 'comma' ], nextState: 'o' } },
+      '.': {
+        '0': { action: [ 'output-0', 'copy' ], nextState: 'o' } },
+      'else': {
+        '*': { action: 'text=' } }
+    }),
+    actions: {
+      'comma': function (buffer, m) { return { type: 'commaDecimal' }; },
+      'output-0': function (buffer, m) {
+        var ret = [];
+        if (buffer.text.length > 4) {
+            var a = buffer.text.length % 3;
+            if (a === 0) { a = 3; }
+            for (var i=buffer.text.length-3; i>0; i-=3) {
+              ret.push(buffer.text.substr(i, 3));
+              ret.push({ type: '1000 separator' });
+            }
+            ret.push(buffer.text.substr(0, a));
+            ret.reverse();
+        } else {
+            ret.push(buffer.text);
+        }
+        for (var p in buffer) { delete buffer[p]; }
+        return ret;
+      },
+      'output-o': function (buffer, m) {
+        var ret = [];
+        if (buffer.text.length > 4) {
+            var a = buffer.text.length - 3;
+            for (var i=0; i<a; i+=3) {
+              ret.push(buffer.text.substr(i, 3));
+              ret.push({ type: '1000 separator' });
+            }
+            ret.push(buffer.text.substr(i));
+        } else {
+            ret.push(buffer.text);
+        }
+        for (var p in buffer) { delete buffer[p]; }
+        return ret;
+      }
+    }
+  };
+
+  //
+  //
+  // Take MhchemParser output and convert it to TeX
+  // (recursive)
+  //
+  //
+  var texify = {
+    types: {
+      'chemfive': function (buf) {
+        var res = "";
+        buf.a = texify.go2(buf.a);
+        buf.b = texify.go2(buf.b);
+        buf.p = texify.go2(buf.p);
+        buf.o = texify.go2(buf.o);
+        buf.q = texify.go2(buf.q);
+        buf.d = texify.go2(buf.d);
+        //
+        // a
+        //
+        if (buf.a) {
+          if (buf.a.match(/^[+\-]/)) { buf.a = "{"+buf.a+"}"; }
+          res += buf.a + "\\,";
+        }
+        //
+        // b and p
+        //
+        if (buf.b || buf.p) {
+          res += "{\\vphantom{X}}";
+          res += "^{\\hphantom{"+(buf.b||"")+"}}_{\\hphantom{"+(buf.p||"")+"}}";
+          res += "{\\vphantom{X}}";
+          res += "^{\\smash[t]{\\vphantom{2}}\\llap{"+(buf.b||"")+"}}";
+          res += "_{\\vphantom{2}\\llap{\\smash[t]{"+(buf.p||"")+"}}}";
+        }
+        //
+        // o
+        //
+        if (buf.o) {
+          if (buf.o.match(/^[+\-]/)) { buf.o = "{"+buf.o+"}"; }
+          res += buf.o;
+        }
+        //
+        // q and d
+        //
+        if (buf['d-type'] === 'kv') {
+          if (buf.d || buf.q) {
+            res += "{\\vphantom{X}}";
+          }
+          if (buf.d) {
+            res += "^{"+buf.d+"}";
+          }
+          if (buf.q) {
+            res += "_{\\smash[t]{"+buf.q+"}}";
+          }
+        } else if (buf['d-type'] === 'oxidation') {
+          if (buf.d) {
+            res += "{\\vphantom{X}}";
+            res += "^{"+buf.d+"}";
+          }
+          if (buf.q) {
+            res += "{\\vphantom{X}}";
+            res += "_{\\smash[t]{"+buf.q+"}}";
+          }
+        } else {
+          if (buf.q) {
+            res += "{\\vphantom{X}}";
+            res += "_{\\smash[t]{"+buf.q+"}}";
+          }
+          if (buf.d) {
+            res += "{\\vphantom{X}}";
+            res += "^{"+buf.d+"}";
+          }
+        }
+        return res;
+      },
+      'rm': function (buf) { return "\\mathrm{"+buf.p1+"}"; },
+      'text': function (buf) {
+        if (buf.p1.match(/[\^_]/)) {
+          buf.p1 = buf.p1.replace(" ", "~").replace("-", "\\text{-}");
+          return "\\mathrm{"+buf.p1+"}";
+        } else {
+          return "\\text{"+buf.p1+"}";
+        }
+      },
+      'roman numeral': function (buf) { return "\\mathrm{"+buf.p1+"}"; },
+      'state of aggregation': function (buf) { return "\\mskip2mu "+texify.go2(buf.p1); },
+      'state of aggregation subscript': function (buf) { return "\\mskip1mu "+texify.go2(buf.p1); },
+      'bond': function (buf) {
+        var ret = texify.bonds[buf.kind];
+        if (!ret) {
+          throw ["MhchemErrorBond", "mhchem Error. Unknown bond type (" + buf.kind + ")"];
+        }
+        return ret;
+      },
+      'frac': function (buf) {
+          var c = "\\frac{" + buf.p1 + "}{" + buf.p2 + "}";
+          return "\\mathchoice{\\textstyle"+c+"}{"+c+"}{"+c+"}{"+c+"}";
+       },
+      'pu-frac': function (buf) {
+          var c = "\\frac{" + texify.go2(buf.p1) + "}{" + texify.go2(buf.p2) + "}";
+          return "\\mathchoice{\\textstyle"+c+"}{"+c+"}{"+c+"}{"+c+"}";
+       },
+      'tex-math': function (buf) { return buf.p1 + " "; },
+      'frac-ce': function (buf) {
+        return "\\frac{" + texify.go2(buf.p1) + "}{" + texify.go2(buf.p2) + "}";
+      },
+      'overset': function (buf) {
+        return "\\overset{" + texify.go2(buf.p1) + "}{" + texify.go2(buf.p2) + "}";
+      },
+      'underset': function (buf) {
+        return "\\underset{" + texify.go2(buf.p1) + "}{" + texify.go2(buf.p2) + "}";
+      },
+      'underbrace': function (buf) {
+        return "\\underbrace{" + texify.go2(buf.p1) + "}_{" + texify.go2(buf.p2) + "}";
+      },
+      'color': function (buf) {
+        return "{\\color{" + buf.color1 + "}{" + texify.go2(buf.color2) + "}}";
+      },
+      'color0': function (buf) {
+        return "\\color{" + buf.color + "}";
+      },
+      'arrow': function (buf) {
+        buf.rd = texify.go2(buf.rd);
+        buf.rq = texify.go2(buf.rq);
+        var arrow = texify.arrows[buf.r];
+        if (buf.rd || buf.rq) {
+          if (buf.r === "<=>"  ||  buf.r === "<=>>"  ||  buf.r === "<<=>"  ||  buf.r === "<-->") {
+            // arrows that cannot stretch correctly yet, https://github.com/mathjax/MathJax/issues/1491
+            arrow = "\\long"+arrow;
+            if (buf.rd) { arrow = "\\overset{"+buf.rd+"}{"+arrow+"}"; }
+            if (buf.rq) { arrow = "\\underset{\\lower7mu{"+buf.rq+"}}{"+arrow+"}"; }
+            arrow = " {}\\mathrel{"+arrow+"}{} ";
+          } else {
+            if (buf.rq) { arrow += "[{"+buf.rq+"}]"; }
+            arrow += "{"+buf.rd+"}";
+            arrow = " {}\\mathrel{\\x"+arrow+"}{} ";
+          }
+        } else {
+          arrow = " {}\\mathrel{\\long"+arrow+"}{} ";
+        }
+        return arrow;
+      },
+      'operator': function (buf) { return texify.operators[buf.kind]; }
+    },
+    arrows: {
+      "->": "rightarrow",
+      "\u2192": "rightarrow",
+      "\u27F6": "rightarrow",
+      "<-": "leftarrow",
+      "<->": "leftrightarrow",
+      "<-->": "leftrightarrows",
+      "<=>": "rightleftharpoons",
+      "\u21CC": "rightleftharpoons",
+      "<=>>": "Rightleftharpoons",
+      "<<=>": "Leftrightharpoons"
+    },
+    bonds: {
+      "-": "{-}",
+      "1": "{-}",
+      "=": "{=}",
+      "2": "{=}",
+      "#": "{\\equiv}",
+      "3": "{\\equiv}",
+      "~": "{\\tripledash}",
+      "~-": "{\\rlap{\\lower.1em{-}}\\raise.1em{\\tripledash}}",
+      "~=": "{\\rlap{\\lower.2em{-}}\\rlap{\\raise.2em{\\tripledash}}-}",
+      "~--": "{\\rlap{\\lower.2em{-}}\\rlap{\\raise.2em{\\tripledash}}-}",
+      "-~-": "{\\rlap{\\lower.2em{-}}\\rlap{\\raise.2em{-}}\\tripledash}",
+      "...": "{{\\cdot}{\\cdot}{\\cdot}}",
+      "....": "{{\\cdot}{\\cdot}{\\cdot}{\\cdot}}",
+      "->": "{\\rightarrow}",
+      "<-": "{\\leftarrow}",
+      "<": "{<}",
+      ">": "{>}"
+    },
+    entities: {
+      'space': " ",
+      'entitySkip': "~",
+      'pu-space-1': "~",
+      'pu-space-2': "\\mkern3mu ",
+      '1000 separator': "\\mkern2mu ",
+      'commaDecimal': "{,}",
+      'comma enumeration L': "{{0}}\\mkern6mu ",
+      'comma enumeration M': "{{0}}\\mkern3mu ",
+      'comma enumeration S': "{{0}}\\mkern1mu ",
+      'hyphen': "\\text{-}",
+      'addition compound': "\\,{\\cdot}\\,",
+      'electron dot': "\\mkern1mu \\bullet\\mkern1mu ",
+      'KV x': "{\\times}",
+      'prime': "\\prime ",
+      'cdot': "\\cdot ",
+      'tight cdot': "\\mkern1mu{\\cdot}\\mkern1mu ",
+      'times': "\\times ",
+      'circa': "{\\sim}",
+      '^': "uparrow",
+      'v': "downarrow",
+      'ellipsis': "\\ldots ",
+      'pKa': "\\mathrm{p}K_{\\mathrm{{0}}}",
+      'Ka': "K_{\\mathrm{{0}}}",
+      'pKa1': "\\mathrm{p}K_{\\mathrm{{0}_{{1}}}}",
+      'Ka1': "K_{\\mathrm{{0}_{{1}}}}",
+      '/': "/",
+      ' / ': "\\,/\\,",
+      '1st-level escape': "{0} "  // &, \\\\, \\hline
+    },
+    operators: {
+      "+": " {}+{} ",
+      "-": " {}-{} ",
+      "=": " {}={} ",
+      "<": " {}<{} ",
+      ">": " {}>{} ",
+      "<<": " {}\\ll{} ",
+      ">>": " {}\\gg{} ",
+      "\\pm": " {}\\pm{} ",
+      "\\approx": " {}\\approx{} ",
+      "$\\approx$": " {}\\approx{} ",
+      "v": " \\downarrow{} ",
+      "(v)": " \\downarrow{} ",
+      "^": " \\uparrow{} ",
+      "(^)": " \\uparrow{} "
+    },
+
+    go: function (input, isInner) {
+      if (!input) { return input; }
+      var res = "";
+      var cee = false;
+      for (var i=0; i<input.length; i++) {
+        var inputi = input[i];
+        if (typeof inputi === "string") {
+          res += inputi;
+        } else if (this.types[inputi.type]) {
+          res += this.types[inputi.type](inputi);
+        } else if (this.entities[inputi.type]) {
+          var a = this.entities[inputi.type];
+          a = a.replace("{0}", inputi.p1 || "");
+          a = a.replace("{1}", inputi.p2 || "");
+          res += a;
+          if (inputi.type === '1st-level escape') { cee = true; }
+        } else {
+          throw ["MhchemBugT", "mhchem bug T. Please report."];  // Missing texify rule or unknown MhchemParser output
+        }
+      }
+      if (!isInner && !cee) {
+        res = "{" + res + "}";
+      }
+      return res;
+    },
+    go2: function(input) {
+      return this.go(input, true);
+    }
+  };
+
+  MathJax.Extension["TeX/mhchem"].CE = CE;
+
+  /***************************************************************************/
+
+  TEX.Definitions.Add({
+    macros: {
+      //
+      //  Set up the macros for chemistry
+      //
+      ce:   "CE",
+      pu:   "PU",
+
+      //
+      //  Make these load AMSmath package (redefined below when loaded)
+      //
+      xleftrightarrow:    ["Extension","AMSmath"],
+      xrightleftharpoons: ["Extension","AMSmath"],
+      xRightleftharpoons: ["Extension","AMSmath"],
+      xLeftrightharpoons: ["Extension","AMSmath"],
+
+      //  FIXME:  These don't work well in FF NativeMML mode
+      longrightleftharpoons: ["Macro","\\stackrel{\\textstyle{-}\\!\\!{\\rightharpoonup}}{\\smash{{\\leftharpoondown}\\!\\!{-}}}"],
+      longRightleftharpoons: ["Macro","\\stackrel{\\textstyle{-}\\!\\!{\\rightharpoonup}}{\\smash{\\leftharpoondown}}"],
+      longLeftrightharpoons: ["Macro","\\stackrel{\\textstyle\\vphantom{{-}}{\\rightharpoonup}}{\\smash{{\\leftharpoondown}\\!\\!{-}}}"],
+      longleftrightarrows: ["Macro","\\stackrel{\\longrightarrow}{\\smash{\\longleftarrow}\\Rule{0px}{.25em}{0px}}"],
+
+      //
+      //  Needed for \bond for the ~ forms
+      //  Not perfectly aligned when zoomed in, but on 100%
+      //
+      tripledash: ["Macro","\\vphantom{-}\\raise2mu{\\kern2mu\\tiny\\text{-}\\kern1mu\\text{-}\\kern1mu\\text{-}\\kern2mu}"]
+    },
+  },null,true);
+
+  if (!MathJax.Extension["TeX/AMSmath"]) {
+    TEX.Definitions.Add({
+      macros: {
+        xrightarrow: ["Extension","AMSmath"],
+        xleftarrow:  ["Extension","AMSmath"]
+      }
+    },null,true);
+  }
+
+  //
+  //  These arrows need to wait until AMSmath is loaded
+  //
+  MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
+    TEX.Definitions.Add({
+      macros: {
+        //
+        //  Some of these are hacks for now
+        //
+        xleftrightarrow:    ["xArrow",0x2194,6,6],
+        xrightleftharpoons: ["xArrow",0x21CC,5,7],  // FIXME:  doesn't stretch in HTML-CSS output
+        xRightleftharpoons: ["xArrow",0x21CC,5,7],  // FIXME:  how should this be handled?
+        xLeftrightharpoons: ["xArrow",0x21CC,5,7]
+      }
+    },null,true);
+  });
+
+  TEX.Parse.Augment({
+
+    //
+    //  Implements \ce and friends
+    //
+    CE: function (name) {
+      var arg = this.GetArgument(name);
+      var tex = CE(arg).Parse();
+      this.string = tex + this.string.substr(this.i); this.i = 0;
+    },
+
+    PU: function (name) {
+      var arg = this.GetArgument(name);
+      var tex = CE(arg).Parse('pu');
+      this.string = tex + this.string.substr(this.i); this.i = 0;
+    }
+
+  });
+
+  //
+  //  Indicate that the extension is ready
+  //
+  MathJax.Hub.Startup.signal.Post("TeX mhchem Ready");
+
+});
+
+MathJax.Ajax.loadComplete("[Local]/mhchem.js");
