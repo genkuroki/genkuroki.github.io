@@ -120,4 +120,4 @@
     });
 });
 
-MathJax.Ajax.loadComplete("[Local]/physics.js");
+MathJax.Ajax.loadComplete("https://genkuroki.github.io/mathjax/physics.js");
