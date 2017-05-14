@@ -1712,4 +1712,4 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 
 });
 
-MathJax.Ajax.loadComplete("https://genkuroki.github.io/mathjax/mhchem.js");
+MathJax.Ajax.loadComplete("https://genkuroki.github.io/mhchem.js");
