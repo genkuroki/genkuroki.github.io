@@ -1,0 +1,552 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bfseries 一般化されたLaplaceの方法}
+\def\AUTHOR{黒木玄}
+\def\DATE{2014年10月14日(金)作成\thanks{%
+2016年10月14日Ver.0.1(4頁): 作成.
+2016年10月19日Ver.0.2(4頁): 微修正.
+2016年10月21日Ver.0.3(6頁): \secref{sec:d=3}を追加.
+}}
+\def\PDFTITLE{一般化されたLaplaceの方法}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{解析学}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\renewcommand\setminus{\smallsetminus}
+\newcommand\Hom{\operatorname{Hom}}
+\newcommand\Aut{\operatorname{Aut}}
+\newcommand\End{\operatorname{End}}
+\newcommand\diag{\operatorname{diag}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% enumerate
+%
+\renewcommand\labelenumi{(\arabic{enumi})}
+\renewcommand\labelenumii{(\alph{enumii})}
+\renewcommand\labelenumiii{(\roman{enumiii})}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+\newtheoremstyle{jplain}% name
+{}% space above
+{}% space below
+{\normalfont}% body  font
+{}% indent amount
+{\bfseries}% theorem head font
+{.}% punctuation after theorem head
+{4pt}% space after theorem head (default: 5pt)
+{\thmname{#1}\thmnumber{#2}\thmnote{\hspace{2pt}(#3)}}% theorem head spec
+
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+\newcommand\fnref[1]{脚注\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\begin{center}
+\href
+{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20161014GeneralizedLaplace.pdf}
+{\tt\small http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20161014GeneralizedLaplace.pdf}
+\end{center}
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{はじめに}
+
+このノートの内容は次のリンク先から始まる連続ツイートの内容をまとめたものである:
+\begin{center}
+\href
+{https://twitter.com/genkuroki/status/786179021138571266}
+{\tt https://twitter.com/genkuroki/status/786179021138571266}
+\\
+\href
+{https://twitter.com/genkuroki/status/789286733246451712}
+{\tt https://twitter.com/genkuroki/status/789286733246451712}
+\end{center}
+
+$\R^d$ を列ベクトル(縦ベクトル)の空間であるとみなし,
+Euclid内積を $\bra\ ,\ \ket$ と書く.
+
+$\R^d$ のLebesgue測度を $dx$ と書く.
+$A$ が $d$ 次正値実対称行列ならば
+\begin{align*}
+\int_{\R^d} e^{-n \bra x,Ax\ket}\,dx
+=\sqrt{\det\left(2\pi n^{-1}A^{-1}\right)}
+=\frac{(2\pi)^{d/2}}{n^{d/2}\sqrt{\det(A)}}
+\end{align*}
+なので
+\begin{align*}
+-\log \int_{\R^d} e^{-n \bra x,Ax\ket}\,dx 
+= \frac{d}{2}\log n +\frac{1}{2}\log\det(A)-\frac{d}{2}\log(2\pi).
+\end{align*}
+ゆえにもしも $f(x)$ が唯一の最小値 $f(x_0)$ を持ち, 
+$x=x_0$ の近傍で
+\begin{align*}
+f(x) = f(x_0)+\frac{1}{2}\bra x-x_0,A(x-x_0)\ket+\cdots
+\end{align*}
+とTaylor展開可能でかつ $A$ が正定値ならば, 
+適当な条件を満たす $\varphi(x)$ について
+\begin{align*}
+Z_n
+:=\int_{\R^n} e^{-nf(x)}\varphi(x)\,dx
+=\frac{(2\pi)^{d/2} e^{-nf(x_0)}\varphi(x_0)}{n^{d/2}\sqrt{\det(A)}}(1+o(1))
+\qquad(n\to\infty)
+\end{align*}
+が成立する. すなわち,
+\begin{align*}
+-\log Z_n
+= nf(x_0) + \frac{d}{2}\log n
++\frac{1}{2}\log\det(A)-\frac{d}{2}\log(2\pi)
+-\log\varphi(x_0)+o(1).
+\end{align*}
+このようにして積分の漸近挙動を導く方法を{\bf Laplaceの方法}と呼ぶ.
+この方法を一般化するための公式を次の節で示そう.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{一般化されたLaplaceの方法を導くための公式}
+
+以下の計算のモチベーションは \cite{watanabe-2012} の第4章の初等的な解読である.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ウォーミングアップ(2次元の場合)}
+
+$L,M>0$ であるとする.
+次の形の積分について考えよう:
+\begin{align*}
+\int_0^L dx \int_0^M dx\, \exp\left(-n x^a y^b \right) x^c y^d.
+\end{align*}
+この形の積分の計算は積分変数の置換 $x^a=X$, $y^b=Y$ によって次の形の積分に帰着できる:
+\begin{align*}
+Z_n:=\int_0^L dx \int_0^M dy\, e^{-nxy} x^{\lambda-1} y^{\mu-1}.
+\end{align*}
+ここで $\lambda=(c+1)/a$, $\mu=(d+1)/b$ である.
+以下では $0<\lambda\leqq\mu$ と仮定して, この積分の $n\to\infty$ での漸近挙動を調べよう.
+
+$0<\lambda<\mu$ の場合.  $x$ による積分を最初に実行することにし, 
+積分変数を $x=t/(ny)$ によって $t$ に変換すると,  
+\begin{align*}
+Z_n
+&= \int_0^M \left(\int_0^L e^{-nxy} x^{\lambda-1}y^{\mu-1}\,dy\right)dy
+=\int_0^M \left(\int_0^{nLy} e^{-t} \left(\frac{t}{ny}\right)^\lambda y^{\mu-1}\frac{dt}{t}\right)dy
+\\ &
+=\frac{1}{n^\lambda}\int_0^M \left(\int_0^{nLy} e^{-t} t^{\lambda-1}\,dt\right)y^{\mu-\lambda-1}\,dy
+=\frac{\Gamma(\lambda)}{n^\lambda}\int_0^M y^{\mu-\lambda-1}\,dy\cdot(1+o(1))
+\\ &
+=\frac{\Gamma(\lambda)}{n^\lambda}\frac{M^{\mu-\lambda}}{\mu-\lambda}(1+o(1)).
+\end{align*}
+すなわち
+\begin{align*}
+-\log Z_n = \lambda\log n -\log\Gamma(\lambda)+ \log(\mu-\lambda)-(\mu-\lambda)\log M + o(1).
+\end{align*}
+
+$0<\lambda=\mu$ の場合. 上と同様にして,
+\begin{align*}
+Z_n
+&=\int_0^M \left(\int_0^L e^{-nxy} (xy)^{\lambda-1}\,dy\right)dy
+=\int_0^M \left(\int_0^{nLy} e^{-t} \left(\frac{t}{ny}\right)^\lambda y^{\lambda-1}\frac{dt}{t}\right)dy
+\\ &
+=\frac{1}{n^\lambda}\int_0^M \left(\int_0^{nLy} e^{-t} t^{\lambda-1}\,dt\right)\frac{dy}{y}
+=\frac{1}{n^\lambda}\int_0^{nLM} e^{-t} t^{\lambda-1} \left(\int_{t/(nL)}^{M}\frac{dy}{y}\right)dt
+\\ &
+=\frac{1}{n^\lambda}\int_0^{nLM} e^{-t} t^{\lambda-1}
+\left(\log n + \log(LM) -\log t \right)\,dt
+\\ &
+=\left(
+\frac{\Gamma(\lambda)\log n}{n^\lambda}
++\frac{1}{n^\lambda}
+\left(\Gamma(\lambda)\log(LM)-\Gamma'(\lambda)\right)
+\right)(1+o(1))
+\\ &
+=\frac{\Gamma(\lambda)\log n}{n^\lambda}(1+o(1)).
+\end{align*}
+ゆえに
+\begin{align*}
+-\log Z_n = \lambda\log n - \log\log n -\log\Gamma(\lambda)+o(1).
+\end{align*}
+べきに重複が存在すると $\log\log n$ の項が現われる.
+
+以上のウォーミングアップをすませた後であれば次の部分節の結果も同様に示せることがわかるだろう.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{3次元の場合}
+\label{sec:d=3}
+
+$L,M,N>0$ であるとし, 次の積分について考えよう:
+\begin{align*}
+\int_0^L dx\int_0^M dy\int_0^N dz\, \exp\left(-n x^k y^l z^m \right) x^a y^b z^c.
+\end{align*}
+この積分の計算は $x=X^{1/k}$, $y=Y^{1/l}$, $z=Z^{1/m}$ という積分変数変換によって
+次の形の積分に帰着できる:
+\begin{align*}
+Z_n = \int_0^L dx \int_0^M dy \int_0^N dz\,
+e^{-nxyz}x^{a-1}y^{b-1}z^{c-1}.
+\end{align*}
+この $Z_n$ における $L,M,N$ をそれぞれ $L^k,M^l,N^m$ で置き換え, 
+さらに $a,b,c$ をそれぞれ $(a+1)/k, (b+1)/l, (c+1)/m$ で置き換えて, 
+さらに $klm$ で割ると上の積分に一致する.
+
+以下では $a,b,c>0$ と仮定する.  $-\log Z_n$ の $n\to\infty$ での漸近挙動を知りたい.
+
+$x=t/(nyz)$ とおいて積分変数を $(x,y,z)$ から $(t,y,z)$ に変換しよう.
+そのとき $(t,y,z)$ に関する積分領域は次の条件で与えられる:
+\begin{align*}
+0<\frac{t}{nyz}<L, \quad 0<y<M, \quad 0<z<N.
+\end{align*} 
+これは以下の各行と同値である:
+\begin{align*}
+&
+0<y<M, \quad 0<z<N, \quad 0<t<nLyz;
+\\ &
+0<z<N, \quad 0<t<nLMz, \quad \frac{t}{nLz}<y<M;
+\\ &
+0<t<nLMN, \quad \frac{t}{nLN}<y<M, \quad \frac{t}{nLy}<z<N.
+\end{align*}
+さらに, $x=t/(nyz)$ より, 
+\begin{align*}
+e^{-nxyz} x^{a-1} y^{b-1} z^{c-1}\, dx\,dy\,dz
+&
+=e^{-t} \left(\frac{t}{nyz}\right)^{a-1} y^{b-1} z^{c-1}\,\frac{dt}{nyz}\,dy\,dz
+\\ &
+=\frac{1}{n^a} e^{-t} t^{a-1} y^{b-a-1} z^{c-a-1}\,dt\,dy\,dz.
+\end{align*}
+ゆえに
+\begin{align*}
+Z_n
+&=
+\frac{1}{n^a}
+\int_0^M y^{b-a-1}
+\left(\int_0^N z^{c-a-1}
+\left(\int_0^{nLyz} e^{-t}t^{a-1}\,dt\right)\,dz\right)\,dy
+\tag{1}
+\\ &
+=
+\frac{1}{n^a}
+\int_0^N z^{c-a-1}
+\left(\int_0^{nLMz} e^{-t}t^{a-1}
+\left(\int_{t/(nLz)}^M y^{b-a-1}\,dy\right)\,dt\right)\,dz
+\tag{2}
+\\ &
+=
+\frac{1}{n^a}
+\int_0^{nLMN} e^{-t}t^{a-1}
+\left(\int_{t/(nLN)}^M y^{b-a-1}
+\left(\int_{t/(nLy)}^N z^{c-a-1}\,dz\right)\,dy\right)\,dt.
+\tag{3}
+\end{align*}
+
+$0<a<b\leqq c$ の場合. 
+$b-a>0$, $c-a>0$ なので, (1)より, $n\to\infty$ のとき
+\begin{align*}
+%n^aZ_n 
+%\to
+%\Gamma(a)\frac{M^{b-a}}{b-a}\frac{N^{c-a}}{c-a}
+%\quad\text{すなわち}\quad
+Z_n = \frac{1}{n^a}\Gamma(a)\frac{M^{b-a}}{b-a}\frac{N^{c-a}}{c-a}(1+o(1)).
+\end{align*}
+ゆえに
+\begin{align*}
+-\log Z_n = a\log n + O(1).
+\end{align*}
+
+$0<a=b<c$ の場合. $b-a=0$, $c-a>0$ なので, (2)より,
+\begin{align*}
+Z_n 
+&=
+\frac{1}{n^a}
+\int_0^N z^{c-a-1}
+\left(\int_0^{nLMz} e^{-t}t^{a-1}
+\log\frac{nLMz}{t}
+\,dt\right)\,dz
+\\ &
+=
+\frac{\log n}{n^a}\Gamma(a)\frac{N^{c-a}}{c-a}(1+o(1)).
+\end{align*}
+ゆえに
+\begin{align*}
+-\log Z_n = a\log n - \log\log n + O(1).
+\end{align*}
+
+$0<a=b=c$ の場合. $b-a=c-a=0$ なので, (3)より, 
+\begin{align*}
+Z_n
+&=
+\frac{1}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}
+\left(
+\int_{t/(nLN)}^M y^{-1} \log\frac{nLyN}{t}\,dy
+\right)\,dt
+\\ &
+=
+\frac{\log n}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}
+\left(
+\int_{t/(nLN)}^M y^{-1} \,dy
+\right)\,dt\cdot(1+o(1))
+\\ &
+=
+\frac{\log n}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}
+\log\frac{nLMN}{t}
+\,dt\cdot(1+o(1))
+\\ &
+=
+\frac{(\log n)^2}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}\,dt\cdot(1+o(1))
+\\ &
+=
+\frac{(\log n)^2}{n^a}\Gamma(a)(1+o(1)).
+\end{align*}
+ゆえに
+\begin{align*}
+-\log Z_n = a\log n - 2\log\log n + O(1).
+\end{align*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{一般次元の場合}
+
+$L_i>0$ であるとし, 
+前節の積分を一般化した次の積分について考えよう:
+\begin{align*}
+\int_0^{L_1}dx_1\cdots\int_0^{L_d}dx_d\,
+\exp\left(-n x_1^{a_1}\cdots x_d^{a_d}\right) x_1^{b_1}\cdots x_d^{b_d}.
+\end{align*}
+この積分の計算は $x_i^{a_i}=X_i$ による積分変数の変換によって次の形の積分に帰着する:
+\begin{align*}
+Z_n = \int_0^{L_1}dx_1\cdots\int_0^{L_d}dx_d\, e^{-nx_1\cdots x_d} 
+x_1^{\lambda_1-1}\cdots x^{\lambda_d-1}.
+\end{align*}
+ここで
+\begin{align*}
+\lambda_i = \frac{b_i+1}{a_i}
+\end{align*}
+$\lambda_i>0$ となると仮定する.
+$\lambda_1,\ldots,\lambda_d$ の最小値を $\lambda$ と書き, 
+$\lambda=\lambda_i$ となる $i$ の個数($\lambda$ の重複度)を $m$ と書くことにする.
+このとき前節の計算を一般化することによって次が成立することを示せる:
+\begin{align*}
+-\log Z_n = \lambda \log n - (m-1)\log\log n + O(1).
+\end{align*}
+この公式における $\lambda$ と $m$ は本質的に \cite{watanabe-2012} の第4章に
+登場する $\lambda$ と $m$ と同じものである.
+
+\begin{example}[Gauss積分]
+$w_i$ たちを
+\begin{align*}
+w_1=x_1,\ 
+w_2=w_1x_2,\ 
+\ldots,\ 
+w_d=w_1x_d
+\end{align*}
+と定めると
+\begin{align*}
+w_1^2+\cdots+w_d^2
+=x_1^2(1+x_2^2+\cdots+x_d^2)
+\end{align*}
+であることから, Gauss積分の対数の $-1$ 倍
+\begin{align*}
+-\log Z_n = -\log \int dw_1\cdots\int dw_d \exp\left(-n(w_1^2+\cdots+w_d^2)\right)
+\end{align*}
+の漸近挙動は本質的に次と同じになる:
+\begin{align*}
+-\log \int dx_1\cdots\int dx_d \, e^{-nx_1^2} x_1^{d-1}.
+\end{align*}
+この場合は $\lambda=(d-1+1)/2=d/2$, $m=1$ となるので
+\begin{align*}
+-\log \int dx_1\cdots\int dx_d \, e^{-nx_1^2} x_1^{d-1}
+=\frac{d}{2}\log n + O(1)
+\end{align*}
+となる.  これはガウス積分を直接計算した場合の結果と一致する.
+\qed
+\end{example}
+
+\begin{example}[退化したGauss積分]
+$0\leqq k<d$ であるとし, 
+$w_i$ たちを
+\begin{align*}
+w_1=x_1,\ 
+w_2=w_1x_2,\ 
+\ldots,\ 
+w_k=w_1 x_k,\ 
+w_{k+1}=x_{k+1},\ 
+\ldots,\ 
+w_d=x_d
+\end{align*}
+と定めると
+\begin{align*}
+w_1^2+\cdots+w_k^2
+=x_1^2(1+x_2^2+\cdots+x_k^2)
+\end{align*}
+であることから, $w_{k+1},\ldots,w_d$ に関する積分は有限の範囲内で行なうことにすると, 
+退化したGauss積分の対数の $-1$ 倍
+\begin{align*}
+-\log Z_n = -\log \int dw_1\cdots\int dw_d \exp\left(-n(w_1^2+\cdots+w_k^2)\right)
+\end{align*}
+の漸近挙動は本質的に次と同じになる:
+\begin{align*}
+-\log \int dx_1\cdots\int dx_d \, e^{-nx_1^2} x_1^{k-1}.
+\end{align*}
+この場合は $\lambda=(k-1+1)/2=k/2$, $m=1$ となるので
+\begin{align*}
+-\log \int dx_1\cdots\int dx_d \, e^{-nx_1^2} x_1^{k-1}
+=\frac{k}{2}\log n + O(1)
+\end{align*}
+となる.  このとき $k<d$ より, $\lambda=k/2<d/2$ となる.
+\qed
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+
+\bibitem{watanabe-2012}
+渡辺澄夫. 
+ベイズ統計の理論と方法.
+コロナ社 (2012/03), 226頁.
+\\
+\href
+{http://watanabe-www.math.dis.titech.ac.jp/users/swatanab/bayes-theory-method.html}
+{\tt\small http://watanabe-www.math.dis.titech.ac.jp/users/swatanab/bayes-theory-method.html}
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

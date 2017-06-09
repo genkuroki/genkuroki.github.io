@@ -1,0 +1,1544 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf Quantum geometric crystals}
+\def\AUTHOR{Gen Kuroki}
+\def\DATE{22 October 2010 \quad (Preliminary Version 0.05)}
+\def\ABSTRACT{We investigate quantization of geometric crystals.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm,amscd}
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter\newcommand\qbinom{\genfrac[]\z@{}}\makeatother
+\newcommand\ad{\mathop{\mathrm{ad}}\nolimits}
+\newcommand\id{\mathop{\mathrm{id}}\nolimits}
+\newcommand\Hom{\mathop{\mathrm{Hom}}\nolimits}
+\newcommand\injto{\hookrightarrow}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\newcommand\ord{\mathop{\mathrm{ord}}\nolimits}
+%
+\newcommand\GG{{\mathbb G}}
+%
+\newcommand\av{\alpha^\vee}
+\newcommand\ah{h}
+\newcommand\Qv{Q^\vee}
+\newcommand\Pv{P^\vee}
+%
+\newcommand\A{{\mathcal A}}
+\newcommand\K{{\mathcal K}}
+%
+\newcommand\g{{\mathfrak g}}
+\newcommand\h{{\mathfrak h}}
+\renewcommand\b{{\mathfrak b}}
+\newcommand\n{{\mathfrak n}}
+%
+\renewcommand\i{{\mathbf i}}
+\renewcommand\j{{\mathbf j}}
+\newcommand\x{{\mathbf x}}
+\newcommand\y{{\mathbf y}}
+\newcommand\e{{\mathbf e}}
+\newcommand\f{{\mathbf f}}
+%
+\newcommand\ph{\varphi}
+\newcommand\ep{\varepsilon}
+\newcommand\eps{\varepsilon}
+%
+%\newcommand\QT{{\mathcal{QT}}}
+%\newcommand\QGSC{{\mathcal{QGSC}}}
+%\newcommand\QGC{{\mathcal{QGC}}}
+\newcommand\QT{{\mathcal{T}}}
+\newcommand\QGSC{{\mathcal{SC}}}
+\newcommand\QGC{{\mathcal{C}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% theorem environments
+%
+\theoremstyle{plain} % bold header and slanted body
+%\theoremstyle{definition} % bold header and normal body
+\newtheorem{theorem}{Theorem}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem*{prop*}{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem*{cor*}{Corollary}
+\newtheorem{example}[theorem]{Example}
+\newtheorem*{example*}{Example}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem*{axiom*}{Axiom}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem*{problem*}{Problem}
+\newtheorem{summary}[theorem]{Summary}
+\newtheorem*{summary*}{Summary}
+\newtheorem{guide}[theorem]{Guide}
+\newtheorem*{guide*}{Guide}
+%
+\theoremstyle{definition} % bold header and normal body
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem*{definition*}{Definition}
+%
+%\theoremstyle{remark} % slanted header and normal body
+\theoremstyle{definition} % bold header and normal body
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem*{remark*}{Remark}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% refs
+%
+\newcommand\secref[1]{Section \ref{#1}}
+\newcommand\theoremref[1]{Theorem \ref{#1}}
+\newcommand\propref[1]{Proposition \ref{#1}}
+\newcommand\lemmaref[1]{Lemma \ref{#1}}
+\newcommand\corref[1]{Corollary \ref{#1}}
+\newcommand\exampleref[1]{Example \ref{#1}}
+\newcommand\axiomref[1]{Axiom \ref{#1}}
+\newcommand\problemref[1]{Problem \ref{#1}}
+\newcommand\summaryref[1]{Summary \ref{#1}}
+\newcommand\guideref[1]{Guide \ref{#1}}
+\newcommand\definitionref[1]{Definition \ref{#1}}
+\newcommand\remarkref[1]{Remark \ref{#1}}
+%
+\newcommand\figureref[1]{Figure \ref{#1}}
+\newcommand\tableref[1]{Table \ref{#1}}
+%
+% proof environment without \qed
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{Proof}
+%\newcommand{\Proofname}{Proof}
+\makeatother
+%
+% \qed
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\begin{abstract}\ABSTRACT\end{abstract}
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % First sction number = 0
+
+\section{Introduction}
+
+In this paper, rings and fields are possibly non-commutative.
+We denote the set of non-negative (resp.\ non-positive) integers 
+by $\Z_{\geqq0}$ (resp.\ $\Z_{\leqq0}$).
+%
+Let $\F$ be the commutative rational function field $\Q(q)$ over $\Q$.
+We shall deal with $\F=\Q(q)$ as a base field.
+A (possibly non-commutative) field $\K$ is called a field over $\F$
+if $\K$ is an algebra over $\F$, 
+that is, the center of $\K$ includes $\F$ as a subring.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Notation and definitions}
+
+\subsection{Cartan datum and root datum}
+
+Let $[a_{ij}]_{i,j\in I}$ be a 
+symmetrizable generalized Cartan matrix (GCM)
+with an index set $I$ (\cite{kac-book}).
+That is, we assume that 
+(1) $a_{ii}=2$, 
+(2) $a_{ij}$ is a non-positive integer if $i\ne j$,
+(3) $a_{ij}=0$ if and only if $a_{ji}=0$, 
+(4) there exists positive integers $d_i$ ($i\in I$) 
+such that $d_ia_{ij}=d_ja_{ji}$ for $i,j\in I$.
+Then $C=([a_{ij}]_{i,j\in I}, \{d_i\}_{i\in I})$ is called
+a {\em Cartan datum}.
+For any subset $J$ of $I$, 
+we define the Cartan datum $C_J$ by $C_J=([a_{ij}]_{i,j\in J}, \{d_i\}_{i\in J})$
+and call it the restriction of $C$ to $J$.
+
+A symmetrizable GCM $[a_{ij}]_{i,j\in I}$ with a finite index set $I$
+is of finite (resp.\ affine) type 
+if and only if the symmetric matrix $[d_ia_{ij}]_{i,j\in I}$ is 
+positive definite (resp.\ semi-possitive definite of rank $|I|-1$,
+where $|I|$ denotes the cardinality of $I$).
+
+Let $\Qv$, $P$ be finitely generated free $\Z$-modules 
+and $\bra\,,\,\ket:\Qv\times P\to\Z$ a perfect bilinear pairing.
+Assume that subsets $\{\ah_i\}_{i\in I}$ of $\Qv$ 
+and $\{\alpha_i\}_{i\in I}$ of $P$ 
+satisfy $\bra\ah_i,\alpha_j\ket=a_{ij}$ for $i,j\in I$.
+Then $\ah_i$ is called a simple coroot, 
+$\alpha_i$ a simple root, 
+$\Qv$ a coroot lattice, 
+and $P$ a weight lattice.
+We call
+$R=(\bra\,,\,\ket:\Qv\times P\to\Z,\,\{\ah_i\}_{i\in I},\,\{\av_i\}_{i\in I})$ 
+a {\em root datum} of type $C=([a_{ij}]_{i,j\in I},\{d_i\}_{i\in I})$ 
+(see \cite{lusztig-book} Section 2.2).
+
+The root lattice $Q$ is defined to be 
+the free $\Z$-module generated by all simple roots:
+$Q=\bigoplus_{i\in I}\Z\alpha_i$.
+Put $Q^+=\bigoplus_{i\in I}\Z_{\geqq0}\alpha_i$.
+If $\{\alpha_i\}_{i\in I}$ is linearly independent over $\Z$ in $P$,
+then $Q$ is naturally identified with the $\Z$-submodule of $P$
+generated by $\{\alpha_i\}_{i\in I}$.
+Let $(\,|\,):Q\times Q\to\Z$ be the symmetric bilinear form 
+given by $(\alpha_i|\alpha_j)=d_ia_{ij}$.
+
+For any subset $J$ of $I$, we put
+\begin{align*}
+ &
+ \Qv_J = \sum_{i\in J}\Z\ah_i, \quad
+ P_J = \Hom(\Qv_J,\Z), \quad
+ \bra\,,\,\ket:\Qv\times P_J\to\Z\ (\text{natural pairing}), 
+ \\ &
+ \ah_{J,i} = \ah_i, \quad
+ \alpha_{J,i} = (\text{the image of $\alpha_i$ in $P$})
+ \quad \text{for $i\in J$},
+ \quad
+ A_J = [a_{ij}]_{i,j\in J}.
+\end{align*}
+Then 
+$R_J=(\bra\,,\,\ket:\Qv_J\times P_J\to\Z,\,\{\ah_{J,i}\}_{i\in J},\,\{\av_{J,i}\}_{i\in J})$ 
+is a root datum of type $C_J=([a_{ij}]_{i,j\in J},\{d_i\}_{i\in J})$
+and called the restriction of $R$ to $J$.
+Put $Q_J=\bigoplus_{i\in J}\Z\alpha_i$ 
+and $Q_J^+\bigoplus_{i\in J}\Z_{\geqq0}\alpha_i$.
+
+\subsection{Group algebra of the weight lattice}
+
+Denote by $\F[q^P]$ the group algebra of the weight lattice $P$ given by
+\begin{equation*}
+ \F[q^P] = \bigoplus_{\lambda\in P}\F q^\lambda, \quad
+ q^\lambda q^\mu = q^{\lambda+\mu} \quad
+ (\lambda,\mu\in P).
+\end{equation*}
+Put $q_i=q^{d_i}$ and 
+define $\av_i\in P_\Q=P\otimes\Q$ by $\av_i = d_i^{-1}\alpha_i$
+which is also called a simple coroot.
+We define $q^P$ to be the subset of $\F[q^P]$ consisting of
+all $q^\lambda$ for $\lambda\in P$.
+For any subset $J$ of $I$, 
+we define $\F[q^{P_J}]$ and $q^{P_J}$ by the same way.
+
+For $v=q^n$ with $n\in\Z$ and a non-negative integer $k$, we put
+\begin{align*}
+ &
+ [x]_v = \frac{v^x-v^{-x}}{v-v^{-1}}, \quad
+ [k]_v! = [1]_v[2]_v\cdots [v]_v, 
+ \\ &
+ \qbinom{x}{k}_v =
+ \frac{[x]_v[x-1]_v\cdots[x-k+1]_v}{[k]_v!}.
+\end{align*}
+Since $q_i^{\pm\av_i}=q^{\pm\alpha_i}\in\F[q^P]$, 
+we have $\qbinom{\av_i}{k}_{q_i}\in\F[q^P]$ for $k\in\Z_{\geqq0}$.
+
+\subsection{Weyl group}
+
+Let $W$ be the group defined by generators $\{s_i\}_{i\in I}$ 
+and the definig relations (1) $s_i^2=1$, 
+(2) if $a_{ij}a_{ji}=0,1,2,3$, then $s_is_js_i\cdots=s_js_is_j\cdots$ 
+where the both sides have 2,3,4,6 factors respectively.
+We call $W$ the Weyl group of type $[a_{ij}]_{i,j\in I}$.
+Then $(W,\{s_i\}_{i\in I})$ is a Coxeter group.
+
+The {\em length} $\ell(w)$ of $w\in W$ is defined to be 
+the minumum of the non-negative ingtegers $m$ 
+such that there exists a word $(j_1,\ldots,j_m)\in I^m$ 
+with $w=s_{j_1}s_{j_2}\cdots s_{j_m}$.
+A word $\i=(i_1,i_2,\ldots,i_N)\in I^N$ of length $N$ is 
+called a {\em reduced word} for $w$ 
+if $N=\ell(w)$ and $w=s_{i_1}s_{i_2}\cdots s_{i_N}$.
+Then $w=s_{i_1}s_{i_2}\cdots s_{i_N}$ is called
+a {\em reduced expression} of $w$.
+Denote by $R(w)$ the set of all reduced words for $w\in W$.
+
+The Weyl group $W$ acts on the weight lattice $P$ by
+$s_i(\lambda) = \lambda - \bra\ah_i,\lambda\ket\alpha_i$ 
+for $i\in I$ and $\lambda\in P$.
+This is naturally extended to the action of $W$ on 
+the group algebra $\F[q^P]$ by $w(q^\lambda)=q^{w(\lambda)}$ 
+for $w\in W$ and $\lambda\in P$.
+
+Put $a_i=q^{\alpha_i}=q_i^{\av_i}$ for $i\in I$. 
+Then we have $s_i(a_j)=a_i^{-a_{ij}}a_j$.
+
+For any subset $J$ of $I$, 
+the Weyl group $W_J$ of type $[a_{ij}]_{i,j\in J}$
+is identified with the subgroup of $W$ generated by $\{s_i\}_{i\in J}$.
+
+\subsection{Ore domain and field of fractions}
+
+A (possibly non-commutative) ring $A$ is called an integral domain 
+or a domain if $ab\ne 0$ for any non-zero $a,b\in A$.
+A ring $A$ is called an Ore domain 
+if $A$ is an integral domain and 
+$Aa\cap Ab\ne 0$, $aA\cap bA\ne 0$ for every non-zero $a,b\in A$.
+
+A ring $A$ is an Ore domain if and only if there exists
+a field $K$ such that $K$ includes $A$ as a subring 
+and \(
+  K=\{\,as^{-1}\mid a,s\in A,\, s\ne 0\,\}
+   =\{\,s^{-1}a\mid a,s\in A,\, s\ne 0\,\}
+\). Such a field $K$ has the following universal mapping property:
+if $L$ is a ring, $f:A\to L$ is a ring homomorphism, and
+$f(s)$ is invertible in $L$ for any non-zero $s\in A$, 
+then there exists a unique ring homomorphism $\phi:K\to L$
+such that $\phi(a)=f(a)$ for all $a\in A$.
+Therefore $K$ is uniquely determined by $A$ up to canonical isomorphisms.
+We shall denote $K$ by $Q(A)$ and call it the {\em quotient field}
+or the {\em field of fractions} of $A$.
+
+Let $A$ be an Ore domain, $a,b,c,d\in A$, and $b,d\ne 0$.
+Then there exists non-zero $b',d'\in A$ with $bd'=db'$.
+We call $bd'=db'$ a common (left) denominator 
+of $ab^{-1}$ and $cd^{-1}$.
+Moreover $ab^{-1}=cd^{-1}$ in $Q(A)$ if and only if there exist 
+non-zero $b',d'\in A$ such that $bd'=db'$ and $ad'=cb'$. 
+
+Let $A$ be a (possibly non-commutative) ring, 
+$k$ a (possibly non-commutative) subfield of $A$,
+and $\{F_n A\}_{n=0}^\infty$ a family 
+of left (resp.\ right) $k$-subspaces of $A$.
+We call $\{F_n A\}_{n=0}^\infty$ 
+a left (resp.\ right) $k$-filtration of $A$
+if $1\in F_0 A$, $F_n A \subset F_{n+1} A$, 
+$F_m A F_n A\subset F_{m+n}A$ for $m,n=0,1,2,\ldots$,
+and $\bigcup_{n=0}^\infty F_n A = A$.
+A left or right $k$-filtration $\{F_n A\}_{n=0}^\infty$
+of $A$ is said to be {\em slowly increasing}
+if $F_n A$ is finite dimensional over $k$ for any $n$ and 
+the convergence radius of 
+the power series $\sum_{n=0}^\infty (\dim_k F_n A)z^n$
+is greater than or equal to $1$.
+
+\begin{lemma}
+ Let $A$ be an integral domain and $k$ a subfield of $A$.
+ If there exist both a slowly increasing left $k$-filtration 
+ and a slowly increasing right $k$-filtration of $A$,
+ then $A$ is an Ore domain.
+\end{lemma}
+
+\begin{proof}
+ Let $\{F_n A\}_{n=1}^\infty$ be a left $k$-filtration of $A$.
+ Assume that there exist non-zero $a,b\in A$ such that $Aa\cap Ab=0$.
+ Since $\bigcup_{n=0}^\infty F_nA=A$, 
+ there exists $N$ with $a,b\in F_N A$.
+ Since $1\in F_0 A$, $F_n A F_N A\subset F_{n+N}A$, and $Aa\cap Ab=0$, 
+ we have 
+ \begin{equation*}
+  \dim_k F_0 A \geqq 1, \quad
+  \dim_k F_{n+N}A \geqq \dim_k((F_nA)a + (F_nA)b) = 2\dim_k F_nA.
+ \end{equation*}
+ Therefore $\dim_k F_{mN}A \geqq 2^m$ for $m\in\Z_{\geqq0}$.
+ Since the convergence radius of $\sum_{m=0}^\infty 2^m z^{mN}$ is 
+ less than $1$, that of $\sum_{n=0}^\infty (\dim_k F_n A)z^n$ is also
+ less than $1$. 
+ This means that $\{F_n A\}_{n=1}^\infty$ is not slowly increasing.
+ Therefore if there exists a slowly increasing left $k$-filtration of $A$,
+ then $Aa\cap Ab\ne 0$ for any non-zero $a,b\in A$.
+ Similarly if there exists a slowly increasing right $k$-filtration of $A$,
+ then $aA\cap aA\ne 0$ for any non-zero $a,b\in A$.
+ \qed
+\end{proof}
+
+As applications of this lemma, 
+we obtain the following examples of Ore domains.
+
+The polynomial ring $K[t_1,\ldots,t_N]$ over 
+a (possibly non-commutative) field $K$ is an Ore domain. 
+Denote the field of fractions $Q(K[t_1,\ldots,t_N])$ by $K(t_1,\ldots,t_N)$.
+Elements of $K(t_1,\ldots,t_N)$ are called rational functions
+of $t_1,\ldots,t_N$ over $K$.
+
+Let $[c_{\mu\nu}]_{\mu,\nu=1}^N$ be a skew-symmetric integer matrix
+and $\A$ the associative algebra over $\F$ given by 
+generators $\{x_\nu\}_{\nu=1}^N$ and the defining relations
+$x_\nu x_\mu = q^{c_{\mu\nu}}x_\mu x_\nu$ ($1\leqq\mu,\nu\leqq N$).
+Then $\A$ is an Ore domain
+and the field of fractions $Q(\A)$ is called 
+a {\em rational function field of quantum torus}
+or simply a {\em quantum torus}.
+
+A quantum enveloping algebra $U_q$ 
+of finite or affine type is an Ore domain and 
+any quotient integral domain of any subalgebra of $U_q$
+is also an Ore domain (\cite{kuroki-2008}).
+
+\subsection{Substitution}
+\label{sec:erh}
+
+Let $K$ be a (possibly non-commutative) field, 
+$c_1,\ldots,c_N$ central elements of $K$,
+and $t_1,\ldots,t_N$ indeterminates.
+Put $t=(t_1,\ldots,t_N)$ and $c=(c_1,\ldots,c_N)$ and
+denote $K(t_1,\ldots,t_N)$ by $K(t)$ and $K[t_1,\ldots,t_n]$ by $K[t]$.
+
+A rational fucntion $f(t)\in K(t)$ is said to be regular at $t=c$ 
+if there exist polynomials $g(t),h(t)\in K[t]$ 
+such that $h(c)\ne 0$ and $f(t)=g(t)h(t)^{-1}$.
+Then $g(c)h(c)^{-1}$ does not depend on the choice of $g(t)$ and $h(t)$.
+Therefore $f(c)\in K$ is well-defined.
+Denote by $K[t]_c$ the subset of $K(t)$ consisting of 
+all rational functions regular at $t=c$.
+Then $K[t]_c$ is a subring of $K(t)$.
+Thus we obtain the substitution ring homomorphism 
+$K[t]_c\to K$, $f(t)\mapsto f(c)$.
+For any $f(t)\in K[t]_c$, $f(t)$ is invertible in $K[t]_c$ 
+if and only if $f(c)\ne 0$.
+We call $K[t]_c$ the local ring at $t=c$.
+
+Let $t'_1,\ldots,t'_N$ be indeterminates and put $t'=(t'_1,\ldots,t'_N)$.
+Then any rational function in $K(t,t')$ regular at $(t,t')=(c,c)$ is
+regular at $t'=t$. That is, $K[t,t']_{(c,c)}\subset K(t)[t']_{t}$.
+Therefore we have the ring homomorphism $K[t,t']_{(c,c)}\to K(t)$, 
+$f(t,t')\mapsto f(t,t)$.
+
+Let $\phi^t:K\to K(t)$ be a ring homomorphism.
+
+If $\phi^t(K)\subset K[t]_c$, 
+then we call $\phi^t$ regulat at $t=c$ and 
+can define the ring homomorphism $\phi^c:K\to K$ to be 
+the composition of $\phi^t:K\to K[t]_c$ and 
+the substitution ring homomorphism at $t=c$.
+
+For subsets $C_1,\ldots,C_N$ of the center of $K$, 
+we define the substitution ring homomorphism at $C=C_1\times\cdots\times C_N$
+to be the mapping $\bigcap_{c\in C} K[t]_c\to K^C$, $f(t)\mapsto (f(c))_{c\in C}$.
+If $C_1,\ldots,C_N$ are all infinite, then 
+the substitution ring homomorphism at $C$ is injective.
+
+Let $C_1,\ldots,C_N$ be infinite subsets of the center of $K$
+and put $C=C_1\times\cdots\times C_N$.
+Assume that $\phi^t$ is regulat at $t=c$ for any $c\in C$.
+Extend $\phi^t$ to the ring homomorphism $K[t]\to K(t)$ by $\phi^t(t)=t$.
+Then we have the following commutative diagram:
+\begin{equation*}
+ \begin{CD}
+   K[t] @>\phi^t>>   \bigcap_{c\in C} K[t]_c @>{\text{inclusion}}>> K(t), \\
+   @VVV                          @VVV        \\
+   K^C  @>\prod_{c\in C}\phi^c>> K^C
+ \end{CD}
+\end{equation*}
+where the vertical arrows are the evalutation ring homomorphisms at $C$
+and hence injective.
+Since $\prod_{c\in C^n}\phi^c$ is injective, 
+$\phi^t:K[t]\to K(t)$ is also injective.
+Therefore $\phi^t:K[t]\to K(t)$ is uniquely extended 
+to the ring homomorphism $K(t)\to K(t)$, 
+which shall be also denoted by $\phi^t$.
+
+For each $\nu=1,\ldots,N$, 
+let $\phi_\nu^{t_\nu}:K\to K(t_\nu)$ be a ring homomorphism 
+and extend it to the ring homomorphism 
+$K(t_{\nu+1},\ldots,t_N)\to K(t_\nu,t_{\nu+1},\ldots,t_N)$ 
+by $\phi_\nu^{t_\nu}(t_\mu)=t_\mu$ for $\mu>\nu$.
+Denote by $\phi^{t_1,\ldots,t_N}$ 
+the composition ring homomorphism 
+$\phi_1^{t_1}\cdots\phi_N^{t_N}:K\to K(t)=K(t_1,\ldots,t_N)$.
+Let $(c_1,\ldots,c_N)\in C_1\times\cdots\times C_N$.
+Assume that 
+$\phi_\nu^{t_\nu}$ is regular at $t=c'_\nu$ for any $c'_\nu\in C_\nu$ 
+and $\phi_\nu^{c_\nu}(C_\mu)\subset C_\mu$ for $\mu>\nu$.
+Put $c'_1 = c_1$, $c'_2 = \phi_1^{c_1}(c_2)$, $\ldots$,
+$c'_N = \phi_1^{c_1}(\phi_2^{c_2}(\cdots(\phi_{N-1}^{c_{N-1}}(c_N))\cdots))$.
+Then $\phi^{t_1,\ldots,t_N}(K)$ is 
+regulat at $(t_1,\ldots,t_N)=(c'_1,\ldots,c'_N)$ and
+$\phi_1^{c_1}\cdots\phi_N^{c_N} = \phi^{c'_1,\ldots,c'_N}$.
+
+Let $[k_{\mu\nu}]_{\mu,\nu=1}^N$ be an integer matrix 
+and $n_1,\ldots,n_N$ integers.
+Put $t'_\nu=t_1^{k_{1\nu}}\cdots t_N^{k_{N\nu}}$ and
+$t'=(t'_1,\ldots,t'_N)$.
+Assume that $\phi_\nu^{t_\nu}$ is regulat at $t_\nu=1$ for $\nu=1,\ldots,N$.
+Then $\phi^{t_1,\ldots,t_N}(K)\subset K[t_1,\ldots,t_N]_{(1,\ldots,1)}$.
+Therefore the ring homomorphism $\phi^{t'_1,\ldots,t'_N}:K\to K(t_1,\ldots,t_N)$
+is well-defined and shall be denoted by $\phi_1^{t'_1}\cdots\phi_N^{t'_N}$.
+
+\section{Quantum geometric semicrystals and crystals}
+
+\subsection{Definition of quantum geometric semicrystals}
+
+Let $C=([a_{ij}]_{i,j\in I}, \{d_i\}_{i\in I})$ be a Cartan datum.
+
+Let $\K$ be a (possibly non-commutative) field 
+and $\e_i^t:\K\to\K(t)$ a ring homomorphism for each $i\in I$.
+Assume the following conditions:
+\begin{enumerate}
+ \item[(1)] For any $i\in I$, $\e_i^t$ is regular at $t=1$,  
+  $\e_i^1=\id_\K$, and $\e_i^{t_1}\e_i^{t_2}=\e_i^{t_1t_2}$.
+ \item[(2)] For any $i,j\in I$ with $i\ne j$, 
+ \begin{align*}
+   &
+   (a_{ij},a_{ji})=(0,0) \implies
+   \e_i^{t_1}\e_j^{t_2} = \e_j^{t_2}\e_i^{t_1},
+   \\ &
+   (a_{ij},a_{ji})=(-1,-1) \implies
+   \e_i^{t_1}\e_j^{t_1t_2}\e_i^{t_2} = \e_j^{t_2}\e_i^{t_1t_2}\e_j^{t_1},
+   \\ &
+   (a_{ij},a_{ji})=(-1,-2) \implies
+   \e_i^{t_1}\e_j^{t_1t_2}\e_i^{t_1t_2^2}\e_j^{t_2}=
+   \e_j^{t_2}\e_i^{t_1t_2^2}\e_j^{t_1t_2}\e_i^{t_1},
+   \\ &
+   (a_{ij},a_{ji})=(-1,-3) \implies
+   \e_i^{t_1}\e_j^{t_1t_2}\e_i^{t_1^2t_2^3}\e_j^{t_1t_2^2}\e_i^{t_1t_2^3}\e_j^{t_2}=
+   \e_j^{t_2}\e_i^{t_1t_2^3}\e_j^{t_1t_2^2}\e_i^{t_1^2t_2^3}\e_j^{t_1t_2}\e_i^{t_1}.
+ \end{align*}
+ These relations are called the {\em Verma relations}.
+\end{enumerate}
+Then $(\K,\{e_i^t\}_{i\in I})$ is called a {\em quantum geometric semicrystal}
+of type $C$.
+For any subset $J$ of $I$, replacing $I$ with $J$,
+we define a {\em quantum geometric $J$-semicrystal} by the same way.
+
+Let $(\K,\{\e_i^t\}_{i\in I})$ be a quantum geometric semicrystal.
+
+Let $[k_{\mu\nu}]_{\mu,\nu=1}^N$ be an integer matrix
+and $i_1,\ldots,i_N\in I$.
+Put $t'_\nu=t_1^{k_{1\nu}}\cdots t_N^{k_{N\nu}}$.
+Then the conditoin (1) implies that 
+$\e_{i_1}^{t'_1}\cdots\e_{i_N}^{t'_N}:\K\to\K(t_1,\ldots,t_N)$ is well-defined
+and can be extended to the ring automorphism of $\K(t_1,\ldots,t_N)$.
+In particular, $\e_i^t\e_i^{t^{-1}}:\K\to\K(t)$
+can be extended to the identity map of $\K(t)$ for $i\in I$.
+
+Let $(\K,\{\e_i^t\}_{i\in J})$ and $(\K',\{\e_i'^t\}_{i\in J})$ 
+be quantum geometric semicrystals.
+An algebra homomorphism $f:\K\to\K'$ is a morphism of quantum geometric 
+semicrystals if $\e_i'^t\circ f=f\circ\e_i^t$ for any $i\in I$, 
+where we denote by the same symbol $f$ the extension of $f$ 
+to the algebra homomorphism $\K(t)\to\K'(t)$ characterized by $f(t)=t$.
+Denote by $\QGSC(C)$ the category of quantum geometric semicrystals and 
+morphisms of quantum geometric semicrystals associated 
+to the Cartan datum $C$.
+
+Recall that $C_J=([a_{ij}]_{i,j\in J}, \{d_i\}_{i\in J})$ 
+is called the restriction of the Cartan datum $C$ to $J$.
+We call $\QGSC(C_J)$ the category of quantum geometric $J$-semicrystals.
+We have the forgetful functor from $\QGSC(C)$ to $\QGSC(C_J)$ 
+which maps a quantum geometric semicrystal $(\K,\{\e_i^t\}_{i\in I})$ 
+to the restriction $(\K,\{\e_i^t\}_{i\in J})$ to $J$.
+We also have the trivial extension functor from $\QGSC(C_J)$ to $\QGSC(C)$ 
+which maps a quantum geometric $J$-semicrystal $(\K,\{\e_i^t\}_{i\in J})$
+to the quantum geometric semicrystal $(\K,\{\e_i^t\}_{i\in I})$ 
+given by $e_i^t(a)=a$ for $i\in I-J$ and $a\in\K$.
+
+\subsection{Definition of quantum geometric crystals}
+
+Let $C=([a_{ij}]_{i,j\in I},\{d_i\}_{i\in I})$ be a Cartan datum,
+$(\K,\{e_i^t\}_{i\in I})$ a quantum geometric semicrystal in $\QGSC(C)$, and
+$R=(\bra\,,\,\ket:\Qv\times P\to\Z,\,\{\ah_i\}_{i\in I},\,\allowbreak\{\av_i\}_{i\in I})$ 
+a root datum of type $C$.
+
+Assume that a ring homomorphism
+$\gamma:\F[q^P]\to\K$ satisfies the following conditions:
+\begin{enumerate}
+ \item[(3)] $\gamma(\F[q^P])$ is included in the center of $\K$
+  and $\e_i^t$ is regular at $t=q^\lambda$ for $i\in I$, $\lambda\in P$.
+ \item[(4)] $\e_i^t(\gamma(q^\lambda))=t^{-\bra h_i,\lambda\ket}\gamma(q^\lambda)$
+  for $i\in I$ and $\lambda\in P$.
+\end{enumerate}
+Then $(\K,\{e_i^t\}_{i\in I},\gamma)$ is called a {\em quantum geometric crystal}.
+For any subset $J$ of $I$, replacing the root datum $R$ 
+with its restriction
+$R_J=(\bra\,,\,\ket:\Qv_J\times P_J\to\Z,\,
+\{\ah_{J,i}\}_{i\in J},\,
+\{\av_{J,i}\}_{i\in J})$,
+we define a {\em quantum geometric $J$-crystal} by the same way.
+
+Let $(\K,\{e_i^t\}_{i\in I},\gamma)$ be a quantum geometric crystal.
+The conditions (1) and (3) imply that the ring homomorphism 
+$\e_i^{\gamma(q_i^\beta)}=\e_i^{\gamma(q^{d_i\beta})}$ 
+is well-defined and is a ring automorphism of $\K$
+for any $\beta\in d_i^{-1}P$.
+For example, since $\av_i=d_i^{-1}\alpha_i\in d_i^{-1}P$, 
+the ring automorphism $\e_i^{\gamma(q_i^{\av_i})}=\e_i^{\gamma(q^{\alpha_i})}$ 
+of $\K$ is well-defined and 
+\begin{equation*}
+ \e_i^{\gamma(q_i^{\av_i})}(\gamma(q^\lambda))=
+ \e_i^{\gamma(q^{\alpha_i})}(\gamma(q^\lambda))=
+ \gamma(q^{\lambda-\bra\ah_i,\lambda\ket\alpha_i})=
+ \gamma(q^{s_i(\lambda)})
+ \quad \text{for $\lambda\in P$}.
+\end{equation*}
+
+Let $(\K,\{\e_i^t\}_{i\in J},\gamma)$ and $(\K',\{\e_i'^t\}_{i\in J},\gamma')$ 
+be quantum geometric crystals.
+An algebra homomorphism $f:\K\to\K'$ is a morphism of quantum geometric 
+crystals if $\e_i'^t\circ f=f\circ\e_i^t$ for any $i\in J$ and $\gamma'=f\circ\gamma$.
+Denote by $\QGC(R)$ the category of quantum geometric crystals and 
+morphisms of quantum geometric crystals associated to 
+the root datum $R$.
+
+Let $(\K,\{e_i^t\}_{i\in I})$ be a quantum geometric semicrystal
+and assume that $\K$ is a (possibly non-commutative) field over $\F$.
+Put $\K[q^P]=\K\otimes_\F\F[q^P]$ and $\K(q^P)=Q(\K[q^P])$.
+Extend $\e_i^t$ to the ring homomorphism $\K(q^P)\to\K(q^P)(t)$ by
+\begin{equation*}
+ \e_i^t(q^\lambda) = t^{-\bra\ah_i,\lambda\ket}q^\lambda
+ \quad\text{for $\lambda\in P$}.
+\end{equation*}
+Denote by $\gamma$ the canonical inclusion $\F[q^P]\to\K(q^P)$.
+Then $(\K(q^P),\{e_i^t\}_{i\in I},\gamma)$ is a quantum geometric crystal,
+which shall be called the associated quantum geometric crystal of 
+$(\K,\{e_i^t\}_{i\in I})$.
+
+\begin{remark}
+  A quantum geometric crystal $(\K,\{\e_i^t\}_{i\in I},\gamma)$ with
+  commutative $\K$ essentially coincides with
+  a geometric crystal in the sense of 
+  Berenstein-Kazhdan \cite{BK9912105}, \cite{BK0601391}.
+  \qed
+\end{remark}
+
+\subsection{Weyl group action on a quantum geometric crystal}
+
+The following is an immediate consequence of 
+the definition of quantum geometric crystals.
+
+\begin{lemma}[Weyl group action]
+\label{lemma:W-action}
+ Let $(\K,\{e_i^t\}_{i\in I},\gamma)$ be a quantum geometric crystal
+ and put $a_i=q^{\alpha_i}$ for $i\in I$.
+ For each $i\in I$, define the action of $s_i$ on $\K$ by
+ \begin{equation*}
+  s_i(x) = \e_i^{\gamma(a_i)}(x) \quad \text{for $x\in \K$}.
+ \end{equation*}
+ Then the action of $\{s_i\}_{i\in I}$ satisfies the defining relations
+ of the Weyl group and generates the action of the Weyl group on $\K$.
+ \qed
+\end{lemma}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Quantum groups and quantum geometric semicrystals}
+
+Let $C=([a_{ij}]_{i,j\in I}, \{d_i\}_{i\in I})$ be a Cartan datum and 
+$R=(\bra\,,\,\ket:\Qv\times P\to\Z,\,\{\ah_i\}_{i\in I},\,\{\av_i\}_{i\in I})$ 
+a root datum of type $C$.
+Recall that the root lattice $Q$ is defined 
+by $Q=\bigoplus_{i\in I}\Z\alpha_i$.
+
+\subsection{Quantum enveloping algebra $U_q$}
+
+The quantum enveloping algebra $U_q$ is defined to be 
+the associative algebra given by generators \(
+\{\, E_i^+, E_i^-, K_h \mid i\in I,\, h\in\Qv\,\}
+\) and the following defining relations:
+\begin{align*}
+ &
+ K_0 = 1, \quad K_h K_{h'} = K_{h+h'}
+ \quad \text{for $h,h'\in\Qv$},
+ \\ &
+ K_h E_j^\pm = q^{\pm\bra h,\alpha_j\ket} E_j^\pm K_h
+ \quad \text{for $h\in\Qv$, $j\in I$},
+ \\ &
+ E_i^+ E_j^- - E_j^- E_i^+ 
+ = \delta_{ij} \frac{K_{d_i\ah_i}-K_{-d_i\ah_i}}{q_i-q_i^{-1}}
+ \quad \text{for $i,j\in I$},
+ \\ &
+ \sum_{k=0}^{1-a_{ij}} (-1)^k
+ \qbinom{1-a_{ij}}{k}_{q_i} (E_i^\pm)^{1-a_{ij}-k} E_j^{\pm} (E_i^\pm)^k = 0
+ \quad \text{for $i,j\in I$ with $i\ne j$}.
+\end{align*}
+The last relations are called the {\em $q$-Serre relations}.
+In particular, 
+we have $K_{d_i\ah_i}E_j^\pm = q^{\pm d_ia_{ij}} E_j^\pm K_{d_i\ah_i}$.
+
+The Cartan part $U_q^0$ of $U_q$ is defined to be 
+the subalgebra generated by $\{K_h\}_{h\in\Qv}$.
+The upper and lower parts $U_q^\pm$ of $U_q$ 
+are defined to be the subalgebras generated by $\{E_i^\pm\}_{i\in I}$.
+The upper Borel part $U_q^{\geqq0}$ (resp.\ the lower Borel part $U_q^{\leqq0}$) 
+of $U_q$ is defined to be the subalgebras generated $U_q^0$ and $U_q^+$
+(resp.\ $U_q^0$ and $U_q^-$).
+
+The $Q$-gradation of $U_q$ is defined by 
+$\deg K_h=0$, $\deg E_i=\alpha_i$, and $\deg F_i=-\alpha_i$.
+For $\beta\in Q$, denote by $U_q^\beta$ the degree-$\beta$ part of $U_q$.
+Put $U_q^{\pm,\beta}=U_q^\beta\cap U_q^\pm$ for $\beta\in Q$.
+Then we have $U_q^\pm=\bigoplus_{\beta\in Q_+}U_q^{\pm,\pm\beta}$.
+For each $\beta\in Q_+$, we
+put $U_q^{+,\geqq\beta}=\bigoplus_{\gamma\in\beta+Q_+}U_q^{\pm,\gamma}$
+and $U_q^{-,\leqq -\beta}=\bigoplus_{\gamma\in\beta+Q_+}U_q^{\pm,-\gamma}$.
+
+For the sake of simplicity, 
+we shall denote $K_{d_i\ah_i}$ by $K_i$, $E_i^+$ by $E_i$, and $E_i^-$ by $F_i$.
+
+Define algebra homomorphisms $\Delta:U_q\to U_q\otimes U_q$, 
+$\eps:U_q\to\F$, and an algebra anti-homomorphism $S:U_q\to U_q$ by
+\begin{align*}
+ &
+ \Delta(K_h) = K_h\otimes K_h,
+ \\ &
+ \Delta(E_i) = E_i\otimes 1        + K_i\otimes E_i, \quad
+ \Delta(F_i) = F_i\otimes K_i^{-1} +   1\otimes F_i,
+ \\ &
+ \eps(K_h) = 1, \quad 
+ \eps(E_i) = \eps(F_i) = 0,
+ \\ &
+ S(K_h) = K_h^{-1}, \quad
+ S(E_i) = -K_i^{-1}E_i, \quad S(F_i) = -F_iK_i.
+\end{align*}
+Then $U_q$ is a Hopf algebra with the product $\Delta$, 
+the counit $\eps$, and the antipode $S$.
+Then the Borel parts $U_q^{\geqq0}$, $U_q^{\leqq0}$ 
+and the Cartan part $U_q^0$ are Hopf subalgebras of $U_q$.
+
+\subsection{Quantum function algebra $V_q$}
+
+Let $V_q$ be the associative algebra given 
+by generators $\{\,X_i^\pm,Z_\lambda\mid i\in I,\,\lambda\in P\,\}$ 
+and the following defining relations:
+\begin{align*}
+ &
+ Z_0 = 1, \quad Z_\lambda Z_\mu = Z_{\lambda+\mu}
+ \quad \text{for $\lambda,\mu\in P$},
+ \\ &
+ Z_\lambda X_j^\pm = q^{\bra d_j\ah_j,\lambda\ket} X_j^\pm Z_\lambda
+ \quad \text{for $\lambda\in P$, $i\in I$},
+ \\ &
+ X_i^+ X_j^- - X_j^- X_i^+ = 0 \quad \text{for $i,j\in I$},
+ \\ &
+ \sum_{k=0}^{1-a_{ij}} (-1)^k
+ \qbinom{1-a_{ij}}{k}_{q_i} (X_i^\pm)^{1-a_{ij}-k} X_j (X_i^\pm)^k = 0
+ \quad \text{for $i,j\in I$ with $i\ne j$}.
+\end{align*}
+Then, since $d_ja_{ji}=d_ia_{ij}$, 
+we have $Z_{\alpha_i}X_j^\pm = q^{d_ia_{ij}} X_j^\pm Z_{\alpha_i}$.
+
+The Cartan part $V_q^0$ of $V_q$ is defined to be
+the subalgebra generated by $\{Z_\lambda\}_{\lambda\in P}$.
+The upper and lower parts $V_q^\pm$ are defined to be
+the subalgebras generated 
+by $\{\,X_i^\pm\mid i\in I\,\}$.
+The upper and lower Borel parts $V_q^{\geqq0}$,$V_q^{\leqq0}$ 
+are defined to be the subalgebras generated 
+by $\{\,Z_\lambda,X_i^\pm\mid \lambda\in P,\, i\in I\,\}$.
+
+The $Q$-gradation of $V_q$ is defined by 
+$\deg Z_\lambda=0$, $\deg X_i=\alpha_i$, and $\deg Y_i=-\alpha_i$.
+For $\beta\in Q$, denote by $V_{q,\beta}$ the degree-$\beta$ part of $V_q$.
+Put $V^\pm_{q,\beta}=V_{q,\beta}\cap V_q^\pm$ for $\beta\in Q$.
+
+Denote $Z_{\alpha_i}$ by $Z_i$, $X_i^+$ by $X_i$, and $X_i^-$ by $Y_i$.
+
+The Hopf algebra stucture of $V_q$ is given by
+\begin{align*}
+ &
+ \Delta(Z_\lambda) = Z_\lambda\otimes Z_\lambda,
+ \\ &
+ \Delta(X_i) = X_i\otimes 1   + Z_i\otimes X_i, \quad
+ \Delta(Y_i) = Y_i\otimes Z_i +   1\otimes Y_i,
+ \\ &
+ \eps(Z_\lambda) = 1, \quad 
+ \eps(X_i) = \eps(X_i) = 0,
+ \\ &
+ S(Z_\lambda) = K_\lambda^{-1}, \quad
+ S(X_i) = -K_i^{-1}X_i, \quad S(Y_i) = -Y_iZ_i^{-1}.
+\end{align*}
+
+\subsection{Drinfeld pairing}
+
+There exists a unique biliner form 
+$\tau:V_q^{\geqq0}\times U_q^{\leqq0}\to\F$ 
+with the following properties:
+\begin{alignat*}{2}
+ &
+ \tau(x,y_1y_2) = (\tau\otimes\tau)(\Delta(x),y_1\otimes y_2)
+ & &
+ \quad \text{for $x\in V_q^{\geqq0}$, $y_1,y_2\in U_q^{\leqq 0}$},
+ \\ &
+ \tau(x_1x_2,y) = (\tau\otimes\tau)(x_2\otimes x_1,\Delta(y))
+ & &
+ \quad \text{for $x_1,x_2\in V_q^{\geqq0}$, $y\in U_q^{\leqq 0}$},
+ \\ &
+ \tau(Z_\lambda,K_h) = q^{-\bra h,\lambda\ket}
+ & &
+ \quad \text{for $\lambda\in P$, $h\in\Qv$},
+ \\ &
+ \tau(Z_\lambda,F_i) = \tau(X_i,K_h) = 0
+ & &
+ \quad \text{for $\lambda\in P$, $i\in I$, $h\in\Qv$},
+ \\ &
+ \tau(X_i,F_j) = \delta_{ij}
+ & &
+ \quad \text{for $i,j\in I$}.
+\end{alignat*}
+Then for each $\beta\in Q^+=\bigoplus_{i\in I}\Z_{\geqq0}\alpha_i$ 
+the restriction of $\tau$ on $V^+_{q,\beta}\times U^-_{q,-\beta}$ 
+is non-degenerate.
+We call $\tau$ the Drinfeld pairing.
+
+We can identify the Hopf subalgebra of $V_q^{\geqq 0}$ 
+generated by $\{Z_i,X_i\}_{i\in I}$ and 
+the Hopf subalgebra of $U_q^{\geqq 0}$
+generated by $\{K_i,E_i\}_{i\in I}$
+by $Z_i=K_i$ and $X_i=-(q_i-q_i^{-1})E_i$ for $i\in I$.
+Then the restriction to the subalgebras of the bilnear pairing $\tau$ 
+coincides with the Drinfeld pairing 
+between the upper and lower Borel parts of 
+the quantum universal enveloping algebra.
+
+\subsection{Quotient Ore domain $\A_q$ of $V_q^+$ and $\K_q=Q(\A_q)$}
+\label{sec:Kq}
+
+Let $\A_q$ be a quotient algebra of $V_q^+$
+and denote by $\xi_i$ the image of $X_i$ in $\A_q$ for $i\in I$.
+Let $J$ be the subset of $I$ consisting of all $i\in I$ with $\xi_i\ne 0$.
+Then $\{\xi_i\}_{i\in J}$ generates $\A_q$ over $\F$ 
+and satisfies the $q$-Serre relations.
+Assume that $\A_q$ is an Ore domain and put $\K_q=Q(\A_q)$.
+
+%\subsection{Iterated adjoint by $\xi_i$}
+
+For $i,j\in J$ with $i\ne j$ and $k\in\Z_{\geqq0}$, 
+we define $(\ad_q \xi_i)^k(\xi_j)$ by
+\begin{equation*}
+ (\ad_q \xi_i)^0(\xi_j) = \xi_j, \quad
+ (\ad_q \xi_i)^{k+1}(\xi_j) = [\xi_i, (\ad_q \xi_i)^k(\xi_j)]_{q_i^{2k+a_{ij}}}.
+\end{equation*}
+where $[a,b]_v=ab-vba$.  Then we have
+\begin{equation*}
+ (\ad_q \xi_i)^k(\xi_j) = 
+ \sum_{\nu=0}^k (-1)^\nu 
+ q_i^{\nu(k-1+a_{ij})}\qbinom{k}{\nu}_{q_i} \xi_i^{k-\nu} \xi_j \xi_i^\nu.
+\end{equation*}
+The $q$-Serre relations for $\{\xi_i\}_{i\in I}$
+are equivalent to $(\ad_q \xi_i)^k(\xi_j)=0$
+for $i\ne j$ and $k>-a_{ij}$.
+
+\subsection{Quantum geometric semicrystal structure on $\K_q$}
+\label{sec:Kq-semicrys}
+
+Let us construct a quantum geometric $J$-semicrystal structure on $\K_q$.
+
+For $n\in \Z$, by induction on $|n|$, we obtain
+\begin{equation*}
+ \xi_i^n \xi_j \xi_i^{-n} =
+ \begin{cases}
+  \xi_i & \text{if $i=j$}, 
+  \\ \displaystyle
+  \sum_{k=0}^{-a_{ij}} 
+  q_i^{(n-k)(k+a_{ij})}\qbinom{n}{k}_{q_i}(\ad_q \xi_i)^k(\xi_j)\xi_i^{-k}
+  & \text{if $i\ne j$}.
+ \end{cases}
+\end{equation*}
+Therefore $\xi_i^n \xi_j \xi_i^{-n}$ is an $n$-independent 
+rational function of $q_i^n$.
+Replacing $q_i^n$ with an indeterminate $t$, 
+we define $\e_i^t(\xi_j)\in\K_q(t)$ by
+\begin{equation*}
+ \e_i^t(\xi_j) =
+ \begin{cases}
+  \xi_i & \text{if $i=j$}, 
+  \\ \displaystyle
+  \sum_{k=0}^{-a_{ij}} 
+  t^{k+a_{ij}}q_i^{-k(k+a_{ij})}\qbinom{t;0}{k}_{q_i}(\ad_q \xi_i)^k(\xi_j)\xi_i^{-k}
+  & \text{if $i\ne j$},
+ \end{cases}
+\end{equation*}
+where
+\begin{equation*}
+ \qbinom{t;x}{k}_v = 
+ \frac{[t;x]_v[t;x-1]_v\cdots[t;x-k+1]}{[k]_v!},
+ \quad
+ [t;x]_v = \frac{tv^x-t^{-1}v^{-x}}{v-v^{-1}}.
+\end{equation*}
+
+\begin{lemma}
+ For each $i\in J$, 
+ the mapping $\e_i^t:\{\xi_j\}_{j\in J}\to\K_q(t)$ can be extended to
+ the algebra homomorphism $\K_q\to\K_q(t)$ also denoted by $\e_i^t$.
+ Then $(\K_q,\{\e_i\}_{i\in J})$ is a quantum geometric $J$-semicrystal.
+ \qed
+\end{lemma}
+
+\subsection{Weyl group action on $\K_q(q^P)$}
+
+Let $R=(\bra\,,\,\ket:\Qv\times P\to\Z,\,\{\ah_i\}_{i\in I},\,\{\av_i\}_{i\in I})$ 
+be a root datum of type $C=([a_{ij}]_{i,j\in I},\{d_i\}_{i\in I})$
+and $R_J=(\bra\,,\,\ket:\Qv_J\times P_J\to\Z,\,\{\ah_{J,i}\}_{i\in J},\,\{\av_{J,i}\}_{i\in J})$ 
+the restriction of $R$ to $J$.
+Let $(\K_q,\{\e_i\}_{i\in J})$ be the quantum geometric semicrystal
+given in \secref{sec:Kq-semicrys}.
+
+\begin{lemma}
+ Let $(\K_q(q^{P_J}),\{\e_i^t\}_{i\in J},\gamma)$ be the associated
+ quantum geometric $J$-crystal of $(\K_q,\{\e_i\}_{i\in J})$
+ and put $a_i=q^{\alpha_i}$ for $i\in J$.
+ Then the Weyl group $W_J$ of type $[a_{ij}]_{i,j\in J}$ acts on $\K_q(q^{P_J})$
+ by $s_i(x)=\e_i^{a_i}(x)$ for $i\in J$ and $x\in\K_q(q^{P_J})$.
+ \qed
+\end{lemma}
+
+\begin{remark}
+ The Weyl group action of the corollary was first constructed by
+ the author in \cite{kuroki-2008}.
+ It is both a $q$-difference analogue and a quantization
+ of the birational Weyl group action constructed by Noumi-Yamada \cite{NY0012028}.
+ They also proposed that the birational action of the lattice part 
+ of the affine Weyl group can be regarded as a difference analogue 
+ of a Painlev\'e system.
+ Therefore the action of the lattice part of the affine Weyl group 
+ on the quantum geometric crystal $\K_q(q^{P_J})$ can be
+ regarded as a $q$-difference analogue of a quantum Painlev\'e system.
+ \qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Standard quantum geometric semicrystals}
+
+\subsection{Quantum algebra $\A_\i$ and $\K_\i=Q(\A_\i)$}
+\label{sec:Ki}
+
+Let ($[a_{ij}]_{i,j\in I}$, $\{d_i\}_{i\in I}$) be a Cartan datum
+and $W$ the Weyl group of type $[a_{ij}]_{i,j\in I}$
+and put $b_{ij}=(\alpha_i|\alpha_j)=d_ia_{ij}$ for $i,j\in I$.
+
+For any $\i=(i_1,\ldots,i_N)\in I^N$,
+define the algebra $\A_\i$ to be the associative algebra
+over $\F$ given by generators $\{x_{\i,\nu}\}_{i=1}^N$ and
+the defining relations 
+$x_{\i,\nu}x_{\i,\mu}=q^{b_{i_\mu i_\nu}}x_{\i,\mu}x_{\i,\nu}$
+for $\mu < \nu$.
+Then $\A_\i$ is an Ore domain. Put $\K_\i=Q(\A_\i)$.
+
+Let $\K_\i^+$ be the semi-subfield of $\K_\i$ generated by
+$q,x_{\i,1},\ldots,x_{\i,N}$.
+That is, $\K_\i^+$ is the minimum subset of $\K_\i$ 
+which contains $0,1,q,x_{\i,1},\ldots,x_{\i,N}$ 
+and is closed under the addition, the multiplication, and 
+the division by non-zero elements.
+Elements of $\K_\i^+$ are said to be {\em subtraction-free}
+or {\em positive}.
+
+For $\i,\j\in I^N$, an algebra isomorphism $f:\K_\j\to\K_\i$ 
+is said to be {\em subtraction-free} or {\em positive}
+if $f(\K_\j^+)\subset\K_\i^+$.
+The isomorphism $f$ is positive 
+if and only if $f(x_{\j,\nu})\in\K_\i^+$ for every $\nu=1,\ldots,N$.
+
+Similarly let $\K_\i(t)^+$ be the semi-subfield of $\K_\i(t)$
+generated by $q,t,x_{\i,1},\ldots,x_{\i,N}$.
+An algebra homomorphism $f:\K_\i\to\K_\i(t)$ is
+called {\em subtraction-free} or {\em positive} 
+if $f(\K_\i^+)\subset\K_\i(t)^+$.
+
+\subsection{Transition isomorphism and its positivity}
+\label{sec:f}
+
+Recall that $U_q^-$ denotes
+the lower part of the quantum universal enveloping algebra
+generated by $\{F_i\}_{i\in I}$.
+The $v$-exponential function $\exp_v(x)$ is defined by
+\begin{equation*}
+ \exp_v(x) = \sum_{k=0}^\infty \frac{x^k}{(k)_v!}, \quad
+ (k)_v = \frac{1-v^k}{1-v}, \quad
+ (k)_v! = (1)_v(2)_v\cdots(k)_v.
+\end{equation*}
+We define the $q$-exponential function $e_q(x)$ by
+\begin{equation*}
+ e_q(x) = \exp_{q^2}(x)=\sum_{k=0}^\infty q^{-k(k-1)/2} \frac{x^k}{[k]_q!}.
+\end{equation*}
+Then, for any $a\in\K_\i$, the $q$-exponential $e_{q^k}(a F_i)$ 
+is well-defined as an element of
+the completion \(
+  \K_\i\widehat\otimes U_q^-
+  =\projlim_{\beta\in Q_+}
+  \K_\i\otimes\left(U_q^-\big/U_q^{-,\leqq-\beta}\right)
+\)
+
+Let $\i=(i_1,\ldots,i_N)$ and $\j=(j_1,\ldots,j_N)$ 
+be reduced words for a same element $w\in W$: $\i,\j\in R(w)$.
+Denote $x_{\i,\nu}\in\K_\i$ by $x_\nu$ and $x_{\j,\nu}\in\K_\j$ by $y_\nu$.
+
+In \cite{B9605016}, Berenstein shows that there exists a unique algebra 
+isomorphism $f:\K_\j\to \K_\i$ such that
+\begin{equation}
+\label{eq:e..e=e..e}
+  e_{q_{i_1}}(x_1 F_{i_1})   \cdots e_{q_{i_N}}(x_N F_{i_N}) = 
+  e_{q_{j_1}}(f(y_1) F_{j_1})\cdots e_{q_{j_N}}(f(y_N) F_{j_N}).
+\end{equation}
+We call $f$ the {\em transition isomorphism}.
+The explicit formulae of $f$
+for the $A_1\times A_1$, $A_2$, and $B_2$ cases 
+can be found in \cite{B9605016}, Proposition 2.8.
+These formulae show that the transition isomorphisms $f$ are positive
+for the $A_1\times A_1$, $A_2$, and $B_2$ cases.
+
+\begin{lemma}
+\label{lemma:f}
+ For any reduced words $\i,\j$ of length $N$ for a same element $w\in W$, 
+ the transition isomorphism $f:\K_\j\to\K_\i$ characterized 
+ by \eqref{eq:e..e=e..e} is always positive 
+ and satisfies $f(\sum_{i_\nu=i} y_\nu)=\sum_{i_\nu=i}x_\nu$
+ for $i\in I$.
+ \qed
+\end{lemma}
+
+The proof of \lemmaref{lemma:f} reduces to 
+the cases of finite type with rank $2$.
+Since the $A_1\times A_1$, $A_2$, and $B_2$ cases 
+are shown by Berenstein \cite{B9605016}, 
+it is sufficient to show the $G_2$ case only.
+
+Before proceeding to prove it, 
+for the convenience of readers
+we write down the explicit formulae of the transition isomorphisms
+for the $A_1\times A_1$, $A_2$, and $B_2$ cases.
+
+Case $A_1\times A_1$.
+Let $[a_{ij}]_{i,j=1}^2$ be the Cartan matrix of type $A_2$:
+$a_{11}=a_{22}=2$, $a_{12}=a_{21}=0$.
+Put $d_1 = d_2 = 1$. 
+Let $f:\K_{(1,2)}\to\K_{(2,1)}$ be 
+the transition isomorphism uniquely characterized by
+$e_q(x_1F_1)e_q(x_2F_2)= e_q(f(y_1)F_2)e_q(f(y_2)F_1)$.
+Since $F_1$ and $F_2$ commute, we have
+\begin{equation*}
+ f(y_1) = x_2, \quad f(y_2) = x_1.
+\end{equation*}
+These formulae mean 
+that $f(\sum_{i_\nu=i} y_\nu)=\sum_{i_\nu=i}x_\nu$ for $i=1,2$.
+Clearly both $f$ and $f^{-1}$ are positive.
+
+Case $A_2$.
+Let $[a_{ij}]_{i,j=1}^2$ be the Cartan matrix of type $A_2$:
+$a_{11}=a_{22}=2$, $a_{12}=a_{21}=-1$.
+Put $d_1 = d_2 = 1$. 
+Let $f:\K_{(2,1,2)}\to \K_{(1,2,1)}$ be
+the transition isomorphism uniquely characterized by
+\begin{equation}
+\label{eq:eee=eee}
+ e_q(x_1F_1)   e_q(x_2F_2)   e_q(x_3F_1)=
+ e_q(f(y_1)F_2)e_q(f(y_2)F_1)e_q(f(y_3)F_2).
+\end{equation}
+Comparison of the coefficients of $F_1$, $F_2$, and $F_2F_1$ in the both-sides
+leads to
+\begin{equation*}
+ f(y_2) = x_1+x_3, \quad
+ f(y_1y_2) = x_2x_3, \quad
+ f(y_1+y_3) = x_2.
+\end{equation*}
+The first and the third equations mean
+that $f(\sum_{i_\nu=i} y_\nu)=\sum_{i_\nu=i}x_\nu$ for $i=1,2$.
+Solving the equations, we obtain
+\begin{equation*}
+ f(y_1) = x_2x_3(x_1+x_3)^{-1}, \quad
+ f(y_2) = x_1+x_3, \quad
+ f(y_3) = x_2x_1(x_1+x_3)^{-1}.
+\end{equation*}
+The anti-algebra isomorphism 
+$\rho:\K_{(1,2,1)}\otimes U_q^-\to\K_{(2,1,2)}\otimes U_q^-$
+is given by $\rho(x_\nu)=y_{4-\nu}$, 
+$\rho(F_1)=F_2$, and $\rho(F_2)=F_1$.
+Applying $\rho$ to \eqref{eq:eee=eee}, 
+we have $f^{-1}=\rho\circ f\circ\rho^{-1}$.
+Therefore both $f$ and $f^{-1}$ are positive.
+
+Case $B_2$.
+Let $[a_{ij}]_{i,j=1}^2$ be the Cartan matrix of type $B_2$:
+$a_{11}=a_{22}=2$, $a_{12}=-1$, $a_{21}=-2$.
+Put $d_1 = 2$ and $d_2 = 1$. 
+Let $f:\K_{(2,1,2,1)}\to \K_{(1,2,1,2)}$ be
+the transition isomorphism uniquely characterized by
+\begin{align}
+ &
+ e_{q^2}(x_1F_1)e_q(x_2F_2)       e_{q^2}(x_3F_1)e_q(x_4F_2)
+ \notag
+ \\ & \qquad =
+ e_q(f(y_1)F_2) e_{q^2}(f(y_2)F_1)e_q(f(y_3)F_2) e_{q^2}(f(y_4)F_1).
+\label{eq:eeee=eeee}
+\end{align}
+Comparing the coefficients of $F_1$ and $F_2$ in the both-sides, 
+we obtain $f(y_1+y_3)=x_2+x_4$ and $f(y_2+y_4)=x_1+x_3$,
+which mean that $f(\sum_{i_\nu=i} y_\nu)=\sum_{i_\nu=i}x_\nu$ for $i=1,2$.
+Comparing the coefficients of $F_2F_1F_2$, $F_1F_2$, $F_1F_2^2F_2$,
+and $F_1F_2^2$, we also obtain
+\begin{alignat*}{2}
+ &
+ p_1 := f(y_1y_2y_3) = x_2x_3x_4, \quad
+ & &
+ p_2 := f(y_2y_3) = x_1x_2+x_1x_4+x_3x_4, \quad
+ \\ &
+ p_3 := f(y_2y_3^2y_4) = x_1x_2^2x_3, \quad
+ & &
+ p_4 := f(y_2y_3^2) = x_1(x_2+x_4)^2+x_3x_4^2.
+\end{alignat*}
+These equations lead to
+\begin{equation*}
+ f(y_1) = p_1 p_2^{-1}, \quad
+ f(y_2) = p_2p_4^{-1}p_2, \quad
+ f(y_3) = p_2^{-1}p_4, \quad
+ f(y_4) = p_4^{-1}p_3.
+\end{equation*}
+The anti-algebra isomorphism 
+$\rho:\K_{(1,2,1,2)}\otimes U_q^-\to\K_{(2,1,2,1)}\otimes U_q^-$
+is given by $\rho(x_\nu)=y_{5-\nu}$ and $\rho(F_i)=F_i$.
+Applying $\rho$ to \eqref{eq:eeee=eeee}, 
+we have $f^{-1}=\rho\circ f\circ\rho^{-1}$.
+Therefore both $f$ and $f^{-1}$ are positive.
+
+Let us prove \lemmaref{lemma:f} for the $G_2$ case.
+
+Case $G_2$.
+Let $[a_{ij}]_{i,j=1}^2$ be the Cartan matrix of type $G_2$:
+$a_{11}=a_{22}=2$, $a_{12}=-1$, $a_{21}=-3$.
+Put $d_1 = 3$ and $d_2 = 1$.
+Let $f:\K_{(2,1,2,1,2,1)}\to \K_{(1,2,1,2,1,2)}$ be
+the tansition isomorphism uniquely characterized by
+\begin{align}
+ &
+ e_{q^3}(x_1F_1)e_q(x_2F_2)       e_{q^3}(x_3F_1)e_q(x_4F_2)       e_{q^3}(x_5F_1)e_q(x_6F_2)
+ \notag
+ \\ & \qquad =
+ e_q(f(y_1)F_2) e_{q^3}(f(y_2)F_1)e_q(f(y_3)F_2) e_{q^3}(f(y_4)F_1)e_q(f(y_5)F_2) e_{q^3}(f(y_6)F_1).
+\label{eq:eeeeee=eeeeee}
+\end{align}
+Comparing the coefficients of $F_1$ and $F_2$, 
+we obtain $f(y_1+y_3+y_5)=x_2+x_4+x_6$ and $f(y_2+y_4+y_6)=x_1+x_3+x_5$,
+which mean that $f(\sum_{i_\nu=i} y_\nu)=\sum_{i_\nu=i}x_\nu$ for $i=1,2$.
+
+We can realize the Chevalley generators of 
+the finite-dimensional simple Lie algebra of type $G_2$ by
+\begin{alignat*}{2}
+  & e_1 = E_{23}+E_{56}, \quad &
+  & e_2 = E_{12}+E_{34}+2E_{45}+E_{67}, \\
+  & f_1 = E_{32}+E_{65}, \quad &
+  & f_2 = E_{21}+2E_{43}+E_{54}+E_{76}, \\
+  & h_1 = E_{22}-E_{33}+E_{55}-E_{66}, \quad &
+  & h_2 = E_{11}-E_{22}+2E_{33}-2E_{55}+E_{66}-E_{77},
+\end{alignat*}
+where $E_{ij}$ denotes the $(i,j)$-matrix unit of size $7$.
+In this realization, we have
+$f_1^2=f_2^3=f_1f_2f_1=f_2^2f_1f_2^2=0$ and
+the same relations for $e_1$, $e_2$.
+These formulae imply
+both the Serre and the $q$-Serre relations 
+for $f_1,f_2$ and $e_1,e_2$.
+Namely we have
+\begin{align*}
+ &
+ f_1^2f_1 - [2]_{q^3} f_1f_2f_1 + f_2f_1^2 = 0, 
+ \\ &
+ f_2^4f_1 - [3]_q f_2^3f_1f_2 
+          + \qbinom{4}{2}_q f^2f_1f^2
+          - [3]_q f_2f_1f_2^3        + f_1f_2^4 = 0
+\end{align*}
+and the same relations for $e_1,e_2$.
+Therefore we obtain the $7$-dimensional representation
+of the lower part $U_q^-$
+of the quantum universal enveloping algebra of type $G_2$.
+
+Then the transition isomorphism $f$ satisfies
+\begin{align}
+ &
+ e_{q^3}(x_1f_1)e_q(x_2f_2)       e_{q^3}(x_3f_1)e_q(x_4f_2)       e_{q^3}(x_5f_1)e_q(x_6f_2)
+ \notag
+ \\ & =
+ e_q(f(y_1)f_2) e_{q^3}(f(y_2)f_1)e_q(f(y_3)f_2) e_{q^3}(f(y_4)f_1)e_q(f(y_5)f_2) e_{q^3}(f(y_6)f_1).
+\end{align}
+Denote by $m_{ij}$ the $(i,j)$-entry of the both sides.
+First write down $m_{ij}$ by $y_\nu$:
+\begin{align*}
+c/2\cdot m_{71}&=f(y_1y_2y_3^2y_4y_5), \\
+c/2\cdot m_{61}&=f(y_2y_3^2y_4y_5), \\
+c/2\cdot m_{72}&=f(y_1y_2y_3^2y_4+y_1y_2y_3^2y_6+y_1y_2y_5^2y_6+y_1y_4y_5^2y_6+y_3y_4y_5^2y_6+cy_1y_2y_3y_5y_6), \\
+c/2\cdot m_{62}&=f(y_2y_3^2y_4+y_2y_3^2y_6+y_2y_5^2y_6+y_4y_5^2y_6+cy_2y_3y_5y_6), \\
+c/2\cdot m_{73}&=f(y_1y_2y_3^2+y_1y_2y_5^2+y_1y_4y_5^2+y_3y_4y_5^2+cy_1y_2y_3y_5), \\
+c/2\cdot m_{63}&=f(y_2y_3^2+y_2y_5^2+y_4y_5^2+cy_2y_3y_5), \\
+1/2\cdot m_{41}&=f(y_1y_2y_3+y_1y_2y_5+y_1y_4y_5+y_3y_4y_5), \\
+         m_{31}&=f(y_2y_3+y_2y_5+y_4y_5), \\
+         m_{21}&=f(y_1+y_3+y_5), 
+%         m_{32}&=y_2+y_4+y_6 \\
+%1/2\cdot m_{42}&=y_1y_2+y_1y_4+y_3y_4+y_1y_6+y_3y_6+y_5y_6 \\
+%c/2\cdot m_{53}&=y_1^2+y_3^2+y_5^2+cy_1y_3+cy_1y_5+cy_3y_5 \\
+%c/2\cdot m_{52}&=y_1^2y_2+y_1^2y_4+y_3^2y_4+y_1^2y_6+y_3^2y_6+y_5^2y_6+cy_1y_3y_4+cy_1y_3y_6+cy_1y_5y_6+cy_3y_5y_6 \\
+%c/2\cdot m_{51}&=y_1^2y_2y_3+y_1^2y_2y_5+y_1^2y_4y_5+y_3^2y_4y_5+cy_1y_3y_4y_5
+\end{align*}
+where $c=1+q^2$.
+Therefore we have
+\begin{align*}
+ &
+ p_1 := f(y_1y_2y_3^2y_4y_5) = c/2\cdot m_{71},
+ \\ &
+ p_2 := f(y_2y_3^2y_4y_5) = c/2\cdot m_{61},
+ \\ &
+ p_3 := f(y_2y_3^3y_4^2y_5^3y_6) = q^4c/2\cdot(p_2m_{72} - p_1m_{62}),
+ \\ &
+ p_4 := f(y_2y_3^3y_4^2y_5^3) = q^4c/2\cdot(p_2m_{73} - p_1m_{63}),
+ \\ &
+ p_5 := f(y_2y_3^3y_4^2y_5^2) = q^4(p_2m_{41}/2 - p_1m_{31}),
+ \\ &
+ p_6 := f(y_2^2y_3^6y_4^3y_5^3) = q^{18}(p_5m_{21}p_2 - c/2\cdot p_5m_{71} - p_4p_2).
+\end{align*}
+Solving these equations, we obtain
+\begin{alignat*}{3}
+ & f(y_1) =         p_1 p_2^{-1}, \quad &
+ & f(y_2) = q^{ 24} p_2^3 p_6^{-1}, \quad &
+ & f(y_3) = q^{-18} p_6 p_5^{-1} p_2^{-1}, \\
+ & f(y_4) = q^{ 15} p_5^3 p_6^{-1} p_4^{-1}, \quad &
+ & f(y_5) = q^{- 3} p_4 p_5^{-1}, \quad &
+ & f(y_6) =         p_3 p_4^{-1}. 
+\end{alignat*}
+Second write down $m_{ij}$ by $x_\nu$:
+\begin{align*}
+c/2\cdot m_{71}&=x_2x_3x_4^2x_5x_6=p_1, \\
+%c/2\cdot m_{61}&=x_1x_2^2x_3x_4+x_1x_2^2x_3x_6+x_1x_2^2x_5x_6+x_1x_4^2x_5x_6+x_3x_4^2x_5x_6+cx_1x_2x_4x_5x_6, \\
+c/2\cdot m_{61}&=x_3x_4^2x_5x_6+x_1(x_2+x_4)^2x_5x_6+x_1x_2^2x_3(x_4+x_6)=p_2, \\
+c/2\cdot m_{72}&=x_2x_3x_4^2x_5, \\
+%c/2\cdot m_{62}&=x_1x_2^2x_3+x_1x_2^2x_5+x_1x_4^2x_5+x_3x_4^2x_5+cx_1x_2x_4x_5, \\
+c/2\cdot m_{62}&=x_1x_2^2x_3+x_3x_4^2x_5+x_1(x_2+x_4)^2x_5, \\
+%c/2\cdot m_{73}&=x_2x_3x_4^2+x_2x_3x_6^2+x_2x_5x_6^2+x_4x_5x_6^2+cx_2x_3x_4x_6, \\
+c/2\cdot m_{73}&=x_2x_5x_6^2+x_4x_5x_6^2+x_2x_3(x_4+x_6)^2, \\
+%c/2\cdot m_{63}&=x_1x_2^2+x_1x_4^2+x_3x_4^2+x_1x_6^2+x_3x_6^2+x_5x_6^2+cx_1x_2x_4+cx_1x_2x_6+cx_1x_4x_6+cx_3x_4x_6 \\
+c/2\cdot m_{63}&=x_5x_6^2+x_3(x_4+x_6)^2+x_1(x_2+x_4+x_6)^2, \\
+1/2\cdot m_{41}&=x_2x_3x_4+x_2x_3x_6+x_2x_5x_6+x_4x_5x_6, \\
+         m_{31}&=x_1x_2+x_1x_4+x_3x_4+x_1x_6+x_3x_6+x_5x_6, \\
+         m_{21}&=x_2+x_4+x_6, 
+%         m_{32}&=x_1+x_3+x_5 \\
+%1/2\cdot m_{42}&=x_2x_3+x_2x_5+x_4x_5 \\
+%c/2\cdot m_{53}&=x_2^2+x_4^2+x_6^2+cx_2x_6+cx_2x_4+cx_4x_6 \\
+%c/2\cdot m_{52}&=x_2^2x_3+x_2^2x_5+x_4^2x_5+cx_2x_4x_5 \\
+%c/2\cdot m_{51}&=x_2^2x_3x_4+x_2^2x_3x_6+x_2^2x_5x_6+x_4^2x_5x_6+cx_2x_4x_5x_6 \\
+\end{align*}
+By straightforward (but very tedious) calculation, we can prove that
+$p_1,\ldots,p_6$ are polynomials of $q,x_1,\ldots,x_6$
+with non-negative integer coefficients.
+Explicitly we have
+\begin{align*}
+ p_1 &= x_2x_3x_4^2x_5x_6,
+ \\ 
+ p_2 &= x_3x_4^2x_5x_6+x_1(x_2+x_4)^2x_5x_6+x_1x_2^2x_3(x_4+x_6),
+ \\ 
+ p_3 &= x_1x_2^3x_3^2x_4^3x_5,
+ \\ 
+ p_4 &= 
+  x_3x_4^3x_5^2x_6^3 
+ +x_1(x_2+x_4)^3x_5^2x_6^3 
+ +x_1x_2^3x_3^2(x_4+x_6)^3
+ \\ & 
+ +q^4x_1x_2^2x_3x_5x_6(
+    q^4(3)_{q^2} x_2x_4x_6
+   +q^2(3)_{q^2} x_4^2x_6
+   +(3)_{q^2} x_4x_6^2
+   +(2)_{q^6}x_2x_6^2
+ ),
+ \\ 
+ p_5 &= 
+  x_3x_4^3x_5^2x_6^2
+ +x_1(x_2+x_4)^3x_5^2x_6^2
+ +x_1x_2^3x_3^2(x_4+x_6)^2
+ \\ &
+ +q^4x_1x_2^2x_3x_5x_6(
+    q^4(2)_{q^2} x_2x_4
+   +q^2(2)_{q^2} x_4^2
+   +(2)_{q^6}x_2x_6
+   +(3)_{q^2} x_4x_6
+ ),
+ \\
+ p_6 &= 
+ q^{15}\bigl(
+   x_3x_4^3x_5x_6
+  +(2)_{q^6}x_1(x_2+x_4)^3x_5x_6
+ \\ & \phantom{q^{15}(}\quad
+  +qx_1x_2^2x_3(
+     q^2(3)_{q^2} x_2x_4
+    +   (3)_{q^2} x_4^2
+    +q^2(3)_{q^2} x_4x_6
+    +q^2(2)_{q^6}x_2x_6
+  )
+ \bigr)
+ x_3x_4^3x_5^2x_6^2
+ \\ & \,
+ +q^{15}x_1^2(
+  (x_2+x_4)^2x_5x_6
+  +x_2^2x_3(x_4+x_6)
+ )^3.
+\end{align*}
+The anti-algebra isomorphism 
+$\rho:\K_{(1,2,1,2,1,2)}\otimes U_q^-\to\K_{(2,1,2,1,2,1)}\otimes U_q^-$
+is given by $\rho(x_\nu)=y_{7-\nu}$ and $\rho(F_i)=F_i$.
+Applying $\rho$ to \eqref{eq:eeeeee=eeeeee}, 
+we have $f^{-1}=\rho\circ f\circ\rho^{-1}$.
+Therefore both $f$ and $f^{-1}$ are positive.
+
+This completes the proof of \lemmaref{lemma:f}.
+
+\begin{remark}
+ The above formulae for the $G_2$ case are 
+ quatum analogue of Theorem 3.1 (c) of 
+ Berenstein-Kazhdan \cite{BZ}.
+ \qed
+\end{remark}
+
+\subsection{Quantum geometric semicrystal structure on $\K_\i$}
+
+For $\i=(i_1,\ldots,i_N)\in I^N$,
+let $\A_\i$ be the algebra given in \secref{sec:Ki}
+and $\K_\i=Q(\A_\i)$ its field of fractions.
+Let $J$ be the subset of $I$ consisting 
+of $i\in I$ with $i_\nu=0$ for some $\nu=1,\ldots,N$.
+We call $J$ the {\em support of $\i$}.
+If $\i=(i_1,\ldots,i_N)$ is a reduced word for $w\in W$, 
+then the support of $\i$ depends only on $w$
+and $J$ is called the {\em support of $w$}.
+
+Let us construct a quantum geometric semicrystal structure on $\K_\i$.
+
+For $i\in I$, define $\xi_i\in\A_\i$ by
+\begin{equation*}
+ \xi_i = \sum_{1\leqq\nu\leqq N,\, i_\nu=i} x_\nu.
+\end{equation*}
+Then $\xi_i\ne 0$ is equivalent to $i\in J$
+and $\{\xi_i\}_{i\in J}$ satisfies the $q$-Serre relations.
+
+For $i\in J$ and $\nu=1,\ldots,N$, we define $X,Y\in\A_\i$ by
+\begin{equation*}
+ X = \sum_{i_\nu=i,\, \mu<\nu} x_\mu, \quad
+ Y = \sum_{i_\nu=i,\, \mu>\nu} x_\mu.
+\end{equation*}
+Then we have $\xi_i = X + \delta_{ii_\nu}x_\nu + Y$.
+For $n\in\Z$, by induction on $|n|$, we can show that
+\begin{align*}
+ \xi_i^n x_\nu \xi_i^{-n} =
+ \begin{cases}
+  \displaystyle
+  q_i^{-2n} x_\nu\;
+  \frac{1+q_i^2 (x_\nu+q_i^2Y)X^{-1}}{1+q_i^{2(1-n)}(x_\nu+q_i^2Y)X^{-1}}\;
+  \frac{1+q_i^2 Y(X+x_\nu)^{-1}}{1+q_i^{2(1-n)}Y(X+x_\nu)^{-1}}
+  & \text{if $i_\nu = i$}, 
+  \\[\smallskipamount] \displaystyle
+  q_i^{-a_{ii_\nu}n} x_\nu\;
+  \prod_{k=0}^{-a_{ii_\nu}-1}
+  \frac{1+q_i^{-2(n+k-1)}YX^{-1}}{1+q_i^{-2(k-1)}YX^{-1}}
+  & \text{if $i_\nu \ne i$}.
+ \end{cases}
+\end{align*}
+Therefore $\xi_i^n x_\nu \xi_i^{-n}$ is an $n$-independent 
+rational function of $q_i^n$. 
+Replacing $q_i^n$ by an indeteminate $t$, 
+we define $\e_i^t(x_\nu)\in\K_\i(t)$ by
+\begin{align*}
+ \e_i^t(x_\nu) = 
+ \begin{cases}
+  \displaystyle
+  t^{-2} x_\nu\;
+  \frac{1+q_i^2 (x_\nu+q_i^2Y)X^{-1}}{1+q_i^{2}t^{-2}(x_\nu+q_i^2Y)X^{-1}}\;
+  \frac{1+q_i^2 Y(X+x_\nu)^{-1}}{1+q_i^{2}t^{-2}Y(X+x_\nu)^{-1}}
+  & \text{if $i_\nu = i$}, 
+  \\[\smallskipamount] \displaystyle
+  t^{-a_{ii_\nu}} x_\nu\;
+  \prod_{k=0}^{-a_{ii_\nu}-1}
+  \frac{1+q_i^{-2(k-1)}t^{-2}YX^{-1}}{1+q_i^{-2(k-1)}YX^{-1}}
+  & \text{if $i_\nu \ne i$}.
+ \end{cases}
+\end{align*}
+
+\begin{lemma}
+ For each $i\in J$, the mapping $\e_i^t:\{\xi_i\}_{i\in J}\to\K_q(t)$
+ can be extended to the positive algebra homomorphism $\K_\i\to\K_\i(t)$ 
+ also denoted by $\e_i^t$.
+ Then $(\K_\i,\{\e_i\}_{i\in J})$ 
+ is a quantum geometric $J$-semicrystal.
+ \qed
+\end{lemma}
+
+We call $(\K_\i,\{\e_i\}_{i\in J})$  
+the {\em standard quantum geometric semicrystal} for $\i\in I^N$.
+
+\begin{lemma}
+ Let $\i=(i_1,\ldots,i_N)$, $\i'=(i'_1,\ldots,i'_N)$ be reduced words
+ for a same element $w\in W$,  $J$ the support of $w$, 
+ and $f:\K_{\i'}\to\K_\i$ the transition isomorphism.  
+ Then $f$ is an isomorphism of quantum geometric $J$-semicrystals.
+ That is, $f$ commutes with $\e_i^t$ for $i\in J$.
+ \qed
+\end{lemma}
+
+\begin{proof}
+ Since the transition isomorphism $f$ preserves $\xi_i$,
+ the algebra isomorphism $x\mapsto \xi_i^n x \xi_i^{-n}$ 
+ commutes with $f$.  This leads to the commutativity of $f$ 
+ and $\e_i^t$.
+ \qed
+\end{proof}
+
+Let $\i=(i_1,\ldots,i_N)$, $\i'=(i'_1,\ldots,i'_N)$ be reduced words
+for a same element $w\in W$ and $J$ the support of $w$.
+Then the quantum geometric $J$-semicrystals $\K_\i$ and $\K_{\i'}$ 
+can be identified via the transition isomorphism.
+Then $\K_\i=\K_{\i'}$ is denoted by $\K_w$ and called 
+the {\em standard quantum geometric semicrystal} for $w\in W$.
+
+%\subsection{Weyl group action on $\K_\i(q^{P_J})$}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Quantum toric semicrystals}
+
+\subsection{Definition of quantum toric semicrystals}
+
+\subsection{Quantum torus and positive structure}
+
+Let $\K$ be a (possibly non-commutative) field over $\F$.
+We call $\K$  a {\em rational function field of quantum torus}
+or simply a {\em quantum torus}
+if there exists a finite family $\{x_\nu\}_{\nu=1}^N$ of elements in $\K$
+such that $\K$ is generated by $\{x_\nu\}_{\nu=1}^N$ as a field over $\F$ 
+and all the relations of $\{x_\nu\}_{\nu=1}^N$ are generated by 
+$x_\nu x_\mu = q^{c_{\mu\nu}}x_\mu x_\nu$ ($1\leqq\mu,\nu\leqq N$)
+for some skew-symmetric integer matrix $[c_{\mu\nu}]_{\mu,\nu=1}^N$.
+We call $\x=\{x_\nu\}_{\nu=1}^N$ a {\em chart}
+of the quantum torus $\K$.
+Quantum tori with charts are quantum analogue of split algebraic tori.
+
+Let $\K$ be a quantum torus with a chart $\{x_\nu\}_{\nu=1}^N$
+and $\A$ the subalgebra generated by $\{x_\nu\}_{\nu=1}^N$.
+Then $\A$ is an Ore domain and hence
+$\K$ is identified with the field of fractions $Q(\A)$.
+
+For example, for each $\i\in I^N$,
+the standard quantum geometric semicrystal $\K_\i$ is a quantum torus 
+with a chart $\{x_{\i,\nu}\}_{\nu=1}^N$.
+
+If $\K$ is a quantum torus with a chart $\{x_\nu\}_{\nu=1}^N$, 
+then the rational function field $\K(t_1,\ldots,t_n)$ over $\K$
+is naturally a quantum torus with 
+a chart $\{t_k\}_{k=1}^n\cup\{x_\nu\}_{\nu=1}^N$.
+
+A subset $S$ of $\K$ is called a {\em semi-subfield} of $\K$
+if $S$ contains $0,1$ and is closed under the addition, 
+the multiplication, and the division by non-zero elements in $S$.
+For any subset $X$ of $\K$, 
+the semi-subfield of $\K$ generated by $X$ is defined 
+to be the minimum semi-subfield of $\K$ which includes $X$.
+An element of $\K$ is positive if and only if
+it can be written in a subtraction-free expression of elements in $X$.
+
+Let $\K$ be a quantum torus with a chart $\x=\{x_\nu\}_{\nu=1}^N$.
+The {\em positive structure} $\K^{\x,+}$ on $\K$ is defined to be 
+the semi-subfield of $\K$ generated by $q$ and $\{x_\nu\}_{\nu=1}^N$.
+More generally, the positive structure $\K(t_1,\ldots,t_n)^{\x,+}$
+on the rational function field $\K(t_1,\ldots,t_n)$
+is defined to be the positive structure given 
+by the chart $\{t_k\}_{k=1}^n\cup\{x_\nu\}_{\nu=1}^N$.
+
+Let $\K$, $\K'$ be quantum tori with 
+charts $\x=\{x_\nu\}_{\nu=1}^N$, $\x'=\{x'_{\nu'}\}_{\nu'=1}^{N'}$ respectively.
+An algebra homomorphism $f:\K'\to\K$ is said to be {\em positive}
+if $f(\K'^{\x',+})\subset\K^{\x,+}$.
+An algebra homomorphism $f:\K'\to\K$ is positive if and only if
+$f(x'_{\nu'})$ can be written in a subtraction-free expression 
+of $\x=\{x_\nu\}_{\nu=1}^N$ for each $\nu'=1,\ldots,N'$.
+
+Denote by $\QT^+$ the category of quantum tori with charts and 
+positive algebra homomorphisms between them.
+Note that a positive algebra isomorphism $f:\K'\to\K$ 
+is not necessarily an isomorphism in $\QT^+$.
+For example, if $f:\F(t_1,t_2)\to\F(t_1,t_2)$ is the positive algebra isomorphism 
+given by $f(t_1)=t_1+t_2$ and $f(t_2)=t_2$, then its inverse is not positive.
+
+\subsection{Product and dual}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+
+\bibitem{B9605016}
+Berenstein, Arkady.
+Group-like elements in quantum groups and Feigin's conjecture.
+\\ {\tt http://arxiv.org/abs/q-alg/9605016}
+
+\bibitem{BK9912105}
+Berenstein, Arkady and Kazhdan, David. 
+Geometric and unipotent crystals. 
+GAFA 2000 (Tel Aviv, 1999).  
+Geom.\ Funct.\ Anal.\  2000,  Special Volume, Part I, 188--236.
+\\ {\tt http://arxiv.org/abs/math/9912105}
+
+\bibitem{BK0601391}
+Berenstein, Arkady and Kazhdan, David. 
+Geometric and unipotent crystals:
+II: From unipotent bicrystals to crystal bases.
+\\ {\tt http://arxiv.org/abs/math/0601391}
+
+\bibitem{BZ}
+Berenstein, Arkady and Zelevinsky, Andrei. 
+Total positivity in Schubert varieties.
+
+\bibitem{kuroki-2008}
+Kuroki, Gen.
+Quantum groups and quantization of 
+Weyl group symmetries of Painlev\'e systems.
+Preprint 2008,
+to appear in Advanced Studies in Pure Mathematics, 
+Proceedings of ``Exploration of New Structures and Natural Constructions in Mathematical Physics'', 
+Nagoya University, March 5--8, 2007.
+\\ {\tt http://arxiv.org/abs/0808.2604}
+
+\bibitem{kac-book}
+Kac, Victor G., 
+Infinite-dimensional Lie algebras, 
+Third edition, 
+Cambridge University Press, Cambridge, 1990, xxii+400~pp.
+
+\bibitem{lusztig-book}
+Lusztig, George,
+Introduction to quantum groups,
+Progress in Mathematics, 110, 
+Birkh\"auser Boston, Inc., Boston, MA, 1993, xii+341~pp.
+
+\bibitem{NY0012028}
+Noumi, Masatoshi and Yamada, Yasuhiko.
+Birational Weyl group action arising from a nilpotent Poisson algebra.  
+Physics and combinatorics 1999 (Nagoya),  287--319, World Sci.\ Publ., River Edge, NJ, 2001.
+\\ {\tt http://arxiv.org/abs/math/0012028}
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

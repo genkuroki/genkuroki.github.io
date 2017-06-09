@@ -1,0 +1,1193 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf ガンマ分布の中心極限定理とStirlingの公式}
+\def\AUTHOR{黒木玄}
+\def\DATE{2016年5月1日作成%
+\thanks{%
+2016年5月1日Ver.0.1. 
+2016年5月2日Ver.0.2: 対数版の易しいStirlingの公式の節を追加した. 
+2016年5月3日Ver.0.3: 色々追加. 特にFourierの反転公式に関する付録を追加した.
+2016年5月4日Ver.0.4: ガウス分布のFourier変換の付録とGauss積分の計算の付録
+を追加した.
+}}
+\def\PDFTITLE{Stirlingの公式}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{確率論}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{Stirlingの公式}
+
+Stirlingの公式とは
+\[
+n! \sim n^n e^{-n} \sqrt{2\pi n} \qquad (n\to \infty)
+\]
+という階乗の近似公式のことである.
+ここで $a_n\sim b_n$ ($n\to\infty$)は $\lim_{n\to\infty}(a_n/b_n)=1$ を
+意味する. 
+このノートではまず最初にガンマ分布に関する中心極限定理からStirlingの公式が
+``導出''されることを説明する. 精密かつ厳密な議論はしない.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ分布に関する中心極限定理からの``導出''}
+
+ガンマ分布とは次の確率密度函数で定義される確率分布のことである%
+\footnote{ガンマ函数は $s>0$ に対して 
+$\Gamma(s)=\int_0^\infty e^{-x}x^{s-1}\,dx$ と定義される.
+直接の計算によって $\Gamma(1)=1$ を, 
+部分積分によって $\Gamma(s+1)=s\Gamma(s)$ を示せるので,
+$0$ 以上の整数 $n$ について $\Gamma(n+1)=n!$ となる.}:
+\[
+f_{\alpha,\tau}(x) =
+\begin{cases}
+\dfrac{e^{-x/\tau}x^{\alpha-1}}{\Gamma(\alpha)\tau^\alpha} & \qquad (x>0), \\
+0 & \qquad (x\leqq 0).
+\end{cases}
+\]
+ここで $\alpha,\tau>0$ はガンマ分布を決めるパラメーターである%
+\footnote{$\alpha$ は shape parameter と, 
+$\tau$ は scale parameter と呼ばれているらしい.}.
+以下簡単のため $\alpha=n>0$, $\tau=1$ の場合のガンマ分布のみを扱うため
+に $f_n(x)=f_{n,1}(x)$ とおく:
+\[
+f_n(x) = \frac{e^{-x} x^{n-1}}{\Gamma(n)} \qquad (x>0).
+\]
+確率密度函数 $f_n(x)$ で定義される確率変数を $X_n$ と書くことにする.
+確率変数 $X_n$ の平均 $\mu_n$ と分散 $\sigma_n^2$ は両方 $n$ になる%
+\footnote{確率密度函数 $f(x)$ を持つ確率変数 $X$ に対して, 
+期待値汎函数が $E[g(X)]=\int_\R g(x)f(x)\,dx$ と定義され, 
+平均が $\mu=E[X]$ と定義され, 
+分散が $\sigma^2=E[(X-\mu)^2]=E[X^2]-\mu^2$ と定義される.}:
+\begin{align*}
+&
+\mu_n = E[X_n] = \int_0^\infty x f_n(x)\,dx = \frac{\Gamma(n+1)}{\Gamma(n)}=n,
+\\ & 
+E[X_n^2] = \int_0^\infty x^2 f_n(x)\,dx = \frac{\Gamma(n+2)}{\Gamma(n)}=(n+1)n,
+\\ &
+\sigma_n^2 = E[X_n^2]-\mu_n^2 = n.
+\end{align*}
+
+ゆえに確率変数 $Y_n=(X_n-\mu_n)/\sigma_n=(X_n-n)/\sqrt{n}$ の
+平均と分散はそれぞれ $0$ と $1$ になり, その確率密度函数は 
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=
+\sqrt{n}\frac{e^{-(\sqrt{n}y+n)}(\sqrt{n}y+n)^{n-1}}{\Gamma{n}}
+\]
+になる%
+\footnote{確率変数 $X$ の確率分布函数が $f(x)$ のとき, 確率変数 $Y$ を $Y=(X-a)/b$ と
+定めると, $E[g(Y)]=\int_\R g((x-a)/b)f(x)\,dx = \int_\R g(y) b f(by+a)\,dy$ なので,
+$Y$ の確率分布函数は $b f(by+a)$ になる.}. 
+この確率密度函数で $y=0$ とおくと
+\[
+\sqrt{n}f_n(n)
+=
+\sqrt{n}\frac{e^{-n}n^{n-1}}{\Gamma(n)}
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+\]
+となる. $n>0$ が整数のとき $\Gamma(n+1)=n!$ なので, 
+これが $n\to\infty$ で $1/\sqrt{2\pi}$ に収束することとStirlingの公式の成立は同値になる.
+
+ガンマ分布が再生性を満たしていることより, 
+中心極限定理を適用できるので, 
+$\R$ 上の有界連続函数 $\varphi(x)$ に対して, $n\to\infty$ のとき
+\[
+\int_0^\infty \varphi\left(\frac{x-n}{\sqrt{n}}\right)f_n(x)\,dx
+=
+\int_0^\infty \varphi(y)\sqrt{n}f_n(\sqrt{n}y+n)\,dy
+\longrightarrow
+\int_{-\infty}^\infty \varphi(y)\frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy.
+\]
+$\varphi(y)$ をデルタ函数 $\delta(y)$ に近付けることによって
+(すなわち被積分函数の $y$ に $0$ を代入することによって), 
+\[
+\sqrt{n}f_n(n)
+=
+\sqrt{n}\frac{e^{-n}n^{n-1}}{\Gamma(n)}
+=
+\frac{n^n e^{-n} \sqrt{n}}{\Gamma(n+1)}
+\longrightarrow
+\frac{1}{\sqrt{2\pi}}
+\qquad(n\to\infty)
+\]
+を得る.
+この結果はStirlingの公式の成立を意味する.
+
+以上の``導出''の最後のステップには論理的にギャップがある.
+このギャップを埋めるためには
+中心極限定理をブラックボックスとして利用するのではなく, 
+中心極限定理の特性函数を用いた証明に戻る必要がある.
+そのような証明の方針については次の節を見て欲しい.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ分布の特性函数を用いた表示からの導出}
+
+前節では中心極限定理を便利なブラックボックスとして用いて
+Stirlingの公式を``導出''した.
+しかし, その``導出''には論理的なギャップがあった.
+そのギャップを埋めるためには, 
+中心極限定理が確率密度函数を特性函数(確率密度函数の逆Fourier変換)の
+Fourier変換で表示することによって証明されることを思い出す必要がある.
+
+この節ではガンマ分布の確率密度函数を特性函数のFourier変換で表わす公式を
+用いて, 直接的にStirlingの公式を証明する%
+\footnote{筆者はこの証明法を
+\href
+{https://www.math.kyoto-u.ac.jp/~nobuo/pdf/prob/stir.pdf}
+{https://www.math.kyoto-u.ac.jp/{\textasciitilde}nobuo/pdf/prob/stir.pdf}
+を見て知った.}.
+
+\subsection{Stirlingの公式の証明}
+
+ガンマ分布の確率密度函数 $f_n(x)=e^{-x}x^{n-1}/\Gamma(n)$ ($x>0$) 
+の特性函数(逆Fourier変換) $F_n(t)$ は次のように計算される%
+\footnote{確率分布がパラメーター $n$ について再生性を持つことと
+特性函数がある函数の $n$ 乗の形になることは同値である.}:
+\[
+F_n(t)
+=\int_0^\infty e^{itx} f_n(x)\,dx
+=\frac{1}{\Gamma(n)}\int_0^\infty e^{-(1-it)x} x^{n-1}\,dx
+%=\frac{1}{\Gamma(n)}\frac{\Gamma(n)}{(1-it)^n}
+=\frac{1}{(1-it)^n}.
+\]
+ここで, 実部が正の複素数 $\alpha$ に対して
+\[
+\frac{1}{\Gamma(n)}\int_0^\infty e^{-\alpha t} t^{n-1}\,dt = \frac{1}{\alpha^n}
+\]
+となること使った. この公式はCauchyの積分定理を使って示せる%
+\footnote{
+Cauchyの積分定理を使わなくても示せる. 
+左辺を $f(\alpha)$ と書くと, $f(1)=1$ でかつ部分積分によって
+$f'(\alpha)=-(n/\alpha)f(\alpha)$ となることがわかるので, 
+その公式が得られる.
+正の実数 $\alpha$ に対するこの公式は $t=x/\alpha$ という
+置換積分によって容易に証明される.
+}.
+
+Fourierの反転公式より%
+\footnote{Fourierの反転公式の証明の概略については\secref{sec:Fourier}を参照せよ.}, 
+\[
+f_n(x)
+=
+\frac{e^{-x} x^{n-1}}{\Gamma(n)}
+=
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-itx}F_n(t)\,dt
+=
+\frac{1}{2\pi}\int_{-\infty}^\infty \frac{e^{-itx}}{(1-it)^n}\,dt
+\qquad (x>0).
+\]
+この公式さえ認めてしまえばStirlingの公式の証明は易しい.
+
+上の公式より, $t=\sqrt{n}u$ と置換することによって,
+\begin{align*}
+\sqrt{n}f_n(n)
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+=
+\frac{\sqrt{n}}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-itn}}{(1-it)^n}
+\,dt
+=
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,du.
+\end{align*}
+Stirlingの公式を証明するためには, 
+これが $n\to\infty$ で $1/\sqrt{2\pi}$ に収束することを示せばよい.
+そのために被積分函数の対数の様子を調べよう:
+\begin{align*}
+\log\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}
+&
+=-n\log\left(1-\frac{iu}{\sqrt{n}}\right)-iu\sqrt{n}
+\\&
+=n\left(\frac{iu}{\sqrt{n}}-\frac{u^2}{2n}+o\left(\frac{1}{n}\right)\right)-iu\sqrt{n}
+=-\frac{u^2}{2} + o(1).
+\end{align*}
+したがって, $n\to\infty$ のとき
+\[
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n} \longrightarrow e^{-u^2/2}.
+\]
+これより, $n\to\infty$ のとき
+\[
+\sqrt{n}f_n(n)
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+=
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,du
+\longrightarrow
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-u^2/2}\,du
+=
+\frac{1}{\sqrt{2\pi}}
+\]
+となることがわかる%
+\footnote{厳密に証明したければ, たとえばLebesgueの収束定理を使えばよい.}.
+最後の等号で一般に正の実数 $\alpha$ に対して
+\[
+\int_{-\infty}^\infty e^{-u^2/\alpha}\,du = \sqrt{\alpha\pi}
+\]
+となることを用いた%
+\footnote{この公式はGauss積分の公式 
+$\int_{-\infty}^\infty e^{-x^2}\,dx=\sqrt{\pi}$ 
+で $x=u/\sqrt{\alpha}$ と積分変数を変換すれば得られる.
+Gauss積分の公式は以下のようにして証明される.
+左辺を $I$ とおくと 
+$I^2=\int_{-\infty}^\infty\int_{-\infty}^\infty e^{-(x^2+y^2)}\,dx\,dy$
+であり, $I^2$ は $z=e^{-(x^2+y^2)}$ のグラフと平面 $z=0$ で挟まれた
+「小山状の領域」の体積だと解釈される.
+その小山の高さ $0< z\leqq 1$ における断面積は $-\pi \log z$ に
+なるので, その体積は $\int_0^1(-\pi\log z)\,dz=-\pi[z\log z-z]_0^1=\pi$ 
+になる. ゆえに $I=\sqrt{\pi}$.
+Gauss積分の公式の不思議なところは円周率が出て来るところであり,  
+しかもその平方根が出て来るところである.
+しかしその二乗が小山の体積であることがわかれば, その高さ $z$ での断面が
+円盤の形になることから円周率 $\pi$ が出て来る理由がわかる. 
+平方根になるのは $I$ そのものを直接計算したのではなく, 
+$I^2$ の方を計算したからである.
+}. %
+これでStirlingの公式が証明された.
+
+\subsection{正規化されたガンマ分布の確率密度函数の各点収束}
+
+確率密度函数 $f_n(x)=e^{-x}x^{n-1}$ を持つ確率変数を $X_n$ と書くとき,
+$Y_n=(X_n-n)/\sqrt{n}$ の平均と分散はそれぞれ $0$ と $1$ になるので
+あった(前節を見よ).  $Y_n$ の確率密度函数は
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=\sqrt{n}\frac{e^{-\sqrt{n}y-n}(\sqrt{n}y+n)^{n-1}}{\Gamma(n)}
+=\frac{e^{-n}n^{n-1/2}}{\Gamma(n)} 
+ \frac{e^{-\sqrt{n}y}(1+y/\sqrt{n})^n}{(1+y/\sqrt{n})}
+\]
+になる. そして, $n\to\infty$ のとき
+\begin{align*}
+\log\left(e^{-\sqrt{n}y}\left(1+\frac{y}{\sqrt{n}}\right)^n\right)
+&=
+n\log\left(1+\frac{y}{\sqrt{n}}\right)-\sqrt{n}y
+\\ &
+=n\left(\frac{y}{\sqrt{n}}-\frac{y^2}{2n}+o\left(\frac{1}{n}\right)\right)
+-\sqrt{n}y
+=-\frac{y^2}{2}+o(1)
+\end{align*}
+なので, $n\to\infty$ で $e^{\sqrt{n}y}(1+y/\sqrt{n})^n\to e^{-y^2/2}$ と
+なり, さらに $1+y/\sqrt{n}\to 1$ となる. 
+ゆえに, 次が成立することと Stirling の公式は同値になる:
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=\sqrt{n}\frac{e^{-\sqrt{n}y-n}(\sqrt{n}y+n)^{n-1}}{\Gamma(n)}
+\longrightarrow
+\frac{e^{-y^2/2}}{\sqrt{2\pi}}
+\qquad (n\to\infty).
+\]
+すなわち $Y_n$ の確率密度函数が標準正規分布の確率密度函数に各点収束すること
+とStirlingの公式は同値である.
+
+ガンマ分布について確率密度函数の各点収束のレベルで中心極限定理が
+成立していることと Stirling の公式は同じ深さにある.
+
+$Y_n$ の確率分布函数が標準正規分布の確率密度函数に各点収束することの
+直接的証明は $\sqrt{n}f(n)$ の収束の証明と同様に以下のようにして得られる:
+\begin{align*}
+\sqrt{n}f_n(\sqrt{n}y+n)
+&=
+\frac{\sqrt{n}}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-it(\sqrt{n}y+n)}}{(1-it)^n}\,dt
+=\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-iuy}\frac{e^{-it\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,dt
+\\ &
+\longrightarrow
+\frac{1}{2\pi}
+\int_{-\infty}^\infty e^{-iuy}e^{-u^2/2}\,du
+=
+\frac{1}{\sqrt{2\pi}}e^{-y^2/2}
+\qquad(n\to\infty).
+\end{align*}
+最後の等号で, Cauchyの積分定理より%
+\footnote{複素解析を使わなくても容易に証明される.
+たとえば, $e^{-ity}$ のTaylor展開を代入して項別積分を実行しても証明できる.
+もしくは, 両辺が $f'(y)=-y f(y)$, $f(0)=\sqrt{2\pi}$ を満たしていることからも
+導かれる(左辺が満たしていることは部分積分すればわかる).  
+Cauchyの積分定理を使えば
+形式的に $u+iy$ ($u>0$) を $v>0$ で置き換える
+置換積分を実行したのと同じように見える証明が得られる.}
+\[
+\int_{-\infty}^\infty e^{-iuy}e^{-u^2/2}\,du
+=\int_{-\infty}^\infty e^{-(u+iy)^2/2-y^2/2}\,du
+=e^{-y^2/2}\int_{-\infty}^\infty e^{-v^2/2}\,dv
+=e^{-y^2/2}\sqrt{2\pi}
+\]
+となることを用いた.
+
+このように, 
+ガンマ分布の確率密度函数の特性函数のFourier変換による表示を使えば
+確率密度函数の各点収束のレベルでの中心極限定理を容易に示すことができ,
+その結果は Stirling の公式と同値になっている.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ函数のGauss積分による近似を使った導出}
+
+前節までに説明したStirlingの公式の証明は
+本質的にガンマ函数(ガンマ分布)がGauss積分(正規分布)で近似されることを
+用いた証明だと考えられる.
+
+この節ではガンマ函数の値をGauss積分で直接近似することによって
+Stirlingの公式を示そう%
+\footnote{この方法はLaplaceの方法と呼ばれることがある.
+Laplaceの方法によるStirlingの公式の証明とその一般化に関しては
+\href{https://www.cs.elte.hu/blobs/diplomamunkak/msc_mat/2012/nemes_gergo.pdf}
+{Gerg\"o Nemes, Asymptotic expansions for integrals, 2012, M.~Sc.~Thesis, 40~pages}
+が詳しい.}.
+
+$g_n(x)=\log(e^{-x}x^n)=n\log x-x$ を $x=n$ でTaylor展開すると
+\[
+g_n(x)
+=n\log n-n
+-\frac{(x-n)^2}{2n}
++\frac{(x-n)^3}{3n^2}
+-\frac{(x-n)^4}{4n^3}
++\cdots
+\]
+これより, $n$ が大きなとき $n!=\Gamma(n+1)=\int_0^\infty e^{-x}x^n\,dx$ が
+\[
+\int_{-\infty}^\infty \exp\left(n\log n-n-\frac{(x-n)^2}{2n}\right)\,dx
+=n^n e^{-n} \int_{-\infty}^\infty e^{-(x-n)^2/(2n)}\,dx
+=n^n e^{-n} \sqrt{2\pi n}
+\]
+で近似されることがわかる. ゆえに
+\[
+n!\sim n^n e^{-n} \sqrt{2\pi n} \qquad (n\to\infty).
+\]
+
+この近似の様子をscilabでグラフで描くことによって作った画像を
+\href
+{http://twilog.org/genkuroki/date-150709}
+{ツイッターの過去ログ}
+で見ることができる.
+
+以上の証明法ではStirlingの公式中の因子 $n^n e^{-n}$, $\sqrt{2\pi n}$ の
+それぞれが $g_n(x)=\log(e^{-x}x^n)=n\log x-x$ の $x=n$ における
+Taylor展開の定数項と2次の項に由来していることがわかる.
+$3$ 次の項は $\int_{-\infty}^\infty y^3 e^{-y^2/\alpha}\,dy=0$ 
+なので寄与しない.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{対数版の易しい Stirling の公式}
+
+Stirlingの公式は次と同値である:
+\[
+\log n! - (n+1/2)\log n - n \longrightarrow \log\sqrt{2\pi} 
+\qquad (n\to\infty).
+\]
+これより
+\[
+\log n! = n\log n - n + o(n)
+\qquad (n\to\infty).
+\]
+ここで $o(n)$ は $n$ で割った後に $n\to\infty$ と
+すると $0$ に収束する量を意味する.
+これをこの節では{\bf 対数版 Stirling の公式}と呼ぶことにする.
+この公式であれば以下で説明するように初等的に証明することができる%
+\footnote{以下の証明を見ればわかるように $o(n)$ の部分は $O(\log n)$
+であることも証明できる. ここで $O(\log n)$ は $\log n$ で割った後に
+有界になる量を意味している.}.
+
+\subsection{易しい証明}
+
+単調増加函数 $f(x)$ について $f(k)\leqq\int_k^{k+1} f(x)\,dx\leqq f(k+1)$
+が成立しているので, $f(1)\geqq 0$ を満たす単調増加函数 $f(x)$ について,
+\[
+f(1)+f(2)+\cdots+f(n-1)\leqq \int_1^n f(x)\,dx \leqq f(1)+f(2)+\cdots+f(n).
+\]
+ゆえに
+\[
+\int_1^n f(x)\,dx\leqq f(1)+f(2)+\cdots+f(n)\leqq \int_1^n f(x)\,dx + f(n).
+\]
+これを $f(x)=\log x$ に適用すると
+\[
+\int_1^n \log x\,dx = [x\log x-x]_1^n = n\log n - n + 1, \qquad
+\log 1+\log 2+\cdots+\log n=\log n!
+\]
+なので
+\[
+n\log n - n + 1 \leqq \log n! \leqq n\log x - n + 1 + \log n.
+\]
+すなわち
+\[
+1 \leqq \log n! - n\log n + n \leqq 1+\log n.
+\]
+したがって
+\[
+\log n!=n\log n-n+O(\log n)=n\log n-n+o(n)
+\qquad (n\to\infty).
+\]
+ここで $O(\log n)$ は $\log n$ で割ると有界になるような量を意味している.
+
+\subsection{大学入試問題への応用例}
+
+対数版の易しいStirlingの公式を使うと, 
+$an$ 個から $bn$ 個取る組み合わせの数(二項係数)の対数は
+\begin{align*}
+\log\binom{an}{bn}
+&=\log(an)! - \log(bn)! -\log((a-b)n)!
+\\ &
+=an\log a+an\log n - an + o(n)
+\\ &
+-bn\log b-bn\log n + bn + o(n)
+\\ &
+-(a-b)n\log(a-b)-(a-b)n\log n + (a-b)n
++o(n)
+\\ &
+= n\log\frac{a^a}{b^b(a-b)^{a-b}} + o(n).
+\end{align*}
+となる. ゆえに
+\[
+\log\binom{an}{bn}^{1/n}
+\longrightarrow \log\frac{a^b}{b^b(a-b)^{a-b}}
+\qquad (n\to\infty).
+\]
+すなわち
+\[
+\lim_{n\to\infty}\binom{an}{bn}^{1/n}
+=\lim_{n\to\infty}\left(\frac{(an)!}{(bn)!((a-b)n)!}\right)^{1/n}
+=\frac{a^a}{b^b(a-b)^{a-b}}.
+\]
+要するに $an$ 個から $bn$ 個取る組み合わせの数の $n$ 乗根の $n\to\infty$
+での極限は二項係数部分の式の分子分母の $(kn)!$ を $k^k$ で置き換えれば得られる.
+
+この結果を使えば次の
+\href{https://www.google.co.jp/search?q=\%E6\%9D\%B1\%E5\%B7\%A5\%E5\%A4\%A7\%E5\%85\%A5\%E8\%A9\%A6\%E5\%95\%8F\%E9\%A1\%8C+1988+\%E6\%95\%B0\%E5\%AD\%A6}
+{東工大の1988年の数学の入試問題}を暗算で解くことができる:
+\[
+\lim_{n\to\infty}\left(\frac{{}_{3n}C_n}{{}_{2n}C_n}\right)^{1/n}\ \text{を求めよ.}
+\]
+この極限の値は
+\[
+\frac{3^3/(1^12^2)}{2^2/(1^11^1)}=\frac{3^3}{2^4}=\frac{27}{16}.
+\]
+入試問題を作った人は, まずStirlingの公式を使うと自明な問題を考え, 
+その後に高校数学の範囲内でも解けることを確認したのだと思われる.
+
+追記. \href{http://d.hatena.ne.jp/gould2007/touch/20071127}
+{東工大では1968年にも次の問題を出しているようだ}:
+\[
+\lim_{n\to\infty}\frac{1}{n}\sqrt[n]{{}_{2n}P_n}\ \text{を求めよ.}
+\qquad(\text{答えは $2^2 e^{-1}$}.)
+\]
+この問題も明らかに元ネタはStirlingの公式である. より一般に次を示せる:
+\[
+\lim_{n\to\infty} \frac{((an)!)^{1/n}}{n^a} 
+%=\lim_{n\to\infty}\left( (an)! n^{-an} \right)^{1/n} 
+= a^a e^{-a}.
+\]
+なぜならば
+\begin{align*}
+\log\frac{((an)!)^{1/n}}{n^a}
+&=
+\frac{1}{n}\log(an)!-a\log n
+\\ &
+=\frac{1}{n}(an\log a + an\log n - an + o(n)) - a\log n
+\\ &
+=a\log a - a + o(1)
+\\ &
+=\log(a^a e^{-a})+o(1).
+\end{align*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: Fourierの反転公式}
+\label{sec:Fourier}
+
+厳密な証明をするつもりはないが, 
+Fourierの反転公式の証明の概略について説明しよう.
+
+函数 $f(x)$ に対してその逆Fourier変換 $F(p)$ を
+\[
+F(p) = \int_{-\infty}^\infty e^{ipx} f(x)\,dx
+\]
+と定める. このとき函数 $f$ について適切な条件を仮定しておくと, 
+それに応じた適切な意味で
+\[
+f(x) = \frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx} F(p)\,dp
+\]
+が成立する. これをFourierの反転公式と呼ぶ.
+
+\subsection{Gauss分布の場合}
+
+$a>0$ であるとし, 
+\[
+f(x)=e^{-x^2/(2a)}
+\]
+とおき, $F(p)$ はその逆Fourier変換であるとする. このとき
+\[
+F(p)
+=\int_{-\infty}^\infty e^{ipx} e^{-x^2/(2a)}\, dx
+=e^{-p^2/(2a^{-1})}\sqrt{2a\pi}
+\]
+が容易に得られる%
+\footnote{Cauchyの積分定理を使う方法, 
+$e^{ipx}$ のTaylor展開を代入して項別積分する方法, 
+左辺と右辺が同じ微分方程式を満たしていることを使う方法
+など複数の方法で容易に計算可能である.}. % 
+この公式で $x$, $a$ のそれぞれと $p$, $a^{-1}$ の立場を
+交換することによって 
+\[
+\int_{-\infty}^\infty e^{-ipx} e^{-p^2/(2a^{-1})}\, dp
+=e^{-x^2/(2a)}\sqrt{2a^{-1}\pi}
+\]
+が得られる. 以上の2つの結果を合わせると, 
+\[
+ f(x) = \frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx} F(p)\,dp
+\]
+が得られる. すなわち $f(x)=e^{-x^2/(2a)}$ については
+Fourierの反転公式が成立している.
+
+一般に $f(x)$ についてFourierの反転公式が成立していれば 
+$f(x)$ を平行移動して得られる函数 $f(x-\mu)$ についても
+Fourierの反転公式が成立していることが容易に示される.
+実際, $F(p)$ を $f(x)$ の逆Fourier変換とすると,
+$f(x-\mu)$ の逆Fourier変換は
+\[
+\int_{-\infty}^\infty e^{ipx} f(x-\mu)\,dx
+=\int_{-\infty}^\infty e^{ip(x'+\mu)} f(x')\,dx'
+=e^{ip\mu}F(p)
+\] 
+になり, 
+\[
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{ip\mu}F(p)\,dp
+=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ip(x-\mu)}F(p)\,dp
+=f(x-\mu).
+\]
+以上によって, $f(x-\mu)=e^{-(x-\mu)^2/(2a)}$ についても
+Fourierの反転公式が成立することがわかった.
+
+逆Fourier変換およびFourier変換の線形性より, 
+$f(x-\mu)=e^{-(x-\mu)^2/(2a)}$ の形の函数の線形和についても
+Fourierの反転公式が成立していることがわかる%
+\footnote{``任意の函数''はそのような線形和の``極限''で表わされる.
+したがって, Fourierの反転公式の証明の本質的部分はこれで終了している
+とみなせる.}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{一般の場合}
+
+$a>0$ に対して函数 $\rho_a(x)$ を
+\[
+\rho_a(x) = \frac{1}{\sqrt{2\pi a}}e^{-x^2/(2a)}
+\]
+と定める. これは $\rho_a(x)>0$ と $\int_{-\infty}^\infty \rho_a(x)\,dx=1$ 
+を満たしている. そして前節の結果によって, $\rho_a(x-\mu)$ は
+Fourierの反転公式を満たしている.
+
+函数 $f(x)$ に対して函数 $f_a(x)$ を 
+$\rho_a$ との畳み込み積によって函数 $f_a(x)$ を定める:
+\[
+f_a(x) = \int_{-\infty}^\infty \rho_a(x-y) f(y)\,dy.
+\]
+このとき $f_a(x)$ についてはFourierの反転公式が成立している%
+\footnote{$f_a(x)$ はFourierの反転公式が成立している函数 
+$\rho_a(x-\mu)$ の重み $f(\mu)$ での重ね合わせなので, 
+これはほとんど明らかである.}.
+実際, $f_a(x)$ の逆Fourier変換 $F_a(p)$ と書くと, 
+\begin{align*}
+F_a(p) 
+&= \int_{-\infty}^\infty e^{ipx} f_a(x)\,dx
+= \int_{-\infty}^\infty
+  \left( \int_{-\infty}^\infty e^{ipx} \rho_a(x-y)\,dx \right)
+  f(y)\,dy
+\end{align*}
+なので
+\begin{align*}
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}F_a(p)\,dp
+&=
+\int_{-\infty}^\infty
+\left(
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-ipx}
+\left(
+\int_{-\infty}^\infty
+e^{ipx'}\rho_a(x'-y)\,dx'
+\right)
+\,dp
+\right)
+f(y)\,dy
+\\ &
+=
+\int_{-\infty}^\infty \rho_a(x-y) f(y) \,dy
+=
+f_a(x).
+\end{align*}
+2つ目の等号で $\rho_a(x-\mu)$ について
+Fourierの反転公式が成立することを使った.
+さらに
+\[
+\int_{-\infty}^\infty e^{ipx} \rho_a(x-y)\,dx
+=e^{ipy}e^{-ap^2/2}
+\]
+なので
+\[
+F_a(p)=\int_{-\infty}^\infty e^{ipy}e^{-ap^2/2}f(y)\,dy=e^{-ap^2/2}F(p)
+\]
+となる%
+\footnote{これは畳み込み積の逆Fourier変換が
+逆Fourier変換の積に等しいことの特殊な場合にすぎない.}. 
+ゆえに
+\[
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}F_a(p)\,dp
+=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{-ap^2/2}F(p)\,dp.
+\]
+したがって
+\[
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{-ap^2/2}F(p)\,dp 
+= \int_{-\infty}^\infty \rho_a(x-y)f(y)\,dy
+= f_a(x).
+\]
+もしも $F(p)$ が可積分ならば, Lebesgueの収束定理より, 左辺について
+\[
+\lim_{a\to 0}\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{-ap^2/2}F(p)\,dp
+=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}F(p)\,dp
+\]
+が言える.
+あとは, 函数 $f(x)$ について適切な条件を仮定したとき, 
+$a\to 0$ のとき函数 $f_a(x)$ が
+適切な意味で函数 $f(x)$ に収束することを示せれば,  
+$f(x)$ 自身が適切な意味でFourierの反転公式を満たすことがわかる%
+\footnote{$\rho_a(x)$ の $a\to 0$ での様子のグラフを描けば, 
+$\rho_a(x)$ がDiracのデルタ函数(超函数)に``収束''しているように
+見えることから, これもほとんど明らかだと言える.}.
+
+たとえば, $f$ は有界かつ点 $x$ で連続だと仮定する.
+ある $M>0$ が存在して $|f(y)-f(x)|\leqq M$ ($y\in\R$)となる.
+任意に $\eps>0$ を取る.
+ある $\delta >0$ が存在して 
+$|y-x|\leqq\delta$ ならば $|f(y)-f(x)|\leqq\eps/2$ となる.
+函数 $\rho_a$ の定義より, 
+$a>0$ を十分小さくすると $\int_{|y-x|>\delta}\rho_a(x-y)\,dy\leqq\eps/(2M)$ 
+となることもわかる. 以上の状況のもとで
+\begin{align*}
+|f_a(x)-f(x)|
+&=
+\left|
+\int_{-\infty}^\infty \rho_a(x-y)(f(y)-f(x))\,dy
+\right|
+\\ &
+\leqq
+\int_{-\infty}^\infty \rho_a(x-y)|f(y)-f(x)|\,dy
+\\ &
+\leqq
+\int_{|y-x|\leqq\delta} \rho_a(x-y)\frac{\eps}{2}\,dy
++
+\int_{|y-x|>\delta} \rho_a(x-y)M\,dy
+\\ &
+\leqq \frac{\eps}{2}+\frac{\eps}{2M}M
+=\eps.
+\end{align*}
+これで $\lim_{a\to 0}f_a(x)=f(x)$ が示された.
+
+筆者は実解析一般については次の教科書をおすすめする.
+\begin{center}
+\href{http://www.amazon.co.jp/dp/4000054449}{%
+猪狩惺, 
+実解析入門, 
+岩波書店 (1996), xii+324頁,
+定価3,800円}.
+\end{center}
+筆者は学生時代に猪狩惺先生の授業で
+Lebesgue積分論やFourier解析について勉強した. 
+信じられないほどクリアな講義であり, 
+数学の分野の中で実解析が最もクリアな分野なのではないかと思えて来るほどだった.
+上の教科書が2016年5月3日現在品切れ中であり, 
+プレミア価格のついた中古本しか手に入らないことはとても残念なことである.
+
+
+\section{付録: ガウス分布のFourier変換}
+
+$t>0$ に対して次の公式が成立している:
+\[
+\int_{-\infty}^\infty e^{-ipx} \frac{e^{-x^2/(2t)}}{\sqrt{2\pi t}}\,dx
+= e^{-tp^2/2}.
+\tag{$*$}
+\]
+この公式が成立していることを以下で示そう.
+
+\subsection{熱方程式を使う方法}
+
+函数 $u(t,x)$ を次のように定める:
+\[
+u(t,x)
+= \frac{e^{-x^2/(2t)}}{\sqrt{2\pi t}}.
+\]
+この $u(t,x)$ は熱方程式を満たしている%
+\footnote{$u(t,x)$ は熱方程式の基本解である.}:
+\[
+\frac{\d u(t,x)}{\d t} = \frac{1}{2}\frac{\d^2 u(t,x)}{\d x^2}.
+\]
+ゆえに $U(t,p)=\int_{-\infty}^\infty e^{-ipx} u(t,x)\,dx$ とおくと, 
+\begin{align*}
+\frac{\d}{\d t}U(t,p)
+&=
+\frac{1}{2}
+\int_{-\infty}^\infty e^{-ipx} \frac{\d^2 u(t,x)}{\d x^2}\,dx
+%\\ &
+=
+\frac{1}{2}
+\int_{-\infty}^\infty \frac{\d^2 e^{-ipx}}{\d x^2}  u(t,x)\,dx
+%\\ &
+=
+-\frac{p^2}{2}U(t,p).
+\end{align*}
+2つ目の等号で部分積分を行なった.
+さらに $U(t,0)=\int_{-\infty}^\infty u(t,x)\,dx=1$ なので
+\[
+U(t,p)=e^{-tp^2/2}
+\]
+であることがわかる. これで公式($*$)が示された.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{項別積分で計算する方法}
+
+もしも $t=1$ の場合の公式($*$)
+\[
+\int_{-\infty}^\infty e^{-ipx} \frac{e^{-x^2/2}}{\sqrt{2\pi}}\,dx = e^{-p^2/2}
+\tag{$**$}
+\]
+が示されたならば, 
+$x$, $p$ をそれぞれ $x/\sqrt{t}$, $\sqrt{t}\,p$ で
+置換することによって一般の $t>0$ に関する公式($*$)が得られる. 
+ゆえに公式($*$)を示すためには公式($**$)を証明すれば十分である.
+
+さらに $\sin(px)$ は奇函数なので 
+$\int_{-\infty}^\infty e^{-x^2/2} \sin(px)\,dx=0$ となる.
+ゆえに
+\[
+\int_{-\infty}^\infty e^{-x^2/2}\cos(px)\,dx=e^{-p^2/2}\sqrt{2\pi}
+\]
+を示せば十分である. 左辺の $\cos(px)$ にそのTaylor-Maclaulin展開を代入
+した後に項別積分することによってこの公式を示そう.
+
+準備. まず $\int_{-\infty}^\infty e^{-x^2/2}x^{2n}\,dx$ を計算しよう.
+部分積分によって
+\begin{align*}
+\int_{-\infty}^\infty e^{-x^2/2} x^{2n}\,dx
+&=
+\int_{-\infty}^\infty \left(-e^{-x^2/2}\right)' x^{2n-1}\,dx
+\\ &
+=\int_{-\infty}^\infty e^{-x^2/2} (x^{2n-1})'\,dx
+=(2n-1)\int_{-\infty}^\infty e^{-x^2/2} x^{2n-2}\,dx.
+\end{align*}
+ゆえに帰納的に $n=0,1,2,\ldots$ に対して
+\[
+\int_{-\infty}^\infty e^{-x^2/2} x^{2n}\,dx
+=(2n-1)\cdots 5\cdot 3\cdot 1\sqrt{2\pi}
+=\frac{(2n)!}{2^n n!}\sqrt{2\pi}.
+\]
+2つ目の等号は左辺の分子分母に$2n\cdots 4\cdot 2=2^n n!$ を
+かけることによって得られる.
+
+上で準備した結果を用いると, 
+\begin{align*}
+&
+\int_{-\infty}^\infty e^{-x^2/2}\cos(px)\,dx
+=
+\int_{-\infty}^\infty e^{-x^2/2}
+\sum_{n=0}^\infty (-1)^n\frac{(px)^{2n}}{(2n)!}
+\,dx
+\\ & \qquad
+=
+\sum_{n=0}^\infty \frac{(-p^2)^n}{(2n)!}
+\int_{-\infty}^\infty e^{-x^2/2}x^{2n}\,dx
+%\\ &
+=
+\sum_{n=0}^\infty \frac{(-p^2/2)^n}{n!}\sqrt{2\pi}
+=
+e^{-p^2/2}\sqrt{2\pi}.
+\end{align*}
+これで公式($**$)が示された.
+
+
+\subsection{Cauchyの積分定理を使う方法}
+
+複素解析を知っている人であれば詳しい説明は必要ないと思うので, 
+以下の説明では大幅に手抜きをする.
+Cauchyの積分定理を使うと実数 $p$ に対して
+\[
+\int_{-\infty}^\infty e^{-(x+ip)^2/2}\,dx 
+=\int_{-\infty}^\infty e^{-x^2/2}\,dx
+=\sqrt{2\pi} 
+\]
+となることを示せる. ゆえに
+\[
+\int_{-\infty}^\infty e^{-ipx}e^{-x^2/2}\,dx
+=
+\int_{-\infty}^\infty e^{-(x+ip)^2/2-p^2/2}\,dx
+=
+e^{-p^2/2}\int_{-\infty}^\infty e^{-(x+ip)^2/2}\,dx
+=
+e^{-p^2/2}\sqrt{2\pi}.
+\]
+これで公式($**$)が示された.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: Gauss積分の計算}
+
+次の公式の様々な証明の仕方を解説しよう:
+\[
+ I:=\int_{-\infty}^\infty e^{-x^2}\,dx = \sqrt{\pi}.
+\]
+この公式の面白いところ(不思議なところ)は円周率の気配が見えない
+積分の値が円周率の平方根になっていることである.
+実際の証明では
+\[
+ I^2 = \iint_{\R^2} e^{-(x^2+y^2)}\,dx\,dy = \pi
+\]
+を示すことになる.
+
+
+\subsection{極座標変換による計算}
+
+$x=r\cos\theta$, $y=r\sin\theta$ と極座標変換すると, 
+\[
+I^2
+=\iint_{\R^2} e^{-(x^2+y^2)}\,dx\,dy
+=\int_0^{2\pi}d\theta \int_0^\infty e^{-r^2}r \,dr
+=2\pi\left[\frac{e^{-r^2}}{-2}\right]_0^\infty
+=\pi.
+\]
+2つ目の等号で極座標変換のJacobianが $r$ になることを使った.
+もしくは
+\begin{align*}
+dx\wedge dy
+=(\cos\theta\,dr-r\sin\theta\,d\theta)\wedge
+ (\sin\theta\,dr+r\cos\theta\,d\theta)
+=r\,dr\wedge d\theta
+\end{align*}
+なので, $K=\{\,(r,\theta)\mid r>0,\ 0\leqq\theta<2\pi\,\}$ とおくと, 
+\[
+I^2
+=\iint_{\R^2} e^{-(x^2+y^2)}\,dx\wedge dy
+=\iint_K e^{-r^2}r \,dr\wedge d\theta
+=\int_0^{2\pi}d\theta \int_0^\infty e^{-r^2}r \,dr
+=\pi.
+\]
+
+
+\subsection{Jacobianを使わずにすむ座標変換による計算}
+
+$y$ から $\theta$ に $y=x\tan\theta$ によって積分変数を変換すると,
+\begin{align*}
+I^2
+&=4
+\int_0^\infty
+\left(
+\int_0^\infty e^{-(x^2+y^2)}\,dy
+\right)\,dx
+=4
+\int_0^\infty
+\left(
+\int_0^{\pi/2} e^{-x^2\cos^2\theta}\,x\cos^2\theta\,d\theta
+\right)\,dx
+\\ &
+=4
+\int_0^{\pi/2}
+\left(
+\int_0^\infty e^{-x^2\cos^2\theta}\,x\cos^2\theta\,dx 
+\right)\,d\theta
+=4
+\int_0^{\pi/2}
+\left[
+\frac{e^{-x^2\cos^2\theta}}{-2}
+\right]_{x=0}^{x=\infty}
+\,d\theta
+\\ &
+=4
+\int_0^{\pi/2}\frac{1}{2}\,d\theta
+=
+\pi.
+\end{align*}
+この計算では1変数の置換積分しか用いていない.
+
+
+\subsection{ガンマ函数とベータ函数の関係を用いた計算}
+
+$s,p,q>0$ (もしくは実部が正の複素数 $s,p,q$)に対して,
+\[
+\Gamma(s)=\int_0^\infty e^{-x}x^{s-1}\,dx
+\qquad
+B(p,q)=\int_0^1 x^{p-1}(1-x)^{q-1}\,dx
+\]
+によってガンマ函数 $\Gamma(s)$ とベータ函数 $B(p,q)$ が定義される%
+\footnote{他にもたくさんの同値な定義の仕方がある.
+以下では解析接続については扱わない.}.
+
+部分積分によって $\Gamma(s+1)=s\Gamma(s)$ であることがわかり, 
+$\Gamma(1)=1$ なので, 0以上の整数 $n$ に対して $\Gamma(n+1)=n!$ となる.
+
+Gauss積分 $I$ は $\Gamma(1/2)$ に等しい:
+\[
+I
+=2\int_0^\infty e^{-x^2}\,dx
+=2\int_0^\infty e^{-t} \frac{t^{-1/2}}{2}\,dt
+=\int_0^\infty e^{-t}t^{1/2-1}\,dt
+=\Gamma(1/2).
+\]
+2つ目の等号で $x=\sqrt{t}$ とおいた.
+したがって $\Gamma(1/2)^2=\pi$ を証明できれば
+Gauss積分が計算できたことになる.
+
+ベータ函数は以下のような複数の表示を持つ:
+\begin{align*}
+B(p,q)
+=2\int_0^{\pi/2} \cos^{2p-1}\theta\,\sin^{2q-1}\theta\,d\theta
+=\int_0^\infty \frac{t^{p-1}\,dt}{(1+t)^{p+q}}
+=\frac{1}{p}\int_0^\infty \frac{du}{(1+u^{1/p})^{p+q}}.
+\end{align*}
+$x=\cos^2\theta=t/(1+t)$, $t=u^{1/p}$ と変数変換した.
+最後の表示の $p=1/2$ の場合の被積分函数が $t$ 分布の確率密度函数の表示で使用され,
+真ん中の表示の被積分函数は $F$ 分布の確率密度函数の表示で使用される.
+$\Gamma(1/2)$ のGauss積分による表示の被積分函数は
+正規分布の確率密度函数の表示で使用され, 
+ガンマ函数の表示の被積分函数は $\chi^2$ 分布の被積分函数の表示で使用される.
+このようにガンマ函数とベータ函数はよく使用される確率分布を理解するためには
+必須の教養になっている.
+
+特に最初の表示より $B(1/2,1/2)=\pi$ となることがわかる.
+ゆえに, もしも
+\[
+\Gamma(p)\Gamma(q)=\Gamma(p+q)B(p,q)
+\]
+が示されたならば, $\Gamma(1/2)^2=\Gamma(1)B(1/2,1/2)=\pi$ となることがわかる.
+したがってGauss積分の計算はガンマ函数とベータ函数のあいだの関係式を
+示すことに帰着される.
+
+ガンマ函数とベータ函数のあいだの関係式は1変数の置換積分と
+積分順序の交換のみを使って証明可能である.
+以下でそのことを簡単に説明しよう.
+条件 $A$ に対して, $x,y$ が $A$ をみたすとき値が $1$ になり, 
+それ以外のときに値が $0$ になる $x,y$ の函数を $1_A(x,y)$ と書くことにすると,
+\begin{align*}
+\Gamma(p)\Gamma(q)
+&=
+\int_0^\infty
+\left(
+\int_0^\infty e^{-(x+y)} x^{p-1} y^{q-1}\,dy
+\right)\,dx
+\\ &
+=
+\int_0^\infty
+\left(
+\int_x^\infty e^{-z} x^{p-1} (z-x)^{q-1}\,dz
+\right)\,dx
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^\infty 1_{x<z}(x,z) e^{-z} x^{p-1} (z-x)^{q-1}\,dz
+\right)\,dx
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^\infty 1_{x<z}(x,z) e^{-z} x^{p-1} (z-x)^{q-1}\,dx
+\right)\,dz
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^z e^{-z} x^{p-1} (z-x)^{q-1}\,dx
+\right)\,dz
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^1 e^{-z} (zt)^{p-1} (z-zt)^{q-1}z\,dt
+\right)\,dz
+\\ &
+=\int_0^\infty e^{-z}z^{p+q-1}\,dz
+\,\int_0^1 t^{p-1}(1-t)^{q-1}\,dt
+=\Gamma(p+q)B(p,q).
+\end{align*}
+2つ目の等号で $y=z-x$ と置換積分し, 
+6つ目の等号で $x=zt$ と置換積分した.
+
+\subsection{同一の体積の2通りの積分表示を用いた計算}
+
+$I^2=\iint_{\R^2}e^{-(x^2+y^2)}\,dx\,dy$ は $z=e^{-(x^2+y^2)}$ の
+小山状のグラフと平面 $z=0$ に挟まれた部分の体積を表わしている.
+同じ体積は高さ $z$ の断面の面積 $\pi(-\log z)$ を $0<z\leqq 1$ で
+積分した結果に等しい.  ゆえに
+\[
+I^2=\int_0^1 \pi(-\log z)\,dz = -\pi[z\log z-z]_0^1 = \pi.
+\]
+
+\subsection{他の方法}
+
+他の方法については
+\href
+{http://folk.ntnu.no/oistes/Diverse/gaussian-integral-puzzle.pdf}
+{Hirokazu Iwasawa, Gaussian Integral Puzzles, 
+The Mathematical Intelligencer, 
+Vol.~31, No.~3, 2009, pp.~38-41}
+および
+\href
+{http://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/StirlingsFormula/GaussianDensity/gaussiandensity.pdf}
+{Steven R.~Dunbar, Evaluation of the Gaussian Density Integral, October 22, 2011}
+を参照して欲しい.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

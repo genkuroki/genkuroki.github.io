@@ -1,0 +1,576 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf 中心極限定理とStirlingの公式}
+\def\AUTHOR{黒木玄}
+\def\DATE{2016年5月1日作成%
+\thanks{%
+2016年5月1日Ver.0.1. ／
+2016年5月2日Ver.0.2. 対数版Stirlingの公式の節を追加した.
+}}
+\def\PDFTITLE{Stirlingの公式}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{確率論}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{Stirlingの公式}
+
+Stirlingの公式とは
+\[
+n! \sim n^n e^{-n} \sqrt{2\pi n} \quad (n\to \infty)
+\]
+という階乗の近似公式のことである.
+ここで $a_n\sim b_n$ ($n\to\infty$)は $\lim_{n\to\infty}(a_n/b_n)=1$ を
+意味する. 
+このノートではまず最初にガンマ分布に関する中心極限定理からStirlingの公式が
+``導出''されることを説明する. 精密かつ厳密な議論はしない.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ分布に関する中心極限定理からの``導出''}
+
+ガンマ分布とは次の確率密度函数で定義される確率分布のことである:
+\[
+f_{\alpha,\tau}(x) =
+\begin{cases}
+\dfrac{e^{-x/\tau}x^{\alpha-1}}{\Gamma(\alpha)\tau^\alpha} & \quad (x>0), \\
+0 & \quad (x\leqq 0).
+\end{cases}
+\]
+ここで $\alpha,\tau>0$ はガンマ分布を決めるパラメーターである.
+以下簡単のため $\alpha=n>0$, $\tau=1$ の場合のガンマ分布のみを扱うため
+に $f_n(x)=f_{n,1}(x)$ とおく:
+\[
+f_n(x) = \frac{e^{-x} x^{n-1}}{\Gamma(n)} \quad (x>0).
+\]
+確率密度函数 $f_n(x)$ で定義される確率変数を $X_n$ と書くことにする.
+確率変数 $X_n$ の平均と分散は両方 $n$ になる.
+
+ゆえに確率変数 $Y_n=(X_n-n)/\sqrt{n}$ の平均と分散はそれぞれ $0$ と $1$ になり, 
+その確率密度函数は 
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=
+\sqrt{n}\frac{e^{-(\sqrt{n}y+n)}(\sqrt{n}y+n)^{n-1}}{\Gamma{n}}
+\]
+になる. この確率密度函数で $y=0$ とおくと
+\[
+\sqrt{n}f_n(n)
+=
+\sqrt{n}\frac{e^{-n}n^{n-1}}{\Gamma(n)}
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+\]
+となる. $n$ が整数のとき $\Gamma(n+1)=n!$ なので, 
+これが $n\to\infty$ で $1/\sqrt{2\pi}$ に収束することとStirlingの公式の成立は同値になる.
+
+ガンマ分布が再生性を満たしていることより, 
+中心極限定理を適用できるので, 
+$\R$ 上の有界連続函数 $\varphi(x)$ に対して, $n\to\infty$ のとき
+\[
+\int_0^\infty \varphi\left(\frac{x-n}{\sqrt{n}}\right)f_n(x)\,dx
+=
+\int_0^\infty \varphi(y)\sqrt{n}f_n(\sqrt{n}y+n)\,dy
+\longrightarrow
+\int_{-\infty}^\infty \varphi(y)\frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy.
+\]
+$\varphi(y)$ をデルタ函数 $\delta(y)$ に近付けることによって
+(すなわち被積分函数の $y$ に $0$ を代入することによって), 
+\[
+\sqrt{n}f_n(n)
+=
+\sqrt{n}\frac{e^{-n}n^{n-1}}{\Gamma(n)}
+=
+\frac{n^n e^{-n} \sqrt{n}}{\Gamma(n+1)}
+\longrightarrow
+\frac{1}{\sqrt{2\pi}}
+\quad(n\to\infty)
+\]
+を得る.
+この結果はStirlingの公式の成立を意味する.
+
+以上の``導出''の最後のステップには論理的にギャップがある.
+このギャップを埋めるためには
+中心極限定理をブラックボックスとして利用するのではなく, 
+中心極限定理の特性函数を用いた証明に戻る必要がある.
+そのような証明の方針については次の節を見て欲しい.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ分布の特性函数を用いた表示からの導出}
+
+前節では中心極限定理を便利なブラックボックスとして用いて
+Stirlingの公式を``導出''した.
+しかし, その``導出''には論理的なギャップがあった.
+そのギャップを埋めるためには, 
+中心極限定理が確率密度函数を特性函数(確率密度函数の逆Fourier変換)の
+Fourier変換で表示することによって証明されることを思い出す必要がある.
+
+この節ではガンマ分布の確率密度函数を特性函数のFourier変換で表わす公式を
+用いて, 直接的にStirlingの公式を証明する%
+\footnote{筆者はこの証明法を
+\href
+{https://www.math.kyoto-u.ac.jp/~nobuo/pdf/prob/stir.pdf}
+{https://www.math.kyoto-u.ac.jp/{\textasciitilde}nobuo/pdf/prob/stir.pdf}
+を見て知った.}.
+
+ガンマ分布の確率密度函数 $f_n(x)=e^{-x}x^{n-1}/\Gamma(n)$ の特性函数(逆Fourier変換) 
+$F_n(t)$ は次のように計算される%
+\footnote{確率分布がパラメーター $n$ について再生性を持つことと
+特性函数がある函数の $n$ 乗の形になることは同値である.}:
+\[
+F_n(t)
+=\int_0^\infty e^{itx} f_n(x)\,dx
+=\frac{1}{\Gamma(n)}\int_0^\infty e^{-(1-it)x} x^{n-1}\,dx
+%=\frac{1}{\Gamma(n)}\frac{\Gamma(n)}{(1-it)^n}
+=\frac{1}{(1-it)^n}.
+\]
+より一般に, 実部が正の複素数 $\alpha$ に対して
+\[
+\frac{1}{\Gamma(n)}\int_0^\infty e^{-\alpha t} t^{n-1}\,dt = \frac{1}{\alpha^n}
+\]
+となることをCauchyの積分定理を使って示せる%
+\footnote{
+Cauchyの積分定理を使わなくても示せる. 
+左辺を $f(\alpha)$ と書くと, $f(1)=1$ でかつ部分積分によって
+$f'(\alpha)=-(n/\alpha)f(\alpha)$ となることがわかるので, 
+この公式が得られる.
+正の実数 $\alpha$ に対するこの公式は $t=x/\alpha$ という
+置換積分によって容易に証明される.
+}.
+
+Fourierの反転公式より, 
+\[
+f_n(x)
+=
+\frac{e^{-x} x^{n-1}}{\Gamma(n)}
+=
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-itx}F_n(t)\,dt
+=
+\frac{1}{2\pi}\int_{-\infty}^\infty \frac{e^{-itx}}{(1-it)^n}\,dt
+\quad (x>0).
+\]
+この公式さえ認めてしまえばStirlingの公式の証明は易しい.
+
+上の公式より, $t=\sqrt{n}u$ と置換することによって,
+\begin{align*}
+\sqrt{n}f_n(n)
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+=
+\frac{\sqrt{n}}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-itn}}{(1-it)^n}
+\,dt
+=
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,du.
+\end{align*}
+Stirlingの公式を証明するためには, 
+これが $n\to\infty$ で $1/\sqrt{2\pi}$ に収束することを示せばよい.
+そのために被積分函数の対数の様子を調べよう:
+\begin{align*}
+\log\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}
+&
+=-n\log\left(1-\frac{iu}{\sqrt{n}}\right)-iu\sqrt{n}
+\\&
+=n\left(\frac{iu}{\sqrt{n}}-\frac{u^2}{2n}+o\left(\frac{1}{n}\right)\right)-iu\sqrt{n}
+=-\frac{u^2}{2} + o(1).
+\end{align*}
+したがって, $n\to\infty$ のとき
+\[
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n} \longrightarrow e^{-u^2/2}.
+\]
+これより, $n\to\infty$ のとき
+\[
+\sqrt{n}f_n(n)
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+=
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,du
+\longrightarrow
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-u^2/2}\,du
+=
+\frac{1}{\sqrt{2\pi}}
+\]
+となることがわかる%
+\footnote{厳密に証明したければ, Lebesgueの収束定理を使うことになる.}.
+最後の等号で一般に正の実数 $\alpha$ に対して
+\[
+\int_{-\infty}^\infty e^{-u^2/\alpha}\,du = \sqrt{\alpha\pi}
+\]
+となることを用いた%
+\footnote{この公式はGauss積分の公式 
+$\int_{-\infty}^\infty e^{-x^2}\,dx=\sqrt{\pi}$ 
+で $x=u/\sqrt{\alpha}$ とおいて置換積分すれば得られる.
+Gauss積分の公式は次のようにして証明される.
+左辺を $I$ とおくと 
+$I^2=\int_{-\infty}^\infty\int_{-\infty}^\infty e^{-(x^2+y^2)}\,dx\,dy$
+であり, $I^2$ は $z=e^{-(x^2+y^2)}$ のグラフと平面 $z=0$ で挟まれた
+「小山状の領域」の体積だと解釈される.
+その小山の高さ $0< z\leqq 1$ における断面積は $-\pi \log z$ に
+なるので, その体積は $\int_0^1(-\pi\log z)\,dz=-\pi[z\log z-z]_0^1=\pi$ 
+と計算される. ゆえに $I=\sqrt{\pi}$.
+Gauss積分の公式の不思議なところは円周率のしかも平方根が出て来るところである.
+しかしその二乗が小山の体積であることがわかれば, その高さ $z$ の断面が
+円盤の形になることから自然に円周率 $\pi$ が出て来ることがわかる. 
+平方根が出て来るのは $I$ そのものを直接計算したのではなく, 
+$I^2$ の方を先に計算したからである.
+} %
+これでStirlingの公式が証明された.
+
+確率密度函数 $f_n(x)=e^{-x}x^{n-1}$ を持つ確率変数を $X_n$ と書くとき,
+$Y_n=(X_n-n)/\sqrt{n}$ の平均と分散はそれぞれ $0$ と $1$ になるので
+あった(前節を見よ).  $Y_n$ の確率密度函数は
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=\sqrt{n}\frac{e^{-\sqrt{n}y-n}(\sqrt{n}y+n)^{n-1}}{\Gamma(n)}
+=\frac{e^{-n}n^{n-1/2}}{\Gamma(n)} 
+ \frac{e^{\sqrt{n}y}(1+y/\sqrt{n})^n}{(1+y/\sqrt{n})}
+\]
+になる. そして, $n\to\infty$ のとき
+\begin{align*}
+\log\left(e^{\sqrt{n}y}\left(1+\frac{y}{\sqrt{n}}\right)^n\right)
+&=
+n\log\left(1+\frac{y}{\sqrt{n}}\right)-\sqrt{n}y
+\\ &
+=n\left(\frac{y}{\sqrt{n}}-\frac{y^2}{2n}+o\left(\frac{1}{n}\right)\right)
+-\sqrt{n}y
+=-\frac{y^2}{2}+o(1)
+\end{align*}
+なので, $n\to\infty$ で $e^{\sqrt{n}y}(1+y/\sqrt{n})^n\to e^{-y^2/2}$ と
+なり, さらに $1+y/\sqrt{n}\to 1$ となる. 
+ゆえに次が成立することと Stirling の公式は同値になる:
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=\sqrt{n}\frac{e^{-\sqrt{n}y-n}(\sqrt{n}y+n)^{n-1}}{\Gamma(n)}
+\longrightarrow
+\frac{e^{-y^2/2}}{\sqrt{2\pi}}
+\quad (n\to\infty).
+\]
+すなわち $Y_n$ の確率密度函数が標準正規分布の確率密度函数に各点収束すること
+とStirlingの公式は同値である.
+
+ガンマ分布について確率密度函数の各点収束のレベルで中心極限定理が
+成立していることと Stirling の公式は同じ深さにある.
+
+$Y_n$ の確率分布函数が標準正規分布の確率密度函数に各点収束することの
+直接的証明は $\sqrt{n}f(n)$ の収束の証明と同様に以下のようにして得られる:
+\begin{align*}
+\sqrt{n}f_n(\sqrt{n}y+n)
+&=
+\frac{\sqrt{n}}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-it(\sqrt{n}y+n)}}{(1-it)^n}\,dt
+=\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-iuy}\frac{e^{-it\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,dt
+\\ &
+\longrightarrow
+\frac{1}{2\pi}
+\int_{-\infty}^\infty e^{-iuy}e^{-u^2/2}\,du
+=
+\frac{1}{\sqrt{2\pi}}e^{-y^2/2}
+\quad(n\to\infty).
+\end{align*}
+最後の等号で, Cauchyの積分定理より%
+\footnote{複素解析を使わなくても容易に証明される.
+たとえば, $e^{-ity}$ のTaylor展開を代入して項別積分を実行しても証明できるし,  
+両辺が同一の微分方程式を満たしていることからも証明される.
+Cauchyの積分定理を使えば
+形式的には $u+iy$ ($u>0$) を $v>0$ で置き換える
+置換積分を実行したのと同じ証明が得られる.}
+\[
+\int_{-\infty}^\infty e^{-iuy}e^{-u^2/2}\,du
+=\int_{-\infty}^\infty e^{-(u+iy)^2/2-y^2/2}\,du
+=e^{-y^2/2}\int_{-\infty}^\infty e^{-v^2/2}\,dv
+=e^{-y^2/2}\sqrt{2\pi}
+\]
+となることを用いた.
+
+このように, 
+ガンマ分布の確率密度函数の特性函数のFourier変換による表示を使えば
+確率密度函数の各点収束のレベルでの中心極限定理を容易に示すことができ,
+その結果は Stirling の公式と同値になっている.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ函数のGauss積分による近似による導出}
+
+前節までに説明したStirlingの公式の証明は
+本質的にガンマ函数(ガンマ分布)がGauss積分(正規分布)で近似されることを
+用いた証明だと考えられる.
+
+この節ではガンマ函数の値をガウス積分で直接近似することによって
+Stirlingの公式を示そう.
+(この方法はLaplaceの方法などと呼ばれることがある.)
+
+$g_n(x)=\log(e^{-x}x^n)=n\log x-x$ を $x=n$ でTaylor展開すると
+\[
+g_n(x)
+=n\log n-n
+-\frac{(x-n)^2}{2n}
++\frac{(x-n)^3}{3n^2}
+-\frac{(x-n)^4}{4n^3}
++\cdots
+\]
+これより, $n$ が大きなとき $n!=\Gamma(n+1)=\int_0^\infty e^{-x}x^n\,dx$ が
+\[
+\int_{-\infty}^\infty \exp\left(n\log n-n-\frac{(x-n)^2}{2n}\right)\,dx
+=n^n e^{-n} \int_{-\infty}^\infty e^{-(x-n)^2/(2n)}\,dx
+=n^n e^{-n} \sqrt{2\pi n}
+\]
+で近似されることがわかる. ゆえに
+\[
+n!\sim n^n e^{-n} \sqrt{2\pi n} \quad (n\to\infty).
+\]
+
+この近似の様子をscilabでグラフで描くことによって作った画像を
+\href
+{http://twilog.org/genkuroki/date-150709}
+{ツイッターの過去ログ}
+で見ることができる.
+
+以上の証明法ではStirlingの公式中の因子 $n^n e^{-n}$, $\sqrt{2\pi n}$ の
+それぞれが $g_n(x)=\log(e^{-x}x^n)=n\log x-x$ の $x=n$ における
+Taylor展開の定数項と2次の項に由来していることがわかる.
+$3$ 次の項は $\int_{-\infty}^\infty y^3 e^{-y^2/\alpha}\,dy=0$ 
+なので寄与しない.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{対数版 Stirling の公式の初等的な証明}
+
+Stirlingの公式は次と同値である:
+\[
+\log n! - (n+1/2)\log n - n \longrightarrow \log\sqrt{2\pi} 
+\quad (n\to\infty).
+\]
+これより
+\[
+\log n! = n\log n - n + o(n)
+\quad (n\to\infty).
+\]
+ここで $o(n)$ は $n$ で割った後に $n\to\infty$ と
+すると $0$ に収束する量を意味する.
+これをこの節では{\bf 対数版 Stirling の公式}と呼ぶことにする.
+この公式であれば以下のように初等的に証明することができる.
+
+一般に $f(1)\geqq 0$ を満たす単調増加函数 $f(x)$ について,
+\[
+f(1)+f(2)+\cdots+f(n-1)\leqq \int_1^n f(x)\,dx \leqq f(1)+f(2)+\cdots+f(n).
+\]
+ゆえに
+\[
+\int_1^n f(x)\,dx\leqq f(1)+f(2)+\cdots+f(n)\leqq \int_1^n f(x)\,dx + f(n).
+\]
+これを $f(x)=\log x$ に適用すると
+\[
+\int_1^n \log x\,dx = [x\log x-x]_1^n = n\log n - n + 1, \quad
+\log 1+\log 2+\cdots+\log n=\log n!
+\]
+なので
+\[
+n\log n - n + 1 \leqq \log n! \leqq n\log x - n + 1 + \log n.
+\]
+すなわち
+\[
+1 \leqq \log n! - n\log n + n \leqq 1+\log n.
+\]
+したがって
+\[
+\log n!=n\log n-n+O(\log n)=n\log n-n+o(n)
+\quad (n\to\infty).
+\]
+ここで $O(\log n)$ は $\log n$ で割ると有界になるような量を意味している.
+
+応用例.
+対数版Stirlingの公式を使うと, $an$ 個から $bn$ 個取る組み合わせの数(二項係数)の対数は
+\begin{align*}
+\log\binom{an}{bn}
+&=\log(an)! - \log(bn)! -\log((a-b)n)!
+\\ &
+=an\log a+an\log n - an + o(n)
+\\ &
+-bn\log b-bn\log n + bn + o(n)
+\\ &
+-(a-b)n\log(a-b)-(a-b)n\log n + (a-b)n
++o(n)
+\\ &
+= n\log\frac{a^a}{b^b(a-b)^{a-b}} + o(n).
+\end{align*}
+となる. ゆえに
+\[
+\log\binom{an}{bn}^{1/n}
+\longrightarrow \log\frac{a^b}{b^b(a-b)^{a-b}}
+\quad (n\to\infty).
+\]
+すなわち
+\[
+\lim_{n\to\infty}\binom{an}{bn}^{1/n}
+=\lim_{n\to\infty}\left(\frac{(an)!}{(bn)!((a-b)n)!}\right)^{1/n}
+=\frac{a^a}{b^b(a-b)^{a-b}}.
+\]
+要するに $an$ 個から $bn$ 個取る組み合わせの数の $n$ 乗根の $n\to\infty$
+での極限は二項係数部分の式の分子分母の $(kn)!$ を $k^k$ で置き換えれば得られる.
+
+この結果を使えば
+\href{https://www.google.co.jp/search?q=\%E6\%9D\%B1\%E5\%B7\%A5\%E5\%A4\%A7\%E5\%85\%A5\%E8\%A9\%A6\%E5\%95\%8F\%E9\%A1\%8C+1988+\%E6\%95\%B0\%E5\%AD\%A6}
+{東工大の1988年の数学の入試問題}
+\[
+\lim_{n\to\infty}\left(\frac{{}_{3n}C_n}{{}_{2n}C_n}\right)^{1/n}\ \text{を求めよ.}
+\]
+を暗算で解くことができる. この極限の値は
+\[
+\frac{3^3/(1^12^2)}{2^2/(1^11^1)}=\frac{3^3}{2^4}=\frac{27}{16}.
+\]
+入試問題を作った人はまずStirlingの公式を使うと自明な問題を考え, 
+その後に高校数学の範囲内でも解けることを確認したのだろうか?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

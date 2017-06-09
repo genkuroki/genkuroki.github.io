@@ -1,0 +1,2868 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf ガンマ分布の中心極限定理とStirlingの公式}
+\def\AUTHOR{黒木玄}
+\def\DATE{2016年5月1日作成%
+\thanks{%
+最新版は下記URLからダウンロードできる.
+2016年5月1日Ver.0.1. 
+2016年5月2日Ver.0.2: 対数版の易しいStirlingの公式の節を追加した. 
+2016年5月3日Ver.0.3: 色々追加. 特にFourierの反転公式に関する付録を追加した.
+2016年5月4日Ver.0.4: ガウス分布のFourier変換の付録とGauss積分の計算の付録
+を追加した.
+2016年5月5日Ver.0.5: 誤りの訂正と様々な追加(全17頁).
+2016年5月5日Ver.0.6: ファイル名を変更し,
+対数版の易しいStirlingの公式の微小な改良の節を追加した(全18頁).
+2016年5月6日Ver.0.7: ガンマ函数の正値性と対数凸性と函数等式による特徴付けと
+無限乗積展開の証明の節や対数版の易しいStirlingの公式を改良して
+通常のStirlingの公式を導くことなどを色々追加した(全24頁).
+2016年5月7日Ver.0.8: 正弦函数の無限乗積展開を $\cos(tx)$ の
+Fourier級数展開を使って導く方法の解説を追加した(全25頁).
+2016年5月8日Ver.0.9: Riemann-Lebesgueの定理の節と
+Fourier変換の部分和とFourier級数の部分和の収束に関する解説を追加(全30頁).
+2016年5月9日Ver.0.10: 二項分布の中心極限定理の解説を追加(全33頁).
+2016年5月12日Ver.0.11: Laplaceの方法による補正項の計算の仕方の解説と 
+\tableref{table:Stirling}を追加(全37頁).
+}
+\\[\bigskipamount]
+{\small
+\href{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160501StirlingFormula.pdf}
+{\tt http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160501StirlingFormula.pdf}
+}}
+\def\PDFTITLE{Stirlingの公式}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{確率論}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{はじめに}
+
+{\bf Stirlingの公式}とは
+\[
+n! \sim n^n e^{-n} \sqrt{2\pi n} \qquad (n\to \infty)
+\]
+という階乗の近似公式のことである.
+ここで $a_n\sim b_n$ ($n\to\infty$)は $\lim_{n\to\infty}(a_n/b_n)=1$ を
+意味する. より精密には
+\[
+n! = n^n e^{-n} \sqrt{2\pi n}\left(1+\frac{1}{12n}+O\left(\frac{1}{n^2}\right)\right) \qquad (n\to \infty)
+\]
+が成立している%
+\footnote{\secref{sec:Laplace}を見よ.}.
+このノートではまず最初にガンマ分布に関する中心極限定理からStirlingの公式が
+``導出''されることを説明する. 
+その後は様々な方法でStirlingの公式を導出する.
+精密かつ厳密な議論はしない.
+
+このノートの後半の付録群では関連の基礎知識の解説を行なう.
+このノートの全体は学生向けのGauss積分入門, ガンマ函数入門, ベータ函数入門,
+Fourier解析入門になることを意図して書かれた雑多な解説の寄せ集めである.
+前の方の節で後の方の節で説明した結果を使うことが多いので
+読者は注意して欲しい.
+基本的な方針として易しい話しか扱わないことにする.
+
+\begin{table}[htbp]
+\caption{Stirlingの公式による階乗の近似}
+\label{table:Stirling}
+\centering
+\begin{tabular}{|c||c|cc|cc|} \hline
+$n$   & $n!$                         & $A_n=n^ne^{-n}\sqrt{2\pi n}$ & ($\text{誤差}/n!$) & $A_n(1+1/(12n))$ & ($\text{誤差}/n!$) \\ \hline\hline
+$1$   & 1                            & $0.92\cdots$                 & (7.78\%)           & $0.9989\cdots$               & ($0.10\%$) \\ \hline
+$3$   & 6                            & $5.836\cdots$                & (2.73\%)           & $5.998\cdots$                & ($0.028\%$) \\ \hline
+$10$  & 3628800                      & $3598695.6\cdots$            & (0.83\%)           & $3628684.7\cdots$            & ($0.0032\%$) \\ \hline
+$30$  & $2.6525\cdots\times10^{32}$  & $2.6451\cdots\times10^{32}$  & (0.28\%)           & $2.6525\cdots\times10^{32}$  & ($3.7\times10^{-6}$) \\ \hline
+$100$ & $9.3326\cdots\times10^{157}$ & $9.3248\cdots\times10^{157}$ & (0.08\%)           & $9.3326\cdots\times10^{157}$ & ($3.4\times10^{-7}$) \\
+\hline
+\end{tabular}
+\end{table}
+
+\tableref{table:Stirling}を見ればわかるように, 
+$n^n e^{-n}\sqrt{2\pi n}$ による $n!$ の近似の誤差は, 
+$n=3$ の段階ですでに $3\%$ を切っており, 
+$n=10$ の段階では $1\%$ を切っている.
+さらに $1/(12n)$ で補正すると誤差は劇的に小さくなり, 
+$n=1$ の段階ですでに近似の精度が $0.1\%$ 程度になる.
+このようにStirlingの公式は階乗の近似公式として極めて優秀である.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ分布に関する中心極限定理からの``導出''}
+
+ガンマ分布とは次の確率密度函数で定義される確率分布のことである%
+\footnote{ガンマ函数は $s>0$ に対して 
+$\Gamma(s)=\int_0^\infty e^{-x}x^{s-1}\,dx$ と定義される.
+直接の計算によって $\Gamma(1)=1$ を, 
+部分積分によって $\Gamma(s+1)=s\Gamma(s)$ を示せるので,
+$0$ 以上の整数 $n$ について $\Gamma(n+1)=n!$ となる.}:
+\[
+f_{\alpha,\tau}(x) =
+\begin{cases}
+\dfrac{e^{-x/\tau}x^{\alpha-1}}{\Gamma(\alpha)\tau^\alpha} & \qquad (x>0), \\
+0 & \qquad (x\leqq 0).
+\end{cases}
+\]
+ここで $\alpha,\tau>0$ はガンマ分布を決めるパラメーターである%
+\footnote{$\alpha$ は shape parameter と, 
+$\tau$ は scale parameter と呼ばれているらしい.}.
+以下簡単のため $\alpha=n>0$, $\tau=1$ の場合のガンマ分布のみを扱うため
+に $f_n(x)=f_{n,1}(x)$ とおく:
+\[
+f_n(x) = \frac{e^{-x} x^{n-1}}{\Gamma(n)} \qquad (x>0).
+\]
+確率密度函数 $f_n(x)$ で定義される確率変数を $X_n$ と書くことにする.
+確率変数 $X_n$ の平均 $\mu_n$ と分散 $\sigma_n^2$ は両方 $n$ になる%
+\footnote{確率密度函数 $f(x)$ を持つ確率変数 $X$ に対して, 
+期待値汎函数が $E[g(X)]=\int_\R g(x)f(x)\,dx$ と定義され, 
+平均が $\mu=E[X]$ と定義され, 
+分散が $\sigma^2=E[(X-\mu)^2]=E[X^2]-\mu^2$ と定義される.}:
+\begin{align*}
+&
+\mu_n = E[X_n] = \int_0^\infty x f_n(x)\,dx = \frac{\Gamma(n+1)}{\Gamma(n)}=n,
+\\ & 
+E[X_n^2] = \int_0^\infty x^2 f_n(x)\,dx = \frac{\Gamma(n+2)}{\Gamma(n)}=(n+1)n,
+\\ &
+\sigma_n^2 = E[X_n^2]-\mu_n^2 = n.
+\end{align*}
+
+ゆえに確率変数 $Y_n=(X_n-\mu_n)/\sigma_n=(X_n-n)/\sqrt{n}$ の
+平均と分散はそれぞれ $0$ と $1$ になり, その確率密度函数は 
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=
+\sqrt{n}\frac{e^{-(\sqrt{n}y+n)}(\sqrt{n}y+n)^{n-1}}{\Gamma{n}}
+\]
+になる%
+\footnote{確率変数 $X$ の確率分布函数が $f(x)$ のとき, 確率変数 $Y$ を $Y=(X-a)/b$ と
+定めると, $E[g(Y)]=\int_\R g((x-a)/b)f(x)\,dx = \int_\R g(y) b f(by+a)\,dy$ なので,
+$Y$ の確率分布函数は $b f(by+a)$ になる.}. 
+この確率密度函数で $y=0$ とおくと
+\[
+\sqrt{n}f_n(n)
+=
+\sqrt{n}\frac{e^{-n}n^{n-1}}{\Gamma(n)}
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+\]
+となる. $n>0$ が整数のとき $\Gamma(n+1)=n!$ なので, 
+これが $n\to\infty$ で $1/\sqrt{2\pi}$ に収束することとStirlingの公式の成立は同値になる.
+
+ガンマ分布が再生性を満たしていることより, 
+中心極限定理を適用できるので, 
+$\R$ 上の有界連続函数 $\varphi(x)$ に対して, $n\to\infty$ のとき
+\[
+\int_0^\infty \varphi\left(\frac{x-n}{\sqrt{n}}\right)f_n(x)\,dx
+=
+\int_0^\infty \varphi(y)\sqrt{n}f_n(\sqrt{n}y+n)\,dy
+\longrightarrow
+\int_{-\infty}^\infty \varphi(y)\frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy.
+\]
+$\varphi(y)$ をデルタ函数 $\delta(y)$ に近付けることによって
+(すなわち確率密度函数の $y$ に $0$ を代入することによって), 
+\[
+\sqrt{n}f_n(n)
+=
+\sqrt{n}\frac{e^{-n}n^{n-1}}{\Gamma(n)}
+=
+\frac{n^n e^{-n} \sqrt{n}}{\Gamma(n+1)}
+\longrightarrow
+\frac{1}{\sqrt{2\pi}}
+\qquad(n\to\infty)
+\]
+を得る.
+この結果はStirlingの公式の成立を意味する.
+
+以上の``導出''の最後で確率密度函数の $y$ に $0$ を代入するステップ
+には論理的にギャップがある.
+このギャップを埋めるためには
+中心極限定理をブラックボックスとして利用するのではなく, 
+中心極限定理の特性函数を用いた証明に戻る必要がある.
+そのような証明の方針については次の節を見て欲しい.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{ガンマ分布の特性函数を用いた表示からの導出}
+
+前節では中心極限定理を便利なブラックボックスとして用いて
+Stirlingの公式を``導出''した.
+しかし, その``導出''には論理的なギャップがあった.
+そのギャップを埋めるためには, 
+中心極限定理が確率密度函数を特性函数(確率密度函数の逆Fourier変換)の
+Fourier変換で表示することによって証明されることを思い出す必要がある.
+
+この節ではガンマ分布の確率密度函数を特性函数のFourier変換で表わす公式を
+用いて, 直接的にStirlingの公式を証明する%
+\footnote{筆者はこの証明法を
+\href
+{https://www.math.kyoto-u.ac.jp/~nobuo/pdf/prob/stir.pdf}
+{https://www.math.kyoto-u.ac.jp/{\textasciitilde}nobuo/pdf/prob/stir.pdf}
+を見て知った.}.
+
+\subsection{Stirlingの公式の証明}
+
+ガンマ分布の確率密度函数 $f_n(x)=e^{-x}x^{n-1}/\Gamma(n)$ ($x>0$) 
+の特性函数(逆Fourier変換) $F_n(t)$ は次のように計算される%
+\footnote{確率分布がパラメーター $n$ について再生性を持つことと
+特性函数がある函数の $n$ 乗の形になることは同値である.}:
+\[
+F_n(t)
+=\int_0^\infty e^{itx} f_n(x)\,dx
+=\frac{1}{\Gamma(n)}\int_0^\infty e^{-(1-it)x} x^{n-1}\,dx
+%=\frac{1}{\Gamma(n)}\frac{\Gamma(n)}{(1-it)^n}
+=\frac{1}{(1-it)^n}.
+\]
+ここで, 実部が正の複素数 $\alpha$ に対して
+\[
+\frac{1}{\Gamma(n)}\int_0^\infty e^{-\alpha t} t^{n-1}\,dt = \frac{1}{\alpha^n}
+\]
+となること使った. この公式はCauchyの積分定理を使って示せる%
+\footnote{
+Cauchyの積分定理を使わなくても示せる. 
+左辺を $f(\alpha)$ と書くと, $f(1)=1$ でかつ部分積分によって
+$f'(\alpha)=-(n/\alpha)f(\alpha)$ となることがわかるので, 
+その公式が得られる.
+正の実数 $\alpha$ に対するこの公式は $t=x/\alpha$ という
+置換積分によって容易に証明される.
+}.
+
+Fourierの反転公式より%
+\footnote{Fourierの反転公式の証明の概略については\secref{sec:Fourier}を参照せよ.}, 
+\[
+f_n(x)
+=
+\frac{e^{-x} x^{n-1}}{\Gamma(n)}
+=
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-itx}F_n(t)\,dt
+=
+\frac{1}{2\pi}\int_{-\infty}^\infty \frac{e^{-itx}}{(1-it)^n}\,dt
+\qquad (x>0).
+\]
+この公式さえ認めてしまえばStirlingの公式の証明は易しい.
+
+この公式より, $t=\sqrt{n}u$ と置換することによって,
+\begin{align*}
+\sqrt{n}f_n(n)
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+=
+\frac{\sqrt{n}}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-itn}}{(1-it)^n}
+\,dt
+=
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,du.
+\end{align*}
+Stirlingの公式を証明するためには, 
+これが $n\to\infty$ で $1/\sqrt{2\pi}$ に収束することを示せばよい.
+そのために被積分函数の対数の様子を調べよう:
+\begin{align*}
+\log\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}
+&
+=-n\log\left(1-\frac{iu}{\sqrt{n}}\right)-iu\sqrt{n}
+\\&
+=n\left(\frac{iu}{\sqrt{n}}-\frac{u^2}{2n}+o\left(\frac{1}{n}\right)\right)-iu\sqrt{n}
+=-\frac{u^2}{2} + o(1).
+\end{align*}
+したがって, $n\to\infty$ のとき
+\[
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n} \longrightarrow e^{-u^2/2}.
+\]
+これより, $n\to\infty$ のとき
+\[
+\sqrt{n}f_n(n)
+=
+\frac{n^n e^{-n}\sqrt{n}}{\Gamma(n+1)}
+=
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-iu\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,du
+\longrightarrow
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-u^2/2}\,du
+=
+\frac{1}{\sqrt{2\pi}}
+\]
+となることがわかる%
+\footnote{厳密に証明したければ, たとえばLebesgueの収束定理を使えばよい.}.
+最後の等号で一般に正の実数 $\alpha$ に対して
+\[
+\int_{-\infty}^\infty e^{-u^2/\alpha}\,du = \sqrt{\alpha\pi}
+\]
+となることを用いた%
+\footnote{この公式はGauss積分の公式 
+$\int_{-\infty}^\infty e^{-x^2}\,dx=\sqrt{\pi}$ 
+で $x=u/\sqrt{\alpha}$ と積分変数を変換すれば得られる.
+Gauss積分の公式は以下のようにして証明される.
+左辺を $I$ とおくと 
+$I^2=\int_{-\infty}^\infty\int_{-\infty}^\infty e^{-(x^2+y^2)}\,dx\,dy$
+であり, $I^2$ は $z=e^{-(x^2+y^2)}$ のグラフと平面 $z=0$ で挟まれた
+「小山状の領域」の体積だと解釈される.
+その小山の高さ $0< z\leqq 1$ における断面積は $-\pi \log z$ に
+なるので, その体積は $\int_0^1(-\pi\log z)\,dz=-\pi[z\log z-z]_0^1=\pi$ 
+になる. ゆえに $I=\sqrt{\pi}$.
+Gauss積分の公式の不思議なところは円周率が出て来るところであり,  
+しかもその平方根が出て来るところである.
+しかしその二乗が小山の体積であることがわかれば, その高さ $z$ での断面が
+円盤の形になることから円周率 $\pi$ が出て来る理由がわかる. 
+平方根になるのは $I$ そのものを直接計算したのではなく, 
+$I^2$ の方を計算したからである.
+}. %
+これでStirlingの公式が証明された.
+
+\subsection{正規化されたガンマ分布の確率密度函数の各点収束}
+
+確率密度函数 $f_n(x)=e^{-x}x^{n-1}$ を持つ確率変数を $X_n$ と書くとき,
+$Y_n=(X_n-n)/\sqrt{n}$ の平均と分散はそれぞれ $0$ と $1$ になるので
+あった(前節を見よ).  $Y_n$ の確率密度函数は
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=\sqrt{n}\frac{e^{-\sqrt{n}y-n}(\sqrt{n}y+n)^{n-1}}{\Gamma(n)}
+=\frac{e^{-n}n^{n-1/2}}{\Gamma(n)} 
+ \frac{e^{-\sqrt{n}y}(1+y/\sqrt{n})^n}{1+y/\sqrt{n}}
+\]
+になる. そして, $n\to\infty$ のとき
+\begin{align*}
+\log\left(e^{-\sqrt{n}y}\left(1+\frac{y}{\sqrt{n}}\right)^n\right)
+&=
+n\log\left(1+\frac{y}{\sqrt{n}}\right)-\sqrt{n}y
+\\ &
+=n\left(\frac{y}{\sqrt{n}}-\frac{y^2}{2n}+o\left(\frac{1}{n}\right)\right)
+-\sqrt{n}y
+=-\frac{y^2}{2}+o(1)
+\end{align*}
+なので, $n\to\infty$ で $e^{\sqrt{n}y}(1+y/\sqrt{n})^n\to e^{-y^2/2}$ と
+なり, さらに $1+y/\sqrt{n}\to 1$ となる. 
+ゆえに, 次が成立することと Stirling の公式は同値になる:
+\[
+\sqrt{n}f_n(\sqrt{n}y+n)
+=\sqrt{n}\frac{e^{-\sqrt{n}y-n}(\sqrt{n}y+n)^{n-1}}{\Gamma(n)}
+\longrightarrow
+\frac{e^{-y^2/2}}{\sqrt{2\pi}}
+\qquad (n\to\infty).
+\]
+すなわち $Y_n$ の確率密度函数が標準正規分布の確率密度函数に各点収束すること
+とStirlingの公式は同値である.
+
+ガンマ分布について確率密度函数の各点収束のレベルで中心極限定理が
+成立していることと Stirling の公式は同じ深さにある.
+
+$Y_n$ の確率分布函数が標準正規分布の確率密度函数に各点収束することの
+直接的証明は $\sqrt{n}f(n)$ の収束の証明と同様に以下のようにして得られる:
+\begin{align*}
+\sqrt{n}f_n(\sqrt{n}y+n)
+&=
+\frac{\sqrt{n}}{2\pi}
+\int_{-\infty}^\infty
+\frac{e^{-it(\sqrt{n}y+n)}}{(1-it)^n}\,dt
+=\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-iuy}\frac{e^{-it\sqrt{n}}}{(1-iu/\sqrt{n})^n}\,dt
+\\ &
+\longrightarrow
+\frac{1}{2\pi}
+\int_{-\infty}^\infty e^{-iuy}e^{-u^2/2}\,du
+=
+\frac{1}{\sqrt{2\pi}}e^{-y^2/2}
+\qquad(n\to\infty).
+\end{align*}
+最後の等号で, Cauchyの積分定理より%
+\footnote{複素解析を使わなくても容易に証明される.
+たとえば, $e^{-ity}$ のTaylor展開を代入して項別積分を実行しても証明できる.
+もしくは, 両辺が $f'(y)=-y f(y)$, $f(0)=\sqrt{2\pi}$ を満たしていることからも
+導かれる(左辺が満たしていることは部分積分すればわかる).  
+Cauchyの積分定理を使えば
+形式的に $u+iy$ ($u>0$) を $v>0$ で置き換える
+置換積分を実行したのと同じように見える証明が得られる.}
+\[
+\int_{-\infty}^\infty e^{-iuy}e^{-u^2/2}\,du
+=\int_{-\infty}^\infty e^{-(u+iy)^2/2-y^2/2}\,du
+=e^{-y^2/2}\int_{-\infty}^\infty e^{-v^2/2}\,dv
+=e^{-y^2/2}\sqrt{2\pi}
+\]
+となることを用いた.
+
+このように, 
+ガンマ分布の確率密度函数の特性函数のFourier変換による表示を使えば
+確率密度函数の各点収束のレベルでの中心極限定理を容易に示すことができ,
+その結果は Stirling の公式と同値になっている.
+
+
+
+\subsection{一般の場合の中心極限定理に関する大雑把な解説}
+
+一般の場合の中心極限定理について大雑把にかつ簡単に解説する.
+
+$X_1,X_2,X_3,\ldots$ は互いに独立で等しい確率分布を持つ確率変数の列であるとする.
+さらにそれらは平均 $\mu=E[X_k]$ と分散 $\sigma^2=E[(X_k-\mu)^2]=E[X_k]^2-\mu^2$
+を持つと仮定する. 
+
+$Y_n=(X_1+\cdots+X_n-n\mu)/\sqrt{n\sigma^2}$ とおくと $Y_n$ の平均と分散は
+それぞれ $0$ と $1$ になる.
+このとき $n\to\infty$ の極限で $Y_n$ の確率分布が平均 $0$, 分散 $1$ の
+標準正規分布に(適切な意味で)収束するというのが中心極限定理である.
+
+記述の簡単のため $X_k$ を $(X_k-\mu)/\sigma$ で置き換えることにする. 
+このように置き換えても $Y_n$ は変わらない.
+このとき $X_k$ の平均と分散はそれぞれ $0$ と $1$ になるので, 
+$X_k$ の特性函数を $\varphi(t)=E[e^{itX_k}]$ と書くと,
+\[
+\varphi(t) = 1 - \frac{t^2}{2} + o(t^2).
+\]
+
+$Y_n=(X_1+\cdots+X_n)/\sqrt{n}$ とおくと 
+$Y_n$ の平均と分散もそれぞれ $0$ と $1$ になり, 
+$Y_n$ の特性函数の極限は次のように計算される:
+\begin{align*}
+E[e^{itY_n}]
+&=\prod_{k=1}^n E[e^{itX_k/\sqrt{n}}]
+=\varphi\left(\frac{t}{\sqrt{n}}\right)^n
+\\ &
+=\left( 1 - \frac{t^2}{2n} + o\left(\frac{1}{n}\right) \right)^n
+\longrightarrow e^{-t^2/2}
+\qquad (n\to\infty).
+\end{align*}
+
+ゆえに, Fourierの反転公式より%
+\footnote{$\varphi(t/\sqrt{n})^n$ が可積分ならば 
+$Y_n$ に関するFourier 反転公式の結果は函数になるが, 
+可積分でない場合には測度になり, 測度の収束を考えることになる.}, 
+$Y_n$ の確率密度函数%
+\footnote{一般には $\R$ 上の確率測度になる.}
+$f_n(y)$ は
+\[
+f_n(y) 
+= \frac{1}{2\pi}\int_{-\infty}^\infty 
+  e^{-ity}\varphi\left(\frac{t}{\sqrt{n}}\right)^n\,dt
+\]
+になり, これは $n\to\infty$ で標準正規分布の確率密度函数
+\[
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ity}e^{-t^2/2}\,dt
+=\frac{e^{-y^2/2}}{\sqrt{2\pi}}
+\]
+に収束する\footnote{厳密には適切な意味での収束を考える必要がある.}.
+
+
+
+\subsection{二項分布の中心極限定理}
+
+前節では確率分布の「適切な意味での収束」についてほとんど何も説明
+しなかった. この節ではその点について二項分布を例に用いて大雑把に説明する%
+\footnote{アイデアの説明はするが, 厳密な議論はしない.}.
+
+$X_n$ が二項分布する確率変数のとき, $g(X_n)$ の期待値は
+\[
+E[g(X_n)] = \sum_{k=0}^n g(k) \binom{n}{k}p^k q^{n-k}
+\]
+と定義される. ここで $0<p<1$, $q=1-p$ であり, $n$ は正の整数であるとし, 
+$\binom{n}{k}$ は二項係数を表わす:
+\[
+\binom{n}{k}
+=\frac{n!}{k!(n-k)!}, \qquad
+(x+y)^n
+=\sum_{k=0}^n \binom{n}{k} x^k y^{n-k}.
+\]
+$E[g(X_n)]$ を積分の形式で書くためにはデルタ函数(デルタ測度) $\delta(x-a)\,dx$ を
+使う必要がある%
+\footnote{デルタ函数(デルタ測度) $\delta(x-a)\,dx$ は連続函数 $f(x)$ に対して, 
+$\int_\R g(x)\delta(x-a)\,dx = g(a)$ によって定義されていると考える.}: 
+\[
+E[g(X_n)] = \int_\R g(x)f_n(x)\,dx,
+\quad
+f_n(x) = \sum_{k=0}^n\binom{n}{k}p^k q^{n-k}\delta(x-k).
+\]
+このように, 二項分布の確率密度函数 $f_n(x)$ は
+デルタ函数(デルタ測度)を使って表わされると考えられ,  
+通常の函数ではなく超函数(より正確には測度)になってしまう.
+特に確率密度函数の収束を通常の函数の各点収束で考えることは
+できなくなる. 
+
+そのような場合には確率密度函数の各点収束ではなく, 
+期待値汎函数 $g\mapsto E[g(X)]$ の収束を考えればよい%
+\footnote{この型の収束は{\bf 弱収束}と呼ばれる.}.
+
+具体的な議論では, 一般の函数 $g$ に対する $E[g(X)]$ を扱うのではなく, 
+ある特別な形の函数 $g$ に関する $E[g(X)]$ を扱い, 
+その特別な場合の計算から一般の場合を導くというようなことがよく行われる.
+
+その典型例が確率変数 $X$ の特性函数 $\varphi_X(t)=E[e^{itX}]$ を扱うことである.
+特性函数は $\R$ 上で常に絶対値が $1$ 以下の一様連続函数になる:
+\begin{align*}
+&
+|\varphi_X(t)|=\left|E[e^{itX}]\right|\leqq E\left[|e^{itX}|\right] = E[1]=1,
+\\ &
+\sup_{t\in\R}|\varphi_X(t+h)-\varphi(t)|
+=\sup_{t\in\R}|E[e^{itX}(e^{ith}-1)]|
+\leqq E\left[|e^{ihX}-1|\right]
+\longrightarrow 0 \quad (h\to 0).
+\end{align*}
+最後の $0$ への収束ではLebesgueの収束定理を用いた.
+函数 $g(x)$ が
+\[
+g(x) = \frac{1}{2\pi}\int_{-\infty}^\infty e^{itx} \widehat{g}(t)\,dt
+\]
+と表わされていたとする%
+\footnote{たとえば $g(x)$ が急減少函数であれば
+急減少函数 $\widehat{g}(t)$ でこのように $g(x)$ を表示できる.}. 
+このとき, $E[\ ]$ と積分の順序を交換することによって
+\[
+E[g(X)]
+= \frac{1}{2\pi}\int_{-\infty}^\infty \widehat{g}(t) E[e^{itX}]\,dt
+= \frac{1}{2\pi}\int_{-\infty}^\infty \widehat{g}(t) \varphi_X(t)\,dt.
+\]
+この公式より, 確率変数列 $Y_n$ と確率変数 $Y$ について, 
+特性函数列 $\varphi_{Y_n}$ が特性函数 $\varphi_Y$ に各点収束していれば, 
+適切なクラス\footnote{たとえば有界な連続函数の集合.}%
+に含まれる任意の函数 $g(y)$ に対して $E[g(Y_n)]$ は $E[g(Y)]$ に
+収束することを示せる%
+\footnote{実際の証明では, 
+$g(y)$ が急減少函数であるような扱い易い場合に収束を示し, 
+その極限として $g(t)$ がより広い函数のクラス(例えば有界連続函数の集合)
+に含まれる場合の結果を導く.}.
+離散型確率変数を含む一般の場合の中心極限定理はこのような形で定式化される.
+
+
+\begin{remark*}
+確率変数 $Y_n$ の特性函数 $\varphi_{Y_n}$ が函数 $\varphi$ に各点収束していても
+収束先の函数 $\varphi$ がある確率変数の特性函数になっていない場合には
+確率変数 $Y_n$ は確率変数に収束しない.
+特性函数列 $\varphi_{Y_n}$ が原点で連続な函数 $\varphi$ に
+各点収束するならば, 特性函数 $\varphi$ を持つ確率変数 $Y$ が存在して, 
+確率変数列 $Y_n$ が $Y$ に弱収束することが知られている\footnote{Bochnerの定理.}.
+\qed
+\end{remark*}
+
+
+二項分布の中心極限定理を示そう.
+二項分布の特性函数は
+\begin{align*}
+\varphi_{X_n}(t)
+&=E[e^{itX_n}]
+=\sum_{k=0}^n e^{itk}\binom{n}{k}p^kq^{n-k}
+\\ &
+=\sum_{k=0}^n \binom{n}{k}(pe^{it})^nq^{n-k}
+=(pe^{it}+q)^n
+\end{align*}
+となる. 二項分布の平均と分散はそれぞれ $\mu_n=np$ と $\sigma_n^2=npq$
+である. ゆえに確率変数
+\[
+Y_n=\frac{X_n-\mu_n}{\sigma_n}=\frac{X_n-np}{\sqrt{npq)}}
+\]
+の平均と分散はそれぞれ $0$ と $1$ になり, その特性函数は
+\begin{align*}
+\varphi_{Y_n}(t)
+&
+=E\left[e^{itY_n}\right]
+=E\left[e^{-itnp/\sqrt{npq}}e^{itX_n/\sqrt{npq}}\right]
+\\ &
+=e^{-itnp/\sqrt{npq}}\varphi_{X_n}(t/\sqrt{npq})
+%\\ &
+=e^{-itnp/\sqrt{npq}}\left( pe^{it/\sqrt{npq}}+q \right)^n
+\\ &
+=\left( pe^{itq/\sqrt{npq}} + qe^{-itp/\sqrt{npq}} \right)^n
+\end{align*}
+となる%
+\footnote{たとえば $p=q=1/2$ のとき $\varphi_{Y_n}(t)=\left( \cos(t/\sqrt{n}) \right)^n$.}. 
+$X_n$ の特性函数の公式を経由せずに, 
+$X_n-np=X_n(p+q)-np=qX_n-p(n-X_n)$ を用いて, 直接的に
+\begin{align*}
+\varphi_{Y_n}(t)
+&
+=E\left[e^{itY_n}\right]
+=E\left[e^{itqX_n/\sqrt{npq}}e^{-itp(n-X_n)/\sqrt{npq}}\right]
+\\ &
+=\sum_{k=0}^n e^{itqk/\sqrt{npq}}e^{-itp(n-k)/\sqrt{npq}} \binom{n}{k}p^kq^{n-k}
+\\ &
+=\sum_{k=0}^n \binom{n}{k}
+\left(pe^{itq/\sqrt{npq}}\right)^k \left(qe^{-itp/\sqrt{npq}}\right)^{n-k}
+\\ &
+=\left( pe^{itq/\sqrt{npq}} + qe^{-itp/\sqrt{npq}} \right)^n
+\end{align*}
+と計算することもできる. これに
+\begin{align*}
+&
+pe^{itq/\sqrt{npq}}
+= p + \frac{itpq}{\sqrt{npq}} - \frac{qt^2}{2n} + O\left(\frac{1}{n\sqrt{n}}\right),
+\\ &
+qe^{-itp/\sqrt{npq}}
+= q - \frac{itpq}{\sqrt{npq}} - \frac{pt^2}{2n} + O\left(\frac{1}{n\sqrt{n}}\right)
+\end{align*}
+を代入すると
+\[
+\varphi_{Y_n}(t)=\left(1-\frac{t^2}{2n}+O\left(\frac{1}{n\sqrt{n}}\right)\right)^n
+\]
+なので
+\[
+\lim_{n\to\infty}\varphi_{Y_n}(t) = e^{-t^2/2}
+\]
+一方, 標準正規分布する確率変数 $Y$ の特性函数は
+\[
+\varphi_Y(t)
+= E[e^{itY}]
+= \int_{-\infty}^\infty e^{ity} \frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy
+= e^{-t^2/2}.
+\]
+これより, 適切なクラスに含まれる函数%
+\footnote{この場合には有界な連続函数
+や $a\leqq y\leqq b$ で値が $1$ にそうでないとき $0$ になる函数など.} %
+$g(y)$ について
+\[
+\lim_{n\to\infty} E[g(Y_n)] = E[g(Y)]
+\]
+となることを示せる. すなわち
+\[
+\lim_{n\to\infty}
+\sum_{k=0}^n
+g\left(\frac{k-np}{\sqrt{npq}}\right)
+\binom{n}{k}p^k q^{n-p}
+=
+\int_{-\infty}^\infty g(y) \frac{e^{-y^2/2}}{2\pi}\,dy.
+\]
+$g(y)$ が $a\leqq y\leqq b$ のとき値が $1$ になり, そうでないとき $0$ 
+になる函数の場合には
+\[
+\lim_{n\to\infty}
+P\left(a\leqq \frac{X_n-np}{\sqrt{npq}}\leqq b\right)
+=
+\int_a^b \frac{e^{-y^2/2}}{2\pi}\,dy.
+\]
+以上が二項分布の確率変数 $X_n$ の中心極限定理である.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Laplaceの方法による導出}
+\label{sec:Laplace}
+
+前節までに説明したStirlingの公式の証明は
+本質的にガンマ函数(ガンマ分布)がGauss積分(正規分布)で近似されることを
+用いた証明だと考えられる.
+Gauss積分による近似を{\bf Laplaceの方法}と呼ぶことがある.
+
+
+\subsection{ガンマ函数のGauss積分による近似を使った導出}
+
+
+ガンマ函数の値をGauss積分で直接近似することによって
+Stirlingの公式を示そう.
+$\log(e^{-x}x^n)=n\log x-x$ を $x=n$ でTaylor展開すると
+\[
+n\log x - x
+=n\log n-n
+-\frac{(x-n)^2}{2n}
++\frac{(x-n)^3}{3n^2}
+-\frac{(x-n)^4}{4n^3}
++\cdots
+\]
+なので, $n$ が大きなとき $n!=\Gamma(n+1)=\int_0^\infty e^{-x}x^n\,dx$ が
+\[
+\int_{-\infty}^\infty \exp\left(n\log n-n-\frac{(x-n)^2}{2n}\right)\,dx
+=n^n e^{-n} \int_{-\infty}^\infty e^{-(x-n)^2/(2n)}\,dx
+=n^n e^{-n} \sqrt{2\pi n}
+\]
+で近似されることがわかる. ゆえに
+\[
+n!\sim n^n e^{-n} \sqrt{2\pi n} \qquad (n\to\infty).
+\]
+
+この近似の様子をscilabで描くことによって作った画像を
+\href{http://twilog.org/genkuroki/date-150709}
+{ツイッターの過去ログ}で見ることができる.
+無料の数値計算ソフトscilabについては
+\href{http://twilog.org/genkuroki/search?word=scilab&ao=a}
+{関連のツイート}を参照して欲しい.
+
+以上の証明法ではStirlingの公式中の因子 $n^n e^{-n}$, $\sqrt{2\pi n}$ の
+それぞれが $g_n(x)=\log(e^{-x}x^n)=n\log x-x$ の $x=n$ における
+Taylor展開の定数項と2次の項に由来していることがわかる.
+$3$ 次の項は $\int_{-\infty}^\infty y^3 e^{-y^2/\alpha}\,dy=0$ 
+なので寄与しない.  
+
+以上の方法を拡張して第1補正項の $1/(12n)$ まで導出してみよう%
+\footnote{%
+\href{https://www.jstage.jst.go.jp/article/sugaku1947/31/3/31_3_262/_article/references/-char/ja/}
+{一松信, Stirlingの公式の第1剰余項までの初等的証明, 
+数学 Vol.~31 (1979) No.~3, 262--263}
+ではWallisの公式の精密化によって第1補正項を得る方法が解説されている.
+第1補正項付きのStirling公式の易しい証明については, 
+\href{https://www.jstage.jst.go.jp/article/sugaku1947/36/2/36_2_175/_article/references/-char/ja/}
+{鍋谷清治, 連続変数に対するStirlingの公式の初等的証明, 
+数学 Vol.~36 (1984) No.~2, 175--178}
+という文献がある. 後者の文献の解説を以下では参考にした.}.
+
+準備. ガウス型積分とガンマ函数の関係は以下の通り:
+\begin{align*}
+\int_{-\infty}^\infty e^{-x^2/2}x^{2k}\,dx
+&=2\int_0^\infty e^{-x^2/2} (x^2)^k \,dx
+=2\int_0^\infty e^{-t} (2t)^k \sqrt{2}\frac{t^{-1/2}}{2}\,dt
+\\ &
+=2^k\sqrt{2}\int_0^\infty e^{-t} t^{k-1/2}\,dt
+=2^k\sqrt{2}\Gamma(k+1/2)
+\\ &
+=2^k\sqrt{2}\frac{1\cdot3\cdots(2k-1)}{2^k}\sqrt{\pi}
+=1\cdot3\cdots(2k-1)\sqrt{2\pi}.
+\end{align*}
+たとえば, 
+\(
+\int_{-\infty}^\infty e^{-x^2/2}\,dx
+=\int_{-\infty}^\infty e^{-x^2/2}x^2\,dx
+=\sqrt{2\pi}
+\),
+\[
+\qquad
+\int_{-\infty}^\infty e^{-x^2/2}x^4\,dx = 3\sqrt{2\pi}, \qquad
+\int_{-\infty}^\infty e^{-x^2/2}x^6\,dx = 15\sqrt{2\pi}.
+\]
+これらの公式を以下で使う.
+
+ガンマ函数の積分表示の積分変数 $x$ に $n(1+x/\sqrt{n})$ を代入すると
+\begin{align*}
+n!
+&=\Gamma(n+1)
+=\int_0^\infty e^{-x}x^n\,dx
+\\ &
+=n^n e^{-n}\sqrt{n}
+\int_{-\sqrt{n}}^\infty e^{-\sqrt{n}\,x} \left( 1+\frac{x}{\sqrt{n}} \right)^n \,dx
+\\ &
+\sim n^n e^{-n}\sqrt{n}
+\int_{-1}^1 e^{-\sqrt{n}\,x} \left( 1+\frac{x}{\sqrt{n}} \right)^n \,dx
+\qquad (n\to\infty).
+\end{align*}
+被積分函数の対数を $\phi_n(x)$ と書くと:
+\begin{align*}
+\phi_n(x)
+&=n\log\left(1+\frac{x}{\sqrt{n}}\right)-\sqrt{n}\,x
+=-\frac{x^2}{2} + \frac{x^3}{3\sqrt{n}}-\frac{x^4}{4n}+ o\left(\frac{1}{n}\right)
+\qquad (n\to\infty).
+\end{align*}
+最後の $o(1/n)$ の部分は $n$ をかけた後に $n\to\infty$ とすると 
+$|x|\leqq 1$ で $0$ に一様収束する.
+ゆえに $|x|\leqq 1$ において一様に
+\begin{align*}
+e^{-\sqrt{n}\,x} \left( 1+\frac{x}{\sqrt{n}} \right)^n
+&=e^{-x^2/2}
+\exp\left( \frac{x^3}{3\sqrt{n}}-\frac{x^4}{4n}+ o\left(\frac{1}{n}\right) \right)
+\\ &
+=e^{-x^2/2}
+\left(
+ 1
+ +\frac{x^3}{3\sqrt{n}}
+ -\frac{x^4}{4n}
+ +\frac{1}{2}\left( \frac{x^3}{3\sqrt{n}} \right)^2
+ +o\left(\frac{1}{n}\right)
+\right)
+\\ &
+=e^{-x^2/2}
+\left(
+1
++\frac{x^3}{3\sqrt{n}}
+-\frac{x^4}{4n}
++\frac{x^6}{18n}
++o\left( \frac{1}{n} \right)
+\right).
+\end{align*}
+$o(1/n)$ の部分に含まれる $n$ の半整数乗分の $1$ の項の係数
+は $x$ について奇函数になることに注意せよ. 
+奇函数と $e^{-x^2/2}$ の積の $-1\leqq x\leqq 1$ での
+積分は消えるので, 上で準備しておいた公式によって次が得られる:
+\begin{align*}
+\int_{-1}^1
+e^{-\sqrt{n}\,x} \left( 1+\frac{x}{\sqrt{n}} \right)^n\,dx
+& \sim
+\int_{-\infty}^{\infty}
+e^{-x^2/2}
+\left(
+ 1
+ -\frac{x^4}{4n}
+ +\frac{x^6}{18n}
+\right)
+\,dx
++O\left( \frac{1}{n^2} \right)
+\\ &
+=
+\sqrt{2\pi}
+-\frac{3\sqrt{2\pi}}{4n}
++\frac{15\sqrt{2\pi}}{18n}
++O\left( \frac{1}{n^2} \right)
+\\ &
+=\sqrt{2\pi}\left(1 + \frac{1}{12n} + O\left(\frac{1}{n^2}\right) \right).
+\end{align*}
+ゆえに
+\[
+n! 
+=
+n^n e^{-n}\sqrt{2\pi n}
+\left(1+\frac{1}{12n}+O\left(\frac{1}{n^2}\right)\right)
+\qquad(n\to\infty).
+\]
+これで第1補正項 $1/(12n)$ が得られた%
+\footnote{高次の補正項も同様にして得られる.}
+第1補正項 $1/(12n)$ は, $n$ が大きなとき, 
+$n!$ の $n^n e^{-n}\sqrt{2\pi n}$ による近似の誤差は $n$ が
+大きなとき $n!$ の値の $12n$ 分の1程度になることを意味している.
+
+
+\subsection{ガンマ函数を使って補正項を計算する方法}
+
+Laplaceの方法によるStirlingの公式の証明とその一般化に関しては
+\href{https://www.cs.elte.hu/blobs/diplomamunkak/msc_mat/2012/nemes_gergo.pdf}
+{Gerg\"o Nemes, Asymptotic expansions for integrals, 2012, M.~Sc.~Thesis, 40~pages}
+が詳しい. 以下で説明する方法の詳細はこの論文の Example 1.2.1 にある.
+そこに書いてある方法を使っても, 
+Stirlingの公式の補正項 $1/(12n)$ を容易に得ることができる.
+
+次の公式を使うことを考える: 任意の $a>0$ ($a=\infty$ を含む)に対して, 
+\[
+\int_0^a e^{-nt} t^{s-1}\,dt 
+= \frac{1}{n^s}\int_0^{an} e^{-x} x^{s-1}\,dx
+\sim
+\frac{\Gamma(s)}{n^s}
+\qquad (n\to\infty).
+\]
+$t=x/n$ と積分変数を置換した. この公式を使えば, 
+\[
+\int_0^a e^{-nt} (\alpha_1 t^{s_1-1} + \alpha_2 t^{s_2-1} + \cdots)\,dt
+=
+\frac{\alpha_1\Gamma(s_1)}{n^{s_1}} + \frac{\alpha_2\Gamma(s_2)}{n^{s_2}} + \cdots
+\qquad (n\to\infty)
+\]
+のような計算が可能になる.
+これを用いてStirlingの公式の最初の補正項 $1/(12n)$を得てみよう.
+
+函数 $f(x)$ を
+\[
+f(x) = x-\log(1+x) \qquad (x>-1)
+\]
+と定め, 積分変数を $y=n(1+x)$ と置換することによって,
+\begin{align*}
+n! 
+&= \Gamma(n+1) 
+= \int_0^\infty e^{-y} y^n\,dy
+\\ &
+= \int_{-1}^\infty e^{-n-nx}n^n(1+x)^n n\,dx
+= n^{n+1}e^{-n}\int_{-1}^\infty e^{-nf(x)}\,dx.
+\end{align*}
+さらに積分を $x>0$ と $x<0$ に分けることによって
+\[
+\frac{n!}{n^{n+1}e^{-n}}
+= \int_0^\infty e^{-nf(x)}\,dx + \int_0^1 e^{-nf(-x)}\,dx.
+\]
+もしも $f(x)=t$ もしくは $f(-x)=t$ と
+積分変数を置換できれば, 積分の形が上で説明した形に
+なりそうである.
+
+実際にそれが可能なことを確認しよう.
+$f(x)=x-\log(1+x)$ の導函数は
+\[
+f'(x) = 1 - \frac{1}{1+x} = \frac{x}{1+x}
+\]
+なので $x>0$ で $f'(x)>0$ となり, $-1<x<0$ で $f'(x)<0$ となる.
+$f(x)$ は $x=0$ で最低値 $f(0)=0$ を持ち, $x>0$ で単調増加し, 
+$x<0$ で単調減少する.
+ゆえに $x>0$ と $-1<x<0$ のそれぞれで $t=f(x)$ は逆函数 $x=x(t)$ を持つ.
+$x=x(t)$ の原点近くでの振る舞いを調べるために, 
+\[
+x = \alpha t^{1/2} + \beta t + \gamma t^{3/2} + \cdots
+\]
+とおいて
+\[
+t = f(x) = x - \log(1+x)
+= \frac{x^2}{2} - \frac{x^3}{3} + \frac{x^4}{4} - \cdots 
+\]
+に代入して%
+\footnote{$|x|<1$ における
+Taylor展開 $\log(1+x)=x-x^2/2+x^3/3-x^4/4+\cdots$ は非常によく使われる.}, 
+$\alpha,\beta,\gamma$ を求めてみよう.
+実際に代入すると,
+\[
+t 
+= \frac{\alpha^2}{2} t 
++ \left( \alpha\beta + \frac{\alpha^3}{3} \right) t^{3/2}
++ \left( \alpha\gamma + \frac{\beta^2}{2} + \alpha^2\beta + \alpha^4 \right) t^2
++ \cdots.
+\]
+両辺を比較して $\alpha,\beta,\gamma$ を求めると,
+\[
+\alpha = \sqrt{2}, \qquad
+\beta = \frac{2}{3}, \qquad
+\gamma = \frac{\sqrt{2}}{18}
+\]
+を得る. すなわち
+\[
+x = \sqrt{2}\,t^{1/2} + \frac{2}{3}t + \frac{\sqrt{2}}{18}t^{3/2} + \cdots
+\]
+とおくと $f(x)=t$ となる. 
+$x>0$ ではこの表示をそのまま用いる.
+$x<0$ では $t^{1/2}$ を $-t^{1/2}$ で置き換え, 
+さらに $x$ を $-x$ で置き換えた表示を用いる.
+すなわち
+\[
+x = \sqrt{2}\,t^{1/2} - \frac{2}{3}t + \frac{\sqrt{2}}{18}t^{3/2} - \cdots
+\]
+とおくと $f(-x)=t$ となる. 以上のそれぞれの場合において, 
+おいて
+\[
+\frac{dx}{dt}
+=
+\frac{\sqrt{2}}{2}\,t^{1/2-1} 
+\pm \frac{2}{3}t^{1-1} 
++ \frac{\sqrt{2}}{12}t^{3/2-1} 
+\pm \cdots
+\]
+以上の2つの場合で $t$ の整数次の項には $-1$ 倍の違いがある.
+準備が整った.
+
+$f(x)=t$ と積分変数を置換することによって, $n\to\infty$ のとき 
+\begin{align*}
+\int_0^\infty e^{-nf(x)}\,dx
+&=\int_0^\infty e^{-nt}\frac{dx}{dt}\,dt
+\\ &
+= \int_0^\infty e^{-nt}
+\left(
+\frac{\sqrt{2}}{2}\,t^{1/2-1} 
++ \frac{2}{3}t^{1-1} 
++ \frac{\sqrt{2}}{12}t^{3/2-1} 
++ \cdots
+\right)
+\,dt
+\\ &
+=
+\frac{\sqrt{2}\Gamma(1/2)}{2n^{1/2}}
++\frac{2\Gamma(1)}{3}
++\frac{\sqrt{2}\Gamma(3/2)}{12n^{3/2}}
++\cdots
+\\ &
+=
+\frac{\sqrt{2\pi}}{2n^{1/2}}
++\frac{2}{3n}
++\frac{\sqrt{2\pi}}{24n^{3/2}}
++\cdots
+\end{align*}
+となる. 最後に $\Gamma(1/2)=\sqrt{\pi}$, $\Gamma(1)=1$, 
+$\Gamma(3/2)=(1/2)\Gamma(1/2)=\sqrt{\pi}/2$ を使った.
+もう一方の積分についても, 
+$f(-x)=t$ と積分変数を置換することによって同様にして, 
+$n\to\infty$ のとき 
+\[
+\int_0^1 e^{-nf(-x)}\,dx
+=
+\frac{\sqrt{2\pi}}{2n^{1/2}}
+-\frac{2}{3n}
++\frac{\sqrt{2\pi}}{24n^{3/2}}
+-\cdots
+\]
+となる. 以上の2つを足し合わせると, 
+$n$ の整数乗分の1の項がすべてキャンセルし, 
+次が得られる:
+\[
+\frac{n!}{n^{n+1}e^{-n}}
+=
+\frac{\sqrt{2\pi}}{n^{1/2}}
++\frac{\sqrt{2\pi}}{12n^{3/2}}
++O\left(\frac{1}{n^{5/2}}\right)
+\qquad
+(n\to\infty).
+\]
+これは次のように書き直される:
+\[
+n! 
+= n^n e^{-n}\sqrt{2\pi n}
+\left(1 + \frac{1}{12n} + O\left(\frac{1}{n^2}\right) \right)
+\qquad (n\to\infty).
+\]
+これで第1の補正項 $1/(12n)$ もLaplaceの方法で求められることがわかった.
+第2の補正項以降も同様にして求められる.
+
+
+
+\begin{remark*}
+以上の計算において ``$+\cdots$'' と書いた部分については注意が必要である.
+そのことは以下の計算例を見ればわかる.
+\[
+\frac{1}{1+t} = 1-t+t^2-t^3+\cdots+(-1)^{k-1}t^{k-1}+(-1)^k\frac{t^k}{1+t}
+\]
+なので
+\begin{align*}
+\int_0^\infty \frac{e^{-nt}\,dt}{1+t}
+&
+=\frac{\Gamma(1)}{n}
+-\frac{\Gamma(2)}{n^2}
+%+\frac{\Gamma(3)}{n^3}
+%-\frac{\Gamma(4)}{n^4}
++\cdots
++(-1)^{k-1}\frac{\Gamma(k)}{n^k}
++(-1)^k\int_0^\infty\frac{e^{-nt}t^k\,dt}{1+t}
+\\ &
+=\frac{0!}{n}
+-\frac{1!}{n^2}
+%+\frac{2!}{n^3}
+%-\frac{3!}{n^4}
++\cdots
++(-1)^{k-1}\frac{(k-1)!}{n^k}
++(-1)^k\int_0^\infty\frac{e^{-nt}t^k\,dt}{1+t}.
+\end{align*}
+上の議論ではこのような和の途中から先を ``$+\cdots$'' と略記して来た. 
+すぐ上の式は正しい公式だが, 
+\[
+\int_0^\infty \frac{e^{-nt}\,dt}{1+t}
+=\sum_{k=1}^\infty (-1)^{k-1}\frac{(k-1)!}{n^k}
+\]
+は通常の意味で正しい公式ではない.
+なぜならば右辺はどんなに大きな $n$ に対しても収束しないからである.
+``$+\cdots$'' の部分は``無限和''を意味すると解釈するのではなく, 
+``有限和+剰余項''を意味すると解釈しておかなければいけない.
+\qed
+\end{remark*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{対数版の易しいStirlingの公式}
+
+Stirlingの公式は次と同値である:
+\[
+\log n! - (n+1/2)\log n + n \longrightarrow \log\sqrt{2\pi} 
+\qquad (n\to\infty).
+\]
+これより, 次の弱い結果が導かれる:
+\[
+\log n! = n\log n - n + o(n)
+\qquad (n\to\infty).
+\]
+ここで $o(n)$ は $n$ で割った後に $n\to\infty$ と
+すると $0$ に収束する量を意味する.
+これをこの節では{\bf 対数版の易しい Stirling の公式}と呼ぶことにする.
+この公式であれば以下で説明するように初等的に証明することができる%
+\footnote{以下の証明を見ればわかるように $o(n)$ の部分は $O(\log n)$
+であることも証明できる. ここで $O(\log n)$ は $\log n$ で割った後に
+有界になる量を意味している.}.
+
+\subsection{対数版の易しい Stirling の公式の易しい証明}
+\label{sec:easy}
+
+単調増加函数 $f(x)$ について $f(k)\leqq\int_k^{k+1} f(x)\,dx\leqq f(k+1)$
+が成立しているので, $f(1)\geqq 0$ を満たす単調増加函数 $f(x)$ について,
+\[
+f(1)+f(2)+\cdots+f(n-1)\leqq \int_1^n f(x)\,dx \leqq f(1)+f(2)+\cdots+f(n).
+\]
+ゆえに
+\[
+\int_1^n f(x)\,dx\leqq f(1)+f(2)+\cdots+f(n)\leqq \int_1^n f(x)\,dx + f(n).
+\]
+これを $f(x)=\log x$ に適用すると
+\[
+\int_1^n \log x\,dx = [x\log x-x]_1^n = n\log n - n + 1, \qquad
+\log 1+\log 2+\cdots+\log n=\log n!
+\]
+なので
+\[
+n\log n - n + 1 \leqq \log n! \leqq n\log x - n + 1 + \log n.
+\]
+すなわち
+\[
+1 \leqq \log n! - n\log n + n \leqq 1+\log n.
+\]
+したがって
+\[
+\log n!=n\log n-n+O(\log n)=n\log n-n+o(n)
+\qquad (n\to\infty).
+\]
+ここで $O(\log n)$ は $\log n$ で割ると有界になるような量を意味している.
+
+\subsection{大学入試問題への応用例}
+
+対数版の易しいStirlingの公式を使うと, 
+$an$ 個から $bn$ 個取る組み合わせの数(二項係数)の対数は
+\begin{align*}
+\log\binom{an}{bn}
+&=\log(an)! - \log(bn)! -\log((a-b)n)!
+\\ &
+=an\log a+an\log n - an + o(n)
+\\ &
+-bn\log b-bn\log n + bn + o(n)
+\\ &
+-(a-b)n\log(a-b)-(a-b)n\log n + (a-b)n
++o(n)
+\\ &
+= n\log\frac{a^a}{b^b(a-b)^{a-b}} + o(n).
+\end{align*}
+となる. ゆえに
+\[
+\log\binom{an}{bn}^{1/n}
+\longrightarrow \log\frac{a^b}{b^b(a-b)^{a-b}}
+\qquad (n\to\infty).
+\]
+すなわち
+\[
+\lim_{n\to\infty}\binom{an}{bn}^{1/n}
+=\lim_{n\to\infty}\left(\frac{(an)!}{(bn)!((a-b)n)!}\right)^{1/n}
+=\frac{a^a}{b^b(a-b)^{a-b}}.
+\]
+要するに $an$ 個から $bn$ 個取る組み合わせの数の $n$ 乗根の $n\to\infty$
+での極限は二項係数部分の式の分子分母の $(kn)!$ を $k^k$ で置き換えれば得られる.
+
+この結果を使えば次の
+\href{https://www.google.co.jp/search?q=\%E6\%9D\%B1\%E5\%B7\%A5\%E5\%A4\%A7\%E5\%85\%A5\%E8\%A9\%A6\%E5\%95\%8F\%E9\%A1\%8C+1988+\%E6\%95\%B0\%E5\%AD\%A6}
+{東工大の1988年の数学の入試問題}を暗算で解くことができる:
+\[
+\lim_{n\to\infty}\left(\frac{{}_{3n}C_n}{{}_{2n}C_n}\right)^{1/n}\ \text{を求めよ.}
+\]
+この極限の値は
+\[
+\frac{3^3/(1^12^2)}{2^2/(1^11^1)}=\frac{3^3}{2^4}=\frac{27}{16}.
+\]
+入試問題を作った人は, まずStirlingの公式を使うと容易に解ける問題を考え, 
+その後に高校数学の範囲内でも解けることを確認したのだと思われる.
+
+
+\begin{remark*}
+上で示したことより,
+\[
+\lim_{n\to\infty}\binom{2n}{n}^{1/n}=\frac{2^2}{1^11^1}=2^2.
+\]
+これは次を意味している($o(n)$ は $n$ で割っても $0$ に収束する量):
+\[
+\binom{2n}{n}=2^{2n} e^{o(n)}
+\qquad (n\to\infty).
+\]
+Wallisの公式(\secref{sec:Wallis})
+\[
+\binom{2n}{n}\sim\frac{2^{2n}}{\sqrt{\pi n}}
+\qquad (n\to\infty)
+\]
+はその精密化になっている.
+\qed
+\end{remark*}
+
+
+\begin{remark*}
+\href{http://d.hatena.ne.jp/gould2007/touch/20071127}
+{東工大では1968年にも次の問題を出しているようだ}:
+\[
+\lim_{n\to\infty}\frac{1}{n}\sqrt[n]{{}_{2n}P_n}\ \text{を求めよ.}
+\qquad(\text{答えは $2^2 e^{-1}$}.)
+\]
+この問題も明らかに元ネタはStirlingの公式である. より一般に次を示せる:
+\[
+\lim_{n\to\infty} \frac{((an)!)^{1/n}}{n^a} 
+%=\lim_{n\to\infty}\left( (an)! n^{-an} \right)^{1/n} 
+= a^a e^{-a}.
+\]
+なぜならば
+\begin{align*}
+\log\frac{((an)!)^{1/n}}{n^a}
+&=
+\frac{1}{n}\log(an)!-a\log n
+\\ &
+=\frac{1}{n}(an\log a + an\log n - an + o(n)) - a\log n
+\\ &
+=a\log a - a + o(1)
+\\ &
+=\log(a^a e^{-a})+o(1).
+\end{align*}
+やはりStirlingの公式を使えば容易に示せる結果を
+高校数学の範囲内で解けるように調節して入試問題にしているのだと思われる.
+\qed
+\end{remark*}
+
+
+\subsection{対数版の易しいStirlingの公式の改良}
+
+少し工夫すると次を示せる. ある定数 $c$ が存在して,
+\[
+\log n! = n \log n + \frac{1}{2}\log n - n + c + o(1)
+\qquad (n\to\infty).
+\]
+以下ではこの公式を証明しよう%
+\footnote{定数 $c$ が $\log\sqrt{2\pi}$ であることは既知であるが, 
+Wallisの公式を使えば $e^c=\sqrt{2\pi}$ であることを示せる.}.
+
+\secref{sec:easy}で証明した対数版の易しいStirlingの公式と
+上の公式の違いは $(1/2)\log n$ の項と定数項 $c$ を付け加えて
+改良しているところである.
+それらの項を出すアイデアは次の通り.
+$\int_1^n\log x\,dx=[x\log x-x]_1^n=n\log n-n+1$ を $k=1,2,3,\ldots,n-1$ に対する
+長方形 $[k-1/2,k+1/2]\times[0,\log k]$ の面積の総和
+と長方形 $[n-1/2,n]\times[0,\log n]$ の面積の
+和 $\log(n-1)!+(1/2)\log n=\log n!-(1/2)\log n$ で近似すれば, 
+自然に $(1/2)\log n$ の項が得られる.
+さらに, それらの長方形の和集合と
+領域 $\{\,(x,y)\mid 1\leqq x\leqq n,\ 0\leqq y\leqq\log x\,\}$
+の違いを注意深く分析すれば, 
+$\int_1^n\log x\,dx$ と長方形の面積の総和の差が $n\to\infty$ で
+ある定数に収束することがわかり, 定数項も得られる.
+
+$\log x$ は単調増加函数なので正の実数 $\alpha_k, \beta_k$ を
+\[
+\alpha_k=\int_k^{k+1/2}\log x\,dx-\frac{1}{2}\log k, \qquad
+\beta_k =\frac{1}{2}\log k-\int_{k-1/2}^k\log x\,dx
+\]
+と定めることができる. このとき, 
+\begin{align*}
+&
+\log n! - \frac{1}{2}\log n - \int_1^n \log x\,dx
+=
+\sum_{k=1}^{n-1}\log k+\frac{1}{2}\log n - \int_1^n \log x\,dx
+\\ & \qquad\qquad
+= -\alpha_1+\beta_2-\alpha_2+\beta_3-\cdots+\beta_{n-1}-\alpha_{n-1}+\beta_n.
+\end{align*}
+この交代和が $n\to\infty$ で収束することを示したい.
+
+$\log x$ が上に凸であることより, 
+数列 $\alpha_1,\beta_2,\alpha_2,\beta_3,\alpha_3,\ldots$ が
+単調減少することがわかり, 
+$\log x$ の導函数が $x\to\infty$ で $0$ に収束することより, 
+その数列は $0$ に収束することもわかる.
+ゆえに上の交代和は $n\to\infty$ で収束する%
+\footnote{$0$ 以上の実数で構成された $0$ に収束する単調減少列 $a_n$ が
+定める交代級数 $\sum_{k=1}^\infty (-1)^{k-1}a_k$ は収束する.
+(絶対収束するとは限らない.)}.
+その収束先を $a$ と書き, $c=1+a$ とおくと, $n\to\infty$ のとき
+\[
+\log n!
+= \frac{1}{2}\log n + \int_1^n\log x\,dx + a + o(1)
+= n\log n +\frac{1}{2}\log n - n + c + o(1). 
+\]
+
+$c=\log\sqrt{2\pi}$ であることをWallisの公式(\secref{sec:Wallis})
+を使って証明しよう. 
+$n!=n^{n+1/2}e^{-n}e^ce^{o(1)}$ をWallisの公式
+\[
+\sqrt{\pi}=\lim_{n\to\infty}\frac{2^{2n}(n!)^2}{(2n)!\sqrt{n}}
+\]
+に代入すると,
+\[
+\sqrt{\pi}
+=\lim_{n\to\infty}
+\frac{2^{2n}n^{2n+1}e^{-2n}e^{2c}}{2^{2n+1/2}n^{2n+1}e^{-2n}e^c}
+=\frac{e^c}{\sqrt{2}}.
+\] 
+ゆえに $e^c=\sqrt{2\pi}$ である.
+
+これでWallisの公式を使えば, 
+対数版の易しいStirlingの公式を改良することによって, 
+通常のStirlingの公式 $n!\sim n^n e^{-n}\sqrt{2\pi n}$ が
+得られることがわかった.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: Fourierの反転公式}
+\label{sec:Fourier}
+
+厳密な証明をするつもりはないが, 
+Fourierの反転公式の証明の概略について説明しよう.
+
+函数 $f(x)$ に対してその逆Fourier変換 $F(p)$ を
+\[
+F(p) = \int_{-\infty}^\infty e^{ipx} f(x)\,dx
+\]
+と定める. このとき函数 $f$ について適切な条件を仮定しておくと, 
+それに応じた適切な意味で
+\[
+f(x) = \frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx} F(p)\,dp
+\]
+が成立する. これをFourierの反転公式と呼ぶ.
+
+\subsection{Gauss分布の場合}
+
+$a>0$ であるとし, 
+\[
+f(x)=e^{-x^2/(2a)}
+\]
+とおき, $F(p)$ はその逆Fourier変換であるとする. このとき
+\[
+F(p)
+=\int_{-\infty}^\infty e^{ipx} e^{-x^2/(2a)}\, dx
+=e^{-p^2/(2a^{-1})}\sqrt{2a\pi}
+\]
+が容易に得られる%
+\footnote{Cauchyの積分定理を使う方法, 
+$e^{ipx}$ のTaylor展開を代入して項別積分する方法, 
+左辺と右辺が同じ微分方程式を満たしていることを使う方法
+など複数の方法で容易に計算可能である.}. % 
+この公式で $x$, $a$ のそれぞれと $p$, $a^{-1}$ の立場を
+交換することによって 
+\[
+\int_{-\infty}^\infty e^{-ipx} e^{-p^2/(2a^{-1})}\, dp
+=e^{-x^2/(2a)}\sqrt{2a^{-1}\pi}
+\]
+が得られる. 以上の2つの結果を合わせると, 
+\[
+ f(x) = \frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx} F(p)\,dp
+\]
+が得られる. すなわち $f(x)=e^{-x^2/(2a)}$ については
+Fourierの反転公式が成立している.
+
+一般に $f(x)$ についてFourierの反転公式が成立していれば 
+$f(x)$ を平行移動して得られる函数 $f(x-\mu)$ についても
+Fourierの反転公式が成立していることが容易に示される.
+実際, $F(p)$ を $f(x)$ の逆Fourier変換とすると,
+$f(x-\mu)$ の逆Fourier変換は
+\[
+\int_{-\infty}^\infty e^{ipx} f(x-\mu)\,dx
+=\int_{-\infty}^\infty e^{ip(x'+\mu)} f(x')\,dx'
+=e^{ip\mu}F(p)
+\] 
+になり, 
+\[
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{ip\mu}F(p)\,dp
+=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ip(x-\mu)}F(p)\,dp
+=f(x-\mu).
+\]
+以上によって, $f(x-\mu)=e^{-(x-\mu)^2/(2a)}$ についても
+Fourierの反転公式が成立することがわかった.
+
+逆Fourier変換およびFourier変換の線形性より, 
+$f(x-\mu)=e^{-(x-\mu)^2/(2a)}$ の形の函数の線形和についても
+Fourierの反転公式が成立していることがわかる%
+\footnote{``任意の函数''はそのような線形和の``極限''で表わされる.
+したがって, Fourierの反転公式の証明の本質的部分はこれで終了している
+とみなせる.}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{一般の場合}
+\label{sec:generalcase}
+
+$a>0$ に対して函数 $\rho_a(x)$ を
+\[
+\rho_a(x) = \frac{1}{\sqrt{2\pi a}}e^{-x^2/(2a)}
+\]
+と定める. これは $\rho_a(x)>0$ と $\int_{-\infty}^\infty \rho_a(x)\,dx=1$ 
+を満たしている. そして前節の結果によって, $\rho_a(x-\mu)$ は
+Fourierの反転公式を満たしている.
+
+函数 $f(x)$ に対して函数 $f_a(x)$ を 
+$\rho_a$ との畳み込み積によって函数 $f_a(x)$ を定める:
+\[
+f_a(x) = \int_{-\infty}^\infty \rho_a(x-y) f(y)\,dy.
+\]
+このとき $f_a(x)$ についてはFourierの反転公式が成立している%
+\footnote{$f_a(x)$ はFourierの反転公式が成立している函数 
+$\rho_a(x-\mu)$ の重み $f(\mu)$ での重ね合わせなので, 
+これはほとんど明らかである.}.
+実際, $f_a(x)$ の逆Fourier変換 $F_a(p)$ と書くと, 
+\begin{align*}
+F_a(p) 
+&= \int_{-\infty}^\infty e^{ipx} f_a(x)\,dx
+= \int_{-\infty}^\infty
+  \left( \int_{-\infty}^\infty e^{ipx} \rho_a(x-y)\,dx \right)
+  f(y)\,dy
+\end{align*}
+なので
+\begin{align*}
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}F_a(p)\,dp
+&=
+\int_{-\infty}^\infty
+\left(
+\frac{1}{2\pi}
+\int_{-\infty}^\infty
+e^{-ipx}
+\left(
+\int_{-\infty}^\infty
+e^{ipx'}\rho_a(x'-y)\,dx'
+\right)
+\,dp
+\right)
+f(y)\,dy
+\\ &
+=
+\int_{-\infty}^\infty \rho_a(x-y) f(y) \,dy
+=
+f_a(x).
+\end{align*}
+2つ目の等号で $\rho_a(x-\mu)$ について
+Fourierの反転公式が成立することを使った.
+さらに
+\[
+\int_{-\infty}^\infty e^{ipx} \rho_a(x-y)\,dx
+=e^{ipy}e^{-ap^2/2}
+\]
+なので
+\[
+F_a(p)=\int_{-\infty}^\infty e^{ipy}e^{-ap^2/2}f(y)\,dy=e^{-ap^2/2}F(p)
+\]
+となる%
+\footnote{これは畳み込み積の逆Fourier変換が
+逆Fourier変換の積に等しいことの特殊な場合にすぎない.}. 
+ゆえに
+\[
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}F_a(p)\,dp
+=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{-ap^2/2}F(p)\,dp.
+\]
+したがって
+\[
+\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{-ap^2/2}F(p)\,dp 
+= \int_{-\infty}^\infty \rho_a(x-y)f(y)\,dy
+= f_a(x).
+\]
+もしも $F(p)$ が可積分ならば, Lebesgueの収束定理より, 左辺について
+\[
+\lim_{a\to 0}\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}e^{-ap^2/2}F(p)\,dp
+=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-ipx}F(p)\,dp
+\]
+が言える.
+あとは, 函数 $f(x)$ について適切な条件を仮定したとき, 
+$a\to 0$ のとき函数 $f_a(x)$ が
+適切な意味で函数 $f(x)$ に収束することを示せれば,  
+$f(x)$ 自身が適切な意味でFourierの反転公式を満たすことがわかる%
+\footnote{$\rho_a(x)$ の $a\to 0$ での様子のグラフを描けば, 
+$\rho_a(x)$ がDiracのデルタ函数(超函数)に``収束''しているように
+見えることから, これもほとんど明らかだと言える.}.
+
+たとえば, $f$ は有界かつ点 $x$ で連続だと仮定する.
+ある $M>0$ が存在して $|f(y)-f(x)|\leqq M$ ($y\in\R$)となる.
+任意に $\eps>0$ を取る.
+ある $\delta >0$ が存在して 
+$|y-x|\leqq\delta$ ならば $|f(y)-f(x)|\leqq\eps/2$ となる.
+函数 $\rho_a$ の定義より, 
+$a>0$ を十分小さくすると $\int_{|y-x|>\delta}\rho_a(x-y)\,dy\leqq\eps/(2M)$ 
+となることもわかる. 以上の状況のもとで
+\begin{align*}
+|f_a(x)-f(x)|
+&=
+\left|
+\int_{-\infty}^\infty \rho_a(x-y)(f(y)-f(x))\,dy
+\right|
+\\ &
+\leqq
+\int_{-\infty}^\infty \rho_a(x-y)|f(y)-f(x)|\,dy
+\\ &
+\leqq
+\int_{|y-x|\leqq\delta} \rho_a(x-y)\frac{\eps}{2}\,dy
++
+\int_{|y-x|>\delta} \rho_a(x-y)M\,dy
+\\ &
+\leqq \frac{\eps}{2}+\frac{\eps}{2M}M
+=\eps.
+\end{align*}
+これで $\lim_{a\to 0}f_a(x)=f(x)$ が示された.
+
+筆者は実解析一般については次の教科書をおすすめする.
+\begin{center}
+\href{http://www.amazon.co.jp/dp/4000054449}{%
+猪狩惺, 
+実解析入門, 
+岩波書店 (1996), xii+324頁,
+定価3,800円}.
+\end{center}
+筆者は学生時代に猪狩惺先生の授業で
+Lebesgue積分論やFourier解析について勉強した. 
+信じられないほどクリアな講義であり, 
+数学の分野の中で実解析が最もクリアな分野なのではないかと思えて来るほどだった.
+上の教科書が2016年5月3日現在品切れ中であり, 
+プレミア価格のついた中古本しか手に入らないことはとても残念なことである.
+
+
+\subsection{Riemann-Lebesgueの定理}
+
+$f(x)$ は $\R$ 上の可積分函数%
+\footnote{$\R$ 上の可測函数で $\int_\R |f(x)|\,dx<\infty$ を満たすものを
+$\R$ 上の可積分函数と呼ぶ. 可測函数の定義を知らない人は以下のように考えてよい.
+区間 $I=[a,b]$ に対して $I$ 上で $1$ になり $I$ の外で $0$ になる
+函数を $1_I$ と書く. 数 $\alpha_i$ と区間 $I_i$ たちによって 
+$\sum_{i=1}^n \alpha_i 1_{I_i}$ と表される函数は{\bf 階段函数}と呼ばれる.
+階段函数の全体は和とスカラー倍で閉じており, 自然にベクトル空間をなす.
+階段函数 $f=\sum_{i=1}^n \alpha_i 1_{I_i}$, $I_i=[a_i,b_i]$, $a_i<b_i$ の
+積分が $\int_\R f(x)\,dx=\sum_{i=1}^n\alpha_i(b_i-a_i)$ と定義することができる.
+階段函数列 $f_n(x)$ は 
+$\int_\R|f_m(x)-f_n(x)|\,dx\to 0$ ($m,n\to\infty$) を満たおり, 
+ほとんどすべての $x\in\R$ について $f_n(x)$ は収束していると仮定する.
+(前者の仮定からほとんどいたる所収束する部分列を取れることを示せる.)
+このとき $f(x)=\lim_{n\to\infty}f_n(x)$ で函数 $f(x)$ が定まる
+(収束しない $x$ における $f$ の値は任意に決めておく).
+このとき \(
+\left|\int_\R f_m(x)\,dx - \int_\R f_n(x)\,dx\right| 
+\leqq \int_\R |f_m(x)-f_n(x)|\,dx
+\to 0
+\) ($m,n\to\infty$)なので $\int_\R f_n(x)\,dx$ は $n\to\infty$ で
+収束する. その収束先の値を $\int_\R f(x)\,dx$ と書く.
+このような函数 $f(x)$ を可積分函数と呼んでよい.
+さらにそのとき \(
+\left|\int_\R |f_m(x)|\,dx - \int_\R |f_n(x)|\,dx\right| 
+\leqq \int_\R |f_m(x)-f_n(x)|\,dx
+\to 0
+\) ($m,n\to\infty$)でもあるので, 
+$\int_\R|f_n(x)|\,dx$ は有限の値に収束し, 
+$\int_\R|f(x)|\,dx<\infty$ も成立している.
+}
+であるとする. 
+このとき, その Fourier変換 $\widehat{f}(p)=\int_{-\infty}^\infty e^{-ipx}f(x)\,dx$ は
+連続函数になり, $|p|\to\infty$ で $0$ に収束する. 特に
+\[
+\lim_{|p|\to\infty} \int_{-\infty}^\infty e^{-ipx}f(x)\,dx=0.
+\]
+これは{\bf Riemann-Lebesgueの定理}(リーマン・ルベーグの定理)と呼ばれている.
+
+$\hat{f}(p)$ の連続性はLebesgueの収束定理%
+\footnote{Lebesgueの収束定理とは次の結果のことである.
+$f_n$ はほとんどいたる所収束する可積分函数列であり, 
+ある可積分函数 $\varphi\geqq 0$ で $|f_n|\leqq\varphi$ を満たすものが
+存在するとき, 積分 $\int_\R f_n(x)\,dx$ は $n\to\infty$ で収束する.
+この定理は非常に便利なので空気のごとく使われる.}によって示される.
+実際, $|e^{ihx}-1||f(x)|\leqq 2|f(x)|$ でかつ $|f(x)|$ は可積分なので, 
+\[
+|\widehat{f}(x+h)-\widehat{f}(x)|
+\leqq\int_\R|e^{ihx}-1||f(x)|\,dx
+\longrightarrow 0
+\qquad(h\to 0).
+\]
+これで $\hat{f}$ の連続性が示された.
+
+Riemann-Lebesgueの定理の証明は可積分函数が階段函数列で $L^1$ 近似
+されることからただちに得られる. 区間 $I=[a,b]$ 上で $1$ になり, 
+その外で $0$ になる函数を $1_I$ と書くと, 
+\[
+\widehat{1_I}(p) 
+= \int_a^b e^{-ipx}\,dx
+= \frac{e^{-ipb}-e^{-ipa}}{-ip}
+\]
+なので, $\widehat{1_I}(p)\to 0$ ($|p|\to\infty$). 
+一般の可積分函数に関する結果はこれよりしたがう.
+
+
+\subsection{Fourier変換の部分和の収束}
+\label{sec:Ftransf-N}
+
+$N>0$ とする.
+
+$\R$ 上の可積分函数 $f$ の
+Fourier変換 $\widehat{f}(p)=\int_{-\infty}^\infty e^{-ipy}f(y)\,dx$ に対して, 
+\[
+s_N(f)(x) = \frac{1}{2\pi}\int_{-N}^N e^{ipx} \widehat{f}(p)\,dp
+\]
+をFourier変換の $N$ 部分和と呼ぶ. $N$ 部分和は次のように変形される:
+\begin{align*}
+s_N(f)(x)
+&=\int_{-\infty}^\infty
+\left(\frac{1}{2\pi}\int_{-N}^N e^{ip(x-y)} \,dp\right) f(y)\,dy
+\\ &
+=\int_{-\infty}^\infty
+\frac{e^{iN(x-y)}-e^{e^{-iN(x-y)}}}{2\pi i(x-y)} f(y)\,dy
+\\ &
+=\int_{-\infty}^\infty
+\frac{\sin(N(x-y))}{\pi(x-y)} f(y)\,dy.
+\\ &
+=\int_0^\infty
+\frac{\sin(Ny)}{\pi y} (f(x+y)+f(x-y))\,dy
+\\ &
+=\frac{1}{\pi}\int_0^\infty
+\sin(Ny) \frac{f(x+y)+f(x-y)}{y} \,dy.
+\end{align*}
+4つ目の等号で $y$ を $x+y$ でおきかえ, $\sin(Ny)/y$ が偶函数であることを
+使った. 
+
+$\delta>0$ を任意に取る.
+$y\geqq \delta$ で $(f(x+y)+f(x-y))/y$ は可積分である.
+ゆえに Riemann-Lebesgue の定理より,
+\[
+\lim_{N\to\infty}
+\int_\delta^\infty
+\sin(Ny) \frac{f(x+y)+f(x-y)}{y} \,dy
+= 0.
+\]
+したがって $N$ 部分和 $s_N(f)(x)$ が $N\to\infty$ で収束することと, 
+\[
+\frac{1}{\pi}\int_0^\delta
+\sin(Ny) \frac{f(x+y)+f(x-y)}{y} \,dy
+\]
+が $N\to\infty$ で収束することは同値になり, 
+それらが収束するときそれらの値は一致する.
+以上の結果を{\bf Riemannの局所性定理}と呼ぶ.
+
+以上の結果を $f(x)=e^{-x^2/2}$ の場合に適用することによって
+{\bf Dirichlet積分}(ディリクレ積分)の公式
+\[
+\lim_{R\to\infty}\int_0^R \frac{\sin x}{x}\,dx = \frac{\pi}{2}
+\]
+を証明できる. $f(x)=e^{-x^2/2}$ とおく.
+このとき, \secref{sec:Gauss-Fourier}での計算より,
+$\widehat{f}(p)=e^{-p^2/2}\sqrt{2\pi}$ でかつ
+\[
+\lim_{N\to\infty}s_N(f)(x)
+= \frac{1}{2\pi}\int_{-\infty}^\infty e^{ipx}\widehat{f}(p)\,dp
+= f(x).
+\]
+ゆえに, Riemannの局所性定理を $x=0$ の場合に適用すると,
+任意の $\delta>0$ について
+\[
+\lim_{N\to\infty}s_N(f)(x)
+=\lim_{N\to\infty}
+\frac{1}{\pi}\int_0^\delta \sin(Ny)\frac{2e^{-y^2/2}}{y}\,dy
+=e^{-0^2/2}=1.
+\] 
+ゆえに
+\[
+\lim_{N\to\infty}
+\left(
+ \int_0^\delta \frac{\sin(Ny)}{y}\,dy
+ + \int_0^\delta \sin(Ny)\frac{e^{-y^2/2}-1}{y}\,dy
+\right)
+=\frac{\pi}{2}.
+\]
+左辺の後者の積分の極限はRiemann-Lebesgueの定理より $0$ に収束する.
+したがって
+\[
+\lim_{N\to\infty}\int_0^\delta \frac{\sin(Ny)}{y}\,dy = \frac{\pi}{2}.
+\]
+さらに $y=x/N$ と積分変数を変換することによって,
+\[
+\frac{\pi}{2}
+=\lim_{N\to\infty}\int_0^{N\delta} \frac{\sin x}{x}\,dx
+= \lim_{R\to\infty}\int_0^R \frac{\sin x}{x}\,dx.
+\]
+このようにDirichlet積分の公式はRiemannの局所性定理とRiemann-Lebesgueの定理
+と $e^{-x^2/2}$ のFourier変換の計算から得られる%
+\footnote{複素解析を使った証明もある.}.
+Dirichlet積分の公式で積分変数 $x$ を $Nx$ で置換することによって
+\[
+\lim_{R\to\infty}\int_0^R \frac{\sin(Nx)}{x}\,dx = \frac{\pi}{2}.
+\]
+という公式が得られる. 
+
+$\R$ 上の可積分函数 $f$ と $x\in\R$ に対して, 
+ある $\delta>0$ が存在して
+\[
+\frac{(f(x+y)+f(x-y))/2-f(x)}{y}
+\]
+が $0<y<\delta$ で可積分になるならば%
+\footnote{この条件は{\bf Diniの条件}と呼ばれている.}, 
+Fourier変換の $N$ 部分和の $x$ における値は $f(x)$ に収束する:
+\[
+\lim_{N\to\infty} s_N(f)(x)=f(x).
+\]
+この事実は上で述べたことを合わせると容易に導かれる. 
+Riemannの局所性定理より, 任意の $\delta>0$ について, 
+$N\to\infty$ のとき 
+\[
+s_N(f)(x)
+=\frac{1}{\pi}\int_0^\delta \sin(Nx)\frac{f(x+y)+f(x-y)}{y}\,dy+o(1).
+\]
+Dirichlet積分の公式の証明より, $N\to\infty$ のとき
+\[
+f(x)
+= \lim_{N\to\infty} \frac{2}{\pi}\int_0^\delta \frac{\sin(Ny)}{y}\,dy\,f(x)
+= \frac{2}{\pi}\int_0^\delta \sin(Ny) \frac{f(x)}{y}\,dy + o(1).
+\]
+ゆえに
+\[
+s_N(f)(x)-f(x)
+=\frac{2}{\pi} \int_0^\delta
+\sin(Ny)\frac{(f(x+y)+f(x-y))/2-f(x)}{y}\,dy
++o(1).
+\]
+もしも $[(f(x+y)+f(x-y))/2-f(x)]/y$ が $0<y<\delta$ で可積分ならば
+Riemann-Lebesgueの定理より, 右辺は $N\to\infty$ で $0$ に収束する.
+これで示すべきことが示された.
+
+\begin{example*}
+可積分函数 $f$ が $x$ で微分可能ならば, 
+十分小さな $\delta>0$ について, \\
+$[(f(x+y)+f(x-y))/2-f(x)]/y$ は $0<y<\delta$ で有界になる. \\
+したがって $\lim_{N\to\infty} s_N(f)(x)=f(x)$ が成立する.
+\qed
+\end{example*}
+
+\begin{example*}
+可積分函数 $f$ の値の点 $x$ における左右からの極限
+\[
+f(x-0)=\lim_{\eps\searrow 0}f(x-\eps), \qquad
+f(x+0)=\lim_{\eps\searrow 0}f(x+\eps)
+\]
+が存在し, $f(x)=(f(x+0)+f(x-0))/2$ であると仮定する.
+さらに点 $x$ における左右の微係数
+\[
+f'(x-0)=\lim_{\eps\searrow 0}\frac{f(x-\eps)-f(x-0)}{-\eps}, \qquad
+f'(x+0)=\lim_{\eps\searrow 0}\frac{f(x+\eps)-f(x+0)}{\eps}
+\]
+が存在すると仮定する.
+このとき, 十分小さな $\delta>0$ について, 
+\[
+\frac{(f(x+y)+f(x-y))/2-f(x)}{y}
+=\frac{1}{2}\left[\frac{f(x+y)-f(x+0)}{y}-\frac{f(x-y)-f(x-0)}{-y}\right]
+\]
+は $0<y<\delta$ で有界になる.
+したがって
+\[
+\lim_{N\to\infty} s_N(f)(x)
+=\lim_{N\to\infty}\frac{1}{2\pi}\int_{-N}^N e^{ipx}\widehat{f}(p)\,dp
+=f(x)=\frac{f(x+0)+f(x-0)}{2}
+\]
+となる.
+\qed
+\end{example*}
+
+
+\subsection{Fourier級数の部分和の収束}
+\label{sec:Fseries-N}
+
+以下, $f$ は $\R$ 上の周期 $2\pi$ を持つ函数であり, 
+$0\leqq x\leqq 2\pi$ で可積分であると仮定する.
+このとき $f$ のFourier係数 $a_n$ ($n\in\Z$) が
+\[
+a_n = \frac{1}{2\pi}\int_0^{2\pi} e^{-iny}f(y)\,dy
+\]
+と定義される. 正の整数 $N$ に対して, 
+次を $f$ のFourier級数の $N$ 部分和と呼ぶ:
+\[
+s_N(f)(x) = \sum_{n=-N}^N a_n e^{inx}.
+\]
+$N$ 部分和は次のように変形される:
+\begin{align*}
+s_N(f)(x)
+&=\frac{1}{2\pi}\int_0^{2\pi}
+\left(\sum_{n=-N}^N e^{in(x-y)}\right) f(y)\,dy
+\\ &
+=\frac{1}{2\pi}\int_0^{2\pi}
+\frac{e^{i(N+1)(x-y)}-e^{-iN(x-y)}}{e^{i(x-y)}-1} f(y)\,dy
+\\ &
+=\frac{1}{2\pi}\int_0^{2\pi}
+\frac{e^{i(N+1/2)(x-y)}-e^{-i(N+1/2)(x-y)}}{e^{i(x-y)/2}-e^{-i(x-y)/2}} f(y)\,dy
+\\ &
+=\frac{1}{2\pi}\int_0^{2\pi}
+\frac{\sin((N+1/2)(x-y))}{\sin((x-y)/2)} f(y)\,dy
+\\ &
+=\frac{1}{2\pi}\int_0^{2\pi}
+\frac{\sin((N+1/2)y)}{\sin(y/2)}f(x+y)\,dy
+\\ &
+=\frac{1}{2\pi}\int_0^{\pi}
+\frac{\sin((N+1/2)y)}{\sin(y/2)}(f(x+y)+f(x-y))\,dy
+\\ &
+=\frac{1}{\pi}\int_0^{\pi}
+\sin((N+1/2)y)\frac{y/2}{\sin(y/2)}\frac{f(x+y)+f(x-y)}{y}\,dy.
+\end{align*}
+5つ目の等号で $y$ を $x+y$ で置き換え, 
+$\sin(\alpha x)/\sin(\beta x)$ が偶函数であることを使い,
+さらに6つ目の等号で被積分函数の周期性を使った.
+
+$\lim_{t\to 0}(t/\sin t)=1$ に注意すれば, 
+\secref{sec:Ftransf-N}とまったく同様にして, 
+$N$ 部分和の収束に関する類似の結果が得られることがわかる.
+
+
+Dirichlet積分の公式の代わりに次の公式を使わなければいけない:
+\[
+\frac{1}{2\pi}\int_0^{2\pi}
+\frac{\sin((N+1/2)y)}{\sin(y/2)}\,dy
+= s_N(1)(0)=1.
+\]
+さらに非積分函数の周期性と偶函数性より,
+\[
+\frac{1}{\pi}\int_0^{\pi}\frac{\sin((N+1/2)y)}{\sin(y/2)}\,dy
+= 1.
+\]
+$s_N(1)(0)=1$ の証明は次の通り:
+\[
+s_N(1)(0)
+=\sum_{n=-N}^N \frac{1}{2\pi}\int_0^{2\pi}e^{-iny}dy
+=\sum_{n=-N}^N \delta_{n0}
+=1.
+\]
+$e^{-i0y}=1$ 以外の $e^{-iny}$ の $0$ から $2\pi$ までの積分が
+消えることを使った.
+
+
+上の公式を使うと, 
+\[
+f(x)
+=\frac{1}{\pi}\int_0^{\pi}\frac{\sin((N+1/2)y)}{\sin(y/2)}\,dy\,f(x)
+=\frac{1}{\pi}\int_0^{\pi}\sin((N+1/2)y)\frac{y/2}{\sin(y/2)}\frac{2f(x)}{y}\,dy.
+\]
+ゆえに上の $s_N(f)(x)$ の表示より, 
+\[
+s_N(f)(x)-f(x)
+=\frac{2}{\pi}\int_0^\pi
+\sin((N+1/2)y)
+\frac{y/2}{\sin(y/2)}\frac{(f(x+y)+f(x-y))/2-f(x)}{y}\,dy.
+\]
+右辺の積分の被積分函数の $\sin((N+1/2)y)$ 以外の部分
+は $\delta\leqq y<\pi$ で可積分なので
+Riemann-Lebesgueの定理より, $\delta>0$ に対して, 
+\[
+\lim_{N\to\infty}
+\int_\delta^\pi
+\sin((N+1/2)y)
+\frac{y/2}{\sin(y/2)}\frac{(f(x+y)+f(x-y))/2-f(x)}{y}\,dy=0.
+\]
+ゆえに, $N\to\infty$ のとき, 
+\begin{align*}
+&
+s_N(f)(x)-f(x)
+\\ &
+=\frac{2}{\pi}\int_0^\delta
+\sin((N+1/2)y)
+\frac{y/2}{\sin(y/2)}\frac{(f(x+y)+f(x-y))/2-f(x)}{y}\,dy + o(1).
+\end{align*}
+ゆえに $0<y<\delta$ で
+\[
+\frac{(f(x+y)+f(x-y))/2-f(x)}{y}
+\]
+が可積分ならば $N\to 0$ で $s_N(f)(x)-f(x)$ が $0$ に収束し, 
+$\lim_{N\to\infty}s_N(f)(x)=f(x)$ が成立することがわかる.
+この条件が成立するための簡単な十分条件の例も\secref{sec:Ftransf-N}
+と同様である.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: ガウス分布のFourier変換}
+\label{sec:Gauss-Fourier}
+
+$t>0$ に対して次の公式が成立している:
+\[
+\int_{-\infty}^\infty e^{-ipx} \frac{e^{-x^2/(2t)}}{\sqrt{2\pi t}}\,dx
+= e^{-tp^2/2}.
+\tag{$*$}
+\]
+この公式が成立していることを複数の方法で示そう.
+
+\subsection{熱方程式を使う方法}
+
+函数 $u=u(t,x)$ を次のように定める:
+\[
+u(t,x)
+= \frac{e^{-x^2/(2t)}}{\sqrt{2\pi t}}.
+\]
+この函数 $u=u(t,x)$ は熱方程式の基本解になっている:
+\[
+u_t = \frac{1}{2}u_{xx}, \qquad
+\lim_{t\to 0}\int_{-\infty}^\infty f(x) u(t,x)\,dx=f(0).
+\]
+ここで $f(x)$ は有界な連続函数である. 
+$u=u(t,x)$ が熱方程式を満たすことは偏微分の計算で容易に示される.
+後者の極限の証明は実質的に\secref{sec:generalcase}の終わりに書いてある.
+
+ゆえに, $U(t,p)=\int_{-\infty}^\infty e^{-ipx} u(t,x)\,dx$ とおくと, 
+\begin{align*}
+\frac{\d}{\d t}U(t,p)
+&=
+\frac{1}{2}
+\int_{-\infty}^\infty e^{-ipx} \frac{\d^2 u(t,x)}{\d x^2}\,dx
+%\\ &
+=
+\frac{1}{2}
+\int_{-\infty}^\infty \frac{\d^2 e^{-ipx}}{\d x^2}  u(t,x)\,dx
+%\\ &
+=
+-\frac{p^2}{2}U(t,p).
+\end{align*}
+2つ目の等号で部分積分を2回行なった. さらに
+\[
+\lim_{t\to 0}U(t,p)
+=\lim_{t\to 0} \int_{-\infty}^\infty e^{-ipx} u(t,x)\,dx
+=e^{-ip0}
+=1.
+\]
+したがって
+\[
+U(t,p)=e^{-tp^2/2}
+\]
+となることがわかる. これで公式($*$)が示された.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{両辺が同一の常微分方程式を満たしていることを使う方法}
+
+前節の記号をそのまま使うと,  
+\begin{align*}
+\frac{\d}{\d p}U(t,p)
+&=\int_{-\infty}^\infty (-ix)e^{-ipx}u(t,x)\,dx
+=it\int_{-\infty}^\infty e^{-ipx}\frac{\d}{\d x}u(t,x)\,dx
+\\ &
+=-it\int_{-\infty}^\infty \left(\frac{\d}{\d x}e^{-ipx}\right)u(t,x)\,dx
+=-it\int_{-\infty}^\infty (-ip)e^{-ipx}u(t,x)\,dx
+\\ &
+=-tp U(t,p).
+\end{align*}
+2つ目の等号で $u_x=-(x/t)u$ を使い, 
+3つ目の等号で部分積分を使った.
+さらに
+\[
+U(t,0)=\int_{-\infty}^\infty u(t,x)\,dx=1
+\]
+となる. これらより $U(t,p)=e^{-tp^2/2}$ となることがわかる.
+この方針であれば $u(t,x)$ が熱方程式の基本解であることを使わずにすむ.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{項別積分で計算する方法}
+
+もしも $t=1$ の場合の公式($*$)
+\[
+\int_{-\infty}^\infty e^{-ipx} \frac{e^{-x^2/2}}{\sqrt{2\pi}}\,dx = e^{-p^2/2}
+\tag{$**$}
+\]
+が示されたならば, 
+$x$, $p$ をそれぞれ $x/\sqrt{t}$, $\sqrt{t}\,p$ で
+置換することによって一般の $t>0$ に関する公式($*$)が得られる. 
+ゆえに公式($*$)を示すためには公式($**$)を証明すれば十分である.
+
+さらに $\sin(px)$ は奇函数なので 
+$\int_{-\infty}^\infty e^{-x^2/2} \sin(px)\,dx=0$ となる.
+ゆえに
+\[
+\int_{-\infty}^\infty e^{-x^2/2}\cos(px)\,dx=e^{-p^2/2}\sqrt{2\pi}
+\]
+を示せば十分である. 左辺の $\cos(px)$ にそのTaylor-Maclaulin展開を代入
+した後に項別積分することによってこの公式を示そう.
+
+準備. まず $\int_{-\infty}^\infty e^{-x^2/2}x^{2n}\,dx$ を計算しよう.
+部分積分によって
+\begin{align*}
+\int_{-\infty}^\infty e^{-x^2/2} x^{2n}\,dx
+&=
+\int_{-\infty}^\infty \left(-e^{-x^2/2}\right)' x^{2n-1}\,dx
+\\ &
+=\int_{-\infty}^\infty e^{-x^2/2} (x^{2n-1})'\,dx
+=(2n-1)\int_{-\infty}^\infty e^{-x^2/2} x^{2n-2}\,dx.
+\end{align*}
+ゆえに帰納的に $n=0,1,2,\ldots$ に対して
+\[
+\int_{-\infty}^\infty e^{-x^2/2} x^{2n}\,dx
+=(2n-1)\cdots 5\cdot 3\cdot 1\sqrt{2\pi}
+=\frac{(2n)!}{2^n n!}\sqrt{2\pi}.
+\]
+2つ目の等号は左辺の分子分母に$2n\cdots 4\cdot 2=2^n n!$ を
+かけることによって得られる.
+
+上で準備した結果を用いると, 
+\begin{align*}
+&
+\int_{-\infty}^\infty e^{-x^2/2}\cos(px)\,dx
+=
+\int_{-\infty}^\infty e^{-x^2/2}
+\sum_{n=0}^\infty (-1)^n\frac{(px)^{2n}}{(2n)!}
+\,dx
+\\ & \qquad
+=
+\sum_{n=0}^\infty \frac{(-p^2)^n}{(2n)!}
+\int_{-\infty}^\infty e^{-x^2/2}x^{2n}\,dx
+%\\ &
+=
+\sum_{n=0}^\infty \frac{(-p^2/2)^n}{n!}\sqrt{2\pi}
+=
+e^{-p^2/2}\sqrt{2\pi}.
+\end{align*}
+これで公式($**$)が示された.
+
+
+\subsection{Cauchyの積分定理を使う方法}
+
+複素解析を知っている人であれば詳しい説明は必要ないと思うので, 
+以下の説明では大幅に手抜きをする.
+Cauchyの積分定理を使うと実数 $p$ に対して
+\[
+\int_{-\infty}^\infty e^{-(x+ip)^2/2}\,dx 
+=\int_{-\infty}^\infty e^{-x^2/2}\,dx
+=\sqrt{2\pi} 
+\]
+となることを示せる. ゆえに
+\[
+\int_{-\infty}^\infty e^{-ipx}e^{-x^2/2}\,dx
+=
+\int_{-\infty}^\infty e^{-(x+ip)^2/2-p^2/2}\,dx
+=
+e^{-p^2/2}\int_{-\infty}^\infty e^{-(x+ip)^2/2}\,dx
+=
+e^{-p^2/2}\sqrt{2\pi}.
+\]
+これで公式($**$)が示された.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: Gauss積分の計算}
+
+次の公式の様々な証明の仕方を解説しよう:
+\[
+ I:=\int_{-\infty}^\infty e^{-x^2}\,dx = \sqrt{\pi}.
+\]
+この公式の面白いところ(不思議なところ)は円周率の気配が見えない
+積分の値が円周率の平方根になっていることである.
+実際の証明では
+\[
+ I^2 = \iint_{\R^2} e^{-(x^2+y^2)}\,dx\,dy = \pi
+\]
+を示すことになる.
+
+
+\subsection{同一の体積の2通りの積分表示を用いた計算}
+
+$I^2=\iint_{\R^2}e^{-(x^2+y^2)}\,dx\,dy$ は $z=e^{-(x^2+y^2)}$ の
+小山状のグラフと平面 $z=0$ に挟まれた部分の体積を表わしている.
+その体積は高さ $z$ の断面の面積%
+\footnote{$z=e^{-(x^2+y^2)}$, $r^2=x^2+y^2$ とおくと, 
+$\pi r^2=\pi(-\log z)$ となる.} %
+$\pi(-\log z)$ を $0<z\leqq 1$ で
+積分することによっても求められる.  ゆえに
+\[
+I^2=\int_0^1 \pi(-\log z)\,dz = -\pi[z\log z-z]_0^1 = \pi.
+\]
+おそらくこの方法が最も簡明である.
+
+
+\subsection{極座標変換による計算}
+
+$x=r\cos\theta$, $y=r\sin\theta$ と極座標変換すると, 
+\[
+I^2
+=\iint_{\R^2} e^{-(x^2+y^2)}\,dx\,dy
+=\int_0^{2\pi}d\theta \int_0^\infty e^{-r^2}r \,dr
+=2\pi\left[\frac{e^{-r^2}}{-2}\right]_0^\infty
+=\pi.
+\]
+2つ目の等号で極座標変換のJacobianが $r$ になることを使った.
+もしくは
+\begin{align*}
+dx\wedge dy
+=(\cos\theta\,dr-r\sin\theta\,d\theta)\wedge
+ (\sin\theta\,dr+r\cos\theta\,d\theta)
+=r\,dr\wedge d\theta
+\end{align*}
+なので, $K=\{\,(r,\theta)\mid r>0,\ 0\leqq\theta<2\pi\,\}$ とおくと, 
+\[
+I^2
+=\iint_{\R^2} e^{-(x^2+y^2)}\,dx\wedge dy
+=\iint_K e^{-r^2}r \,dr\wedge d\theta
+=\int_0^{2\pi}d\theta \int_0^\infty e^{-r^2}r \,dr
+=\pi.
+\]
+
+
+\subsection{Jacobianを使わずにすむ座標変換による計算}
+
+$y$ から $\theta$ に $y=x\tan\theta$ によって積分変数を変換すると,
+\begin{align*}
+I^2
+&=4
+\int_0^\infty
+\left(
+\int_0^\infty e^{-(x^2+y^2)}\,dy
+\right)\,dx
+=4
+\int_0^\infty
+\left(
+\int_0^{\pi/2} e^{-x^2\cos^2\theta}\,x\cos^2\theta\,d\theta
+\right)\,dx
+\\ &
+=4
+\int_0^{\pi/2}
+\left(
+\int_0^\infty e^{-x^2\cos^2\theta}\,x\cos^2\theta\,dx 
+\right)\,d\theta
+=4
+\int_0^{\pi/2}
+\left[
+\frac{e^{-x^2\cos^2\theta}}{-2}
+\right]_{x=0}^{x=\infty}
+\,d\theta
+\\ &
+=4
+\int_0^{\pi/2}\frac{1}{2}\,d\theta
+=
+\pi.
+\end{align*}
+3つ目の等号で積分の順序交換を行なった.
+
+
+\subsection{ガンマ函数とベータ函数の関係を用いた計算}
+\label{sec:GaussGamma}
+
+前節ではJacobianが出て来ない1変数の積分の置換積分のみを用いて
+Gauss積分を計算する方法を説明した.
+それと似たような方法によって, 
+ガンマ函数とベータ函数の関係式を
+1変数の積分の置換積分のみを用いて証明することができて, 
+その関係式の特別な場合としてGauss積分の値を計算することもできる.
+この節の内容は前節の内容の一般化であると考えられる.
+統計学でよく使われる確率密度函数の記述にはガンマ函数や
+ベータ函数を与える積分の被積分函数が現われる.
+だから, 統計学に興味がある読者は
+Gauss積分の計算の一般化として
+ガンマ函数とベータ函数についても学んでおいた方が
+効率が良いとも考えられる.
+
+$s,p,q>0$ (もしくは実部が正の複素数 $s,p,q$)に対して,
+\[
+\Gamma(s)=\int_0^\infty e^{-x}x^{s-1}\,dx
+\qquad
+B(p,q)=\int_0^1 x^{p-1}(1-x)^{q-1}\,dx
+\]
+によってガンマ函数 $\Gamma(s)$ とベータ函数 $B(p,q)$ が定義される%
+\footnote{他にもたくさんの同値な定義の仕方がある.
+以下では解析接続については扱わない.}.
+
+部分積分によって $\Gamma(s+1)=s\Gamma(s)$ であることがわかり, 
+$\Gamma(1)=1$ なので, 0以上の整数 $n$ に対して $\Gamma(n+1)=n!$ となる.
+
+Gauss積分 $I$ は $\Gamma(1/2)$ に等しい:
+\[
+I
+=2\int_0^\infty e^{-x^2}\,dx
+=2\int_0^\infty e^{-t} \frac{t^{-1/2}}{2}\,dt
+=\int_0^\infty e^{-t}t^{1/2-1}\,dt
+=\Gamma(1/2).
+\]
+2つ目の等号で $x=\sqrt{t}$ とおいた.
+したがって $\Gamma(1/2)^2=\pi$ を証明できれば
+Gauss積分が計算できたことになる.
+
+ベータ函数は以下のような複数の表示を持つ:
+\begin{align*}
+B(p,q)
+=2\int_0^{\pi/2} \cos^{2p-1}\theta\,\sin^{2q-1}\theta\,d\theta
+=\int_0^\infty \frac{t^{p-1}\,dt}{(1+t)^{p+q}}
+=\frac{1}{p}\int_0^\infty \frac{du}{(1+u^{1/p})^{p+q}}.
+\end{align*}
+$x=\cos^2\theta=t/(1+t)$, $t=u^{1/p}$ と変数変換した.
+3つ目の(最後の)表示の $p=1/2$ の場合の被積分函数
+が $t$ 分布の確率密度函数の表示で使用され,
+2つ目の表示の被積分函数は $F$ 分布の確率密度函数の表示で使用される.
+$\Gamma(1/2)$ のGauss積分による表示の被積分函数は
+正規分布の確率密度函数の表示で使用され, 
+ガンマ函数の定義式の被積分函数は $\chi^2$ 分布の被積分函数の表示で使用される.
+このようにガンマ函数とベータ函数は実用的によく利用される確率分布を
+理解するためには必須の教養になっている.
+
+特に最初の表示より $B(1/2,1/2)=\pi$ となることがわかる.
+ゆえに, もしも
+\[
+\Gamma(p)\Gamma(q)=\Gamma(p+q)B(p,q)
+\]
+が示されたならば, $\Gamma(1/2)^2=B(1/2,1/2)=\pi$ となることがわかる.
+したがってGauss積分の計算はガンマ函数とベータ函数のあいだの関係式を
+示すことに帰着される.
+
+ガンマ函数とベータ函数のあいだの関係式は1変数の置換積分と
+積分順序の交換のみを使って証明可能である.
+以下でそのことを簡単に説明しよう.
+条件 $A$ に対して, $x,y$ が $A$ をみたすとき値が $1$ になり, 
+それ以外のときに値が $0$ になる $x,y$ の函数を $1_A(x,y)$ と書くことにすると,
+\begin{align*}
+\Gamma(p)\Gamma(q)
+&=
+\int_0^\infty
+\left(
+\int_0^\infty e^{-(x+y)} x^{p-1} y^{q-1}\,dy
+\right)\,dx
+\\ &
+=
+\int_0^\infty
+\left(
+\int_x^\infty e^{-z} x^{p-1} (z-x)^{q-1}\,dz
+\right)\,dx
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^\infty 1_{x<z}(x,z) e^{-z} x^{p-1} (z-x)^{q-1}\,dz
+\right)\,dx
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^\infty 1_{x<z}(x,z) e^{-z} x^{p-1} (z-x)^{q-1}\,dx
+\right)\,dz
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^z e^{-z} x^{p-1} (z-x)^{q-1}\,dx
+\right)\,dz
+\\ &
+=
+\int_0^\infty
+\left(
+\int_0^1 e^{-z} (zt)^{p-1} (z-zt)^{q-1}z\,dt
+\right)\,dz
+\\ &
+=\int_0^\infty e^{-z}z^{p+q-1}\,dz
+\,\int_0^1 t^{p-1}(1-t)^{q-1}\,dt
+=\Gamma(p+q)B(p,q).
+\end{align*}
+2つ目の等号で $y=z-x$ と置換積分し, 
+4つ目の等号で積分の順序を交換し, 
+6つ目の等号で $x=zt$ と置換積分した.
+
+
+\subsection{他の方法}
+
+他の方法については
+\href
+{http://folk.ntnu.no/oistes/Diverse/gaussian-integral-puzzle.pdf}
+{Hirokazu Iwasawa, Gaussian Integral Puzzles, 
+The Mathematical Intelligencer, 
+Vol.~31, No.~3, 2009, pp.~38-41}
+および
+\href
+{http://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/StirlingsFormula/GaussianDensity/gaussiandensity.pdf}
+{Steven R.~Dunbar, Evaluation of the Gaussian Density Integral, October 22, 2011}
+を参照して欲しい.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: ガンマ函数}
+
+\secref{sec:GaussGamma}でガンマ函数について簡単に解説した.
+以下ではそこでは解説できなかったガンマ函数の性質について説明しよう.
+
+\subsection{ガンマ函数と正弦函数の関係式}
+
+\secref{sec:GaussGamma}で示した $\Gamma(1/2)^2=B(1/2,1/2)=\pi$ は
+次の有名な公式の特別な場合である:
+\[
+\Gamma(s)\Gamma(1-s)=B(s,1-s)=\frac{\pi}{\sin(\pi s)}.
+\]
+この公式にも複数の証明法がある. 
+1つ目の方法は $\sin z$ と $\Gamma(s)$ の無限乗積展開
+\begin{align*}
+&
+\sin z = z\prod_{n=1}^\infty\left(1-\frac{z^2}{\pi^2 n^2}\right),
+\qquad\text{{\it i.e.}}\quad
+\frac{\sin(\pi s)}{\pi}=s\prod_{n=1}^\infty\left(1-\frac{s^2}{n^2}\right),
+\\ &
+\frac{1}{\Gamma(s)}
+=\lim_{n\to\infty}\frac{s(s+1)\cdots(s+n)}{n!n^s}
+=e^{\gamma s}s\prod_{n=1}^\infty\left[ \left(1+\frac{s}{n}\right)e^{-s/n} \right]
+\end{align*}
+を使う方法である%
+\footnote{$\Gamma(s)\Gamma(1-s)=\pi/\sin(\pi s)$ を先に証明しておいて
+(たとえば複素解析を使えば容易に示せる), 
+ガンマ函数の無限乗積展開から $\sin z$ の無限乗積展開を導出することもできる.}. 
+ここで $\gamma$ はEuler定数
+\[
+\gamma=\lim_{n\to\infty}\left(\frac11+\frac12+\cdots+\frac1n-\log n\right)
+\]
+である. これらの公式を認めると,
+\[
+\frac{1}{\Gamma(s)\Gamma(1-s)}
+=\frac{1}{\Gamma(s)(-s)\Gamma(-s)}
+=\frac{s(-s)}{-s}\prod_{n=1}^\infty\left[\left(1+\frac{s}{n}\right)\left(1-\frac{s}{n}\right)\right]
+=\frac{\sin(\pi s)}{\pi}.
+\]
+2つ目の方法は次の定積分を複素解析を用いて計算することである:
+\[
+\Gamma(s)\Gamma(1-s)=B(s,1-s) = \int_0^\infty \frac{t^{s-1}}{1+t}\,dt.
+\]
+$0<s<1$ であると仮定し, $0<\eps<1<R$ に対して定まる次の積分経路を $C$ と書く:
+まず $\eps$ から $R$ までまっすぐに進む. 
+次に複素平面上の原点を中心とする半径 $R$ の円周上を反時計回りで1周する.
+そして $R$ から $\eps$ までまっすぐに進む.
+最後に複素平面上の原点を中心とする半径 $\eps$ の円周上を時計回りで1周する.
+このとき $\int_C z^{s-1}\,dz/(1+z)$ は $z^{s-1}\,dz/(1+z)$ の $z=-1$ での留数
+の $2\pi i$ 倍に等しい:
+\[
+\int_C \frac{z^{s-1}\,dz}{1+z} = - 2\pi i e^{\pi i s}.
+\]
+$\eps\to 0$, $R\to\infty$ の極限を考えることによって $\int_C z^{s-1}\,dz/(1+z)$ は
+$\int_0^\infty t^{s-1}\,dt/(1+z)$ からそれ自身の $e^{2\pi i s}$ 倍%
+\footnote{$z^s$ の値は原点の周囲を反時計回りに1周すると $e^{2\pi i s}$ 倍になる.}
+を引いた結果に等しいこともわかる:
+\[
+\int_C \frac{z^{s-1}\,dz}{1+z} = (1-e^{2\pi i s})\int_0^\infty\frac{t^{s-1}\,dt}{1+t}.
+\]
+以上の2つの結果を比較することによって
+\[
+B(s,1-s)
+=\int_0^\infty \frac{t^{s-1}\,dt}{1+t}
+=\frac{-2\pi i e^{\pi i s}}{1-e^{2\pi i s}}
+=\frac{2\pi i}{e^{\pi i s}-e^{-\pi i s}}
+=\frac{\pi}{\sin(\pi s)}.
+\]
+この積分は $t=u^{1/s}$ とおくことによって
+$s^{-1}\int_0^\infty du/(1+u^{1/s})$ に変形できる. 
+ゆえに, 次の公式も得られたことになる:
+\[
+B(1+s,1-s)=sB(s,1-s)
+=\int_0^\infty \frac{du}{1+u^{1/s}} = \frac{\pi s}{\sin(\pi s)}.
+\]
+この公式を直接示すこともできる.
+$R>1$ であるとし, 
+複素平面上を原点から $R$ までまっすぐ進み,
+次に時計回りに角度 $2\pi s$ だけ回転して $Re^{2\pi is}$ まで進み, 
+そこから原点までまっすぐに戻る経路を $C$ と書くと, 
+$\int_C dz/(1+z^{1/s})$ は $dz/(1+z^{1/s})$ の $z=e^{\pi is}$ に
+おける留数 $-s e^{\pi is}$ の $2\pi i$ 倍に等しく,
+$R\to\infty$ の極限で $\int_C dz/(1+z^{1/s})$ 
+は $\int_0^\infty du/(1+u^{1/s})$ からそれ自身の $e^{2\pi is}$ 倍を引いた
+ものに等しい%
+\footnote{$z^{1/s}$ は $z$ を $e^{2\pi is}$ 倍しても不変だが, 
+$dz$ は $e^{2\pi is}$ 倍になる.}. ゆえに
+\[
+\int_0^\infty \frac{du}{1+u^{1/s}}
+=\frac{-2\pi is e^{\pi is}}{1-e^{2\pi is}}
+=\frac{2\pi is}{e^{\pi is}-e^{-\pi is}}
+=\frac{\pi s}{\sin(\pi s)}.
+\]
+定積分を計算した結果に円周率倍がよく現われるのは
+極の周囲を1周する積分が留数の $2\pi i$ 倍になるからである. 
+
+複素解析と初等函数とガンマ函数の解説については, 
+\href{http://www.amazon.co.jp/dp/4000051717}
+{高木貞治『解析概論』(岩波書店)}の第5章(201--267頁)をおすすめする.
+複素函数論の一般論だけではなく, 
+具体的な函数の性質の詳しい解説も含めて67頁におさまっているのは
+驚異的だと思う.
+
+
+\subsection{ガンマ函数の無限乗積展開}
+\label{sec:Gamma-prod}
+
+函数 $f(s)$ ($s>0$)は以下の3つの条件を満たしていると仮定する:
+\begin{itemize}
+\item 正値性: $f(s)>0$ ($s>0$),
+\item 函数等式: $f(s+1)=sf(s)$ ($s>0$),
+\item 対数凸性: $\log f(s)$ は $s>0$ の下に凸な函数である.
+\end{itemize}
+この3つの条件を満たす函数は次の表示を持つ:
+\[
+f(s) = f(1)\lim_{n\to\infty}\frac{n!n^s}{s(s+1)\cdots(s+n)}
+\qquad (s>0).
+\tag{$*$}
+\]
+特に $\Gamma(s)$ が上の3つの条件と $\Gamma(1)=1$ を満たしていることから, 
+{\bf Gaussの公式}
+\[
+\Gamma(s)=\lim_{n\to\infty}\frac{n!n^s}{s(s+1)\cdots(s+n)}
+\]
+が成立しており, 上の3つの条件を満たしている函数は $\Gamma(s)$ の定数倍
+になることもわかる.
+
+以上で述べたことを証明しよう.
+
+まず, ($*$)の極限の分子分母をひっくり返して得られる極限
+\[
+\lim_{n\to\infty}\frac{s(s+1)\cdots(s+n)}{n!n^s}
+\]
+が常に収束することを示そう.
+\begin{align*}
+&
+\frac{s(s+1)\cdots(s+n)}{n!n^s}
+\\ &
+=
+s\left(1+\frac{s}{1}\right)\left(1+\frac{s}{2}\right)\cdots\left(1+\frac{s}{n}\right)
+e^{-s\log n}
+\\ &
+=
+s\left(1+\frac{s}{1}\right)e^{-s}\left(1+\frac{s}{2}\right)e^{-\frac{s}{2}}
+ \cdots\left(1+\frac{s}{n}\right)e^{-\frac{s}{n}}
+e^{s\left(1+\frac{1}{2}+\cdots+\frac{1}{n}-\log n\right)}
+\end{align*}
+$1+\frac{1}{2}+\cdots+\frac{1}{n}-\log n$ は $n\to\infty$ でEuler定数 $\gamma$ に
+収束する%
+\footnote{$1/x$ は単調減少函数なので, 
+$1+1/2+\cdots+1/n-\log n\geqq\int_1^{n+1}dx/x-\log n=\log(n+1)-\log n\geqq 0$
+でかつ $1/(n+1)\leqq\int_n^{n+1}dx/x=\log(n+1)-\log n$ なので,
+$1+1/2+\cdots+1/n-\log n$ は有界かつ単調減少する. ゆえに収束する.}.
+ゆえに $\prod_{k=1}^n(1+s/k)e^{-s/k}$ が $n\to\infty$ で収束することを示せばよい. 
+$z$ の複素正則函数 $(1+z)e^{-z}-1$ は原点 $z=0$ で2位の零点を持つので, 
+$(1+z)e^{-z}=1+O(z^2)$ ($z\to 0$) となる.
+ゆえに $(1+s/k)e^{-s/k}=1+O(s^2/k^2)$ ($k\to\infty$).
+これより無限積 $\prod_{k=1}^\infty(1+s/k)e^{-s/k}$ が収束することがわかる.
+まとめ:
+\[
+\lim_{n\to\infty}\frac{s(s+1)\cdots(s+n)}{n!n^s}
+=e^{\gamma s}s\prod_{n=1}^\infty\left[ \left(1+\frac{s}{n}\right)e^{-s/n} \right]
+\]
+は常に収束する%
+\footnote{この極限を $1/\Gamma(s)$ の定義とすることもできる.
+この方法であれば最初から $1/\Gamma(s)$ が複素平面全体で定義されており, 
+$\Gamma(s)$ の極が $s=0,-1,-2,\ldots$ のみにあることも自明になる.}.
+右辺の無限積が $1/\Gamma(s)$ に等しいという公式を{\bf Weierstrass の公式}と
+呼ぶことがある.
+
+この極限の逆数を $F(s)$ と書くと, 
+\[
+F(s+1)
+=\lim_{n\to\infty}
+\frac{ns}{s+1+n}\frac{n!n^s}{s(s+1)\cdots(s+n)}
+=sF(s), \quad
+F(1)=\frac{n!\,n}{(n+1)!}=1.
+\]
+ゆえに目標である($*$)の公式 $f(s)=f(1)F(s)$ ($s>0$) を
+示すためには, $0<s<1$ のとき $f(s)=f(1)F(s)$ となることを示せば十分である.
+
+次に, $f(s)$ の正値性と対数凸性を用いて, 
+2以上の整数 $n$ と $0<s<1$ について, 
+$f(n+s)$ の大きさを $f(n-1),f(n),f(n+1)$ を用いて上下から評価する不等式
+\[
+\left(\frac{f(n)}{f(n-1)}\right)^s f(n)
+\leqq f(n+s)
+\leqq \left(\frac{f(n+1)}{f(n)}\right)^s f(n)
+\qquad(0<s<1)
+\tag{$\#$}
+\]
+を示そう. 一般に下に凸な函数 $g(s)$ は $a<b<c$ に対して
+\[
+\frac{g(b)-g(a)}{b-a} 
+\leqq \frac{g(c)-g(a)}{c-a} 
+\leqq \frac{g(c)-g(b)}{c-b}
+\]
+を満たしている
+\footnote{図を描けば直観的に明らかだろう.}.
+これの左半分を $g(s)=\log f(s)$, $(a,b,c)=(n,n+s,n+1)$ に
+適用すると,
+\[
+\frac{\log f(n+s)-\log f(n)}{s}\leqq \log f(n)-\log f(n+1).
+\]
+右半分を $(a,b,c)=(n-1,n,n+s)$ に適用すると, 
+\[
+\log f(n)-\log f(n-1)\leqq\frac{\log f(n+s)-\log f(n)}{s}.
+\]
+以上の2つの不等式を整理し直すと $f(n+s)$ の評価($\#$)が得られる.
+
+$f(n+s)$ の評価($\#$)に $f$ の函数等式を適用しよう. $f$ の函数等式より
+\[
+\frac{f(n+1)}{f(n)}=n, \quad
+f(s+n)=(s+n-1)\cdots(s+1)sf(s), \quad
+f(n)=(n-1)!f(1)
+\]
+などが成立している.
+($\#$)の左半分で $n$ を $n+1$ に置き換えると,
+\[
+n^s n! f(1)\leqq (n+s)(n-1+s)\cdots s f(s),
+\qquad\therefore\quad
+\frac{f(0)n!n^s}{s(s+1)\cdots(s+n)}\leqq f(s).
+\]
+($\#$)の右半分より, 
+\begin{align*}
+f(s)\leqq \frac{f(1)(n-1)!n^s}{s(s+1)\cdots(s+n-1)}
+=\frac{n+s}{n}\frac{f(1)n!n^s}{s(s+1)\cdots(s+n)}.
+\end{align*}
+以上をまとめると
+\[
+\frac{f(1)n!n^s}{s(s+1)\cdots(s+n)}
+\leqq
+f(s)
+\leqq \frac{n+s}{n}
+\frac{f(1)n!n^s}{s(s+1)\cdots(s+n)}.
+%\tag{$\&$}
+\]
+これより, 示したかった($*$)が得られる.
+
+ガンマ函数が3つの条件(正値性, 函数等式, 対数凸性)を満たしていることを
+証明しよう. 正値性は定義 $\Gamma(s)=\int_0^\infty e^{-x}x^{s-1}\,dx$ 
+より明らかであり, 函数等式は部分積分によって容易に証明される.
+対数凸性を示すためには $g(s)=\log\Gamma(s)$ とおくとき, 
+$g''(s)\geqq 0$ を示せば十分である.
+より一般に次のように定義される函数 $f(s)$ に対して $g(s)=\log f(s)$ 
+とおくと $g''(s)\geqq 0$ となることを示そう:
+\[
+f(s)=\int_a^b e^{s\phi(x)+\psi(x)}\,dx.
+\]
+ここで $\phi(x),\psi(x)$ は実数値函数であり, 
+$s$ に関する積分記号化の微分が可能だと仮定しておく.
+$(a,b)=(0,\infty)$, $\phi(x)=\log x$, $\psi(x)=-x-\log x$ の
+とき $f(s)=\Gamma(s)$ となる%
+\footnote{$(a,b)=(0,1)$, $\psi(x)=\log x$ $\phi(x)=t\log(1-x)$ 
+のとき $f(s)=B(s,t)$ となる. 
+$B(s,t)$ も $s$ の函数として対数凸になる.
+ゆえに $F(s)=\Gamma(s+t)B(s,t)$ も $s$ の函数として対数凸になる.
+$F(s+1)=sF(s)$, $F(1)=\Gamma(t)$ なので $F(s)=\Gamma(s)\Gamma(t)$
+であることがわかる. このようにガンマ函数の特徴付けによって
+ガンマ函数とベータ函数の関係式を証明することもできる.}. 
+このとき, $g(s)=\log f(s)$ とおくと
+\[
+g''
+=\frac{d}{ds}\frac{f'}{f}
+=\frac{ff''-f'^2}{f^2}.
+\]
+ゆえに $f'^2-ff''\leqq 0$ を示せばよい.
+$f(s)$ の定義より,
+\begin{align*}
+f(s)\lambda^2+2f'(s)\lambda+f''(s)
+&
+=\int_a^b e^{s\phi(x)+\psi(x)}(\lambda^2+2\phi(x)\lambda+\phi(x)^2)\,dx
+\\ &
+=\int_a^b e^{s\phi(x)+\psi(x)}(\lambda+\phi(x))^2\,dx
+\geqq 0.
+\end{align*}
+ゆえに $f'^2-ff''\leqq 0$ となる.
+特に $\Gamma(s)$ も対数凸である.
+
+これでガンマ函数のGaussの公式と無限乗積展開も証明されたことになる.
+
+補足. 以上で説明したガンマ函数に関するGaussの公式の証明は
+ガンマ函数そのものではなく、正値対数凸でガンマ函数と同じ函数等式を
+満たす函数に対して証明されたのであった. 
+積分で定義されたガンマ函数に関するGaussの公式を
+以下のようにして直接的に証明することもできる.
+函数 $n^s B(s,n+1)$ について,
+\[
+n^sB(s,n+1)
+=\frac{n^s\Gamma(s)\Gamma(n+1)}{\Gamma(s+n+1)}
+=\frac{n^s n!}{s(s+1)\cdots(s+n)}
+\]
+でかつ
+\[
+n^sB(s,n+1)
+=n^s\int_0^1 x^{s-1}(1-x)^n\,dx
+=\int_0^n t^{s-1}\left(1-\frac{t}{n}\right)^n\,dt
+\]
+2つ目の等号で $x=t/n$ とおいた. ゆえに, $n\to\infty$ のとき, 
+\[
+\frac{n^s n!}{s(s+1)\cdots(s+n)}
+=\int_0^n t^{s-1}\left(1-\frac{t}{n}\right)^n\,dt
+\longrightarrow
+\int_0^\infty t^{s-1}e^{-t}\,dt
+=\Gamma(s).
+\]
+最後のステップを別の方法で証明することもできる.
+評価($\#$)を $f(s)=\Gamma(s)$ の場合に適用すると,
+$0<s<1$ のとき
+\[
+\Gamma(s+n+1)\sim n^s\Gamma(n+1)
+\qquad(n\to\infty).
+\]
+ガンマ函数の函数等式より, これは任意の $s>0$ で成立している. ゆえに
+\[
+\frac{n^s n!}{s(s+1)\cdots(s+n)}
+=\frac{n^s\Gamma(s)\Gamma(n+1)}{\Gamma(s+n+1)}
+\longrightarrow
+\Gamma(s)
+\qquad(n\to\infty).
+\]
+このように, ガンマ函数の正値性, 対数凸性, 函数等式による特徴付けを
+経由せずに, 直接的にガンマ函数に関するGaussの公式を(したがって無限乗積展開も)
+得ることは易しい.  以上によって次の公式も証明されたことになる:
+\[
+\lim_{n\to\infty}n^s B(s,n+1)=\Gamma(s).
+\]
+
+まとめ:
+\[
+\Gamma(s)
+=\lim_{n\to\infty}n^sB(s,n+1)
+=\lim_{n\to\infty}\frac{n^s n!}{s(s+1)\cdots(s+n)}
+=\frac{1}{e^{\gamma s}s}\prod_{n=1}^\infty\left[\left(1+\frac{s}{n}\right)e^{-s/n}\right]^{-1}.
+\]
+ここで $\gamma$ はEuler定数である.
+
+
+
+\subsection{正弦函数の無限乗積展開}
+
+ガンマ函数の無限乗積展開の応用として $\sin z$ の無限乗積展開を証明しよう.
+積分の順序交換を用いて証明されるガンマ函数とベータ函数の関係と
+複素解析を用いて証明されるベータ函数と正弦函数の関係より
+\[
+\Gamma(s)\Gamma(1-s)=B(s,1-s)=\frac{\pi}{\sin(\pi s)}.
+\]
+一方, ガンマ函数の無限乗積展開より,
+\[
+\frac{1}{\Gamma(s)\Gamma(1-s)}
+=\frac{1}{\Gamma(s)(-s)\Gamma(-s)}
+=s\prod_{n=1}^\infty\left(1-\frac{s^2}{n^2}\right).
+\]
+以上を比較すると,
+\[
+\sin(\pi s)=\pi s\prod_{n=1}^\infty\left(1-\frac{s^2}{n^2}\right),
+\qquad\therefore\quad
+\sin z=z\prod_{n=1}^\infty\left(1-\frac{z^2}{\pi^2n^2}\right).
+\]
+このように, $\sin(\pi s)=\pi/(\Gamma(s)(-s)\Gamma(-s))$ なので
+ガンマ函数の無限乗積展開\footnote{直接証明すれば易しい.}から
+正弦函数の無限乗積展開が得られるのである.
+
+正弦函数の無限乗積展開を直接示すためには, 
+$\sin z$ の対数微分 $\cot z$ の部分分数展開
+\[
+\cot z 
+= \frac{1}{z} 
++ \sum_{n=1}^\infty\left(\frac{1}{z-n\pi}+\frac{1}{z+n\pi}\right)
+\]
+を複素解析を用いて証明し, 項別に積分すればよい.
+詳しくは高木貞治『解析概論』の235頁を見よ.
+
+以下では, 複素解析ではなく, 
+Fourier級数の理論を使って正弦函数の無限乗積展開を得る方法
+を紹介しておこう\footnote{以下では厳密な議論はしないが,
+Fourier級数の収束については\secref{sec:Fseries-N}を参照せよ.}. 
+
+まず $x$ の函数 $\cos(tx)$ の $-\pi\leqq x\leqq\pi$ での値のFourier級数展開を求め, 
+そこから $\cot(\pi t)$ の部分分数展開が得られることを示そう%
+\footnote{$x$ の偶函数 $\cos(tx)$ の $-\pi\leqq x\leqq\pi$ での値を周期 $2\pi$ 
+で $\R$ 全体に拡張して得られる連続周期函数 $f_t(x)$ のFourier級数を考える.
+$\cos(tx)$ の $0\leqq x<2\pi$ での値を周期 $2\pi$ で拡張するのではない
+ことに注意せよ.
+}.
+$e^{itx}$ の Fourier係数は
+\begin{align*}
+a_n 
+&= \frac{1}{2\pi}\int_{-\pi}^\pi e^{-inx}e^{itx}\,dx
+=\frac{1}{2\pi}\left[ \frac{e^{-inx}e^{itx}}{i(t-n)} \right]_{x=-\pi}^{x=\pi}
+\\ &
+=\frac{(-1)^n(e^{i\pi t}-e^{-i\pi t})}{2\pi i(t-n)}
+=(-1)^n\frac{\sin(\pi t)}{\pi}\frac{1}{t-n}
+\end{align*}
+なので, $e^{itx}$ のFourier級数展開は
+\begin{align*}
+e^{itx}
+&=\lim_{N\to\infty} \sum_{n=-N}^N a_n e^{inx}
+=\frac{\sin(\pi t)}{\pi}
+\lim_{N\to\infty} \sum_{n=-N}^N \frac{(-1)^n e^{inx}}{t-n}
+\\ &
+=\frac{\sin(\pi t)}{\pi} \left[
+  \frac{1}{t} 
+  + \sum_{n=1}^\infty (-1)^n 
+    \left(\frac{e^{inx}}{t-n}+\frac{e^{-inx}}{t+n} \right)
+\right]
+\\ &
+=\frac{\sin(\pi t)}{\pi} \left[
+  \frac{1}{t} 
+  + \sum_{n=1}^\infty (-1)^n 
+    \left(\frac{2t\cos(nx)}{t^2-n^2}+i\frac{2n\sin(nx)}{t^2-n^2} \right)
+\right]
+\end{align*}
+になる. ゆえに $\cos(tx)$ のFourier級数展開は
+\[
+\cos(tx)
+=\frac{\sin(\pi t)}{\pi}
+\left[
+  \frac{1}{t} + \sum_{n=1}^\infty (-1)^n\frac{2t\cos(nx)}{t^2-n^2}
+\right]
+\]
+になる. したがって, 
+\[
+\pi\cot(tx)
+=\frac{\pi\cos(\pi t)}{\sin(\pi t)}
+=\frac{1}{t} + \sum_{n=1}^\infty (-1)^n\frac{2t\cos(nx)}{t^2-n^2}
+\]
+両辺の $x\to\pi$ での極限を取ることによって,
+\[
+\pi\cot(\pi t)
+=\frac{1}{t} + \sum_{n=1}^\infty\frac{2t}{t^2-n^2}
+=\frac{1}{t} + \sum_{n=1}^\infty\left(\frac{1}{t-n}+\frac{1}{t+n}\right).
+\]
+$\sin(\pi t)$ の対数微分は $\pi\cot(\pi t)$ に等しいので,
+\[
+\frac{d}{dt}\log\frac{\sin(\pi t)}{\pi t}
+=\sum_{n=1}^\infty\left(\frac{1}{t-n}+\frac{1}{t+n}\right)
+=\sum_{n=1}^\infty\left( \frac{-1/n}{1-t/n} + \frac{1/n}{1+t/n} \right).
+\]
+両辺を $t=0$ から $t=s$ まで積分すると,
+\[
+\log\frac{\sin(\pi s)}{\pi s}
+=\sum_{n=1}^\infty
+\left(\log\left( 1-\frac{s}{n} \right)+\log\left( 1+\frac{s}{n} \right)\right)
+=\log\prod_{n=1}^\infty\left( 1-\frac{s^2}{n^2} \right)
+\]
+したがって
+\[
+\sin(\pi s)
+=\pi s \prod_{n=1}^\infty\left( 1-\frac{s^2}{n^2} \right).
+\]
+
+$\sin$ の無限乗積展開とガンマ函数の無限乗積展開の公式を認めて使うことを許せば, 
+$1/(\Gamma(s)\Gamma(1-s))$ と $\sin(\pi s)$ を比較することによって
+\[
+\Gamma(s)\Gamma(1-s)=\frac{\pi}{\sin(\pi s)}
+\]
+を示せる. さらに $\Gamma(p)\Gamma(q)=\Gamma(p+q)B(p,q)$ を
+1変数の積分の置換積分と積分の順序交換のみを用いて容易に証明できることを
+使えば, 次の公式も得られる:
+\[
+\frac{\pi}{\sin(\pi s)}
+=B(s,1-s)
+=\int_0^1x^s(1-x)^{1-s}\,dx
+=\int_0^\infty \frac{t^{s-1}\,dt}{1+t}
+=\frac{1}{s}\int_0^\infty\frac{du}{1+u^{1/s}}.
+\]
+これらの公式はどれか一つを証明できれば他も芋づる式に得られるようになっている.
+
+
+\subsection{Wallisの公式}
+\label{sec:Wallis}
+
+次の公式は{\bf Wallisの公式}と呼ばれている:
+\[
+\lim_{n\to\infty}\frac{2^{2n}(n!)^2}{(2n)!\sqrt{n}}
+=\sqrt{\pi},
+\qquad
+\text{\it i.e.}\quad
+\binom{2n}{n}\sim\frac{2^{2n}}{\sqrt{\pi n}}.
+\]
+Wallisの公式の面白いところは円周率の平方根が
+整数の比の極限で表わされているところである.
+Wallisの公式はガンマ函数に関するGaussの公式に $s=1/2$ を代入すれば得られる:
+\begin{align*}
+\sqrt{\pi}&
+=\Gamma(1/2)
+=\lim_{n\to\infty}\frac{n^{1/2} n!}{(1/2)(1/2+1)\cdots(1/2+n)}
+\\ &
+=\lim_{n\to\infty}
+\frac{2^{n+1}n^{1/2}n!}{1\cdot3\cdots(2n+1)}
+=\lim_{n\to\infty}
+\frac{2^{n+1}n^{1/2}n!}{1\cdot3\cdots(2n+1)}\frac{2^n n!}{2\cdot4\cdots(2n)}
+\\ &
+=\lim_{n\to\infty}
+\frac{2^{2n+1}n^{1/2}(n!)^2}{(2n+1)!}
+=\lim_{n\to\infty}
+\frac{2^{2n}(n!)^2}{(2n)!}\frac{2n^{1/2}}{2n+1}
+=\lim_{n\to\infty}
+\frac{2^{2n}(n!)^2}{(2n)!\sqrt{n}}.
+\end{align*}
+
+次の公式も{\bf Wallisの公式}と呼ばれている:
+\[
+\prod_{n=1}^\infty\frac{2n\cdot 2n}{(2n-1)(2n+1)} = \frac{\pi}{2}.
+\] 
+この公式は次の公式で $s=1/2$ とおけば得られる:
+\[
+\sin(\pi s) 
+= \frac{\pi}{\Gamma(s)\Gamma(1-s)}
+= \pi s\prod_{n=1}^\infty\left(1-\frac{s^2}{n^2}\right).
+\]
+実際, 
+\[
+1=\sin\left(\frac{\pi}{2}\right)
+=\frac{\pi}{2}\prod_{n=1}^\infty\left(1-\frac{1}{(2n)^2}\right)
+=\frac{\pi}{2}\prod_{n=1}^\infty\frac{(2n-1)(2n+1)}{2n\cdot 2n}.
+\]
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

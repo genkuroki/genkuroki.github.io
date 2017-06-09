@@ -1,0 +1,934 @@
+<html lang="ja">
+<head>
+<title>日本語 LaTeX を使うときに注意するべきこと</title>
+<link rel="stylesheet" type="text/css" href="../default.css" />
+<meta http-equiv="Content-Type" CONTENT="text/html; charset=UTF-8" />
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] },
+    TeX: {
+      Macros: {
+        np: ['{:}#1{:}', 1],
+        diag: '\\mathop{\\mathrm{diag}}\\nolimits',
+        C: '{\\mathbb C}',
+        R: '{\\mathbb R}',
+        Q: '{\\mathbb Q}',
+        Z: '{\\mathbb Z}'
+      }
+    }
+  });
+</script>
+<meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+</script>
+</head>
+<body>
+
+<h1><a href="#title" name="title">日本語 LaTeX を使うときに注意するべきこと</a></h1>
+
+<p><a href="http://www.math.tohoku.ac.jp/~kuroki/index-j.html">黒木玄</a></p>
+
+<p>2011年7月19日のMathJax-HTML版<br>
+2003年6月5日版のプレインテキスト版がオリジナル</p>
+
+<p>2016年7月22日：<a href="#amsthm2"><code>\usepackage{amsthm}</code> で theoremstyle を作成する方法</a>を追記した。</p>
+
+<p>内容的に古くなっている部分があるかもしれないので注意。学生の方が書いた日本語LaTeXのコードで見付けた失敗例をもとにまとめたものです。</p>
+
+<h2><a href="#saishoni" name="saishoni">最初に注意するべきこと</a></h2>
+
+<p>手書きと違ってコンピューター上で文章を書くと後で修正することが容易になる。しかし最初に書き始めるときに十分注意しておかないと、修正の手間が膨大な量に膨れ上がるので注意が必要である。手間を減らすためには最初から以下の項目に注意を払った方が良い。</p>
+
+<p>(1) 実際に論文が出版される場合には横に長過ぎる数式はうまく印刷されないか
+もしれない。</p>
+
+<p>たとえば </p>
+<pre>
+\documentclass[a4paper,10pt]{jarticle}
+</pre>
+<p>と宣言して10ポイントの小さなフォントで横幅ぎりぎりまで使った横長の数式を多用してしまったとする。そのような論文の数式は実際に出版されるときにはうまく印刷できず、困ったことになります。</p>
+
+<p>10pt ではなく、12pt としておけばそうなる確率がかなり減ります。しかし A4版の紙の横幅ぎりぎりの長さの数式は好ましくありません。最初から横に長過ぎる数式を意識的に避けるように工夫して論文を書いた方が良いでしょう。</p>
+
+<p>(2) 見た目をいじるための命令を多用しない。</p>
+
+<p>たとえば改行位置を自分好みにするために <code>\\</code> を多用するのは止めましょう。<code>\\</code> は行列を書いたり、<code>align</code> 環境などで複数行の数式を書くというような場合にのみ使用することにしましょう。</p>
+
+<p>(3) 文中の数式を意味するアルファベットは <code>$ $</code> で囲む。</p>
+
+<p>たとえば、A が数式ならば文中には <code>$A$</code> と書かなければいけません。</p>
+
+<p>(4) コンマとピリオドの後には必ず空白を入れる。</p>
+
+<p>これはまあ常識でしょう。</p>
+
+<p>(5) 数式は文中で「単語(名詞)」もしくは「文(節)」の扱いになる。</p>
+
+<p>たとえば「定数 <code>$C$</code> を <code>$\zeta(3)$</code> と定める.」と書くとき、数式の <code>$C$</code> と <code>$\zeta(3)$</code> は単語扱いになります。</p>
+
+<p>たとえば「函数 <code>$f(x)$</code> を次のように定める: <code>$f(x)=\sin x$</code>.」と書くとき、<code>$f(x)$</code> は単語扱いであり、<code>$f(x)=\sin x$</code> は文節の扱いになります。</p>
+
+<p><code>$C$</code>, <code>$\zeta(3)$</code>, <code>$f(x)$</code>, <code>$f(x)=\sin x$</code> の前後にも空白が入っていることに注意して下さい。</p>
+
+<p>(6) 後で修正が大変になりそうな部分の書き方には注意を払う。</p>
+
+<p>これは重要な一般原則です。後で修正が容易ならばいい加減に書いておいて、後で修正すれば良いだけのことですが、そうでない場合には後で大変なことになる場合があります。</p>
+
+<h2><a href="#teiri" name="teiri">定理環境で斜体を使わない</a></h2>
+
+<p>日本語で数学の文章を書くときに定理の文中のアルファベットを斜体にしない方が見ばえが良い。問題はそのための方法である。</p>
+
+<p>ときどき各定理環境ごとに <code>\upshape</code> を使用している人を見かけるが。それは良い方法とは言えない。不合理なので止めた方が良い。</p>
+
+<p>おすすめなのは以下の二つの方法である。</p>
+
+<h3><a href="#amsthm" name="amsthm"><code>\usepackage{amsthm}</code> を使う方法</a></h3>
+
+<p><code>\begin{document}</code> の前で</p>
+<pre>
+\usepackage{amsthm}
+</pre>
+<p>と宣言しておき、</p>
+<pre>
+\theoremstyle{definition}
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義}
+</pre>
+<p>と定理環境を定義しておけば定理の中身が斜体にならなくなる。</p>
+
+<p><code>\theoremstyle</code> は <code>plain</code>, <code>definiton</code>, <code>remark</code> の三種類を指定できる。</p>
+<ul>
+<li>plain では見出しは太字になり、本文は斜体になる。</li>
+<li>definiton では見出しが太字になり、本文で斜体を使わない。</li>
+<li>remark では見出しが斜体になり、本文で斜体を使わない。</li>
+</ul>
+<p>日本語で書く場合には definition スタイルだけを使うのが良さそうである。</p>
+
+<p>定理と定義は <code>\begin{document}</code> の後に以下のように書く。</p>
+<pre>
+\begin{theorem}
+ 定理の文中で alphabet は斜体にならない.
+\end{theorem}
+
+\begin{definition}
+ 定義の番号は定理とともにに通り番号になる.
+\end{definition}
+</pre>
+<p>この方法の一つ目の利点は <code>\newtheorem*</code> によって番号がつかない定理環境を定義できることである。</p>
+<pre>
+\begin{theorem*}
+ この定理には番号が付かない.
+\end{theorem*}
+
+\begin{definition*}
+ この定義には番号が付かない.
+\end{definition*}
+</pre>
+<p>二つ目の利点は <code>\usepackage{amsthm}</code> とすることによって <code>proof</code> 環境も定義されることである。日本語で書く場合には <code>\begin{document}</code> の前に</p>
+<pre>
+\renewcommand\proofname{\bf 証明}
+</pre>
+<p>と宣言しておき、以下のように証明を書けばよい.</p>
+<pre>
+\begin{proof}
+ ここに証明を書く. 
+\end{proof}
+</pre>
+<p>ただし証明の最後に箱マークが自動的に追加されてしまう。個人的にはこの点だけは <code>amsthm</code> の欠点だと思う。証明の最後の箱マークを手動で入れたい場合には<code>proof</code> 環境を以下のように定義し直せばよい。</p>
+<pre>
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+\makeatother
+</pre>
+
+<h3><a href="#amsthm2" name="amsthm2"><code>\usepackage{amsthm}</code> で theoremstyle を作成する方法</a></h3>
+
+<p>以上の方法を使うと、</p>
+<pre>
+\begin{theorem}[主定理]
+ これが主定理である.
+\end{theorem}
+</pre>
+<p>と書いたとき、「(主定理)」の部分が<b>太字</b>で印刷されなくなる(下の方で説明する <code>\usepackage{theorem}</code> を使う方法では<b>太字</b>になる)。</p>
+
+<p>この点を嫌う人は自分で <code>theoremstyle</code> を定義して使えばよい。筆者自身は以下のようにしている。</p>
+<pre>
+\newtheoremstyle{jplain}% name
+{}% space above
+{}% space below
+{\normalfont}% body font
+{}% indent amount
+{\bfseries}% theorem head font
+{.}% punctuation after theorem head
+{4pt}% space after theorem head (default: 5pt)
+{\thmname{#1}\thmnumber{#2}\thmnote{\hspace{2pt}(#3)}}% theorem head spec
+
+\theoremstyle{jplain}
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+</pre>
+<p>さらに筆者は <code>enumerate</code> 環境での番号の表示の仕方を
+<pre>
+\renewcommand\labelenumi{(\arabic{enumi})}
+\renewcommand\labelenumii{(\alph{enumii})}
+\renewcommand\labelenumiii{(\roman{enumiii})}
+</pre>
+と変えている。筆者は(1),(2),...がデフォルトであって欲しい。
+
+<h3><a href="#theorem" name="theorem"><code>\usepackage{theorem}</code> を使う方法</a></h3>
+
+<p><code>\begin{document}</code> の前で</p>
+<pre>
+\usepackage{theorem}
+</pre>
+<p>と宣言しておき、</p>
+<pre>
+\theorembodyfont{\normalfont}
+\newtheorem{theorem}{定理}
+\newtheorem{definition}[theorem]{定義}
+</pre>
+<p>と宣言しておけば定理環境の文中で斜体を使わなくなる。</p>
+
+<p>この場合には <code>proof</code> 環境が定義されないので自前で用意する必要がある。上の定義をそのまま持って来て以下を使えば良いだろう。</p>
+<pre>
+%
+% \qed を自動で入れない proof 環境を定義
+%
+\makeatletter
+\newenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\newcommand{\proofname}{証明}
+\makeatother
+</pre>
+
+<h2><a href="#benri" name="benri">日本語 LaTeX を使うときに知っておくと便利なこと</a></h2>
+
+<h3><a href="#kihon" name="kihon">日本語 LaTeX は基本的に以下のように書く。</a></h3>
+
+<pre>
+  \documentclass[12pt]{jarticle}
+  \usepackage{amsmath,amssymb}
+  %
+  % ここに自分専用のマクロや \setlength や \newtheorem などを書く。
+  %
+  \begin{document}
+
+  \title{タイトル}
+  \author{名前}
+  \date{年月日}
+  \maketitle % 上記のタイトル、名前、年月日を印刷
+  \tableofcontents % 目次を印刷
+
+  \section{序文}
+  \label{sec:intro}
+  %
+  % ここに序文の内容を書く。
+  %
+
+  \section{最初の節}
+  \label{sec:hoge} % 引用するときには「第\ref{sec:hoge}節」と書く。
+
+  % ここに色々書く。
+
+  \section{次の節}
+  \label{sec:moge}
+
+  % ここに色々書く。
+
+  \section{終わりの節}
+  \label{sec:hoe}
+
+  % ここに色々書く。
+
+  % 以下は文献表。引用するときは \cite{chosha1} のように書く。
+  %
+  \begin{thebibliography}{99}
+
+  \bibitem{chosha1}
+  著者1, 論文タイトル1, 雑誌名, Vol.~12, No.~2, 1999, 23--45
+
+  \bibitem{chosha2}
+  著者2, 論文タイトル2, 雑誌名, Vol.~104, No.~4, 2000, 223--256
+
+  \end{thebibliography}
+
+  \end{document}
+</pre>
+
+<p>私はいつも <code>\usepackage{amsmath,amssymb}</code> を使っているので、以下これを仮定してしまうことがあるかもしれない。</p>
+
+<h3><a href="#bango" name="bango">定理番号と式番号について</a></h3>
+
+<p>たとえば、</p>
+<pre>
+\newtheorem{theorem}{定理}
+\newtheorem{prop}[theorem]{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem{rem}[theorem]{注意}
+\newtheorem{guide}[theorem]{参考}
+
+\numberwithin{theorem}{section}  % 定理番号を「定理2.3」のように印刷
+\numberwithin{equation}{section} % 式番号を「(3.5)」のように印刷
+</pre>
+<p>と定義しておくと、定理と式番号が 3.1, 3.2, ... (節番号.定理もしくは式の番号) のようになる。使い方は以下の通り。たとえば、</p>
+<pre>
+  \begin{theorem}
+  \label{th:hoge}
+    定理の内容.
+  \end{theorem}
+</pre>
+<p>と書いておき、</p>
+<pre>
+  定理 \ref{th:hoge} によれば
+</pre>
+<p>と書くと「定理 3.4 によれば」のように印刷される。たとえば、</p>
+<pre>
+  \begin{equation}
+    A = B.
+  \label{eq:moge}
+  \end{equation}
+</pre>
+<p>と書いておき、</p>
+<pre>
+  式 (\ref{eq:moge}) によれば
+</pre>
+<p>と書くと「式 (2.1) によれば」のように印刷される。実は</p>
+<pre>
+  式 \eqref{eq:moge} によれば
+</pre>
+<p>と書くこともできる。こちらの方が良いだろう。</p>
+
+<h3><a href="#a4" name="a4">A4版の紙をいっぱいに使う方法</a></h3>
+
+<p>ページ番号を一番下に印刷する場合</p>
+<pre>
+%\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.8cm}
+\setlength{\textheight}{25cm}
+%\setlength{\topmargin}{-1.3cm}
+%\setlength{\textheight}{24cm}
+\setlength{\textwidth}{16cm}
+</pre>
+<p>ページ番号とヘッディングを一番上に印刷する場合</p>
+<pre>
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+%\setlength{\topmargin}{-0.8cm}
+%\setlength{\textheight}{24cm}
+\setlength{\textwidth}{16cm}
+</pre>
+
+<h3><a href="#proof" name="proof">証明を <code>Proof</code> 環境で書いて <code>\qed</code> マークを手動で入れる。</a></h3>
+
+<pre>
+%
+% proof environment without \qed
+%
+\makeatletter
+%\renewenvironment{proof}[1][\proofname]{\par
+\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+%\renewcommand{\proofname}{証明}
+%\renewcommand{\proofname}{Proof}
+\newcommand{\Proofname}{証明}
+%\newcommand{\Proofname}{Proof}
+\makeatother
+%
+% \qed
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+%\renewcommand\qed{\BOX}
+\newcommand\QED{\BOX}
+</pre>
+<p>たとえば、</p>
+<pre>
+  \begin{Proof}
+    ここにはできるだけクリアな証明を書く.
+    \QED
+  \end{Proof}
+</pre>
+<p>と書くと、</p>
+<pre>
+  証明.  ここにはできるだけクリアな証明を書く.  □
+</pre>
+<p>のように印刷される。たとえば、</p>
+<pre>
+  \begin{Proof}[定理\ref{thm:hoge}の証明]
+    ここにはできるだけクリアな定理\ref{thm:hoge}の証明を書く.
+    \QED
+  \end{Proof}
+</pre>
+<p>と書くと、</p>
+<pre>
+  定理3.2の証明.  ここにはできるだけクリアな定理3.2の証明を書く.  □
+</pre>
+<p>のように印刷される。</p>
+
+<h3><a href="#textasciitilde" name="textasciitilde">テキストの <code>~</code> を出力するためには <code>\textasciitilde</code> を使う。</a></h3>
+
+<p><code>http://www.math.tohoku.ac.jp/~kuroki/</code> と出力するためには</p>
+<pre>
+  http://www.math.tohoku.ac.jp/\textasciitilde kuroki/
+</pre>
+<p>と書けばよい。</p>
+
+
+<h2><a href="#shoshinsha" name="shoshinsha">初心者が陥りがちな細かな失敗</a></h2>
+
+<h3><a href="#tenten" name="tenten">点々の高さはそれを囲むモノの高さに合わせる。</a></h3>
+
+<p>たとえば、<code>$1,2,\cdots,n$</code> と書いて、</p>
+<blockquote>
+<p>$1,2,\cdots,n$</p>
+</blockquote>
+<p>と印刷するのは誤りである。なぜならば、「$\cdots$」はそれを囲む「$,$」よりも高
+い位置にあるからだ。正しくは、<code>$1,2,\ldots,n$</code> として、
+<blockquote>
+<p>$1,2,\ldots,n$</p>
+</blockquote>
+<p>と印刷しなければいけない。実は <code>$1,2,\dots,n$</code> と書けば自動的に正しい高さの点々を出力してくれる。他にも、<code>$1+2+\ldots+n$</code> と書いて、</p>
+<blockquote>
+<p>$1+2+\ldots+n$</p>
+</blockquote>
+<p>と印刷するのは誤りであり、<code>$1+2+\cdots+n$</code> もしくは <code>$1+2+\dots+n$</code> と書いて、</p>
+<blockquote>
+<p>$1+2+\cdots+n$</p>
+</blockquote>
+<p>としなければいけない。点々の高さを $+$ に合わせる。</p>
+
+<h3><a href="#sushiki" name="sushiki">数式は単語もしくは文章の扱いになる。</a></h3>
+
+<p>たとえば、「<code>$\sin x$ は解析函数である.</code>」の中の <code>\sin x</code> は単語扱い。</p>
+
+<p>しかし、「<code>函数 $f(x)$ を次のように定義する. \[ f(x) = \sin x. \]</code>」の中の <code>f(x) = \sin x</code> は文章扱いになる。最後にピリオドがついていることに注意！ 文章の最後のピリオドを忘れずに！</p>
+
+<h3><a href="#commma" name="commma">コンマを変なところに挿入しない。</a></h3>
+
+<p>たとえば、複数の等式を並べた</p>
+\begin{align*}
+   A &= B, \\
+   C &= D, \\
+   E &= F.
+\end{align*}
+<p>ではコンマが必要。しかし、式変形の</p>
+\begin{align*}
+    A &= B \\
+      &= C \\
+      &= D.
+\end{align*}
+<p>ではコンマは不要。たとえば、</p>
+\begin{align*}
+    A &= B, \\
+      &= C, \\
+      &= D.
+\end{align*}
+<p>は誤り。他にも、</p>
+\[
+    A_n = B_n,  \quad (n = 1,2,3)
+\]
+<p>の $B_n$ の後のコンマもいらない。文章の終わりならば最後にピリオドが必要：</p>
+\[
+    A_n = B_n  \quad (n = 1,2,3).
+\]
+<p>括弧の前に <code>\quad</code> と書いて空白を入れることが必要である。数式環境の中では <code>\quad</code> で空白を入れ、平文の中に数式を入れる場合は単なる空白にする。たとえば、</p>
+<pre>
+  \begin{equation*}
+    A_n = B_n \quad (n = 1,2,3).
+  \end{equation*}
+</pre>
+<p>もしくは</p>
+<pre>
+  $A_n = B_n$ ($n=1,2,3$) が成立する.
+</pre>
+<p>のように書く。</p>
+
+<h3><a href="#kaigyo" name="kaigyo"><code>align</code> 環境など以外の場所で、普通の文章を <code>\\</code> で改行してはいけない。</a></h3>
+
+<p><code>\\</code> で改行するのは止めた方が良い。段落を空行で区切るというのが基本である。適切な箇条書き環境 (<code>itemize</code>, <code>enumerate</code>, <code>description</code>, $\ldots$) を利用すると便利である。
+
+<h3><a href="#kugyo" name="kugyo">勝手に空行を入れない。</a></h3>
+
+<p>たとえば、</p>
+<pre>
+  $u(c)$ を
+
+  \begin{equation*}
+    u(c) = \log c
+  \end{equation*}
+
+  と定義する.
+</pre>
+<p>のように書いてはいけない。空行を省いて、</p>
+<pre>
+  $u(c)$ を
+  \begin{equation*}
+    u(c) = \log c
+  \end{equation*}
+  と定義する.
+</pre>
+<p>と書く。空行は論理的な段落の区切り以外には入れない。見易さのためにどうしても空行を入れたければ、</p>
+<pre>
+  $u(c)$ を
+  %
+  \begin{equation*}
+    u(c) = \log c
+  \end{equation*}
+  %
+  と定義する.
+</pre>
+<p>と書く。繰り返しになるが、空行は論理的な段落の区切り以外には入れない。印刷結果における改行と段落の区切りの違いに注意せよ。 TeX は段落と段落のあいだに微小な空白を入れてくれる。</p>
+
+<h3><a href="#kugyo2" name="kugyo2">空行を入れるべき場所には入れる。</a></h3>
+
+<p>論理的な段落の区切り目には必ず入れる。たとえば、定理や証明は一つの段落である。 <code>\section{}</code> の前後にも空行を入れた方が見易いだろう。</p>
+
+<h3><a href="#backslashspace" name="backslashspace">空白をあけるために "<code>\ </code>" (バックスラッシュ＋スペース) を濫用しない。</a></h3>
+
+<p>たとえば、</p>
+\[
+    f(x) = \cos x, \quad g(x) = \sin x \quad (0\le x<2\pi)
+\]
+と出力したければ、 \quad を用いて、
+<pre>
+  \begin{equation*}
+    f(x) = \cos x, \quad g(x) = \sin x \quad (0\le x<2\pi)
+  \end{equation*}
+</pre>
+<p>と書く。空白を出力するために <code>\quad</code> を使う。より広い空白を出したければ、<code>\qquad</code> を使う。また、</p>
+<pre>
+  $f(x) = \cos x,\ g(x) = \sin x$
+</pre>
+<p>と書くのも誤りである。これは次のように書くべきである：</p>
+<pre>
+  $f(x) = \cos x$, $g(x) = \sin x$
+</pre>
+<p>"<code>\ </code>" はほとんど使わない。</p>
+
+<p>"<code>\ </code>" は次のような場合に使う。 Comm. Math. Phys. 135 と出力したいときに、</p>
+<pre>
+  Comm.\ Math.\ Phys.\ {\bf 135}
+</pre>
+<p>のように書く。文章の終わりでない . の後には "<code>\ </code>" を入れておくと良い。</p>
+
+<h3><a href="#align" name="align"><code>eqnarray</code> 環境よりも <code>align</code> 環境を使った方が良い。</a></h3>
+
+<p><code>eqnarray</code> は等号 = の両側にたくさんのスペースを入れてしまう。AMSLaTeX の <code>align</code> 環境を使いましょう。たとえば、</p>
+  \begin{align*}
+    A &= B \\
+      &= C \\
+      &= D
+  \end{align*}
+と出力したければ、
+<pre>
+  \begin{align*}
+    A &= B \\
+      &= C \\
+      &= D
+  \end{align*}
+</pre>
+<p>もしくは</p>
+<pre>
+  \begin{align*}
+    A &= B
+    \\
+    &= C
+    \\
+    &= D
+  \end{align*}
+</pre>
+<p>と書く。たとえば、</p>
+  \begin{align}
+    A &= B
+    \notag
+    \\
+    &= C
+    \tag{2.3}
+  \end{align}
+<p>と = C の行だけに式番号を出力したければ、式番号を付けたくない行に <code>\notag</code> を書き、式番号を付ける行には引用のためのラベルを付けて、</p>
+<pre>
+  \begin{align}
+    A &= B
+    \notag
+    \\
+    &= C
+    \label{eq:A=B=C}
+  \end{align}
+</pre>
+<p>のように書く。式番号は <code>\eqref{eq:A=B=C}</code> のように引用する。</p>
+
+<p>2ヶ所以上縦に揃えたければ、 <code>alignat</code> を使う。たとえば、</p>
+  \begin{alignat*}{3}
+    A + A' &\,= B, \quad & C + C' &\,= D,      \quad & E + E' &\,= F + F' \\
+         G &\,= H, \quad &      I &\,= J + J', \quad &      K &\,= L
+  \end{alignat*}
+<p>と出力したければ、</p>
+<pre>
+  \begin{alignat*}{3}
+    A + A' &= B, \quad & C + C' &= D,      \quad & E + E' &= F + F' \\
+         G &= H, \quad &      I &= J + J', \quad &      K &= L
+  \end{alignat*}
+</pre>
+<p>解説:</p>
+<ul>
+<li><code>\\</code> が行を区切る。</li>
+<li>各行の奇数番目の <code>&</code> の位置を縦に揃える。</li>
+<li>各行の偶数番目の <code>&</code> は式のまとまりの区切り。</li>
+</ul>
+<p><code>alignat</code> でも、式番号を出したければ、<code>alignat*</code> の <code>*</code> を取れば良い。</p>
+
+<h3><a href="#nihongoinmath" name="nihongoinmath">数式の中に日本語をナマで入れてはいけない。</a></h3>
+
+<p>ある種の TeX 環境では数式の中に日本語をナマで書いてもエラーが出ないようです。しかし、それは絶対に止めて下さい。他の環境でコンパイルできなくなります。</p>
+
+<p>数式の中に普通の文章や単語を入れるためには <code>\text{ }</code> を使います。(数式中のテキストという意味)</p>
+
+<p>たとえば、</p>
+  \begin{equation*}
+    a(i) = b(i) \quad (\text{$i$ は正の偶数})
+  \end{equation*}
+<p>と出力したければ、</p>
+<pre>
+  \begin{equation*}
+    a(i) = b(i) \quad (\text{$i$ は正の偶数})
+  \end{equation*}
+</pre>
+<p>と書く。 <code>\text{}</code> であり、 <code>\textstyle{}</code> ではないことに注意せよ！</p>
+
+<h3><a href="#Hom" name="Hom">Hom などを数式中にナマで書いて斜字体にしないように気を付ける。</a></h3>
+
+<p>Hom などは <code>mathrm</code> で印刷しなければいけません。しかし、 Hom の周囲には微小な空白が必要です。微小な空白を自動的に挿入するためには、</p>
+<pre>
+  \newcommand\Hom{\mathop{\mathrm{Hom}}\nolimits}
+</pre>
+<p>もしくは <code>amsmath</code> の <code>\operatorname</code> を使って、</p>
+<pre>
+  \newcommand\Hom{\operatorname{Hom}}
+</pre>
+<p>と定義して、 \Hom を使えば良い。 ここで \nolimits は</p>
+<pre>
+  \Hom_R(M, N)
+</pre>
+<p>が</p>
+\[
+\newcommand\Hom{\mathop{\mathrm{Hom}}\nolimits}
+\Hom_R(M, N)
+\]
+<p>のように印刷されるために必要。 \nolimits がないと、</p>
+\[
+\renewcommand\Hom{\mathop{\mathrm{Hom}}}
+\Hom_R(M, N)
+\]
+<p>と印刷されてしまう。</p>
+
+<p>proj lim や ind lim の定義では <code>\nolimits</code> を付けないか、<code>\operatorname*</code>を使う。たとえば、</p>
+<pre>
+  \newcommand\indlim{\mathop{\mathrm{ind\,lim}}}
+  \renewcommand\projlim{\mathop{\mathrm{proj\,lim}}}
+</pre>
+<p>もしくは</p>
+<pre>
+  \newcommand\indlim{\operatorname*{ind\,lim}}
+  \renewcommand\projlim{\operatorname*{proj\,lim}}
+</pre>
+<p>と定義したとき、 <code>\indlim_{n\to\infty} M_n</code> は</p>
+\[
+\newcommand\indlim{\mathop{\mathrm{ind\,lim}}}
+\indlim_{n\to\infty}\, M_n
+\]
+<p>と印刷される。</p>
+
+<h3><a href="#hoge" name="hoge">前の行の終わりが日本語なのに行の先頭に <code>$hoge$</code> と数式を書かない。</a></h3>
+
+<p><b>2016年7月22日：この節の内容は時代遅れであるが、削除せずに残しておく。現代の読者はこの節の内容を無視して欲しい。</b></p>
+
+<p>たとえば、</p>
+<pre>
+  これは
+  $hoge$ なのだ.
+</pre>
+<p>と書くと、「これは$hoge$ なのだ.」のように、前の行の日本語の「これは」と数式の $hoge$ がぴったりくっついてしまう。「これは」のあとに微小な空白を入れて「これは hoge なのだ.」のように印刷するためには、</p>
+<pre>
+  これは %
+  $hoge$ なのだ.
+</pre>
+<p>のように前の行の終わりに、空白と <code>%</code> を書いておくか、</p>
+<pre>
+  これ
+  は $hoge$ なのだ.
+</pre>
+<p>のように <code>$hoge$</code> の前後に空白を入れておく。</p>
+
+<p>このような工夫が必要なのは日本語 TeX のバグのせい。</p>
+
+<h3><a href="#tenmaru" name="tenmaru">数式を多用する文書では「、」「。」を使わない。</a></h3>
+
+<p>数式を多用する文書では「,」「.」を使う。習慣的に数学や物理学の文献ではそうなっている。 (注意：コンピューター関係の文献では必ずしもそうなっていない。「,」と「。」の組み合わせになっている場合がある。)</p>
+
+
+<h2><a href="#eq" name="eq">数式</a></h2>
+
+<h3><a href="#tenchi" name="tenchi">転置行列の $t$ を行列の左上に出す方法</a></h3>
+
+<p>たとえば次のようにマクロを定義すれば良い：</p>
+<pre>
+\newcommand\transpose[1]{\,{\vphantom{#1}}^t\!#1}
+</pre>
+<p>その使用例：</p>
+<pre>
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\newcommand\transpose[1]{\,{\vphantom{#1}}^t\!#1}
+\begin{document}
+\begin{equation*}
+  X \transpose{X} =
+  \left[\frac{\partial H}{\partial x_{ij}}\right]
+  \transpose{\left[\frac{\partial H}{\partial x_{ij}}\right]}.
+\end{equation*}
+\end{document}
+</pre>
+
+<h3><a href="#braces" name="braces"><code>{}</code> で囲むことが不要な場合と必要な場合</a></h3>
+
+<p>不要な場合</p>
+<ul>
+<li><code>$a_n$</code> の <code>n</code> は <code>{}</code> で囲まなくて良い。→ $a_n$</li>
+<li><code>$z^\alpha$</code> の <code>\alpha</code> は <code>{}</code> で囲まなくて良い。→ $z^\alpha$</li>
+<li><code>$X = (x^i_j)$</code> の <code>i</code> と <code>j</code> は <code>{}</code> で囲まなくて良い。→ $X = (x^i_j)$</li>
+</ul>
+<p>一般に <code>^</code> や <code>_</code> で上付き下付きにしたい部分がアルファベットや数字が一文字、もしくは <code>\</code> のあとにアルファベットが続いた文字列で表現される文字 (たとえば <code>\alpha</code>) の場合は <code>{}</code> で囲まなくて良い。 (もちろん囲んでも良い。) それ以外の場合は <code>{}</code> で囲む必要がある。</p>
+<p>必要な場合</p>
+<ul>
+<li><code>$a_{n+1}$</code> の <code>n+1</code> は <code>{}</code> で囲む必要がある。囲まないと $a_n+1$ となる。</li>
+<li><code>$z^{\alpha+\beta}$</code> の <code>\alpha+\beta</code> は <code>{}</code> で囲む必要がある。囲まないと $z^\alpha+\beta$ となる。</li>
+<li><code>$X = (x_{ij})$</code> の <code>ij</code> は <code>{}</code> で囲む必要がある。囲まないと $X = (x_ij)$ となる。</li>
+</ul>
+
+<h3><a href="#dx" name="dx">積分や微分形式の $dx$ の前に微小な空白を入れるのを忘れないようにする。</a></h3>
+
+<p>積分は <code>\int_a^b f(x)\,dx</code> のように書いて $\int_a^b f(x)\,dx$ と印刷する。 <code>\,</code> で微小な空白を入れることが重要なポイント。</p>
+
+<p>多重積分では <code>dx</code> と <code>dy</code> のあいだにも <code>\,</code> を入れるのを忘れずに。<code>\iint_K f(x)\,dx\,dy</code> と書くと $\iint_K f(x)\,dx\,dy$ と印刷され、<code>\iint_K f(x)dxdy</code> と書くと $\iint_K f(x)dxdy$ と印刷される。微小な空白を入れないと微妙におかしな印刷になってしまう。</p>
+
+<h3><a href="#shugo" name="shugo">集合の中に微小な空白を入れるのを忘れる。</a></h3>
+
+<p>$\{\,x\in X\mid P(x)\,\}$ と印刷したければ、</p>
+<pre>
+    \{\,x\in X\mid P(x)\,\}
+</pre>
+<p>と書く。 <code>\{</code> の後と <code>\}</code> の前の <code>\,</code> と縦棒が <code>\mid</code> (縦棒の左右に微小な空白が入る)であることに注意せよ。括弧と縦棒を大きくしたければ、</p>
+<pre>
+    \bigl\{\,x\in X\bigm| P(x)\,\bigr\}
+</pre>
+<p>と書く。もっとでかくしたければ、 <code>\big</code> を <code>\Big</code>, <code>\bigg</code>, <code>\Bigg</code> とする。</p>
+
+<p>$\{1,2,3,\ldots\}$ と印刷したければ、<p>
+<pre>
+    \{1,2,3,\ldots\}
+</pre>
+<p>と書く。この場合は <code>\,</code> を入れない。</p>
+
+<h3><a href="#lhdrhd" name="lhdrhd">正規部分群は <code>\lhd</code> <code>\rhd</code></a></h3>
+
+<code>$N\lhd G$</code> で $N\lhd G$ と印刷される.
+
+<h3><a href="#ltimesrtimes" name="ltimesrtimes">半直積は <code>\ltimes</code> <code>\rtimes</code></a></h3>
+
+<pre>
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{latexsym}
+\begin{document}
+$H$ が $G$ の正規部分群であるとき, $H \lhd G$ もしくは $G \rhd H$ と書く.
+
+群 $G$ が群 $H$ に作用しているとき, 
+それらの半直積を $G\ltimes H$ もしくは$G \rtimes H$ と書く. 
+このとき, $G\ltimes H \rhd H$ が成立する.
+\end{document}
+</pre>
+
+<p>$H$ が $G$ の正規部分群であるとき, $H \lhd G$ もしくは $G \rhd H$ と書く.</p>
+
+<p>群 $G$ が群 $H$ に作用しているとき, それらの半直積を $G\ltimes H$ もしくは$G \rtimes H$ と書く. このとき, $G\ltimes H \rhd H$ が成立する.</p>
+
+<h3><a href="#matrix" name="matrix">行列</a></h3>
+
+\begin{equation*}
+  L(z) =
+  \begin{bmatrix}
+    p_1 &  1  &     &        &         & a_N/z' \\
+    a_1 & p_2 &  1  &        &         &        \\
+        & a_2 & p_3 &    1   &         &        \\
+        &     & a_3 & \ddots & \ddots  &        \\
+        &     &     & \ddots & \ddots  &   1    \\
+     z' &     &     &        & a_{N-1} &  p_N   \\
+  \end{bmatrix}
+\end{equation*}
+<p>と出力したければ、</p>
+<pre>
+\begin{equation*}
+  L(z) =
+  \begin{bmatrix}
+    p_1 &  1  &     &        &         & a_N/z' \\
+    a_1 & p_2 &  1  &        &         &        \\
+        & a_2 & p_3 &    1   &         &        \\
+        &     & a_3 & \ddots & \ddots  &        \\
+        &     &     & \ddots & \ddots  &   1    \\
+     z' &     &     &        & a_{N-1} &  p_N   \\
+  \end{bmatrix}
+\end{equation*}
+</pre>
+<p>と書く。<code>bmatrix</code> を <code>pmatrix</code> にすると行列の括弧が丸くなる。</p>
+
+<h3><a href="#ZERO" name="ZERO">行列の中の大きなゼロ</a></h3>
+
+<pre>
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\newcommand\bigzerol{\smash{\hbox{\large 0}}}             % 左下の大きなゼロ
+\newcommand\bigzerou{\smash{\lower.3ex\hbox{\large 0}}}   % 右上の大きなゼロ
+\newcommand\bigstarl{\smash{\hbox{\Large $*$}}}           % 左下の大きな星
+\newcommand\bigstaru{\smash{\lower.3ex\hbox{\Large $*$}}} % 右上の大きな星
+\begin{document}
+\begin{equation*}
+  C(a_1,\cdots,a_{n-1}) :=
+  \begin{bmatrix}
+        1      &   &        & \bigzerou &  a_1    \\
+               & 1 &        &           &  a_2    \\
+               &   & \ddots &           & \vdots  \\
+               &   &        &     1     & a_{n-1} \\
+    \bigzerol  &   &        &           &   1     \\
+  \end{bmatrix}.
+\end{equation*}
+\begin{equation*}
+  \begin{vmatrix}
+     a_{11}    &        &        & \bigstaru \\
+               & a_{22} &        &           \\
+               &        & \ddots &           \\
+     \bigzerol &        &        & a_{nn}    \\
+  \end{vmatrix}
+  =
+  \begin{vmatrix}
+     a_{11}    &        &        & \bigzerou \\
+               & a_{22} &        &           \\
+               &        & \ddots &           \\
+     \bigstarl &        &        & a_{nn}    \\
+  \end{vmatrix}
+  = a_{11} a_{22} \cdots a_{nn}.
+\end{equation*}
+\end{document}
+</pre>
+
+<h3><a href="#subsetneqq" name="subsetneqq">真部分集合を意味する \subset の下に不等号</a></h3>
+
+<pre>
+\begin{equation*}
+  A \subsetneq B, \quad
+  A \subsetneqq B
+\end{equation*}
+</pre>
+<p>で次のように印刷される。</p>
+\begin{equation*}
+  A \subsetneq B, \quad
+  A \subsetneqq B
+\end{equation*}
+
+<h3><a href="#tensorcomma" name="tensorcomma">テンソル積記号の下にコンマ</a></h3>
+
+<p>他にもっと良いやり方があるかもしれないが、たとえば、</p>
+<pre>
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\newcommand\octimes{\mathop{%
+    \underset{\mbox{\raisebox{\totalheight}{,}}}{\otimes}%
+    }\nolimits}
+\begin{document}
+\begin{equation*}
+  \{L\octimes L\} = r L\otimes L - L\otimes L r.
+\end{equation*}
+\end{document}
+</pre>
+
+<h3><a href="#backslashbackslash" name="backslashbackslash"><code>\\[\medskipamount]</code></a></h3>
+
+<p><code>\\</code> による改行の幅を制御するためには <code>\\[1mm]</code> と書けば良い。<code>1mm</code> の代わりに <code>\medskipamount</code> を使う例：</p>
+<pre>
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\begin{document}
+Old:
+\begin{equation}
+  \left\{
+    \begin{array}{l}
+      \cfrac{d}{dt}\log V_{0} =
+      (K_{1}+V_{1})-(K_{0}+V_{0})+\alpha_{0},
+      \\
+      \cfrac{d}{dt}\log V_{1} =
+      (K_{0}+V_{0})-(K_{1}+V_{1})+\alpha_{1},
+      \\
+      \cfrac{d}{dt}K_{0} = K_{0}V_{0}-K_{1}V_{1},
+      \\
+      \cfrac{d}{dt}K_{1} = K_{1}V_{1}-K_{0}V_{0} .
+    \end{array}
+  \right.
+\end{equation}
+
+New:
+\begin{equation}
+  \left\{
+    \begin{array}{l}
+      \cfrac{d}{dt}\log V_{0} =
+      (K_{1}+V_{1})-(K_{0}+V_{0})+\alpha_{0},
+      \\[\medskipamount]
+      \cfrac{d}{dt}\log V_{1} =
+      (K_{0}+V_{0})-(K_{1}+V_{1})+\alpha_{1},
+      \\[\medskipamount]
+      \cfrac{d}{dt}K_{0} = K_{0}V_{0}-K_{1}V_{1},
+      \\[\medskipamount]
+      \cfrac{d}{dt}K_{1} = K_{1}V_{1}-K_{0}V_{0} .
+    \end{array}
+  \right.
+\end{equation}
+\end{document}
+</pre>
+
+</body>
+</html>

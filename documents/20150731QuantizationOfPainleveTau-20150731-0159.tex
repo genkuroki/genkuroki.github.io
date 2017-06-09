@@ -1,0 +1,2227 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf Painlev\'e系 の $\tau$ 函数の正準量子化について}
+\def\PDFTITLE{Painlev\'e系 の $\tau$ 函数の正準量子化について}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{数学}
+\def\AUTHOR{黒木 玄}
+\def\AUTHOREN{Gen Kuroki}
+\def\DATE{2015年7月31日(金) 02:00 Version 0.2}
+\def\ABSTRACT{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\documentclass[12pt,twoside,dvipdfm]{jarticle}
+\documentclass[12pt,twoside,dvipdfm]{msjproc}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfm]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pagestyle{plain}
+%\setlength{\oddsidemargin}{0cm}
+%\setlength{\evensidemargin}{0cm}
+%\setlength{\topmargin}{-1.6cm}
+%\setlength{\textheight}{24.8cm}
+%\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfm]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+  \def\Ddots{\mathinner{\mkern1mu
+      \raise\p@\hbox{.}\mkern2mu\raise4\p@\hbox{.}\mkern2mu
+      \raise7\p@\vbox{\kern7\p@\hbox{.}}\mkern1mu}}
+  \makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+\renewcommand\P{{\mathbb P}} % projective spaces
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第 \ref{#1} 節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\figref[1]{\figureref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\g{\mathfrak{g}}
+\newcommand\bor{\mathfrak{b}}
+\newcommand\nil{\mathfrak{n}}
+\newcommand\qP[1]{{\text{$q\mathrm{P}_{\text{#1}}$}}}
+\newcommand\PP[1]{{\text{$\mathrm{P}_{\text{#1}}$}}}
+\newcommand\arXiv[1]{{\tt arXiv:#1}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\newcommand\eps{\varepsilon}
+\newcommand\WW{\widetilde{W}}
+\newcommand\A{\mathcal{A}}
+\newcommand\K{\mathcal{K}}
+\newcommand\hK{{\widehat{\K}}}
+\newcommand\B{\mathcal{B}}
+\newcommand\diag{\mathop{\mathrm{diag}}\nolimits}
+\newcommand\glhat{\mathop{\widehat{\mathrm{gl}}}\nolimits}
+\newcommand\tL{{\widetilde{L}}}
+\newcommand\cG{{\mathcal{G}}}
+\newcommand\tg{{\tilde{g}}}
+\newcommand\Ad{\mathop{\mathrm{Ad}}\nolimits}
+\newcommand\tC{{\widetilde{C}}}
+\newcommand\ta{{\tilde{a}}}
+\newcommand\tb{{\tilde{b}}}
+\newcommand\tc{{\tilde{c}}}
+\newcommand\ts{{\tilde{s}}}
+\newcommand\hL{{\widehat{L}}}
+\newcommand\ha{{\hat{a}}}
+\newcommand\hb{{\hat{b}}}
+\newcommand\hf{{\hat{f}}}
+\newcommand\ev{\varepsilon^\vee}
+\newcommand\av{\alpha^\vee}
+\newcommand\dv{\delta^\vee}
+\newcommand\gauge{{\mathrm{gauge}}}
+\newcommand\ad{\mathop{\mathrm{ad}}\nolimits}
+\makeatletter\newcommand\qbinom{\genfrac[]\z@{}}\makeatother
+\newcommand\Qv{{Q^\vee}}
+\newcommand\co{c_{\mathrm{odd}}}
+\newcommand\cO{{\mathcal{O}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}{\AUTHOREN}
+\date{\DATE}
+\maketitle
+%\begin{abstract}
+%  \ABSTRACT
+%\end{abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+この文書の最新版は次の場所からダウンロードできる. 
+
+\href
+{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20150731QuantizationOfPainleveTau.pdf}
+{\small http://www.math.tohoku.ac.jp/{\TILDE}kuroki/LaTeX/20150731QuantizationOfPainleveTau.pdf}
+\end{center}
+
+\begin{center}
+Painlev\'e 系の量子化に関する
+関連の文書を以下の場所からダウンロードできる.
+
+\href
+{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/}
+{http://www.math.tohoku.ac.jp/{\TILDE}kuroki/LaTeX/}
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setcounter{section}{-1} % First section number = 0
+
+\section{Painlev\'e系の量子化 (\qP{IV}を例に用いた解説)}
+
+まず, Painlev\'e系の量子化について説明しよう.
+
+多くの議論が対称化可能一般Cartan行列に付随する極めて一般的な場合に拡張可能なのだが, 
+表現論の言葉に不慣れだが, Painlev\'e系に関する知識はある読者のために, 
+$q$ 差分版のPainlev\'e IV 型方程式の対称形式 \qP{IV} を例に説明して行く.
+
+目標は量子化された Painlev\'e 系を表現論の言葉で統一的に定式化し, 
+量子 Painlev\'e 系の基礎になる代数構造の由来を
+Kac-Moody代数や量子群の言葉を用いて説明することである.
+
+
+
+
+\subsection{$q$ 差分化と量子化の区別}
+
+「$q$ 差分化」と「量子化」という用語を厳密に区別して用いたい.
+
+微分 $df(x)/dx$ を用いた事柄をパラメーター $q$ で変形して,  $q$ 差分
+\begin{equation*}
+ T_{x,q} f(x) = \frac{f(x)-f(qx)}{x(1-q)}
+\end{equation*}
+を用いた事柄に拡張することおよびその適切な一般化を {\bf $q$ 差分化}と呼ぶことにする.
+逆に $q\to 1$ で $T_{q,x}\to d/dx$ の極限を取る操作を {\bf 微分極限}と呼ぶことにする.
+そして, 微分を用いて記述される数学的対象を{\bf 微分版}と呼び, 
+$q$ 差分を用いて記述される数学的対象を{\bf $q$ 差分版}と呼ぶことにする.
+
+
+
+Poisson括弧 $\{p,x\}=1$ を持つ代数に関する事柄を交換関係
+\begin{equation*}
+ [p,x] = px - xp = 1
+\end{equation*} 
+を満たす非可換環に関する事柄に拡張することおよびその適切な一般化を{\bf 正準量子化}と呼ぶことにする.
+以下では簡単のため正準量子化を単に{\bf 量子化}と呼ぶことにする.
+
+たとえば, 座標 $x$ を持つ直線の余接束上の函数環の自然な量子化は $x$ と $d/dx$ で生成される
+微分作用素環である. 
+
+たとえば, Lie代数 $\g$ の普遍展開環 $U(\g)$ は $\g$ から生成される対称代数 $S(\g)$ 
+(これは $\g^*$ 上の函数環とみなされる)の量子化である.
+さらに $\g$ がKac-Moody代数ならば, 量子展開環 $U_q(\g)$ は普遍展開環 $U(\g)$ の
+代数としての $q$ 差分化であるとみなせる.  
+代数として $U_q(\g)$ を $U(\g)$ の量子化とはみなさない.
+$U(\g)$ は不変微分作用素環とみなせるので微分版の数学的対象とみなされ,  
+それとの対比で $U_q(\g)$ は代数として $q$ 差分版の数学的対象とみなされる.
+代数として量子展開環 $U_q(\g)$ は対称代数 $S(\g)$ の量子化かつ $q$ 差分化になっている.
+
+一方, $U_q(\g)$ の余積は非余可換であり, $q\to 1$ の極限で余可換な $U(\g)$ の
+余積が再現されるので, 量子展開環 $U_q(\g)$ は余代数として普遍展開環 $U(\g)$ の
+量子化だとみなせる.
+
+量子展開環 $U_q(\g)$ は代数として普遍展開環 $U(\g)$ の $q$ 差分化になっており, 
+余代数としては普遍展開環 $U(\g)$ の量子化になっている. 
+代数としての $q$ 差分化と余代数としての量子化のためのパラメーターの両方が
+同じ $q$ になっているので混乱しないように注意が必要である.
+
+
+
+
+\subsection{古典極限とPoisson構造}
+
+パラメーター $\hbar$ を含む可換とは限らない環 $A_\hbar$ に対して, 
+$\hbar\to 0$ の極限で得られる環(すなわち $\hbar$ で生成されるイデアル
+で $A_\hbar$ を割ってできる剰余環 $A_\hbar/\hbar A_\hbar$)を $A_0$ と書き, 
+$a\in A_\hbar$ の $A_0$ での像を $\bar{a}$ と書くことにする.
+
+$A_0$ は可換環になると仮定する. 
+このとき $A_\hbar$ は $A_0$ の量子化であるという.
+仮定より, 任意の $a,b\in A_\hbar$ の交換子 $[a,b]=ab-ba$ は $\hbar$ で割り切れる.
+任意の $a,b\in A_\hbar$ に対して,  
+$\hbar^{-1}[a,b]\in A_\hbar$ の $A_0$ での像は $a$, $b$ の像だけから決まることがわかり, 
+可換環 $A_0$ に Poisson 構造を
+\(
+ \{\bar{a}, \bar{b}\} = \overline{\hbar^{-1}[a,b]}
+\)
+によって定めることができる.
+このように構成された Poisson 代数 $A_0$ を $A_\hbar$ の{\bf 古典極限}と呼ぶことにする.
+
+たとえば, $p=d/dx$ と $x$ から $\C[\hbar]$ 上生成されるパラメーター $\hbar$ 付きの
+微分作用素環 $\C[\hbar, x, d/dx]$ を考え, 
+$p=\hbar d/dx$ と $x$ から $\C[\hbar]$ 上生成される部分代数を $A_\hbar$ と書くことにする.
+このとき $A_0=A_\hbar/\hbar A_\hbar$ は $\bar{p}$ と $\bar{x}$ で
+生成される可換な多項式環になり,  $\hbar^{-1}[p,x]=1$ なので, 
+$A_0=\C[\bar{p},\bar{x}]$ には $\{\bar{p},\bar{x}\}=1$ で自然に Poisson 構造が定まる.
+これが上の意味での古典極限の典型例である.  
+
+$\C$ 上のLie環 $\g$ の普遍展開環 $U(\g)$ の古典極限は以下のように構成される.
+まず, $U(\g)$ の $\C[\hbar]$ による係数拡大 $U(\g)\otimes\C[\hbar]$ を考える.
+そして, $\hbar A$ ($A\in\g$) たちから $\C[\hbar]$ 上生成されるその部分代数を $A_\hbar$
+とする.  このとき $A_0=A_\hbar/\hbar A_\hbar$ は可換環になり, 
+$\hbar\g$ から $\C$ 上生成される対称代数 $S(\hbar\g)\cong S(\g)$ に同型になる.
+これを $U(\g)$ の古典極限と呼ぶ.
+さらに, $A,B\in\g$ に対して $[A,B]=C$ が成立しているとき, 
+$\hbar^{-1}[\hbar A, \hbar B]=\hbar C$ となるので, 
+$\hbar A$, $\hbar B$, $\hbar C$ の $A_0$ での像をそれぞれ $a$, $b$, $c$ と
+書くと $A_0$ において $\{a,b\}=c$ が成立している.
+要するに Lie 環におけるLieブラケット $[\ ,\ ]$ をそのままPoisson括弧 $\{\ ,\ \}$ に
+置き換えるだけで古典極限における Poisson 構造が得られる.
+
+生成元 $x$, $y$ と基本関係式 $xy=qyx$ で定義される $\C[q]$ 上の代数 $A_q$ を考える.
+(古典極限は $q\to 1$ で得られる.  $\hbar=q-1$ とおいて考えよ.)
+このとき $[x,y]=xy-yx=(q-1)yx$が成立しているので,  $A_{q=1}=A_q/(q-1)A_q$ は
+可換環になり,  $A_{q=1}$ に自然に入る Poisson 構造は $\{\bar{x},\bar{y}\}=\bar{x}\bar{y}$ を
+満たしている.  このことから $\{a,b\}=ab$ 型のPoisson構造の量子化は $xy=qyx$ 型の交換関係
+で定義される代数を用いて構成可能なことがわかる.  この例は $q$ 差分化された場合の量子化の
+構成において最も基本的である.
+
+古典極限の形だけがわかっていても, 可能な量子化は無数にある.
+我々が欲しいのは古典極限のレベルで成立している多くの結果が保たれるような
+良い量子化である.
+$q$ 差分化されていない微分版の場合には, 
+手頃な手間で可能な直線的な手計算のみで良い量子化を構成可能なことが多いが, 
+$q$ 差分化された場合はそうではない.
+背景に隠れている代数構造を明らかにしないと良い量子化を作ることは難しい.
+
+しかも実際には古典極限におけるPoisson構造の定義式が明らかになっていない場合が多数ある.
+そのような場合には量子化はさらに困難になる%
+\footnote{古典Painlev\'e系の研究者の方々にお願い. 
+Poisson構造も論文に書いて下さい.  お願い致します.}.
+
+
+
+
+\subsection{$q$-Painlev\'e IV 方程式の対称形式 \qP{IV}}
+
+$q$ 差分版の Painlev\'e IV 方程式の対称形式 $\qP{IV}$ に関する詳しい記述については
+文献 \cite{KNY-qPIV}, \cite{Noumi-AWG} を参照せよ.
+さらに \qP{IV} の $A^{(1)}_2$ 型のアフィンWeyl群対称性の量子化とその一般化については
+文献  \cite{Hasegawa-QB} を見よ. 
+(量子化に関する文献を見れば古典極限によってPoisson構造の情報も得られる.)
+この節の内容はそれらの文献からの引き写しである. 
+
+まず, $A^{(1)}_2$ 型の一般Cartan行列 $[a_{ij}]_{i,j=0}^2$ と
+反対称行列 $[b_{ij}]_{i,j=0}^2$ を次のように定める%
+\footnote{反対称行列 $[b_{ij}]$ はクラスター代数の記述に用いられる
+反対称行列と同じものである.}:
+\begin{equation*}
+  [a_{ij}]_{i,j=0}^2 = 
+  \begin{bmatrix}
+     2 & -1 & -1 \\
+   -1 &  2 & -1 \\
+   -1 & -1 & 2 \\
+  \end{bmatrix},
+  \quad
+  [b_{ij}]_{i,j=0}^2 =
+  \begin{bmatrix}
+      0 & 1 & -1 \\
+    -1 & 0 & 1   \\
+     1 & -1 & 0 \\
+  \end{bmatrix}.
+\end{equation*}
+さらに, $\C(q)$ 上 $a_i$, $F_i$ ($i=0,1,2)$ から生成される有理函数環を考え, 
+そこに Poisson 構造を次のように入れる:
+\begin{equation*}
+ \{F_i, F_j\} = b_{ij} F_i F_j, \quad \{a_i,a_j\}=\{a_i,F_j\}=0.
+\end{equation*}
+さらに $a_{i+3}=a_i$, $F_{i+3}=F_i$ によってインデックスを整数全体に拡張しておく.
+$F_i$ を{\bf 従属変数}と呼び, $a_i$ を{\bf パラメーター変数}と呼ぶことにする.
+
+$q$ 差分版の Painlev\'e IV 方程式の対称形式 \qP{IV} 
+とは次のように定義される離散時間発展 $T_\qP{IV}$ のことである(\cite{KNY-qPIV}, \cite{Noumi-AWG}):
+\begin{align*}
+%  &
+  T_\qP{IV}(F_i) = 
+  a_i a_{i+1} F_{i+1}
+  \frac{1+a_{i-1}F_{i-1}+a_{i-1}a_i F_{i-1}F_i}{1+a_i F_i+a_i a_{i+1} F_i F_{i+1}},
+%  \\ &
+  \quad
+  T_\qP{IV}(a_i) = a_i.
+\end{align*}
+%この逆は次のように書ける:
+%\begin{align*}
+%  &
+%  T_{\qP{IV}}^{-1}(F_i) = 
+%  \frac{F_{i-1}}{a_i a_{i+1}}
+%  \frac{a_i a_{i+1} + a_i F_{i+1} + F_i F_{i+1}}{a_{i-1}a_i + a_{i-1}F_i + F_{i-1}F_i},
+%  \\ &
+%  \quad
+%  T_{\qP{IV}}^{-1}(a_i) = a_i.
+%\end{align*}
+この離散時間発展はPoisson構造を保つ.
+
+$A^{(1)}_2$ 型の拡大アフィンWeyl群 $\WW(A^{(1)}_2)=\bra s_0,s_1,s_2,\pi\ket$ が
+次の関係式で定義される:
+\begin{equation*}
+ s_i^2=1, \quad
+ s_is_{i+1}s_i=s_{i+1}s_is_{i+1}, \quad
+ \pi s_i = s_{i+1} \pi.
+\end{equation*}
+ただしインデックスを $s_{i+3}=s_i$ によって整数全体に拡張しておいた.
+
+拡大アフィンWeyl群 $\WW(A^{(1)}_2)$ の作用を次のように定める:
+\begin{equation*}
+  s_i(a_j) = a_i^{-{a_{ij}}}a_j,  \quad 
+  s_i(F_j) = F_j \left(\frac{a_i+F_i}{1+a_i F_i}\right)^{b_{ij}}, \quad
+  \pi(a_i)=a_{i+1}, \quad
+  \pi(F_i)=F_{i+1}.
+\end{equation*}
+この作用はPoisson構造を保ち, 離散時間発展 $T_{\qP{IV}}$ と可換であり, 
+$q$ 差分版の Painlev\'e IV 方程式の対称性(B\"acklund変換)になっている.
+
+実は以上の構造の背景には量子群が隠れている.
+以下の節ではそのことを説明したい.
+
+結論を先走って言うと, $q$ 差分版の Painlev\'e 方程式の従属変数 $F_i$ は
+量子展開環の下三角部分の Chevalley 生成元 $\varphi_i$ の化身になっている.
+
+ただし,  $F_i$ が量子展開環のした三角部分の Chevalley 生成元 $\varphi_i$ の像に
+直接なっているのではなく, 
+$\varphi_i$ の余積を $\Delta(\varphi_i)=\varphi_{i1}+\varphi_{i2}$, 
+$\varphi_{i1}=\varphi_i\otimes k_i$, $\varphi_{i2}=1\otimes\varphi_i$ 
+と書くとき,  $a_i F_i$ が $\varphi_{i1}\varphi_{i2}^{-1}$ の像になっている
+という若干複雑な事情になっている.
+そして $s_i$ の作用は $\Delta(\varphi_i)$ の像 $f_i$ のべき $f_i^\gamma$ の作用を
+用いて構成される.   詳しくは \cite{Kuroki-W} を参照して欲しい%
+\footnote{べき $f_i^\gamma$ の構成の仕方について
+は\secref{sec:powers1}に解説を書いておいた.}. 
+
+
+
+\subsection{$\WW(A^{(1)}_2)\times\WW(A^{(1)}_1)$ 対称性}
+
+この節の内容は文献 \cite{KNY-WxW}, \cite{KNY-qKP}, \cite{NY-RSK} の構成
+を $(m,n)=(3,2)$ の場合に特殊化したものになっている.
+互いに素な任意の $(m,n)$ の場合の量子化については \cite{Kuroki-WxW} を見よ.
+
+準周期性 $t_{i+3}=r^{-1} t_i$, $x_{i+3}=r^{-1} x_i$, $y_{i+3}=r^{-1} y_i$ を
+満たす%
+\footnote{このとき直後に定義される $a_i$ たちは $a_0a_1a_2=r$ をみたしている.
+だから文献 \cite{KNY-qPIV} における $q$ はここでの $r$ に対応している.
+記号 $q$ は量子群の変形パラメーターのために取っておくことにする.}%
+変数 $t_i$, $x_i$, $y_i$ を用意し, 
+$t_i^2 = x_i y_i$ が成立していると仮定し, 
+Poisson 構造を次のように定める%
+\footnote{この関係式は $3$ を3以上の任意の奇数 $m$ に
+一般化しても $\mu=1,2,\dots,m-1$ について有効である.
+ここで扱っている \qP{IV} のケースは $(n,m)=(3,2)$ の場合に対応しており, 
+互いに素な任意の $(m,n)$ の場合に一般化される. 
+そのとき変数 $x_i$, $y_i$ は $mn$ 個の変数 $x_{ik}$ に拡張されるが, 
+$x_{ik}$ たちのPoisson括弧
+も $\{x_{ik},x_{jl}\}=\eps_{ijkl} x_{ik}x_{jl}$, $\eps_{ijkl}=0,\pm1$ の形になるが, 
+$\eps_{ijkl}$ がどのように $0,\pm1$ になっているかは複雑である.
+詳しくは量子化された場合を扱っている \cite{Kuroki-WxW} を見よ.}%
+: $\mu=1,2$ について, 
+\begin{alignat*}{3}
+ &
+ \{x_i, y_i\}=0, \quad
+ \\ &
+ \{x_i,x_{i+\mu}\} = (-1)^{\mu-1} x_i x_{i+\mu}, \quad
+ & &
+ \{x_i,y_{i+\mu}\} = - (-1)^{\mu-1} x_i y_{i+\mu}, \quad
+ \\ &
+ \{y_i,y_{i+\mu}\} = (-1)^{\mu-1} y_i y_{i+\mu}, \quad
+ & &
+ \{y_i,x_{i+\mu}\} = - (-1)^{\mu-1} y_i x_{i+\mu}, \quad
+ \\ &
+ \{t_i, \xi_j\}=0 \qquad (\xi=x,y,t).
+\end{alignat*}
+最後の行の関係式を忘れて, 変数 $t_i$ をPoisson中心元 $x_i y_i$ の平方根として導入してもよい.
+このとき, $F_i$ と $a_i$ を
+\begin{equation*}
+ a_i = \frac{t_i}{t_{i+1}}, \quad F_i = \frac{x_{i+1}x_i}{t_{i+1}t_i}.
+\end{equation*}
+と定める. このとき $a_{i+3}=a_i$, $F_{i+3}=F_i$.
+この $F_i$, $a_i$ たちは前節のPoisson構造の定義式を満たしている.
+この関係があるので $x_i$, $y_i$ たちをも{\bf 従属変数}と呼び, 
+$t_i$ たちをも{\bf パラメーター変数}と呼ぶことにする.
+
+$A^{(1)}_1$ 型の拡大アフィンWeyl群 $\WW(A^{(1)}_1)=\bra r_0,r_1,\varpi\ket$ が
+次の関係式で定義される:
+\begin{equation*}
+ r_i^2=1, \quad
+ \varpi r_i = r_{i+1} \varpi.
+\end{equation*}
+ただしインデックスを $r_{i+2}=r_i$ によって整数全体に拡張しておいた. 
+
+拡大アフィンWeyl群の直積 $\WW(A^{(1)}_2)\times\WW(A^{(1)}_1)$ の $x_i$, $y_i$, $t_i$ への
+作用を以下のように定めることができる%
+%\footnote{以下の式は実は非可換の場合でも通用するように積の順序を注意深く決めてある.}%
+:
+\begin{align*}
+ &
+ s_i(x_i) 
+ = x_i - (y_i x_i - y_{i+1}x_{i+1})(y_i+x_{i+1})^{-1}
+ = (x_i+y_{i+1})x_{i+1}(y_i+x_{i+1})^{-1},
+ \\ &
+ s_i(x_{i+1})
+ = x_{i+1} +(x_i+y_{i+1})^{-1}(y_i x_i - y_{i+1}x_{i+1})
+ =(x_i+y_{i+1})^{-1} x_i (y_i+x_{i+1}),
+ \\ &
+ s_i(y_i) 
+ = y_i - (x_i y_i - x_{i+1}y_{i+1})(x_i+y_{i+1})^{-1}
+ = (y_i+x_{i+1})y_{i+1}(x_i+y_{i+1})^{-1},
+ \\ &
+  s_i(y_{i+1})
+ = y_{i+1} +(y_i+x_{i+1})^{-1}(x_i y_i - x_{i+1}y_{i+1})
+ =(y_i+x_{i+1})^{-1} y_i (x_i+y_{i+1}),
+ \\ &
+ s_i(x_{i+2})=x_{i+2},
+ \quad
+ s_i(y_{i+2})=y_{i+2}, 
+ \\ &
+ s_i(t_i)=t_{i+1},  \quad
+ s_i(t_{i+1})=t_i,  \quad
+ s_i(t_{j+2})=t_{j+2},
+ \\ &
+ \pi(x_i) = x_{i+1},  \quad
+ \pi(y_i) = y_{i+1},  \quad
+ \pi(t_i) = t_{i+1},
+ \\[\medskipamount] &
+ Q_i := y_{i+2}y_{i+1} + y_{i+2}x_i + x_{i+1}x_i, 
+ \\ &
+ r_1(x_i) 
+ = x_i - r Q_{i+1}^{-1}(x_{i+3}x_{i+2}x_{i+1}-y_{i+4}y_{i+3}y_{i+2})
+ = r^{-1} Q_{i+1}^{-1}y_i Q_i,
+ \\ &
+ r_1(y_i)
+ = y_i + r(x_{i+2}x_{i+1}x_i-y_{i+3}y_{i+2}y_{i+1})Q_i^{-1}
+ = r Q_{i+1} x_i Q_i^{-1},
+ \\ &
+ r_1(t_i) = t_i, \quad
+ \varpi(x_i)=y_i,   \quad
+ \varpi(y_i)=x_i,   \quad
+ \varpi(t_i)=t_i.
+\end{align*}
+%$r_0=\varpi r_1 \varpi^{-1}$ なので, $\WW(A^{(1)}_1)$ の作用を定めるため
+%には $r_1$ と $\varpi$ の作用を定めれば十分であることに注意せよ.
+この作用は Poisson 構造と $F_i$, $a_i$ で生成される部分体を保ち, 
+$s_i$, $\pi$ の $F_i$, $a_i$ への作用は前節に定義したものと一致している.
+
+$U_1=r_1 \varpi$ とおく. 
+このとき $U_1$ は以下を満たしている:
+\begin{align*}
+ &
+ U_1(x_i) = r Q_{i+1} x_i Q_i^{-1},
+ \qquad
+ U_1(y_i) = r^{-1} Q_{i+1}^{-1}y_i Q_i,
+ \qquad
+ U_1(t_i) = t_i.%,
+% \\[\medskipamount] &
+% Q'_i := \varpi(Q_i) = x_{i+2}x_{i+1} + x_{i+2}y_i + y_{i+1}y_i, 
+% \\ &
+% U_1^{-1}(x_i) = r^{-1} {Q'_{i+1}}^{-1}x_i Q'_i,
+% \qquad
+% U_1^{-1}(y_i) = r Q'_{i+1} y_i {Q'_i}^{-1},
+% \qquad
+% U_1^{-1}(t_i) = t_i.
+\end{align*}
+これらの公式と
+\begin{align*}
+ &
+ x_{i+1}x_i = t_i t_{i+1} F_i, \quad
+ y_{i+2}x_i = t_i t_{i+2} F_{i+1}^{-1} F_i,
+% \\ &
+\quad
+% x_{i+2}y_i = t_i t_{i+2} F_{i+1} F_i^{-1}, \quad
+ y_{i+2}y_{i+1} = t_{i+1} t_{i+2}F_{i+1}^{-1}
+\end{align*}
+から, $U_1$ の $F_i$, $a_i$ への作用は
+前節で定義した $q$ 差分版の Painlev\'e IV 方程式の離散時間発展 $T_\qP{IV}$ に
+一致することも確かめられる%
+\footnote{$U_1$ の $F_i$, $a_i$ への作用は $r$ の値によらない.}.
+
+したがって, この節の内容を量子化可能ならば, 
+$q$ 差分版 Painlev\'e IV 方程式を量子化できる.
+そのためにはこの節で登場した変数 $t_i$, $x_i$, $y_i$ と
+拡大Weyl群の作用を量子群の言葉で理解することが必要になる.  
+
+\subsection{$\WW(A^{(1)}_2)\times\WW(A^{(1)}_1)$ の作用のLax表示}
+
+量子化を始める前に $\WW(A^{(1)}_2)\times\WW(A^{(1)}_1)$ の作用のLax表示について
+説明しておこう.
+
+変数 $z,w$ を用意して, 
+行列 $\Lambda_3(z)$, $\Lambda_2(w)$, $X(z)$, $Y(z)$, $V_i(w)$ を次のように定める:
+\begin{align*}
+ &
+ \Lambda_3(z) =
+ \begin{bmatrix}
+  0 & 1 & 0 \\
+  0 & 0 & 1 \\
+  z & 0 & 0 \\
+ \end{bmatrix},
+ \quad
+ \Lambda_2(w) =
+ \begin{bmatrix}
+  0 & 1 \\
+  w & 0 \\
+ \end{bmatrix},
+ \\ &
+ X(z) =
+ \begin{bmatrix}
+  x_1 & 1 & 0 \\
+  0 & x_2 & 1 \\
+  z & 0 & x_3 \\
+ \end{bmatrix},
+ \quad
+ Y(z) =
+ \begin{bmatrix}
+  y_1 & 1 & 0 \\
+  0 & y_2 & 1 \\
+  z & 0 & y_3 \\
+ \end{bmatrix},
+ \quad
+ V_i(w) =
+ \begin{bmatrix}
+  y_i &  1  \\
+  w   & x_i \\
+ \end{bmatrix}.
+\end{align*}
+$X(z)$, $Y(z)$, $V_i(z)$ を {\bf local $L$-operators} と呼ぶ.
+さらに行列 $G_i$, $G'_i$ ($i=1,2$), $R_i$ ($i\in\Z$) を次のように定める:
+\begin{align*}
+ &
+ G_1 =
+ \begin{bmatrix}
+  1   & 0 & 0 \\
+  g_1 & 1 & 0 \\
+  0 & 0 & 1 \\
+ \end{bmatrix},
+ \quad
+ G_2 =
+ \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & 1 & 0 \\
+  0 & g_2 & 1 \\
+ \end{bmatrix},
+ \quad
+ G'_i = \varpi(G_i),
+ \quad
+ R_i =
+ \begin{bmatrix}
+  1      & 0 \\
+  \rho_i & 1 \\
+ \end{bmatrix}.
+\end{align*}
+ここで
+\begin{equation*}
+ g_i = \frac{x_i y_i-x_{i+1}y_{i+1}}{x_i+y_{i+1}},
+ \quad
+ \rho_i = r \frac{x_{i+2}x_{i+1}x_{i}-y_{i+3}y_{i+2}y_{i+1}}{Q_i}.
+\end{equation*}
+$\varpi$ は $x_i$ と $y_i$ を交換する操作であった.
+
+このとき, 前節で構成した拡大アフィンWeyl群の $x_i$, $y_i$ たちへの作用の
+定義を以下のように書き直せる:
+\begin{alignat*}{2}
+ &
+ s_i(X(z)) = G_i X(z) {G'_i}^{-1}, \qquad
+ & & 
+ s_i(Y(z)) = G'_i Y(z) G_i^{-1},
+ \\ &
+ \pi(X(z)) = \Lambda_3(z) X(rz) \Lambda_3(rz)^{-1}, \qquad
+ & &
+ \pi(Y(z)) = \Lambda_3(z) Y(rz) \Lambda_3(rz)^{-1},
+ \\ &
+ r_1(V_i(w)) = R_{i+1}^{-1} V_i(w) R_i,  \qquad
+ & & 
+ \varpi(V_i(w)) = \Lambda_2(w) V_i(w) \Lambda_2(w)^{-1}.
+\end{alignat*}
+これを拡大アフィンWeyl群の作用の{\bf Lax表示}と呼ぶ.
+さらに, 以下の条件で上記の拡大アフィンWeyl群の $x_i$, $y_i$ への作用を
+特徴付けることもできる:
+\begin{align*}
+ &
+ r_1(X(z)Y(rz)) = X(z)Y(rz), 
+ \\ &
+ r_1(x_{i+2}x_{i+1}x_i) = y_{i+3}y_{i+2}y_{i+1}, \quad
+ r_1(y_{i+3}y_{i+2}y_{i+1}) = x_{i+2}x_{i+1}x_i,
+ \\ &
+ \varpi(X(z)) = Y(z), \quad
+ \varpi(Y(z)) = X(z),
+ \\[\medskipamount] &
+ s_i(V_{i+1}(w)V_i(w)) = V_{i+1}(w)V_i(w), \quad
+ s_i(V_{i+2}(w))=V_{i+2}(w),
+ \\ &
+ s_i(x_i y_i) = x_{i+1}y_{i+1}, \quad 
+ s_i(x_{i+1}y_{i+1})= x_i y_i,
+ \\ &
+ \pi(V_i(w)) = V_{i+1}(w).
+\end{align*}
+これらの事実は公式 \(
+ Q_{i+1}x_i - y_{i+3}Q_i = x_{i+2}x_{i+1}x_i - y_{i+3}y_{i+2}y_{i+1}
+\) などを使えば確認できる%
+\footnote{この $(m,n)=(3,2)$ の場合に計算を地道にまとめておけば一般の場合に
+どんな感じになっているかの感触がつかめる. 
+うまく行く計算の仕組みを見付けるのは大変だが, 
+ある特別な場合にうまく行くことを確認できれば, それを一般化するのは易しいことが多い.}.
+そして, それらの事実を使えば実際に拡大アフィンWeyl群の作用が定まっていることも
+確認できる%
+\footnote{拡大アフィンWeyl群作用については, 
+前節の天下り的な意味がよく分からない定義を出発点にするのではなく, 
+この節のLax表示を用いた定義の方を出発点に採用した方がよい.}.
+
+
+
+\subsection{量子展開環のChevalley生成元の像のべき $f_i^\gamma$ の作用}
+\label{sec:f^gamma}
+
+$q$ 差分版 Painlev\'e IV 方程式とその対称性の量子化を始めよう.
+まず, 基礎になる非可換環を量子群の方法を用いて構成しよう.
+
+$\B$ は生成元 $a_{ik}^\pm$, $b_{ik}^\pm$ ($i=1,2,3$, $k=1,2$) と
+以下の関係式で定義される $\C(q)$ 上の代数であるとする:
+\begin{align*}
+ &
+ \xi \xi^{-1} = \xi^{-1} \xi = 1
+ \qquad (\xi=a_{ik},b_{ik}),
+ \\ &
+ a_{ik} b_{ik} = q^{-1} b_{ik} a_{ik}, \quad
+ a_{ik} b_{i+1,k} = q b_{i+1,k} a_{ik}, \quad
+ a_{ik} b_{i+2,k} = b_{i+2,k} a_{ik}, 
+ \\ &
+ a_{ik} a_{jk} = a_{jk} a_{ik}, \quad
+ b_{ik} b_{jk} = b_{jk} b_{ik}, \quad
+ \xi_{i1} \eta_{j2} = \eta_{j2} \xi_{i1} \qquad (\xi,\eta=a,b).
+\end{align*}
+ただし $\xi_{i+3,k}=\xi_{ik}$ ($\xi=a,b$) によって
+インデックス $i$ を整数全体に拡張しておいた.
+
+$A^{(1)}_2$ 型の量子 $R$ 行列 $R(z)$ を次のように定める:
+\begin{align*}
+ R(z)
+ & = (q-q^{-1}z) \sum_i E_{ii}\otimes E_{ii}
+ + (1-z)       \sum_{i\ne j} E_{ii}\otimes E_{jj}
+ \\ & \,
+ + (q-q^{-1})  \sum_{i<j} (E_{ij}\otimes E_{ji} + z E_{ji}\otimes E_{ij}).
+\end{align*}
+ここで $i,j$ は $1,2,3$ の範囲内を動き, $E_{ij}$ は $(i,j)$ 成分のみが $1$ で
+他の成分が $0$ であるような $3\times 3$ 行列であるとする. 
+さらに行列 $L_k(z)$ を次のように定める:
+\begin{equation*}
+ L_k(z) =
+ \begin{bmatrix}
+    a_{1k} & b_{1k} & 0 \\
+    0 & a_{2k} & b_{2k} \\
+  z b_{3k} & 0 & a_{3k} \\
+ \end{bmatrix}.
+\end{equation*}
+この $L_k(z)$ たちを {\bf local $L$-operators} と呼ぶ.
+このとき代数 $\B$ の定義関係式は次の ``RLL=LLR'' 関係式に書き直される:
+\begin{align*}
+ &
+ R(z/w)L_k(z)^1 L_k(w)^2 = L_k(z)^2 L_k(z)^1 R(z/w)  \quad (k=1,2), 
+ \\ &
+ L_1(z)^1 L_2(w)^2 = L_2(w)^2 L_1(z)^1.
+\end{align*}
+ただし $L_k(z)^1=L_k(z)\otimes 1$, $L_k(w)^2=1\otimes L_k(w)$ と定めた.
+
+以上の構成は量子群の世界では標準的でよく知られている.
+
+量子展開環 $U_q(\glhat_3)$ の下Borel部分代数 $U_q(\bor_-)$ は
+生成元 $\kappa_o^{\pm 1}$, $\varphi_i$ ($i=1,2,3$) と次の関係式で定義される代数である:
+\begin{align*}
+ &
+ \kappa_i\kappa_i^{-1} = \kappa_i^{-1}\kappa_i = 1, \quad
+ \kappa_i\kappa_j = \kappa_j\kappa_i,
+ \\ &
+ \kappa_i \varphi_i \kappa_i^{-1} = q^{-1} \varphi_i, \quad
+ \kappa_{i+1} \varphi_i \kappa_{i+1}^{-1} = q \varphi_i, \quad
+ \kappa_{i+2} \varphi_i \kappa_{i+2}^{-1} = \varphi_i,
+ \\ &
+ \varphi_i^2 \varphi_{i\pm1} 
+ - (q+q^{-1})\varphi_i\varphi_{i\pm1}\varphi
+ + \varphi_{i\pm1}\varphi^2 = 0.
+\end{align*}
+インデックスを $3$ 周期的に整数全体に拡張しておいた.
+最後の関係式を $q$-Serre 関係式と呼び, 
+$\varphi_i$ たちを量子展開環の下三角部分の {\bf Chevalley 生成元}と呼ぶことにする.
+$\kappa_i^{\pm1}$ たちから生成される部分代数は {\bf Cartan 部分代数}と呼ばれる.
+
+
+各 $k$ ごとに次によって代数準同型を定めることができる:
+\begin{equation*}
+  \kappa_i^{\pm1}\mapsto a_{ik}^{\pm1},  \qquad
+  \varphi_i \mapsto a_{ik}^{-1} b_{ik}.
+\end{equation*}
+ゆえに $a_{ik}^{\pm 1}$ と $b_{ik}$ で生成される $\B$ の部分代数
+は $U_q(\glhat_3)$ の下Borel部分代数の
+テンソル積 $U_q(\bor_-)\otimes U_q(\bor_-)$ の
+\begin{align*}
+  &
+  \kappa_i^{\pm1}\otimes 1 \mapsto a_{i1}^{\pm1},  \quad
+  \varphi_i\otimes 1 \mapsto a_{i1}^{-1} b_{i1},
+%  \\ &
+\quad
+  1\otimes \kappa_i^{\pm1} \mapsto a_{i2}^{\pm1},  \quad
+  1\otimes\varphi_i\otimes 1 \mapsto a_{i2}^{-1} b_{i2}.
+\end{align*}
+で定まる代数準同型写像の像になっている.
+
+よく知られているように, local $L$-operaors の積 $L(z):=L_1(z)L_2(z)$ を考えることは
+量子展開環の余積を考えることに対応している.
+$U_q(\bor_-)$ の余積が
+\begin{equation*}
+  \Delta(\kappa_i^{\pm1}) = \kappa_i^{\pm1}\otimes\kappa_i^{\pm1}, \qquad
+  \Delta(\varphi_i) 
+  = \varphi_i\otimes \kappa_i^{-1}\kappa_{i+1} + 1\otimes\varphi_i
+\end{equation*}
+で定義される. 行列 $L(z)=L_1(z)L_2(z)$ の $(i,i)$ 成分は $\Delta(\kappa_i)$ の
+像に一致し, $(i,i+1)$ 成分を左から $(i,i)$ 成分で割ってできる元
+\begin{equation*}
+  f_i := a_{i1}^{-1}b_{i1}a_{i2}^{-1}a_{i+1,2} + a_{i2}^{-1}b_{i2}
+\end{equation*}
+は量子展開環の下三角部分のChevalley生成元の余積 $\Delta(\varphi_i)$ の像に一致する.
+	
+
+
+行列 $L(z) = L_1(z)L_2(z)$ の対角部分を
+\begin{equation*}
+  L_0=\diag(\ta_1,\ta_2,\ta_3), \qquad
+  \ta_i = a_{i1}a_{i2} \quad (i=1,2,3)
+\end{equation*}
+と書き, 行列 $\tL(z) := L_1(z)L_2(z)L_0$ を次のように書くことにする%
+\footnote{量子展開環の余積に対応する標準的な $L$-operator $L(z)=L_1(z)L_2(z)$ ではなく, 
+対角部分 $L_0$ を二重にした $\tL(z)=L(z)L_0$ を主に使うことになることに注意せよ.}:
+\begin{equation*}
+ \tL(z) = L_1(z)L_2(z)L_0 =
+ \begin{bmatrix}
+     \ta_1^2 & b_1     & c_1 \\
+   z c_2     & \ta_2^2 & b_2 \\
+   z b_3     & z c_3   & \ta_3^2 \\
+ \end{bmatrix},
+ \quad
+ \begin{cases}
+  b_i = (a_{i1}b_{i2}+b_{i1}a_{i+1,2})a_{i+1,1}a_{i+1,2}, \\
+  c_i = b_{i1}b_{i+1,2}a_{i+2,1}a_{i+2,2}.
+ \end{cases}
+\end{equation*}
+さらに $\ta_i$, $b_i$, $c_i$ のインデックスを $3$ 周期的に整数全体に拡張しておく.
+
+量子展開環の下三角部分のChevalley生成元の余積 $\Delta(\varphi_i)$ の
+像 $f_i$ は次のように表わされるのであった:
+\begin{equation*}
+  f_i = \ta_i^{-1}b_i\ta_{i+1}^{-1} = f_{i1} + f_{i2}, \quad
+  f_{i1} = a_{i1}^{-1}b_{i1}a_{i2}^{-1}a_{i+1,2}, \quad
+  f_{i2} = a_{i2}^{-1}b_{i2}
+\end{equation*}
+$f_i$ たちは $\varphi_i$ の余積たちの像なので特に $q$-Serre 関係式を満たしている. 
+ゆえに変数 $\gamma$ による $f_i$ のべき $f_i^\gamma$ を含む代数を
+構成することができ(\secref{sec:powers1}), 次の公式が成立することを示せる
+(\secref{sec:powers2}, \cite{Kuroki-W}, \cite{Kuroki-Tau}): $a_{ij}=a_{ji}=-1$ のとき
+\begin{align*}
+ &
+ f_i^\gamma f_j f_i^{-\gamma}
+ = q^{\pm\gamma}f_j+[\gamma]_q(f_i f_j - q^{\pm1} f_j f_i)f_i^{-1}
+ = [1-\gamma]_q f_j + [\gamma]_q f_i f_j f_i^{-1},
+ \\ &
+ f_i^\beta f_j^{\beta+\gamma} f_i^\gamma
+ = f_j^\gamma f_i^{\beta+\gamma} f_j^\beta.
+\end{align*}
+ここで $[\gamma]_q = (q^\gamma-q^{-\gamma})/(q-q^{-1})$.
+後者の関係式は {\bf Verma 関係式}と呼ばれている.
+
+すべてを計算だけで確認することもできる. 
+$\ta_i^{\pm 1}$, $b_i$, $c_i$ で生成される $\B$ の部分代数
+は $\ta_i^{\pm 1}$, $f_i$, $c_i$ で生成される部分代数
+に一致している. それらは以下の関係式を満たしている:
+\begin{align*}
+ &
+ f_i f_{i+1} - q f_{i+1} f_i = (1-q^2) \ta_i^{-1}c_i\ta_{i+1}^{-1}, 
+ \\ &
+ f_i c_j = c_j f_i, \quad
+ \ta_i\ta_j = \ta_j\ta_i, 
+ \\ &
+ c_i c_{i-2} = q c_{i-2} c_i, \quad
+ c_i c_{i+2} = q^{-1} c_{i+2} c_i, 
+ \\ &
+ \ta_i     f_i = q^{-1} f_i \ta_i, \quad
+ \ta_{i+1} f_i = q      f_i \ta_{i+1}, \quad
+ \ta_{i+2} f_i = f_i\ta_{i+2}, 
+ \\ &
+ \ta_i     c_i = q^{-1} c_i \ta_i, \quad
+ \ta_{i+1} c_i =        c_i \ta_{i+1}, \quad
+ \ta_{i+2} c_i = q      c_i \ta_{i+2}.
+\end{align*}
+これらの関係式を使えば必要な公式はすべて計算できる.
+特に重要なのは, $c_i$ たちが $f_j$ たちと可換になり, 
+$c_i$ どうしが $q$ べき指数因子を除けば可換になることである.
+この事実は後で $f_i$ 変数を変数変換するときに使われる.
+
+$\tL(z)$ の成分で $f_i$ と非可換なの
+は $\ta_i^2$, $\ta_{i+1}^2$, $b_{i-1}$, $b_{i+1}$ の4つだけであり, 
+\begin{align*}
+ &
+ f_i^\gamma b_{i+1} f_i^{-\gamma}
+ = b_{i+1} + (q^{-2\gamma}-1)\ta_i^2 b_i^{-1} c_i,
+ \\ &
+ f_i^\gamma b_{i-1} f_i^{-\gamma}
+ = b_{i-1} + (q^{2\gamma}-1)c_{i-1}b_i^{-1}\ta_i^2,
+ \\ &
+ f_i^\gamma \ta_i f_i^{-\gamma} = q^\gamma \ta_i, 
+ \\ &
+ f_i^\gamma \ta_{i+1} f_i^{-\gamma} = q^{-\gamma} \ta_{i+1} 
+\end{align*}
+が成立していることも確認できる.
+
+変換 $\Ad(f_i^\gamma)(x)=f_i^\gamma x f_i^{-\gamma}$ のLax表示を得る
+ために次のようにおく:
+\begin{equation*}
+ \cG_{i,c}  = y_i((c^{ 2}-1)\ta_{i+1}^2 b_i^{-1}), \quad
+ \cG'_{i,c} = y_i((c^{-2}-1)b_i^{-1}\ta_i^2).
+\end{equation*} 
+ただし,
+\begin{align*}
+ &
+ y_1(a) =
+ \begin{bmatrix}
+   1 & 0 & 0 \\
+   a & 1 & 0 \\
+   0 & 0 & 1 \\
+ \end{bmatrix},
+ \quad
+ y_2(a) =
+ \begin{bmatrix}
+   1 & 0 & 0 \\
+   0 & 1 & 0 \\
+   0 & a & 1 \\
+ \end{bmatrix},
+ \quad
+ y_3(a) =
+ \begin{bmatrix}
+   1 & 0 & z^{-1}a \\
+   0 & 1 & 0 \\
+   0 & 0 & 1 \\
+ \end{bmatrix}.
+\end{align*}
+このとき, $f_i^\gamma$ の作用に関する上の公式を使うと次が成立していることを示せる:
+\begin{align*}
+  f_i^\gamma \tL(z) f_i^{-\gamma} = \cG_{i,c} \tL(z) \cG'_{i,c}, \quad
+  c = q^{-\gamma}.
+\end{align*}
+これを $\Ad(f_i^\gamma)$ の{\bf Lax表示}と呼ぶ%
+\footnote{このタイプの公式を得るためには $L_1(z)L_2(z)$ そのものではなく, 
+その対角部分 $L_0$ を二重化した $\tL(z)=L_1(z)L_2(z)L_0$ を使わなければいけない.}.
+
+
+
+
+\subsection{不変部分代数への制限}
+\label{sec:fhat}
+
+代数 $\B$ の中心可逆元 $r$ を
+\begin{equation*}
+ r = c_1 c_3 c_2
+\end{equation*}
+と定め%
+\footnote{より一般に local $L$-operators の行列としてのサイズ $3$ 
+を $3$ 以上の奇数 $m$ に置き換えた場合には $r$ を \(
+ r = c_1 c_3 \cdots c_m c_2 c_4 \cdots c_{m-1}
+\) と定める.}, %
+対角行列 $\tC$ と $t_i\in\B$ を次のように定める%
+\footnote{行列のサイズが $3$ 以上の奇数 $m$ の場合には,
+$\tC$ を次のように定める: 
+\[
+ \tC=\diag(\tc_1,\ldots,\tc_m)
+ := \diag
+  (1, 
+   \co,                      c_1, 
+   \co c_2,                  c_1c_3, 
+   \co c_2c_4,               c_1c_3c_5, 
+   \ldots, 
+   \co c_2c_4\cdots c_{m-3}, c_1c_3\cdots c_m).
+\]
+ここで $\co=c_1c_3\cdots c_m$.}:
+\begin{equation*}
+ \tC = \diag(\tc_1,\tc_2,\tc_3) := \diag(1, c_1 c_3, c_1), \quad
+ t_i = \tc_i \ta_i \tc_i^{-1}.
+\end{equation*}
+この $t_i$ と $\ta_i=a_{i1}a_{i2}$ は $q$ べき因子を除いて一致する.
+$\tc_i$ のインデックスは整数全体に拡張{\bf しない}ことにする.
+
+このとき, 行列 $\hL(z) := \tC \tL(z) \tC^{-1}$ は次の形になる:
+\begin{equation*}
+ \hL(z) = \tC \tL(z) \tC^{-1} =
+ \begin{bmatrix}
+   t_1^2   & \hb_1 & 1     \\
+   rz      & t_2^2 & \hb_2 \\
+   zr\hb_3 & z     & t_3^2 \\
+ \end{bmatrix},
+ \qquad
+ \begin{cases}
+  \hb_1 = \tc_1 b_1 \tc_2^{-1}, \\
+  \hb_2 = \tc_2 b_2 \tc_3^{-1}, \\
+  \hb_3 = r^{-1} \tc_3 b_3 \tc_1^{-1}.
+ \end{cases}
+\end{equation*}
+前節までは $3$ 周期的にインデックスを整数全体に拡張していたが, 
+この節では次の{\bf 準}周期性によって $t_i$, $\hb_i$ のインデックスを整数全体に拡張しておく:
+\begin{equation*}
+ t_{i+3} = r^{-1}t_i, \quad
+ \hb_{i+3} = r^{-1} \hb_i.
+\end{equation*}
+
+このとき, $t_i$ たちは, 互いに可換なだけではなく, $\hb_j$ たちとも可換になる%
+\footnote{この事実がとても重要である.
+$\ta_i^{\pm1}$, $b_i^{\pm1}$, $c_i^{\pm1}$ で生成される代数には, 
+可逆な複素対角行列全体のなす群が
+行列 $\tL(z)$ の相似変換の形で作用している.
+その作用で不変な元全体のなす部分代数は $t_i^{\pm1}$, $\hb_i^{\pm1}$, $r^{\pm1}$ で生成される.
+すなわち行列 $\hL(z)$ を考えることは可逆な対角行列による相似変換で
+不変な部分代数を考えることに対応している.
+$\hL(z)$ のすべての成分が $t_i$ と可換になるのはこの不変性の帰結である.}.
+そこで $t_i$ たちを{\bf 量子化されたパラメーター変数}と呼ぶことにする.
+$\hL(z)$ の成分で $f_i$ と非可換なのは $t_i^2$, $t_{i+1}^2$, $\hb_{i+1}$, $\hb_{i-1}$ 
+の4つだけである. 
+
+$\Ad(f_i^\gamma)$ の $\hL(z)$ の作用のLax表示を得るために次のようにおく:
+\begin{equation*}
+ G_{i,c} = \tC \cG_{i,c} \tC^{-1}, \quad
+ G''_{i,c} = \tC \cG'_{i,c} \tC^{-1}.
+\end{equation*}
+後で $G'_{i,c}$ を別に定義するのでこのような記号法になっている.
+このとき, 
+\begin{align*}
+ &
+ G_{i,c} = y_i((c^2-1)t_{i+1}^2 \hb_i^{-1}),   \quad
+ G''_{i,c} = y_i((c^{-2}-1)\hb_i^{-1}t_i^2)  \quad
+ (i=1,2),
+ \\ &
+ G_{3,c} = y_3(r^{-1}(c^2-1)t_1^2\hb_3^{-1}), \quad
+ G''_{3,c} = y_3(r^{-1}(c^{-2}-1)\hb_3^{-1}t_3^2).
+\end{align*}
+前節の結果より, 次の公式が成立している:
+\begin{equation*}
+  f_i^\gamma \hL(z) f_i^{-\gamma} = G_{i,c} \hL(z) G''_{i,c}, \quad
+  c = q^{-\gamma}.
+\end{equation*}
+この公式より $\hL(z)$ が
+文献 \cite{BK-GC1} で導入された unipotent crystal (幾何クリスタルの一種)
+の量子化とみなせることがわかる.
+
+量子化されたパラメーター変数 $a_i$ を次のように定めておく%
+\footnote{パラメーター変数 $a_i$ は単純コルートに対応している.}:
+\begin{equation*}
+  a_i = t_i t_{i+1}^{-1}.
+\end{equation*}
+このとき, 量子化される前の幾何クリスタルの場合(\cite{BK-GC1}, \cite{BK-GC2})と同様
+の方法で、この量子化された場合にも, 
+拡大アフィンWeyl群 $\WW(A^{(1)}_2)=\bra s_0,s_1,s_2,\pi\ket$
+の作用を $t_i$, $\hb_i$ たちから $\C(q,r)$ 上生成される斜体上に
+次のように定めることができる:
+\begin{equation*}
+ s_i(\hL(z)) = G_{i,a_i} \hL(z) G_{i,a_i}^{-1}, \quad
+ \pi(\hL(z)) = \Lambda_3(z) \hL(rz) \Lambda_3(r^2z)^{-1}.
+\end{equation*}
+$G_{i,a_i} = {G''_{i,a_i}}^{-1} = y_i((t_i^2-t_{i+1}^2)\hb_i^{-1})$ 
+($i=1,2$) が成立していることに注意せよ%
+\footnote{$s_i = \pi^{i-1}s_1\pi^{-(i-1)}$ なので $s_1$ と $\pi$ の作用が
+定まっていれば $\WW(A^{(1)}_2)$ の作用を得るためには十分である.
+そこで以下の説明では $s_0=s_3$ の作用に関する説明を暗黙のうちに省略する
+ことがある.}.
+この作用を具体的に書き下すと次のようになる:
+\begin{align*}
+ &
+ s_i(t_i) = t_{i+1}, \quad
+ s_i(t_{i+1}) = t_i, \quad
+ s_i(t_{i+2}) = t_{i+2},
+ \\ &
+ s_i(\hb_i) = \hb_i, \quad
+ s_i(\hb_{i+1}) = \hb_{i+1} + (t_i^2-t_{i+1}^2)\hb_i^{-1}, \quad
+ s_i(\hb_{i-1}) = \hb_{i-1} - (t_i^2-t_{i+1}^2)\hb_i^{-1},
+ \\ &
+ \pi(t_j) = t_{j+1}, \quad
+ \pi(\hb_j) = \hb_{j+1}.
+\end{align*}
+準周期性 $t_{i+3}=r^{-1}t_i$, $\hb_{i+3}=r^{-1}\hb_i$ に注意せよ.
+
+
+以下の結果は\secref{sec:Sato-Wilson}において $\tau$ 函数へのWeyl群作用の
+Sato-Wilson表示について説明するために使われる.
+
+従属変数 $\hf_i$ を次のように定める
+\footnote{これは $\hf_1$, $\hf_2$ のみに通用する公式.
+$\hf_3$ についてはここだけで仮に $\tc_4=r$ とおけば
+同じ公式で適切な定義が可能である.}:
+\begin{equation*} 
+ \hf_i = -(q-q^{-1})^{-1}\tc_i f_i \tc_{i+1}^{-1}.
+\end{equation*}
+このとき $\hb_i = -(q-q^{-1})t_i \hf_i t_{i+1}$ が成立している.
+
+$\tc_i$ たちは $f_j$ たちと可換なので
+\begin{equation*}
+ \hf_i^\gamma f_j \hf_i^{-\gamma} = f_i^\gamma f_j f_i^{-\gamma}
+\end{equation*}
+を満たしている.  さらに $\tc_i$ たちは互いに $q$ べき因子を除いて可換である.
+ゆえに $\hf_i^\beta \hf_j^{\beta+\gamma} \hf_i^\gamma$ と
+$\hf_j^\gamma \hf_i^{\beta+\gamma} \hf_j^\beta$ も $q$ べき因子を
+除いて等しい. このことから, 
+上で構成したWeyl群作用を $f_i^\gamma$ ではなく, $\hf_i^\gamma$ を
+用いて構成できそうである. 
+しかし, $\hf_i$ たちは $f_i$ たちと違って $t_i$ たちと可換である.
+ゆえに $t_i$ たちへのWeyl群作用は $\hf_i^\gamma$ 以外の手段を用いて
+構成しなければいけない. そこで $\C(q,r)$ 上 $t_i$, $\hf_i$ で生成される
+斜体 $\K$ の代数自己同型 $\ts_i$ を次のように定めておく:
+\begin{equation*}
+ \ts_i(t_i)=t_{i+1}, \quad
+ \ts_i(t_{i+1})=t_i, \quad
+ \ts_i(t_{i+2})=t_{i+2}, \quad
+ \ts_i(\hf_j)=\hf_j.
+\end{equation*} 
+このとき $\K$ へのWeyl群作用を
+\begin{equation*}
+  s_i(x) = \Ad(\hf_i^\gamma)(\ts_i(x)) = \hf_i^\gamma\ts_i(x)\hf_i^{-\gamma}, \quad
+  c = q^{-\gamma} = a_i = t_i t_i^{-1}
+\end{equation*}
+によって定めることでき, この作用は上で構成したWeyl群作用と一致している:
+\begin{align*}
+ &
+ s_i(\hL(z)) = G_i \hL(z) G_i^{-1}, \quad
+ G_i := G_{i,a_i} = y_i(g_i), \quad
+ g_i = \frac{t_i^2-t_{i+1}^2}{\hb_i} = \frac{[\av_i]_q}{\hf_i}.
+\end{align*}
+この結果は\secref{sec:Sato-Wilson}で基本的な役目を果たす%
+\footnote{斜体の元 $a$, $b$ が互いに可換なとき, 
+$ab^{-1}=b^{-1}a$ を $a/b$ や $\frac{a}{b}$ と書くことにする.}.
+
+
+
+\subsection{変数 $x_i$, $y_i$ の量子化}
+\label{sec:xy}
+
+
+対角行列 $\tC'$ を次のように定める:
+\begin{equation*}
+ \tC' = \diag(\tc_3 b_{31}, \tc_1 b_{11}, \tc_2 b_{21}).
+\end{equation*}
+このとき行列 $X(z):=\tC L_1(z) \tC'^{-1}$, $Y(rz):=\tC' L_2(z) L_0 \tC^{-1}$ は
+次の形をしている%
+\footnote{実際にはその形になるように $\tC'$ を定めた. 
+適切な $\tC$ がすでに与えられているとき, $\tC'$ はその条件で一意に定まる.}:
+\begin{align*}
+ &
+ X(z)=\tC L_1(z) \tC'^{-1} =
+ \begin{bmatrix}
+  x_1 & 1   & 0 \\
+   0  & x_2 & 1 \\
+   z  & 0   & x_3 \\
+ \end{bmatrix},
+ \\ &
+ Y(rz)=\tC' L_2(z)L_0 \tC^{-1} =
+ \begin{bmatrix}
+  y_1 & 1   & 0  \\
+   0  & y_2 & 1  \\
+   rz & 0  & y_3 \\
+ \end{bmatrix}.
+\end{align*}
+この式によって
+量子化された従属変数 $x_i$, $y_i$ を定義する.
+それらのインデックスを準周期性 $x_{i+3}=r^{-1}x_i$, $y_{i+3}=r^{-1}y_i$ 
+によって整数全体に拡張しておく.
+
+このとき, $\ha_i = t_i^2 = x_i y_i$ および以下の関係式が成立している: 
+$\mu=1,2$ について, 
+\begin{alignat*}{2}
+ &
+ x_i y_i = y_i x_i = t_i^2, \quad
+ \\ &
+ x_i x_{i+\mu} = q^{(-1)^{\mu-1}2} x_{i+\mu} x_i, \qquad
+ & &
+ x_i y_{i+\mu} = q^{-(-1)^{\mu-1}2} y_{i+\mu} x_i,
+ \\ &
+ y_i y_{i+\mu} = q^{(-1)^{\mu-1}2} y_{i+\mu} y_i, \qquad
+ & &
+ y_i x_{i+\mu} = q^{-(-1)^{\mu-1}2} x_{i+\mu} y_i,
+ \\ &
+ t_i \xi_j = \xi_j t_i \quad (\xi=x,y,t).
+\end{alignat*}
+この関係式の古典極限は
+古典版の変数 $x_i,y_i,t_i$ のPoisson構造を再現する%
+\footnote{$\hbar=q^2-1$ とおいて $\hbar\to 0$ の古典極限を考える.}.
+このことより, この節の行列 $X(z)$, $Y(rz)$ は古典版の $q$ 差分化された
+Painlev\'e IV 方程式の記述で用いた行列 $X(z)$, $Y(rz)$ の
+量子化になっていることがわかる.
+
+
+$x_i$, $y_i$ たちは以下の条件から一意に決定される:
+\begin{equation*}
+  X(z)Y(rz) = \tC \tL(z) \tC^{-1} = \hL(z), \quad
+  r = c_1 c_3 c_2, \quad
+  x_3 x_2 x_1 = b_{31}^{-1}a_{31}b_{21}^{-1}a_{21}b_{11}^{-1}a_{11}.
+\end{equation*}
+$r$ と $x_3 x_2 x_1$ に関する条件の右辺は代数 $\B$ の可逆な中心元であることにも注意せよ.
+対角行列 $\tC$ の成分は $\tL(z)=L_1(z)L_2(z)L_0$ の成分 $c_i$ たちで書けていたの
+で,  $x_3 x_2 x_1$ に関する条件と $\tL(z)$ の成分から $x_i$, $y_i$ たちは一意に決まる.
+さらに $L_0$ は $L(z)=L_1(z)L_2(z)$ の対角部分だったので, 
+$x_3 x_2 x_1$ に関する条件と $L(z)$ の成分から $x_i$, $y_i$, $t_i$ 
+たちは一意に決まる. ($\tC=\diag(\tc_1,\tc_2,\tc_3)$, $L_0=\diag(\ta_1,\ta_2,\ta_3)$ であり, 
+$t_i$ は $t_i=\tc_i\ta_i\tc_i^{-1}$ と定義されたのであった.) 
+
+
+代数 $\B$ は $a_{ik}^{\pm1}$, $b_{ik}^{\pm1}$ から生成される代数なのであった.
+$\B$ には群 $(\C^\times)^3\times(\C^\times)^3$ の元 $(g,g')$ を
+次のように作用させることができる:
+\begin{equation*}
+ L_1(z)\mapsto g L_1(z) g'^{-1}, \quad
+ L_2(z)\mapsto g'L_2(z) g^{-1}.
+\end{equation*}
+ただし $(\C^\times)^3$ の元 $g$, $g'$ と可逆な対角行列を同一視した.
+この群作用を local $L$-operators $L_1(z)$, $L_2(z)$ の{\bf gauge変換}と呼ぶことにする.
+このguage変換で不変な $\B$ の元全体のなす部分代数を $\B^\gauge$ と
+書くことにする. $\B^\gauge$ は $x_i$, $y_i$, $t_i$, $r$ とその逆元たちで
+生成される.  
+
+
+
+
+\subsection{$\WW(A^{(1)}_2)\times\WW(A^{(1)}_1)$ の作用の量子化}
+
+
+前節の定義より, 次が成立していることがすぐにわかる($i=1,2$):
+\begin{align*}
+ &
+ \hL(z) = \tC L_1(z)L_2(z)L_0 \tC^{-1} = X(z)Y(rz),
+ \\ &
+ G_{i,c} = y_i(g_i(c)), \quad
+ g_i(c) := \frac{(c^{ 2}-1)t_{i+1}^2}{x_i+y_{i+1}}, 
+ \\ &
+ G''_{i,c} = y_i(g''_i(c)), \quad
+ g''_i(c) := \frac{(c^{-2}-1)t_i^2}{x_i+y_{i+1}}.
+\end{align*}
+さらに行列 $G'_{i,c}$ を次のように定める:
+\begin{align*}
+ G'_{i,c} = y_i(g'_i(c)), \quad
+ g'_i(c)
+ := \frac{(c^2-1)t_{i+1}^2}{c^2 t_{i+1}^2 x_i^{-1}+x_{i+1}}
+ = - \frac{(c^{-2}-1)t_i^2}{c^{-2}t_i^2 y_{i+1}^{-1}+y_i}.
+\end{align*}
+このとき, $\Ad(f_i^\gamma)$ の $X(z)$, $Y(rz)$ への作用は次のように書ける:
+\begin{align*}
+ &
+ f_i^\gamma X(z) f_i^{-\gamma} = G_{i,c} X(z) {G'_{i,c}}^{-1}, \quad
+ f_i^\gamma Y(rz) f_i^{-\gamma} = G'_{i,c} Y(rz) G''_{i,c}, \quad
+ c = q^{-\gamma}. 
+\end{align*}
+ゆえに, $x_i$, $y_i$ によって $\C(r,q)$ 上生成される斜体への
+拡大アフィンWeyl群 $\WW(A^{(1)}_2)=\bra s_0,s_1,s_2,\pi\ket$ の作用を
+次によって定めることができる:
+\begin{align*}
+ &
+ s_i(X(z)) = G_{i,a_i} X(z) {G'_{i,a_i}}^{-1}, \quad
+ s_i(Y(z)) = G'_{i,a_i} Y(rz) G''_{i,a_i}, \quad
+ \\ &
+ \pi(X(z)) = \Lambda(z)X(z)\Lambda(rz)^{-1}, \quad
+ \pi(Y(rz)) = \Lambda(rz)Y(rz)\Lambda(r^2z)^{-1}.
+\end{align*}
+以下の公式より, 以上の結果は古典版の $q$ 差分化された Painlev\'e IV 方程式
+の対称性(B\"acklund変換)の部分の量子化を与えていることがわかる:
+\begin{align*}
+ &
+ G_{i,a_i} = y_i(g_i), \quad
+ g_i = \frac{x_i y_i - x_{i+1}y_{i+1}}{x_i+y_{i+1}},
+ \\ &
+ G'_{i,a_i} = y_i(g'_i), \quad
+ g'_i = \frac{y_i x_i - y_{i+1}x_{i+1}}{y_i+x_{i+1}},
+ \\ &
+ G''_{i,a_i}=G_{i,a_i}^{-1}
+\end{align*}
+この作用はパラメーター変数 $t_i$ たちにも自然に拡張される. 
+
+以上で構成された $\WW(A^{(1)}_2)$ の作用の量子化の具体形は以下の通り:
+\begin{align*}
+ &
+ s_i(x_i) 
+ = x_i - (y_i x_i - y_{i+1}x_{i+1})(y_i+x_{i+1})^{-1}
+ = (x_i+y_{i+1})x_{i+1}(y_i+x_{i+1})^{-1},
+ \\ &
+ s_i(x_{i+1})
+ = x_{i+1} +(x_i+y_{i+1})^{-1}(y_i x_i - y_{i+1}x_{i+1})
+ =(x_i+y_{i+1})^{-1} x_i (y_i+x_{i+1}),
+ \\ &
+ s_i(y_i) 
+ = y_i - (x_i y_i - x_{i+1}y_{i+1})(x_i+y_{i+1})^{-1}
+ = (y_i+x_{i+1})y_{i+1}(x_i+y_{i+1})^{-1},
+ \\ &
+  s_i(y_{i+1})
+ = y_{i+1} +(y_i+x_{i+1})^{-1}(x_i y_i - x_{i+1}y_{i+1})
+ =(y_i+x_{i+1})^{-1} y_i (x_i+y_{i+1}),
+ \\ &
+ s_i(x_{i+2})=x_{i+2},
+ \quad
+ s_i(y_{i+2})=y_{i+2}, 
+ \\ &
+ s_i(t_i)=t_{i+1},  \quad
+ s_i(t_{i+1})=t_i,  \quad
+ s_i(t_{j+2})=t_{j+2},
+ \\ &
+ \pi(x_i) = x_{i+1},  \quad
+ \pi(y_i) = y_{i+1},  \quad
+ \pi(t_i) = t_{i+1}.
+\end{align*}
+これらの公式は $q$ が一ヶ所も出て来ないように書かれているので
+古典の場合の対応する公式と見かけ上完全に一致している.
+
+残りの $\WW(A^{(1)}_1)=\bra r_0,r_1,\varpi\ket$ の部分の作用の量子化も
+同様に構成される.
+$d_i$, $d'_i$ を次のように定めるとすべての $x_i$, $y_i$, $t_i$ と可換である:
+\begin{equation*}
+  d_i  = x_{i+2}x_{i+1}x_i, \quad
+  d'_i = y_{i+2}y_{i+1}y_i.
+\end{equation*}
+量子化された $V_i(w)$, $R_i$, $\rho_i$, $Q_i$ を古典の場合の公式をそのまま
+用いて
+\begin{align*}
+  &
+  V_i(w) =
+  \begin{bmatrix}
+    y_i & 1   \\
+    w   & x_i \\
+  \end{bmatrix},
+  \quad
+  R_i =
+  \begin{bmatrix}
+    1      & 0 \\
+    \rho_i & 1 \\
+  \end{bmatrix},
+  \quad
+  \rho_i = r \frac{d_i - d'_{i+1}}{Q_i},
+  \\ &
+  Q_i = y_{i+2}y_{i+1} + y_{i+2}x_i + x_{i+1}x_i.
+\end{align*}
+と定める. このとき $x_i$, $y_i$ によって $\C(r,q)$ 上生成される斜体への
+拡大アフィンWeyl群 $\WW(A^{(1)}_1)=\bra r_0,r_1,\varpi\ket$
+の作用を(古典の場合と同様の)次の式によって定めることができる:
+\begin{equation*}
+  r_1(V_i(z)) = R_{i+1}^{-1} V_i(z) R_i, \qquad
+  \varpi(V_i(z)) = \Lambda_2(w)V_i(w)\Lambda_2(w)^{-1}.
+\end{equation*}
+この作用はパラメーター変数 $t_i$ にも自然に拡張される.
+
+以上で構成された $\WW(A^{(1)}_1)$ の作用の量子化の具体形は以下の通り:
+\begin{align*}
+ &
+ r_1(x_i) 
+ = x_i - r Q_{i+1}^{-1}(x_{i+3}x_{i+2}x_{i+1}-y_{i+4}y_{i+3}y_{i+2})
+ = r^{-1} Q_{i+1}^{-1}y_i Q_i,
+ \\ &
+ r_1(y_i)
+ = y_i + r(x_{i+2}x_{i+1}x_i-y_{i+3}y_{i+2}y_{i+1})Q_i^{-1}
+ = r Q_{i+1} x_i Q_i^{-1},
+ \\ &
+ r_1(t_i) = t_i,  \quad
+ \varpi(x_i)=y_i,   \quad
+ \varpi(y_i)=x_i,   \quad
+ \varpi(t_i)=t_i.
+\end{align*}
+これらの公式も
+古典の場合の対応する公式と見かけ上完全に一致している.
+
+さらに, 以下の条件で以上で定義した2つの拡大アフィンWeyl群の $x_i$, $y_i$ への作用を
+特徴付けることもできる:
+\begin{align*}
+ &
+ r_1(X(z)Y(rz)) = X(z)Y(rz), 
+ \\ &
+ r_1(x_{i+2}x_{i+1}x_i) = y_{i+3}y_{i+2}y_{i+1}, \quad
+ r_1(y_{i+3}y_{i+2}y_{i+1}) = x_{i+2}x_{i+1}x_i,
+ \\ &
+ \varpi(X(z)) = Y(z), \quad
+ \varpi(Y(z)) = X(z),
+ \\[\medskipamount] &
+ s_i(V_{i+1}(w)V_i(w)) = V_{i+1}(w)V_i(w), \quad
+ s_i(V_{i+2}(w))=V_{i+2}(w),
+ \\ &
+ s_i(x_i y_i) = x_{i+1}y_{i+1}, \quad 
+ s_i(x_{i+1}y_{i+1})= x_i y_i,
+ \\ &
+ \pi(V_i(w)) = V_{i+1}(w).
+\end{align*}
+このことから2つの拡大アフィンWeyl群の作用が可換になることがわかる.
+したがって, 以上によって, $\WW(A^{(1)}_2)\times\WW(A^{(1)}_1)$ の作用の量子化
+が構成できたことになる.
+
+
+
+
+\subsection{\qP{IV} の量子化}
+\label{sec:qqPIV}
+
+古典の場合の $q$ 差分版 Painlev\'e IV 方程式の離散時間発展は
+$\WW(A^{(1)}_2)\times\WW(A^{(1)}_1)$ の作用における
+$\WW(A^{(1)}_1)=\bra r_0,r_1, \varpi\ket$ の側の $U_1=r_1\varpi$ の作用に
+一致しているのであった. 
+
+量子化された $U_1=r_1\varpi$ の作用の仕方は次の通り:
+\begin{align*}
+ &
+ U_1(x_i) = r Q_{i+1} x_i Q_i^{-1},
+ \qquad
+ U_1(y_i) = r^{-1} Q_{i+1}^{-1}y_i Q_i,
+ \qquad
+ U_1(t_i) = t_i.%,
+% \\[\medskipamount] &
+% Q'_i := \varpi(Q_i) = x_{i+2}x_{i+1} + x_{i+2}y_i + y_{i+1}y_i, 
+% \\ &
+% U_1^{-1}(x_i) = r^{-1} {Q'_{i+1}}^{-1}x_i Q'_i,
+% \qquad
+% U_1^{-1}(y_i) = r Q'_{i+1} y_i {Q'_i}^{-1},
+% \qquad
+% U_1^{-1}(t_i) = t_i.
+\end{align*}
+$Q_i$ は $Q_i=y_{i+2}y_{i+1} + y_{i+2}x_i + x_{i+1}x_i$ と定義されたのであった.
+
+
+量子化されたパラメーター変数 $a_i$ は
+古典の場合と同様に $a_i=t_i t_{i+1}^{-1}$ と定義されたのであった($t_i^2=x_i y_i=y_i x_i$).
+量子化された従属変数 $F_i$ も古典の場合と同様に次のように定義しよう:
+\begin{equation*}
+  F_i = t_i^{-1} t_{i+1}^{-1} x_{i+1} x_i.
+\end{equation*}
+このとき, $F_{i+3}=F_i$, $a_{i+3}=a_i$ が成立しており, 
+それらは以下の関係式を満たしている:
+\begin{equation*}
+  F_i F_j = q^{2 b_{ij}} F_j F_i,  \quad
+ a_i a_j = a_j a_i, \quad 
+ a_i F_j = F_j a_i.
+\end{equation*}
+たとえば $F_i F_{i+1}=q^2 F_{i+1} F_i$.
+この関係式の古典極限は古典の場合の Poisson 構造を再現する.
+
+
+$F_i$ の定義と $t_i^2= x_i y_i = y_i x_i$ と $x_i x_{i+1}=q^2 x_{i+1}x_i$ などより,
+\begin{equation*}
+  x_{i+1} x_i = t_i t_{i+1} F_i, \quad
+  y_{i+2} x_i = t_i t_{i+2} F_i F_{i+1}^{-1} ,\quad
+  y_{i+2} y_{i+1} = q^{-2} t_{i+1} t_{i+2} F_{i+1}^{-1}.
+\end{equation*}	
+ゆえに
+\begin{align*}
+  Q_i 
+  & = q^{-2} t_{i+1} t_{i+2} F_{i+1}^{-1}
+  + t_i t_{i+2} F_i F_{i+1}^{-1}
+  + t_i t_{i+1} F_i
+  \\
+  & = ( 1 + q^2 a_i F_i + q^2 a_i a_{i+1} F_i F_{i+1} ) 
+      q^{-2}t_{i+1}t_{i+2}F_{i+1}^{-1}
+  \\
+  Q_{i+1}
+  & = ( 1 + q^2 a_{i+1} F_{i+1} + q^2 a_{i+1} a_{i-1} F_{i+1} F_{i-1} )
+      q^{-2}r^{-1}t_{i+2}t_iF_{i-1}^{-1}
+  \\
+  Q_{i+2}
+  & = (1 + q^2 a_{i-1}F_{i-1} + q^2 a_{i-1} a_i F_{i-1} F_i)
+      q^{-2}r^{-2}t_it_{i+1}F_i^{-1}.
+\end{align*}
+これより, 特に
+\begin{align*}
+ &
+ U_1(F_i)
+ = r^2 Q_{i+2} F_i Q_i^{-1}
+ \\
+ &= (1 + q^2 a_{i-1}F_{i-1} + q^2 a_{i-1} a_i F_{i-1} F_i)
+    a_i a_{i+1} F_{i+1}
+    (1 + q^2 a_i F_i + q^2 a_i a_{i+1} F_i F_{i+1})^{-1}
+\end{align*}
+これが $q$ 差分版 Painlev\'e IV 方程式の{\bf 量子化された離散時間発展}である.
+
+
+
+
+\subsection{まとめ}
+
+以上によって $q$ 差分版 Painlev\'e IV 方程式の離散時間発展とその $A^{(1)}_2$ 対称性が
+量子化された.  量子化の過程で, $q$ 差分版 Painlev\'e IV 方程式の対称形式の
+独立変数 $F_i$, $x_i$, $y_i$ たちとパラメーター変数 $a_i$, $t_i$ たちが量子群のどこに
+どのように住んでいるかもわかった.
+
+量子化された従属変数 $F_i$ とパラメーター変数 $a_i$ の積 $a_i F_i = y_{i+1}^{-1}x_i$ 
+は $q$ のべき因子を除いて $\varphi_i\otimes\kappa_i^{-1}\kappa_{i+1}$ の像 $f_{i1}$ 
+と $1\otimes \varphi_i$ の像 $f_{i2}$ の比 $f_{i2}^{-1}f_{i1}$ に等しい. 
+すなわち $a_i F_i$ は $q$ のべき因子を除いて量子展開環の
+下三角部分の Chevalley 生成元 $\varphi_i$ の余積の2つの項の比の像に等しい.
+
+量子化されたパラメーター変数 $t_i$, $a_i$ のそれぞれは $q$ べき因子を除いて
+量子展開環の Cartan 部分代数の元 $\kappa_i$, $\kappa_i^{-1}\kappa_{i+1}$ の
+余積の像に等しい.
+
+要するに $q$ 差分化された Painlev\'e IV 方程式の対称形式の従属変数は
+量子展開環の下三角部分のChevalley生成元から来ており,
+パラメーター変数は量子展開環のCartan部分代数の生成元から来ている.
+
+$q$ 差分化された Painlev\'e IV 方程式の量子化の対称性 $s_i$ の作用
+は量子展開環の下三角部分のChevalley生成元の余積の像 $f_i$ のべき $f_i^\gamma$
+の作用から来ている. ただし, $\gamma$ とパラメーター変数の関係
+を $a_i=t_i/t_{i+1}=q^{-\gamma}$ としなければいけない.
+
+$x_i$, $y_i$, $t_i$ 変数は local $L$-operators $L_1(z)$, $L_2(z)$ の可逆な
+対角行列によるguage変換で不変な元であり, それらの逆元と $r^{\pm1}$ から
+guage変換で不変な $\B$ の元全体のなす部分代数 $\B^\gauge$ が生成される.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{$\tau$ 函数の量子化}
+
+前節では $q$ 差分版 Painlev\'e IV 方程式を例に Painlev\'e 系の量子化を
+量子群を使って遂行する方法について説明した.
+しかし, そこで量子化されたのは従属変数 $F_i$, $x_i$, $y_i$ たちと
+パラメーター変数 $a_i$, $t_i$ たちだけであり, 
+$\tau$ 函数は一切登場しなかった.
+
+この節では $\tau$ 函数の量子化を扱うことにする.
+より正確に言えば表現論と相性の良い量子化された {\bf $\tau$ 変数}を
+導入し, その基本性質を調べる.
+
+この文書で「量子化」は「Poisson 括弧を非可換環の交換子で置き換えること
+およびその一般化」を意味しているのであった.
+Painlev\'e 系の解に付随する $\tau$ 函数を考えてしまうと, 
+その意味での量子化を遂行できない.
+量子化できるのは Poisson 構造が定められた変数たちの方である.
+だから, この文書のタイトルは「$\tau$ 函数の量子化」ではなく
+「$\tau$ 変数の量子化」とするべきだったかもしれない.
+
+Painlev\'e 系の従属変数とパラメーター変数は Painlev\'e 系の
+舞台となる Poisson 多様体の座標変数であると考えられる.
+ゆえにそこに新たに $\tau$ 変数を付け加えるということは,
+Painlev\'e 系の舞台となる Poisson 多様体を拡張することを
+意味している. 
+
+$\tau$ 変数の量子化のためには $\tau$ 変数と従属変数やパラメーター変数の
+あいだのPoisson括弧が適切に定義されていなければいけない.
+しかし, 非常に残念なことに古典 Painlev\'e 系の論文で $\tau$ と他の変数のあいだ
+に Poisson 括弧を導入しているものを見付けることができなかった.
+だから, Poisson 括弧の情報無しに適切な量子 $\tau$ 変数の定義を
+見付けなければいけない.
+
+現時点でわかっていることは以下の通りである.
+
+
+
+\subsection{量子 $\tau$ 変数の導入}
+
+$q$ 差分版 Painlev\'e IV 方程式の量子化において
+出発点になる基礎となる代数は
+量子展開環 $U_q(\glhat_3)$ の下Borel部分代数 $U_q(\bor_-)$ だった. 
+以下ではこの場合を例に量子化された $\tau$ 変数を導入しよう.
+ただし, 可能な限り, 任意の対称化可能一般Cartan行列に付随する場合への一般化
+の仕方が分かるように説明したい.
+
+$\F=\C(q)$ とおき, 量子展開環などは $\F$ 上の代数として
+定義されていると考えることにする.
+以下で主に使うのは $U_q(\glhat_3)$ の下Borel部分代数全体ではなく, 
+下三角部分 $U_q(\nil_-)=\bra\varphi_0,\varphi_1,\varphi_2\ket$
+の方である.
+
+まず, $\A$ は$U_q(\nil_-)$ のある剰余環を部分環として
+含むOre整域であると仮定し, $Q(\A)$ はその分数斜体であるとする:
+\begin{equation*}
+ Q(\A) 
+ = \{\, ab^{-1} \mid a,b\in\A,\ b\ne0 \,\}
+ = \{\, b^{-1}a \mid a,b\in\A,\ b\ne0 \,\}.
+\end{equation*}
+たとえば\secref{sec:f^gamma}の $\B$ はそのような $\A$ の例になっている.
+一般にアフィン型もしくは有限型の量子展開環の部分環の剰余環で整域に
+なっているものはすべてOre整域になっている.
+
+次に, 記号 $\ev_1,\ev_2,\ev_3,\dv$ で張られる自由 $\Z$ 加群 $\Qv$ を考える.
+$\Qv$ を{\bf コルート格子}と呼ぶことにする.
+準周期条件
+\begin{equation*}
+  \ev_{i+3} = \ev_i - \dv
+\end{equation*}
+によってインデックスを整数全体に拡張しておく.
+$\Qv$ の群環の基底を $q^\gamma$ ($\gamma\in\Qv$) と書き, 
+$\Qv$ の群環を $\F[q^\Qv]$ と書くことにする.
+
+
+$\ev_i,\dv$ そのものおよび $q^{\ev_i},q^{\dv}$ を{\bf パラメーター変数}
+と呼ぶことにする.
+
+以下, $\K$ は $\A$ の分数斜体 $Q(\A)$ の部分斜体であると仮定する.
+
+$\K$ と $\F[q^\Qv]$ のテンソル積代数を $\K[q^\Qv]=\K\otimes\F[q^Qv]$ と表わす.
+$\K[q^\Qv]$ は $\K$ にパラメーター変数を添加して得られる代数である.
+$\K[q^\Qv]$ の中で $q^\gamma$ ($\gamma\in\Qv$) はすべての元と可換である.
+$\K[q^\Qv]$ もOre整域になるので, その分数斜体を $\K(q^\Qv)$ と表わす.
+
+{\bf 単純コルートに対応するパラメーター変数} $\av_i$ を次のように定める:
+\begin{equation*}
+ \av_i = \ev_i-\ev_{i+1}.
+\end{equation*}
+たとえば, $\theta^\vee=\av_1+\av_2=\ev_1-\ev_3$ と
+おくと $\av_0=\dv-\theta^\vee$ であり, $\av_{i+3}=\av_i$ が成立している.
+
+
+コルート格子 $\Qv$ の双対格子を $P$ と書き, {\bf ウェイト格子}と呼び,  
+$\ev_1,\ev_2,\ev_3,\dv$ の双対基底を $\eps_1,\eps_2,\eps_3,\Lambda_0$ と書く:
+\begin{align*}
+ &
+ \bra\ev_i,\eps_j\ket=\delta_{ij}, \quad
+ \bra\ev_i,\Lambda_0\ket=0, \quad
+ \bra\dv,\eps_j\ket=0, \quad
+ \bra\dv,\Lambda_0\ket=1.
+\end{align*}
+$\eps_i,\alpha_i, \Lambda_i\in X$ ($i\in\Z$) を次の条件によって定める:
+\begin{align*}
+ &
+ \eps_{i+3}=\eps_i, \quad
+ \Lambda_i = \Lambda_{i-1} + \eps_i,
+ \\ &
+ \alpha_i = \eps_i - \eps_{i+1} = 2\Lambda_i-\Lambda_{i-1}-\Lambda_{i+1}.
+\end{align*}
+このとき, 次が成立している:
+\begin{align*}
+ &
+ \bra\av_i,\alpha_j\ket = a_{ij} \quad (i,j=0,1,2),
+ \\ &
+ \bra\av_i,\Lambda_j\ket = \delta_{ij} \quad (i,j=0,1,2),
+ \qquad
+ \bra\av_i,\Lambda_{j+3}\ket=\bra\av_i,\Lambda_j\ket \quad (i,j\in\Z).
+\end{align*}
+ここで $[a_{ij}]_{i,j=0}^2$ は $A^{(1)}_2$ 型の一般Cartan行列である.
+そこで $\alpha_i$ を{\bf 単純ルート}と呼び, 
+$\Lambda_i$ を{\bf 基本ウェイト}と呼び, 
+$P$ の元を{\bf 整ウェイト}と呼ぶことにする.
+
+任意の $\mu\in P$ に対して, 
+パラメーター変数に作用する差分作用素 $\tau^\mu$ を
+次のように定める:
+\begin{equation*}
+  \tau^\mu(\gamma) = \gamma + \bra\gamma,\mu\ket
+  \quad (\gamma\in\Qv).
+\end{equation*}
+この作用は $q^\gamma$ のタイプのパラメーター変数に自然に拡張される:
+\begin{equation*}
+  \tau^\mu(q^\gamma) = q^{\bra\gamma,\mu\ket}q^\gamma
+  \quad (\gamma\in\Qv).
+\end{equation*}
+そこで次の関係式によって $\K[q^\Qv]$ に $\tau^\mu$ ($\mu\in P$)
+を添加してできる $\K[q^\Qv]$ の $q$ 差分作用素環 $\K[q^\Qv,\tau^P]$ が
+定義される:
+\begin{equation*}
+ \tau^\lambda a = a \tau^\lambda, \quad
+ \tau^\lambda q^\gamma = q^{\bra\gamma,\lambda\ket} q^\gamma \tau^\lambda, \quad
+ \tau^\lambda \tau^\mu = \tau^{\lambda+\mu} \quad
+ (a\in\A,\ \gamma\in\Qv,\ \lambda,\mu\in P).
+\end{equation*}
+同様に斜体 $\K(q^\Qv)$ に $q$ 差分作用素 $\tau^\lambda$ ($\lambda\in P$) を
+添加して得られる $q$ 差分作用素環 $\K(q^\Qv)[\tau^P]$ も定義される.
+
+
+実はこの差分作用素の意味で導入された記号 $\tau^\lambda$ たちが
+我々が必要としている{\bf 量子化された $\tau$ 変数}である.
+量子 $\tau$ 変数はパラメーター変数を動かす差分作用素なので, 
+量子化された場合ではパラメーター変数は $\tau$ 変数とは非可換になる. 
+
+特に重要なのは基本ウェイトに対応する差分作用素 $\tau^{\Lambda_i}$ たち
+である.  そこでそれらを $\tau_i$ と書き, 
+{\bf 基本 $\tau$ 変数}と呼ぶことにする:
+\begin{equation*}
+  \tau_i := \tau^{\Lambda_i}  \qquad
+ (\text{基本 $\tau$ 変数}).
+\end{equation*}
+基本変数 $\tau_i$ とは単純コルートに対応する
+パラメーター変数 $\av_i$ の正準共役 $\partial/\partial\av_i$ の
+指数函数 $\exp(\partial/\partial\av_i)$ のことだと考えることもできる.
+
+
+
+\subsection{量子 $\tau$ 変数へのWeyl群作用}
+
+コルート格子 $\Qv$ とウェイト格子 $P$ には次によってWeyl群作用が定まる:
+\begin{equation*}
+ s_i(\gamma) = \gamma - \bra\gamma,\alpha_i\ket\av_i, \quad
+ s_i(\lambda)=\lambda - \bra\av_i,\lambda\ket\alpha_i \quad
+ (\gamma\in\Qv,\ \lambda\in P).
+\end{equation*}
+たとえば, $i=0,1,2$ について, 
+\begin{align*}
+ &
+ s_i(\Lambda_i) = \Lambda_i-\alpha_i = \Lambda_{i-1}+\Lambda_{i+1}-\Lambda_i,
+% \\ &
+ \quad
+ s_i(\Lambda_j) = \Lambda_j \quad (i\ne j).
+\end{align*}
+この作用を $\K$ の元を固定するように $\K(q^\Qv)[\tau^P]$ に拡張したもの
+を $\ts_i$ と書く. すなわち, 以下の条件によって $\K(q^\Qv)[\tau^P]$ の
+代数自己同型 $\ts_i$ を定める:
+\begin{equation*}
+ \ts_i(q^\gamma)=q^{s_i(\gamma)}, \quad
+ \ts_i(\tau^\lambda)=\tau^{s_i(\lambda)}, \quad
+ \ts_i(a) = a \quad
+ (\gamma\in\Qv,\ \lambda\in P,\ a\in\K).
+\end{equation*}
+後でPainlev\'e系の対称性としての $\K(q^\Qv)[\tau^P]$ への
+作用を $s_i$ と書くことになる.
+
+代数 $\A$ における量子展開環の下三角部分のChevalley生成元 $\varphi_i$ の
+像を $f_i$ と書くことにする.
+そして, 簡単のため, すべての $i$ について $f_i\ne 0$ であると仮定する%
+\footnote{$f_i=0$ の場合にはWeyl群作用を構成するときに $f_i^{\av_i}$ を
+$1$ に置き換えればWeyl群作用は構成できる.}.
+
+さらに, $Q(\A)$ の部分斜体 $\K$ は 
+\begin{equation*}
+  f_i^\gamma \K(q^\Qv) f_i^{-\gamma} \subset \K(q^\Qv)
+  \quad (\gamma\in\Qv)
+\end{equation*}
+を満たしていると仮定する. 
+たとえば, Ore整域 $\A$ が $U_q(\nil_-)$ の剰余環になっているとき, 
+その分数斜体 $Q(\A)$ そのものを $\K$ とするとその条件が満たされている.
+他にも, $\A$ が\secref{sec:f^gamma}の代数 $\B$ のとき, 
+以下の斜体はその条件を満たしている:
+\begin{itemize}
+\item \secref{sec:f^gamma}の $\ta_i$, $b_i$, $c_i$ たちから生成される部分斜体,
+\item \secref{sec:fhat}の $t_i$, $\hf_i$, たちから生成される部分斜体,
+\item \secref{sec:xy}の $t_i$, $x_i$, $y_i$ たちから生成される部分斜体,
+\item \secref{sec:qqPIV}の $a_i$, $F_i$ たちから生成される部分斜体.
+\end{itemize}
+
+Verma関係式より, $a_{ij}=a_{ji}=-1$ ならば 
+\begin{equation*}
+   f_i^{\av_i} f_j^{\av_i+\av_j} f_i^{\av_j}
+ = f_j^{\av_j} f_i^{\av_i+\av_j} f_j^{\av_i}
+\end{equation*}
+が成立している(\secref{sec:powers2}). 
+作用素として $\ts_i f^\gamma = f^{s_i(\gamma)} \ts_i$ ($f\in\A$, $\gamma\in\Qv$) 
+が成立することを使うと,
+\begin{equation*}
+   f_i^{\av_i}\ts_i f_j^{\av_j}\ts_j f_i^{\av_i}\ts_i
+ = f_j^{\av_j}\ts_j f_i^{\av_i}\ts_i f_j^{\av_j}\ts_j
+\end{equation*}
+が成立することがわかる. このことから, 斜体 $\K(q^\Qv)$ に
+\begin{equation*}
+  s_i(x) = \Ad(f_i^{\av_i})(\ts_i(x)) = f_i^{\av_i} \ts_i(x) f_i^{-\av_i}
+  \quad (x\in\K(q^\Qv))
+\end{equation*}
+によってWeyl群の代数自己同型作用を定められることがわかる.
+
+ここで, すべての $f_i$ が $\K$ に含まれていると仮定する.
+
+このとき $s_i=\Ad(f_i^{\av_i})\ts_i$ の作用
+は $q$ 差分作用素環 $\K(q^\Qv)[\tau^P]$ に拡張される.
+公式 $\tau^\lambda f_i^{\gamma} = f_i^{\gamma+\bra\gamma,\lambda\ket}\tau^\lambda$ 
+($\gamma\in\Qv$) などを使うと,
+次が成立していることがわかる:
+\begin{equation*}
+ s_i(\tau^\lambda) = f_i^{\bra\av_i,\lambda\ket}\tau^{s_i(\lambda)},
+\end{equation*}
+特に基本 $\tau$ 変数への作用は以下のようになる:
+\begin{equation*}
+ s_i(\tau_i)=f_i\tau^{\Lambda_i-\alpha_i}
+ = f_i \frac{\tau_{i-1}\tau_{i+1}}{\tau_i},
+ \qquad 
+ s_i(\tau_j)=\tau_j \quad (i,j=0,1,2;\ i\ne j).
+\end{equation*}
+たとえば, 整域 $\A$ が $U_q(\nil_-)$ の剰余環で $\K=Q(\A)$ のとき, 
+以下の公式が成立していることがわかる:
+\begin{align*}
+ &
+ s_i(q^\gamma) = q^{s_i(\gamma)},
+ \quad
+ s_i(\tau^\lambda) = f_i^{\bra\av_i,\lambda\ket}\tau^{s_i(\lambda)},
+ \\ &
+ s_i(f_j) = 
+ \begin{cases}
+  f_j & \qquad (i=j \ \text{or}\ a_{ij}=0), \\
+  q^{\pm\av_i}f_j + [\av_i]_q(f_if_j-q^{\pm1}f_jf_i)f_i^{-1} & \qquad (a_{ij}=-1).
+ \end{cases}
+\end{align*}
+これらの公式(およびその対称化可能一般Cartan行列の場合への一般化)は
+文献 \cite{NY-BWA} で構成された双有理Weyl群作用の量子化かつ $q$ 差分化
+になっている.
+
+
+
+\subsection{Weyl群作用のSato-Wilson表示}
+\label{sec:Sato-Wilson}
+
+この節では一時的に $\A$ は\secref{sec:f^gamma}の代数 $\B$ であるとし, 
+$\K$ は\secref{sec:fhat}の $t_i$, $\hf_i$ たちで生成される斜体であるとし, 
+前節とは少し異なるWeyl群作用を $\K(q^\Qv)[\tau^P]$ 上に定める.
+
+$U_q(\nil_-)$ のChevalley生成元の取り方には定数倍の不定性があり, 
+公式 $s_i(\tau_i)=f_i\tau_i$ より, 
+Weyl群の $\tau$ 変数への作用の仕方は Chevalley 生成元を定数倍すれば変わる.
+$\tau$ 変数へのWeyl群作用にはもっと大きな不定性がある.
+
+前節の議論から $f_i$ たちが Verma 関係式を満たしていれば, 
+$s_i=\Ad(f_i^{\av_i})\ts_i$ の形でWeyl群作用を定めるには十分である.
+さらに $q$ べき因子を除いて $A$ と $B$ が等しいことを $A\sim B$ と
+書くことにすると, Verma関係式そのものがぴったり成立している必要はなく, 
+$f_i$ たちが \(
+      f_i^{\av_i} f_j^{\av_i+\av_j} f_i^{\av_j}
+ \sim f_j^{\av_j} f_i^{\av_i+\av_j} f_j^{\av_j}
+\) ($a_{ij}=a_{ji}=-1$) のタイプの弱いVerma関係式を満たしていれば, 
+$s_i=\Ad(f_i^{\av_i})\ts_i$ によってWeyl群作用を定めることができる.
+$f_i$ たちがVerma関係式を満たしており, 
+$u_i\in Q(\A)$ たちの積は $q$ べき因子を除いて可換であり, 
+$f_iu_j=u_jf_i$ が成立しているとき, 
+$u_if_i$ たちは弱いVerma関係式を満たしている.
+だから $s_i=\Ad((u_if_i)^{\av_i})\ts_i$ によってWeyl群作用を
+定めることもできる. このとき $s_i(\tau_i)=u_if_i\tau_i$ となる.
+
+この構成を\secref{sec:fhat}の $\hf_i$ たちに適用しよう.
+$\A$ は\secref{sec:f^gamma}の $\B$ であり, 
+$\K$ は\secref{sec:fhat}の $t_i$, $\hf_i$ たちで生成される斜体であるとする.
+$\hf_i$ は $f_i$ に $f_i$ たちと可換な $c_j^{\pm1}$ たちの積を
+かけたものになっており, $c_j$ たちの積は $q$ べき因子を除いて可換である.
+さらに $\hf_i$ たちと $t_j$ たちは可換であり, $t_{i+3}=r^{-1}t_i$, 
+$q^{\ev_{i+3}}=q^{-\dv}q^{\ev_i}$ が成立しているので, 
+$r=q^{\dv}$, $t_i=q^{-\ev_i}$ と同一視することにする.
+このとき\secref{sec:fhat}の $\ts_i$ と前節の $\ts_i$ は一致する.
+この同一視によって $\K(q^\Qv)$ の代わりに $\K$ そのものを扱えばよいことになった.
+$\pi$ の $\K$ への作用は\secref{sec:fhat}と同様に定めておく.
+
+$q$ 差分作用素環 $\K[\tau^P]$ に $s_i=\Ad(\hf_i^{\av_i})\ts_i$ に
+よってWeyl群作用を定めることができる. このとき, 以下の公式が成立している%
+\footnote{$\hb_i=-(q-q^{-1})t_i\hf_i t_{i+1}$ を使えば
+それらの公式から $s_i(\hf_i)$ を計算することができる.}:
+\begin{align*}
+ &
+ s_i(\tau_i) = \hf_i \frac{\tau_{i-1}\tau_{i+1}}{\tau_i}, \quad
+ s_i(\tau_j) = \tau_j \quad
+ (i=0,1,2,\ i\ne j),
+ \\ &
+ s_i(t_i) = t_{i+1}, \quad
+ s_i(t_{i+1}) = t_i, \quad
+ s_i(t_{i+2}) = t_{i+2},
+ \\ &
+ s_i(\hb_i) = \hb_i, \quad
+ s_i(\hb_{i+1}) = \hb_{i+1} + (t_i^2-t_{i+1}^2)\hb_i^{-1}, \quad
+ s_i(\hb_{i-1}) = \hb_{i-1} - (t_i^2-t_{i+1}^2)\hb_i^{-1},
+ \\ &
+ \pi(t_j) = t_{j+1}, \quad
+ \pi(\hb_j) = \hb_{j+1}.
+\end{align*}
+新しい公式は最初の行だけである, 
+残りの公式はすでに\secref{sec:fhat}で得られている.
+\secref{sec:fhat}では $s_i$ の $t_i$ と $\hb_i$ たちへの作用を
+行列 $\hL(z)$ を用いて記述する公式(Lax表示)が得られている.
+以下では $s_i$ の $\tau_j$ たちへの作用の行列表示(Sato-Wilson表示)
+について説明する.
+
+$t=(t_1,t_2,t_3)$ とおき,
+\begin{equation*}
+ D(t)=\diag(t_1^2,t_2^2,t_3^2)
+\end{equation*}
+と定める.
+$\K[[z]]$ の元を成分に持つ $3\times 3$ 行列 $U(z)=[u_{ij}(z)]$ 
+で $U(0)$ が対角成分がすべて $1$ の上三角行列になり, 
+\begin{equation*}
+  \hL(z) = U(z)D(t)U(r^2z)^{-1}
+\end{equation*}
+を満たすものが一意に存在する.  
+この一意性を使うと $\hL(z)$ へのWeyl群作用の公式から $U(z)$ へのWeyl群作用の
+公式を得ることができる. 結果を以下で説明しよう.
+
+$g_i\in\K$ と行列 $G_i$ を次のように定める($i=1,2$):
+\begin{equation*}
+ g_i = \frac{t_i^2-t_{i+1}^2}{\hb_i} = \frac{[\av_i]_q}{\hf_i}, \quad
+ G_i = y_i(g_i).
+\end{equation*}
+このとき,
+\begin{equation*}
+ s_i(\hL(z)) = G_i \hL(z) G_i^{-1}, \quad
+ \pi(\hL(z)) = \Lambda_3(z)\hL(rz)\Lambda_3(r^2z)^{-1}, \quad
+ u_{i,i+1}(0) =  -g_i^{-1}
+\end{equation*}
+が成立している. 
+
+$z_i=\tau^{\ev_i}$ とおき, 対角行列 $D_Z$ と行列 $Z(z)$ を
+\begin{equation*}
+  D_Z=\diag(z_1,z_2,z_3), \quad Z(z) = U(z)D_Z
+\end{equation*} 
+と定める. 行列 $S^g_i$, $S_i$ を次のように定める:
+\begin{align*}
+ &
+ S^g_1 =
+ \begin{bmatrix}
+   0    & g_1^{-1} & 0 \\
+   -g_1 & 0        & 0 \\
+   0    &          & 1 \\
+ \end{bmatrix},
+ \quad
+ S^g_2 =
+ \begin{bmatrix}
+   1 & 0 & 0 \\
+   0 & 0 & g_2^{-1} \\
+   0 & -g_2 & 0 \\
+ \end{bmatrix},
+ \\ &
+ S_1 =
+ \begin{bmatrix}
+   0           & -[\av_1+1]_q & 0 \\
+   [\av_1-1]_q & 0        & 0 \\
+   0           &          & 1 \\
+ \end{bmatrix},
+ \quad
+ S_2 =
+ \begin{bmatrix}
+   1 & 0           & 0 \\
+   0 & 0           & -[\av_2+1]_q \\
+   0 & [\av_2-1]_q & 0 \\
+ \end{bmatrix}.
+\end{align*}
+このとき以下が成立している:
+\begin{align*}
+ &
+ \hL(z) = Z(z)D(qt)Z(z)^{-1}, 
+ \\ &
+ s_i(U(z)) = G_i U(z) S^g_i,  \quad
+ \pi(U(z)) = \Lambda_3(z)U(rz)\Lambda_3(z)^{-1}, 
+ \\ &
+ s_i(D_Z) = (S^g_i)^{-1} D_Z S_i, \quad
+ \pi(D_Z) = \Lambda_3(z) D_Z \Lambda_3(z),
+ \\ &
+ s_i(D(t)) = S_i^{-1} D(t) S_i, \quad
+ \pi(D(t)) = \Lambda_3(z)D(t)\Lambda_3(r^2z)^{-1}.
+\end{align*}
+これらの公式より次が導かれる:
+\begin{equation*}
+ s_i(Z(z)) = G_i Z(z) S_i, \quad
+ \pi(Z(z)) = \Lambda_3(z) Z(rz) \Lambda_3(z).
+\end{equation*}
+これをWeyl群作用の{\bf Sato-Wilson表示}と呼ぶ.
+
+
+
+\subsection{基本 $\tau$ 変数へのWeyl群作用の結果の正則性}
+
+前々節の構成が対称化可能一般Cartan行列に付随する場合にまで一般化され, 
+次の定理が成立している.
+
+\begin{theorem}[\cite{Kuroki-Tau}]
+ 基本 $\tau$ 変数へのWeyl群作用の結果は $f_i$, $q^{\pm\av_i}$ たちについて
+ 多項式になる.
+ \qed
+\end{theorem}
+
+整ウェイト $\mu\in X$ が任意の $i$ について $\bra\av_i,\lambda\ket\geqq 0$
+を満たしているとき, $\mu$ をドミナント整ウェイトと呼ぶ.
+ドミナント整ウェイト全体の集合を $P_+$ と書く.
+Weyl群を $W$ と書く.
+
+ドミナント整ウェイト $\mu$ とWeyl群の元 $w$ によって $w(\mu)$ と
+表わされる整ウェイト全体の集合を $WP_+$ と書く.
+$\nu\in WP_+$ を $\nu=w(\mu)$, $w\in W$, $\mu\in P_+$ と書く
+とき $w(\tau^\mu)$ は $\nu$ だけから決まり, $w$ と $\mu$ の取り方によらない.
+そこで $\nu=w(\mu)\in WP_+$ に対して, $\tau(\nu) = w(\tau^\mu)$ とおく.
+
+このとき, 上の定理の結果は次のように言い変えられる:
+$\A$ が $U_q(\nil_-)$ の像に一致し, $\K=Q(\A)$ のとき,
+すべての $f_i$ が $0$ でないならば,  
+任意の $\nu\in WP_+$ に対して
+\begin{equation*}
+  \tau(\nu)=w(\tau^\mu) \in \A[q^\Qv]\tau^\nu
+  \qquad(\nu=w(\mu),\ w\in W,\ \mu\in P_+).
+\end{equation*}
+証明には表現論におけるBGGカテゴリー $\cO$ に関する理論を使う(\cite{Kuroki-Tau}).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録}
+
+あまり知られていないようなので, 
+非可換環の元 $f$ の変数 $\gamma$ によるべき $f^\gamma$ を純代数的に
+構成する方法をこの付録で解説しておく.
+それに続けて, 量子展開環の下三角部分のChevalley生成元のべきが満たす
+関係式の証明も簡単に解説しておく.
+
+
+\subsection{非可換環の元の変数によるべきを導入する方法}
+\label{sec:powers1}
+
+$A$ は可換とは限らない環であるとする.
+
+$X$ は空でない集合であるとする.
+このとき, べき集合 $A^X$ には自然に環構造が入る.
+以下では, この状況の下で, $A$ と
+単射準同型写像 $A\to A^X$, $a\mapsto (a)_{x\in X}$ による像を同一視することにする.
+これによって $A$ は $A^X$ の部分環とみなされる.
+
+変数 $\gamma$ による $A$ の可逆元 $f$ のべき $f^\gamma$ は
+環 $A^\Z$ の元として $f^\gamma = (f^k)_{k\in\Z}$ と定義される.
+任意の $k\in\Z$ について $f^k$ が満たしている関係式を $f^\gamma$ 
+も満たしている.  $A^\Z$ に埋め込まれた $A$ と $f^\gamma$ から
+生成された $A^\Z$ の部分環を考えれば, $A$ に $f$ の変数 $\gamma$ 
+によるべき $f^\gamma$ を付け加えた環が得られる.
+
+より一般に, 変数の組 $\gamma=(\gamma_1,\ldots,\gamma_N)$ の
+整係数多項式 $p(\gamma)$ に対して,  $f^{p(\gamma)}$ は
+$A^{\Z^N}$ の元として \(
+  f^{p(\gamma)}
+  = \left(f^{p(k)}\right)_{k\in\Z^N}
+\) と定義される. 
+このように定義された $f$ のべきは変数 $\gamma_i$ に任意の整数の組を
+代入したときに成立しているすべての関係式をみたしている. 
+たとえば
+\begin{equation*}
+ f^\gamma f^{-\gamma} = f^{-\gamma}f^\gamma = 1,  \quad
+ f^\lambda f^\mu = f^{\lambda+\mu}
+\end{equation*}
+が成立している. さらに, もしも $A$ の可逆元 $f$, $g$ と中心可逆元 $c$ が
+\begin{equation*}
+ f g = c g f
+\end{equation*} 
+という関係式を満たしていれば
+\begin{equation*}
+ f^\beta g^\gamma = c^{\beta\gamma} g^\gamma f^\beta
+\end{equation*}
+が成立している. 
+
+他にも, たとえば, もしも $A$ の可逆元 $f,g$ が
+\begin{equation*}
+　f^k g^{k+l} f^l = g^l f^{k+l} g^k
+  \quad (k,l\in\Z)
+\end{equation*}
+という関係式を満たしていれば
+\begin{equation*}
+  f^\beta g^{\beta+\gamma} f^\gamma
+ =g^\gamma f^{\beta+\gamma} g^\beta.
+\end{equation*}
+も成立している. 
+
+このように単純な処方箋で, 
+自然な関係式を満たしている変数 $\gamma$ によるべき $f^\gamma$ を
+非可換環に自由に付け加えることができる.
+
+
+
+
+\subsection{Chevalley生成元のべきが満たす関係式}
+\label{sec:powers2}
+
+いつものように $q$ 二項係数を次のように定めておく:
+\begin{align*}
+ &
+ [x]_q = \frac{q^x-q^{-x}}{q-q^{-1}}, \quad
+ [k]_q! = [1]_q[2]_q\cdots[k]_q,
+ \\ &
+ \qbinom{x}{k}_q = \frac{[x]_q[x-1]_q\cdots[x-k+1]_q}{[k]_q!} \quad
+ (k=0,1,2,\ldots).
+\end{align*}
+
+$\C(q)$ 上の代数 $\A$ の可逆元 $f,g$ はを任意に取り, 
+非負の整数 $k$ に対する $\ad_q(f)^k(g)\in\A$ を次のように定める:
+\begin{equation*}
+  \ad_q(f)(g)= fg - q^{-1} gf, \quad
+  \ad_q(f)^{k+1}(g) = f\ad_q(f)^k(g) - q^{2k-1}\ad_q(f)^k(g) f.
+\end{equation*}
+このとき, すべての整数 $l$ について
+次が成立することを帰納法で示せる%
+\footnote{$l$ が正の場合には両辺に右から $f^l$ をかけて
+得られる公式を帰納法で証明し, $l$ が負の場合には両辺に左から $f_i^{-l}$ を
+かけて得られる公式を証明する.}:
+\begin{equation*}
+  f^l g f^{-l} = 
+  \sum_{k=0}^\infty q^{(k-1)(l-k)}\qbinom{l}{k}_q \ad_q(f)^k(g) f^{-k}.
+\end{equation*}
+$k>l$ のとき $q$ 二項係数は $0$ になるので右辺は実際には有限和である.
+
+ここで, 次の $q$-Serre 関係式が成立していると仮定する:
+\begin{equation*}
+ \ad_q(f)^2(g) = f^2 g - (q+q^{-1})fgf + gf^2 = 0.
+\end{equation*}
+このとき, 上の公式より次が成立する:
+\begin{equation*}
+  f^l g f^{-l} = q^{-l}g + [l]_q(fg-q^{-1}gf)f^{-1}.
+\end{equation*}
+ゆえに前節の構成によって変数によるべき $f^\gamma$ は次を満たしている:
+\begin{equation*}
+ f^\gamma g f^{-\gamma} 
+ = q^{-\gamma} g + [\gamma]_q(fg-q^{-1}gf)f^{-1}.
+\end{equation*}
+この右辺は次のように変形できる:
+\begin{equation*}
+ f^\gamma g f^{-\gamma}
+ = [1-\gamma]_q g + [\gamma]_q fgf^{-1}
+ = q^\gamma g + [\gamma]_q(fg-qgf)f^{-1}.
+\end{equation*}
+
+さらに, 次の $q$-Serre 関係式も成立していると仮定する:
+\begin{equation*}
+ g^2 f - (q+q^{-1})gfg + fg^2 = 0.
+\end{equation*}
+このとき量子展開環の表現論によって任意の非負の整数 $k,l$ に対して
+\begin{equation*}
+  f^k g^{k+l} f^l = g^l f^{k+l} g^k
+\end{equation*}
+が成立することが知られている%
+\footnote{Verma加群のあいだの準同型がどれだけ
+存在するかに関する結果の一部である.
+$q$-Serre関係式を用いた直接の計算によって証明することもそう難しくない.}.
+これを{\bf Verma関係式}と呼ぶ%
+\footnote{より一般のVerma関係式とその証明については
+教科書 \cite{Lusztig} の Proposition 39.3.7 を参照せよ.}.
+$k,l$ が両方非負の整数の場合のVerma関係式から, 
+$k,l$ のどちらか片方もしくは両方が
+負の整数の場合にも同じ公式が成立することが導かれる%
+\footnote{たとえば $k$ が負で $k+l$ が非負の場合のVerma関係式は, 
+両辺に左から $f^{-k}$ をかけて 
+右から $g^{-k}$ をかけると, 
+非負の整数べきのみを含むVerma関係式の形になる.}.
+
+ゆえに, 前節の構成によって, 
+整数べきを変数べきで置き換えた次の公式が成立している:
+\begin{equation*}
+  f^\beta g^{\beta+\gamma} f^\gamma
+ =g^\gamma f^{\beta+\gamma} g^\beta.
+\end{equation*}
+これもVerma関係式と呼ぶ.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+
+\bibitem{BK-GC1}
+Berenstein, Arkady and Kazhdan, David. 
+Geometric and unipotent crystals. 
+GAFA 2000 (Tel Aviv, 1999).  
+Geom.\ Funct.\ Anal.\  2000,  Special Volume, Part I, 188--236.
+\arxivref{math/9912105}
+
+\bibitem{BK-GC2}
+Berenstein, Arkady and Kazhdan, David. 
+Geometric and unipotent crystals.\ II.\ 
+From unipotent bicrystals to crystal bases. 
+Quantum groups, 13–-88, Contemp.\ Math., 433, 
+Amer.\ Math.\ Soc., Providence, RI, 2007.
+\arxivref{math/0601391}
+
+\bibitem{Hasegawa-QB}
+Hasegawa, Koji.
+Quantizing the B\"acklund transformations of Painlev\'e equations and 
+the quantum discrete Painlev\'e VI equation. 
+{\em Exploring new structures and natural constructions in mathematical physics}, 275-288, 
+Adv.\ Stud.\ Pure Math., 61, {\em Math.\ Soc.\ Japan}, Tokyo, 2011.
+\arxivref{math/0703036}
+
+\bibitem{KNY-qPIV}
+Kajiwara, Kenji, Noumi, Masatoshi, and Yamada, Yasuhiko.
+A study on the fourth q-Painlev\'e equation.
+J.\ Phys.\ A 34 (2001), no.~41, 8563-8581. 
+\arxivref{nlin/0012063}
+
+\bibitem{KNY-WxW}
+Kajiwara, Kenji, Noumi, Masatoshi, and Yamada, Yasuhiko.
+Discrete dynamical systems with $W(A^{(1)}_{m-1}(1)\times A^{(1)}_{n-1})$ symmetry.
+Lett.\ Math.\ Phys.\ 60 (2002), no.~3, 211-219. 
+\arxivref{nlin/0106029}
+
+\bibitem{KNY-qKP}
+Kajiwara, Kenji, Noumi, Masatoshi, and Yamada, Yasuhiko.
+$q$-Painlev\'e systems arising from $q$-KP hierarchy.
+Lett.\ Math.\ Phys.\ 62 (2002), no.~3, 259-268. 
+\arxivref{nlin/0112045}
+
+\bibitem{Kuroki-WxW}
+黒木玄.
+互いに素な $m$, $n$ に対する
+拡大アフィンWeyl群の直積 $\WW(A^{(1)}_{m-1})\times\widetilde{W}(A^{(1)}_{n-1})$ の
+双有理作用の量子化. ノート, 2013年.
+\\ \href
+{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20130322WxW.pdf}
+{http://www.math.tohoku.ac.jp/{\TILDE}kuroki/LaTeX/20130322WxW.pdf}
+
+\bibitem{Kuroki-W}
+Kuroki, Gen. 
+Quantum groups and quantization of Weyl group symmetries of Painlev\'e systems. 
+{\rm Exploring new structures and natural constructions in mathematical physics}, 289-325, 
+Adv.\ Stud.\ Pure Math., 61, {\em Math.\ Soc.\ Japan}, Tokyo, 2011.
+\arxivref{0808.2604}
+
+\bibitem{Kuroki-Tau}
+Kuroki, Gen.
+Regularity of quantum tau-functions generated by quantum birational Weyl group actions.
+\arxivref{1206.3419}
+
+\bibitem{Lusztig}
+Lusztig, George. 
+Introduction to quantum groups. 
+Reprint of the 1994  edition.  
+Modern Birkhauser Classics. 
+Birkhauser/Springer, New York, 2010.\ xiv+346 pp. 
+
+\bibitem{Noumi-AWG}
+Noumi, Masatoshi.
+Affine Weyl group approach to Painlev\'e equations.
+Proceedings of the International Congress of Mathematicians, 
+Vol.~III (Beijing, 2002), 497-509, Higher Ed.\ Press, Beijing, 2002. 
+\arxivref{math-ph/0304042}
+
+\bibitem{NY-BWA}
+Noumi, Masatoshi and Yamada, Yasuhiko.
+Birational Weyl group action arising from a nilpotent Poisson algebra. 
+Physics and combinatorics 1999 (Nagoya), 287--319, 
+World Sci.\ Publ., River Edge, NJ, 2001. 
+\arxivref{math.QA/0012028}
+
+\bibitem{NY-RSK}
+Noumi, Masatoshi and Yamada, Yasuhiko.
+Tropical Robinson-Schensted-Knuth correspondence and birational Weyl group actions. 
+{\em Representation theory of algebraic groups and quantum groups}, 371-442,
+Adv.\ Stud.\ Pure Math., 40, {\em Math.\ Soc.\ Japan}, Tokyo, 2004. 
+\arxivref{math-ph/0203030}
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

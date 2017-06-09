@@ -1,0 +1,1232 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf Painlev\'e系とその $\tau$ 函数の正準量子化}
+\def\PDFTITLE{量子 Painlev\'e $\tau$ 函数}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{数学}
+\def\AUTHOR{黒木玄 (Gen Kuroki)}
+\def\INSTITUTE{東北大学数学教室
+\\ \quad
+\\ 日本数学会 2015年度秋季総合分科会 
+\\ 京都産業大学 2015年9月13日(日)～16日(水)
+\\ \VERSION
+%\\ \URL
+}
+\def\DATE{講演日2015年9月14日(月)
+}
+\def\VERSION{%
+2015/09/13 Version 0.1
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\documentclass[20pt,dvipdfm]{beamer}
+%\documentclass[17pt,dvipdfm]{beamer}
+\documentclass[14pt,dvipdfm]{beamer}
+%\documentclass[dvipdfm]{beamer}
+% pdfの栞の字化けを防ぐ
+% \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}
+% テーマ
+%\usetheme{AnnArbor}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+%\usecolortheme{crane}
+\usecolortheme{dove}
+%\usecolortheme{seagull}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% navi. symbolsは目立たないが，dvipdfmxを使うと機能しないので非表示に
+\setbeamertemplate{navigation symbols}{} 
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amscd}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% フォントはお好みで
+\usepackage{txfonts}
+\mathversion{bold}
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\setbeamerfont{title}{size=\large,series=\bfseries}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamertemplate{frametitle}[default][center]
+\usefonttheme{professionalfonts} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\tW{{\widetilde W}}
+\newcommand\WxW{\tW(A^{(1)}_{m-1})\times\tW(A^{(1)}_{n-1})}
+\newcommand\Peq[1]{\mathrm{P}_{\mathrm{#1}}}
+\newcommand\PIV{\Peq{IV}}
+\newcommand\qPeq[1]{q\mathrm{P}_{\mathrm{#1}}}
+\newcommand\qPIV{\qPeq{IV}}
+\newcommand\eps{\varepsilon}
+\newcommand\MOD{\mathop{\mathrm{mod}}\nolimits}
+\renewcommand\pmod[1]{\;(\MOD #1)}
+\renewcommand\d{\partial}
+\newcommand\ad{\mathop{\mathrm{ad}}\nolimits}
+\newcommand\Ad{\mathop{\mathrm{Ad}}\nolimits}
+\newcommand\Hom{\mathop{\mathrm{Hom}}\nolimits}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\newcommand\av{\alpha^\vee}
+\newcommand\ev{\eps^\vee}
+\newcommand\A{{\mathcal A}}
+\newcommand\K{{\mathcal K}}
+\newcommand\B{{\mathcal B}}
+\newcommand\N{{\mathcal N}}
+\newcommand\cl{{\mathrm{cl}}}
+\newcommand\h{{\mathfrak h}}
+\newcommand\n{{\mathfrak n}}
+%\renewcommand\b{{\mathfrak b}}
+\newcommand\g{{\mathfrak g}}
+\newcommand\Spec{\mathop{\mathrm{Spec}}\nolimits}
+\newcommand\lie{\mathrm}
+\newcommand\trace{\mathop{\mathrm{tr}}\nolimits}
+\makeatletter\newcommand\qbinom{\genfrac[]\z@{}}\makeatother
+\newcommand\st{{\tilde s}}
+\newcommand\rt{{\tilde r}}
+\newcommand\gr{\mathop{\mathrm{gr}}\nolimits}
+\newcommand\Lt{\widetilde{L}}
+\renewcommand\L{{\mathcal L}}
+\newcommand\M{{\mathcal M}}
+\newcommand\G{{\mathcal G}}
+\newcommand\diag{\mathop{\mathrm{diag}}\nolimits}
+\newcommand\At{\widetilde{\A}}
+\newcommand\Wt{\widetilde{W}}
+\newcommand\minv{{\widetilde m}}
+\newcommand\ninv{{\tilde n}}
+\newcommand\all{{\mathrm{all}}}
+\newcommand\ball{b_\all}
+\newcommand\isom{\cong}
+\newcommand\LL{{\mathbb L}}
+\newcommand\XX{{\mathbb X}}
+\newcommand\bigzerol{\smash{\hbox{\large $0$}}}             % 左下の大きなゼロ
+\newcommand\bigzerou{\smash{\lower.3ex\hbox{\large $0$}}}   % 右上の大きなゼロ
+\newcommand\bigstarl{\smash{\hbox{\Large $*$}}}           % 左下の大きな星
+\newcommand\bigstaru{\smash{\lower.3ex\hbox{\Large $*$}}} % 右上の大きな星
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\tL{{\widetilde{L}}}
+\newcommand\tM{{\widetilde{M}}}
+\newcommand\cG{{\mathcal{G}}}
+\newcommand\tg{{\tilde{g}}}
+\newcommand\ta{{\tilde{a}}}
+\newcommand\tb{{\tilde{b}}}
+\newcommand\tc{{\tilde{c}}}
+\newcommand\ts{{\tilde{s}}}
+\newcommand\tw{{\tilde{w}}}
+\newcommand\tC{{\widetilde{C}}}
+%\newcommand\tW{{\widetilde{W}}}
+\newcommand\hL{{\widehat{L}}}
+\newcommand\hM{{\widehat{M}}}
+\newcommand\ha{{\hat{a}}}
+\newcommand\hb{{\hat{b}}}
+\newcommand\hf{{\hat{f}}}
+\newcommand\dv{\delta^\vee}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\arxivref[1]{{\tt\red arXiv:#1}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{{\tt arXiv:#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\migiue{\text{／}}
+\newcommand\migish{\text{＼}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\magenta\TITLE}
+\author{\AUTHOR}
+\institute{\INSTITUTE}
+\date{\DATE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\titlepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{量子化できている場合の概略}
+
+微分版の $\PIV$ と $q$ 差分版の $\qPIV$ を含んでいる.
+
+\bigskip
+
+対称性(B\"acklund変換)の量子化については\\
+対称化可能GCMに付随するすべての場合
+
+\bigskip
+
+微分版 $\longrightarrow$ Kac-Moody 代数 $\g$ による定式化
+
+$q$ 差分版 $\longrightarrow$ 量子展開環 $U_q$ による定式化
+
+\smallskip{\small (ただし, Borel 部分代数のみを使う場合)}
+
+\bigskip
+
+$A^{(1)}_{m-1}$ 型の場合の Lax formalism
+
+$A^{(1)}_{m-1}$ 型の場合の Sato-Wilson formalism
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{正準量子化とは}
+
+古典力学 $\longrightarrow$ 量子力学
+
+\bigskip
+
+Poisson 括弧 $\longrightarrow$ 非可換性(交換関係)
+
+\bigskip
+
+$\{p,x\}=1$ $\longrightarrow$ $[p,x]=px-xp=1$
+\quad ($p=\d/\d x$, 微分)
+
+\bigskip
+
+$\{\tau,x\}=\tau$ $\longrightarrow$ $\tau x \tau^{-1} = x+1$ 
+\quad ($\tau=e^{\d/\d x}$, 差分)
+
+\bigskip
+
+$\{\tau,a\}=\tau a$ $\longrightarrow$ $\tau a\tau^{-1}=qa$ 
+\quad ($a=q^x$, $q$ 差分)
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Painlev\'e 系の量子化}
+\begin{small}
+
+\begin{tabular}{ccc}
+古典 Painlev\'e 系 & $\longrightarrow$ & 量子 Painlev\'e 系
+\\
+\\
+互いに可換な変数   & $\longrightarrow$ & 互いに非可換な変数
+\\
+\(
+\left\{
+\begin{array}{ll}
+ \text{従属変数}         & f_i    \\
+ \text{\footnotesize パラメーター変数} & \av_i  \\
+ \text{$\tau$ 変数}      & \tau_i \\
+\end{array}
+\right\}
+\)
+& $\longrightarrow$ &
+\(
+\left\{
+\begin{array}{ll}
+ \text{量子従属変数}         & f_i    \\
+ \text{\footnotesize 量子パラメーター変数} & \av_i  \\
+ \text{量子 $\tau$ 変数}      & \tau_i \\
+\end{array}
+\right\}
+\)
+\\
+\\
+$\{\tau_i,\av_j\}=\delta_{ij}\tau_i$ &
+$\longrightarrow$ &
+$\tau_i \av_j \tau_i^{-1} = \av_j+\delta_{ij}$
+\\
+$\{\tau_i, q^{\av_j}\}=\delta_{ij}\tau_i q^{\av_j}$ &
+$\longrightarrow$ &
+$\tau_i q^{\av_j} \tau_i^{-1} = q^{\delta_{ij}} q^{\av_j}$
+\\
+$\tau_i=\exp(\Lambda_i)$ &
+$\longrightarrow$ &
+$\tau_i=\exp(\d/\d \av_i)$
+\\
+\end{tabular}
+
+\bigskip
+
+$\av_i = \text{(simple coroot)}$ \\
+$\Lambda_i = \text{(fundamental weight)}$
+
+\medskip
+
+$\{\Lambda_i,\av_j\} = \Lambda_i(\av_j) = \delta_{ij}$
+
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{例: 微分版 Painlev\'e $\PIV$ の量子化}
+\begin{small}
+
+{\red $A^{(1)}_2$} 型の場合.
+
+\bigskip
+
+$f_{i+3}=f_i$, \quad $\av_{i+3}=\av_i$, \quad
+
+\medskip
+
+$[f_i,f_{i+1}]=1$, \quad
+$[\av_i,\av_j]=0$, \quad 
+$[\av_i,f_j]=0$.
+
+\bigskip
+
+$\PIV$: \qquad\qquad
+\(
+\dfrac{\d f_i}{\d t}=f_i f_{i+1} - f_{i-1}f_i+\av_i
+\)
+
+\bigskip
+
+対称性(Weyl群作用):
+\\
+\qquad\qquad\qquad
+\( s_i(f_i)=f_i \), \quad
+\( s_i(f_{i\pm1})=f_{i\pm1}\pm\dfrac{\av_i}{f_i} \),
+\\[\medskipamount]
+\qquad\qquad\qquad
+\( s_i(\av_i)=-\av_i \), \quad
+\( s_i(\av_{i\pm1})=\av_i+\av_{i\pm1} \).
+
+\bigskip
+
+非可換性以外は古典の場合と同じ.
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{例: 微分版 Painlev\'e $\PIV$ の $\tau$ 変数の導入}
+\begin{small}
+
+量子化された $\tau$ 変数 $\tau_i = \exp(\d/\d\av_i)$ (差分作用素):
+
+\medskip
+\qquad\qquad
+{\red
+$\tau_i\av_j\tau_i^{-1}=\av_j+\delta_{ij}$, \quad
+$\tau_i\tau_j=\tau_j\tau_i$, \quad
+$\tau_i f_j = f_j \tau_i$.
+}
+
+\medskip
+
+対称性(Weyl群作用): 
+\\[\medskipamount]
+\qquad\qquad
+\( s_i(\tau_i)=f_i\dfrac{\tau_{i-1}\tau_{i+1}}{\tau_i} \), \qquad
+$s_i(\tau_j)=\tau_j$ \quad ($j\not\equiv i\pmod 3)$.
+
+\medskip
+
+対称性を用いて従属変数 $f_i$ を $\tau$ 変数で表示できる:
+\\[\medskipamount]
+\qquad\qquad\qquad\qquad\qquad
+$f_i = \dfrac{s_i(\tau_i)\tau_i}{\tau_{i-1}\tau_{i+1}}$.
+
+\bigskip
+
+非可換性以外は古典の場合と同じ.
+
+\medskip
+
+{\red しかし, $\tau$ 変数の正しい非可換性(の候補)は知られていなかった.}
+
+\medskip
+
+$\tau$ 変数は任意の対称化可能GCMに付随する場合に可能.
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{$\tau$ 変数へのWeyl群作用の結果の多項式性}
+
+古典の場合は漸化式で有理函数として定義される\\
+岡本多項式が実際に多項式になることの一般化
+
+\bigskip
+
+$w\in W=\bra s_0,s_1,s_2\ket$ に対して
+\begin{align*}
+w(\tau_i)
+&= (\text{$f_i$, $\av_i$ たちの非可換{\red 多項式}})
+\\
+&\,\times(\text{$\tau$ 変数のLaurent単項式})
+\end{align*}
+
+公式 $s_i(f_{i+1})=f_{i+1}+\av_i/f_i$ などのせいで非自明. \\
+分母が出て来る項がすべてキャンセルして消えることを示さなければいけない.\\
+{\red\bf 表現論の tanslation functor に関する結果を使う!}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{ここまでのまとめ}
+
+微分版のPainlev\'e系の量子化については
+\\[\medskipamount]
+\quad {\small 野海正俊著『パンルヴェ方程式---対称性からの入門---』}
+\\[\medskipamount]
+の内容の正準量子化が\\
+{\red $\tau$ 函数の量子化も含めて}(ほぼ)できている.
+
+\bigskip
+
+しかも, その過程で, Kac-Moody 代数の表現論の translation functor 
+と量子化された $\tau$ 変数のあいだの\\関係が判明:
+\[
+\tau_i \longleftrightarrow
+(\text{fund.\ wt.\ $\Lambda_i$ に対応するtransl.\ functor})
+\]
+より一般に{\small\red
+\[
+ (\text{$\tau$ 変数の単項式})
+ \longleftrightarrow
+ (\text{dom.\ int.\ wt.\ に対応する transl.\ functor})
+\]
+}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{量子化だけではなく, $q$ 差分化も!}
+
+微分版の量子化の公式は古典の場合とほぼ同じ.\\
+特別な道具を使わない直接的な計算で色々わかる.
+
+\bigskip
+
+$q$ 差分版の量子化を直接的な計算で構成するのは難しい.
+適切な非可換性の入れ方もわからないことが多い.
+
+\bigskip
+
+{\red 量子群の助けを借りる!}
+
+\bigskip
+
+$q$ 差分版 Painlev\'e IV $\qPIV$ を例に説明する. 
+
+\medskip
+
+{\small 以下で紹介する公式はすべて量子群の助けを借りて見付けたもの.}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{古典の場合の $q$ 差分版 Painlev\'e IV $\qPIV$}
+\begin{small}
+
+{\red $A^{(1)}_2$} 型の場合.
+
+\bigskip
+
+従属変数 $F_{i+3}=F_i$, \quad パラメーター変数 $a_{i+3}=a_i$
+
+\bigskip
+
+$\qPIV$: \quad
+\(
+T_{\qPIV}(F_i)
+=
+a_i a_{i+1} F_{i+1}
+\dfrac
+{1+a_{i-1}F_{i-1}+a_{i-1}a_i F_{i-1}F_i}
+{1+a_i F_i + a_i a_{i+1} F_i F_{i+1}}
+\), 
+\\
+\qquad\quad\;\,
+\( T_{\qPIV}(a_i)=a_i \).
+
+\bigskip
+
+対称性(Weyl群作用):
+\\
+\qquad\qquad
+$s_i(F_i)=F_i$, \quad
+$s_i(F_{i\pm1})=F_{i\pm1}\left(\dfrac{1+a_iF_i}{a_i+F_i}\right)^{\pm1}$, \quad
+\\
+\qquad\qquad
+$s_i(a_i) = a_i^{-1}$, \quad
+$s_i(a_{i\pm1}) = a_ia_{i\pm1}$.
+
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\QqPIV{
+$F_i F_{i+1}=q^2 F_{i+1} F_i$, \quad
+$a_i a_j=a_j a_i$, \quad
+$a_i F_j = F_j a_i$.
+
+\bigskip
+
+量子 $\qPIV$ (離散時間発展):
+\begin{align*}
+T_{\qPIV}(F_i)
+&=(1+q^2 a_{i-1}F_{i-1}+q^2 a_{i-1}a_i F_{i-1}F_i)
+\\
+& \,\times a_i a_{i+1} F_{i+1}
+\\
+& \,\times(1+q^2 a_i F_i + q^2 a_i a_{i+1} F_i F_{i+1})^{-1}
+\\
+T_{\qPIV}(a_i)
+&=a_i.
+\end{align*}
+
+対称性(Weyl群作用):
+\\[\medskipamount]
+\qquad\qquad
+$s_i(F_i)=F_i$, 
+\\
+\qquad\qquad
+$s_i(F_{i-1})=F_{i-1}\dfrac{a_i+F_i}{1+a_i F_i}$, \quad
+$s_i(F_{i+1})=\dfrac{1+a_i F_i}{a_i+F_i}F_{i+1}$, 
+\\
+\qquad\qquad
+$s_i(a_i) = a_i^{-1}$, \quad
+$s_i(a_{i\pm1}) = a_ia_{i\pm1}$.
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{$q$ 差分版 Painlev\'e IV $\qPIV$ の量子化}
+\begin{small}
+
+\QqPIV
+
+\bigskip
+
+{\red 対称性の方に注目して量子群との関係を見付ける(結構複雑).}
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+%\frametitle{}
+
+\begin{center}
+\large
+
+以下の構成は結構複雑.
+
+\bigskip\bigskip
+
+1. 量子群の $L$-operator を定義する.
+\end{center}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{量子$L$-operatorから$\qPIV$の量子化へ 1}
+\begin{small}
+
+$A^{(1)}_2$ 型の $R$ 行列:
+\begin{align*}
+ R(z)
+ & = (q-q^{-1}z) \sum_i E_{ii}\otimes E_{ii}
+ + (1-z)       \sum_{i\ne j} E_{ii}\otimes E_{jj}
+ \\ & \,
+ + (q-q^{-1})  \sum_{i<j} (E_{ij}\otimes E_{ji} + z E_{ji}\otimes E_{ij}).
+\end{align*}
+$i,j$ は $1,2,3$ を動く. $E_{ij}$ は $3\times3$ の行列単位.
+
+\bigskip
+
+$A^{(1)}_2$ 型の量子 $L$-operator の定義は {\red ``$RLL=LLR$''}: 
+\\
+$3\times3$ 行列 $L(z)$ の成分は非可換環の元,
+\begin{align*}
+&
+{\red R(z/w)L(z)^1 L(w)^2 = L(w)^2 L(z)^1 R(z/w)}, \quad
+\\ &
+L(z)^1=L(z)\otimes 1, \quad L(w)^2=1\otimes L(w).
+\end{align*}
+
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+%\frametitle{}
+
+\begin{center}
+\large
+2-1. 2つの二重対角型 $L$-operators の積.
+
+\bigskip
+
+2-2. その{\red 対角部分を二重化 $\tL(z)$}.
+\end{center}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{量子$L$-operatorから$\qPIV$の量子化へ 2}
+\begin{small}
+
+次のような二重対角型の上三角 $L$-operator を考える:
+\[
+L_k(z) =
+\begin{bmatrix}
+a_{1k}   & b_{1k} & 0      \\ 
+0        & a_{2k} & b_{2k} \\
+z b_{3k} & 0      & a_{3k} \\
+\end{bmatrix}
+\]
+より正確に言えば, 各々の $L_k(z)$ に関する ''$RLL=LLR$ 関係式
+と異なる $k$ に対する $L_k(z)$ の成分は互いに可換だという条件を
+定義関係式とする代数を考える.
+
+\medskip
+
+
+$L_0:=(\text{$L_1(z)L_2(z)$ の対角部分})=\diag(\ta_1,\ta_2,\ta_3)$ 
+\;($\ta_i=a_{i1}a_{i2}$).
+
+\medskip
+
+{\red $L_1(z)L_2(z)$ の対角部分 $L_0=\diag(\ta_1,\ta_2,\ta_3)$ を``二重化''}:
+\[
+\tL(z) = L_1(z)L_2(z){\red L_0} =
+\begin{bmatrix}
+ \ta_1^{{\red 2}} & b_1     & c_1     \\
+ z c_2   & \ta_2^{{\red 2}} & b_2     \\
+ z b_3   & z c_3   & \ta_3^{{\red 2}} \\
+\end{bmatrix}.
+\] 
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+%\frametitle{}
+
+\begin{center}
+\large
+3-1. $\tL(z)$ の対角行列による相似変換で\\
+$c_i$ の部分を $1$ または中心元 $r$ にする.
+{\small
+\[
+\tL(z) =
+\begin{bmatrix}
+ \ta_1^2 & b_1     & c_1     \\
+ z c_2   & \ta_2^2 & b_2     \\
+ z b_3   & z c_3   & \ta_3^2 \\
+\end{bmatrix}
+\mapsto
+\tC \tL(z) \tC^{-1}
+\begin{bmatrix}
+ t_1^2   & \hb_1 & 1     \\
+ rz      & t_2^2 & \hb_2 \\
+ rz\hb_3 & z c_3 & t_3^2 \\
+\end{bmatrix}
+\] 
+}
+
+\bigskip
+
+3-2. {\red 二重対角行列の積 $X(z)Y(rz)$ に分解する.}
+{\small
+\[
+\tC \tL(z) \tC^{-1} = X(z) Y(rz)
+\]
+}
+
+\end{center}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{量子$L$-operatorから$\qPIV$の量子化へ 3}
+\begin{small}
+
+$\tC:=\diag(\tc_1,\tc_2,\tc_3):=\diag(1,c_1 c_3, c_1)$, 
+\\[\medskipamount]
+$\tC':=\diag(\tc_3 b_{31}, \tc_1 b_{11}, \tc_2 b_{21})$,
+\\[\medskipamount]
+$r:=c_1 c_3 c_2 \in \text{center}$,
+\\[\medskipamount]
+$t_i := \tc_i \ta_i \tc_i^{-1}$.
+
+\bigskip
+
+\(X(z) := \tC L_1(z) \tC'^{-1}\),\quad
+\(Y(rz) := \tC' L_2(z)L_0 \tC^{-1}\).
+\\
+\(
+X(z) =
+\begin{bmatrix}
+ x_1 & 1   & 0 \\
+ 0   & x_2 & 1 \\
+ z   & 0   & x_3 \\
+\end{bmatrix}
+\),
+\quad
+\(
+Y(rz) =
+\begin{bmatrix}
+ y_1 & 1   & 0 \\
+ 0   & y_2 & 1 \\
+ rz  & 0   & y_3 \\
+\end{bmatrix}
+\).
+
+\bigskip
+
+このとき \(
+X(z)Y(rz) = \tC\tL(z)\tC^{-1} =
+\begin{bmatrix}
+ t_1^2              & x_1+y_2 & 1       \\
+ rz                 & t_2^2   & x_2+y_3 \\
+ rz(x_3+r^{-1}y_1)  & z       & t_3^2   \\
+\end{bmatrix}
+\).
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+%\frametitle{}
+\begin{small}
+
+前ページの続き.
+
+\bigskip
+
+インデックスの拡張: \quad
+$x_{i+3}=r^{-1}x_i$, \quad
+$y_{i+3}=r^{-1}y_i$, \quad
+$t_{i+3}=r^{-1}t_i$.
+
+\bigskip
+
+基本関係式: \quad $\mu=1,2$ に対して, 
+\begin{alignat*}{2}
+ &
+ x_i y_i = y_i x_i = t_i^2, \quad
+ \\ &
+ x_i x_{i+\mu} = q^{(-1)^{\mu-1}2} x_{i+\mu} x_i, \qquad
+ & &
+ x_i y_{i+\mu} = q^{-(-1)^{\mu-1}2} y_{i+\mu} x_i,
+ \\ &
+ y_i y_{i+\mu} = q^{(-1)^{\mu-1}2} y_{i+\mu} y_i, \qquad
+ & &
+ y_i x_{i+\mu} = q^{-(-1)^{\mu-1}2} x_{i+\mu} y_i,
+ \\[\smallskipamount] &
+ \text{$t_i$ は $t_j$, $x_j$, $y_j$ と可換}.
+\end{alignat*}
+この関係式は ``$3$'' を $3$ 以上の奇数に一般化しても成立している.
+
+\bigskip
+
+以上は $(m,n)=(3,2)$ の場合. \\
+互いに素な $(m,n)$ の場合に一般化可能.\\
+$n>2$ の場合にも ``$xy=q^{2a} yz$'' 型の関係式になる($a=0,\pm 1$).
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+%\frametitle{}
+
+\begin{center}
+\large
+4. 量子化された変数 $t_i$, $x_i$, $y_i$ には\\
+   {\red $\tW(A^{(1)}_2)\times\tW(A^{(1)}_1)$ が双有理作用!}
+
+\bigskip\bigskip
+
+$\tW(A^{(1)}_2)=\bra s_0,s_1,s_2,\pi\ket$
+
+\bigskip
+
+$\tW(A^{(1)}_1)=\bra r_0,r_1,\varpi\ket$
+
+\end{center}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{量子$L$-operatorから$\qPIV$の量子化へ 4}
+\begin{small}
+
+$\tW(A^{(1)}_2)\times\tW(A^{(1)}_1)$ の作用:
+\begin{align*}
+ &
+ s_i(x_i) 
+% = x_i - (y_i x_i - y_{i+1}x_{i+1})(y_i+x_{i+1})^{-1}
+ = (x_i+y_{i+1})x_{i+1}(y_i+x_{i+1})^{-1},
+ \\ &
+ s_i(x_{i+1})
+% = x_{i+1} +(x_i+y_{i+1})^{-1}(y_i x_i - y_{i+1}x_{i+1})
+ =(x_i+y_{i+1})^{-1} x_i (y_i+x_{i+1}),
+ \\ &
+ s_i(y_i) 
+% = y_i - (x_i y_i - x_{i+1}y_{i+1})(x_i+y_{i+1})^{-1}
+ = (y_i+x_{i+1})y_{i+1}(x_i+y_{i+1})^{-1},
+ \\ &
+  s_i(y_{i+1})
+% = y_{i+1} +(y_i+x_{i+1})^{-1}(x_i y_i - x_{i+1}y_{i+1})
+ =(y_i+x_{i+1})^{-1} y_i (x_i+y_{i+1}),
+ \\ &
+ s_i(x_{i+2})=x_{i+2},
+ \quad
+ s_i(y_{i+2})=y_{i+2}, 
+ \\ &
+ s_i(t_i)=t_{i+1},  \quad
+ s_i(t_{i+1})=t_i,  \quad
+ s_i(t_{j+2})=t_{j+2},
+ \\ &
+ \pi(x_i) = x_{i+1},  \quad
+ \pi(y_i) = y_{i+1},  \quad
+ \pi(t_i) = t_{i+1}.
+ \\[\medskipamount]
+ &
+ Q_i := y_{i+2}y_{i+1} + y_{i+2}x_i + x_{i+1}x_i,
+ \\ &
+ r_1(x_i) 
+% = x_i - r Q_{i+1}^{-1}(x_{i+3}x_{i+2}x_{i+1}-y_{i+4}y_{i+3}y_{i+2})
+ = r^{-1} Q_{i+1}^{-1}y_i Q_i,
+ \\ &
+ r_1(y_i)
+% = y_i + r(x_{i+2}x_{i+1}x_i-y_{i+3}y_{i+2}y_{i+1})Q_i^{-1}
+ = r Q_{i+1} x_i Q_i^{-1},
+ \\ &
+ r_1(t_i) = t_i,  \quad
+ \varpi(x_i)=y_i,   \quad
+ \varpi(y_i)=x_i,   \quad
+ \varpi(t_i)=t_i.
+\end{align*}
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+%\frametitle{}
+
+\begin{center}
+\large
+5. \quad
+$a_i:=\dfrac{t_i}{t_{i+1}}$ \quad (パラメーター変数), 
+\\[\medskipamount]
+$F_i:=\dfrac{x_{i+1}x_i}{t_{i+1}t_i}$ \quad (従属変数),
+\\[\medskipamount]
+$T_{\qPIV} := r_1 \varpi$ \quad (離散時間発展).
+
+\bigskip
+
+このようにおくと次ページの公式が成立.
+
+\end{center}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{量子$L$-operatorから$\qPIV$の量子化へ 5(終)}
+\begin{small}
+
+周期性: \quad $F_{i+3}=F_i$, \quad $a_{i+3}=a_i$.
+
+\medskip
+
+\QqPIV
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{``変数べき''を用いたWeyl群作用の表示}
+\begin{small}
+
+$f_i := (q^{-1}-q)^{-1}\ta_i^{-1}b_i\ta_{i+1}^{-1}$, \\
+$\hf_i := (q^{-1}-q)^{-1}t_i^{-1}(x_i + y_{i+1})t_{i+1}^{-1}$, \\
+{\blue $\hL(z) := X(z)Y(rz)$} とおくと, 
+\[
+\hL(z)=
+\begin{bmatrix}
+t_1^2                     & (q^{-1}-q)t_1 t_2\hf_1 & 1 \\
+rz                        & t_2^2                  & (q^{-1}-q)t_2 t_3\hf_2 \\
+rz(q^{-1}-q)t_3 t_4 \hf_3 & z                      & t_3^2 \\
+\end{bmatrix}.
+\]
+
+$\ts_i(t_i)=t_{i+1}$, $\ts_i(t_{i+1})=t_i$, $\ts_i(t_{i+2})=t_{i+2}$, 
+$\ts_i(\hf_i)=\hf_i$ と定めると,
+\[
+s_i(\hL(z))
+= f_i^{\av_i} \hL(z) f_i^{-\av_i}
+= \hf_i^{\av_i} \ts_i(\hL(z)) \hf_i^{\av_i}.
+\]
+ここで $a_i = t_i/t_{i+1} = q^{-\av_i}$.
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Lax表示とは}
+
+微分版:
+\[
+\frac{\d L}{\d t} = AL-LA.
+\]
+
+\bigskip\bigskip
+
+離散版: \quad 離散変換 $\rho$ について
+\[
+\rho(L) = g L g^{-1}.
+\]
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Weyl群作用のLax表示 1}
+\begin{small}
+
+$T_{z,r}:=(\text{差分作用素 $z\mapsto rz$})$ とし, 
+\[
+ {\blue \hM(z) := X(z)T_{z,r}Y(z)T_{z,r} = \hL(z)T_{z,r}^2}
+\]
+とおく. このとき, 
+\[
+s_i(\hM(z)) = G_i(z) \hM(z) G_i(z)^{-1}.
+\]
+ここで \vspace{-2\medskipamount}
+\begin{align*}
+&
+G_1(z)=
+\begin{bmatrix}
+ 1 & 0 & 0 \\
+g_1& 1 & 0 \\
+ 0 & 0 & 1 \\
+\end{bmatrix},
+\;
+G_2(z)=
+\begin{bmatrix}
+ 1 & 0 & 0 \\
+ 0 & 1 & 0 \\
+ 0 &g_2& 1 \\
+\end{bmatrix},
+\;
+G_3(z)=
+\begin{bmatrix}
+ 1 & 0 &rz^{-1}g_3 \\
+ 0 & 1 & 0 \\
+ 0 & 0 & 1 \\
+\end{bmatrix},
+\\ &
+g_i = \frac{[\av_i]_q}{\hf_i}, \quad
+[\av_i]_q = \frac{a_i^{-1}-a_i}{q-q^{-1}}, \quad
+q^{-\av_i} = a_i = \frac{t_i}{t_{i+1}}.
+\end{align*}
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Weyl群作用のLax表示 2}
+
+$\pi(t_i)=t_{i+1}$, \; $ \pi(\hf_i)=\hf_{i+1}$, \quad 
+$t_{i+3}=r^{-1}t_i$,\; \quad $\hf_{i+3}=r\hf_i$.
+\[
+\Lambda_3(z) =
+\begin{bmatrix}
+ 0 & 1 & 0 \\
+ 0 & 0 & 1 \\
+ z & 0 & 0 \\
+\end{bmatrix}
+\]
+とおくと, 
+\begin{align*}
+\pi(\hM(z)) 
+&= (\Lambda_3(z)T_{z,r}) \hM(z) (\Lambda_3(z)T_{z,r})^{-1}
+\\
+&= \Lambda_3(z) \hL(rz) \Lambda_3(r^2z)^{-1} T_{z,r}^2.
+\end{align*}
+\[
+{\red \pi \longleftrightarrow \Lambda_3(z)T_{z,r}}
+\]
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Sato-Wilson表示とは}
+\begin{footnotesize}
+
+Lie群 $G$ とその部分群 $G_{\pm}$ について, 
+$G_-\times G_+\to G$, $(x_-,x_+)\mapsto x=x_-^{-1}x_+$ が \\
+$G$ の単位元の近傍での局所微分同相を定めると仮定する.\\
+$G$, $G_\pm$ のLie環を $\g$, $\g_\pm$ と書くと, $\g=\g_+\oplus\g_-$.\\
+単位元の近傍で以下が成立している.
+
+\bigskip
+
+微分方程式: \quad $x_-P x_-^{-1}=B_+-B_-$, \quad 
+$P\in\g$, \quad $B_\pm\in\g_\pm$ \quad のとき
+\[
+\frac{\d x}{\d t}=Px
+\quad\iff\quad
+\frac{\d x_+}{\d t} = B_+ x_+ \;\;\text{and}\;\;
+\frac{\d x_-}{\d t} = B_+ x_- - x_- P.
+\]
+$P$ は時間に依存しないとする.
+$B_\pm$ は初期条件と時間に依存する.
+
+\bigskip
+
+離散対称性: \quad $x_+\sigma=g_-^{-1}g_+$, \quad
+$\sigma\in G$, \quad $g_\pm\in G_\pm$ \quad のとき
+\[
+\rho(x) = x \sigma
+\quad\iff\quad
+{\red \rho(x_+) = g_- x_+ \sigma} \;\;\text{and}\;\;
+\rho(x_-) = g_- x_-.
+\]
+$\sigma$ は時間に依存しないとする.\\
+時間発展 $\d x/\d t=Px$ と離散変換 $\rho(x)=x\sigma$ は互いに可換.
+
+\end{footnotesize}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Sato-Wilson表示 $\implies$ Lax表示}
+\begin{small}
+
+前ページの設定のもとで, \\
+$x_-P x_-^{-1}=B_+-B_-$, \quad 
+$P\in\g$, \quad $B_\pm\in\g_\pm$, \\
+$x_+\sigma=g_-^{-1}g_+$, \quad
+$\sigma\in G$, \quad $g_\pm\in G_\pm$ \quad $h\in G_+$ \quad かつ
+\[
+ {\red \rho(h)=\sigma^{-1} h \sigma}
+\]
+のとき{\small(たとえば $h$ は対角行列で $\sigma$ は置換行列)},
+\[
+  {\red L := x_+ h x_+^{-1}}
+\]
+とおくと, \quad $\d x/\d t=Px$,\quad $\rho(x)=x\sigma$ \quad のとき,
+\[
+ \frac{\d L}{\d t} = [B_+, L], \qquad
+ {\red \rho(L) = g_- L g_-^{-1}}.
+\]
+微分方程式が差分方程式の場合も同様.
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Lax表示からSato-Wilson表示へ}
+\begin{small}
+
+上三角行列 $L$ の対角部分を $h=D$ と書く.
+
+\medskip
+
+$L=Z D Z^{-1}$ を満たす上三角行列 $x_+=Z$ は一意的ではない.
+
+\medskip
+
+$Z$ の対角部分は $L$ から決まらない($Z$ の不定性はちょうどそれ).
+
+\medskip
+
+$\tau$ 変数は本質的に上三角行列 $Z=x_+$ の対角成分の座標である.
+
+\medskip
+
+すべてが可換な場合は易しい.
+
+\medskip
+
+量子化された非可換な場合には整合性が色々非自明になる.
+
+\bigskip
+
+しかし、我々が扱っている場合について\\
+実際に計算してみると色々うまく行っている！
+
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{$\tau$ 変数の導入}
+\begin{small}
+
+$\tau$ 変数 $\tau_0$, $z_1,z_2,z_3$ を次の関係式で導入する:
+\begin{align*}
+&
+\tau_0 r = q^{-1}r \tau_0, \quad
+\tau_0 t_j = t_j \tau_0, \quad
+z_i r = r z_i, \quad
+z_i t_j = q^{-\delta_{ij}} t_j z_i,
+\\ &
+\tau_0 z_i = z_i \tau_0, \quad
+z_i z_j = z_j z_i, \quad
+\tau_0 \hf_j = \hf_j \tau_0, \quad
+z_i \hf_j = \hf_j z_i.
+\end{align*}
+さらに \quad $z_{i+3}=z_i$, \quad $\tau_i=\tau_{i-1}z_i$ \quad によってインデックスを拡張.
+
+$s_i$, $\pi$ の作用を以下のように $\tau$ 変数に拡張できる:
+\begin{align*}
+&
+s_i(\tau_i) = \hf_i \frac{\tau_{i-1}\tau_{i+1}}{\tau_i}, \quad
+s_i(\tau_j) = \tau_j \quad (i,j=0,1,2,\; i\ne j),
+\\ &
+\pi(\tau_i)=\tau_{i+1}.
+\end{align*}
+
+\[
+{\red s_i(x) = \hf_i^{\av_i} \ts_i(x) \hf_i^{-\av_i}}
+\]
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Sato-Wilson表示 1}
+\begin{small}
+
+$D(t):=\diag(t_1,t_2,t_3)$.
+
+\medskip
+
+$\exists! U(z)$: $z$ の形式べき級数を成分に持つ $3\times 3$ 行列, \\
+$U(0)$ は対角成分がすべて $1$ の上三角行列,
+\[
+ \hM(z) = U(z) (D(t)T_{z,r})^2 U(z)^{-1}.
+\]
+
+$D_Z:=\diag(z_1,z_2,z_3)$. 
+
+\medskip
+
+$Z(z) := U(z)D_Z$.
+
+\bigskip
+
+このとき\quad $\hM(z) = Z(z) (D(qt)T_{z,r})^2 Z(z)^{-1}$.
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Sato-Wilson表示 2(終)}
+\begin{small}
+
+行列 $S^g_i$, $S_i$ を次のように定める:{\footnotesize
+\begin{align*}
+ &
+ S^g_1 =
+ \begin{bmatrix}
+   0    & g_1^{-1} & 0 \\
+   -g_1 & 0        & 0 \\
+   0    & 0        & 1 \\
+ \end{bmatrix},
+ \quad
+ S^g_2 =
+ \begin{bmatrix}
+   1 & 0 & 0 \\
+   0 & 0 & g_2^{-1} \\
+   0 & -g_2 & 0 \\
+ \end{bmatrix},
+ \\ &
+ S_1 =
+ \begin{bmatrix}
+   0           & -[\av_1+1]_q & 0 \\
+   [\av_1-1]_q & 0        & 0 \\
+   0           & 0        & 1 \\
+ \end{bmatrix},
+ \quad
+ S_2 =
+ \begin{bmatrix}
+   1 & 0           & 0 \\
+   0 & 0           & -[\av_2+1]_q \\
+   0 & [\av_2-1]_q & 0 \\
+ \end{bmatrix}.
+\end{align*}}
+このとき以下が成立している:
+\begin{align*}
+ &
+ \hM(z)
+ = Z(z)(D(qt)T_{z,r})^2 Z(z)^{-1}
+ = Z(z)D(qt)^2Z(r^2z)^{-1}T_{z,r}^2,
+ \\[\medskipamount] &
+ s_i(U(z)) = G_i U(z) S^g_i, 
+ \\ &
+ s_i(D_Z) = (S^g_i)^{-1} D_Z S_i, \
+ \\ &
+ s_i(D(t)T_{z,r}) = S_i^{-1} D(t)T_{z,r} S_i
+ \\ &
+ {\red s_i(Z(z)) = G_i Z(z) S_i}.
+\end{align*}
+
+\end{small}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame{
+%\frametitle{}
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

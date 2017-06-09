@@ -1,0 +1,2964 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf Kullback-Leibler情報量とSanovの定理}
+\def\AUTHOR{黒木玄}
+\def\DATE{2016年6月16日作成%
+\thanks{%
+最新版は下記URLからダウンロードできる.
+飽きるまで継続的に更新と訂正を続ける予定である.
+6月16日Ver.0.1(10頁). 数時間かけて10頁ほど書いた. 
+6月17日Ver.0.2(16頁). 区分求積法による高校レベルの方法に関する
+付録\ref{sec:quadrature-by-parts}と
+多項分布の場合のSanovの定理の厳密に証明するための\secref{sec:Sanov}を追加した.
+そこで紹介した証明は階乗に関するStirlingの公式さえ使わない
+極めて初等的な証明である.
+6月18日Ver.0.2.1. 小さな追加と訂正.
+6月18日Ver.0.3(22頁). Sanovの定理からカノニカル分布の導出について説明した
+\secref{sec:Gibbs}を追加した.
+たくさんのケアレスミスを訂正した.
+6月18日Ver.0.3.1. \secref{sec:binom-Gibbs}の誤植を訂正.
+6月19日Ver.0.4(23頁). \exampleref{example:binom-Gibbs}の説明の仕方を変更した.
+他にも細かな訂正. 
+相対R\'enyiエントロピーの定義だけに触れた\remarkref{remark:Renyi-Free}を追加した.
+6月21日Ver.0.5(26頁). \remarkref{remark:beta}に
+「時間を巻き戻してギャンブルをやり直す話」との関係を追記した.
+この文書は\remarkref{remark:beta}から読み始めると読み易いかもしれない.
+相対Tsallisエントロピーの定義だけに触れた\remarkref{remark:Tsallis}を追加した.
+6月22日Ver.0.6(30頁). 
+タイトルを「KL情報量の解説」から「KL情報量とSanovの定理」に変更した. 
+\remarkref{remark:Tsallis}などを別の部分節に分離し, 内容も増やした.
+さらにその脚注に相対Tsallisエントロピーの定義の必然性を理解できていないことを
+正直に書いた.
+細かな手直し.
+「加法性」に関する\remarkref{remark:additivity}を追加した.
+6月23日Ver.0.7(32頁).
+相対エントロピーが多項分布の漸近挙動を記述しているのと同じように
+相対Tsallisエントロピーで漸近挙動が記述される多項分布のある拡張
+の構成に関する\secref{sec:Tsallis-multinomial}を追加した.
+6月24日Ver.0.8(36頁).
+KL情報量が「距離」のような性質を持っていることを意味する不等式を扱った
+\secref{sec:inequalities}を追加した.
+相対Renyiエントロピーと相対Tsallisエントロピー関係の説明を
+\secref{sec:entropies}に分離した.
+このノートには後でCram\'erの定理の解説も追加する予定.
+Cram\'erの定理の上からの評価は自明であり, 
+下からの評価はカノニカル分布に関する大数の弱法則から導かれる.
+7月5日Ver.0.9(37頁).
+$\limsup$ と $\liminf$ に関する簡単な解説(\secref{sec:limsup})を追加した.
+}
+\\[\bigskipamount]
+{\small
+\href{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160616KullbackLeibler.pdf}
+{\tt http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160616KullbackLeibler.pdf}
+}}
+\def\PDFTITLE{Kullback-Leibler}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{確率論}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+\newcommand\tf{{\tilde f}}
+\newcommand\tg{{\tilde g}}
+\newcommand\Li{\operatorname{Li}}
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\renewcommand\setminus{\smallsetminus}
+\newcommand\cP{{\mathcal P}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+\newcommand\fnref[1]{脚注\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\tableofcontents
+%\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{はじめに}
+
+このノートは次のノートの続編である:
+\begin{quote}
+「ガンマ分布の中心極限定理とStirlingの公式」というタイトルの雑多なノート
+\\
+\href{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160501StirlingFormula.pdf}
+{\tt http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160501StirlingFormula.pdf}
+\end{quote}
+このノートで使用するStirlingの公式についてはそのノートを見て欲しい.
+この雑多なノートは「タイトルにいつわりあり」の雑多な内容のノートになっている.
+
+このノートの目標はKullback-Leibler情報量(相対エントロピーの $-1$ 倍)および
+Boltzmann因子 $\exp(-\sum_\nu \beta_\nu f_{\nu}(k))$ で
+記述されるカノニカル分布が
+必然的に出て来る理由を説明することである%
+\footnote{インターネット上での日本語による検索結果を眺めたところ, 
+Kullback-Leibler情報量(相対エントロピーの $-1$ 倍)について
+「2つの確率分布の``距離''を表わす量」
+「2つの確率分布の違いを表わす量」
+のように説明しただけですませているものが目立ち, 
+Kullback-Leibler情報量が自然に出て来るシンプルな理由を十分に説明しているものを
+見付けることができなかったのでこの解説ノートを書くことにした.
+Kullback-Leibler情報量が必然的に出て来る理由は
+多項分布の $n\to\infty$ での漸近挙動にKullback-Leibler情報量が
+自然に出て来るからである.
+そのことから, $n\to\infty$ のときの経験分布の挙動を
+Kullback-Leibler情報量で記述可能になる.
+その結果の数学的に厳密な定式化はSanovの定理と呼ばれている.
+この解説ノートを書いたもう一つの理由は, 
+Boltzmann因子, カノニカル分布が出て来る理由を
+多項分布の $n\to\infty$ での漸近挙動(もしくはSanovの定理)に基づいて
+分かり易く説明している日本語の解説をインターネット上に見付けることが
+できなかったことである. 
+この解説ノートではBoltzmann因子 $e^{-\beta E_i}$ が出て来る理由も詳しく説明する.}.
+最初の方では直観的な説明を重視し, 数学的に厳密な議論は行なわない.
+第\ref{sec:Sanov}, \ref{sec:Gibbs}節において
+可能な範囲内で数学的に厳密な証明を行なう.
+
+\bigskip
+
+以下の文献などを参考にした.
+
+\vspace{-7.5mm}
+\begin{thebibliography}{99}
+
+\bibitem{Csiszar2006}
+Csiszar, Imre.
+A simple proof of Sanov's theorem.
+Bull Braz Math Soc, New Series 37(4), 453--459, 2006.
+\\
+\href
+{http://www.emis.ams.org/journals/em/docs/boletim/vol374/v37-4-a2-2006.pdf}
+{\tt http://www.emis.ams.org/journals/em/docs/boletim/vol374/v37-4-a2-2006.pdf}
+
+%\bibitem{Csiszar-Korner-1986}
+%Csiszar, Imre and K\"orner, J'anos.
+%Information Theory: Coding Theorems for Discrete Memoryless Systems.
+%Cambridge University Press; Second edition (August 15, 2011).
+%(\href
+%{https://www.google.co.jp/search?q=%22Information+Theory+Coding+Theorems+for+Discrete+Memoryless+Systems%22+Csiszar+Korner}
+%{Googleで検索})
+
+\bibitem{Cover-Thomas-2006}
+Cover, M. Thomas and Thomas, Joy A.
+Elements of Information Theory. 
+Second Edition, John Wiley \& Sons, Inc., 2006, xxiii+748~pages.
+(\href
+{https://www.google.co.jp/search?q=Elements+of+information+theory+Cover+Thomas}
+{Googleで検索})
+
+\bibitem{Dembo-Zeitouni-1998}
+Dembo, Amir and Zeitouni, Ofer. 
+Large Deviations Techniques and Applications.
+Stochastic Modelling and Applied Probability 
+(formerly: Applications of Mathematics), 
+38, Second Edition, Springer, 1998, 396~pages.
+(\href
+{https://scholar.google.co.jp/scholar?q=%22Large+deviations+techniques+and+applications%22+Dembo+Zeitouni}
+{Googleで検索})
+
+\bibitem{Ellis2008}
+Ellis, Richard, S.
+The theory of large deviations and applications to statistical mechanics.
+Lecture notes for \'Ecole de Physique Les Houches,
+August 5--8, 2008, 123~pages.
+\\
+\href
+{http://people.math.umass.edu/~rsellis/pdf-files/Les-Houches-lectures.pdf}
+{\tt http://people.math.umass.edu/{\textasciitilde}rsellis/pdf-files/Les-Houches-lectures.pdf}
+
+\bibitem{Sanov1958}
+Sanov,~I.~N.
+On the probability of large deviations of random variables.
+English translation of Matematicheskii Sbornik, 42(84):1, pp.~11--44.
+Institute of Statistics Mimeograph Series No.~192, March, 1958.
+\\
+\href
+{http://www.stat.ncsu.edu/information/library/mimeo.archive/ISMS_1958_192.pdf}
+{\tt http://www.stat.ncsu.edu/information/library/mimeo.archive/ISMS\_1958\_192.pdf}
+
+\bibitem{Suyari2004}
+Suyari, Hiroki. Mathematical structure derived from the $q$-multinomial coefficient
+in Tsallis statistics.
+\arxivref{cond-mat/0401546}
+
+\bibitem{Tasaki}
+田崎晴明.
+統計力学 I, II.
+新物理学シリーズ, 培風館 (2008/12), 合計525ページ.
+\\
+\href
+{https://www.amazon.co.jp/dp/4563024376}
+{https://www.amazon.co.jp/dp/4563024376}
+\\
+\href
+{https://www.amazon.co.jp/dp/4563024384}
+{https://www.amazon.co.jp/dp/4563024384}
+
+\bibitem{vanErven-Harremoes}
+Tim van Erven and Peter Harremo\"es.
+R\'enyi divergence and Kullback-Leibler divergence.
+\arxivref{1206.2459}
+
+\bibitem{vanRamon2013}
+Ramon van Handel.
+Lecture~3: Sanov's theorem.
+Stochas Analytic Seminar (Princeton University), 
+Blog Article, 10 October 2013.
+\\
+\href
+{https://blogs.princeton.edu/sas/2013/10/10/lecture-3-sanovs-theorem/}
+{https://blogs.princeton.edu/sas/2013/10/10/lecture-3-sanovs-theorem/}
+
+\bibitem{Vasicek1980}
+Vasicek, Oldrich Alfonso. 
+A conditional law of large numbers.
+Ann.\ Probab., Volume~8, Number~1 (1980), 142--147.
+\\
+\href
+{http://projecteuclid.org/euclid.aop/1176994830}
+{\tt http://projecteuclid.org/euclid.aop/1176994830}
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{多項分布からKullback-Leibler情報量へ}
+
+多項分布にStirlingの公式を単純に代入するだけで
+自然かつ容易にKullback-Leibler情報量(もしくはその $-1$ 倍の相対エントロピー)
+が現われることを説明したい.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{母集団分布が $q_i$ の多項分布}
+
+$q_i\geqq 0$, $\sum_{i=1}^r q_i=1$ とする.
+1回の独立試行で状態 $i$ が確率 $q_i$ で得られる状況を考える.
+$q=(q_1,\ldots,q_r)$ を{\bf 母集団分布}と呼ぶことにする.
+そのような試行を $n$ 回繰り返したとき, 
+状態 $i$ が生じた回数を $k_i$ と書く($k_i$ は確率変数である).
+そのとき状態 $i$ が生じた割合 $k_i/n$ (これを{\bf 経験分布}と呼ぶことにする)
+が $n\to\infty$ でどのように振る舞うかを調べよう.
+
+これは, サイコロ(歪んでいてもよい)を $n$ 回ふって目 $i$ の出た割合の分布
+(経験分布)が $n\to\infty$ でどのように振る舞うかを調べる問題だと言ってよい.
+
+大数の法則によって $n\to\infty$ で $k_i/n\to q_i$ となるのだが,
+後で条件付き確率を考えたいので母集団分布から離れた分布が
+経験分布として現われる確率がどのように減衰するかを知りたい.
+\secref{sec:Boltzmann-factors}では
+条件付き確率を考えることによってBoltzmann因子が得られることを説明する.
+
+我々はこれから母集団分布 $q=(q_1,\ldots,q_r)$ を任意に固定し, 
+経験分布 $(k_1/n,\ldots,k_r/n)$ の確率分布を考え,
+その $n\to\infty$ での様子を調べることになる.
+
+$n$ 回の独立試行で状態 $i$ が $k_i$ 回得られる確率は, 
+$\sum_{i=1}^r k_i=n$ のとき
+\[
+\frac{n!}{k_1!\cdots k_r!} q_1^{k_1}\cdots q_r^{k_r}
+\tag{$*$}
+\]
+になり, 他のとき $0$ になる(多項分布).
+
+$p_i\geqq 0$, $\sum_{i=1}^r p_i=1$ と仮定する.
+$n$ 回の独立試行で状態 $i$ が得られた割合 $k_i/n$ がほぼ $p_i$ になるとき, 
+経験分布はほぼ $p_i$ になると言うことにする.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{サンプルサイズを大きくしたときの多項分布の漸近挙動}
+\label{sec:log}
+
+$n\to\infty$ のとき経験分布がほぼ $p_i$ になる確率がどのように振る舞うか
+を知りたい. そこで $n\to\infty$ のとき, $k_i$ たちが
+\[
+k_i= np_i+O(\log n) = np_i\left(1 + O\left(\frac{\log n}{n}\right)\right) 
+\tag{$**$}
+\]
+を満たしていると仮定し, 上の確率($*$)がどのように振る舞うかを調べよう.
+この仮定のもとで $\log(k_i/n)=\log p_i+O((\log n)/n)$ が成立することに注意せよ%
+\footnote{Taylor展開 $\log(1+x)=x-x^2/2+x^3/3-x^4/4+\cdots$ より.}.
+
+Stirlingの公式と $\sum_{i=1}^r k_i=n$ より
+\begin{align*}
+&
+\log n! 
+= n\log n - n + O(\log n)
+= \sum_{i=1}^r k_i\log n - \sum_{i=1}^r k_i + O(\log n), 
+\\ &
+\log k_i! 
+= k_i\log k_i - k_i + O(\log k_i) 
+= k_i\log k_i - k_i + O(\log n),
+\\ &
+\log q_i^{k_i} = k_i\log q_i.
+\end{align*}
+これらを上の確率($*$)の対数に代入すると $k_i$ の項はキャンセルする.
+さらに($**$)を代入すると次が得られる:
+\begin{align*}
+\log\left(\frac{n!}{k_1!\cdots k_r!} q_1^{k_1}\cdots q_r^{k_r}\right)
+&
+=
+- n\sum_{i=1}^r \frac{k_i}{n}\left(\log\frac{k_i}{n}-\log q_i\right) 
++ O(\log n)
+\\ &
+= -n\sum_{i=1}^r p_i(\log p_i - \log q_i)+O(\log n)
+\\ &
+= -n\sum_{i=1}^r p_i\log\frac{p_i}{q_i}+O(\log n).
+\end{align*}
+同様の計算を区分求積法を用いた高校レベルの計算で実行することもできる
+(\secref{sec:quadrature-by-parts}).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Kullback-Leibler情報量と相対エントロピーの定義}
+
+\secref{sec:log}の結果は
+\[
+D[p|q]=\sum_{i=1}^r p_i\log\frac{p_i}{q_i}
+\]
+とおくと次のように書き直される:
+\[
+\log\left(\frac{n!}{k_1!\cdots k_r!} q_1^{k_1}\cdots q_r^{k_r}\right)
+=-n D[p|q] + O(\log n).
+\]
+左辺は経験分布 $k_i/n$ がほぼ $p_i$ になる確率の対数を意味していることに注意せよ.
+$D[p|q]$ を{\bf Kullback-Leibler 情報量}(カルバック・ライブラー情報量)
+もしくは{\bf Kullback-Leibler divergence}と呼ぶ.
+Kullback-Leibler情報量の $-1$ 倍
+\[
+S[p|q] = -D[p|q] = - \sum_{i=1}^r p_i\log\frac{p_i}{q_i}
+\]
+を{\bf 相対エントロピー}と呼ぶことにする.
+相対エントロピーは本質的に $n$ が大きなときの
+「母集団分布が $q_i$ のとき経験分布がほぼ $p_i$ となる確率の対数の $n$ 分の1」
+である.
+
+対数を取る前の公式は次の通り:
+\[
+(\text{$n$ 回の独立試行で経験分布がほぼ $p_i$ になる確率})
+=\exp(-n D[p|q] + O(\log n)).
+\]
+もしも $D[p|q]>0$ ならば,  
+$n$ を十分に大きくすれば $O(\log n)$ の項は $n D[p|q]$ の項と比較して
+無視できる量になるので, 
+この確率は $\exp(-n D[p|q])$ の部分でほぼ決まっていると考えてよい. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Kullback-Leibler情報量の基本性質}
+\label{sec:KL-prop}
+
+Kullback-Leibler情報量 $D[p|q]$ の $p=(p_1,\ldots,p_r)$ の函数としての性質は
+函数 $f(x)=x\log(x/q)=x(\log x-\log q)$ ($x>0$) の性質を調べればわかる.
+$f'(x)=\log x-\log q + 1$, $f''(x)=1/x>0$ なので函数 $f(x)$ は
+下に狭義凸である.
+ゆえに函数 $f(x)$ はその $x=q$ での接線の函数 $x$ で下から押さえられる.
+すなわち $f(x)\geqq f(q)+f'(q)(x-q)=x-q$ (等号の成立と $x=q$ は同値).
+ゆえに
+\begin{align*}
+&
+D[p|q]=\sum_{i=1}^r p_i\log\frac{p_i}{q_i}\geqq \sum_{i=1}^r(p_i-q_i)=0,
+\\ &
+\text{等号の成立は $p_i=q_i$ ($i=1,\ldots,r$) と同値.}
+\end{align*}
+さらに $f(x)$ が下に狭義凸であることより, 
+$D[p|q]$ も $p$ の函数として下に狭義凸であることもわかる.
+
+このようにKullback-Leibler情報量の値は $0$ 以上になり, 
+最小値 $0$ が実現することと分布 $p_i$ が母集団分布 $q_i$ に
+等しくなることは同値である.
+ゆえに, 分布 $p_i$ が母集団分布 $q_i$ に等しくないとき, 
+$D[p|q]>0$ となるので, 
+経験分布がほぼ $p_i$ になる確率は $n\to\infty$ で
+$n$ について指数函数的に $0$ に収束する.
+したがって, $n\to\infty$ で経験分布 $k_i/n$ は母集団分布 $q_i$ に近付く.
+これは{\bf 大数の法則}の成立を意味している.
+
+Kullback-Leibler情報量は母集団分布 $q_i$ のもとで分布 $p_i$ が経験分布として
+どれだけ確率的に実現し難いかを表わしている.
+異なる分布が実現する確率の比は $n\to\infty$ で
+Kullback-Leibler情報量の差の $-n$ 倍の指数函数のように振る舞う.
+ゆえにKullback-Leibler情報量がほんの少しでも違っていれば, 
+Kullback-Leibler情報量がより大きな方の分布は
+相対的にほとんど生じないということもわかる.
+ゆえに, ある条件を課して分布 $p_i$ が生じる条件付き確率を考える場合には, 
+課した条件のもとでKullback-Leibler情報量が最小になる分布に
+条件を満たす経験分布は(条件付き確率の意味で)近付くことになる
+({\bf 条件付き大数の法則}, {\bf 条件付き極限定理}).
+この法則を{\bf 最小Kullback-Leibler情報量の原理}と呼ぶ.
+$n$ が非常に大きなとき, ある条件のもとで経験的に実現される分布は
+課した条件のもとでKullback-Leibler情報量が最小の分布になる.
+
+相対エントロピーはKullback-Leibler情報量の $-1$ 倍だったので,
+条件付きで分布 $p_i$ が経験的に生じる確率を考える場合には
+課した条件のもとで相対エントロピーが最大になる分布に
+経験分布が近付くことになる.
+この言い換えを{\bf 最大相対エントロピーの原理}と呼ぶ.
+$n$ が大きなとき、ある条件のもとで経験的に実現される分布は
+課した条件のもとで相対エントロピーが最大になるような分布である.
+
+補足. 説明の簡素化のために
+条件 $B$ が成立しているとき条件 $A$ が常に成立していると仮定する.
+このとき, 条件 $A$ のもとで条件 $B$ が成立する確率(条件付き確率)は, 
+条件 $B$ が成立する確率を条件 $A$ が確率で割ったものと定義される.
+このように条件付き確率は確率の商で定義される.
+だから, 確率の商が $n\to\infty$ でどのように振る舞うかを確認できれば,
+条件付き確率がどのように振る舞うかがわかる. 
+上の議論ではこの考え方を使った.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{二項分布の場合の計算例}
+\label{sec:binom-Sanov}
+
+$r=2$, $q_1=q$, $q_2=1-q$ の「コイン投げ」(もしくは「丁半博打」)の場合を考える.
+この場合に多項分布は二項分布になる.
+このとき, $p_1=p$, $p_2=1-p$ とおくと, 
+Kullback-Leibler情報量は次のように表わされる:
+\[
+D[p|q]=p\log \frac{p}{q}+(1-p)\log\frac{1-p}{1-q}. 
+\]
+これは $p=q$ で最小値 $0$ になり, $p$ が $q$ から
+離れれば離れるほど大きくなる.
+Kullback-Leibler情報量は分布の経験的な生じ難さを表わす量なので
+$q$ から遠い $p$ ほど経験的に生じ難くなる.
+しかも $p$ が経験的に生じる確率は $n\to\infty$ で
+$\exp(-nD[p|q]+O(\log n))$ と振る舞う.
+ゆえに, 複数の $p$ の生じる確率を比較すると, 
+$D[p|q]$ が相対的に大きな $p$ が生じる確率は
+$n\to\infty$ で比の意味で相対的に $0$ に近付く. 
+以上を踏まえた上で次の問題について考えよう.
+
+\medskip
+
+{\bf 問題}\enspace $n$ は非常に大きいと仮定する.
+$n$ 回のコイン投げの結果表が出た割合が $a$ 以上になったとする.
+このとき表の割合はどの程度になるだろうか?
+
+\medskip
+
+大数の法則より, $n\to\infty$ で表の割合は $q$ に近付く.
+ゆえに $0\leqq a<q$ のとき, 表の割合が $a$ 以上であるという条件は
+$n\to\infty$ で常に実現することになる.
+だから, $0\leqq a<q$ のとき, 表の割合が $a$ 以上の場合に制限{\bf しても}, 
+$n$ が大きければ表の割合はほぼ $q$ に等しくなっていると考えられる.
+
+問題は $q<a\leqq 1$ の場合である. 
+そのとき, $n$ が大きくなればなるほど, 
+表の割合が $a$ 以上になる確率は $0$ に近付く.  
+上の問題は表の割合が $a$ 以上になる場合に制限したときに
+表の割合がほぼ $p$ になる確率(条件付き確率)が
+どのように振る舞うかという問題になる.
+この場合には上で計算したKullback-Leibler情報量が役に立つ.
+$p\geqq a$ という条件のもとでの $D[p|q]$ の最小値は $p=a$ で
+実現される. ゆえに条件付き大数の法則より, 
+$n\to\infty$ で経験分布は $p=a$ に近付く.
+$q<a\leqq 1$ のとき, 表の割合が $a$ 以上の場合に制限{\bf すると}, 
+$n$ が大きければ表の割合はほぼ $a$ に等しくなっていると考えられる.
+
+以上の結果から以下の公式が成立していることもわかる:
+\[
+\lim_{n\to\infty}
+\frac{1}{n}\log\sum_{k/n\geqq a} \binom{n}{k}q^k(1-q)^{n-k}
+=-\inf_{p\geqq a} D[p|q]
+=
+\begin{cases}
+-D[q|q]=0 & (0\leqq a\leqq q), \\
+-D[a|q]   & (q<a\leqq 1).
+\end{cases}
+\]
+対数を使わない形式でこの公式を書き下すと,
+\[
+\sum_{k/n\geqq a} \binom{n}{k}q^k(1-q)^{n-k}
+=
+\exp\left(-n\inf_{p\geqq a}D[p|q] + o(n)\right).
+\]
+左辺は表の割合が $a$ 以上になる確率である.
+$n\to\infty$ のとき確率には $D[p|q]$ が最小になる分布だけが強く効いて来る.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{max-plus代数への極限やLaplaceの方法との関係}
+
+実数または $-\infty$ の $a,b$ に対して演算
+\[
+(a,b)\mapsto\max\{a,b\}, \qquad
+(a,b)\mapsto a+b
+\]
+を考えたもの(半環(semiring), 半体(semifiled)と呼ばれている)を
+{\bf max-plus代数}と呼ぶ.
+(max-plus代数は{\bf 超離散化}や{\bf tropical mathematics} 
+や各種{\bf 正値性を扱う問題}などに登場する重要な``代数''である. 
+体は加減剰余が自由にできる``代数''のことであるが, 
+半体は加乗除は自由にできるが引算は自由に
+できない``代数''のことである.
+引算が自由にできなくても意味のある面白い数学を作れる.)
+
+大雑把には, $\max$ は $0$ 以上の実数の足算に対応しており, 
+$+$ は掛算に対応していて, $-\infty$ は足算の単位元 $0$ に対応している.
+その対応は $\log$ を取って極限を取ることによって与えられる.
+すなわち, 次の公式が成立している:
+\[
+\lim_{n\to\infty}\frac{1}{n}\log(e^{na}+e^{nb})=\max\{a,b\}, \qquad
+\lim_{n\to\infty}\frac{1}{n}\log(e^{na}e^{nb})=a+b.
+\]
+後者は明らかな公式である.
+前者の公式は次のようにして確かめられる. 
+$a\geqq b$ と仮定すると, $b-a\leqq 0$ となるので, 
+$e^{n(b-a)}$ は有界になり, 
+\[
+\frac{1}{n}\log(e^{an}+e^{nb})
+=\frac{1}{n}\log\left(e^{na}\left(1+e^{n(b-a)}\right)\right)
+=a+\frac{1}{n}\log\left(1+e^{n(b-a)}\right)
+\to a
+\quad (n\to\infty)
+\]
+となる. これで前者の公式も示された.
+
+より一般に次が成立している:
+\[
+\lim_{n\to\infty}\frac{1}{n}\log\sum_{i=1}^r \exp(na_i+O(\log n)) 
+= \max\{a_1,\ldots,a_r\}.
+\]
+このように $\exp(na_i+O(\log n))$ のように振る舞う量の和の対数の $1/n$ 倍には
+$n\to\infty$ のとき最大の $a_i$ の部分のみが効いて来る.
+対数を使わない方の公式を書き下すと, 
+\[
+\sum_{i=1}^r \exp(na_i+O(\log n))
+=
+\exp(n\max\{a_1,\ldots,a_r\}+o(n))
+\qquad
+(n\to\infty).
+\]
+これは積分の場合のLaplaceの方法の類似であるとみなされる.
+
+積分の場合は次の通り.
+適切な設定のもとで次が成立している:
+\[
+\int_\alpha^\beta \exp\biggl(-nf(x)+O(\log n)\biggr)\,dx
+=
+\exp\left(-n\inf_{\alpha\leqq x\leqq\beta} f(x) + o(n)\right)
+\qquad
+(n\to\infty).
+\]
+$f(x)$ が $x=x_0$ で一意的な最大値を持ち, 
+$f''(x_0)>0$ ならば,
+\[
+\int_\alpha^\beta e^{-nf(x)}g(x)\,dx
+=
+e^{-nf(x_0)}g(x_0)\sqrt{\frac{2\pi}{n f''(x_0)}}(1+o(1))
+\qquad
+(n\to\infty).
+\]
+このような漸近挙動の計算の仕方は{\bf Laplaceの方法}と呼ばれている.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{区分求積法による高校レベルの計算でKL情報量を出す方法}
+\label{sec:quadrature-by-parts}
+
+多項分布の $n\to\infty$ での漸近挙動を以下のようにして, 
+区分求積法を使った高校数学っぽい方法で調べることもできる.
+
+$q_i\geqq 0$, $\sum_{i=1}^r q_i=1$ とし, 
+非負の整数 $a,b_i$ は $\sum_{i=1}^r b_i=a$ をみたしているとし, 
+\[
+p_i=\frac{b_i}{a}=\frac{Nb_i}{Na}
+\]とおく.  このとき
+\[
+\lim_{N\to\infty}\frac{1}{Na}
+\log\left(\frac{(Na)!}{(Nb_1)!\cdots(Nb_r)!}q_1^{Nb_1}\cdots q_r^{Nb_r}\right)
+=-\sum_{i=1}^r p_i\log\frac{p_i}{q_i}.
+\tag{$*$}
+\]
+これの右辺は相対エントロピー(Kullback-Leibler情報量の $-1$ 倍)である. 
+すなわち
+\[
+\lim_{N\to\infty}
+\left(\frac{(Na)!}{(Nb_1)!\cdots(Nb_r)!}q_1^{Nb_1}\cdots q_r^{Nb_r}\right)^{1/(Na)}
+=\frac{1}{(p_1/q_1)^{p_1}\cdots (p_r/q_r)^{p_r}}.
+\]
+区分求積法でこれを証明してみよう. 公式($*$)を示せばよい. $N\to\infty$ のとき
+\begin{align*}
+&
+\frac{1}{Na}
+\log\left(\frac{(Na)!}{(Nb_1)!\cdots(Nb_r)!}q_1^{Nb_1}\cdots q_r^{Nb_r}\right)
+\\ &
+=\frac{1}{Na}
+\left(
+\sum_{k=1}^{Na}\log k
+-\sum_{i=1}^r\sum_{k=1}^{Nb_i}\log k
++\sum_{i=1}^rNb_i\log q_i
+\right)
+\\ &
+=\frac{1}{Na}
+\left(
+\sum_{k=1}^{Na}\log \frac{k}{Na}
+-\sum_{i=1}^r\sum_{k=1}^{Nb_i}\log \frac{k}{Na}
++\sum_{i=1}^rNb_i\log q_i
+\right)
+\\ &
+=\frac{1}{Na}\sum_{k=1}^{Na}\log \frac{k}{Na}
+-\sum_{i=1}^r\frac{1}{Na}\sum_{k=1}^{Nb_i}\log \frac{k}{Na}
++\sum_{i=1}^r p_i\log q_i
+\\ &
+\to
+\int_0^1 \log x\,dx 
+- \sum_{i=1}^r\int_0^{p_i}\log x\,dx 
++ \sum_{i=1}^r p_i\log q_i
+\\ &
+=[x\log x-x]_0^1
+-\sum_{i=1}^r[x\log x-x]_0^{p_i}
++\sum_{i=1}^r p_i\log q_i
+%\\ &
+=-\sum_{i=1}^r p_i\log\frac{p_i}{q_i}.
+\end{align*}
+2つ目の等号で括弧の内側に
+\(
+Na\log(Na)-\sum_{i=1}^rNb_i\log(Na)=0
+\)
+を挿入した. それによって区分求積法を適用できる形に変形できた.
+
+以上の結果は次が成立することを意味している: $N\to\infty$ のとき
+\[
+(\text{$Na$ 回の試行で経験分布が $p_i=b_i/a$ になる確率})^{1/(Na)}\to\frac{1}{(p_1/q_1)^{p_1}\cdots(p_r/q_r)^{p_r}}.
+\]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{条件付き大数の法則からBoltzmann因子へ}
+\label{sec:Boltzmann-factors}
+
+条件付き大数の法則(最小Kullback-Leibler情報量の原理, 最大相対エントロピーの原理)
+からBoltzmann因子で記述される分布が自然に得られることを説明したい.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{問題の設定}
+
+母集団分布が $q=(q_1,\ldots,q_r)$ の多項分布の設定に戻る.
+
+$n$ 回の独立試行によって各々の $i$ について
+状態 $i$ が生じた割合 $k_i/n$ がほぼ $p_i$ に等しいとき, 
+経験分布がほぼ $p=(p_1,\ldots,p_r)$ に等しくなると言うことにする.
+その確率について 
+\[
+(\text{$n$ 回で経験分布がほぼ $p$ になる確率})
+=
+\exp(-n D[p|q] + O(\log n))
+\qquad (n\to\infty)
+\]
+が成立しているのであった. 
+
+次の問題を考える: 分布 $p=(p_1,\ldots,p_r)$ に
+\[
+\sum_{i=1}^r f_{\nu,i}p_i = c_\nu
+\qquad (\nu=1,2,\ldots,s)
+\tag{$*$}
+\]
+という条件を課す. 
+ただし, $\R^r$ のベクトル $(1,1,\ldots,1),(f_{\nu,1},\ldots,f_{\nu,r})$ 
+($\nu=1,\ldots,s$) は一次独立であると仮定しておく.
+経験分布がこの条件を満たす分布 $p$ にほぼ
+等しい場合に制限したとき, 経験分布の確率分布は $n\to\infty$ で
+どのように振る舞うか?
+
+たとえば, 状態 $i$ のエネルギーが $E_i$ の場合に
+\[
+\sum_{i=1}^r E_i p_i \approx U
+\]
+という条件
+(すなわちエネルギーの経験的平均値がほぼ $U$ に等しくなっているという条件)
+を課したとき, 経験分布が $n\to\infty$ でどのように振る舞うか?
+
+たとえば, サイコロを振って $i$ の目が出たら, 賞金を $E_i$ ペリカ
+もらえるとき,
+\[
+\sum_{i=1}^r E_i p_i \approx U
+\]
+という条件
+(すなわち1回あたりの賞金の経験的平均値がほぼ $U$ ペリカに等しくなっているという条件)
+を課したとき, 経験分布が $n\to\infty$ でどのように振る舞うか?
+
+以上の2つの例では $s=1$ である.  複数の条件を課せば $s>1$ となる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Boltzmann因子の導出}
+
+条件($*$)のもとでの経験分布の条件付き確率は $n\to\infty$ で, 
+条件 $\sum_{i=1}^r p_i=1$ と条件($*$)のもとで
+Kullback-Leibler情報量 $K[p|q]=\sum_{i=1}^r p_i\log(p_i/q_i)$ が
+最小値になる分布 $p=(p_1,\ldots,p_r)$ に集中することになる.
+
+その条件付き最小値問題を解くためにLagrangeの未定乗数法を使おう.
+(Kullback-Leibler情報量が $p$ について下に狭義凸な函数であったことを思い出そう.)
+そのために
+\[
+L 
+= \sum_{i=1}^r p_i \log\frac{p_i}{q_i} 
++ (\lambda-1)\left(\sum_{i=1}^r p_i-1\right)
++ \sum_{\nu=1}^s\beta_\nu\left(\sum_{i=1}^r f_{\nu,i}p_i - c_\nu \right)
+\]
+とおく. ここで $\lambda-1$, $\beta_\nu$ が未定乗数である.
+未定乗数と $p_i$ で $L$ を偏微分した結果がすべて $0$ になるという
+方程式
+\begin{align*}
+&
+0=\frac{\d L}{\d\lambda} = \sum_{i=1}^r p_i - 1,
+\tag{1}
+\\ &
+0=\frac{\d L}{\d\beta_\nu} = \sum_{i=1}^r f_{\nu,i}p_i - c_\nu
+\qquad (\nu=1,\ldots,s),
+\tag{2}
+\\ &
+0=\frac{\d L}{\d p_i} = \log\frac{p_i}{q_i} + \lambda + \sum_{\nu=1}^s \beta_\nu f_{\nu,i}
+\qquad (i=1,\ldots,r)
+\tag{3} 
+\end{align*}
+を解けばよい. (3)より,
+\[
+p_i = \exp\left(-\lambda-\sum_{\nu=1}^s \beta_\nu f_{\nu,i} \right)q_i
+\]
+これを(1)に代入すると,
+\[
+Z:= e^\lambda 
+= \sum_{i=1}^r e^{-\sum_{\nu=1}^s \beta_\nu f_{\nu,i}}q_i,
+\qquad
+p_i = \frac{1}{Z}e^{-\sum_{\nu=1}^s \beta_\nu f_{\nu,i}}q_i
+\tag{4}
+\]
+となることがわかる. この $Z$ は{\bf 分配函数}と呼ばれる.
+このように $p_i$ と $Z=e^\lambda$ は $\beta_\nu$ たちの函数になっている. 
+$\beta_\nu$ たちは(4)を(2)に代入することによって決定される.
+$\exp\left(-\sum_{\nu=1}^s \beta_\nu f_{\nu,i}\right)$ を
+{\bf Boltzmann因子}と呼ぶことにする.
+Boltzmann因子は母集団分布 $q_i$ と条件付きの経験分布 $p_i$ が
+どれだけ異なるかを記述している.
+このようにして求められた分布 $p_i$ を{\bf カノニカル分布}と呼ぶことにする.
+
+条件($*$)が成立している場合に制限した場合の経験分布は,
+$n\to\infty$ で以上で求めた分布 $p=(p_1,\ldots,p_r)$ に近付く
+(条件付き大数の法則より). 
+$n$ が巨大ならば経験分布はカノニカル分布の形をしているとしてよい.
+
+たとえば $s=1$, $f_{1,i}=E_i$, $c_1=U$, $\beta_1=\beta$ のとき, 
+\begin{align*}
+p_i = \frac{1}{Z}e^{-\beta E_i}q_i,
+\qquad
+Z = \sum_{i=1}^r e^{-\beta E_i}q_i,
+\qquad
+-\frac{\d\log Z}{\d\beta} 
+= \frac{1}{Z} \sum_{i=1}^r E_i e^{-\beta E_i}q_i = U.
+\end{align*}
+これらの公式は $q_i$ たちが互いにすべて等しい場合には
+統計力学におけるBoltzmann因子を用いた確率分布の記述に一致している.
+
+カノニカル分布に対する相対エントロピー $S[p|q]=-K[p|q]=-\sum_{i=1}^r p_i\log(p_i/q_i)$
+の別の表示を求めよう: 
+$\log(p_i/q_i)=-\sum_{\nu=1}^s\beta_\nu f_{\nu,i}-\log Z$, $\sum_{i=1}^r p_i=1$,
+$\sum_{i=1}^r f_{\nu,i}p_i=c_\nu$ なので
+\begin{align*}
+S[p|q] = \sum_{\nu=1}^s \beta_\nu c_\nu + \log Z.
+\end{align*}
+たとえば $s=1$, $f_{1,i}=E_i$, $c_1=U$, $\beta_1=\beta$ のとき
+\[
+S[p|q] = \beta U + \log Z.
+\]
+{\bf 自由エネルギー} $F$ を $F=-\beta^{-1}\log Z$ と定義すると,
+\[
+S[p|q] = \beta(U-F)
+\]
+この公式は, Boltzmann定数が含まれていない点を除けば,
+統計力学を知っている人達にとってお馴染みの公式だろう%
+\footnote{Boltzmann定数が $1$ になる単位系を採用することもできる.}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{母分布が連続型の場合から連続型の指数型分布族が得られること}
+
+母集団分布が確率密度函数 $q(x)$ で与えられている場合を考えよう.
+この場合には $n$ 回の独立試行の結果得られる経験分布の確率密度函数が
+ほぼ $p(x)$ になる確率の対数の $1/n$ 倍は $n\to\infty$ で
+\[
+S[p|q]=-K[p|q] = -\int p(x)\log\frac{p(x)}{q(x)}\,dx
+\]
+に近付くと考えられる. 分布 $p(x)$ に以下の条件を課す:
+\[
+\int f_\nu(x)p(x)\,dx = c_\nu
+\qquad (\nu=1,\ldots,s).
+\]
+前節と同様にして, この条件のもとで $K[p|q]$ を最小にする
+確率密度函数 $p(x)$ を求めると次のようになることがわかる:
+\begin{align*}
+&
+p(x)=\frac{1}{Z}e^{-\sum_{\nu=1}^s \beta_\nu f_\nu(x)}q(x), 
+\\ &
+Z=\int e^{-\sum_{\nu=1}^s \beta_\nu f_\nu(x)}q(x)\,dx,
+\\ &
+-\frac{\d\log Z}{\d\beta_\nu} 
+= \frac{1}{Z}\int f_\nu(x) e^{-\sum_{\nu=1}^s \beta_\nu f_\nu(x)}q(x) \,dx
+= c_\nu.
+\end{align*}
+このようにな形の連続型確率分布の族を{\bf 連続型の指数型分布族}と呼ぶ.
+積分が和の場合には{\bf 離散型の指数型分布族}と呼ばれる.
+
+たとえば以下の確率分布はすべて指数型分布族に含まれている.
+
+\paragraph{二項分布:} $0<\theta<1$ のとき,
+$-\beta=\log\theta-\log(1-\theta)$ とおくと, $k=0,1,\ldots,n$ について
+\begin{align*}
+%&
+p_k 
+= \binom{n}{k} \theta^k(1-\theta)^{n-k}
+=\frac{e^{-\beta k}q_k}{Z},
+\qquad
+%\\ &
+q_k = \binom{n}{k}\frac{1}{2^n}, 
+\qquad
+Z = \frac{1}{2^n(1-\theta)^n}.
+\end{align*}
+この場合と条件付き大数の法則の関係については
+\exampleref{example:binom-Gibbs}も参照せよ.
+
+\paragraph{多項分布:} $\theta_i\geqq 0$, $\theta_r>0$, $\sum_{i=1}^r\theta_i=1$ であるとし, 
+$-\beta_i=\log\theta_i-\log\theta_r$ とおくと, \\
+$k_1+\cdots+k_r=n$ のとき
+\begin{align*}
+&
+p_{k_1,\ldots,k_r}
+=
+\frac{n!}{k_1!\cdots k_r!}\theta_1^{k_1}\cdots \theta_r^{k_r}
+=\frac{e^{-\sum_{i=1}^{r-1}\beta_i k_i}q_{k_1,\ldots,k_r}}{Z},
+\\ &
+q_{k_1,\ldots,k_r}
+=\frac{n!}{k_1!\cdots k_r!}\frac{1}{r^n},
+\qquad
+Z=\frac{1}{r^n\theta_r^n}
+\end{align*}
+
+\paragraph{正規分布:}
+\[
+p(x) 
+= \frac{e^{-(x-\mu)^2/(2\sigma^2)}}{\sqrt{2\pi}}
+= \frac{e^{-(1/(2\sigma^2))x^2+(\mu/\sigma^2)x}}{Z},
+\qquad Z=e^{\mu^2/(2\sigma^2)}\sqrt{2\pi\sigma^2}.
+\]
+$\mu=0$, $\sigma=1$ の場合については\secref{sec:normal-Gibbs}も参照して欲しい.
+正規分布の確率密度函数 $p(x)$ は平均 $\mu$ と分散 $\sigma^2$ を指定したときに, 
+すなわち $\int_\R p(x)\,dx=1$, 
+\[
+\int_\R x\,p(x)\,dx=\mu, \qquad
+\int_\R x^2\,p(x)\,dx = \sigma^2+\mu^2
+\]
+という条件のもとで, エントロピー
+\[
+S[p(x)] = -\int_\R p(x)\log p(x)\,dx
+\]
+が最大になる $p(x)$ として特徴付けられる.
+
+\paragraph{Gamma分布:} $x>0$ において
+\[
+p(x)=\frac{e^{-x/\tau}x^{\alpha-1}}{\tau^{\alpha}\Gamma(\alpha)}
+=\frac{e^{-x/\tau+(\alpha-1)\log x}}{Z}, 
+\qquad
+Z=\tau^{\alpha}\Gamma(\alpha).
+\]
+Gamma分布の確率密度函数 $p(x)$ は $\int_\R p(x)\,dx=1$, 
+\[
+\int_0^\infty x\,p(x)\,dx=c_1, \qquad
+\int_0^\infty (\log x)\, p(x)\,dx = c_2
+\]
+という条件のもとでエントロピー
+\[
+S[p(x)] = - \int_0^\infty p(x)\log p(x)\,dx
+\]
+が最大になる $p(x)$ として特徴付けられる. 以下も同様である.
+
+\paragraph{第二種Beta分布:} $x>0$ において
+\[
+p(x)
+=\frac{1}{B(\alpha,\beta)}\frac{x^{\alpha-1}}{(1+x)^{\alpha+\beta}}
+=\frac{e^{(\alpha-1)\log x-(\alpha+\beta)\log(1+x)}}{Z},
+\qquad
+Z=B(\alpha,\beta).
+\]
+
+\paragraph{自由度 $n$ の $t$ 分布を $1/\sqrt{n}$ でスケールしたもの:}
+自由度 $n$ の $t$ 分布の確率密度は
+\[
+\rho(t)\,dt
+=
+\frac{1}{c_n} \left(1+\frac{t^2}{n}\right)^{-(n+1)/2}\,dt,
+\qquad
+c_n=\sqrt{n}B(1/2,n/2)
+=\frac{\sqrt{n\pi}\,\Gamma(n/2)}{\Gamma((n+1)/2)}
+\]
+であった. 
+$p(x)\,dx=\rho(\sqrt{n}\,x)\,d(\sqrt{n}\,x)$, $\beta=(n+1)/2$ とおくと
+\[
+p(x)
+=\frac{1}{Z}\frac{1}{(1+x^2)^{(n+1)/2}}
+=\frac{e^{-\beta\log(1+x^2)}}{Z}, 
+\qquad
+Z=B(1/2,n/2).
+\]
+
+\paragraph{第一種Beta分布:} $0<x<1$ について
+\[
+p(x)
+=\frac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}
+=\frac{e^{(\alpha-1)\log x+(\beta-1)\log(1-x)}}{Z},
+\quad
+Z=B(\alpha,\beta).
+\]
+
+\paragraph{Poisson分布:}
+\[
+p_k 
+= \frac{e^{-\lambda}\lambda^k}{k!}
+=\frac{e^{-(\log\lambda)k}q_k}{Z},
+\quad  
+q_k=\frac{e}{k!},
+\quad
+Z=e^{\lambda+1}.
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{標準正規分布の導出例}
+\label{sec:normal-Gibbs}
+
+例として $s=1$, $f_1(x)=x^2$, $c_1=1$, $q(x)=1$ の場合にどうなるかを
+計算してみよう%
+\footnote{$q(x)=1$ なのでこの場合に $q(x)$ は確率密度函数にならない.
+しかし, 以下の計算の結論は正しい.}.
+この場合に上の結果は, $n$ 回の独立試行の結果得られた $x^2$ の
+経験的期待値 $(x_1^2+\cdots+x_n^2)/n$ について
+\[
+\frac{x_1^2+\cdots+x_n^2}{n}=1
+\]
+という条件を課したとき, 
+$n\to\infty$ で $x$ の経験的分布がどうなるかを求めることに等しい.
+上の公式を使うと
+\[
+p(x)=\frac{1}{Z}e^{-\beta x^2}, \qquad
+Z=\int_\R e^{-\beta x^2}\,dx=\sqrt{\pi}\beta^{-1/2}, \qquad
+-\frac{\d\log Z}{\d\beta}=\frac{1}{2\beta}=1.
+\]
+ゆえに $\beta=1/2$, $Z=\sqrt{2\pi}$, $p(x)=e^{-x^2/2}/\sqrt{2\pi}$ となる.
+すなわち $n\to\infty$ で得られる分布は標準正規分布になる.
+
+この結果は $\R^n$ 内の半径の2乗が $n$ の原点を中心とする $n-1$ 次元球面上の
+一様分布の $1$ 次元部分空間への射影が $n\to\infty$ で標準正規分布に
+収束することを意味している. すなわち次の公式が成立している:
+\[
+\lim_{n\to\infty}\int_{\sqrt{n}\,S^{n-1}} f(x_1)\,\mu_n(dx)
+=\int_\R f(x)\frac{e^{-x^2/2}}{\sqrt{2\pi}}\,dx.
+\]
+ここで $\sqrt{n}\,S^{n-1}$ は半径 $\sqrt{n}$ の $n-1$ 次元球面であり, 
+$\mu_n$ はその上の一様確率分布であり, 
+$f(x_1)$ の $x_1$ は球面上の点 $(x_1,\ldots,x_n)$ の射影である.
+この極限の公式は通常の多変数の微積分の計算で直接に確認できる%
+\footnote{次の雑多なノートのMaxwell-Boltzmann則の節にその直接的な計算が書いてある. \\
+\href{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160501StirlingFormula.pdf}
+{\tt http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160501StirlingFormula.pdf}}.
+
+以上の計算例を見れば, 指数型分布族に属する他の確率分布
+がどのような条件を課したときに自然に現われるかも理解できると思う.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{多項分布の場合のSanovの定理}
+\label{sec:Sanov}
+
+多項分布の場合のSanovの定理の主張を明確に述べて厳密に証明しておくことにする.
+Stirlingの公式さえ使わない易しい証明を紹介する.
+この節の証明はブログ記事 \cite{vanRamon2013} で
+解説されている証明と本質的に同じものである.
+そのブログには参考になる解説がたくさんある.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Sanovの定理の主張}
+
+
+有限集合 $\{1,2,\ldots,r\}$ 上の確率分布全体の集合を $\cP$ と書く:
+\[
+\cP = \{\,p=(p_1,\ldots,p_r)\in\R^r\mid p_1,\ldots,p_r\geqq 0,\ p_1+\cdots+p_r=1 \,\}.
+\]
+$\cP$ は $r-1$ 次元の閉単体である.
+たとえば $r=3$ のとき $\cP$ は正三角形になる.
+
+確率分布 $q=(q_1,\ldots,q_r)\in\cP$ を任意に取って固定する.
+確率変数 $X_1,X_2,\ldots$ は集合 $\{1,2,\ldots,r\}$ に値を持つ確率変数列であり, 
+独立で同分布 $q=(q_1,\ldots,q_r)$ にしたがっていると仮定する.
+$q=(q_1,\ldots,q_r)$ を{\bf 母集団分布}と呼ぶ.
+
+集合 $A$ に対してその元の個数を $\# A$ と書き, 
+条件 $A$ が満たされる確率を $P(A)$ と書くことにする.
+(後で条件 $A$ のもとでの $B$ の条件付き確率を $P(B|A)$ と書く.)
+
+各々の $i=1,\ldots,r$ に対して
+$X_1,\ldots,X_n$ に含まれる $i$ の個数が $k_i$ 個になる確率は 
+\[
+P\biggl(
+\#\{\,k=1,2,\ldots,n\mid X_k=i\,\}=k_i\ \text{for each $i=1,\ldots,r$}
+\biggr)
+=
+\frac{n!}{k_1!\cdots k_r!}q_1^{k_1}\cdots q_r^{k_r}
+\]
+となる. 可能な $(k_1,\ldots,k_r)$ の組合せは 
+$k_i=0,1,\ldots,n$, $k_1+\cdots+k_r=n$ を満たしていなければいけない.
+このような $(k_1,\ldots,k_r)$ に対する $(k_1/n,\ldots,k_r/n)$ 全体の集合
+を $\cP_n\subset\cP$ と書くことにする:
+\[
+\cP_n =
+\left\{\left.\,\left(\frac{k_1}{n},\ldots,\frac{k_r}{n}\right)
+\,\right|\,
+k_i=0,1,\ldots,n,\ k_1+\cdots+k_r=n
+\,\right\}.
+\]
+このとき $\cP_n$ の元の個数は $(n+1)^r$ 以下になる.
+($\#\cP_n\leqq(n+1)^r$ を後で自由に利用する.)
+$X_1,\ldots,X_n$ に対応する $\cP_n$ の
+元 $P_n=(k_1/n,\cdots,k_r/n)$ を{\bf 経験分布}と呼ぶ.
+経験分布 $P_n$ は $\cP_n$ に値を持つ確率変数である.
+
+確率分布の組 $(p,q)\in\cP^2$ の函数 $D[p|q]$ を次のように定める:
+\[
+D[p|q]=\sum_{i=1}^r p_i\log\frac{p_i}{q_i}.
+\]
+$p_i$ や $q_i$ が $0$ になる場合には $0\log 0=0$, $-\log 0=\infty$ 
+という約束のもとで値を定めておく.
+$D[p|q]$ を{\bf Kullback-Leibler情報量}と呼ぶ.
+
+\begin{theorem}[Sanov]
+\label{theorem:Sanov}
+以上の設定のもとで以下が成立している%
+\footnote{$\liminf$, $\limsup$ について\secref{sec:limsup}に簡単な解説を書いておいた.}:
+\begin{enumerate}
+\item[(1)] $A$ が $\cP$ の{\bf 開}部分集合ならば
+\[
+\liminf_{n\to\infty}\frac{1}{n}\log P(P_n\in A)\geqq -\inf_{p\in A} D[p|q].
+\]
+\item[(2)] $A$ が $\cP$ の部分集合ならば%
+\footnote{我々が扱っている場合には $A$ は任意の部分集合であっても問題ない.
+しかし, 無限次元の場合には $A$ は{\bf 閉}部分集合だと仮定することが重要になるらしい.}
+\[
+\limsup_{n\to\infty}\frac{1}{n}\log P(P_n\in A)\leqq -\inf_{p\in A}D[p|q].
+\]
+\item[(3)] $\cP$ の部分集合 $A$ の開核の閉包が $A$ を含むならば
+\[
+\lim_{n\to\infty}\frac{1}{n}\log P(P_n\in A)= -\inf_{p\in A}D[p|q].
+\]
+\end{enumerate}
+このように経験分布の $n\to\infty$ での漸近挙動は
+Kullback-Leibler情報量 $D[p|q]$ の $\inf$ で記述される.
+\qed
+\end{theorem}
+
+
+
+\begin{example}[二項分布の場合]
+$r=2$ とし, $q_1=q$, $q_2=1-q$, $p_1=p$, $p_2=1-p$ とおくと,
+\[
+D[p|q] = p\log\frac{p}{q}+(1-p)\log\frac{1-p}{1-q}.
+\]
+これは $p=q$ のとき最低値 $0$ になり, 
+$p$ が $q$ から離れるとこれの値は減少する.
+
+$0\leqq a<b\leqq 1$ であるとし, $A=(a,b)$ とおく. このとき
+\[
+P(P_n\in A)
+=\sum_{a<k/n<b}\binom{n}{k}q^k(1-q)^{n-k}
+\]
+なので
+\[
+\lim_{n\to\infty}
+\frac{1}{n}\log\sum_{a<k/n<b}\binom{n}{k}q^k(1-q)^{n-k}
+=-\inf_{a<p<b}D[p|q]
+=
+\begin{cases}
+-D[b|q]   & (b<q), \\
+-D[q|q]=0 & (a\leqq q\leqq b), \\
+-D[a|q]   & (q<a)
+\end{cases}
+\]
+となる. これがSanovの定理の非自明な応用の最も簡単な場合である.
+\qed
+\end{example}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Sanovの定理の証明の準備}
+
+次の補題が後でStirlingの公式の代わりに使われる.
+
+\begin{lemma}
+\label{lemma:l!/k!}
+非負の整数 $k,l$ に対して
+\[
+\frac{l!}{k!} \geqq k^{l-k}.
+\]
+\end{lemma}
+
+\begin{proof}
+$l\geqq k$ のとき
+\[
+\frac{l!}{k!}
+=(k+1)(k+2)\cdots l
+\geqq k^{l-k}.
+\]
+$l\leqq k$ のとき
+\[
+\frac{l!}{k!}
+=\frac{1}{(l+1)(l+2)\cdots k}
+\geqq \frac{1}{k^{k-l}}
+=k^{l-k}.
+\]
+これで示すべきことが示された.
+\qed
+\end{proof}
+
+次の補題が証明できればSanovの定理の証明は易しい.
+次の補題の証明にはStirlingの公式を使わない.
+
+\begin{lemma}
+\label{lemma:types}
+任意の $p\in\cP_n$ に対して
+\[
+\frac{1}{(n+1)^r}e^{-n D[p|q]}
+\leqq P(P_n=p)
+\leqq e^{-n D[p|q]}.
+\]
+\end{lemma}
+
+\begin{proof}
+$p=(p_1,\ldots,p_r)=(k_1/n,\ldots,k_r/n)\in\cP_n$ のとき,
+\begin{align*}
+&\!
+-nD[p|q]=-\sum_{i=1}^r k_i\log p_i+\sum_{i=1}^rk_i\log q_i,
+\\ &
+e^{-n D[p|q]}
+=\frac{q_1^{k_1}\cdots q_r^{k_r}}{p_1^{k_1}\cdots p_r^{k_r}},
+%\\ &
+\qquad
+P(P_n=p)
+=\frac{n!}{k_1!\cdots k_r!}q_1^{k_1}\cdots q_r^{k_r}.
+\end{align*}
+ゆえに, この補題の結論は次と同値である:
+\[
+\frac{1}{(n+1)^r}\
+\leqq \frac{n!}{k_1!\dots k_r!}p_1^{k_1}\cdots p_r^{k_r}
+\leqq 1.
+\]
+上からの評価の方(右側の不等式)は多項分布の知識より自明である.
+(多項分布における確率が $1$ 以下であることを意味しているに過ぎない.)
+以下で下からの評価(左側の不等式)を証明しよう.
+
+$l_i=0,1,\ldots,n$, $l_1+\cdots+l_r=n$ と仮定する.
+このとき, $p_i=k_i/n$ なので
+\[
+\frac{n!}{l_1!\dots l_r!}p_1^{l_1}\cdots p_r^{l_r}
+\leqq
+\frac{n!}{k_1!\dots k_r!}p_1^{k_1}\cdots p_r^{k_r}
+\tag{$*$}
+\]
+が成立しているはずである. なぜならば多項分布において
+確率が最大になるのは経験分布(今の場合は $l_i/n$)が
+母集団分布(今の場合は $p_i=k_i/n$)に等しくなるときだからである.
+実際, \lemmaref{lemma:l!/k!}より,
+\begin{align*}
+\frac{(右辺)}{(左辺)}
+&
+=\frac{l_1!}{k_1!}\cdots \frac{l_r!}{k_r!}\cdot k_1^{k_1-l_1}\cdots k_r^{k_r-l_r}
+%\\ &
+\geqq k_1^{l_1-k_1}\cdots k_r^{l_r-k_r}\cdot k_1^{k_1-l_1}\cdots k_r^{k_r-l_r}
+=1.
+\end{align*}
+これで($*$)が証明された.
+ゆえに, 多項定理より
+\[
+1
+=\sum_{l_1+\cdots+l_r=n}
+\frac{n!}{l_1!\dots l_r!}p_1^{l_1}\cdots p_r^{l_r}
+\leqq (n+1)^r
+\frac{n!}{k_1!\dots k_r!}p_1^{k_1}\cdots p_r^{k_r}
+\]
+両辺を $(n+1)^r$ で割れば下からの評価が得られる.
+\qed
+\end{proof}
+
+
+\begin{remark}
+以上の結果の一部分は以下のように拡張される.
+
+$f(n)$ は $f(0)=0$ を満たす非負の整数 $n$ の単調増加函数であるとし, 
+\[
+ f(n)! = f(1)f(2)\cdots f(n), \qquad f(0)!=1
+\]
+と定める. これを $f$ 階乗と呼ぶことにする.  このとき非負の整数 $k,l$ に対して,
+\[
+\frac{f(l)!}{f(k)!}\geqq f(k)^{l-k}.
+\]
+実際, $l\geqq k$ のとき
+\[
+\frac{f(l)!}{f(k)!}=f(k+1)f(k+2)\cdots f(l)\geqq f(k)^{l-k}
+\]
+となり, $l\leqq k$ のとき
+\[
+\frac{l!}{k!}=\frac{1}{f(l+1)f(l+2)\cdots f(k)}\geqq \frac{1}{f(k)^{k-l}}=f(k)^{l-k}.
+\]
+
+$k_i\in\Z_{\geqq 0}$ $p_i=f(k_i)/f(n)$ とおくと,  $l_i\in\Z_{\geqq 0}$ のとき, 
+\[
+\frac{f(n)!}{f(l_1)!\cdots f(l_r)!}p_1^{l_1}\cdots p_r^{l_r}
+\leqq
+\frac{f(n)!}{f(l_1)!\cdots k_r)!}p_1^{k_1}\cdots p_r^{k_r}.
+\]
+なぜならば
+\begin{align*}
+\frac{(\text{右辺})}{(\text{左辺})}
+&
+=\frac{f(l_1)!}{f(k_1)!}\cdots \frac{f(l_r)!}{f(k_r)!}\cdot f(k_1)^{k_1-l_1}\cdots f(k_r)^{k_r-l_r}
+\\ &
+\geqq f(k_1)^{l_1-k_1}\cdots f(k_r)^{l_r-k_r}\cdot f(k_1)^{k_1-l_1}\cdots f(k_r)^{k_r-l_r}
+=1.
+\end{align*}
+$f(n)$ が特別な場合にはこの類似をさらにたどることができると思われる.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Sanovの定理の証明}
+
+\begin{proof}[\theoremref{theorem:Sanov}の証明]
+下からの評価(1)を示そう.
+$A$ は有限集合 $\{1,2,\ldots,r\}$ 上の確率分布全体の空間 $\cP$
+(これは $r-1$ 次元単体になる)の開部分集合であるとする.
+$\bigcup_{n=1}^\infty\cP_n=\cP\cap\Q^r$ 
+は $\cP$ の中で稠密である.
+$A$ は $\cP$ の開部分集合なので分布列 $p_n\in\cP_n\cap A$ で
+\[
+\lim_{n\to\infty} D[p_n|q]=\inf_{p\in A} D[p|q]
+\]
+をみたすものを取れる. 以上の状況で 
+\[
+P(P_n\in A)
+=\sum_{p\in\cP_n\cap A}P(P_n=p)
+\geqq P(P_n=p_n)
+\geqq \frac{1}{(n+1)^r}e^{-nD[p_n|q]}.
+\]
+最後の不等号で\lemmaref{lemma:types}の下からの評価を使った.
+これより
+\[
+\frac{1}{n}\log P(P_n\in A)
+\geqq - D[p_n|q] - \frac{r}{n}\log(n+1)
+\]
+となることがわかる. したがって, $n\to\infty$ とすることによって, 
+\[
+\liminf_{n\to\infty}\frac{1}{n}\log P(P_n\in A)
+\geqq - \inf_{p\in A}D[p|q].
+\]
+これで(1)が証明された.
+
+上からの評価(2)を示そう. 
+$A$ は有限集合 $\{1,2,\ldots,r\}$ 上の確率分布全体の空間 $\cP$
+の任意の部分集合であるとする.
+このとき
+\[
+P(P_n\in A)
+=\sum_{p\in\cP_n\cap A}P(P_n=p)
+\leqq
+\sum_{p\in\cP_n\cap A}e^{-nD[p|q]}
+\leqq
+(n+1)^r e^{-n\inf_{p\in A}D[p|q]}.
+\]
+最初の不等号で\lemmaref{lemma:types}の上からの評価を使った.
+これより
+\[
+\frac{1}{n}\log P(P_n\in A)
+\leqq -\inf_{p\in A}D[p|q] + \frac{r}{n}\log(n+1)
+\]
+となることがわかる. したがって, $n\to\infty$ とすることによって,
+\[
+\limsup_{n\to\infty}\frac{1}{n}\log P(P_n\in A)
+\leqq - \inf_{p\in A}D[p|q].
+\]
+これで(2)が証明された.
+
+(3)を示そう. $A$ の開核を $B$ と書き, $B$ の閉包を $C$ と書き, 
+$A\subset C$ と仮定する. \\
+$B\subset A\subset C$ より 
+$-\inf_{p\in B}D[p|q]\leqq -\inf_{p\in A}D[p|q]\leqq -\inf_{p\in C}D[p|q]$.
+$C$ が $B$ の閉包であること $D[p|q]$ が $p$ の連続函数であることより,
+$-\inf_{p\in C}D[p|q]=-\inf_{p\in B}D[p|q]$.
+ゆえに $-\inf_{p\in B}D[p|q]=-\inf_{p\in A}D[p|q]=-\inf_{p\in C}D[p|q]$.
+したがって(1),(2)から(3)が導かれる.
+
+これで\theoremref{theorem:Sanov}が証明された.
+\qed
+\end{proof}
+
+
+
+\begin{remark}
+以上の証明では階乗に関するStirlingの近似公式を使っていない.
+証明で本質的に使った事柄は次の二つだけである.
+\begin{enumerate}
+\item[(1)] 上からの評価のために次の事実を使った: \\
+$p_i\geqq 0$, $p_1+\cdots+p_r=1$ のとき
+\[
+\frac{n!}{k_1!\cdots k_r!}p_1^{k_1}\cdots p_r^{k_r}\leqq 1
+\quad
+(k_i\in\Z_{\geqq 0},\ k_1+\cdots+k_r=n).
+\]
+これは多項分布において「確率は1以下であること」を意味している.
+それを意味する不等式は, 左辺を $k_i$ たちを動かして足し上げた結果
+が多項定理より $1$ になること
+\[
+\sum_{k_1+\cdots+k_r=n}
+\frac{n!}{k_1!\cdots k_r!}p_1^{k_1}\cdots p_r^{k_r}
+= (p_1+\cdots+p_r)^r
+= 1
+\]
+から, ただちに得られる.
+
+\item[(2)] 下からの評価のために次の事実を使った: \\
+$k_i\in\Z_{\geqq 0}$, $k_1+\cdots+k_r=n$, $p_i=k_i/n$ のとき,
+\[
+\frac{n!}{l_1!\cdots l_r!}p_1^{l_1}\cdots p_r^{l_r}
+\leqq
+\frac{n!}{k_1!\cdots k_r!}p_1^{k_1}\cdots p_r^{k_r}
+\quad
+(l_i\in\Z_{\geqq 0},\ l_1+\cdots+l_r=n)
+\]
+これは多項分布において
+「確率が最大になるのは分布が母集団分布に等しくなるときであること」
+を意味している.
+その不等式は次の易しい不等式($k,l$ の大小関係によらずに成立している)
+からただちに得られる:
+\[
+\frac{l!}{k!}\geqq k^{l-k}
+\qquad (k,l\in\Z_{\geqq 0}).
+\]
+実際, この不等式を使うと, $p_i=k_i/n$ より
+\begin{align*}
+\frac{(\text{右辺})}{(\text{左辺})}
+&
+=
+\frac{l_1!}{k_1!}\cdots\frac{l_r!}{k_r!}
+\frac{k_1^{k_1}}{k_1^{l_1}}\cdots\frac{k_r^{k_r}}{k_r^{l_r}}
+%\\ &
+\geqq k_1^{l_1-k_1}\cdots k_r^{l_r-k_r}\cdot k_1^{k_1-l_1}\cdots k_r^{k_r-l_r}
+=1.
+\end{align*}
+\end{enumerate}
+以上の2つの結果は多項分布について知っていれば当然知っているはずの事柄である.
+たったそれだけの事実から多項分布版のSanovの定理は証明されるのである.
+
+\lemmaref{lemma:types}の証明を逆にたどってKullback-Leibler情報量が
+出て来るところまでの議論を繰り返そう.
+
+$k_i\in\Z_{\geqq 0}$, $k_1+\cdots+k_r=n$, $p_i=k_i/n$ と仮定する.
+上の(2)を $l_i$ 達について足し上げることによって
+\[
+1
+=\sum_{l_1+\cdots+l_r=n}
+\frac{n!}{l_1!\cdots l_r!}p_1^{l_1}\cdots p_r^{l_r}
+\leqq
+(n+1)^r
+\frac{n!}{k_1!\cdots p_r!}p_1^{k_1}\cdots p_r^{k_r}.
+\]
+これの両辺を $(n+1)^r$ で割って得られる不等式と上の(1)を合わせると
+\[
+\frac{1}{(n+1)^r}
+\leqq \frac{n!}{k_1!\cdots k_r!}p_1^{k_1}\cdots p_r^{k_r}
+\leqq 1
+\]
+を得る. $q_i\in\Z_{\geqq 0}$, $q_1+\cdots+q_r=1$ であるとし, 
+この不等式全体を $p_1^{k_1}\cdots p_r^{k_r}$ で割って, 
+$q_1^{k_1}\cdots q_r^{k_r}$ をかけると
+\[
+\frac{1}{(n+1)^r}
+\frac{q_1^{k_1}\cdots q_r^{k_r}}{p_1^{k_1}\cdots p_r^{k_r}}
+\leqq
+\frac{n!}{k_1!\cdots k_r!}q_1^{k_1}\cdots q_r^{k_r}
+\leqq
+\frac{q_1^{k_1}\cdots q_r^{k_r}}{p_1^{k_1}\cdots p_r^{k_r}}.
+\]
+$k_i=np_i$ より, 
+この時点ですでにKullback-Leibler情報量
+\[
+D[p|q]=\sum_{i=1}^r p_i\log\frac{p_i}{q_i}
+\]
+が見えている:
+\[
+\log\frac{q_1^{k_1}\cdots q_r^{k_r}}{p_1^{k_1}\cdots p_r^{k_r}}
+=
+\log\left(
+\left(\frac{q_1}{p_r}\right)^{p_1} \cdots \left(\frac{q_r}{p_r}\right)^{p_r}\right)^n
+=
+-nD[p|q].
+\]
+したがって
+\[
+\frac{1}{(n+1)^r}e^{-nD[p|q]}
+\leqq
+\frac{n!}{k_1!\cdots k_r!}q_1^{k_1}\cdots q_r^{k_r}
+\leqq
+e^{-nD[p|q]}.
+\]
+この不等式が\lemmaref{lemma:types}の結論であった.	
+そしてこの不等式を用いて多項分布の $n\to\infty$ での様子を調べれば
+ただちにSanovの定理(\theoremref{theorem:Sanov})が得られるのであった.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Sanovの定理を使ったカノニカル分布の導出}
+\label{sec:Gibbs}
+
+\secref{sec:Sanov}の記号をそのまま引き継ぐ.
+たとえば $\cP$ は有限集合 $\{1,2,\ldots,r\}$ 上の確率分布
+$p=(p_1,\ldots,p_r)$ 全体の集合であるとし, 
+母集団分布 $q=(q_1,\ldots,q_r)\in\cP$ を任意に取って固定する.
+$n$ 回の独立試行の結果, 状態 $i$ が生じた回数を $k_i$ と書くと,  
+状態 $i$ の生じた割合は $k_i/n$ である.
+$P_n=(k_1/n,\ldots,k_r/n)$ は $\cP$ に値を持つ確率変数になる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{分配函数とエネルギーの期待値}
+\label{sec:Z-U}
+
+$E=(E_1,\ldots,E_r)\in\R^r$ であるとし, 
+\[
+E_1=\cdots=E_a<E_{a+1}\leqq\cdots\leqq E_{r-b}<E_{r-b+1}=\cdots=E_r
+\]
+かつ $q_1,q_r>0$ であると仮定しておく
+(あとで分配函数の対数凸性などを保証するための仮定).
+$E_i$ たちを状態 $i$ の{\bf エネルギー}と呼ぶ%
+\footnote{ギャンブルが好きな人はエネルギーを
+サイコロで $i$ の目が出たときにもらえる賞金だと思ってよい.}.
+$\beta\in\R$ に対して 
+分布 $p(\beta)=(p_1(\beta),\ldots,p_r(\beta))\in\cP$ と函数 $Z(\beta)$ を
+\[
+p_i(\beta)=\frac{e^{-\beta E_i}q_i}{Z(\beta)}, \qquad
+Z(\beta)=\sum_{i=1}^r e^{-\beta E_i}q_i, \qquad
+\]
+によって定める. さらに函数 $U(\beta)=\bra E \ket_\beta$ を
+\[
+U(\beta)
+=\bra E\ket_\beta
+=\sum_{i=1}^r E_i p_i(\beta)
+=-\frac{\d}{\d\beta}\log Z(\beta)
+\]
+と定める. $\beta$ を{\bf 逆温度}と呼び, 
+$e^{-\beta E_i}$ を{\bf Boltzmann因子}と呼び,
+$p(\beta)$ を{\bf カノニカル分布}と呼び, 
+函数 $Z(\beta)$ を{\bf 分配函数}と呼び,
+函数 $U(\beta)$ を{\bf エネルギーの期待値}と呼ぶ.
+
+$\log Z(\beta)$ は $\beta$ に関する下に狭義凸な函数である.
+なぜならば
+\[
+\left(\frac{\d}{\d\beta}\right)^2\log Z(\beta)
+=\frac{Z''(\beta)Z(\beta)-Z'(\beta)^2}{Z(\beta)^2}
+\] 
+であり, $a_i=e^{-\beta E_i}q_i\geqq 0$ とおくと, 
+最初の方の仮定から $a_1,a_r>0$ かつ $E_1<E_r$ なので
+\begin{align*}
+&
+Z''(\beta)Z(\beta)-Z'(\beta)^2
+=
+\sum_{i,j} E_i^2 a_i a_j - \sum_{i,j}E_i a_i E_j a_j
+\\ & \qquad
+=\frac{1}{2}\sum_{i,j}(E_i^2+E_j^2)a_ia_j
+-\frac{1}{2}\sum_{i,j}2E_iE_ja_ia_j
+=\frac{1}{2}\sum_{i,j}(E_i-E_j)^2 a_ia_j
+>0
+\end{align*}
+となり, ゆえに
+\[
+\left(\frac{\d}{\d\beta}\right)^2\log Z(\beta) > 0
+\]
+となるからである. したがって, エネルギーの期待値
+\[
+U(\beta)=-\frac{\d}{\d\beta}\log Z(\beta)
+\]
+は $\beta$ の狭義単調減少函数である.
+
+次に $U(\beta)$ の値の様子を調べよう.
+まず $p(0)=q$ より
+\begin{align*}
+U(0)= \sum_{i=1}^r E_i q_i.
+\end{align*}
+次に $\beta\to\infty$ のとき
+\begin{align*}
+U(\beta)
+=
+\frac
+{\sum_i E_i e^{-\beta E_i}q_i}
+{\sum_i     e^{-\beta E_i}q_i}
+\to
+\frac
+{E_1 e^{-\beta E_1}\sum_{i=1}^a q_i}
+{    e^{-\beta E_1}\sum_{i=1}^a q_i}
+=E_1.
+\end{align*}
+最後に $\beta\to-\infty$ のとき
+\begin{align*}
+U(\beta)
+=
+\frac
+{\sum_i E_i e^{-\beta E_i}q_i}
+{\sum_i     e^{-\beta E_i}q_i}
+\to
+\frac
+{E_r e^{-\beta E_r}\sum_{i=r-b+1}^r q_i}
+{    e^{-\beta E_r}\sum_{i=r-b+1}^r q_i}
+=E_r.
+\end{align*}
+
+以上により, $E_r\geqq U\geqq E_1$ と $-\infty\leqq\beta\leqq\infty$
+は $U=U(\beta)$ によって一対一に対応していることがわかる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{条件付き確率分布のカノニカル分布への収束}
+
+経験分布 $p=(p_1,\ldots,p_r)\in\cP$ について, 
+条件 $\sum_{i=1}^r E_i p_i\approx U(\beta)$ のもとで,  
+$n\to\infty$ のとき条件付き確率分布がカノニカル分布 $p(\beta)$ に
+収束することを示したい.
+
+以下では, 数学的に厳密な取り扱いをするために,
+条件 $\sum_{i=1}^r E_i p_i\approx U(\beta)$ の代わりに,
+任意に $a>0$ を取って以下の条件を課す:
+\begin{itemize}
+\item $\beta\geqq 0$ のとき, 条件 \(
+\displaystyle
+U(\beta)-a \leqq \sum_{i=1}^r E_i p_i \leqq U(\beta)
+\) を課す. 
+\item $\beta\geqq 0$ のとき, 条件 \(
+\displaystyle
+U(\beta)\leqq \sum_{i=1}^r E_i p_i \leqq U(\beta)+a
+\) を課す. 
+\end{itemize}
+後で $a>0$ の取り方は議論の本質に無関係であることがわかる.
+この条件のもとでの条件付き確率を考えるために
+$\{1,2,\ldots,r\}$ 上の確率分布全体の集合 $\cP$ の部分集合 $A$ を
+\[
+A =
+\begin{cases}
+\left\{\,p\in\cP \,\left|\, 
+U(\beta)-a \leqq \sum_{i=1}^r E_i p_i \leqq U(\beta) \right.\right\} 
+& (\beta\geqq 0), 
+\\
+\left\{\, p\in\cP \,\left|\, 
+U(\beta)\leqq \sum_{i=1}^r E_i p_i \leqq U(\beta)+a \right.\right\} 
+& (\beta\leqq 0)
+\end{cases}
+\]
+と定める. 条件 $P_n\in A$ のもとでの条件付き確率
+\[
+P(P_n\in B|P_n\in A)=\frac{P(P_n\in A\cap B)}{P(P_n\in A)}
+\qquad (B\subset\cP)
+\]
+が $n\to\infty$ でカノニカル分布 $p(\beta)$ に集中することを
+Sanovの定理(\theoremref{theorem:Sanov})を使って証明したい. 
+そのために, 任意に $\eps>0$ を取って, 
+$\cP$ の部分集合 $B$ を次のように定める:
+\[
+B = \{\,p\in\cP \mid ||p-p(\beta)||<\eps \,\}.
+\]
+ここで $||\cdot||$ はEuclidノルムである.
+$B$ は $p(\beta)$ の $\eps$ 開近傍である.
+以上の設定のもとで, $n\to\infty$ で条件付き確率分布が
+カノニカル分布 $p(\beta)$ に集中することを意味する
+\[
+P(P_n\in B|P_n\in A)\to 1
+\qquad (n\to\infty)
+\tag{$*$}
+\]
+を示すことが以下の目標である.
+
+Kullback-Leibler情報量 $D[p|q]$ の定義を $\cP$ の部分集合 $C$ に
+\[
+D[C|q] = \inf_{p\in P}D[p|q]
+\]
+と拡張しておく. 
+Sanovの定理より, $\cP$ の部分集合 $C$ の開核の閉包が $C$ を含むとき 
+\[
+P(P_n\in C) = \exp(-n D[C|q] + o(n)).
+\]
+上で定めた $\cP$ の部分集合 $A$, $B$, $A\cap B$ の開核の閉包は
+それぞれ $A$, $B$, $A\cap B$ を含む. 
+さらに $B$ の $A$ での補集合 $B'=A\setminus B$ も同様である.
+ゆえに
+\[
+P(P_n\in B'|P_n\in A)
+=\exp(-n(D[B'|q]-D[A|q])+o(n)).
+\]
+これが $n\to\infty$ で $0$ に収束することと目標である($*$)は同値である.
+
+もしも条件 $p\in A$ のもとで $p=p(\beta)$ が $D[p|q]$ が唯一の最小点
+になるならば, $B'=A\setminus B$ の閉包に $p(\beta)$ が含まれないことより,
+$D[B'|q]>D[A|q]=D[p(\beta)|q]$ となり,  $n\to\infty$ で
+$P(P_n\in B'|P_n\in A)\to 0$ となることがわかる.
+
+$D[p|q]$ は $p$ の函数として下に狭義凸であり, 
+$A$ は $\cP$ の凸部分集合なので, 
+条件 $p\in A$ のもとでの $D[p|q]$ が $p=p(\beta)$ で
+最小になるならば, $p=p(\beta)$ は唯一の最小点になる. 
+ゆえに条件 $p\in A$ のもとで $D[p|q]$ が $p=p(\beta)$ で
+最小になることを示せば($*$)の証明が終了する.
+以下でそのことを証明しよう.
+
+カノニカル分布 $p(\beta)$ は
+\[
+\sum_{i=1}^r E_i p_i(\beta) = U(\beta)
+\]
+を満たしているので, $p(\beta)\in A$ である. さらに%
+\footnote{相対エントロピー $S[p|q]=-D[p|q]$ を用いて公式を
+書き直すと $S[p|q]=\beta U(\beta) + \log Z(\beta)$ になる.
+この手の公式は統計力学を知っている人達にはお馴染みのものだろう.}
+\begin{align*}
+D[p(\beta)|q]
+&
+=\sum_{i=1}^r p_i(\beta)\log\frac{p_i(\beta)}{q_i}
+=\sum_{i=1}^r p_i(\beta)\log\frac{e^{-\beta E_i}}{Z(\beta)}
+\\ &
+=\sum_{i=1}^r p_i(\beta)(- \beta E_i - \log Z(\beta))
+=-\beta U(\beta)-\log Z(\beta).
+\end{align*}
+これが条件 $p\in A$ のもとでの $D[p|q]$ の最小値であることを示したい.
+すなわち $p\in A$ のとき $D[p|q]\geqq D[p(\beta)|q]$ となることを示したい.
+
+$p\in A$ と仮定する. このとき, $A$ の定義より, 
+$\beta\geqq 0$ のとき $\sum_{i=1}^r E_i p_i\leqq U(\beta)$ となり, 
+$\beta\leqq 0$ のとき $\sum_{i=1}^r E_i p_i\geqq U(\beta)$ となるので,
+$\beta$ の符号によらずに
+\[
+\beta\sum_{i=1}^r E_i p_i \leqq \beta U(\beta).
+\tag{$\#$}
+\]
+が成立している. 
+\secref{sec:Z-U}の計算より, 
+$\beta>0$ と $U(\beta)<\sum_{i=1}^r E_i q_i$ は同値であり, 
+$\beta<0$ と $U(\beta)>\sum_{i=1}^r E_i q_i$ は同値である.
+集合 $A$ を定義するときに用いた $a>0$ は以下の議論には関係しない.
+
+Kullback-Leibler情報量 $D[p|q]$ は以下のように変形される:
+\begin{align*}
+D[p|q]
+&
+=\sum_{i=1}^r p_i\log\frac{p_i}{q_i}
+=\sum_{i=1}^r p_i\log\left(\frac{p_i}{p_i(\beta)}\frac{p_i(\beta)}{q_i}\right)
+%\\ &
+=\sum_{i=1}^r p_i\log\frac{p_i}{p_i(\beta)}
++\sum_{i=1}^r p_i\log\frac{p_i(\beta)}{q_i}
+\\ &
+=D[p|p(\beta)]+\sum_{i=1}^r p_i\log\frac{e^{-\beta E_i}}{Z(\beta)}
+%\\ &
+=D[p|p(\beta)]+\sum_{i=1}^r p_i(-\beta E_i-\log Z(\beta))
+\\ &
+=D[p|p(\beta)]-\beta\sum_{i=1}^r E_i p_i - \log Z(\beta).
+\end{align*}
+ゆえに, Kullback-Leibler情報量が常に $0$ 以上であることと不等式($\#$)より, 
+\[
+D[p|q]
+\geqq D[p|p(\beta)] -\beta U(\beta)-\log Z(\beta) 
+\geqq D[p|p(\beta)] + D[p(\beta)|q]
+\geqq D[p(\beta)|q].
+\]
+これで条件 $p\in A$ のもとで $D[p|q]$ は $p=p(\beta)$ で最小になることがわかった.
+目標の($*$)が証明された.
+
+
+\begin{remark}[不等式($\#$)について]
+\label{remark:beta}
+以上の議論は本質的に不等式 ($\#$) の仮定だけに基づく.
+
+統計力学の文脈では $\beta$ は絶対温度のBoltzmann定数倍の逆数を意味する.
+その場合には $\beta>0$ となるので不等式 ($\#$) は
+\[
+(\text{エネルギーの平均値})=\sum_{i=1}^r E_i p_i\leqq U(\beta)
+\]
+を意味する. 田崎 \cite{Tasaki}の第9-2-1節(p.319)も参照せよ.
+
+カノニカル分布が経験的に自然に得られることを示すためには, 
+$\sum_{i=1}^r E_i p_i\approx U(\beta)$ という強い条件を
+仮定する必要はなく, 不等式 ($\#$) を仮定するだけでよい.
+この点についてもう少し詳しくコメントしておく.
+
+\secref{sec:Z-U}で計算した通り,
+$U(0)$ は母集団分布でのエネルギーの期待値 $\sum_{i=1}^r E_i q_i$ になる.
+そして $\beta>0$ を大きくすると $U(\beta)$ は $\min\{E_1,\ldots,E_r\}$ に近付き, 
+$\beta<0$ を小さくすると $U(\beta)$ は $\max\{E_1,\ldots,E_r\}$ に近付く.
+$\beta=\infty$ で状態は最小エネルギー状態(基底状態)にはりつくようになり,
+$\beta=-\infty$ で状態は最大エネルギー状態にはりつくようになる.
+
+統計力学において $\beta$ は絶対温度の逆数であり, 
+$\beta=\infty$ は絶対零度に対応し, 
+$\beta=0$ は絶対温度無限大に対応している.
+我々が扱っている場合には $\beta$ は負にもなりえる.
+その場合には対応する絶対温度も負の値になる.
+絶対温度の高さを逆温度 $\beta$ の低さで測ることにすれば, 負の絶対温度は
+絶対温度無限大よりも高温であるとみなされる.
+
+我々が扱っているのは次のような状況であると考えられる.
+
+$r$ 種類の目が出るルーレットを回して, 
+$i$ の目が出たら賞金を $E_i$ ペリカもらえるゲームを考える.
+($E_i<0$ の場合には $|E_i|$ ペリカ支払うことにすればギャンブルになる.)
+$i$ の目が出る確率は $q_i$ であるとする.
+そのようなゲーム1回あたりの賞金の期待値は $U_0=\sum_{i=1}^r E_i q_i$ になる.
+大数の法則よりそのようなゲームをたくさん繰り返せば
+1回あたりの賞金の平均値は $U_0$ に近付く.
+
+まず $U>U_0$ であると仮定する.
+ゲームをたくさん繰り返して(回数は $n$ 回とする). 
+ゲーム1回あたりの賞金の平均値が $U$ 未満で終わったならば, 
+時間を巻き戻して何度でも $n$ 回分のゲームをやり直せると仮定する.
+そのようにしてゲーム1回あたりの賞金の平均値が
+ゲーム自体の期待値である $U_0$ より大きい $U$ 以上になったら
+時間を巻き戻すのを止める.
+このとき, $n$ 回のゲーム中 $i$ の目が出た割合 $p_i$ は
+($n$ が大きなとき)どのような値になる可能性が高いだろうか?
+
+ゲーム1回あたりの賞金の平均値が $U_0$ から離れれば離れるほど
+そのような状況が生じる確率は下がるので, 
+ゲーム1回あたりの賞金の平均値はほぼ $U$ 
+(すなわち $U$ よりほんの少し大きな数値)
+になってしまう可能性が高いだろう.
+
+そのときの $i$ の目が出た割合 $p_i$ を計算すると, 
+$U$ が定める $\beta$ に対応するカノニカル分布 $p_i(\beta)$ に
+近くなる可能性が高いというのがこの節において数学的にきちんと証明したことである.
+
+この場合には $U>U_0$ なので $\beta<0$ となる.
+すなわち必要ならば時間を巻き戻すことによって, 
+ゲーム自体の賞金期待値よりも高い賞金を求めると, 
+対応する絶対温度は負の値になってしまうと解釈される.
+
+絶対温度が正の値の状況を作り出すには, 
+$U<U_0$ であると仮定し, 必要ならば時間を巻き戻して, 
+ゲーム1回あたりの賞金の平均値が $U$ 以下になるようにすればよい.
+そのとき, ゲーム1回あたりの賞金の平均値が $U_0$ から離れれば離れるほど
+そのような状況が生じる確率は下がるので, 
+ゲーム1回あたりの賞金の平均値はほぼ $U$ になる可能性が高く, 
+$i$ の目が出た割合は $U$ に対応するカノニカル分布 $p_i(\beta)$ に近くなる可能性が高い.
+この場合には $U<U_0$ なので $\beta>0$ となり, 
+絶対温度は正の値になる.
+
+つまり, 時間を巻き戻して, ゲーム自体の期待値よりも低い賞金を得るように
+すると絶対温度は正の値になるとされるのである.
+
+以上の説明を読めばカノニカル分布の導出で使った不等式 ($\#$) の向きが
+どのように自然であるかがわかると思う.
+上の議論と\secref{sec:binom-Sanov}の最後の方の
+極限の計算と比較してみよ.
+\secref{sec:binom-Sanov}では「丁半博打」のケースを扱っていると考えられる.
+\qed
+\end{remark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{まとめと二項分布もカノニカル分布の例になっていること}
+\label{sec:binom-Gibbs}
+
+以上の結果は以下のようにまとめられる.
+
+\begin{theorem}[条件付き大数の弱法則, 条件付き極限定理]
+\label{theorem:Gibbs}
+母集団分布は $q=(q_1,\ldots,q_r)\in\cP$ であるとする.
+$X_1,X_2,\ldots$ は独立で同分布 $q$ にしたがう $\{1,2,\ldots,r\}$
+に値を持つ確率変数列であるとする.
+$X_1,X_2,\ldots,X_n$ の中に含まれる $i$ の個数を $k_i$ と書き, 
+$P_n=(k_1/n,\ldots,k_r/n)$ とおく. $P_n$ は分布の集合 $\cP$ に値を
+持つ確率変数になる.
+$E_i\in\R$ は\secref{sec:Z-U}の通りとする.
+$E_1<U<E_r$ であるとし, $\beta\in\R$, 
+$p(\beta)=(p_1(\beta),\ldots,p_r(\beta))\in\cP$, 
+$Z(\beta)$ を以下の条件で定める:
+\begin{align*}
+p_i(\beta)=\frac{e^{-\beta E_i}q_i}{Z(\beta)}, \quad
+Z(\beta)=\sum_{i=1}^r e^{-\beta E_i}q_i, \quad
+-\frac{\d}{\d\beta}\log Z(\beta) = \sum_{i=1}^r E_i p_i(\beta) = U.
+\end{align*}
+$p(\beta)$ を{\bf カノニカル分布}と呼ぶ.
+$0<a\leqq\infty$ とし, 分布の集合 $A_U\subset\cP$ を
+\[
+A_U =
+\begin{cases}
+\left\{\,p\in\cP \,\left|\, 
+U-a \leqq \sum_{i=1}^r E_i p_i \leqq U \right.\right\} 
+& (\beta\geqq 0), 
+\\
+\left\{\, p\in\cP \,\left|\, 
+U\leqq \sum_{i=1}^r E_i p_i \leqq U+a \right.\right\} 
+& (\beta\leqq 0)
+\end{cases}
+\]
+と定める. このとき $\sum_{i=1}^r E_i p_i(\beta)=U$ なので $p(\beta)\in A_U$ 
+である. 任意に $\eps>0$ を取り, $p(\beta)$ の $A_U$ における $\eps$ 開近傍
+を $B_\eps(p(\beta))$ と書く. このとき, $n\to\infty$ で
+\[
+P(P_n\in B_\eps(p(\beta))|P_n\in A_U)
+=
+\frac{P(P_n\in B_\eps(p(\beta)))}{P(P_n\in A_U)}
+\to 1.
+\]
+すなわち経験分布 $P_n$ は $n\to\infty$ で
+カノニカル分布 $p(\beta)$ に(確率)収束する.
+\qed
+\end{theorem}
+
+
+\begin{example}
+\label{example:binom-Gibbs}
+確率 $\theta$ に対応する一般の二項分布が
+確率 $1/2$ の二項分布を母集団分布とする場合のカノニカル分布として
+自然に現われることを説明しよう. 
+この例は母集団分布が一様分布でない場合のカノニカル分布の簡単な例になっている.
+
+有限集合 $\{0,1,\ldots,r\}$ に値を持つ
+確率変数 $X$ は確率 $1/2$ に対応する対称な二項分布にしたがうと仮定する:
+\[
+P(X=i)=\binom{r}{i}\frac{1}{2^r}
+\qquad (i=0,1,\ldots,r).
+\]
+$X_1,X_2,\ldots$ は独立で $X$ と同じ分布を持つ確率変数の列であるとする.
+$X_1,X_2,\ldots,X_n$ の中に含まれる $i$ の個数を $k_i$ と書き, 
+$P_n=(k_0/n,k_1/n,\ldots,k_r/n)$ とおくと, 
+$P_n$ は $\{0,1,\ldots,r\}$ 上の確率分布に値を持つ確率変数になる.
+大数の法則より, 何も条件を付けずに $n\to\infty$ とすると, 
+$P_n$ は対称な二項分布に近付く.
+
+$E_i=i$ の場合にカノニカル分布が何になるかを計算してみよう. 
+そのとき, 分配函数は二項定理より
+\[
+Z(\beta)
+=\sum_{i=0}^r e^{-\beta E_i}q_i
+=\sum_{i=0}^r \binom{r}{i}\left(\frac{e^{-\beta}}{2}\right)^i\left(\frac{1}{2}\right)^{r-i}
+=\frac{(e^{-\beta}+1)^r}{2^r}
+\] 
+となるので, カノニカル分布は
+\[
+p_i(\beta)
+=\frac{e^{-\beta E_i}q_i}{Z(\beta)}
+=\binom{r}{i}\frac{e^{-\beta i}}{(e^{-\beta}+1)^r}
+=\binom{r}{i}
+\left(\frac{e^{-\beta}}{e^{-\beta}+1}\right)^i
+\left(\frac{1}{e^{-\beta}+1}\right)^{r-i}
+\]
+と二項分布になる. つまり, 
+\[
+p_i(\beta)=\binom{r}{i}\theta^i(1-\theta)^{r-i},
+\qquad
+\theta=\frac{e^{-\beta}}{e^{-\beta}+1}.
+\]
+このとき,
+\[
+-Z'(\beta)=\frac{r e^{-\beta}(e^{-\beta}+1)^{r-1}}{2^r}
+\]
+なので, ``エネルギーの期待値''は
+\[
+U(\beta)
+=-\frac{\d}{\d\beta}Z(\beta)
+=\frac{-Z'(\beta)}{Z(\beta)}
+=\frac{r e^{-\beta}}{e^{-\beta}+1}
+=r\theta
+\]
+と確率 $\theta$ に対応する二項分布における $i$ の期待値になる.
+
+確率 $1/2$ に対応する対称な二項分布については
+コイン投げの状況を想像すると分かり易いだろう. 
+コインを投げたとき表になる確率が $1/2$ である状況を考える.
+そのようなコインを $r$ 回投げて表の出た回数 $i$ と表が出た割合 $i/r$ を
+記録する行為を $n$ 回繰り返したとしよう.
+ただし $n$ は非常に大きいとする.
+記録には表の出た回数 $i$ と表が出た割合 $i/r$ が
+それぞれ $n$ 個ずつ記録されている.
+その記録を見ると次が成立していたとする%
+\footnote{大数の(弱)法則より, $\theta$ が $1/2$ から離れている確率
+は $n\to\infty$ で $0$ に近付く.
+ここではそのような稀なケースが生じた場合を想定している.}:
+\[
+(\text{表の出た割合 $i/r$ の平均値})
+=\sum_{i=0}^r \frac{i}{r} p_i 
+\approx \theta.
+\tag{$*$}
+\]
+このとき $p_i=k_i/n$ たちはどのような値になっている可能性が高いだろうか?
+
+「経験分布 $p=(p_0,p_1,\ldots,p_r)$ は確率 $\theta$ 
+に対応する二項分布にほぼ等しくなっている可能性が高い」というのが, 
+\theoremref{theorem:Gibbs}をすぐ上の計算に適用したときの結論になる.
+
+上で計算したカノニカル分布 $p(\beta)$ 
+(確率 $\theta$ に対応する二項分布)は, \theoremref{theorem:Gibbs}より, 
+\[
+(\text{表が出た回数 $i$ の期待値})
+=\sum_{i=0}^r i p_i 
+=\sum_{i=0}^r E_i p_i
+\approx U(\beta) = r\theta
+\]
+を満たす分布 $p=(p_0,p_1,\ldots,p_r)$ に制限した場合の
+経験分布 $P_n$ が $n\to\infty$ で近付く先になっている.
+この条件は上の($*$)と同値である.
+表の出る割合が $\theta$ になるという条件で制限を付ければ
+確率 $\theta$ に対応する二項分布が経験分布として自然に現われる.
+
+{\bf 結論.}\enspace
+表の出る確率が $1/2$ の公平なコインを $r$ 回投げて表の出た回数を数えること
+をたくさん繰り返し, $r$ 回中表の出た回数が大量に記録されたリストを作ったとする.
+そのときもしもその記録において $r$ 回中表の出た割合の平均値が $\theta$ に
+なっているならば%
+\footnote{$\theta$ が $1/2$ から離れると, 
+$n$ が大きなときそのようなリストが得られる確率はほぼ $0$ になるが, 
+そのような稀な状況が生じてしまった場合についても考えている.},  
+そのリストにはあたかも「表の出る確率が $\theta$ の二項分布の記録が残っている」
+かのように見えてしまうことになる.
+\qed
+\end{example}
+
+
+\begin{remark}
+\exampleref{example:binom-Gibbs}の
+議論を一般化するとほぼ自明に以下のようなことが成立していることがわかる.
+母集団分布 $q_i$ は最初から $E_i$ に関するカノニカル分布の形をしていると仮定する:
+\[
+q_i = \frac{e^{-\beta_0 E_i}q_{0,i}}{Z_0}, \qquad
+Z_0 = \sum_{i=1}^r e^{-\beta_0 E_i}q_{i,0}.
+\]
+ここで $q_{0,i}\geqq 0$, $\sum_{i=1}^r q_{0,i}=1$, 
+$E_1,\ldots,E_r\in\R$ の最大値 $E_1$ と最大値 $E_r$ は異なり, 
+$q_1,q_r>0$ であると仮定する.
+このとき, この母集団分布と $E_i$ たちに対応するカノニカル分布 $p(\beta)$ も
+母集団分布と同じ形のカノニカル分布になる:
+\[
+p_i(\beta) = \frac{e^{-(\beta_0+\beta)E_i}q_{0,i}}{Z_0 Z(\beta)}, \qquad
+Z_0Z(\beta) 
+= Z_0\sum_{i=1}^r e^{-\beta E_i}q_i
+= \sum_{i=1}^r e^{-(\beta_0+\beta)E_i} q_{0,i}.
+\]
+二項分布は離散型の指数型分布族に含まれているので
+\exampleref{example:binom-Gibbs}のようなことが成立するのである.
+他の指数型分布族に含まれる確率分布についても同様のことが成立する.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: Kullback-Leibler情報量に関する不等式}
+\label{sec:inequalities}
+
+Cover-Thomas \cite{Cover-Thomas-2006} は情報理論に関する有名な教科書である. 
+情報量とエントロピー一般に関する詳しい解説を読みたい人はその本を参照すればよい.
+以下では主にこの教科書を参照しながら, Kullback-Leibler情報量が「距離」のような
+性質を持っていることを意味する不等式を扱う.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{準備: Jensenの不等式}
+\label{sec:Jensen}
+
+函数 $f(X)$ を数 $E[f(X)]$ に対応させる汎函数 $E[\ \cdot\ ]$ は
+以下の条件を満たしていると仮定する:
+\begin{enumerate}
+\item 線形性: 函数 $f(X)$, $g(X)$ と数 $\alpha,\beta$ に対して, \\
+\qquad $E[\alpha f(X)+\beta g(X)]=\alpha E[f(X)]+\beta E[g(X)]$.
+\item 短調性: 常に $f(X)\geqq g(X)$ ならば $E[f(X)]\geqq E[g(X)]$.
+\item 規格化条件: $E[1]=1$.
+\end{enumerate}
+規格化条件と短調性より, 数 $\alpha$ に対して $E[\alpha]=\alpha$ となることがわかる.
+このような $E[\ \cdot\ ]$ を期待値汎函数と呼ぶ.
+たとえば $p_i\geqq 0$, $\sum_{i=1}^r p_i=1$ のとき, 
+$E[f(X)]=\sum_{i=1}^r f(x_i)p_i$ は期待値汎函数である.
+他にも $\rho(x)\geqq 0$, $\int_a^b \rho(x)\,dx=1$ のとき,
+$E[f(X)]=\int_a^b f(x)\rho(x)\,dx$ も期待値汎函数である.
+
+このとき以下の不等式が成立している({\bf Jensenの不等式}):
+\begin{itemize}
+\item $f(X)$ が上に凸ならば $E[f(X)]\leqq f(E[X])$.
+\item $f(X)$ が下に凸ならば $E[f(X)]\geqq f(E[X])$.
+\end{itemize}
+以下で前者のみを証明しよう. 後者は $-f(X)$ に前者を適用すれば得られる.
+
+\begin{proof}[前者の証明]
+函数 $f(X)$ は上に凸であると仮定し, $\mu=E[X]$ とおく.
+このとき上に戸津な函数 $f(X)$ の $X=\mu$ での``接線''を $a(X-\mu)+f(\mu)$ と書くと,
+\[
+f(X)\leqq a(X-\mu)+f(\mu)
+\]
+となるので, 
+\[
+E[f(X)]\leqq E[a(X-\mu)+f(\mu)]=a(E[X]\mu)+f(\mu)=f(E[X]).
+\]
+2つ目の等号で期待値汎函数の短調性を使い, 
+2つ目の等号でその線形性と規格化条件を使った%
+\footnote{$E[f(X)]=\sum_{i=1}^r f(x_i)p_i$ の場合のJensenの不等式は
+$r$ に関する数学的帰納法で証明することもできるが, 期待値汎函数の公理だけを使って
+証明する方が不等式が成立する理由が分かりやすいと思う.}.
+\qed
+\end{proof}
+
+\begin{remark}
+上の証明から, $f(X)$ が狭義凸ならば, 
+等号が成立するための必要十分条件は $f(X)=E[f(X)]$ となることであることもわかる.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{対数和不等式とその応用}
+\label{sec:log-sum}
+
+次の不等式はたとえば \cite{Cover-Thomas-2006}, p.31, Theorem 2.7.1 (Log sum inequality)
+に書いてある. 
+
+\paragraph{対数和不等式} 
+$0$ 以上の $a_i$, $b_i$ に対して,
+\[
+\sum_{i=1}^n a_i \log\frac{a_i}{b_i}\geqq A\log\frac{A}{B}, 
+\qquad
+A=\sum_{i=1}^n a_i, \quad B=\sum_{i=1}^n b_i.
+\]
+等号の成立と $a_i/b_i$ が互いにすべて等しいことは同値である.
+いつものように $0\log 0=0$, $a\log(a/0)=\infty$ と約束しておく.
+
+\begin{proof}
+$a_i>0$, $b_i>0$ の場合のみを証明すれば十分である.
+(一般の場合はその場合の極限として証明される.)
+$f(x)=x\log x$ とおくと, $f'(x)=\log x + 1$, $f''(x)=1/x$ なので $f(x)$ は $x>0$ で
+下に狭義凸である. これにJensenの不等式を適用しよう.
+そのために $p_i=b_i/B$ とおく.
+このとき
+\begin{align*}
+\frac{1}{B}\sum_{i=1}^n a_i \log\frac{a_i}{b_i}
+&
+=\sum_{i=1}^n \frac{b_i}{B} \frac{a_i}{b_i}\log\frac{a_i}{b_i}
+=\sum_{i=1}^n p_i f\left(\frac{a_i}{b_i}\right)
+\\ &
+\geqq f\left(\sum_{i=1}^n p_i \frac{a_i}{b_i}\right)
+=f\left(\sum_{i=1}^n \frac{b_i}{B} \frac{a_i}{b_i}\right)
+=f\left(\frac{A}{B}\right)
+=\frac{A}{B}\log\frac{A}{B}.
+\end{align*}
+$f(x)$ の狭義凸性より, 
+等号が成立することと $a_i/b_i$ が互いにすべて等しいことが同値であることもわかる.
+\qed
+\end{proof}
+
+この不等式を使えば特に $p_i$, $q_i$ が非負でそれぞれの総和が $1$ のとき
+\[
+D[p|q]=\sum_{i=1}^r p_i\log\frac{p_i}{q_i}\geqq 1\log\frac{1}{1}=0
+\]
+が得られる({\bf Kullback-Leibler情報量の非負性}).
+さらに, 集合 $\{1,2,\ldots,r\}$ の分割
+\[
+\{1,2,\ldots,r\} = A_1\sqcup\cdots\sqcup A_s
+\]
+に対して, $\{\,A_1,\ldots,A_s\,\}$ 上の確率分布 
+$P=(P_1,\ldots,P_s)$, $Q_j=(Q_1,\ldots,Q_s)$ を
+\[
+P_j = \sum_{i\in A_j} p_i, \qquad Q_j = \sum_{i\in A_j} q_i
+\]
+と定めると, 対数和不等式より
+\[
+D[p|q]
+= \sum_{j=1}^s\sum_{i\in A_j} p_i\log\frac{p_i}{q_i}
+\geqq \sum_{j=1}^s P_i\log\frac{P_j}{Q_j}
+=D[P|Q].
+\]
+要するに, {\bf 細部の情報を忘れるとKullback-Leibler情報量は小さくなる}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Kullback-Leibler情報量で $L^1$ 距離を上からおさえられこと}
+
+集合 $\{1,2,\ldots,r\}$ 上の確率分布 $p=(p_1,\ldots,p_r)$, $q=(q_1,\ldots,q_r)$ 
+のあいだの $L^1$ 距離 $||p-q||_{L^1}$ を
+\[
+||p-q||_{L^1} = \sum_{i=1}^r |p_i-q_i|
+\]
+と定める. 確率分布 $p$ に関する確率を
+\[
+p(A)=\sum_{i\in A} p_i \qquad(A\subset\{1,2,\ldots,r\})
+\]
+と書くと,
+\[
+||p-q||_{L^1}=2(p(A)-q(A)), \qquad
+A = \bigl\{\, i\in\{1,2,\ldots,r\} \,\big|\, p_i\geqq q_i\,\bigr\}.
+\tag{$\#$}
+\]
+なぜならば
+\begin{align*}
+||p-q||_{L^1}
+&
+=\sum_{i\in A} (p_i-q_i) + \sum_{i\in A^c}(q_i-p_i)
+=p(A)-q(A)+q(A^c)-p(A^c)
+\\ &
+=p(A)-q(A)+1-q(A)-(1-p(A))
+=2(p(A)-q(A)).
+\end{align*}
+以上の記号を以下においてそのまま用いる.
+
+\paragraph{KL情報量で $L^1$ 距離を上からおさえられること:}
+\[
+D[p|q] \geqq \frac{1}{2}||p-q||_{L^1}^2.
+\tag{$*$}
+\]
+この不等式を証明したい.
+
+\begin{proof}[$\mathbf{r=2}$ の場合の($*$)の証明]
+$0<a<1$, $0<b<1$ のとき
+\[
+a\log\frac{a}{b}+(1-a)\log\frac{1-a}{1-b}\geqq 2(a-b)^2
+\]
+となることを示せばよい. そのために左辺から右辺を引いた結果を $f(b)$ と書く:
+\[
+f(b) = a\log\frac{a}{b}+(1-a)\log\frac{1-a}{1-b} - 2(a-b)^2.
+\]
+このとき
+\begin{align*}
+f'(b)
+=-\frac{a}{b}+\frac{1-a}{1-b}-4(b-a)
+=(b-a)\left(\frac{1}{b(1-b)}-4\right).
+\end{align*}
+$b(1-a)\leqq 1/4$ より, $1/(b(1-b))-4\geqq 0$ となる.
+ゆえに $f(b)$ の符号は $b-a$ の符号に等しい.
+すなわち $f(b)$ は $b<a$ で単調減少し, $b>a$ で単調増加する.
+したがって $f(p)=0$ なので $f(b)\geqq 0$ となることがわかる.
+\qed
+\end{proof}
+
+\begin{proof}[一般の場合の($*$)の証明]
+集合 $A$ は($\#$)の通りであるとし, 
+集合 $\{1,2,\ldots,r\}$ の分割 $\{A, A^c\}$ 上の
+確率分布 $P=(a,1-a)$, $Q=(b,1-b)$ を $a=p(A)$, $b=q(A)$ と定める.
+このとき
+細部の情報を忘れるとKullback-Leibler情報量が小さくなること(\secref{sec:log-sum})より
+\begin{align*}
+D[p|q] \geqq D[P|Q] \geqq 2(a-b)^2=2(p(A)-q(B))^2=\frac{1}{2}||p-q||_{L^1}^2.
+\end{align*}
+ここで2つ目の不等号で上で証明した $r=2$ の場合の結果を使い, 
+最後に($\#$)を使った.
+\qed
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Pithagorian theorem}
+\label{sec:Pythagorian}
+
+$\cP=\{\,p=(p_1,\ldots,p_r)\in\R^r_{\geqq 0}\mid p_1+\cdots+p_r=1\,\}$ とおき, 
+$\cP$ を集合 $\{1,2,\ldots,r\}$ 上の確率分布全体の集合とみなす.
+$\cP$ は $r-1$ 次元単体である.
+
+次の不等式は \cite{Cover-Thomas-2006}, p.367, Theorem 11.6.1 にある.
+
+\paragraph{Pythagorian theorem}
+$E$ は $\cP$ の凸閉部分集合であるとし, $q\in\cP\setminus E$ であるとする.
+$p^*=(p^*_1,\ldots,p^*_r)\in E$ は $D[p|q]$ を $E$ 上で最小化する $p$ であるとする:
+\[
+D[p^*|q] = \min_{p\in E} D[p|q].
+\]
+このとき
+\[
+D[p|q] \geqq D[p|p^*] + D[p^*|q]
+\qquad (p\in E).
+\]
+この不等式とKullback-Leibler情報量の非負性より, 
+$D[p|q]\to D[p^*|q]$ ならば $p\to p^*$ となることが導かれる.
+
+\begin{proof}[Pythegorian theoremの証明]
+$p^*$ と $p$ を通る直線上のKullback-Leibler情報量の値の $p^*$ における
+微係数を見ればこの不等式が証明される.
+
+$t\in\R$ に対して
+\begin{align*}
+&
+p(t) =(p_1(t),\ldots,p_r(t))= tp+(1-t)p^*, 
+\qquad
+p_i(t)=t p_i+(1-t)p^*_i, 
+\\ &
+f(t) = D[p(t)|q] = \sum_{i=1}^r (t p_i+(1-t)p^*_i)\log\frac{t p_i+(1-t)p^*_i}{q_i}
+\end{align*}
+とおく. このとき
+\begin{align*}
+f'(t)
+&
+=\sum_{i=1}^r\left( (p_i-p^*_i)\log\frac{t p_i+(1-t)p^*_i}{q_i} + (p_i-p^*_i) \right)
+\\ &
+=\sum_{i=1}^r(p_i-p^*_i)\log\frac{t p_i+(1-t)p^*_i}{q_i}.
+\end{align*}
+2つ目の等号で $\sum_{i=1}^r p_i=\sum_{i=1}^r p^*_i=1$ となることを使った.
+
+$p(0)=p^*\in E$, $p(1)=p\in E$ であり, $E$ は凸だったので $p(t)\in E$ ($0\leqq t\leqq 1$).
+$p^*$ は $D[p|q]$ を $E$ 上で最小化する $p$ だったので, $f'(0)\geqq 0$ となる. ゆえに
+\begin{align*}
+0
+&
+\leqq 
+f'(0) 
+= \sum_{i=1}^r (p_i-p^*_i)\log\frac{p^*_i}{q_i}
+%\\ &
+= \sum_{i=1}^r p_i\log\left(\frac{p_i}{q_i}\frac{p^*_i}{p_i}\right)
+- \sum_{i=1}^r p^*_i\log\frac{p^*_i}{q_i}
+\\ &
+= \sum_{i=1}^r p_i\log\frac{p_i}{q_i}
+- \sum_{i=1}^r p_i\log\frac{p_i}{p^*_i}
+- \sum_{i=1}^r p^*_i\log\frac{p^*_i}{q_i}
+= D[p|q] - D[p|p^*] - D[p^*|q].
+\end{align*}
+これで示したい不等式が示された. \qed
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: 他の種類のエントロピーについて}
+\label{sec:entropies}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{自由エネルギーやMassieu函数との関係}
+\label{sec:free-energy}
+
+\begin{remark}[モーメント母函数とキュムラント母函数]
+確率分布 $q_i$ のもとで確率変数 $X:i\mapsto X_i$ のモーメント母函数 $M_X(t)$ は
+\[
+M_X(t)=\sum_{i=1}^r e^{tX_i}q_i
+\]
+と定義される. これは $X=E$, $t=-\beta$ のとき分配函数
+\[
+Z(\beta)=\sum_{i=1}^r e^{-\beta E_i}q_i
+\]
+に一致する.  確率論の教科書に書いてあるモーメント母函数(積率母函数)は
+分配函数と本質的に同じものだと思ってよい.
+確率論の教科書によればモーメント母函数の対数
+\[
+K_X(t) = \log M_X(t)
+\]
+は確率変数 $X$ のキュムラント母函数(cumulant generating function)と呼ばれている. 
+自由エネルギーの定義
+\[
+F(\beta)=-\frac{1}{\beta}\log Z(\beta)
+\]
+は本質的にキュムラント母函数の定義に一致している.
+より正確には逆温度 $\beta$ で割る前の
+\[
+{\mathcal F}(\beta)=\log Z(\beta)
+\qquad (\text{より正確には右辺はそのBoltzmann定数倍})
+\]
+の方がキュムラント母函数の直接の対応物になる.
+こちらの $\mathcal F(\beta)$ は{\bf Massieu函数}と呼ばれている.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{相対R\'enyiエントロピー}
+\label{sec:Renyi}
+
+\begin{remark}[相対R\'enyiエントロピー]
+\label{remark:Renyi-Free}
+2つの確率分布 $p=(p_1,\ldots,p_r)$, $q=(q_1,\ldots,q_r)$ に対して, 
+{\bf 相対R\'enyiエントロピー} $S_\beta[p|q]$ が
+\[
+S_\beta[p|q]
+= - \frac{1}{\beta-1}\log \sum_{i=1}^r \left(\frac{p_i}{q_i}\right)^\beta q_i
+= - \frac{1}{\beta-1}\log \sum_{i=1}^r p_i^\beta q_i^{1-\beta}
+\]
+と定義される. これの $\beta-1$ 倍を $\beta$ で微分すると
+\[
+\frac{\d}{\d\beta}((\beta-1)S_\beta[p|q])
+=
+-\frac
+{\sum_{i=1}^r p_i^\beta q_i^{1-\beta}\log(p_i/q_i)}
+{\sum_{i=1}^r p_i^\beta q_i^{1-\beta}}
+\]
+なので, さらに $\beta=1$ とすると,
+\[
+\left.\frac{\d}{\d\beta}\right|_{\beta=1}((\beta-1)S_\beta[p|q])
+=-\sum_{i=1}^r p_i\log\frac{p_i}{q_i}
+=S[p|q]
+\]
+と相対エントロピーが出て来る. ゆえに
+\[
+S_1[p|q] := \lim_{\beta\to 1}S_\beta[p|q] = S[p|q].
+\]
+相対R\'enyiエントロピーは相対エントロピーのワンパラーメータ―変形になっている
+と考えられる. $q_i=1$ の場合のR\'enyiエントロピーの定義を知っていれば
+相対R\'enyiエントロピーの定義は誰でも容易に思い付くと思われる.
+
+相対R\'enyiエントロピーの定義は分配函数
+\[
+Z(\beta;p,q)
+=\sum_{i=1}^r \left(\frac{p_i}{q_i}\right)^\beta q_i
+=\sum_{i=1}^r e^{-\beta E_i}q_i, 
+\qquad
+E_i = -\log\frac{p_i}{q_i}
+\]
+に付随する自由エネルギー $F(\beta:p,q)$ とMassieu函数 ${\mathcal F}(\beta;p,q)$ の定義
+\begin{align*}
+&
+F(\beta;p,q)=-\beta^{-1}\log Z(\beta;p,q), 
+\\ &
+{\mathcal F}(\beta;p,q)=\log Z(\beta;p,q) \qquad\qquad (\text{Boltzmann定数倍は略})
+\end{align*}
+と本質的に同じである:
+\[
+(\beta-1)S_\beta[p|q] 
+= \beta F(\beta;p,q) 
+= -{\mathcal F}(\beta;p,q) 
+= -\log Z(\beta;p,q).
+\]
+R\'enyi divergence (相対R\'enyiエントロピーの $-1$ 倍)の基本性質の
+まとめが \cite{vanErven-Harremoes} にある.
+
+$(\beta-1)S_\beta[p|q]=-\log Z(\beta;p,q)$ は $\beta$ の函数として上に凸である:
+\begin{align*}
+&
+\left(\frac{\d}{\d\beta}\right)^2(-\log Z(\beta;p,q))
+=-\frac{\sum_{i,j=1}^r (E_i-E_j)^2 e^{-\beta(E_i+E_j)}q_i q_j}{2Z(\beta)^2}
+\leqq 0
+\\ &
+(\text{等号成立は $p_i=q_i$ ($i=1,\ldots,r$) と同値}).
+\end{align*}
+そして, $(\beta-1)S_\beta[p|q]=-\log Z(\beta;p,q)$ の 
+$\beta=1$ での値が $-\log Z(1;p,q)=-\log 1=0$ であることと,
+$(\beta-1)S_\beta[p|q]=-\log Z(\beta;p,q)$ の $\beta=1$ での微係数
+が相対エントロピー $S[p|q]$ に等しいという上の計算結果より,
+\[
+(\beta-1)S_\beta[p|q]\leqq(\beta-1)S[p|q].
+\]
+右辺は左辺の接線の式である.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{相対Tsallisエントロピー}
+\label{sec:Tsallis}
+
+\begin{remark}[相対Tsallisエントロピー]
+\label{remark:Tsallis}
+確率分布 $p=(p_1,\ldots,p_r),q=(q_1,\ldots,q_r)$ に対して, 
+$Z(\beta;p,q)$ を次のように定める:
+\[
+Z(\beta;p,q) 
+= \sum_{i=1}^r e^{-\beta E_i} q_i
+= \sum_{i=1}^r \left(\frac{p_i}{q_i}\right)^\beta q_i
+= \sum_{i=1}^r p_i^\beta q_i^{1-\beta},
+\qquad
+E_i = -\log\frac{p_i}{q_i}.
+\]
+各 $E_i$ は2つの確率分布 $p$ と $q$ の各 $i$ ごとの違いを表わしている.
+カノニカル分布 $p(\beta)=(p_1(\beta),\ldots,p_r(\beta))$ を
+\[
+p_i(\beta)
+=\frac{e^{-\beta E_i}q_i}{Z(\beta;p,q)}
+=\frac{p_i^\beta q_i^{1-\beta}}{Z(\beta;p,q)}
+\]
+と定めると, 逆温度 $\beta$ は $q_i=p_i(0)$ と $p_i=p_i(1)$ を
+補間するパラメーターになっている.
+このとき, 相対R\'enyiエントロピー $S_\beta[p|q]$ は
+\[
+S_\beta[p|q]
+=\frac{\log Z(\beta;p,q)}{1-\beta}
+=\frac{1}{1-\beta}\log\sum_{i=1}^r p_i^\beta q_i^{1-\beta}
+\]
+と表わされ, 相対エントロピー $S[p|q]$ は 
+\[
+S[p|q]
+=-\left.\frac{\d}{\d\beta}\right|_{\beta=1} \log Z(\beta;p,q) 
+=-\left.\frac{\d}{\d\beta}\right|_{\beta=1} Z(\beta;p,q) 
+=-\sum_{i=1}^r p_i\log\frac{p_i}{q_i}
+\]
+と表わされる. 2つ目の等号で $Z(1;p,q)=1$ を使った.
+
+次の演算を $x$ に関する $q$ 差分作用素と呼ぶ:
+\[
+D_{x,q}f(x) = \frac{f(x)-f(qx)}{(1-q)x}.
+\]
+$q\to 1$ で $q$ 差分 $D_{x,q}f(x)$ は微分 $\d f(x)/\d x$ に収束する.
+
+上の相対エントロピーの式の $\log Z(\beta;p,q)$ ではなく $Z(\beta;p,q)$ を
+用いた表示における $\beta$ に関する微分を $q$ 差分で置き換えることによって%
+\footnote{筆者は2016年6月22日の段階でその必然性をまったく理解できていない.}, 
+{\bf 相対Tsallisエントロピー}が次のように定義される%
+\footnote{筆者は(相対)Tsallisエントロピーの定義の必然性をまったく理解していない.
+(相対)R\'enyiエントロピーは本質的に分配函数の対数(自由エネルギー, Massieu函数)なので
+そのようなものを考えることの必然性を納得できるが, 
+(相対)Tsallisエントロピーについてはよくわからない.
+}
+($q$ 差分の $q$ を次の式では $\alpha$ と書く):
+\[
+T_\alpha[p|q] 
+= -\left. D_{\beta,\alpha}\right|_{\beta=1}Z(\beta;p,q)
+= -\frac{Z(1;p,q)-Z(\alpha;p,q)}{1-\alpha}
+= -\frac{1-\sum_{i=1}^r p_i^\alpha q_i^{1-\alpha}}{1-\alpha}.
+\]
+$\alpha\to 1$ で $\alpha$ 差分は通常の微分に収束するので, 
+相対Tsallisエントロピーは相対エントロピーに収束する.
+そのことは
+\begin{align*}
+&
+T_\alpha[p|q]
+=-\sum_{i=1}^r\frac{(p_i/q_i)-(p_i/q_i)^\alpha}{1-\alpha}q_i,
+%\\ &
+\qquad
+\lim_{\alpha\to 1}\frac{x-x^{\alpha}}{1-\alpha}
+= \left.\frac{\alpha}{\d\alpha}\right|_{\alpha=1}x^\alpha
+= x \log x.
+\end{align*}
+より, 直接にも確かめられる. 相対Tsallisエントロピーは相対エントロピーの定義
+における $x\log x$ を $(x-x^\alpha)/(1-\alpha)$ で置き換えたものだと言える.
+相対Tsallisエントロピーを相対R\'enyiエントロピーで次のように表わすこともできる:
+\[
+T_\beta[p|q] 
+= \frac{Z(\beta;p,q)-1}{1-\beta}
+= \frac{\exp((1-\beta)S_\beta[p|q])-1}{1-\beta}.
+\]
+逆に相対R\'enyiエントロピーを相対Tsallisエントロピーによって
+\[
+S_\beta[p|q] 
+= \frac{\log Z(\beta;p,q)}{1-\beta} 
+= \frac{\log(1+(1-\beta)T_\beta[p|q])}{1-\beta}
+\]
+と表わすこともできる. 相対Tsallisエントロピーと相対R\'enyiエントロピーの
+違いは $x-1$ と $\log x=\log(1+(x-1))$ の違いであると考えることもできる.
+
+以上のように, 相対エントロピー, 相対R\'enyiエントロピー, 相対Tsallisエントロピー
+はどれも分配函数 $Z(\beta;p,q)$ からの派生物である.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{加法性(示量性)について}
+
+\begin{remark}[加法性について]
+\label{remark:additivity}
+
+$\nu=1,2$ に対する
+有限集合 $R_\nu=\{1,2,\ldots,r_\nu\}$ 上の
+確率分布 $p_\nu=(p_{\nu,1},\ldots,p_{\nu,r_\nu})$, 
+$p_\nu=(p_{\nu,1},\ldots,p_{\nu,r_\nu})$ に対して,
+相対エントロピーと相対R\'enyiエントロピーは
+\begin{align*}
+&
+S[p_\nu|q_\nu] = -\sum_{i=1}^{r_\nu} p_{\nu,i}\log\frac{p_{\nu,i}}{q_{\nu,i}},
+\\ &
+S_\beta[p_\nu|q_\nu] = \frac{\log Z(\beta)[p_\nu|q_\nu]}{1-\beta},
+\qquad
+Z_\beta[p_\nu|q_\nu] = \sum_{i=1}^{r_\nu} p_{\nu,i}^\beta q_{\nu,i}^{1-\beta}
+\end{align*}
+となる. 
+直積集合 $R_1\times R_2=\{\,(i,j)\mid i\in R_1,\ j\in R_2\,\}$ 上の確率分布が
+$(i,j)\mapsto p_{1,i}p_{2,j}$,  
+$(i,j)\mapsto q_{1,i}q_{2,j}$
+によって定義される. この直積集合上の確率分布の組に対する
+相対エントロピーと相対R\'enyiエントロピーの定義を書き下すと次のようになる:
+\begin{align*}
+&
+S[p_1,p_2|q_1,q_2] 
+= -\sum_{i,j} p_{1,i}p_{2,j}\log\frac{p_{1,i}p_{2,j}}{q_{1,i}q_{2,j}},
+\\ &
+S_\beta[p_1,p_2|q_1,q_2] = \frac{\log Z_\beta[p_1,p_2|q_1,q_2]}{1-\beta},
+\qquad
+Z_\beta[p_1,p_2|q_1,q_2] = \sum_{i,j} (p_{1,i}p_{2,j})^\beta (q_{1,i}q_{2,j})^{1-\beta}.
+\end{align*}
+このとき次の{\bf 加法性}が成立している:
+\[
+S[p_1,p_2|q_1,q_2] = S[p_1|q_2] + S[p_2|q_2], \qquad
+S_\beta[p_1,p_2|q_1,q_2] = S_\beta[p_1|q_2] + S_\beta[p_2|q_2].
+\]
+後者は
+\[
+Z_\beta[p_1,p_2|q_1,q_2]
+= Z_\beta[p_1|q_1]\, Z_\beta[p_2|q_2]
+\]
+と同値である. 証明は以下の通り:
+\begin{align*}
+S[p_1,p_2|q_1,q_2]
+&
+=
+-\sum_{i,j}p_{1,i}p_{2,j}\log\frac{p_{1,i}}{q_{1,i}}
+-\sum_{i,j}p_{1,i}p_{2,j}\log\frac{p_{2,j}}{q_{2,j}}
+\\ &
+=
+-\sum_{i}p_{1,i}\log\frac{p_{1,i}}{q_{1,i}}
+-\sum_{j}p_{2,j}\log\frac{p_{2,j}}{q_{2,j}}
+%\\ &
+= S[p_1|q_1] + S[p_2|q_2],
+\\
+Z_\beta[p_1,p_2|q_1,q_2]
+&
+= \sum_{i,j} (p_{1,i}p_{2,j})^\beta (q_{1,i}q_{2,j})^{1-\beta}
+= \sum_{i,j} p_{1,i}^\beta q_{1,i}^{1-\beta}\cdot p_{2,j}^\beta q_{2,j}^{1-\beta}
+\\ &
+= \sum_i p_{1,i}^\beta q_{1,i}^{1-\beta}\cdot \sum_j p_{2,j}^\beta q_{2,j}^{1-\beta}
+= Z_\beta[p_1|q_1]\, Z_\beta[p_2|q_2].
+\end{align*}
+相対Tsallisエントロピー
+\begin{align*}
+T_\beta[p_\nu|q_\nu]=\frac{Z_\beta[p_\nu|q_\nu]-1}{1-\beta}, 
+\qquad
+T_\beta[p_1,p_2|q_1,q_2]=\frac{Z_\beta[p_1,p_2|q_1,q_2]-1}{1-\beta}
+\end{align*}
+は加法性を満たしていないが,
+\[
+T_\beta[p_1,p_2|q_1,q_2]
+=T_\beta[p_1|q_1]+T_\beta[p_2|q_2]
++(1-\beta)T_\beta[p_1|q_1]\,T_\beta[p_2|q_2]
+\]
+を満たしている. 証明は次の通り:
+\begin{align*}
+&
+T_\beta[p_1,p_2|q_1,q_2]-T_\beta[p_1|q_1]-T_\beta[p_2|q_2]
+\\ &
+=\frac
+{Z_\beta[p_1|q_1]\,Z_\beta[p_2|q_2]-1-(Z_\beta[p_1|q_1]-1)-(Z_\beta[p_2|q_2]-1)}
+{1-\beta}
+\\ &
+=\frac
+{Z_\beta[p_1|q_1]\,Z_\beta[p_2|q_2]-Z_\beta[p_1|q_1]-Z_\beta[p_2|q_2]+1}
+{1-\beta}
+\\ &
+=\frac{(Z_\beta[p_1|q_1]-1)(Z_\beta[p_2|q_2]-1)}{1-\beta}
+\\ &
+=(1-\beta)\,T_\beta[p_1|q_1]\,T_\beta[p_2|q_2].
+\end{align*}
+これは $q$ 数 $(x)_q=(1-q^x)/(1-q)$ に関する公式
+\[
+(x+y)_q = (x)_q + (y)_q + (q-1)\,(x)_q\,(y)_q
+\]
+に似ている. Tsallisエントロピー%
+\footnote{相対Tsallisエントロピーの定義で $q_i=1$ とするとTsallisエントロピー
+の定義が得られる.}
+に関係した数学的構造に関する議論および
+文献については \cite{Suyari2004} を参照せよ.
+そこでは $n\to\infty$ の漸近挙動にTsallisエントロピーが現われる
+多項係数の類似物が扱われている.
+\qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{相対Tsallisエントロピーを漸近挙動に含む多項分布の拡張の構成}
+\label{sec:Tsallis-multinomial}
+
+Suyari \cite{Suyari2004} は
+多項{\bf 係数}のある拡張の $n\to\infty$ の漸近挙動がTsallisエントロピーで
+記述されることを示した. 
+以下ではその結果を多項{\bf 分布}と{\bf 相対}Tsallisエントロピーの場合に拡張する%
+\footnote{ほぼ自明な拡張でしかない.}.
+以下では細かいことを気にせずに大雑把な素描を行なう.
+
+以下ではパラメーター $h$ とパラメーター $\beta$ のあいだには
+\[
+h=\beta-1, \qquad h+1=\beta
+\]
+という関係があると仮定する.
+パラメーター $h=\beta-1$ による指数函数の拡張 $e_h(x)$ と対数函数の拡張 $\ell_h(x)$ を
+\[
+e_h(x) = (1+hx)^{1/h}, \qquad
+\ell_h(x) = \frac{x^h-1}{h}
+\]
+と定める. これらは互いに相手の逆函数になっており, 
+$h\to 0$ ($\beta\to 1$)で通常の指数函数と対数函数に収束する.
+この記号法を使うと, 
+\secref{sec:Tsallis}で導入した相対Tsallisエントロピー $T_\beta[p|q]$ を
+次のように表わせる%
+\footnote{これを相対Tsallisエントロピーの定義だと思ってもよい.
+この形式の定義では, 相対Tsallisエントロピー $T_\beta[p|q]$ が
+相対エントロピー $S[p|q]=-\sum_{i=1}^r p_i\log(p_i/q_i)$ の
+パラメーター $h=\beta-1$ による拡張になっていることが分かり易い.}:
+\[
+T_\beta[p|q] = -\sum_{i=1}^r p_i\,\ell_h\left(\frac{p_i}{q_i}\right).
+\]
+なぜならば
+\begin{align*}
+-\sum_{i=1}^r p_i\,\ell_h\left(\frac{p_i}{q_i}\right)
+&
+=-\frac{1}{h}\sum_{i=1}^r \left(p_i\left(\frac{p_i}{q_i}\right)^h-p_i\right)
+=-\frac{1}{\beta-1}\sum_{i=1}^r(p_i^\beta q_i^{1-\beta}-p_i)
+\\ &
+=-\frac{\sum_{i=1}^r p_i^\beta q_i^{1-\beta}-1}{\beta-1}
+=\frac{1-\sum_{i=1}^r p_i^\beta q_i^{1-\beta}}{\beta-1}
+=T_\beta[p|q].
+\end{align*}
+これが漸近挙動に現われるような多項分布の拡張を構成することが以下の目標である.
+
+通常の多項分布における確率は
+\[
+a(n;k)=\frac{n!}{k_1\cdots k_r}q_1^{k_1}\cdots q_r^{k_r}
+\qquad \left(k=(k_1,\ldots,k_r),\ k_i\geqq 0,\ k_1+\cdots+k_r=n\right)
+\]
+であり, これの対数は次のように表わされる:
+\[
+\log a(n;k)
+= \sum_{\nu=1}^n\log\nu 
+- \sum_{i=1}^r\sum_{\nu_i=1}^{k_i} \log\left(\frac{\nu_i}{q_i}\right).
+\]
+これを拡張して次の条件によって $a_h(n;k)$ を定義する:
+\[
+\ell_h(a_h(n;k))
+=
+\sum_{\nu=1}^n\ell_h(\nu) 
+- \sum_{i=1}^r\sum_{\nu_i=1}^{k_i} \ell_h\left(\frac{\nu_i}{q_i}\right).
+\]
+このとき, 右辺の $\ell_h(x)=x^h/h-1/h$ の中の $-1/h$ の部分はキャンセルして消えるので, 
+\begin{align*}
+\ell_h(a_h(n;k))
+&
+=\frac{1}{h}\left(
+  \sum_{\nu=1}^n \nu^h 
+ -\sum_{i=1}^r \sum_{\nu_i=1}^{k_i} \left(\frac{\nu_i}{q_i}\right)^h
+\right)
+=\frac{1}{h}\left(
+  \sum_{\nu=1}^n \nu^h
+ -\sum_{i=1}^r q_i^{-h} \sum_{\nu_i=1}^{k_i}\nu_i^h
+\right).
+\end{align*}
+すなわち
+\[
+a_h(n;k)
+=\left(
+  1
+ +\sum_{\nu=1}^n \nu^h
+ -\sum_{i=1}^r q_i^{-h} \sum_{\nu_i=1}^{k_i}\nu_i^h
+\right)^{1/h}.
+\]
+
+$h>0$ ($\beta>1$) と仮定し, 
+$n\to\infty$ で $k_i/n$ はほぼ一定 $k_i=n p_i + O(1)=n(p_i+O(1/n))$ という条件を仮定する.
+$n\to\infty$ のとき $\ell_h(a_h(n;k))$ がどのように振る舞うかを知りたい.
+$h>0$ と仮定したので, 
+\[
+\sum_{\nu=1}^r \nu^h 
+= \frac{n^{h+1}}{h+1} + O(n^h)
+= \frac{n^\beta}{\beta} + O(n^{\beta-1})
+\qquad (n\to\infty).
+\]
+さらに $k_i=np_i+O(1)$ と仮定したので, 
+\[
+\sum_{\nu_i=1}^{k_i}\nu_i^h 
+= \frac{(np_i)^{h+1}}{h+1} + O(n^h)
+= \frac{n^\beta}{\beta}p_i^\beta+ O(n^{\beta-1}).
+\]
+ゆえに
+\begin{align*}
+\ell_h(a_h(n;k))
+&
+=\frac{n^\beta}{\beta}\frac{1-\sum_{i=1}^r p_i^\beta q_i^{1-\beta}}{\beta-1}
++ O(n^{\beta-1})
+=\frac{n^\beta}{\beta} T_\beta[p|q] + O(n^{\beta-1})
+\qquad(n\to\infty).
+\end{align*}
+これが{\bf 目標としていた結果}である%
+\footnote{この結果(もしくはその拡張)を使えば
+相対Tsallisエントロピーの場合に関する
+Sanovの定理の拡張を証明できるだろう.
+しかし, 2016年6月23日の時点で筆者はパラメーター $h=\beta-1$ による
+多項分布の拡張 $a_h(n;k)$ が出て来る必然性を理解できていない.}. 
+この結果は次のように書き直される:
+\[
+a_h(n;k)
+=e_h\left( \beta^{-1}n^\beta T_\beta[p|q] + O(n^{\beta-1}) \right)
+=\left(1+\frac{\beta-1}{\beta}n^\beta T_\beta[p|q] + O(n^{\beta-1})\right)^{1/(\beta-1)}.
+\]
+この $h>0$ ($\beta>1$) の場合の結果は通常の $h=0$ ($\beta=1$) の場合の結果
+\[
+a(n;k)=\frac{n!}{k_1!\cdots k_r!}q_1^{k_1}\cdots q_r^{k_r}
+=\exp\left(n S[p|q] + O(\log n) \right)
+\]
+の拡張になっている.
+
+
+\begin{remark*}[相対Tsallisエントロピーと相対R\'enyiエントロピーの関係]
+相対Tsallisエントロピー $T_\beta[p|q]$ と相対R\'enyiエントロピー $S_\beta[p|q]$
+はどちらも
+\[
+Z_\beta[p|q] = \sum_{i=1}^r p_i^\beta q_i^{1-\beta}
+\]
+を用いて
+\[
+T_\beta[p|q] = - \frac{Z_\beta[p|q]-1}{\beta-1}, 
+\qquad
+S_\beta[p|q] = - \frac{\log Z_\beta[p|q]}{\beta-1}.
+\]
+と表わされる. $\beta>1$ (もしくは $\beta<1$)の場合はどちらも $Z_\beta[p|q]$ 
+の単調減少函数(もしくは単調増加函数)なので,
+それらを最大化することは $Z_\beta[p|q]$ を最小化(もしくは最大化)することと同値になる.
+さらに
+\[
+e_{\beta-1}(x)=(1+(\beta-1)x)^{1/(\beta-1)}, \qquad
+\ell_{\beta-1}(x)=\frac{x^{\beta-1}-1}{\beta-1}
+\]
+が互いに相手の逆函数になることより, 
+\[
+Z_\beta[p|q]^{1/(\beta-1)}
+=e_{\beta-1}(-T_\beta[p|q])
+=\exp(-S_\beta[p|q]). 
+\]
+この意味で相対Tsallisエントロピーと相対R\'enyiエントロピーの違いは
+ちょうど $e_{\beta-1}(x)$ と $\exp(x)$ の違いになっている.
+もちろん, この事実は最初から
+\[
+T_\beta[p|q] = - \ell_{\beta-1}\left( Z_\beta[p|q]^{1/(\beta-1)} \right), 
+\qquad
+S_\beta[p|q] = - \log\left( Z_\beta[p|q]^{1/(\beta-1)} \right)
+\]
+と書いておけば自明なのであるが.
+\qed
+\end{remark*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録: 上極限と下極限に関する簡単な解説}
+\label{sec:limsup}
+
+上極限 $\limsup$ と下極限 $\liminf$ は収束先として $\pm\infty$ を許せば
+常に収束するので, 収束するかどうかわからない実数列の漸近挙動を調べるときにとても
+便利である. 
+
+数学科の学生であれば上極限と下極限についても講義で習っていてよく知っているだろうが, 
+他学科の出身者は詳しく習ったことがないかもしれない. 
+だから, この付録で上極限と下極限について簡単に解説しておくことにした.
+
+$a_1,a_2,\ldots$ は実数列であるとする. 
+
+$a_n,a_{n+1},a_{n+2},\ldots$ の上限 $\sup_{k\geqq n} a_k$ を
+\[
+\sup_{k\geqq n} a_k 
+=(\text{すべての $a_n,a_{n+1},a_{n+2},\ldots$ 以上の $\alpha$ の中で最小のもの}).
+\]
+ただし $\alpha$ は実数または $\infty$ であるとする%
+\footnote{上限の存在は実数の連続性によって保証される.
+上限が常に存在することを実数の連続性そのものだと思ってもよい.}: 
+\[
+\sup_{k\geqq n} a_k
+=\min\{\,\alpha\in\R\cup\{\infty\}\mid a_k\leqq\alpha\ (k\geqq n)\,\}.
+\]
+一般により小さな実数の集合の上限は小さくなるので
+$n$ に関する数列 $\sup_{k\geqq n} a_k$ は単調減少数列になる.
+したがって, 数列 $\sup_{k\geqq n} a_k$ は $n\to\infty$ で実数または $\pm\infty$ に収束する%
+\footnote{収束することも実数の連続性によって保証される.}.
+その収束先を実数列 $a_n$ の上極限(limit superior)と呼び, 次のように表わす:
+\[
+\limsup_{n\to\infty} a_n = \lim_{n\to\infty}\sup_{k\geqq n} a_k.
+\]
+同様に下極限(limit inferior)を次のように定義する:
+\begin{gather*}
+\inf_{k\geqq n} a_k
+=\max\{\,\alpha\in\R\cup\{-\infty\}\mid a_k\geqq\alpha\ (k\geqq n)\,\},
+\\
+\liminf_{n\to\infty} a_n = \lim_{n\to\infty}\inf_{k\geqq n} a_k.
+\end{gather*}
+上限 $\sup$ は下限 $\inf$ 以上なので上極限と下極限は次の不等式を満たしている:
+\[
+\liminf_{n\to\infty} a_n \leqq \limsup_{n\to\infty} a_n.
+\]
+実数列 $a_n$ が収束するならば, $\sup_{k\geqq n} a_k$ と $\inf_{k\geqq n} a_k$ 
+の差は $0$ に収束するので,
+\[
+\liminf_{n\to\infty} a_n = \limsup_{n\to\infty} a_n = \lim_{n\to\infty} a_n
+\]
+が成立する. 逆に $\limsup_{n\to\infty} a_n$ と $\liminf_{n\to\infty} a_n$ が一致するならば
+実数列 $a_n$ はそれらと同じ値に収束することもわかる.
+
+上極限と下極限の典型的な使い方について説明しよう.
+数列 $a_n$ の $n\to\infty$ での様子を知りたいとしよう.
+数列 $a_n$ が $n\to\infty$ で収束する量 $B_n$, $C_n$ によって
+\[
+B_n \leqq a_n \leqq C_n
+\]
+と評価されたとする(はさみうち!). このとき $n\to\infty$ で次が成立する:
+\[
+\lim_{n\to\infty} B_n 
+\leqq \liminf_{n\to\infty} a_n 
+\leqq \limsup_{n\to\infty} a_n
+\leqq \lim_{n\to\infty} C_n.
+\] 
+この評価は $a_n$ が収束していなくても成立する.
+もしも $B_n$ と $C_n$ が同じ値に収束するならば, 
+この不等式より $a_n$ もそれらと同じ値に収束することがわかる.
+以上の議論のパターンを知っていれば, 
+$a_n$ が収束するとは限らない弱い条件のもとで上極限と下極限に関する不等式を示しておいて, 
+追加の強い条件のもとで $a_n$ が収束することを示せるようになる.
+Sanovの定理の定式化と証明に関する\secref{sec:Sanov}の議論は
+まさにそのようなタイプの議論の典型例になっている.
+
+
+\begin{example}[上極限と下極限の例]
+以下が成立していることを定義に基づいて確認してみよ:
+\begin{align*}
+&
+\limsup_{n\to\infty}(-1)^n = 1, \qquad
+\liminf_{n\to\infty}(-1)^n = -1,
+\\ &
+\limsup_{n\to\infty}\left( (-1)^n n \right)= \infty, \qquad
+\liminf_{n\to\infty}\left( (-1)^n n \right)= -\infty,
+\\ &
+\limsup_{n\to\infty}\left( (-1)^n\left(1+2^{-n}\right) \right)=1, \qquad
+\liminf_{n\to\infty}\left( (-1)^n\left(1+2^{-n}\right) \right)=-1.
+\end{align*}
+これらの上極限と下極限を図を描いて確認すれば
+上極限と下極限の概念を直観的に理解できると思う.
+\qed
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

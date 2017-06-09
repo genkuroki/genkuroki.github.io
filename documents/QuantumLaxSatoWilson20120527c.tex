@@ -1,0 +1,1207 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf Lax formalism for the quantum birational Weyl group actions of type $A$}
+\def\AUTHOR{Gen Kuroki\thanks{\ADDRESS.}}
+\def\DATE{May 27, 2012, \quad Version 0.05\thanks{
+This is an unfinished draft. 
+Please do not redistribute this draft printed on papers.
+The latest version can be retrieved from \href
+{http://www.math.tohoku.ac.jp/\~kuroki/LaTeX/QuantumLaxSatoWilson.pdf}
+{http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/QuantumLaxSatoWilson.pdf}.
+The twitter account of the author is 
+\href{https://twitter.com/genkuroki}{genkuroki}.
+Any comments are welcome.}}
+% 2012-05-16 Ver.0.00 Created
+% 2012-05-25 Ver.0.01 6 pages
+% 2012-05-26 Ver.0.02 7 pages, Proof of A_{n-1} Sato-Wilson added
+% 2012-05-26 Ver.0.03 8 pages, Proof of A_{n-1} Lax added
+% 2012-05-27 Ver.0.04 8 pages, Remarks in Section 1 added, minor corrections
+% 2012-05-27 Ver.0.05 10 pages
+\def\ADDRESS{Mathematical Institute, Tohoku University, Sendai 980-8578, Japan}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\ABSTRACT{
+We present the the Lax and the Sato-Wilson formalisms for the $q$-difference version 
+of the quantized birational Weyl group actions 
+of type $A_{n-1}$, of type $A_\infty$, and of type $A^{(1)}_{n-1}$.
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.6cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\A{{\mathcal A}}
+\newcommand\B{{\mathcal B}}
+\newcommand\G{{\mathcal G}}
+\newcommand\K{{\mathcal K}}
+\newcommand\M{{\mathcal M}}
+\newcommand\N{{\mathcal N}}
+\renewcommand\L{{\mathcal L}}
+\renewcommand\O{{\mathcal O}}
+\renewcommand\b{{\mathfrak b}}
+\renewcommand\d{\partial}
+\newcommand\g{{\mathfrak g}}
+\newcommand\h{{\mathfrak h}}
+\newcommand\n{{\mathfrak n}}
+
+\newcommand\tA{{\widetilde A}}
+\newcommand\tD{{\widetilde D}}
+\newcommand\tK{{\widetilde K}}
+\newcommand\tL{{\widetilde{L}}}
+\newcommand\tU{{\widetilde U}}
+\newcommand\tW{{\widetilde W}}
+\newcommand\tcA{\widetilde{\mathcal A}}
+\newcommand\ts{{\tilde s}}
+\newcommand\tw{{\widetilde w}}
+\newcommand\hs{s^\eta}
+\newcommand\hw{w^\eta}
+
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\newcommand\Hom{\mathop{\mathrm{Hom}}\nolimits}
+\newcommand\Aut{\mathop{\mathrm{Aut}}\nolimits}
+\makeatletter\newcommand\qbinom{\genfrac[]\z@{}}\makeatother
+\newcommand\ad{\mathop{\mathrm{ad}}\nolimits}
+\newcommand\Ad{\mathop{\mathrm{Ad}}\nolimits}
+\newcommand\av{\alpha^\vee}
+\newcommand\eps{\varepsilon}
+\newcommand\epsv{\eps^\vee}
+\newcommand\deltav{\delta^\vee}
+\newcommand\Qv{Q^\vee}
+\newcommand\pr{\mathop{\mathrm{pr}}\nolimits}
+\newcommand\isom{\cong}
+\renewcommand\setminus{\smallsetminus}
+\newcommand\pa{{\mathrm{pa}}}
+\newcommand\bs{{\mathbf s}}
+\newcommand\be{{\mathbf e}}
+\newcommand\Oq[1]{\O_{q,#1}}
+%\newcommand\intpart{{\mathrm{int}}}
+\newcommand\intpart{P}
+\newcommand\Oint{\O_\intpart}
+\newcommand\Ointq{\O_{\intpart,q}}
+\newcommand\Ointg{\Oint^{\mathrm{g}}}
+\newcommand\Ointqg{\Ointq^{\mathrm{g}}}
+\newcommand\Kint{K_{\intpart}}
+\newcommand\Kintg{\Kint^{\mathrm{g}}}
+\newcommand\Ob{\mathop{\mathrm{Ob}}\nolimits}
+\newcommand\Peq[1]{\mathrm{P}_{\mathrm{#1}}}
+\newcommand\PI{\Peq{I}}
+\newcommand\PII{\Peq{II}}
+\newcommand\PIII{\Peq{III}}
+\newcommand\PIV{\Peq{IV}}
+\newcommand\PV{\Peq{V}}
+\newcommand\PVI{\Peq{VI}}
+\newcommand\MOD{\mathop{\mathrm{mod}}\nolimits}
+\newcommand\lie{\mathrm}
+\newcommand\ot{\otimes}
+\newcommand\diag{\mathop{\mathrm{diag}}\nolimits}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% theorem environments
+%
+\theoremstyle{plain} % bold header and slanted body
+%\theoremstyle{definition} % bold header and normal body
+\newtheorem{theorem}{Theorem}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem*{prop*}{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem*{cor*}{Corollary}
+\newtheorem{example}[theorem]{Example}
+\newtheorem*{example*}{Example}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem*{axiom*}{Axiom}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem*{problem*}{Problem}
+\newtheorem{summary}[theorem]{Summary}
+\newtheorem*{summary*}{Summary}
+\newtheorem{guide}[theorem]{Guide}
+\newtheorem*{guide*}{Guide}
+%
+\theoremstyle{definition} % bold header and normal body
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem*{definition*}{Definition}
+%
+%\theoremstyle{remark} % slanted header and normal body
+\theoremstyle{definition} % bold header and normal body
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem*{remark*}{Remark}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% refs
+%
+\newcommand\secref[1]{Section \ref{#1}}
+\newcommand\theoremref[1]{Theorem \ref{#1}}
+\newcommand\propref[1]{Proposition \ref{#1}}
+\newcommand\lemmaref[1]{Lemma \ref{#1}}
+\newcommand\corref[1]{Corollary \ref{#1}}
+\newcommand\exampleref[1]{Example \ref{#1}}
+\newcommand\axiomref[1]{Axiom \ref{#1}}
+\newcommand\problemref[1]{Problem \ref{#1}}
+\newcommand\summaryref[1]{Summary \ref{#1}}
+\newcommand\guideref[1]{Guide \ref{#1}}
+\newcommand\definitionref[1]{Definition \ref{#1}}
+\newcommand\remarkref[1]{Remark \ref{#1}}
+%
+\newcommand\figureref[1]{Figure \ref{#1}}
+\newcommand\tableref[1]{Table \ref{#1}}
+%
+% proof environment without \qed
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{Proof}
+%\newcommand{\Proofname}{Proof}
+\makeatother
+%
+% \qed
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\begin{abstract}
+  \ABSTRACT
+\end{abstract}
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % First section number = 0
+
+\section{Introduction}
+
+In \cite{Kuroki2008}, 
+the author canonically quantized 
+the birational Weyl group action 
+arising from a nilpotent Poisson algebra 
+proposed by Noumi and Yamada in \cite{NY0012028}
+and also constructed its $q$-difference deformation. 
+At that time he was not able to quantize the $\tau$-functions 
+generated by the birational Weyl group action.
+After that, in \cite{Kuroki2012a}, he succeeded 
+in quantizing the $\tau$-functions
+and showed the regularity (or polynomiality) 
+of the quantum $\tau$-functions.
+However he did not mention the Lax formalism 
+for the quantum birational Weyl group action.  
+
+In this paper, we shall present the Lax and the Sato-Wilson formalisms
+for the $q$-difference version of the quantum birational Weyl group actions
+of type $A$.  
+First we shall construct the Lax and the Sato-Wilson formalisms 
+for the quantum birational Weyl group action of type $A_{n-1}$ 
+(\secref{sec:A_{n-1}}).
+Second, taking the inductive limit of them,
+we shall get the formalisms for the action of type $A_\infty$
+(\secref{sec:A_{infinity}}).  
+Third, by the $n$-periodic reduction, we shall also obtain the formalisms 
+for the actions of type $A^{(1)}_{n-1}$
+(\secref{sec:A^{(1)}_{n-1}}).
+
+\paragraph{Notation and Conventions.}
+When $X = \sum_k a_k\ot b_k$, we set 
+$X^{12}=\sum_k a_k\ot b_k\ot 1$, 
+$X^{13}=\sum_k a_k\ot 1\ot b_k$, and
+$X^{23}=\sum_k 1\ot a_k\ot b_k$.
+The $q$-numbers, the $q$-factorials, and the $q$-binomial coefficients are defined by
+\begin{align*}
+ &
+ [a]_q = \frac{q^a-q^{-a}}{q-q^{-1}}, \qquad
+ [k]_q! = [1]_q[2]_q\cdots[k]_q, \quad
+ \\ &
+ \qbinom{a}{k}_q =
+ \frac{[a]_q[a-1]_q[a-2]_q\cdots[a-k+1]_q}{[k]_q!}
+ \quad  (k\in\Z_{\geqq0}).
+\end{align*}
+The $q$-commutator is given by $[A,B]_q=AB-qBA$.
+The associative algebra is always with unit $1$. 
+The matrix units are denoted by $E_{ij}$.
+We shall often denote the unit matrix by $1$.
+Any automorphism of an algebra $R$ naturally acts on matrices over $R$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Weyl group action of type $A_{n-1}$}
+\label{sec:A_{n-1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Quantum algebras of type $A_{n-1}$}
+\label{sec:quantum-alg-A_{n-1}}
+
+In this subsection, we deal with the lower triangular part of 
+the quantum group of type $A_{n-1}$ for a positive integer $n$.
+
+We define the $R$-matrix of type $A_{n-1}$ by
+\begin{equation}
+ R 
+ = \sum_i^n q E_{ii}\ot E_{ii}
+ + \sum_{i\ne j} E_{ii}\ot E_{jj}
+ + \sum_{i<j} (q-q^{-1}) E_{ij}\ot E_{ji},
+ \label{eq:def-R}
+\end{equation}
+where $i$ and $j$ run through $1,2,\ldots,n$.
+Then $R$ satisfies the Yang-Baxter equation
+$R^{12}R^{13}R^{23} = R^{23}R^{13}R^{12}$.
+Let $L$ be the upper triangular matrix of size $n$ with 
+non-commutative indeterminate entries $l_{ij}$,
+namely $L = \sum_{i\leqq j} l_{ij} E_{ij}$.
+
+Let $\B_-$ be the associative algebra over $\C(q)$ 
+generated by $l_{ij}$ ($1\leqq i\leqq j\leqq n$) 
+and $l_{ii}^{-1}$ ($1\leqq i\leqq n$)
+with the following fundamental relations:
+\begin{equation}
+ R L^1L^2 = L^2L^1R,
+ \quad l_{ii} l_{ii}^{-1} = l_{ii}^{-1}l_{ii} = 1,
+ \label{eq:RLL=LLR}
+\end{equation}
+where $L^1=L\ot 1$ and $L^2=1\ot L$. 
+Explicitly the relation $R L^1L^2=L^2L^1R$ is equivalent to
+the following conditions:
+\begin{align*}
+ &
+ i\leqq j<k\leqq l \ \text{or}\ k<i\leqq j<l 
+ \implies l_{ij}l_{kl} = l_{kl}l_{ij},
+ \\ &
+ k<i\leqq j \implies l_{ij}l_{kj}=q l_{kj}l_{ij},
+ \\ &
+ i\leqq j<l \implies l_{ij}l_{il}=q^{-1}l_{il}l_{ij},
+ \\ &
+ k<i\leqq l<j \implies 
+ l_{ij}l_{kl} - l_{kl}l_{ij} = (q-q^{-1}) l_{kj}l_{il}.
+\end{align*}
+The matrix $L$ is called {\em the $L$-operator of type $A_{n-1}$}.
+
+\begin{remark}
+ When $L=\sum_{i,j} l_{ij} E_{ij}$ is not upper triangular,
+ the relation $R L^1L^2=L^2L^1R$ is equivalent to
+ the following relations:
+ \begin{align*}
+  &
+  l_{il}l_{kj} = l_{il}l_{kj}, \quad
+  l_{ij}l_{kl}-l_{kl}l_{ij} = (q-q^{-1})l_{il}l_{kj},
+  \\ &
+  l_{ij}l_{il} = q l_{il}l_{ij}, \quad
+  l_{ij}l_{kj} = q l_{kj}l_{ij} 
+  \qquad\qquad\qquad\quad (k<i, l<j).
+ \end{align*}
+ The fundamental relations of $\B_-$ are 
+ the specialization of these relations to the upper triangular $L$.
+ \qed
+\end{remark}
+
+Denote by $D_L$ the diagonal part of $L$, namely $D_L=\sum_i l_{ii}E_{ii}$.
+We define the unipotent upper triangular matrix $\tL$ by $\tL=D_L^{-1}L$
+and denote its $(i,j)$-entry by $f_{ij}$:
+\begin{equation*}
+ \tL = D_L^{-1}L = 1 + \sum_{i<j} f_{ij}E_{ij}, \quad 
+ f_{ij} = l_{ii}^{-1}l_{ij}.
+\end{equation*}
+We call the matrix $\tL$ {\em the quasi $L$-operator of type $A_{n-1}$}.
+
+Let $\N_-$ be the subalgebra of $\B_-$ generated by $f_{ij}$ ($i<j$).
+We define $f_i\in\N_-$ by
+\begin{equation}
+ f_i = (1-q^2)^{-1} f_{i,i+1}.
+ \label{eq:f_i}
+\end{equation}
+Then $f_i$'s satisfy the following $q$-Serre relations:
+\begin{equation}
+ f_i^2 f_{i\pm1} - (q+q^{-1}) f_if_{i\pm1}f_i + f_{i\pm1}f_i^2=0, \qquad
+ f_if_j=f_jf_i \quad (|i-j|\geqq 2).
+ \label{eq:f_i-q-Serre}
+\end{equation}
+Moreover we have
+\begin{equation}
+ f_{ij}f_j - q f_j f_{ij} = f_{i,j+1} \quad (i<j).
+ \label{eq:f_{ij}f_j}
+\end{equation}
+and hence the algebra $\N_-$ is generated by $f_i$'s.
+Under the condition that $l_{ii}$'s are invertible, 
+we can derive the fundamental relations of $\B_-$ from
+the relations \eqref{eq:f_i}, \eqref{eq:f_i-q-Serre}, 
+and \eqref{eq:f_{ij}f_j} of $f_{ij}=l_{ii}^{-1}l_{ij}$ 
+and the following relations:
+\begin{equation*}
+ l_{ii}f_{ij}=q^{-1}f_{ij}l_{ii}, \quad
+ l_{jj}f_{ij}=q     f_{ij}l_{jj}, \quad
+ l_{kk}f_{ij}=f_{ij}l_{kk} \quad
+ (i<j, k\ne i,j).
+\end{equation*}
+Therefore the algebra $\N_-$ is isomorphic to  
+the upper triangular part $U_q(\n_-)$ 
+of the quantized enveloping algebra $U_q(\g)$ of type $A_{n-1}$.
+
+In the sequel, we identify $\N_-$ with $U_q(\n_-)$
+and denote $\N_-=U_q(\n_-)$ by $U_-$. 
+We call the Chevalley generators $f_i$ of $U_-$ 
+{\em the quantum dependent variables}.
+
+We denote by $Q(R)$ the skew field of fractions of an Ore domain $R$.
+The algebra $U_-$ is a Noetherian domain 
+(Sections 7.3 and 7.4 of \cite{Jos-1995}).
+Therefore $U_-$ is an Ore domain.
+We obtain the skew field $K=Q(U_-)$ of fractions of $U_-$. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Quantum birational Weyl group action}
+\label{sec:Weyl-A_{n-1}}
+
+The Weyl group $W=W(A_{n-1})$ of type $A_{n-1}$ is defined to be the group
+generated by $s_1,s_2,\ldots,s_{n-1}$ with the following fundamental relations:
+\begin{equation*}
+ s_i s_{i+1}s_i = s_{i+1}s_i s_{i+1}, \qquad
+ s_i s_j = s_j s_i \quad (|i-j|\geqq 2), \qquad
+ s_i^2 = 1.
+\end{equation*}
+Then $W$ is isomorphic to the permutation group of $\{1,2,\ldots,n\}$ 
+by sending $s_i$ to the transposition $(i,i+1)$.
+
+Let $\Qv$ be the free $\Z$-module generated by $\eps_1,\eps_2,\ldots,\eps_n$
+and put $P=\Hom(\Qv,\Z)$.
+Denote the canonical pairing between $\Qv$ and $P$ by $\bra\ ,\ \ket$.
+We call $\Qv$ the coroot lattice and $P$ the weight lattice.
+Denote the dual basis of $\{\epsv_i\}_{i=1}^n$ by $\{\eps_i\}_{i=1}^n$.
+We define the simple coroots $\av_i$ ($i=1,\ldots,n-1$) by $\av_i=\epsv_i-\epsv_{i+1}$
+and the simple roots $\alpha_i$ ($i=1,\ldots,n-1$) by $\alpha_i=\eps_i-\eps_{i+1}$.
+The fundamental weights $\Lambda_i$ ($i=0,1,\ldots,n$) 
+and the Weyl vector $\rho$ are given by
+$\Lambda_i = \eps_1+\eps_2+\cdots+\eps_i$ and $\rho=\sum_{i=1}^{n-1}\Lambda_i$.
+Then we have
+\begin{equation*}
+ \bra\av_i,\alpha_j\ket =
+ \begin{cases}
+   2 & \text{if $i=j$},  \\
+  -1 & \text{if $|i-j|=1$}, \\
+   0 & \text{otherwise}, \\ 
+ \end{cases}
+ \quad
+ \bra\av_i,\Lambda_j\ket = \delta_{ij},
+ \quad
+ \bra\av_i,\rho\ket = 1.
+\end{equation*}
+The matrix $[a_{ij}]_{i=1}^{n-1}$ is defined by $a_{ij}=\bra\av_i,\alpha_j\ket$ and
+called the Cartan matrix of type $A_{n-1}$.
+
+The Weyl group acts on $\Qv$ and $P$ by
+\begin{equation*}
+ s_i(\beta) = \beta - \bra\beta,\alpha_i\ket\av_i \quad (\beta\in\Qv), \qquad
+ s_i(\lambda) = \lambda - \bra\av_i,\lambda\ket\alpha_i \quad (\lambda\in P).
+\end{equation*}
+Then the Weyl group actions on $\Qv$ and $P$ preserve the canonical pairing
+between them.
+ 
+Denote by $K[q^\beta|\beta\in\Qv]$ the associative algebra over 
+the skew field $K=Q(U_-)$ generated by symbols $q^\beta$
+for $\beta\in\Qv$ with the following fundamental relations:
+\begin{equation*}
+ q^\beta f_i = f_i q^\beta, \quad
+ q^\beta q^\gamma = q^{\beta+\gamma}, \quad
+ q^0 = 1 \quad (\beta,\gamma,0\in\Qv).
+\end{equation*}
+It coincides with the Laurent polynomial ring over $K$ 
+generated by $\{q^{\pm\epsv_i}\}_{i=1}^n$ 
+and hence is an Ore domain.
+Denote by $K^\pa$ the skew filed of fractions 
+of $K[q^\beta|\beta\in\Qv]=K[q^{\pm\epsv_1},\ldots,q^{\pm\epsv_n}]$.
+We call $q^{\epsv_i}$'s {\em the parameter variables}. 
+The algebra $U_-^\pa$ %(resp.\ $\tU_-^\pa$) 
+is defined to be the subalgebra of $K^\pa$
+generated by $U_-$ %(resp.\ $\tU_-$) 
+and $\{q^{\pm\epsv_i}\}_{i=1}^n$.
+Here $(\ )^\pa$ stands for {\em an algebra with parameter variables}.
+
+For each $\lambda\in P$, 
+we define the algebra homomorphism $\phi_\lambda:U_-^\pa\to U_-$ 
+by $\phi(q^\beta)=q^{\bra\beta,\lambda\ket}$ ($\beta\in\Qv$) 
+and $\phi(f_i)=f_i$.
+Using Theorem 2.1 of \cite{S-1971}, we can prove that 
+$S_\lambda = \{\, a\in U_-^\pa \mid \phi_\lambda(a)\ne 0\,\}$
+is an Ore set in $U_-^\pa$. Therefore we obtain the localization
+$U_-[S_\lambda^{-1}]\subset K^\pa$.
+Define the algebra $U_{-,(P)}^\pa$ to be the intersection 
+of $U_-[S_\lambda^{-1}]$ for all $\lambda\in P$.
+(For details, see \cite{Kuroki2012a}.)
+The algebra homomorphism $\phi_\lambda$ is uniquely extended to
+the algebra homomorphism $\phi_\lambda:U_{-,(P)}^\pa\to K$,
+which substitutes $\bra\beta,\lambda\ket$ in $\beta\in\Qv$.
+
+Let $D(K^\pa)$ be the associative algebra generated by $K^\pa$ and $\{\tau^\lambda\}_{\lambda\in P}$
+with the following fundamental relations:
+\begin{align*}
+ &
+ \tau^\lambda\tau^\mu = \tau^{\lambda+\mu}, \quad
+ \tau^0 = 1 \quad (\lambda,\mu,0\in P),
+ \\ &
+ \tau^\lambda f_i = f_i \tau^\lambda, \quad
+ \tau^\lambda q^\beta = q^{\beta + \bra\beta,\lambda\ket} \tau^\lambda \quad
+ (\lambda\in P, \beta\in\Qv). 
+\end{align*}
+Then we have $D(K^\pa) = \bigoplus_{\lambda\in P} K \tau^\lambda$.
+Here $D(\ )$ stands for 
+{\em a difference operator algebra with respect to the parameter variables}.
+We define {\em the quantum $\tau$-variables} $\tau_i$ 
+by $\tau_i=\tau^{\Lambda_i}$
+($i=0,1\ldots,n$) and call $\tau^\lambda$'s 
+{\em the quantum Laurent $\tau$-monomials}.
+(Note that $\tau_0=1$.)
+Let $D(U_-^\pa)$ (resp.\ $D(U_{-,(P)}^\pa)$) 
+be the subalgebra of $D(K^\pa)$ generated by 
+$U_-^\pa$ (resp.\ $U_{-,(P)}^\pa$) and $\{\tau^\lambda\}_{\lambda\in P}$.
+
+The following proposition is a special case of the general result 
+of \cite{Kuroki2012a} (see also \cite{Kuroki2008}).
+
+\begin{prop}
+\label{prop:QWGA-A_{n-1}}
+ For each $i=1,2,\ldots,n-1$, 
+ the algebra automorphism $\bs_i$ of $D(U_{-,(P)}^\pa)$ can be given by
+ \begin{align*}
+  &
+  \bs_i(f_j)
+  = q^{-\av_i} f_j + [\av_i]_q [f_i,f_j]_{q^{-1}} f_i^{-1}
+  \quad (j=i\pm1),
+ \quad
+  \bs_i(f_j) = f_j 
+  \quad (j\ne i\pm 1), 
+ \\ &
+  \bs_i(q^\beta) = q^{s_i(\beta)} 
+  \quad (\beta\in\Qv),
+ \qquad
+  \bs_i(\tau^\lambda) 
+  = f_i^{\bra\av_i,\lambda\ket}\tau^{s_i(\lambda)} 
+  \quad (\lambda\in P).
+ \end{align*}
+ Furthermore the mapping $s_i\mapsto\bs_i$ defines the Weyl group actions 
+ on $D(U_{-,(P)}^\pa)$, $U_{-,(P)}^\pa$, $D(K^\pa)$, and $K^\pa$.
+ \qed
+\end{prop}
+
+\begin{definition}
+ The Weyl group actions 
+ on $D(U_{-,(P)}^\pa)$, $U_{-,(P)}^\pa$, $D(K^\pa)$, and $K^\pa$ 
+ obtained by \propref{prop:QWGA-A_{n-1}}
+ are called {\em the quantum birational Weyl group actions of type $A_{n-1}$}.
+ Denote the action of $w\in W$ on $x\in D(K^\pa)$ by $w(x)$.
+ \qed 
+\end{definition}
+
+\begin{remark}
+For $w\in W$, we define the algebra automorphism $\tw$ 
+of $D(K^\pa)$ by 
+\begin{equation*}
+ \tw(f_i) = f_i, \quad 
+ \tw(q^\beta) = q^{w(\beta)}, \quad
+ \tw(\tau^\lambda) = \tau^{w(\lambda)} \quad
+ (\beta\in\Qv, \lambda\in P).
+\end{equation*}
+This defines the Weyl group action on $D(K^\pa)$, 
+which is called {\em the tilde action}.
+In \cite{Kuroki2008} and \cite{Kuroki2012a}, the author constructs 
+the quantum birational Weyl group action by
+\begin{equation*}
+ s_i(x) = f_i^{\av_i} \ts_i(x) f_i^{-\av_i}
+ \quad (x\in D(K^\pa)),
+\end{equation*}
+where $f_i^{\av_i}$ denotes a fractional power of $f_i$.
+For details, see \cite{Kuroki2012a}.
+\qed
+\end{remark}
+
+\begin{remark}
+\label{remark:fractional-power}
+ Applying the main result of \cite{Kuroki2012a} to the quantum birational
+ Weyl group action of type $A_{n-1}$, 
+ we obtain that $w(\tau_i)\in D(U_-^\pa)$ for $w\in W$ and $i=1,2,\ldots,n-1$.
+ More precisely, 
+ there exists a unique non-commutative polynomial $\phi_{i,w}$ 
+ of $\{f_i, q^{\pm\av_i}\}_{i=1}^{n-1}$ 
+ such that $w(\tau_i)=\phi_{i,w}\tau^{w(\Lambda_i)}$.
+ Such a result is called {\em the regularity of the quantum $\tau$-functions}
+ in \cite{Kuroki2012a}.
+ \qed 
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Lax formalism}
+\label{sec:Lax-A_{n-1}}
+
+For the notational simplicity, we shall denote $q^{-\epsv_i}$ by $t_i$
+and $q^{-\av_i}$ by $a_i$:
+\begin{equation*}
+ t_i = q^{-\epsv_i}, \quad 
+ a_i = q^{-\av_i} = t_i/t_{i+1}.
+\end{equation*}
+Then we have
+\begin{align}
+  &
+  s_i(f_j)
+  = a_i      f_j + \frac{a_i^{-1}-a_i}{q-q^{-1}} [f_i,f_j]_{q^{-1}} f_i^{-1}
+% \notag
+% \\ &
+% \hphantom{s_i(f_j)}
+  = a_i^{-1} f_j + \frac{a_i^{-1}-a_i}{q-q^{-1}} [f_i,f_j]_q        f_i^{-1}
+ \notag
+ \\ &
+  \hphantom{s_i(f_j)}
+  = \frac{q a_i-q^{-1}a_i^{-1}}{q-q^{-1}} f_j 
+  + \frac{a_i^{-1}-a_i}{q-q^{-1}} f_i f_j f_i^{-1}
+  \qquad (j=i\pm1), 
+ \label{eq:s_i(f_j)-1}
+ \\ &
+  s_i(f_j) = f_j 
+  \qquad (j\ne i\pm 1),
+ \label{eq:s_i(f_j)-2}
+ \\ &
+  s_i(t_i) = t_{i+1}, \quad
+  s_i(t_{i+1}) = t_i, \quad
+  s_i(t_j) = t_j \quad (j\ne i,i+1),
+ \label{eq:s_i(t_j)}
+ \\ &
+  s_i(\tau_i) 
+  = f_i\frac{\tau_{i-1}\tau_{i+1}}{\tau_i} 
+  \qquad (i=1,\ldots,n-1),
+ \notag
+ \\ & 
+  s_i(\tau_j) = \tau_j
+  \qquad (i\ne j).
+ \notag 
+\end{align}
+These formulas uniquely characterize the action of $s_i$ on $D(K^\pa)$.
+
+Define the diagonal matrix $D_t$ of the parameter variables by 
+\begin{equation*}
+ D_t = \sum_{i=1}^n t_i E_{ii} = \diag(t_i)_{i=1}^n.
+\end{equation*}
+Recall that, in \secref{sec:quantum-alg-A_{n-1}}, 
+the quasi $L$-operator $\tL$ is defined by $\tL=D_L^{-1}L$, 
+where $D_L$ is the diagonal part of the $L$-operator $L$.
+We introduce {\em the $M$-operator} by
+\begin{equation*}
+ M = D_t \tL D_t 
+   = D_t^2 + \sum_{i<j}t_i t_j f_{ij}E_{ij}
+   = [m_{ij}]_{i,j=1}^n.
+\end{equation*}
+Define the matrices $G_i$ ($i=1,2,\ldots,n-1$) by
+\begin{equation*}
+ G_i = 1 + g_i E_{i+1,i}, \quad
+ g_i = \frac{t_i^2-t_{i+1}^2}{m_{i,i+1}}
+     = \frac{a_i^{-1}-a_i}{f_{i,i+1}}
+     = \frac{[\av_i]_q}{q f_i}.
+\end{equation*}
+Then we can prove the following theorem by straightforward calculations.
+
+\begin{theorem}[Lax formalism for type $A_{n-1}$]
+\label{theorem:Lax-A_{n-1}}
+ We have
+ \begin{equation*}
+   s_i(M)=G_i M G_i^{-1} \quad \text{for $i=1,2,\ldots,n-1$}.
+ \end{equation*}
+ These formulas with \eqref{eq:s_i(t_j)} uniquely characterize 
+ the quantum birational Weyl group action of type $A_{n-1}$ 
+ on $K^\pa$.
+\end{theorem}
+
+\begin{proof}
+Using \eqref{eq:f_i}, \eqref{eq:f_i-q-Serre}, and \eqref{eq:f_{ij}f_j},
+we can write down the explicit formulas for 
+the actions of $s_i$ on $f_{kl}$'s as below:
+\begin{align*}
+ &
+ s_i(f_{ki}) = a_i f_{ki} - (a_i-a_i^{-1})f_{k,i+1}f_{i,i+1}^{-1}
+ \qquad (k<i),
+ \\ &
+ s_i(f_{k,i+1}) = a_i^{-1}f_{k,i+1}
+ \qquad (k<i),
+ \\ &
+ s_i(f_{i+1,l}) = a_i^{-1}f_{i+1,l} + (a_i-a_i^{-1})f_{i,i+1}^{-1}f_{il}
+ \qquad (l>i+1),
+ \\ &
+ s_i(f_{il}) = a_i f_{il}
+ \qquad (l>i+1),
+ \\ &
+ s_i(f_{kl}) = f_{kl} \qquad \text{for other $f_{kl}$}.
+\end{align*}
+These formulas with \eqref{eq:s_i(t_j)}
+immediately lead to $s_i(M)=G_i M G_i^{-1}$.
+The last statement of the theorem is clear.
+\qed
+\end{proof}
+
+\begin{remark}[The $q\to 1$ limit]
+ We shall sketch how to obtain 
+ the limit of \theoremref{theorem:Lax-A_{n-1}} as $q\to 1$.
+ Note that it is not a classical limit.
+ Define $x_{ji}$ by $f_{ij}=(q-q^{-1})x_{ji}$ ($i<j$).
+ Then we have $[x_{j+1,j}, x_{ji}]_q = x_{j+1,i}$ ($i<j$).
+ Therefore, after taking the limit as $q\to 1$, 
+ we obtain $[x_{ij}, x_{kl}] = \delta_{jk}x_{il}-\delta_{li}x_{kj}$.
+ Setting $q=e^{\hbar/2}$, we have
+ \begin{equation*}
+   M = 1 + \hbar \M + O(\hbar^2), \quad 
+   G_i = \G_i + O(\hbar), 
+ \end{equation*}
+ where $\M$ and $\G_i$ are defined by
+ \begin{equation*}
+  \M = -\sum_i \epsv_i E_{ii} + \sum_{i<j} x_{ji} E_{ij}, \quad
+  \G_i = 1 - \frac{\epsv_i-\epsv_{i+1}}{x_{i+1,i}} E_{i+1,i}.
+ \end{equation*}
+ The limit of the quantum birational Weyl group
+ action of type $A_{n-1}$ as $q\to 1$ can be written in the form 
+ $s_i(\M)=\G_i \M \G_i^{-1}$.
+ This is the straightforward canonical quantization of Theorem 7.1 
+ in \cite{Noumi}.
+ \theoremref{theorem:Lax-A_{n-1}} is both the quantization
+ and the $q$-difference analogue of Theorem 7.1 in \cite{Noumi}.
+ \qed
+\end{remark}
+
+\begin{remark}[Quantum unipotent crystal structure on $M$]
+ In this remark, we shall deform the algebra automorphisms 
+ $\bs_i$ ($i=1,2,\ldots,n-1$) and 
+ constructs a quantum unipotent crystal structure on the $M$-operator.
+
+ For any element $c$ of the center of $(K^\pa)^\times$, 
+ we can define the algebra automorphism $\be_i^c$ of $K^\pa$ 
+ as follows.  We define the actions of $\be_i^c$ on $f_j$'s by
+ \begin{align*}
+  &
+  \be_i^c(f_j) 
+  = c f_j      + \frac{c^{-1}-c}{q-q^{-1}}[f_i,f_j]_{q^{-1}} f_i^{-1}
+  =  c^{-1} f_j + \frac{c^{-1}-c}{q-q^{-1}}[f_i,f_j]_q        f_i^{-1}
+  \\ & \hphantom{\be_i^c(f_j)}
+  = \frac{q c-q^{-1}c^{-1}}{q-q^{-1}}f_j 
+  + \frac{c^{-1}-c}{q-q^{-1}}f_jf_jf_j^{-1}
+  \qquad (j=i\pm1),
+  \\ &
+  \be_i^c(f_j) = f_j \qquad (j\ne i\pm1).
+ \end{align*}
+ If we formally denote $c$ by $q^{-\gamma}$, then
+ we have $\be_i^c(f_j)=f_i^\gamma f_j f_i^{-\gamma}$.
+ (For the construction of fractional powers of $f_i$, see \cite{Kuroki2012a}.)
+ The actions of $\be_i^c$ on $t_j$'s are given by
+ \begin{equation*}
+  \be_i^c(t_i) = c^{-1}t_i, \quad
+  \be_i^c(t_{i+1}) = ct_{i+1}, \quad
+  \be_i^c(t_j) = t_j \quad (j\ne i,i+1).
+ \end{equation*}
+ Equivalently, we set $\be_i^c(q^\beta)=c^{\bra\beta,\alpha_i\ket}q^\beta$
+ for $\beta\in\Qv$.
+ Then the specialization of $c$ at $q^{-\av_i}$ gives $\be_i^c = \bs_i$.
+ Putting $\alpha_i(M) = m_{ii}/m_{i+1.i+1}$, 
+ $\psi_i(M) = m_{i,i+1}/m_{ii}$, and
+ $y_i(a) = \exp(aE_{i+1,i})$,
+ we obtain
+ \begin{equation*}
+   \be_i^c(M) 
+   = y_i\left(\frac{c^2-1}{\alpha_i(M)\psi_i(M)}\right)\cdot
+     M \cdot
+     y_i\left(\frac{c^{-2}-1}{\psi_i(M)}\right).
+ \end{equation*}
+ Therefore we can regard the upper triangular matrix $M$ 
+ as a quantum unipotent crystal. 
+ Compare the above formula with Equation (3.8) of \cite{BK2000}.
+ \qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Sato-Wilson formalism}
+\label{sec:SW-A_{n-1}}
+
+Since $M$-operator is the upper triangular matrix with
+invertible diagonal entries, 
+it can be uniquely diagonalized 
+by the unipotent upper triangular matrix $U$:
+\begin{equation*}
+ M = U D_t^2 U^{-1}, \quad
+ U = 1 + \sum_{i<j} u_{ij} E_{ij},
+\end{equation*}
+where $u_{ij}$'s are given by
+\begin{equation*}
+ u_{ij} 
+ = \sum_{r=1}^{j-i}(-1)^r
+   \sum_{i=i_0<i_1<\cdots<i_r=j}
+   \frac{m_{i_0i_1}m_{i_1i_2}\cdots m_{i_{r-1}i_r}}
+        {(t_{i_0}^2-t_j^2)(t_{i_1}^2-t_j^2)\cdots(t_{i_{r-1}}^2-t_j^2)}
+ \quad (i<j).
+\end{equation*}
+For example, we have 
+$u_{i,i+1} = -m_{i,i+1}/(t_i^2-t_{i+1}^2)=-g_i^{-1} = - qf_i/[\av_i]_q$. 
+
+The uniqueness of $U$ and \theoremref{theorem:Lax-A_{n-1}} show that
+$s_i(U)$ is written in the following form:
+\begin{equation}
+ s_i(U) = G_i U S_i^g, \quad
+ S_i^g = g_i^{-1} E_{i,i+1} - g_i E_{i+1,i} + \sum_{k\ne i,i+1} E_{kk}.
+ \label{eq:s_i(U)}
+\end{equation}
+In fact, the matrix $G_i U S_i^g$ is unipotent upper triangular 
+and \theoremref{theorem:Lax-A_{n-1}} leads to
+\begin{equation*}
+ s_i(M) 
+ = G_i M G_i^{-1}
+ = G_i U D_t^2 (G_i U)^{-1}
+ = G_i U S_i^g s_i(D_t^2) (G_i U S_i^g)^{-1}.
+\end{equation*}
+On the other hand, we have $s_i(M)=s_i(U)s_i(D_t^2)s_i(U)^{-1}$.
+Therefore we obtain $s_i(U)=G_i U S_i^g$.
+
+Define the $z$-variables by $z_i = \tau^{\epsv_i}$ ($i=1,2,\ldots,n$) 
+and the diagonal matrix $D_z$ of the $z$-variables by
+\begin{equation*}
+ D_z = \sum_{i=1}^n z_i E_{ii} = \diag(z_i)_{i=1}^n,
+ \qquad z_i = \tau^{\eps_i} = \frac{\tau_i}{\tau_{i-1}}.
+\end{equation*}
+We define {\em the $Z$-operator} by
+\begin{equation*}
+ Z = U D_z = D_z + \sum_{i<j} u_{ij}z_j E_{ij} = [z_{ij}]_{i,j=1}^n.
+\end{equation*}
+Since $z_i t_j = q^{-\delta_{ij}} t_j z_i$, 
+we have $M = q^2 Z D_t^2 Z^{-1}$. 
+The actions of $s_i$ on $z_j$'s are explicitly written in the following form:
+\begin{equation*}
+ s_i(z_i)= f_i z_{i+1}, \quad
+ s_i(z_{i+1}) = f_i^{-1} z_i, \quad
+ s_i(z_j) = z_j \quad (j\ne i,i+1).
+\end{equation*}
+
+For each $i=1,\ldots,n-1$,
+we define the algebra automorphism $\eta_i$ of $D(K^\pa)$ by
+\begin{align*}
+ &
+ \eta_i(f_j)=f_j, \quad 
+ \eta_i(q^\beta) = q^\beta
+ \quad (j=1,2,\ldots,n-1; \beta\in\Qv),
+ \\ &
+ \eta_i(\tau_j) = [\av_i]_q^{\delta_{ij}} \tau_j [\av_i]_q^{\delta_{ij}}
+ \quad (j=1,2,\ldots,n).
+\end{align*}
+The twisted actions $\hs_i$ of $s_i$ on $D(K^\pa)$ 
+are defined by 
+\begin{equation*}
+ \hs_i(x)=\eta_i(s_i(x)) \quad 
+ \text{for $i=1,2,\ldots,n-1$ and $x\in D(K^\pa)$}.
+\end{equation*}
+Then we have
+\begin{align}
+ &
+ \hs_i(z_i) = f_i [\av_i]_q^{-1}z_{i+1} [\av_i]_q^{-1}, \quad
+ \hs_i(z_{i+1}) = f_i^{-1} [\av_i]_q z_i [\av_i]_q, 
+ \notag
+ \\ &
+ \hs_i(z_j) = z_j \quad (j\ne i,i+1)
+ \label{eq:hs_i(z_j)}.
+\end{align}
+The restriction of $\hs_i$ on $K^\pa$ coincides with that of $s_i$.
+Note that $\C(q,q^\beta|\beta\in\Qv)^\times$ is 
+a normal subgroup of $D(K^\pa)^\times=(K^\pa)^\times\tau^P$
+and is closed under the Weyl group action.
+Although the mapping $s_i\mapsto \hs_i$ does not give 
+the Weyl group action on $D(K^\pa)$, 
+it defines the action on $D(K^\pa)^\times/\C(q,q^\beta|\beta\in\Qv)^\times$,
+which is called {\em the quantum projective Weyl group action on $D(K^\pa)$}.
+
+
+Define the matrices $S_i$ ($i=1,2,\ldots,n-1$) by
+\begin{equation*}
+ S_i = 
+ q [\av_i]_q E_{i,i+1} - (q[\av_i]_q)^{-1} E_{i+1,i}
+ + \sum_{k\ne i,i+1} E_{kk}.
+\end{equation*}
+
+\begin{theorem}[Sato-Wilson formalism for type $A_{n-1}$]
+\label{theorem:Sato-Wilson-A_{n-1}}
+ We have
+ \begin{equation}
+  \hs_i(Z) = G_i Z S_i, \quad 
+  \hs_i(D_t) = s_i(D_t) = S_i^{-1} D_t S_i 
+  \quad \text{for $i=1,2,\ldots,n-1$}.
+  \label{eq:hs_i(Z)}
+ \end{equation}
+ These formulas uniquely characterize the whole of 
+ the quantum birational Weyl group action of type $A_{n-1}$
+ on $D(K^\pa)$.
+\end{theorem}
+
+\begin{proof}
+ Equation \eqref{eq:s_i(t_j)} is equivalent to $s_i(D_t)=S_i D_t S_i^{-1}$.
+ Because of \eqref{eq:s_i(U)}, 
+ the formula $\hs_i(Z)=G_i Z S_i$ is equivalent to
+ $\hs_i(D_z) = (S_i^g)^{-1} D_z S_i$ and hence equivalent to \eqref{eq:hs_i(z_j)}.
+ We have shown Equation \eqref{eq:hs_i(Z)}.
+ Equation \eqref{eq:hs_i(Z)} implies $s_i(M)=G_i M G_i^{-1}$.
+ Therefore \theoremref{theorem:Lax-A_{n-1}} proves 
+ the last statement of the theorem.
+ \qed
+\end{proof}
+
+\begin{remark}
+ \theoremref{theorem:Sato-Wilson-A_{n-1}} is both the quantization
+ and the $q$-difference analogue of Theorem 7.3 in \cite{Noumi}. 
+ In the classical (and hence commutative) case, 
+ the Sato-Wilson formalism of the birational
+ Weyl group action of type $A_{n-1}$ immediately proves 
+ the regularity of the classical $\tau$-functions, 
+ because a determinant is a polynomial in its entries.
+ But, in the quantum (and hence non-commutative) case, 
+ the Sato-Wilson formalism does not 
+ immediately lead to the regularity of the quantum $\tau$-fucntions,
+ because a non-commutative determinant is 
+ not always a polynomial but a rational function in general,
+ owing to the theory of quasi-determinants (\cite{GR}, \cite{GGRW}).
+ In \cite{Kuroki2012a}, the regularity of the quantum $\tau$-functions
+ are shown by the theory of the translation functors 
+ in representation theory.
+ It is an open problem whether or not the quantum $\tau$-functions 
+ admit non-commutative polynomial-type determinant representations. 
+ \qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Weyl group action of type $A_\infty$}
+\label{sec:A_{infinity}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Quantum algebras of type $A_\infty$}
+%\label{sec:quantum-alg-A_{infinity}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Quantum birational Weyl group action}
+%\label{sec:Weyl-A_{infinity}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Lax formalism}
+%\label{sec:Lax-A_{infinity}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Sato-Wilson formalism}
+%\label{sec:SW-A_{infinity}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Weyl group action of type $A^{(1)}_{n-1}$}
+\label{sec:A^{(1)}_{n-1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Quantum algebras of type $A^{(1)}_{n-1}$}
+%\label{sec:quantum-alg-A^{(1)}_{n-1}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Quantum birational Weyl group action}
+%\label{sec:Weyl-A^{(1)}_{n-1}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Lax formalism}
+%\label{sec:Lax-A^{(1)}_{n-1}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\subsection{Sato-Wilson formalism}
+%\label{sec:SW-A^{(1)}_{n-1}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+
+\bibitem{BK2000}
+Berenstein, Arkady and Kazhdan, David. 
+Geometric and unipotent crystals. 
+GAFA 2000 (Tel Aviv, 1999). 
+Geom.\ Funct.\ Anal.\ 2000, Special Volume, Part I, 188--236.
+\arxivref{math/9912105}
+
+%\bibitem{BK2007}
+%Berenstein, Arkady and Kazhdan, David. 
+%Geometric and unipotent crystals. II. 
+%From unipotent bicrystals to crystal bases. 
+%Quantum groups, 13–88, Contemp.\ Math., 433, Amer.\ Math.\ Soc., Providence, RI, 2007.
+%\arxivref{math/0601391}
+
+%\bibitem{DGK}
+%Deodhar, Vinay V., Gabber, Ofer, and Kac, Victor. 
+%Structure of some categories of representations 
+%of infinite-dimensional Lie algebras. 
+%Adv.\ in Math.\ 45 (1982), no.~1, 92--116.
+%
+%\bibitem{Dixmier}
+%Dixmier, Jacques.
+%Enveloping Algebras,
+%The 1996 Printing of the 1977 English Translation.
+%Graduate Studies in Mathematics, Volume 11, 
+%American Mathematical Society, 1996, 379~pp.
+%
+%\bibitem{EK}
+%Etingof, Pavel and Kazhdan, David. 
+%Quantization of Lie bialgebras. 
+%VI. Quantization of generalized Kac-Moody algebras. 
+%Transform.\ Groups 13 (2008), no.~3--4, 527--539. 
+
+\bibitem{GR}
+Gelfand, I.\ and Retakh, V. 
+Quasideterminants. I. 
+Selecta Math.\ (N.S.) 3 (1997), no.~4, 517--546.
+\arxivref{q-alg/9705026}
+
+\bibitem{GGRW}
+Gelfand, Israel, Gelfand, Sergei, Retakh, Vladimir, and Wilson, Robert Lee. Quasideterminants. 
+Adv.\ Math.\ 193 (2005), no.~1, 56--141.
+\arxivref{math/0208146}
+
+%\bibitem{GW-2004}
+%Goodearl, K.~R.\ and Warfield, R.~B., Jr.,
+%An introduction to noncommutative Noetherian rings, Second edition.
+%London Mathematical Society Student Texts, 61, 
+%Cambridge University Press, Cambridge, 2004, xxiv+344~pp. 
+%
+%\bibitem{Hasegawa2007}
+%Hasegawa, Koji. 
+%Quantizing the B\"acklund transformations of Painlev\'e equations 
+%and the quantum discrete Painlev\'e VI equation. 
+%Exploring new structures and natural constructions in mathematical physics, 275--288, 
+%Adv.\ Stud.\ Pure Math., 61, Math.\ Soc.\ Japan, Tokyo, 2011.
+%\arxivref{math/0703036}
+%
+%\bibitem{Hirota}
+%Hirota, Ryogo.
+%Discrete analogue of a generalized Toda equation. 
+%J.\ Phys.\ Soc.\ Japan 50 (1981), no.~11, 3785--3791. 
+%
+%\bibitem{Jat-1986}
+%Jategaonkar, A.~V.
+%Localization in Noetherian rings.
+%London Mathematical Society lecture note series, 98, 
+%Cambridge University Press, 1986, xii+323~pp.
+%
+%\bibitem{JNS}
+%Jimbo, M., Nagoya, H., and  Sun, J. 
+%Remarks on the confluent KZ equation for $\mathfrak{sl}_2$ 
+%and quantum Painlev\'e equations. 
+%J.\ Phys.\ A 41 (2008), no.~17, 175205, 14~pp. 
+
+\bibitem{Jos-1995}
+Joseph, Anthony.
+Quantum groups and their primitive ideals.
+Ergebnisse der Mathematik und ihrer Grenzgebiete (3) 
+[Results in Mathematics and Related Areas (3)], 29. 
+Springer-Verlag, Berlin, 1995. x+383~pp. 
+
+%\bibitem{KW}
+%Kac, Victor G.\ and Wakimoto, Minoru.
+%Modular invariant representations of infinite-dimensional Lie algebras and superalgebras.
+%Proc.\ Nat.\ Acad.\ Sci.\ U.S.A.\ 85 (1988), no.~14, 4956--4960.
+%
+%\bibitem{KNY}
+%Kajiwara, Kenji, Noumi, Masatoshi, and Yamada, Yasuhiko. 
+%A study on the fourth $q$-Painlev\'e equation. 
+%J.\ Phys.\ A 34 (2001), no.~41, 8563–8581.
+%\arxivref{nlin/0012063}
+
+\bibitem{Kuroki2008}
+Kuroki, Gen.
+Quantum groups and quantization of Weyl group symmetries of Painlev\'e systems. 
+Exploring new structures and natural constructions in mathematical physics, 
+289--325, Adv.\ Stud.\ Pure Math., 61, Math.\ Soc.\ Japan, Tokyo, 2011.
+\arxivref{0808.2604}
+
+\bibitem{Kuroki2012a}
+Kuroki, Gen.
+Regularity of quantum $\tau$-functions generated by 
+quantum birational Weyl group actions.
+Preprint 2012. \\
+\href
+{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/RegularityOfQuantumTau.pdf}
+{http://www.math.tohoku.ac.jp/\textasciitilde kuroki/LaTeX/RegularityOfQuantumTau.pdf}
+
+%\bibitem{Lusztig}
+%Lusztig, George. 
+%Introduction to quantum groups. 
+%Reprint of the 1994  edition.  
+%Modern Birkhauser Classics. 
+%Birkhauser/Springer, New York, 2010.\ xiv+346 pp. 
+%
+%\bibitem{MR-2001}
+%McConnell, J.~C.\ and Robson, J.~C., 
+%Noncommutative Noetherian rings,
+%With the cooperation of L.~W.~Small, 
+%Revised edition, 
+%Graduate Studies in Mathematics, 30, 
+%American Mathematical Society, Providence, RI, 2001, xx+636~pp.
+
+%\bibitem{Malikov}
+%Malikov, Fyodor.
+%Quantum groups: singular vectors and BGG resolution. 
+%Infinite analysis, Part A, B (Kyoto, 1991), 623--643, 
+%Adv.\ Ser.\ Math.\ Phys., 16, World Sci.\ Publ., River Edge, NJ, 1992. 
+
+%\bibitem{Miwa}
+%Miwa, Tetsuji.
+%On Hirota's difference equations. 
+%Proc.\ Japan Acad.\ Ser.~A Math. Sci.\ 58 (1982), no.~1, 9--12. 
+
+%\bibitem{Nagoya2009}
+%Nagoya, Hajime.
+%A quantization of the sixth Painlev\'e equation. 
+%Noncommutativity and singularities, 291–298, 
+%Adv.\ Stud.\ Pure Math., 55, Math.\ Soc.\ Japan, Tokyo, 2009. 
+
+%\bibitem{Nagoya2011}
+%Nagoya, H.
+%Hypergeometric solutions to Schr\"odinger equations 
+%for the quantum Painlev\'e equations. 
+%J.\ Math.\ Phys.\ 52 (2011), no.~8, 083509, 16~pp. 
+%\arxivref{1109.1645}
+%
+%\bibitem{Nagoya2012}
+%Nagoya, Hajime.
+%Realizations of Affine Weyl Group Symmetries 
+%on the Quantum Painlev\'e Equations by Fractional Calculus.
+%Lett.\ Math.\ Phys.\ Online First, 29 March 2012,
+%DOI: 10.1007/s11005-012-0557-6.
+%\\ \href
+%{http://www.springerlink.com/content/1470478223ugw4k1/}
+%{http://www.springerlink.com/content/1470478223ugw4k1/}
+%
+%\bibitem{NGR}
+%Nagoya, Hajime, Grammaticos, Basil, and Ramani, Alfred.
+%Quantum Painlev\'e equations: from continuous to discrete. 
+%SIGMA Symmetry Integrability Geom.\ Methods Appl.\ 4 (2008), Paper 051, 9 pp. 
+%\arxivref{0806.1466}
+
+\bibitem{Noumi}
+Noumi, Masatoshi. 
+Painlev\'e equations through symmetry. 
+Translated from the 2000 Japanese original by the author. 
+Translations of Mathematical Monographs, 223. 
+American Mathematical Society, Providence, RI, 2004. x+156 pp. 
+
+%\bibitem{NY9708018}
+%Noumi, Masatoshi and Yamada, Yasuhiko.
+%Symmetries in the fourth Painlev\'e equation and Okamoto polynomials.  
+%Nagoya Math.\ J.\ 153 (1999), 53--86. 
+%\arxivref{q-alg/9708018}
+
+\bibitem{NY0012028}
+Noumi, Masatoshi and Yamada, Yasuhiko.
+Birational Weyl group action arising from a nilpotent Poisson algebra. 
+Physics and combinatorics 1999 (Nagoya), 287--319, 
+World Sci.\ Publ., River Edge, NJ, 2001. 
+\arxivref{math.QA/0012028}
+
+%\bibitem{Okamoto1981}
+%Okamoto, Kazuo. 
+%On the $\tau$-function of the Painlev\'e equations. 
+%Phys.\ D 2 (1981), no.~3, 525--535.
+%
+%\bibitem{OkamotoIII}
+%Okamoto, Kazuo. 
+%Studies on the Painlev\'e equations. 
+%III. Second and fourth Painlev\'e equations, PII and PIV. 
+%Math.\ Ann.\ 275 (1986), no.~2, 221--255. 
+
+%\bibitem{Okamoto1996}
+%Okamoto, Kazuo.
+%Algebraic relations among six adjacent $\tau$-functions 
+%related to the fourth Painlev\'e system. 
+%Kyushu J.\ Math.\ 50 (1996), no.~2, 513–532. 
+
+%\bibitem{Oshima}
+%Oshima, Toshio.
+%Fractional calculus of Weyl algebra and Fuchsian differential equations.
+%Preprint \arxivref{1102.2792}
+%
+%\bibitem{RCW}
+%Rocha-Caridi, Alvany and Wallach, Nolan R., 
+%Characters of irreducible representations of the Virasoro algebra,  
+%Math.\ Z.\ 185 (1984), no.~1, 1--21. 
+%
+%\bibitem{Sato-Sato}
+%Sato, Mikio and Sato, Yasuko. 
+%Soliton equations as dynamical systems on infinite-dimensional Grassmann manifold. 
+%Nonlinear partial differential equations in applied science (Tokyo, 1982), 259--271, 
+%North-Holland Math. Stud., 81, North-Holland, Amsterdam, 1983.
+
+\bibitem{S-1971}
+Smith, P.~F.
+Localization and the AR property.
+Proc.\ London Math.\ Soc.\ (3) 22 (1971), 39--68.
+
+%\bibitem{Yamada9808002}
+%Yamada, Yasuhiko. 
+%Determinant formulas of the $\tau$-functions of the Painlev\'e equations of type A. 
+%Nagoya Math.\ J.\ 156 (1999), 123–134.
+%\arxivref{math/9808002}
+%
+%\bibitem{Yamada-SP}
+%Yamada, Yasuhiko.
+%Special polynomials and generalized Painlev\'e equations. 
+%Combinatorial methods in representation theory (Kyoto, 1998), 391–400, 
+%Adv.\ Stud.\ Pure Math., 28, Kinokuniya, Tokyo, 2000. 
+%%\\
+%\href
+%{http://www.math.kobe-u.ac.jp/~yamaday/comb.ps}
+%{http://www.math.kobe-u.ac.jp/\textasciitilde yamaday/comb.ps}
+%
+%\bibitem{Yamakawa}
+%Yamakawa, Daisuke.
+%Quiver varieties with multiplicities, 
+%Weyl groups of non-symmetric Kac-Moody algebras, and Painlev\'e equations.
+%SIGMA Symmetry Integrability Geom.\ Methods Appl.\ 6 (2010), Paper 087, 43~pp. 
+%\arxivref{1003.3633}
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
