@@ -1,0 +1,164 @@
+<html lang="ja">
+<head>
+<title>MathJaxの使い方</title>
+<style type="text/css"><!--
+body { 
+  margin-left:   50px;
+  margin-right:  50px;
+  margin-bottom: 50px;
+}
+--></style>
+<meta http-equiv="Content-Type" CONTENT="text/html; charset=Shift_JIS" />
+<meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+<script src="http://genkuroki.web.fc2.com/MathJax/MathJax.js">
+  MathJax.Hub.Config({
+    imageFont: null,
+    extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                 "TeX/noErrors.js","TeX/noUndefined.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+    TeX: {
+      Macros: {
+        np: ['{:}#1{:}', 1],
+        diag: '\\mathop{\\mathrm{diag}}\\nolimits',
+        C: '{\\mathbb C}',
+        R: '{\\mathbb R}',
+        Q: '{\\mathbb Q}',
+        Z: '{\\mathbb Z}'
+      }
+    }
+  });
+</script>
+</head>
+<body>
+
+<h1>MathJaxの使い方</h1>
+
+<p>くろきげん</p>
+
+<p>2011年3月9日</p>
+
+<p><b>警告！ MathJax v1.1 が公開されていました。この文書の説明は v1.0.1 をもとにしているので少し古くなってしまっています。</b> <small>まさかこのタイミングで v1.1 が正式公開されるとは！</small></p>
+
+<h2>インストール</h2>
+
+<p><a href="http://www.mathjax.org/">MathJax</a> の Download から必要な ZIP ファイルをダウンロードして展開してウェブサーバーにアップロードする。ただし3万個程度も存在する png ファイルのアップロードには膨大に時間がかかってしまうので、展開結果の中から png ファイルを検索してすべて削除してからアップロードした方が良いだろう。あと Firefox 3.6.13 以降の問題の対処のために <a href="http://www.mathjax.org/dl/MathJax-Font-Update.zip">MathJax-Font-Update.zip</a> もダウンロードしてその中身で置き換えておくことを忘れずに。</p>
+
+<p>より詳しくは以下の通り:</p>
+<ol>
+<li><a href="http://www.mathjax.org/">http://www.mathjax.org/</a> の右上の <a href="http://www.mathjax.org/download/">Download</a> から MathJax-v1.0.1a.zip (16.4MB) と MathJax-Font-Update.zip (314K) をダウンロードしてそれらを展開する。
+<li>MathJax-Font-Update.zip を展開して出て来る otf ファイルを MathJax-v1.0.1a.zip の展開結果の MathJax/fonts/HTML-CSS/TeX/otf/ 以下の otf ファイルにすべて上書きする。
+<li>MathJax/fonts/ 以下にある png ファイルを検索してすべて削除する。
+<li>MathJax/ 以下のファイルをウェブサーバー上の /MathJax/ 以下にすべてコピーする。 <a href="http://www2.biglobe.ne.jp/~sota/ffftp.html">FFFTP</a> が定番の道具である。
+<li>せっかくなので MathJax の簡単な使い方を説明した文書も用意してアップロードする。文化の伝搬のために布教は重要。
+</ol>
+
+<h2>使い方</h2>
+
+<p>このファイルのヘッダーを真似して HTML ファイルを作る。これでその HTML ファイルの中で <code>$ $</code> や <code>\( \)</code> や <code>$$ $$</code> や <code>\[ \]</code> で囲んで LaTeX 方式で数式を書けるようになる。</p>
+
+<p>文字集合を charset=UTF-8 とする場合には円マークとバックスラッシュが異なることに注意すること。文字集合として charset=Shift_JIS, charset=ISO-2022-JP を使えば円マークとバックスラッシュの違いに悩まされずにすむ。</p>
+
+<h3>例1 (textstyle)</h3>
+
+<blockquote>
+<pre><code>$\sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}$</code></pre>
+
+<p>$\sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}$</p>
+</blockquote>
+
+<h3>例2 (displaystyle)</h3>
+
+<p>式番号は <code>\tag{ }</code> で入れられる。</p>
+
+<blockquote>
+<pre><code>\[
+  \tag{3}
+  \sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}
+\]</code></pre>
+
+<p>\[
+  \tag{3}
+  \sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}
+\]</p>
+</blockquote>
+
+<p>式番号の自動生成およびラベルを使った引用には現時点では対応していない。しかし開発陣は対応するつもりのようである。</p>
+
+<h3>例3 (引数のないマクロ)</h3>
+
+<p>引数のないマクロを <code>$ $</code> などの中で定義できる。</p>
+
+<blockquote>
+<pre><code>\(\newcommand\O{{\mathcal O}} \O_X\)</code></pre>
+
+<p>\(\newcommand\O{{\mathcal O}} \O_X\)</p>
+</blockquote>
+
+<h3>例4 (引数を持つマクロ)</h3>
+
+<p>現時点では引数を持つマクロは MathJax.js 呼び出し時の設定で行なわなければいけない。詳しくはこの HTML ファイルのソースを見よ。</p>
+
+<blockquote>
+<pre><code>    TeX: {
+      Macros: {
+        np: ['{:}#1{:}', 1],
+        diag: '\\mathop{\\mathrm{diag}}\\nolimits',
+        C: '{\\mathbb C}',
+        R: '{\\mathbb R}',
+        Q: '{\\mathbb Q}',
+        Z: '{\\mathbb Z}'
+      }
+    }
+</code></pre>
+<pre><code>$\C[y_1,\ldots,y_n]\to {\mathcal A}$, $a\mapsto\np{a}$</code></pre>
+
+<p>$\C[y_1,\ldots,y_n]\to {\mathcal A}$, $a\mapsto\np{a}$</p>
+</blockquote>
+
+<p>ここで <code>\np</code> が引数を持つマクロである。</p>
+
+<p>この方法でマクロを定義したファイルを用意しておけば複数の HTML ファイルで同じマクロを共有できる。そのためには MathJax/config/MathJax.js を MathJax/config/MyConfig.js にコピーして、その内容を自分好みの設定に書き換え、さらにマクロの定義もそこで行なっておき、ヘッダーで次のようにして読み込めばよい。</p>
+
+<blockquote>
+<pre></code>&lt;script src="http://domain/dir/MathJax/MathJax.js"&gt;
+  MathJax.Hub.Config({config:"MyConfig.js"});
+&lt;/script&gt;</code></pre>
+</blockquote>
+
+<h3>数式が正しく表示されない場合</h3>
+
+<p>上の例で数式が正しく表示されない場合には <a href="http://www.chromeplus.org/">ChromePlus</a> のような他のブラウザを使ったり、 <a href="http://www.stixfonts.org/">STIXフォント</a>をOSにインストールすることを試してみるべし。</p>
+
+<p>Ajax を使っている場合にはどのタイミングでどのように MathJax を動作させるかが難しくなるので注意するべし。</p>
+
+<h3>数式の表示があまりにも遅い場合</h3>
+
+<p>おそらく Microsoft Internet Explorer 8 (IE8) を使っているからでしょう。 <a href="http://www.chromeplus.org/">ChromePlus</a> や <a href="http://mozilla.jp/firefox/">Firefox</a> のような他のブラウザを使いましょう。 最新のブラウザの中では IE8 だけが飛び抜けて遅い。 ChromePlus や Firefox なら瞬時に数式が表示されるのに、IE8 だと1分以上かかることがある。どうしても IE8 を使い続けたいならば Microsoft 社に改善を強く要求した方が良いでしょう。ユーザーの声はソフトの改善のために重要だと思います。</p>
+
+<h2>リンク集</h2>
+
+<ul>
+<li><a href="http://www.google.co.jp/search?q=MathJax&num=100&lr=lang_ja">MathJax を含む日本語のページを検索</a>
+<li><a href="MathJax/docs/html/index.html">MathJax Documentation</a> (MathJaxの解説、結構わかりやすい)
+<li><a href="MathJax/test/index.html">テストページ</html> (ブラウザで MathJax が使えるかを確認)
+<li><a href="MathJax/test/sample.html">サンプルページ</html> (さらなる表示の確認)
+<li><a href="MathJax/LivePreviewMathJax.html">Live Preview of MathJax Type Setting</a> (MathJaxをリアルタイムでプレビュー)
+<li><a href="http://genkuroki.blog91.fc2.com/">くろきげんのFC2ブログ</a> (MathJaxを使ったブログの例)
+<li><a href="http://blog.livedoor.jp/genkuroki/">くろきげんの livedoor blog</a> (MathJaxを使ったブログの例、livedoor blog は結構使い易い)
+<li><a href="http://www.math.tohoku.ac.jp/~kuroki/index-j.html">黒木玄のウェブサイト</a>でも MathJax を使っている。
+<ul>
+<li><a href="http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20101228HowToMakeQDIs.html">量子 dilogarithm 恒等式の作り方</a> (MaghJaxの使用例)
+</ul>
+<li><a href="http://www.ams.org/mathscinet/">MathSciNet</a> (Examples:
+<a href="http://www.ams.org/mathscinet-getitem?mr=2463362">1</a>, 
+<a href="http://www.ams.org/mathscinet-getitem?mr=2450171">2</a>, 
+<a href="http://www.ams.org/mathscinet-getitem?mr=2188864">3</a>)。
+数学者たちがいつもお世話になっている世界最大の数学論文データベースです。ここで MathJax が採用されたということは少なくとも数学研究の世界ではウェブでの数式表示に関して MathJax が標準になったことを意味しています。これからは数式も書けるサイトであることを売りにしたいならば MathJax への対応は必須になったと言えます。
+<li><a href="http://mathoverflow.net/">MathOverflow</a> (MathJaxを使った専門的な数学の質問掲示板)
+</ul>
+
+<scr'+'ipt language="javascript" src="http://analyzer54.fc2.com/ana/processor.php?uid=1393625" type="text/javascript"></scr'+'ipt><noscript><div align="right"><img src="http://analyzer54.fc2.com/ana/icon.php?uid=1393625&amp;ref=&amp;href=&amp;wid=0&amp;hei=0&amp;&amp;col=0" /></div></nos'+'cript><div style="width:180px;display:inline;"><ol style="text-align:left;list-style-type:none;margin:3px;font-size:10pt;display:inline;"></ol></div>
+
+</body>
+</html>

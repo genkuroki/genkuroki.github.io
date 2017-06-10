@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Live Preview of MathJax Type Setting</title>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+<meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+</head>
+<body>
+
+<script type="text/javascript">
+function doPreview(mode) {
+  var textAreaId = 'input';
+  var previewAreaId = 'preview';
+  
+  if (!getElementPreview(textAreaId) || !getElementPreview(previewAreaId)) {
+    return;
+  } else if (mode == 'init') {
+    getElementPreview(previewAreaId).innerHTML = 'Preview Area';
+    return;
+  }
+  
+  var s = getStringPreview(textAreaId);
+  
+  if (getElementPreview(previewAreaId)) {
+    getElementPreview(previewAreaId).innerHTML = s;
+  }
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub,previewAreaId]);
+}
+
+function getStringPreview(e) {
+  var s = '';
+  s = getElementPreview(e).value;
+  s = s.split('&').join('&amp;');
+  s = s.split('<').join('&lt;');
+  s = s.split('>').join('&gt;');
+  s = s.split('"').join('&quot;;');
+  s = s.split('\'').join('&#39;');
+  return s;
+}
+
+function getElementPreview(e, f) {
+  var l = (document.layers) ? 1 : 0;
+  if(l) {
+    f=(f) ? f : self;
+    var a = f.document.layers;
+    if (a[e]) return a[e];
+    for (var w = 0; w < a.length;) {
+      return getElementPreview(e, a[w++]);
+    }
+  }
+  if (document.all) return document.all[e];
+  return document.getElementById(e);
+}
+
+doPreview('init');
+</script>
+
+<h1>Live Preview of MathJax Type Setting</h1>
+
+<h2>Input</h2>
+
+<p>Examples: <code>$\varphi_i$</code>, <code>\(\dfrac12\)</code>, <code>\[\sum_{n=1}^\infty x^n\]</code>, etc</p>
+
+<p><textarea id="input" name="body" cols="80" rows="8">\[ \zeta(s) = \sum_{n=1}^\infty\frac{1}{n^s} \]</textarea></p>
+
+<h2>Preview Area</h2>
+
+<div id="preview"></div>
+
+</body>
+</html>

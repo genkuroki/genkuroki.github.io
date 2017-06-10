@@ -1,0 +1,291 @@
+<html>
+<head>
+<title>Chapter4: Quantum trajectories / Quantum Measurement and Control (H. M. Wiseman and G. J. Milburn)</title>
+<!--<meta http-equiv="refresh" content="30" />-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+#inputPane, #outputPane, #syntaxPane, #paneSetting, #footer {
+ display: none;
+}
+</style>
+<script type="text/javascript" src="/MathJax/MathJax.js"></script>
+<script type="text/javascript" src="/showdown/compressed/showdown.js"></script>
+<script type="text/javascript" src="/showdown/example/showdown-gui.js"></script>
+</head>
+<body>
+<textarea id="inputPane">
+# 4 Quantum trajectories
+
+## 4.1 Introduction
+
+- 4.2: Simplest quantum trajectory, which involves jumps
+- 4.3: Photon counting measurements on the bath, correlation functions for measurement records
+- 4.4: Adds a coherent field (local oscillator) before detection: homodyne detection
+- 4.5: Heterodyne detection, more general diffusive trajectories
+- 4.6: Conditioned evolution of a damped driven two-level atom
+- 4.7: Continuous measurement in the Heisenberg picture
+- 4.8: Imperfect detection, inefficiency, thermal and squeezed bath noise, dark noise and finite detector bandwidth
+- 4.9: Mesoscopic electronics
+
+## 4.2 Quantum jumps
+### 4.2.1 Master equations and continuous measurements
+
+Unconditioned evolution with *monitoring*
+\\[
+\rho(t + dt) = \sum_r\mathcal{J}[\hat{M}\_r(dt)]\rho(t).
+\tag{4.4}
+\\]
+Measurement operators
+\begin{align}
+\hat{M} _0(dt) &= \hat{1} - (\hat{c}^\dagger\hat{c}/2 + i\hat{H})dt,
+\tag{4.5}\\\\
+\hat{M} _1(dt) &= \sqrt{dt}\hat{c}.
+\tag{4.6}
+\end{align}
+
+### 4.2.2 Stochastic evolution
+
+The stochastic increment \\(dN(t)\\) of photodetections up to time \\(t\\)
+\begin{align}
+dN(t)^2 &= dN(t),
+\tag{4.13}\\\\
+\operatorname{E}[dN(t)]
+ &= \langle \hat{M} _1^\dagger(dt)\hat{M} _1(dt) \rangle
+ = dt \langle \psi(t)|\hat{c}^\dagger\hat{c}|\psi(t) \rangle.
+\tag{4.14}
+\end{align}
+The nonlinear *stocahstic Schrödinger equation* (SSE)
+\\[
+d|\psi(t)\rangle = \left[
+ dN(t) \left(
+  \frac{\hat{c}}{\sqrt{\langle \hat{c}^\dagger\hat{c}\rangle(t)}}
+  - 1
+ \right)
+ + dt \left(
+  \frac{\langle \hat{c}^\dagger\hat{c}\rangle(t)}{2} -
+  \frac{\hat{c}^\dagger\hat{c}}{2} - i\hat{H}
+ \right)
+\right] |\psi(t)\rangle.
+\tag{4.19}
+\\]
+Nonlinear superoperators
+\begin{align}
+\mathcal{G}[\hat{r}]\rho &=
+ \frac{\hat{r}\rho\hat{r}^\dagger}{\operatorname{Tr}[\hat{r}\rho\hat{r}^\dagger]}
+ - \rho,
+ \tag{4.23}\\\\
+\mathcal{H}[\hat{r}]\rho &=
+ \hat{r}\rho + \rho\hat{r}^\dagger
+ - \operatorname{Tr}[\hat{r}\rho + \rho\hat{r}^\dagger]\rho.
+ \tag{4.24}
+\end{align}
+Stocahstic evolution of a projector
+\\(\hat{\pi}(t) = |\psi(t)\rangle\langle\psi(t)|\\)
+\\[
+d\hat{\pi}(t) = \left\\{
+ dN(t)\mathcal{G}[\hat{c}]
+ - dt\mathcal{H}
+  \left[i\hat{H} + \frac{1}{2}\hat{c}^\dagger\hat{c}\right]
+  \right\\}\hat{\pi}(t).
+\tag{4.22}
+\\]
+
+### 4.2.3 Quantum trajectories for simulations
+
+Unnormalized evolution
+\\[
+\frac{d}{dt}|\tilde{\psi}(t)\rangle =
+-\left(\sum_\mu \hat{c}^\dagger _\mu\hat{c} _\mu/2 + i\hat{H}\right)
+|\tilde{\psi}(t)\rangle.
+\tag{4.34}
+\\]
+
+## 4.3 Photodetection
+### 4.3.2 Output correlation functions
+
+Photocurrent
+\\[
+I(t) = dN(t)/dt. \tag{4.39}
+\\]
+*Stochastic master equation* (SME)
+\\[
+d\rho _I(t) = \left\\{
+ dN(t)\mathcal{G}[\hat{c}]
+ - dt\mathcal{H}
+  \left[i\hat{H} + \frac{1}{2}\hat{c}^\dagger\hat{c}\right]
+  \right\\}\rho _I(t).
+\tag{4.40}
+\\]
+Jump probability
+\\[
+\operatorname{E}[dN(t)|I(s), s < t] =
+dt\operatorname{Tr}[\hat{c}^\dagger\hat{c}\rho _I(t)].
+\tag{4.41}
+\\]
+Mean photocurrent
+\\[
+\operatorname{E}[I(t)] =
+\operatorname{Tr}[\hat{c}^\dagger\hat{c}\rho(t)] =
+\operatorname{E}[\operatorname{Tr}[\hat{c}^\dagger\hat{c}\rho _I(t)]].
+\tag{4.42}
+\\]
+Autocorrelation function
+\\[
+F^{(2)}(t, t+\tau) = \operatorname{E}[I(t+\tau)I(t)].
+\tag{4.43}
+\\]
+Assume \\(\rho(t)\\) is given. Then
+\\[
+F^{(2)}(t, t+\tau) =
+\operatorname{Tr}[\hat{c}^\dagger\hat{c}e^{\mathcal{L}\tau}\hat{c}\rho(t)\hat{c}^\dagger] +
+\operatorname{Tr}[\hat{c}^\dagger\hat{c}\rho(t)]\delta(\tau).
+\tag{4.50}
+\\]
+
+### 4.3.3 Coherent field input
+
+Initial state of the bath
+\\[
+[\hat{1} + \beta d\hat{B}^\dagger]|0\rangle,\quad
+\langle d\hat{B}\rangle = \beta dt.
+\\]
+Jump measurement operator
+\\[
+\hat{M} _1(dt) = (dt)^{1/2}(\hat{c} + \beta).
+\tag{4.53}
+\\]
+No-jump measurement operator
+\\[
+\hat{M} _0(dt) = \hat{1} - \left[
+ i\hat{H} + \frac{1}{2}\hat{c}^\dagger\hat{c} + \hat{c}^\dagger\beta
+\right]dt.
+\tag{4.55}
+\\]
+SSE
+\\[
+d|\psi _I(t)\rangle = \left[
+ dN(t)\left(
+  \frac{\hat{c}+\beta}{\sqrt{\langle(\hat{c}^\dagger+\beta^*)(\hat{c}+\beta)\rangle _I(t)}}
+  - 1
+ \right) + dt\left(
+  \frac{\langle\hat{c}^\dagger\hat{c}\rangle _I(t)}{2} -
+  \frac{\hat{c}^\dagger\hat{c}}{2} +
+  \frac{\langle\hat{c}^\dagger\beta+\beta^ *\hat{c}\rangle _I(t)}{2} -
+  \hat{c}^\dagger\beta - i\hat{H}
+ \right)
+\right]|\psi _I(t)\rangle.
+\tag{4.56}
+\\]
+Unconditioned master equation
+\\[
+\dot{\rho} = \mathcal{D}[\hat{c}]\rho -
+i[\hat{H}+i\beta^ *\hat{c}-i\hat{c}^\dagger\beta, \rho].
+\tag{4.57}
+\\]
+In this situation, **photons in the bath can excite the system**, which corresponds to the \\(-\hat{c}^\dagger\beta dt\\) term in Eq.&nbsp;(4.55). The system is **driven** by the coherent field.
+
+## 4.4 Homodyne detection
+### 4.4.1 Adding a local oscillator
+
+Consider a different unraveling of the usual master equation with the vacuum bath
+\\[
+d\rho = -idt[\hat{H}, \rho] + dt\mathcal{D}[\hat{c}]\rho.
+\tag{4.58}
+\\]
+Measurement operators
+\begin{align}
+\hat{M} _1(dt) &= (dt)^{1/2}(\hat{c} + \gamma),
+\tag{4.60}\\\\
+\hat{M} _0(dt) &= \hat{1} - dt\left[i\hat{H} +
+ \frac{1}{2}\hat{c}^\dagger\hat{c} + \hat{c}\gamma^ *
+ + \frac{1}{2}|\gamma|^2
+\right].
+\tag{4.61}
+\end{align}
+This can be achieved by mixing the bath with a strong coherent field (equivalent to displacement of the bath annihilation operator) before detection. In this situation, **photons in the bath cannot excite the system**, which can be seen from the absence of the \\(\hat{c}^\dagger\\) term in Eq.&nbsp;(4.61).
+
+When \\(\gamma\\) is real,
+\\[
+\operatorname{E}[dN(t)/dt|I(s), s < t] =
+\operatorname{Tr}[(\gamma^2 + \gamma\hat{x} + \hat{c}^\dagger\hat{c})\rho _I(t)],
+\tag{4.64}
+\\]
+where the two system quadratures are defined by
+\\[
+\hat{x} = \hat{c} + \hat{c}^\dagger,\qquad
+\hat{y} = -i(\hat{c} - \hat{c}^\dagger).
+\tag{4.65}
+\\]
+SME
+\\[
+d\rho _I(t) = \left\\{
+ dN(t)\mathcal{G}[\hat{c} + \gamma]
+ + dt\mathcal{H}
+  \left[-i\hat{H} - \frac{1}{2}\hat{c}^\dagger\hat{c} - \gamma\hat{c}\right]
+  \right\\}\rho _I(t).
+\tag{4.66}
+\\]
+SSE
+\\[
+d|\psi _I(t)\rangle = \left[
+ dN(t)\left(
+  \frac{\hat{c}+\gamma}{\sqrt{\langle(\hat{c}^\dagger+\gamma)(\hat{c}+\gamma)\rangle _I(t)}}
+  - 1
+ \right) + dt\left(
+  \frac{\langle\hat{c}^\dagger\hat{c}\rangle _I(t)}{2} -
+  \frac{\hat{c}^\dagger\hat{c}}{2} +
+  \frac{\langle\hat{c}^\dagger\gamma+\gamma\hat{c}\rangle _I(t)}{2} -
+  \gamma\hat{c} - i\hat{H}
+ \right)
+\right]|\psi _I(t)\rangle.
+\tag{4.67}
+\\]
+
+### 4.4.2 The continuum limit
+
+When \\(\gamma \to \infty\\), it is possible to approximate the photocurrent by a continuous function of time. The SME yields a continuous evolution:
+\\[
+d\rho _J(t) = -i[\hat{H}, \rho _J(t)]dt +
+dt\mathcal{D}[\hat{c}]\rho _J(t) +
+dW(t)\mathcal{H}[\hat{c}]\rho _J(t),
+\tag{4.72}
+\\]
+where \\(dW(t)\\) is the *Wiener increment* satisfying
+\\[
+dW(t)^2 = dt,\qquad \operatorname{E}[dW(t)] = 0.
+\tag{4.73, 4.74}
+\\]
+The homodyne signal after removing the constant local oscillator contribution
+\\[
+J _\text{hom}(t) \equiv \lim _{\gamma\to\infty}
+\frac{\delta N(t) - \gamma^2\delta t}{\gamma\delta t} =
+\langle\hat{x}\rangle _J(t) + \xi(t),
+\tag{4.75}
+\\]
+where \\(\xi(t)=dW(t)/dt\\).
+
+</textarea>
+
+<select id="paneSetting">
+ <option value="previewPane">Preview</option>
+</select>
+	
+<textarea id="outputPane"></textarea>
+<div id="previewPane"></div><div id="last"></div>
+<textarea id="syntaxPane"></textarea>
+
+<div id="footer">
+ <span id="convertTextControls">
+  <button id="convertTextButton" type="button" title="Convert text now">
+   Convert text
+  </button>
+  <select id="convertTextSetting">
+   <option value="delayed">in the background</option>
+   <option value="continuous">every keystroke</option>
+   <option value="manual">manually</option>
+  </select>
+ </span>
+ <div id="processingTime" title="Last processing time">0 ms</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,632 @@
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" CONTENT="text/html; charset=UTF-8" />
+<title>MathJaxの使い方</title>
+<style type="text/css"><!--
+body { 
+  margin-left:   50px;
+  margin-right:  50px;
+  margin-bottom: 50px;
+}
+--></style>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    }
+  });
+</script>
+<!--
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+-->
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+<meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+</head>
+<body>
+
+<h1>MathJaxの使い方</h1>
+
+<p><big><b><a href="https://genkuroki.github.io">黒木玄</a>　(<a href="http://blog.livedoor.jp/genkuroki/">ブログ</a>、<a href="http://twitter.com/genkuroki/">ツイッター</a>)</b></big>、<a href="http://www.math.tohoku.ac.jp/~kuroki/index-j.html">大学</a></p>
+
+<p>2017年6月10日：<a href="http://genkuroki.web.fc2.com/">http://genkuroki.web.fc2.com/</a> からこちらに引っ越した。</p>
+
+<p>2017年4月3日：cdn.mathjax.orgではなく、cdnjs.cloudflare.com/ajax/libs/mathjax を使うように変更した。</p>
+
+<!--
+<p>2011年3月27日　(要約を追加)</p>
+
+<p>2011年3月20日：<a href="#install">MathJaxのインストール</a>の説にイメージフォントを削除しても実用的に使えるという説明を追加し、<a href="#hiki">Hiki</a> と <a href="#tdiary">tDiary</a></p> で MathJax を使う方法の解説も追加した。</p>
+
+<p>2011年3月16日：Question2Answer の MathJax 対応で <a href="#q2a-20110316">リアルタイムプレビュー</a>できるようにしてみた。</p>
+
+<p>2011年3月10日：昨日の夕方に <a href="http://www.mathjax.org/">MathJax</a> v1.1 が公開されていることに気付いた。そこで <a href="v1.0.1.html">v1.0.1について書かれた解説</a>を全面的に書き直すことにした。</p>
+-->
+
+<h2><a name="abstract">要約</a></h2>
+
+<p>簡単な使い方：次を HTML ファイルの <code>&lt;head&gt;</code> と <code>&lt;/head&gt;</code> のあいだに挿入する。それだけで LaTeX 方式で数式を書けるようになる。</p>
+
+<!--
+<blockquote>
+<pre><code>&lt;script type="text/x-mathjax-config"&gt;
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+&lt;/script&gt;
+&lt;script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+&lt;meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" /&gt;</code></pre>
+</blockquote>
+-->
+
+<blockquote>
+<pre><code>&lt;script type="text/x-mathjax-config"&gt;
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+&lt;/script&gt;
+&lt;script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+&lt;meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" /&gt;</code></pre>
+</blockquote>
+
+<p>最も簡単な使い方：次を HTML ファイル中の <code>&lt;head&gt;</code> と <code>&lt;/head&gt;</code> のあいだに挿入する。それだけで LaTeX 方式で数式を書けるようになる。ただし <code>$ $</code> は使えない。</p>
+
+<!--
+<blockquote>
+<pre><code>&lt;script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;</code></pre>
+</blockquote>
+-->
+
+<blockquote>
+<pre><code>&lt;script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;</code></pre>
+</blockquote>
+
+<p>文字集合が UTF-8 としてある場合にはバックスラッシュと円マークの違いに注意すること。円マークだと MathJax で数式に変換されない。</p>
+
+<h2><a name="toc">目次</a></h2>
+
+<ul>
+<li><a href="#abstract">要約</a></h2>
+<li><a href="#intro">MathJaxで何ができるか</a>
+<li><a href="#install">MathJaxのインストール</a>
+<li><a href="#preview">リアルタイムプレビュー</a>
+<li><a href="#standard">MathJaxはすでに有力な標準仕様</a>
+<li><a href="#howto">MathJaxの使い方</a>
+<li><a href="#blog">ブログなどでの設定</a>
+<ul>
+<li><a href="#samples">無料ブログなどのサンプル</a>
+</ul>
+<li><a href="#config">設定とマクロの共有</a>
+<li><a href="#latex">数式の書き方の例</a>
+<ul>
+<li><a href="#inline">例：inlineMath</a>
+<li><a href="#display">例：displayMath</a>
+<li><a href="#amsmath">例：AMSmath</a>
+<li><a href="#amssymbols">例：AMSsymbols</a>
+<li><a href="#typo">例：タイポ</a>
+<li><a href="#macro">例：マクロ</a>
+<li><a href="#htmltag">例：数式中の&lt;br /&gt;などは無視される</a>
+</ul>
+<li><a href="#troubles">トラブル対策</a>
+<ul>
+<li><a href="#notdisplayed">数式が正しく表示されない場合</a>
+<li><a href="#slow">数式の表示があまりにも遅い場合</a>
+</ul>
+<li><a href="#ppblog">ppBlogでMathJaxを使う方法</a>
+<li><a href="#q2a">Question2AnswerでMathJaxを使う方法</a>
+<ul>
+<li><a href="#q2a-20110314">2011年03月14日版</a>
+<li><a href="#q2a-20110316">2011年03月16日版：リアルタイムプレビュー</a>
+</ul>
+<li><a href="#hiki">HikiでMathJaxを使う方法</a>
+<li><a href="#tdiary">tDiaryでMathJaxを使う方法</a>
+<li><a href="#links">リンク集</a>
+</ul>
+
+<h2><a name="intro">MathJaxで何ができるか</a></h2>
+
+<p>HTML の中に <a href="http://www.mathjax.org/">MathJax</a> を使うための設定を書き込み、その中で LaTeX のコマンドで数式を記述すると、その HTML ファイルをブラウザで見たときに LaTeX のコマンドで書かれた部分が自動的にきれいな数式に置き換わる。<b>ブラウザ側の設定は何も必要ない。</b> HTML の中にあるコードを埋め込んでおくだけでよい。</p>
+
+<p>このファイルも数式を MathJax を使って表示するようにしてある。</p>
+
+<h2><a name="install">MathJaxのインストール</a></h2>
+
+<p><b>MathJaxのファイル群のインストールは必要ない。</b></p>
+
+<p>もしも自前の MathJax サーバーを用意したかったり、オフネットでも使いたいならば <a href="http://www.mathjax.org/docs/1.1/start.html#installing-your-own-copy-of-mathjax">Installing Your Own Copy of MathJax</a> の指示にしたがうべし。</p>
+
+<p>自前のサーバーにインストールする場合のヒント：MathJax のパッケージには3万個程度の PNG ファイルのイメージフォントが含まれている。古いブラウザで数式を表示できなくても構わないならばそれらの3万個程度の PNG ファイルを削除しても構わない。そのために、まず MathJax/fonts/ 以下にある PNG ファイルをすべて検索してリストアップし、それらをすべて削除する。その後にウェブサーバーのしかるべき場所にアップロードしたり、コピーしたりすればよい。 3万個ものファイルをコピーしたりアップロードしたりするのは非常に大変なので、避けた方がいいでしょう。 (もしもアップロード先でアーカイブを展開できるならば、アップロードしてから展開した方が速い。)</p>
+
+<h2><a name="preview">リアルタイムプレビュー</a></h2>
+
+<p>MathJaxをリアルタイムでプレビュー</p>
+<ul>
+<!-- <li><a href="MathJax/LivePreviewMathJax.html">Live Preview of MathJax Type Setting</a> -->
+<li><a href="MathJax/LivePreviewMathJax-jquery.html">Live Preview of MathJax Type Setting</a>
+(<a href="MathJax/Preview.html">別バージョン</a>)
+<br>(どちらも<a href="http://jquery.com/">jquery</a>を使用しています)
+</ul>
+<p>色々打ち込んで試してみれば MathJax が大体どういうものかがわかるはず。</p>
+
+<h2><a name="standard">MathJaxはすでに有力な標準仕様</a></h2>
+
+<p>世界最大の数学論文データベース <a href="http://www.ams.org/mathscinet/">MathSciNet</a> (Examples:
+<a href="http://www.ams.org/mathscinet-getitem?mr=2463362">1</a>, 
+<a href="http://www.ams.org/mathscinet-getitem?mr=2450171">2</a>, 
+<a href="http://www.ams.org/mathscinet-getitem?mr=2188864">3</a>) は MathJax を採用した。ここで MathJax が採用されたということは少なくとも数学研究の世界ではウェブでの数式表示に関して MathJax が標準になったことを意味している。これからは数式も書けるサイトであることを売りにしたいならば MathJax への対応は必須になったと考えられる。</p>
+
+<p><a href="http://projecteuclid.org/">Project Euclid</a> も MathJax を採用しました (<a href="http://johokanri.jp/stiupdates/info/2011/01/005440.html">Project Euclid、オンライン上の"美しい数学"を後押し</a>)。</p>
+
+<p><a href="http://www.mathjax.org/sponsors/">MathJax のスポンサー</a>は the American Mathematical Society, Design Science, Inc., and the Society for Industrial and Applied Mathematics である。それらの有力な団体がインターネット上で標準的に使うために MathJax の開発にお金を出している。さらにサポーターは the American Physics Society, Elsevier, and Project Euclid である。</p>
+
+<p><a href="http://mathoverflow.net/">MathOverflow</a> (MathJaxを使った専門的な数学の質問掲示板) でも MathJax を使っている。</p>
+
+<p>日本語圏 MathJax は十分に普及していないが、 <a href="http://mathoverflow.net/">MathOverflow</a> のような <a href="http://stackoverflow.com/">StackOverflow</a> 系のＱ＆Ａサイトでは MathJax (もしくはそのもとになった jsMath) が十分に普及していて、エンジニア、数学者、物理学者のような数学を使う科学者、などなどが活発にかつ気軽に情報交換している。日本語圏でも MathJax はもっと普及した方が良いと思う。</p>
+
+<h2><a name="howto">MathJaxの使い方</a></h2>
+
+<p>このファイルのヘッダーを真似して HTML ファイルを作る。これでその HTML ファイルの中で <code>$ $</code> や <code>\( \)</code> や <code>$$ $$</code> や <code>\[ \]</code> で囲んで LaTeX 方式で数式を書けるようになる。</p>
+
+<p>注意：文字集合を charset=UTF-8 とする場合には円マークとバックスラッシュが異なることに注意せよ。文字集合として charset=Shift_JIS や charset=EUC-JP や charset=ISO-2022-JP を使えば円マークとバックスラッシュの違いに悩まされずにすむ。</p>
+
+<p>このファイルのヘッダーの中の MathJax 関係の記述について説明しよう。</p>
+
+<p>次の3行をヘッダーに入れるだけで MathJax を使えるようになる。</p>
+
+<!--
+<blockquote>
+<pre><code>&lt;script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+</code></pre>
+</blockquote>
+-->
+
+<blockquote>
+<pre><code>&lt;script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+</code></pre>
+</blockquote>
+
+<!--
+<p>cdn.mathjax.org のサービス利用規約については <a href="http://www.mathjax.org/download/mathjax-cdn-terms-of-service/">MathJax CDN Terms of Service</a> を見よ。</p>
+-->
+
+<p>2017年4月3日：cdn.mathjax.org のサービスは2017年4月30日に停止します。詳しくは <a href="https://www.mathjax.org/cdn-shutting-down/">MathJax CDN shutting down on April 30, 2017 (March 31, 2017)</a>を参照して下さい。</p>
+
+<p>注意：<code>config=...</code> の部分を <a href="http://www.mathjax.org/docs/1.1/configuration.html#using-a-configuration-file"><code>config=TeX-AMS-MML_HTMLorMML</code></a> に置き換えたら、 <code>\tag{}</code> で式番号を入れることができなくなってしまった。これは仕様なのかバグなのかまだよく理解できていない。</p>
+
+<p>このファイル内だけで通用するローカルな設定は次の通り。</p>
+
+<blockquote>
+<pre><code>&lt;script type="text/x-mathjax-config"&gt;
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    }
+  });
+&lt;/script&gt;
+</code></pre>
+</blockquote>
+
+<p>tex2jax: 内の inlineMath の設定がないと <code>$ $</code> を使えなくなる。 <code>$$ $$</code> を使えなくしたければ displayMath の設定からそのための記述を削除すればよい。</p>
+
+<p>次の行は Microsoft IE8 対策である。 IE8 を無視して構わないならば省略して構わない。</p>
+
+<blockquote>
+<pre><code>&lt;meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" /&gt;</code></pre>
+</blockquote>
+
+<p>この記述があっても IE8 による数式の表示は遅い。当面のあいだは他のブラウザを使ってもらうしかないだろう。</p>
+
+<p>参考：すでに数学の研究者のあいだでは MathJax が不自由なく使えるブラウザ (実際には IE 以外の任意のブラウザ) が不可欠な道具になっている。なぜならば世界最大の数学論文データベース <a href="http://www.ams.org/mathscinet/">MathSciNet</a> (Examples:
+<a href="http://www.ams.org/mathscinet-getitem?mr=2463362">1</a>, 
+<a href="http://www.ams.org/mathscinet-getitem?mr=2450171">2</a>, 
+<a href="http://www.ams.org/mathscinet-getitem?mr=2188864">3</a>) が MathJax を使うようになったからである。すでに MathJax を採用している数学関係の有力なサイトはたくさんある。すでに MathJax はウェブでの数式の表示に関するスタンダードになったと考えられる。 IE8 での数式の表示が遅いという理由で MathJax の採用を躊躇すると時代に乗り遅れることになってしまうだろう。</p>
+
+<h2><a name="blog">ブログなどでの設定</a></h2>
+
+<p>ブログなどで MathJax を使いたければ以下のコードをテンプレートのヘッダに貼り付ければよい。たったそれだけで設定は終わり。FC2ブログとライブドアブログとSo-netブログでは可能なことを確認してある。他にも便利 MathJax が使える無料ブログは結構あるようだ。</p>
+
+<blockquote>
+<pre><code>&lt;script type="text/x-mathjax-config"&gt;
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+&lt;/script&gt;
+&lt;script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+&lt;meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" /&gt;</code></pre>
+</blockquote>
+
+<p><code>$ $</code> も IE8 対策も必要ないのであれば次の3行だけで十分である。</p>
+
+<blockquote>
+<pre><code>&lt;script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+</code></pre>
+</blockquote>
+
+<h3><a name="samples">無料ブログなどのサンプル</a></h3>
+
+<p>個人的には各種無料ブログが最初からMathJax対応になってくれるとうれしいと思っています。写真や音楽や動画をブログに貼り付けられるだけだと不十分であり、数式も当然使えるのが当然という風になって欲しいものです。</p>
+
+<ul>
+<li><a href="http://genkuroki.blog.fc2.com/">くろきげんのFC2ブログ</a> (MathJaxを使ったブログの例)
+<li><a href="http://blog.livedoor.jp/genkuroki/">くろきげんのライブドアブログ</a> (MathJaxを使ったブログの例、ラブドアブログは結構使い易い)
+<li><a href="http://genkuroki.blog.so-net.ne.jp/">くろきげんのSo-netブログ</a> (MathJaxを使ったブログの例、So-netブログも結構使い易さそう)
+<li><a href="http://genkuroki.blogspot.com/">くろきげんのBloggerブログ</a> (MathJaxを使ったブログの例)
+<li><a href="http://kuroki.s12.xrea.com/blog/index.php">くろきげんのppBlog</a> (Xreaに設置、<a href="#ppblog">ppBlogでMathJaxを使う方法</a>)
+</ul>
+
+<p>以下はいち早くMathJaxをブログなどで使い始めた方々です。</p>
+
+<ul>
+<li><a href="http://cse.niaes.affrc.go.jp/minaka/diary2011-03.html##21">三中信宏さんの日録：MathJaxの紹介</a></li>
+<li><a href="http://archimedes.blog.so-net.ne.jp/">いくらなんでも幾何</a> (So-netブログ)</li>
+<li><a href="http://ser-lys.blogspot.com/">A Puzzler on the Trail</a> (blogspot.com)</li>
+<li><a href="http://blog.livedoor.jp/juntamatsukidaira/">松木平 淳太のblog</a> (livedoor blog)</li>
+<li><a href="http://amaryllis.ldblog.jp/">調べはアマリリス@月之桂</a> (livedoor blog、iPhoneから数式入力！)</li>
+<li><a href="http://blog.livedoor.jp/kinoosara/">木のおさら</a> (livedoor blog)</li>
+</ul>
+
+<h2><a name="config">設定とマクロの共有</a></h2>
+
+<p>設定とマクロが書かれたファイル <code>MyConfig.js</code> を用意しておき、次のようにして読み込めば複数の HTML ファイルで同じ設定とマクロを共有できる。</p>
+
+<blockquote>
+<pre></code>&lt;script type="text/javascript"
+  src="http://domain/dir/MathJax/MyConfig.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+</code></pre>
+</blockquote>
+
+<p>MathJax のデフォルトの設定からの差分を <code>MyConfig.js</code> に書いておくならば <code>config=TeX-AMS_CHTML</code> の部分を <code>config=default</code> とすればよい。
+(個人的に TeX-AMS_CHTML の設定はかなり使い易いと思っている。)</p>
+
+<p><code>MyConfig.js</code> の中身は次のような感じにする。</p>
+
+<blockquote>
+<pre></code>MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+  },
+  TeX: {
+    Macros: {
+      C: '{\\mathbb C}',
+      R: '{\\mathbb R}',
+      Q: '{\\mathbb Q}',
+      Z: '{\\mathbb Z}',
+      diag: '\\mathop{\\mathrm{diag}}\\nolimits',
+      np: ['{#1}#2{#1}', 2]
+    }
+  }
+});</code></pre>
+</blockquote>
+
+<p>例：<a href="MyConfig-example.html">MyConfig-example.html</a></p>
+
+<h2><a name="latex">数式の書き方の例</a></h2>
+
+<h3><a name="inline">例：inlineMath</a></h3>
+
+<p>デフォルトの設定では <code>\( \)</code> のみが使用できるが、このファイルでは <code>$ $</code> も使えるようにしてある。 <code>$ $</code> がデフォルトの設定で使えないようにしてある理由は米語の文書に <code>$</code> が頻出するからである。日本語で書く場合には <code>$ $</code> も使えた方が便利だと思う。</p>
+
+<blockquote>
+<pre><code>\(\sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}\)</code></pre>
+
+<p>\(\sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}\)</p>
+</blockquote>
+
+<h3><a name="display">例：displayMath</a></h3>
+
+<p>式番号は <code>\tag{ }</code> で入れられる。</p>
+
+<blockquote>
+<pre><code>\[
+  \sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}
+  \tag{3}
+\]</code></pre>
+
+<p>\[
+  \sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}
+  \tag{3}
+\]</p>
+</blockquote>
+
+<p>式番号の自動生成およびラベルを使った引用には現時点では対応していない。しかし開発陣は対応するつもりのようである。</p>
+
+<h3><a name="amsmath">例：AMSmath</a></h3>
+
+<blockquote>
+<pre><code>\begin{align*}
+ A & = B \\
+   & = C \\
+   & = D.
+\end{align*}
+</code></pre>
+
+<p>\begin{align*}
+ A & = B \\
+   & = C \\
+   & = D.
+\end{align*}
+</p>
+</blockquote>
+
+<h3><a name="amssymbols">例：AMSsymbols</a></h3>
+
+<blockquote>
+<pre><code>$Q_1\boxtimes Q_2$, $\because$, $\dfrac12$, $\hslash$, $O(3)\ltimes{\mathbb R}$</code></pre>
+
+<p>$Q_1\boxtimes Q_2$, $\because$, $\dfrac12$, $\hslash$, $O(3)\ltimes{\mathbb R}^3$</p>
+</blockquote>
+
+<h3><a name="typo">例：タイポ</a></h3>
+
+<blockquote>
+<pre><code>\[ \sym_{n=1}^\infty \frac{1}{n^2} = \frac{\po^2}{6} \]</code></pre>
+
+<p>\[ \sym_{n=1}^\infty \frac{1}{n^2} = \frac{\po^2}{6} \]</p>
+</blockquote>
+
+<h3><a name="macro">例：マクロ</a></h3>
+
+<p>マクロを <code>$ $</code> や <code>$$ $$</code> などの中で定義できる。</p>
+
+<blockquote>
+<pre><code>$$
+  \newcommand\C{{\mathbb C}}
+  \newcommand\np[2]{{#1}#2{#1}}
+  \C[y_1,\ldots,y_n]\to {\mathcal A}, \quad a\mapsto\np{:}{a}
+$$</code></pre>
+
+<p>$$
+  \newcommand\C{{\mathbb C}}
+  \newcommand\np[2]{{#1}#2{#1}}
+  \C[y_1,\ldots,y_n]\to {\mathcal A}, \quad a\mapsto\np{:}{a}
+$$</p>
+</blockquote>
+
+<h3><a name="htmltag">例：数式中の&lt;br /&gt;などは無視される</a></h3>
+
+<blockquote>
+<pre><code>\( \exp x = 1 + x + x^2/2 + x^3/6 + \cdots \)<br />
+\( \exp x = 1 + x + x^2/2&lt;br /&gt;
+          + x^3/6 + \cdots \)
+\[ \exp x = 1 + x + x^2/2 + x^3/6 + \cdots \]&lt;br /&gt;
+\[&lt;br /&gt;
+   \exp x = 1 + x + x^2/2 + x^3/6 + \cdots&lt;br /&gt;
+\]</code></pre>
+
+<p>\( \exp x = 1 + x + x^2/2 + x^3/6 + \cdots \)<br />
+\( \exp x = 1 + x + x^2/2 <br />+ x^3/6 + \cdots \)
+\[ \exp x = 1 + x + x^2/2 + x^3/6 + \cdots \]
+\[<br />
+   \exp x = 1 + x + x^2/2 + x^3/6 + \cdots<br />
+\]</p>
+
+</blockquote>
+
+<h2><a name="troubles">トラブル対策</a></h2>
+
+<h3><a name="notdisplayed">数式が正しく表示されない場合</a></h3>
+
+<p>上の例で数式が正しく表示されない場合には <a href="http://www.chromeplus.org/">ChromePlus</a> のような他のブラウザを使ったり、 <a href="http://www.stixfonts.org/">STIXフォント</a>をOSにインストールすることを試してみるべし。</p>
+
+<p>個人的には数式の表示が速くなるので<a href="http://www.stixfonts.org/">STIXフォント</a>をインストールしておくことをおすすめする。インストールの方法は <a href="http://www.mathjax.org/help/fonts/">MathJax Font Help</a> に書いてある。</p>
+
+<p>Ajax を使っている場合にはどのタイミングでどのように MathJax を動作させるかが難しくなるので注意するべし。</p>
+
+<h3><a name="slow">数式の表示があまりにも遅い場合</a></h3>
+
+<p>おそらく Microsoft Internet Explorer 8 (IE8) を使っているからでしょう。 <a href="http://www.chromeplus.org/">ChromePlus</a> や <a href="http://mozilla.jp/firefox/">Firefox</a> のような他のブラウザを使いましょう。 最新のブラウザの中では IE8 だけが飛び抜けて遅い。 ChromePlus や Firefox なら瞬時に数式が表示されるのに、IE8 だと1分以上かかることがある。どうしても IE8 を使い続けたいならば Microsoft 社に改善を強く要求した方が良いでしょう。ユーザーの声はソフトの改善のために重要だと思います。</p>
+
+<h2><a name="ppblog">ppBlogでMathJaxを使う方法</a></h2>
+
+<p><a href="http://p2b.jp/">ppBlog</a> (<a href="http://download.p2b.jp/">download</a>: <a href="http://download.p2b.jp/index.php?id=ppBlog188_20091217">1.8.8</a>, <a href="http://download.p2b.jp/index.php?id=ppBlog188_safemode_20091217">1.8.8safemode</a>) は <a href="http://www.cp.cmc.osaka-u.ac.jp/~kikuchi/weblog/">kikulog</a> などで採用されているブログソフトである。私もいつか使うかもしれないと考え、 ppBlog で MathJax を使えるようにしてみた。変更が必要な点については次の差分ファイルを見よ。</p>
+
+<p><a href="ppBlog-1.8.8-MathJax.diff">ppBlog-1.8.8 への MathJax 対応差分ファイル</a></p>
+
+<p>注意：この差分ファイルには MathJax とは関係ない部分も含まれている。しかしこれを見ればどこをどのように変更すれば <a href="http://p2b.jp/">ppBlog</a> で MathJax を使えるようになるかがわかるはずである。 </p>
+
+<p>変更のポイントは以下の通りである。</p>
+<ol>
+
+<li><p>ppBlog の吐く HTML ファイルのヘッダー内に MathJax.js を読み込むスクリプトが追加されるようにする。</p>
+
+<li><p>ppBlog の php ファイルではバックスラッシュのエスケープ先として &amp;yen; が使われているがそれらをすべて &amp;#92; (バックスラッシュ) に変更する。 LaTeX のコマンドの頭文字は円マークではなくバックスラッシュなので、 LaTeX のコマンドを MathJax に認識してもらうためにはこの変更が必須になる。 (UTF-8 では円マークとバックスラッシュが区別される。)</p>
+
+<li><p>MathJax を適切なタイミングで動かすように js/ 以下のファイルを修正する。この修正がなくても記事内の LaTeX コマンドが MathJax で数式に変換されるようになるのだが、プレビューなどでも数式に変換されるようにするためにはこの修正が必要になる。私が採用した方法は <a href="http://www.mathjax.org/docs/1.1/queues.html#the-mathjax-processing-queue">The MathJax Processing Queue</a> に書いてある。</p>
+
+</ol>
+
+<p>設置の例</p>
+
+<ul>
+<li><a href="http://kuroki.s12.xrea.com/blog/index.php">くろきげんのppBlog</a> (Xreaに設置)
+</ul>
+
+<h2><a name="q2a">Question2AnswerでMathJaxを使う方法</a></h2>
+
+<h3><a name="q2a-20110314">2011年03月14日版</a></h3>
+
+<p><a href="http://question2answer.org/">Question2Answer</a> (以下 Q2A) は PHP と MySQL で動く、 <a href="http://stackoverflow.com/">StackOverflow</a> クローンである。 Q2A を MathJax 対応に改造すれば <a href="http://mathoverflow.net/">MathOverflow</a> に類似のサイトを構築できるだろう (<a href="http://blog.livedoor.jp/genkuroki/archives/51368418.html">ライブドアブログでの記事</a>)。</p>
+
+<p><a href="Q2A-1.3.1-MathJax.diff">Q2A-1.3.1 への MathJax 対応差分ファイル</a></p>
+
+<p>変更したところは以下の通り。</p>
+
+<ol>
+
+<li><p>Q2A の管理者メニューで Layout → Custom HTML in &lt;HEAD&gt; section of every page: に次を書き込む (これは差分ファイルには含まれていない)：</p>
+
+<pre><code>&lt;script type="text/x-mathjax-config"&gt;
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+&lt;/script&gt;
+&lt;script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+&lt;meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" /&gt;</code></pre>
+
+<li><p>qa-plugin/wysiwyg-editor/ckeditor.js をいじってプレビュー画面でも MathJax を使うように設定する。</p>
+
+<li><p>qa-plugin/wysiwyg-editor/qa-wysiwyg-editor.php を書き換えて編集フォームのツールバーにプレビューボタンが出るようにする。さらに Enter で改行(&lt;br /&gt;)、Shift+Enter で段落(&lt;p&gt;～&lt;/p&gt;) を使うように設定する。 (注意： MathJax では数式の中で &lt;br /&gt; は無視されるので、数式中に無駄に  &lt;br /&gt; が挿入されても害がない。)</p>
+
+<li><p>qa-plugin/wysiwyg-editor/skins/v2/editor.css を書き換えてプレビューボタンがより目立つようにする。 (数式だけは WYSIWIG にならないので、プレビューボタンの役割は大きい。数式も WYSIWIG になればプレビューボタンの役割は小さくなる。しかし現時点でそれは難しいようだ。)</p>
+
+</ol>
+
+<p>どなたか MathOverflow のようなサイトを開設しませんか？</p>
+
+<h3><a name="q2a-20110316">2011年03月16日版：リアルタイムプレビュー</a></h3>
+
+<p>Q2A 1.3.1 の MathJax 対応を完全にやり直した。質問と回答の入力を HTML の直入力にし、リアルタイムプレビュー (live preview) ができるようにした。次の ZIP ファイルがその作業の結果である。</p>
+
+<p><a href="Q2A-MathJax.zip">Q2A-MathJax.zip</a></p>
+
+<p>README-j.html の内容<p>
+<blockquote><pre>
+### Question2Answer の MathJax 対応 ###
+
+このアーカイブに含まれるファイルに著作権は主張しない。
+道端に落ちている石ころと同じ扱いでかまわない。
+それらのファイルの内容は無保証である。
+内容を確認して自己責任で使って欲しい。
+
+## インストールの仕方 ##
+
+Question2Answer のバージョンは 1.3.1 であると仮定し、
+Q2A をインストールしたフォルダは /qa であると仮定する。
+
+1. qa-theme/DEFAULTS/qa-theme.php を /qa/qa-theme/DEFAULTS/qa-theme.php 
+にコピーすると
+
+(1) LaTeX 方式で数式を書くとMathJaxできれいな数式に変換されるようになり、
+(2) Basic editor でリアルタイムプレビューが使えるようになる。
+
+リアルタイムプレビューがうざいならば qa-theme.php から関連の記述を削除する。
+そのためには jquery 関係と previewArea 関係の記述を消せば良い。
+
+2. qa-theme/DEFAULTS/qa-styles.css を /qa/qa-theme/DEFAULTS/qa-styles.css
+に上書きすると、少しだけ質問や回答の表示の幅が大きくなる。質問や回答を入力
+するテキストエリアの幅も広がる。
+
+3. qa-plugin/html-editor/ 以下を /qa/qa-plugin/html-editor/ 以下に
+コピーすると、新しいエディター HTML Editor を選択できるようになる。
+HTML Editor は本質的に Basic editor と同じもので、
+余計な変換をせずに HTML を直接入力できるように変更しただけ。
+qa_html_sanitize() してあるので危ないタグは削除される。
+
+上のリアルタイムプレビューは打ち込んだ内容を単純に HTML で表示しているだけ
+なので HTML editor を使わないとプレビューと実際の投稿結果が違った結果に
+なってしまう。
+
+HTMLに不慣れなユーザーのために「段落の最初に &lt;p&gt; を入れて欲しい」というような
+コメントを表示するようにしておいた方が親切かもしれない。 &lt;p&gt; だけがあれば
+段落の終わりの &lt;/p&gt; は自動的に挿入される。
+
+## 更新 ##
+
+# 2011年03月16日 #
+
+最初のバージョン。
+
+# 2011年03月17日 #
+
+qa-theme/DEFAULTS/qa-theme.php で textarea に挿入するテキストを qa_html()
+で &lt; &gt; &amp; などをエスケープするようにした。
+</pre></blockquote>
+
+<h2><a name="hiki">HikiでMathJaxを使う方法</a></h2>
+
+<p><a href="http://hikiwiki.org/">Hiki</a>がすでにインストールされていると仮定する。</p>
+
+<p><a href="http://www.microstory.org/gakusi/wiki/hiki.cgi?cmd=view&p=HikiPluginInsertHeader&key=Ruby">Hikiヘッダ挿入プラグイン</a>のページから<a href="http://www.microstory.org/gakusi/wiki/hiki.cgi?c=plugin;plugin=attach_download;p=HikiPluginInsertHeader;file_name=insert_header.rb">insert_header.rb</a>をダウンロードして、Hikiで使っている文字コードに変換し、Hiki をインストール先の misc/plugin/ の下にコピーする。</p>
+
+<p>Hikiの管理画面のプラグイン選択で insert_header.rb にチェックを入れてOKボタンを押す。</p>
+
+<p>管理画面でヘッダ追加プラグインのメニューを選択し、以下をテキストエリアに書き込み、OKボタンを押す。</p>
+<blockquote>
+<pre><code>mathjax &lt;script type="text/x-mathjax-config"&gt;
+mathjax   MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+mathjax &lt;/script&gt;
+mathjax &lt;script type="text/javascript"
+mathjax   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+mathjax &lt;/script&gt;
+mathjax &lt;meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" /&gt;</pre></code>
+</blockquote>
+
+<p>MaghJax を使いたいページには <code>{{header mathjax}}</code> と書き込む。これでそのページのヘッダには MathJax を読み込むコードが追加されるようになる。</p>
+
+<h2><a name="tdiary">tDiaryでMathJaxを使う方法</a></h2>
+
+<p><a href="http://www.tdiary.org/">tDiary</a>がすでにインストールされていると仮定する。</p>
+
+<p>tDiaryのインストール先の skel/header.rhtml の &lt;/head&gt; の直前に以下を追加する(実際にはヘッダ内ならどこに追加してもよい)。</p>
+
+<blockquote>
+<pre><code>&lt;script type="text/x-mathjax-config"&gt;
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+&lt;/script&gt;
+&lt;script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"&gt;
+&lt;/script&gt;
+&lt;meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" /&gt;</pre></code>
+</blockquote>
+
+<p>これで MathJax が使えるようになる。</p>
+
+<h2><a name="links">リンク集</a></h2>
+
+<ul>
+<li><a href="http://www.mathjax.org/">MathJax Official Site</a>
+<li><a href="http://www.mathjax.org/resources/docsindex/">MathJax Documentation</a> (MathJaxの解説、懇切丁寧な説明でわかりやすい)
+<ul>
+<li><a href="http://www.mathjax.org/docs/1.1/index.html">MathJax v1.1 Documentation</a>
+<ul>
+<li><a href="http://www.mathjax.org/docs/1.1/platforms/index.html">Using MathJax v1.1 in popular web platforms</a> (WordPress, Movable Type, etc.)
+</ul>
+</ul>
+<li><a href="http://www.google.co.jp/search?q=MathJax&num=100&lr=lang_ja">MathJax を含む日本語のページを検索</a>
+<li><a href="http://www.math.tohoku.ac.jp/~kuroki/index-j.html">黒木玄のウェブサイト</a>でも MathJax を使っている。
+<ul>
+<li><a href="20101228HowToMakeQDIs.html">量子 dilogarithm 恒等式の作り方</a> (MaghJaxの使用例)
+</ul>
+</ul>
+
+<p>MathJax とは無関係のリンク</p>
+<ul>
+<li><a href="20101123Kakezan.html">かけ算の式の順序にこだわってバツを付ける教え方は止めるべきである</a>
+<li><a href="Jarnal/index.html">Javaで書かれた手書きノート作成ソフトJarnal関係のファイル</a>
+<li><a href="goyo.html">原発業界御用学者リストのウィキの記録</a>
+</ul>
+
+<p>囲碁</p>
+<ul>
+<li><a href="Master60all.pdf">Master60all.pdf</a>、<a href="Master60fuseki.pdf">Master60fuseki.pdf</a>
+<li><a href="Riryo20170124-20170126.pdf">Riryo20170124-20170126.pdf</a>、<a href="Riryo20170124-20170126.zip">Riryo20170124-20170126.zip</a> (zipped sgf fies)
+</ul>
+
+<p>数学</p>
+<ul>
+<li><a href="20160501StirlingFormula.pdf">20160501StirlingFormula.pdf</a>
+<li><a href="20160616KullbackLeibler.pdf">20160616KullbackLeibler.pdf</a>
+<li>これらの最新版は <a href="https://genkuroki.github.io/documents/#misc">https://genkuroki.github.io/documents/#misc</a> に置いてある。
+</ul>
+
+</body>
+</html>
