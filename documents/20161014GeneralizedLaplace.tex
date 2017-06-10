@@ -2,11 +2,13 @@
 \def\TITLE{\bfseries 一般化されたLaplaceの方法}
 \def\AUTHOR{黒木玄}
 \def\DATE{2014年10月14日(金)作成\thanks{%
-2016年10月14日Ver.0.1(4頁). 作成.
+2016年10月14日Ver.0.1(4頁): 作成.
+2016年10月19日Ver.0.2(4頁): 微修正.
+2016年10月21日Ver.0.3(6頁): \secref{sec:d=3}を追加.
 }}
-\def\PDFTITLE{PDFのタイトル}
-\def\PDFAUTHOR{著者名}
-\def\PDFSUBJECT{主題}
+\def\PDFTITLE{一般化されたLaplaceの方法}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{解析学}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[12pt,twoside]{jarticle}
 \usepackage{amsmath,amssymb,amsthm}
@@ -47,7 +49,7 @@
 \setlength{\topmargin}{-1.3cm}
 \setlength{\textheight}{25cm}
 \setlength{\textwidth}{16cm}
-\allowdisplaybreaks
+%\allowdisplaybreaks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\newcommand\N{{\mathbb N}} % natural numbers
 \newcommand\Z{{\mathbb Z}} % rational integers
@@ -194,6 +196,10 @@
 \href
 {https://twitter.com/genkuroki/status/786179021138571266}
 {\tt https://twitter.com/genkuroki/status/786179021138571266}
+\\
+\href
+{https://twitter.com/genkuroki/status/789286733246451712}
+{\tt https://twitter.com/genkuroki/status/789286733246451712}
 \end{center}
 
 $\R^d$ を列ベクトル(縦ベクトル)の空間であるとみなし,
@@ -242,7 +248,7 @@ Z_n
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{ウォーミングアップ}
+\subsection{ウォーミングアップ(2次元の場合)}
 
 $L,M>0$ であるとする.
 次の形の積分について考えよう:
@@ -303,13 +309,144 @@ Z_n
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{3次元の場合}
+\label{sec:d=3}
+
+$L,M,N>0$ であるとし, 次の積分について考えよう:
+\begin{align*}
+\int_0^L dx\int_0^M dy\int_0^N dz\, \exp\left(-n x^k y^l z^m \right) x^a y^b z^c.
+\end{align*}
+この積分の計算は $x=X^{1/k}$, $y=Y^{1/l}$, $z=Z^{1/m}$ という積分変数変換によって
+次の形の積分に帰着できる:
+\begin{align*}
+Z_n = \int_0^L dx \int_0^M dy \int_0^N dz\,
+e^{-nxyz}x^{a-1}y^{b-1}z^{c-1}.
+\end{align*}
+この $Z_n$ における $L,M,N$ をそれぞれ $L^k,M^l,N^m$ で置き換え, 
+さらに $a,b,c$ をそれぞれ $(a+1)/k, (b+1)/l, (c+1)/m$ で置き換えて, 
+さらに $klm$ で割ると上の積分に一致する.
+
+以下では $a,b,c>0$ と仮定する.  $-\log Z_n$ の $n\to\infty$ での漸近挙動を知りたい.
+
+$x=t/(nyz)$ とおいて積分変数を $(x,y,z)$ から $(t,y,z)$ に変換しよう.
+そのとき $(t,y,z)$ に関する積分領域は次の条件で与えられる:
+\begin{align*}
+0<\frac{t}{nyz}<L, \quad 0<y<M, \quad 0<z<N.
+\end{align*} 
+これは以下の各行と同値である:
+\begin{align*}
+&
+0<y<M, \quad 0<z<N, \quad 0<t<nLyz;
+\\ &
+0<z<N, \quad 0<t<nLMz, \quad \frac{t}{nLz}<y<M;
+\\ &
+0<t<nLMN, \quad \frac{t}{nLN}<y<M, \quad \frac{t}{nLy}<z<N.
+\end{align*}
+さらに, $x=t/(nyz)$ より, 
+\begin{align*}
+e^{-nxyz} x^{a-1} y^{b-1} z^{c-1}\, dx\,dy\,dz
+&
+=e^{-t} \left(\frac{t}{nyz}\right)^{a-1} y^{b-1} z^{c-1}\,\frac{dt}{nyz}\,dy\,dz
+\\ &
+=\frac{1}{n^a} e^{-t} t^{a-1} y^{b-a-1} z^{c-a-1}\,dt\,dy\,dz.
+\end{align*}
+ゆえに
+\begin{align*}
+Z_n
+&=
+\frac{1}{n^a}
+\int_0^M y^{b-a-1}
+\left(\int_0^N z^{c-a-1}
+\left(\int_0^{nLyz} e^{-t}t^{a-1}\,dt\right)\,dz\right)\,dy
+\tag{1}
+\\ &
+=
+\frac{1}{n^a}
+\int_0^N z^{c-a-1}
+\left(\int_0^{nLMz} e^{-t}t^{a-1}
+\left(\int_{t/(nLz)}^M y^{b-a-1}\,dy\right)\,dt\right)\,dz
+\tag{2}
+\\ &
+=
+\frac{1}{n^a}
+\int_0^{nLMN} e^{-t}t^{a-1}
+\left(\int_{t/(nLN)}^M y^{b-a-1}
+\left(\int_{t/(nLy)}^N z^{c-a-1}\,dz\right)\,dy\right)\,dt.
+\tag{3}
+\end{align*}
+
+$0<a<b\leqq c$ の場合. 
+$b-a>0$, $c-a>0$ なので, (1)より, $n\to\infty$ のとき
+\begin{align*}
+%n^aZ_n 
+%\to
+%\Gamma(a)\frac{M^{b-a}}{b-a}\frac{N^{c-a}}{c-a}
+%\quad\text{すなわち}\quad
+Z_n = \frac{1}{n^a}\Gamma(a)\frac{M^{b-a}}{b-a}\frac{N^{c-a}}{c-a}(1+o(1)).
+\end{align*}
+ゆえに
+\begin{align*}
+-\log Z_n = a\log n + O(1).
+\end{align*}
+
+$0<a=b<c$ の場合. $b-a=0$, $c-a>0$ なので, (2)より,
+\begin{align*}
+Z_n 
+&=
+\frac{1}{n^a}
+\int_0^N z^{c-a-1}
+\left(\int_0^{nLMz} e^{-t}t^{a-1}
+\log\frac{nLMz}{t}
+\,dt\right)\,dz
+\\ &
+=
+\frac{\log n}{n^a}\Gamma(a)\frac{N^{c-a}}{c-a}(1+o(1)).
+\end{align*}
+ゆえに
+\begin{align*}
+-\log Z_n = a\log n - \log\log n + O(1).
+\end{align*}
+
+$0<a=b=c$ の場合. $b-a=c-a=0$ なので, (3)より, 
+\begin{align*}
+Z_n
+&=
+\frac{1}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}
+\left(
+\int_{t/(nLN)}^M y^{-1} \log\frac{nLyN}{t}\,dy
+\right)\,dt
+\\ &
+=
+\frac{\log n}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}
+\left(
+\int_{t/(nLN)}^M y^{-1} \,dy
+\right)\,dt\cdot(1+o(1))
+\\ &
+=
+\frac{\log n}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}
+\log\frac{nLMN}{t}
+\,dt\cdot(1+o(1))
+\\ &
+=
+\frac{(\log n)^2}{n^a}\int_0^{nLMN} e^{-t}t^{a-1}\,dt\cdot(1+o(1))
+\\ &
+=
+\frac{(\log n)^2}{n^a}\Gamma(a)(1+o(1)).
+\end{align*}
+ゆえに
+\begin{align*}
+-\log Z_n = a\log n - 2\log\log n + O(1).
+\end{align*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{一般次元の場合}
 
 $L_i>0$ であるとし, 
 前節の積分を一般化した次の積分について考えよう:
 \begin{align*}
 \int_0^{L_1}dx_1\cdots\int_0^{L_d}dx_d\,
-\exp\left(-n x_1^{a_1}\cdots x_d^{a_d}\right) x_1^{b_1}\cdots x_d^{b_d}
+\exp\left(-n x_1^{a_1}\cdots x_d^{a_d}\right) x_1^{b_1}\cdots x_d^{b_d}.
 \end{align*}
 この積分の計算は $x_i^{a_i}=X_i$ による積分変数の変換によって次の形の積分に帰着する:
 \begin{align*}
@@ -325,7 +462,7 @@ $\lambda_1,\ldots,\lambda_d$ の最小値を $\lambda$ と書き,
 $\lambda=\lambda_i$ となる $i$ の個数($\lambda$ の重複度)を $m$ と書くことにする.
 このとき前節の計算を一般化することによって次が成立することを示せる:
 \begin{align*}
--\log Z_n = \lambda \log n + (m-1)\log\log n + O(1).
+-\log Z_n = \lambda \log n - (m-1)\log\log n + O(1).
 \end{align*}
 この公式における $\lambda$ と $m$ は本質的に \cite{watanabe-2012} の第4章に
 登場する $\lambda$ と $m$ と同じものである.

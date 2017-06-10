@@ -84,11 +84,15 @@
 Riemann-Lebesgueの定理の説明を詳しくした(\secref{sec:Riemann-Lebesgue}).
 2017年1月23日Ver.0.32(98ページ): \secref{sec:Taylor}を微修正. 
 たとえば最初の式で微分を意味する $'$ が欠けていたのを追加.
+2017年5月5日Ver.0.33(98ページ): \secref{sec:x-a/x=y}を微修正.
+このファイルのリンク先をGitHubに変えた.
+2017年5月18日Ver.0.33(99ページ): \href{https://mathtod.online}{mathtodon}に
+おける解説を\secref{sec:B(s,1/2)}と\secref{sec:Fresnel}に収録した.
 }
 \\[\bigskipamount]
 {\small
-\href{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160501StirlingFormula.pdf}
-{\tt http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160501StirlingFormula.pdf}
+\href{https://github.com/genkuroki/Stirling}
+{\tt https://github.com/genkuroki/Stirling}
 }}
 \def\PDFTITLE{Stirlingの公式}
 \def\PDFAUTHOR{黒木玄}
@@ -277,8 +281,8 @@ Riemann-Lebesgueの定理の説明を詳しくした(\secref{sec:Riemann-Lebesgu
 \begin{center}
 {\small
 \href
-{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160501StirlingFormula/}
-{\tt http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160501StirlingFormula/}
+{https://github.com/genkuroki/Stirling/tree/master/Old}
+{\tt https://github.com/genkuroki/Stirling/tree/master/Old}
 }
 \end{center}
 最初のVer.0.1は3ページしかなかった.
@@ -290,8 +294,8 @@ Riemann-Lebesgueの定理の説明を詳しくした(\secref{sec:Riemann-Lebesgu
 \begin{center}
 {\small
 \href
-{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160616KullbackLeibler.pdf}
-{\tt http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160616KullbackLeibler.pdf}
+{https://github.com/genkuroki/Sanov}
+{\tt https://github.com/genkuroki/Sanov}
 }
 \end{center}
 この続編ではKullback-Leibler情報量(相対エントロピーの $-1$ 倍)と
@@ -2766,6 +2770,7 @@ Vol.~31, No.~3, 2009, pp.~38-41}
 
 
 \subsection{類似の積分}
+\label{sec:x-a/x=y}
 
 $a\geqq 0$ に対する次の公式を証明しよう:
 \begin{align*}
@@ -2788,13 +2793,15 @@ dx = \frac{1}{2}\left(1 + \frac{y}{\sqrt{y^2+4a}}\right)\,dy.
 \begin{align*}
 \int_{-\infty}^\infty \exp\left(-\frac{1}{2}\left(x-\frac{a}{x}\right)^2\right)\,dx
 &
-=2\int_0^\infty \exp\left(-\frac{1}{2}y^2\right)
+=2\int_0^\infty \exp\left(-\frac{1}{2}\left(x-\frac{a}{x}\right)^2\right)\,dx
+\\ &
+=2\int_{-\infty}^\infty \exp\left(-\frac{1}{2}y^2\right)
 \frac{1}{2}\left(1 + \frac{y}{\sqrt{y^2+4a}}\right)\,dy
 \\ &
 =\int_{-\infty}^\infty e^{-y^2/2}\,dy
 =\sqrt{2\pi}.
 \end{align*}
-2番目の等号で $y/\sqrt{y^2+4a}$ が $y$ の奇函数であることを使った.
+3番目の等号で $y/\sqrt{y^2+4a}$ が $y$ の奇函数であることを使った.
 一方
 \begin{align*}
 -\frac{1}{2}\left(x-\frac{a}{x}\right)^2
@@ -3347,6 +3354,121 @@ Wallisの公式はガンマ函数に関するGaussの公式に $s=1/2$ を代入
 =\frac{\pi}{2}\prod_{n=1}^\infty\left(1-\frac{1}{(2n)^2}\right)
 =\frac{\pi}{2}\prod_{n=1}^\infty\frac{(2n-1)(2n+1)}{2n\cdot 2n}.
 \]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{$\boldsymbol{B(s,1/2)}$ の級数展開}
+\label{sec:B(s,1/2)}
+
+以下の内容は\href{https://mathtod.online}{mathtodon}の
+\href
+{https://mathtod.online/@genkuroki/133351}
+{\tt https://mathtod.online/@genkuroki/133351}
+で解説した事柄である.
+
+二項係数 $\binom{-1/2}{n}$ は次のように表わされる:
+\begin{align*}
+\binom{-1/2}{n}
+&=\frac{(-1/2)(-3/2)\cdots(-(2n-1)/2)}{n!}
+=\frac{(-1)^n}{2^n}\frac{1\cdot3\cdots(2n-1)}{n!}
+\\
+&=\frac{(-1)^n}{2^n}\frac{1\cdot2\cdot3\cdot4\cdots(2n-1)(2n)}{n!\cdot2\cdot4\cdots(2n)}
+=\frac{(-1)^n}{2^n}\frac{(2n)!}{n!\cdot2^n n!}
+=\binom{2n}{n}\frac{(-1)^n}{2^{2n}}.
+\end{align*}
+ゆえに
+\[
+(1-x)^{-1/2}
+=\sum_{n=0}^\infty\binom{-1/2}{n}(-x)^n
+=\sum_{n=0}^\infty\binom{2n}{n}\frac{x^n}{2^{2n}}.
+\]
+したがって, $B(s,1/2)$ は以下のように変形できる:
+\begin{align*}
+B(s,1/2)
+&=\int_0^1 x^{s-1}(1-x)^{-1/2}\,dx
+=\sum_{n=0}^\infty\binom{2n}{n}2^{-2n}\int_0^1 x^{n+s-1}\,dx
+=\sum_{n=0}^\infty\binom{2n}{n}\frac{2^{-2n}}{n+s}.
+\end{align*}
+たとえば $s=1/2$ のとき,
+\[
+\sum_{n=0}^\infty\binom{2n}{n}\frac{2^{-2n}}{n+1/2}=B(1/2,1/2)=\pi.
+\]
+両辺を $2$ で割ると,
+\[
+\sum_{n=0}^\infty\binom{2n}{n}\frac{2^{-2n}}{2n+1}=B(1/2,1/2)=\frac\pi2.
+\]
+%$B(1,1/2)=2$, $B(3/2,1/2)=\pi/2$ より, 
+他にも以下のような公式が成立している:
+\begin{align*}
+&\sum_{n=0}^\infty\binom{2n}{n}\frac{2^{-2n}}{n+1}=B(1,1/2)=2, \\
+&\sum_{n=0}^\infty\binom{2n}{n}\frac{2^{-2n}}{2n+3}=\frac12 B(3/2,1/2)=\frac\pi4.
+\end{align*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Fresnel積分とDirichlet積分とガンマ函数}
+\label{sec:Fresnel}
+
+以下の内容は\href{https://mathtod.online}{mathtodon}の
+\href
+{https://mathtod.online/@genkuroki/133687}
+{\tt https://mathtod.online/@genkuroki/133687}
+で解説した事柄である.
+
+Fresnel積分の公式とは
+\[
+\int_{-\infty}^\infty \cos t^2\,dt
+=\int_{-\infty}^\infty \sin t^2\,dt
+=\sqrt{\frac\pi2}
+\]
+という公式のことである. ここで $\int_{-\infty}^\infty$ 
+は $\lim_{R\to\infty}\int_{-R}^R$ の意味である.
+上の公式は左辺は偶函数の積分であることと, 置換 $t=\sqrt{x}$ によって
+\[
+\int_0^\infty \frac{\cos x}{\sqrt{x}}\,dx
+=\int_0^\infty \frac{\sin x}{\sqrt{x}}\,dx
+=\sqrt{\frac\pi2}
+\]
+と書き直され, これは $\Gamma(1/2)=\sqrt\pi$ と $e^{\pi i/4}=(1+i)/\sqrt{2}$ より, 
+\[
+\int_0^\infty e^{ix}x^{1/2-1}\,dx
+=e^{\pi i/4}\Gamma(1/2)
+\]
+とまとめられる. この公式は
+\[
+\int_0^\infty e^{ix}x^{s-1}\,dx
+=e^{\pi i s/2}\Gamma(s)
+\tag{$*$}
+\]
+に一般化される. この公式は, ガンマ函数の定義式
+\[
+\Gamma(z)=\int_0^\infty z^{s-1}e^{-z}\,dz
+\]
+で $z=-ix=e^{-\pi i/2}x$ とおき、積分経路を
+複素平面内で90度回転させたものに形式的に等しい.
+Cauchyの積分定理を使えば実際にそのような議論で公式($*$)を証明できる.
+
+上の公式($*$)の虚部は
+\[
+\int_0^\infty x^{s-1}\sin x\,dx = \Gamma(s)\sin\frac{\pi s}{2}
+\]
+である. この公式で両辺の $s\to 0$ の極限を取れば, 
+Dirichlet積分の公式(\secref{sec:Ftransf-N}に別証明がある)
+\[
+\int_0^\infty \frac{\sin x}x\,dx = \frac\pi2
+\]
+が得られる. 右辺の極限は
+\[
+\lim_{s\to0}\Gamma(s)\sin\frac{\pi s}{2}
+=\lim_{s\to0}\Gamma(s+1)\frac{\sin(\pi s/2)}{s}
+=\frac\pi2
+\]
+と計算される. 
+
+以上によって, Fresnel積分の公式とDirichlet積分の公式は
+それぞれガンマ函数の $s=1/2$ での特殊値 $\sqrt{\pi}$ 
+と $s=0$ での留数 $1$ を見る公式に本質的になっていることがわかった.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

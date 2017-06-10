@@ -1,0 +1,1654 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf コンパクトRiemann面に関する相互法則}
+\def\AUTHOR{黒木玄}
+\def\DATE{2016年2月13日(土)作成\thanks{%
+2016年2月16日(火)初公開Ver.1.0. ／
+2016年2月19日(金)\secref{sec:CC-Heis}を追加Ver1.1
+}
+\\[\bigskipamount]
+\href
+{http://www.math.tohoku.ac.jp/~kuroki/LaTeX/20160213ReciprocitiesForRiemannSurfaces.pdf}
+{\small http://www.math.tohoku.ac.jp/{\textasciitilde}kuroki/LaTeX/20160213ReciprocitiesForRiemannSurfaces.pdf}
+}
+\def\PDFTITLE{Weilの相互法則}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{tame記号}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\Res{\mathop{\mathrm{Res}}\nolimits}
+\newcommand\h{{\mathfrak h}}
+\newcommand\Khat{{\widehat K}}
+\newcommand\OO{{\mathcal O}}
+\newcommand\Ohat{{\widehat \OO}}
+\newcommand\A{{\mathbb A}}
+%\newcommand\tame[3]{\mathrm{tame}_{#1}(#2,#3)}
+\newcommand\tame[3]{\left[#2,#3\right]_{#1}}
+\newcommand\eps{\varepsilon}
+\newcommand\m{{\mathfrak m}}
+\newcommand\CC[3]{\left\langle #2,#3\right\rangle_{#1}}
+\newcommand\MOD{\operatorname{mod}}
+\newcommand\Li{\operatorname{Li}}
+\newcommand\B{{\mathcal B}}
+\newcommand\isomto{\overset{\sim}{\to}}
+\newcommand\np[1]{{:}{#1}{:}}
+\newcommand\ad{\operatorname{\mathrm{ad}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{序文}
+
+このノートの目標はコンパクトRiemann面上のtame記号と
+Contou-Carr\`ere記号の相互法則の反復積分を用いた証明を
+紹介することである.
+
+このノートを書くきっかけはtwitterで始めたこの件に関する雑談である.
+その雑談は次の場所で読める:
+\href
+{https://twitter.com/genkuroki/status/694780107794182144}
+{https://twitter.com/genkuroki/status/694780107794182144}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Heisenberg代数と留数定理}
+\label{sec:heisenberg}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{コンパクトRiemann面と代数函数体}
+
+$X$ はコンパクトRiemann面であるとし, $X$ の代数函数体を $K=\C(X)$ と書く
+ことにする.
+各点 $x\in X$ に対して, 代数函数体 $K$ の点 $x$ での完備化を $\Khat_x$ と書く.
+すなわち, $z(x)=0$ を満たす点 $x$ における局所座標 $z$ を取ると, 
+完備化 $\Khat_x$ は形式Laurent級数体 $\C((z))$ と同一視される.
+点 $x$ におけるLaurent展開によって自然に $K\subset\Khat_x$ とみなされる.
+部分環 $\C[[z]]\subset K_x$ を $\Ohat_x$ と書く.
+
+無限直積環 $\prod_{x\in X}\Khat_x$ の部分環 $\A_X$ を次のように定める:
+\[
+\A_X =
+\left\{\,\left.
+(f_x)_{x\in X}\in\prod_{x\in X} 
+\,\right|\,
+\text{高々有限個の $x$ を除いて $f_x\in\Ohat_x$}
+\right\}.
+\] 
+この $\A_X$ をRiemann面 $X$ のアデール環と呼ぶ.
+対角埋め込み $K\to\A_X$, $f\mapsto(f)_{x\in X}$ によって $K\subset\A_X$ 
+とみなす.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Heisenberg代数}
+
+可換な $\C$ 上のLie環とみなされたアデール環 $\A_x$ の $\C$ による
+Lie環としての中心拡大 $\h_X=\A_x\oplus\C$ を次のように定めることができる:
+\[
+ [(f_x)_{x\in X}, (g_x)_{x\in X}] = \sum_{x\in X} \Res_x(df_x\cdot g_x)
+ \qquad \bigl((f_x)_{x\in X}, (g_x)_{x\in X}\in\A_X\bigr).
+\]
+ここで $\Res_x$ は点 $x$ での留数を取り出す操作である. 
+高々有限個の $x$ を除いて $f_x,g_x\in\Ohat_x$ なので
+右辺の和は有限和になる.
+$\h_X$ をアデール版のHeisenberg代数と呼ぶ.
+
+このタイプのHeisenberg代数が共形場理論の文脈では自由ボソン場の形式で
+登場する%
+\footnote{共形場理論については, 筆者が知る限りにおいて, 
+山田泰彦著 \cite{yamada} が現時点で最も優れた教科書である.
+この節のタイプのHeisenberg代数は \cite{yamada} 第2.1節で解説されている.
+Heisenberg代数 $\h_x=\C((z))\oplus\C$ の中
+で $[z^m,z^n]=\Res(mz^{m+n-1}\,dz)=m\delta_{m+n,0}$ が成立しているの
+で \cite{yamada} 第2.1節の $a_m$ とその $z^m$ を同一視できる.
+中心拡大する前の可換なLie環 $\C((z))$ は幾何的には直線束
+(と点 $x$ におけるその自明化)の無限小変形を記述するLie環だとみなせる.
+$\C[[z]]$ の部分は点 $z$ における自明化の無限小変形を記述し, 
+$z^{-1}\C[z^{-1}]$ の部分は点 $x$ における直線束の貼り合わさり方の
+無限小変形を記述しているとみなせる.
+ソリトン方程式の佐藤理論における無限小時間発展は $z^{-1}\C[z^{-1}]$ で記述される. 
+共形場理論はコンパクトRiemann面の理論とソリトン方程式の佐藤理論を含んでいると
+考えられる. 
+}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{留数定理}
+
+留数定理より,
+\[
+\sum_{x\in X} \Res_x(df\cdot dg)=0 \qquad (f,g\in K=\C(X))
+\]
+なので上の中心拡大を $K=\C(X)$ に制限すると分裂している.
+
+アデール版のHeisenberg $\h_\A$ は
+可換なLie環 $\A_X$ の分裂しない中心拡大になっているが, 
+それを大域体 $K=\C(X)$ に制限すると分裂している.
+そしてその大域的分裂は留数定理の言い換えになっている.
+
+共形場理論では留数定理そのものだけではなく, その逆も重要になる%
+\footnote{共形場理論の教科書 \cite{yamada} pp.210--211 
+およびそこで紹介されている参考文献を見よ.
+留数定理とその逆についてもう少し説明しておく.
+有限個の互いに異なる点 $x_i\in X$ における局所座標 $z_i$ で $z_i(x_i)=0$ を
+満たすものを取る. $x_i$ 達にのみ極を持つ $X$ 上の有理型 1-form $\omega$ に
+対して, その $x_i$ における
+局所座標表示を $g_i=g_i(z_i)dz_i\in\C((z))dz$ と書くと, 
+留数定理より, 高々 $x_i$ 達のみを極とする $X$ 上の任意の有理型函数 $f$ に対して,
+$\sum_i\Res_{z_i=0}(f(z_i)g_i(z_i)dz_i)=\sum_{x\in X}(f\omega)=0$ が成立する.
+そして逆に, $g_i=g_i((z_i))dz_i\in\C((z_i))dz_i$ 達が高々 $x_i$ 達のみを
+極とする $X$ 上のある有理型 1-form の局所座標表示になっているためには
+その条件が成立すれば十分である. 
+すなわち, 高々 $x_i$ 達のみを極とする $X$ 上の任意の有理型函数 $f$ について
+$\sum_i\Res_{z_i=0}(f(z_i)g_i(z_i)dz_i)=0$ が成立すれば十分である.
+共形場理論における共形ブロック(\cite{yamada} p.210 の用語では「真空」)は
+留数定理およびその逆の考え方を用いて定義される.
+共形場理論は代数体上の代数群のアデールを用いた保型形式の理論の
+コンパクトRiemann面における類似物になっていると考えられる.
+その類似のもとで, 複素上半平面を $PSL_2(\Z)$ で割ってできる
+楕円曲線のモジュライ空間の共形場理論における類似物はコンパクトRiemann面
+上のランク2のベクトル束のモジュライ空間だと考えられる.
+保型形式の共形場理論における類似物は共形ブロック
+(幾何的にはベクトル束のモジュライ空間上のある種の直線束の切断)
+だと考えられる.
+}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{tame記号とWeilの相互法則}
+
+コンパクトRiemann面に関する前節の記号をそのまま引き継ぐ.
+
+この節の内容については \cite{deligne}, \cite{kerr} を参照した.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{tame記号の定義}
+
+点 $x$ における形式Laurent級数 $f\in\Khat_x=\C((z))$ の
+零点の位数を $v_x(f)$ と書くことにする.
+すなわち $f=a_0 z^r+a_1 z^{r+1}+a_2 z^{r+2}\cdots$, 
+$r\in\Z$, $a_i\in\C$, $a_0\ne 0$ のとき $v_x(f)=r$ と定め, 
+$v_x(0)=\infty$ と定める.
+$f\in\Khat_x$ について $v_x(f)\geqq 0$ と $f\in\Ohat_x$ は同値である.
+$f\in\Ohat_x$ のとき $f=a_0+a_1 z+ a_2 z^2+\cdots$, $a_i\in\C$ と書け, 
+$f$ の点 $x$ における値 $f(x)=a_0\in\C$ が定義される
+($z(x)=0$ と約束していたことに注意せよ).
+
+$f,g\in\Khat_x^\times$ のtame記号 $\tame{x}{f}{g}\in\C^\times$ 
+(tame symbol)を次のように定める:
+\[
+\tame{x}{f}{g} =
+(-1)^{v_x(f)v_x(g)}\left[\frac{f^{v_x(g)}}{g^{v_x(f)}}\right](x).
+\]
+ここで, $v_x(f^{v_x(g)}/g^{v_x(f)})=0$ より, 
+$f^{v_x(g)}/g^{v_x(f)}$ の点 $x$ における値 $[f^{v_x(g)}/g^{v_x(f)}](x)$ が
+定まり, $0$ にならないことに注意せよ.
+
+この節の目標はRiemann面上の複素解析を用いてtame記号の相互法則(Weilの相互法則)を
+証明することである\footnote{純代数的な証明もある.
+ジーナス $0$ の場合は終結式(resultant)の純代数的な計算に帰着する.
+ジーナスが高い場合には射影直線の有限被覆とみなすことに
+よってジーナス $0$ の場合に帰着できる. 
+たとえば最近の数学セミナー誌の記事 \cite{yamazaki} はその方針で
+Weilの相互法則について解説している.
+同誌同号は特集「平方剰余の相互法則」の他の記事もおすすめである.
+}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{tame記号の積分表示}
+\label{sec:tame-integral}
+
+もしもtame記号を線積分で表示できれば留数定理の場合と同様にしてtame記号に
+関する相互法則が自然に導かれるはずである. 
+
+複素平面上の点 $x_0$ から出発して原点の周囲を反時計周りに一周して
+点 $x_0$ に戻る経路を $C$ と書く.
+基本になるのは次の公式である%
+\footnote{この公式を筆者は最初 \cite{deligne} のp.153で学んだ.
+共形場理論に関係がある論文だということでその論文を読むことになった.}:
+\begin{align*}
+&
+\frac{1}{2\pi i}\int_C (\log z\cdot d\log z - d\log z\cdot\log x_0)
+\\ & \qquad
+= \frac{1}{4\pi i}\int_C d\left((\log z)^2\right) 
+- \log x_0
+\\ & \qquad
+= \frac{1}{4\pi i}\left((\log x_0 + 2\pi i)^2 - (\log x_0)^2 \right) 
+- \log x_0
+= \pi i.
+\end{align*}
+この積分のexponentialは $-1$ になる. 
+このような仕組みでtame記号の符号因子が線積分から自然に出て来ることになる.
+
+$f,g\in K^\times=\C(X)^\times$ を任意に取って固定する.
+$f,g$ の零点と極の全体を含む $X$ の有限部分集合 $S$ を任意に取る. 
+
+コンパクトRiemann面 $X$ のジーナスが $g$ だとすると%
+\footnote{ジーナスを表わす記号 $g$ と函数を表わす記号 $g$ が重複してしまった.
+読者は混同しないように注意して欲しい.
+たとえば四角形の対辺を貼り合わせてトーラス(ジーナス1の閉曲面)を作れる.
+$4g$ 角形の辺を時計と反対回りに向きも込めて 
+$\alpha_1,\beta_1,\alpha'_1,\beta'_1,\ldots,\alpha_g,\beta_g,\alpha'_g,\beta'_g$
+と表わすとき, $\alpha'_i$ と $\alpha_i^{-1}$ を, $\beta'_i$ と $\beta^{-1}$ を
+貼り合わせると, 穴が $g$ 個ある浮き環状の閉曲面(ジーナス $g$ の閉曲面)ができる.
+},
+$X$ を切り開いて, $X$ を $4g$ 角形の辺を適切に貼り合わせたものとみなせる%
+\footnote{Riemannの写像定理よりその $4g$ 角形は複素上半平面に含まれていると
+みなしてよい.}.
+必要なら切断線をずらして, 
+$S$ のすべての点が $4g$ 角形の内部に入るようにしておく.
+$4g$ 角形の頂点の一つを $x_0$ と書き, 
+点 $x_0$ から $S$ に含まれる点に向けてカットを入れておく.
+
+点 $x\in S$ に対して, 
+点 $x_0$ から出発して点 $x$ のみを反時計周りに一周して
+点 $x_0$ に戻る $4g$ 角形内部の経路 $C_x$ でカットと交わらないものを一つ取る.
+このとき, 
+\[
+\tame{x}{f}{g} =
+\exp\left[
+\frac{1}{2\pi i}\int_{C_x} \bigl(
+  \log f\cdot d\log g - d\log f\cdot\log g(x_0)
+\bigr)
+\right]
+\tag{$*$}
+\]
+が成立する. 以下でこの公式を証明しよう. 
+そのために 左辺を $\varphi(f,g)$ と書くことにする.
+
+$\log(ab)=\log a+\log b$ より
+$\varphi(fg,h)=\varphi(f,h)\varphi(g,h)$, 
+$\varphi(f,gh)=\varphi(f,g)\varphi(f,h)$ が成立することがわかる.
+すなわち $\varphi$ はbimultiplicativeである%
+\footnote{$G,H,K$ が演算を乗法的に書く半群であるとき, 
+写像 $\varphi:G\times H\to K$ がbimultiplicativeであるとは
+$\varphi(gg',h)=\varphi(g,h)\varphi(g',h)$,
+$\varphi(g,hh')=\varphi(g,h)\varphi(g,h')$
+($g,g'\in G$, $h,h'\in H$)
+が成立することである.
+$G,H,K$ がAbel群のとき, bimultiplicative写像 $\varphi:G\times H\to K$
+と群の準同型写像 $G\otimes_\Z H\to K$, $g\otimes h\mapsto\varphi(g,h)$
+は自然に一対一に対応している. ただし $G\otimes_\Z H$ は $G,H$ を $\Z$ 加群と
+みなしたときの $\Z$ 上のテンソル積である.
+}.
+
+さらに部分積分によって $\varphi(f,g)=\varphi(g,f)^{-1}$ が成立することもわかる:
+\begin{align*}
+&
+\frac{1}{2\pi i}\int_{C_x} \bigl(
+  \log f\cdot d\log g - d\log f\cdot\log g(x_0)
+\bigr)
+\\ &
+=\frac{1}{2\pi i}\bigl(
+   (\log f(x_0)+2\pi i\,v_x(f))(\log g(x_0)+2\pi i\,v_x(g))
+  - \log f(x_0)\cdot\log g(x_0)
+\\ & \qquad\qquad
+  - \int_{C_x} d\log f\cdot\log g
+  - 2\pi i\,v_x(f)\log g(x_0)
+\bigr)
+\\ &
+= \log f(x_0)\cdot v_x(g) + 2\pi i\,v_x(f)v_x(g) 
+- \frac{1}{2\pi i}\int_{C_x}d\log f\cdot\log g
+\\ &
+=
+-
+\frac{1}{2\pi i}\int_{C_x} \bigl(
+  d\log f\cdot \log g - \log f(x_0)\cdot d\log g
+\bigr)
++ 2\pi i\,v_x(f)v_x(g).
+\end{align*}
+この結果のexponentialを考えることに
+よって $\varphi(f,g)=\varphi(g,f)^{-1}$ を得る.
+
+点 $x$ において $f,g$ の両方が正則で $0$ にならないとき, 
+Cauchyの積分定理より $\varphi(f,g)=1$ となることがわかる.
+
+$f$ と $g$ を $f=z^{v_x(f)}f_0$, $g=z^{v_x{g}}g_0$,
+$v_x(f_0)=0$, $v_x(g_0)=0$ と表わしておく.
+このとき
+\begin{align*}
+&
+\varphi(z,z)
+=\exp\left[
+  \frac{1}{2\pi i}\int_{C_x}(\log z\cdot d\log z-d\log z\cdot\log x_0)
+\right]
+=\exp[\pi i]= -1,
+\\ &
+\varphi(f_0,z)
+=\exp\left[
+  \frac{1}{2\pi i}\int_{C_x}(\log f_0\cdot d\log z-d\log f_0\cdot\log x_0)
+\right]
+= \exp(\log f_0(x))=f_0(x),
+\\ &
+\varphi(z,g_0)=\varphi(g_0,z)^{-1}=g_0(x)^{-1},
+\\ &
+\varphi(f_0,g_0)=1.
+\end{align*}
+以上の結果をすべて合わせると公式($*$)が成立することがわかる.
+
+公式($*$)を反復積分(iterated integral, \cite{chen})で書き直そう.
+
+1-forms $\omega_1,\ldots,\omega_r$ と経路 $\gamma(t)$ ($0\leqq t\leqq 1$)
+に対して iterated integral $\int_\gamma \omega_r\circ\cdots\circ\omega_1$ 
+を以下のように定める: $\gamma^*\omega_i=f_i(t)\,dt$ のとき,
+\[
+\int_\gamma \omega_r\circ\cdots\circ\omega_1
+=\int\!\cdots\!\int_{0<t_r<\cdots<t_1<1}
+ f_r(t_r)\cdots f_1(t_1) \,dt_r\cdots dt_1.
+\]
+すなわち反復積分とは時刻 $t_i$ を右から大きな順序で並べた積分である.
+たとえば $r=3$ のとき(一般の $r$ でも同様), 
+\[
+\int_\gamma \omega_3\circ\omega_2\circ\omega_1
+=\int_0^1 \left(\int_0^{t_1} \left(\int_0^{t_2}
+ f_3(t_3)\,dt_3\right)\cdot f_1(t_2)\,dt_2\right)\cdot f(t_1)\,dt_1.
+\]
+この公式を見ればどうして「反復積分」と呼ぶかは明らかだろう%
+\footnote{たとえば次の公式が成立している: \(
+-\int_0^1 d\log(1-t)\circ\underbrace{d\log t\circ\cdots\circ d\log t}_{\text{$r$ times}}
+= \sum_{n=1}^\infty n^{-(r+1)} = \zeta(r+1)
+\).
+数学的帰納法によって, $|z|<1$ のとき, \(
+-\int_0^z d\log(1-t)\circ\underbrace{d\log t\circ\cdots\circ d\log t}_{\text{$r$ times}}
+= \sum_{n=1}^\infty z^n/n^{r+1}
+= \Li_{r+1}(z)
+\) となることを示せる. 函数 $\Li_{r+1}(z)$ は多重対数(polylogarithm)と呼ばれている.
+\secref{sec:polylog}も参照せよ.
+}.
+
+
+以上の定義のもとで
+\[
+\int_{C_x} d\log f\circ d\log g
+=\int_{C_x} \left(\log f - \log f(x_0)\right)\cdot d\log g
+\]
+なので, 公式($*$)は
+\begin{align*}
+&
+\tame{x}{f}{g}
+\\ &
+=
+\exp\left[
+\frac{1}{2\pi i}\int_{C_x} \bigl(
+  d\log f\circ d\log g + \log f(x_0)\cdot d\log g - d\log f\cdot\log g(x_0)
+\bigr)
+\right]
+\tag{$\ast\ast$}
+\end{align*}
+と書き直される.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{tame記号に関するWeilの相互法則}
+
+\begin{theorem}[Weilの相互法則]
+コンパクトRiemann面 $X$ とその上の $0$ でない代数函数 $f,g$ に対して, 
+\[
+\prod_{x\in X} \tame{x}{f}{g} = 1
+\]
+が成立する. (左辺の積は有限集合 $S$ に含まれる $x$ に
+に関する有限積になる.)
+\end{theorem}
+
+\begin{proof}
+$X$ を切り開いて作った $4g$ 角形の境界上の経路で $x_0$ から出発して
+時計と反対周りに一周して $x_0$ に戻るものを $\Gamma$ と書くと, 
+公式($\ast\ast$)とCauchyの積分定理と留数定理より
+\begin{align*}
+\prod_{x\in X} \tame{x}{f}{g}
+&
+=\exp\left[
+\frac{1}{2\pi i}
+\int_{\Gamma}d\log f\circ d\log g
+\right].
+\end{align*}
+$\Gamma$ はRiemann面上の閉曲線達 $\alpha_i,\beta_i$ によって
+$\Gamma=
+\alpha_1\beta_1\alpha_1^{-1}\beta_1^{-1}\cdots
+\alpha_g\beta_g\alpha_g^{-1}\beta_g^{-1}$
+と書ける. 
+定義に基づいた直接的な計算で反復積分達が一般に
+\begin{align*}
+&
+\int_{\gamma^{-1}} \omega_r\circ\cdots\circ\omega_1
+= (-1)^r \int_\gamma \omega_1\circ\cdots\circ\omega_r,
+%\tag{$\sharp 1$}
+\\ 
+&
+\int_{\gamma_1\cdots\gamma_r}\omega_2\circ\omega_1
+=\sum_{i=1}^r \int_{\gamma_i}\omega_2\circ\omega_1
++\sum_{1\leqq<i<j<\leqq r} \int_{\gamma_j}\omega_2 \int_{\gamma_i}\omega_1,
+%\tag{$\sharp 2$}
+\\ &
+\int_{\alpha\beta\alpha^{-1}\beta^{-1}}\omega_2\circ\omega_1
+= \int_\beta\omega_2  \int_\alpha\omega_1 
+- \int_\alpha\omega_2 \int_\beta\omega_1
+%\tag{$\sharp 3$}
+\end{align*}
+を満たしていることがわかる. 
+(3番目の公式は前者の2つの公式から導かれる.)
+そして $X$ 上の閉曲線 $\gamma$ に対して
+\(
+\int_\gamma d\log f, \int_\gamma d\log g \in 2\pi i\Z
+\)
+となるので、
+\[
+\frac{1}{2\pi i}
+\int_{\Gamma}d\log f\circ d\log g
+\in \frac{1}{2\pi i}(2\pi i)^2\Z
+= 2\pi i\Z
+\]
+となることがわかる. ゆえに $\prod_{x\in X}\tame{x}{f}{g}=1$.
+\qed
+\end{proof}
+
+%\begin{problem*}
+%上の証明中で用いた公式($\sharp1$),($\sharp2$),($\sharp3$)を
+%定義に基づいた直接的計算で確認せよ.
+%\qed
+%\end{problem*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Steinberg記号の定義と基本性質}
+
+一般に, $k$ が体で $G$ がAbel群であるとき, 
+bimultiplicative な写像 $\varphi:k^\times \times k^\times\to G$ で
+$f,1-f\in k^\times$ ならば $\varphi(f,1-f)=1$ を満たすものを
+Steinberg記号(Steinberg symbol)と呼ぶ.
+
+一般に体 $k$ に対してその第二 $K$ 群 $K_2(k)$ は
+$k^\times\otimes_\Z k^\times$ を $\{\,f\otimes(1-f)\mid f,1-f\in k^\times\,\}$
+から生成される部分群で割って得られる剰余群に一致する(松本の定理).
+ゆえにSteinberg記号はAbel群の準同型写像 $K_2(k)\to G$ と
+自然に一対一対応している.
+
+任意のSteinberg記号 $\varphi$ は $\varphi(f,-f)=1$ を満たしている:
+\begin{align*}
+1
+&
+=\varphi(f,1-f)
+=\varphi(f,-f)\varphi(f,1-f^{-1})
+\\ &
+=\varphi(f,-f)\varphi(f^{-1},1-f^{-1})^{-1}
+=\varphi(f,-f).
+\end{align*}
+これより $\varphi(f,g)\varphi(g,f)=1$ が得られる:
+\[
+1
+=\varphi(fg,-fg)
+%=\varphi(f,-fg)\varphi(g,-fg)
+=\varphi(f,-f)\varphi(f,g)\varphi(g,f)\varphi(g,-g)
+=\varphi(f,g)\varphi(g,f).
+\]
+その他に $\varphi(f,f)=\varphi(f,-1)$ も得られる:
+\[
+1=\varphi(f,-f)=\varphi(f,f)\varphi(f,-1)
+\]
+であり, $\varphi$ がbimultiplicativeなので $\varphi(f,-1)^2=1$ となる
+から, $\varphi(a,a)=\varphi(f,-1)$ を得る.
+これらより, $\varphi(f,1-f)=1$ ($f,1-f\in k^\times$)の
+一般化である $\varphi(f/g,g-f)=\varphi(-f,g)$ ($f,g,g-f\in k^\times$)が導かれる:
+$h=g-f$ とおくと $1=(g-f)h^{-1}=(-fh^{-1})+gh^{-1}$ より
+\begin{align*}
+1 
+&
+= \varphi(-fh^{-1}, gh^{-1}) 
+= \varphi(-f,g)\varphi(-f,h)^{-1}\varphi(h,g)^{-1}\varphi(h,h)
+\\ &
+= \varphi(-f,g)\varphi(-f,h)^{-1}\varphi(h,g)^{-1}\varphi(h,-1)
+= \varphi(-f,g)\varphi(f/g,h)^{-1}.
+\end{align*}
+ゆえに $\varphi(f/g,g-f)=\varphi(f/g,h)=\varphi(-f,g)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{tame記号のSteinberg性}
+
+tame記号 $\tame{x}{\,}{\,}:\Khat_x^\times\times\Khat_x^\times\to\C^\times$ が
+Steinberg記号であることを証明しよう.
+$f,g\in\Khat_x^\times$ かつ $f+g=1$ であるとする.
+$v_x(f)>0$ のとき $v_x(g)=0$ かつ $g(x)=1$ なので
+tame記号の定義より $\tame{x}{f}{g}=1/g(x)^{v_x(f)}=1$ となる.
+$v_x(f)=0$ のとき $v_x(g)\geqq 0$ となる.
+$v_x(f)=0$ かつ $v_x(g)>0$ ならば
+上で示したことより $\tame{x}{f}{g}=\tame{x}{g}{f}^{-1}=1$.
+$v_x(f)=v_x(g)=0$ ならばtame記号の定義より $\tame{x}{f}{g}=1$ となる.
+tame記号の定義から $\tame{x}{h}{-h}=1$ ($h\in\Khat_x$) となることを
+直接かつ容易に確認できる. ゆえに $v_x(f)<0$ のとき, その $h=f^{-1}$ の場合を使って,
+\begin{align*}
+\tame{x}{f}{g}
+&
+= \tame{x}{f}{1-f}
+= \tame{x}{f^{-1}}{1-f}^{-1}
+\\ &
+= \tame{x}{f^{-1}}{1-f}^{-1} \tame{x}{f^{-1}}{-f^{-1}}^{-1}
+\\ &
+= \tame{x}{f^{-1}}{-(1-f)f^{-1}}^{-1}
+= \tame{x}{f^{-1}}{1-f^{-1}}
+= 1.
+\end{align*}
+最後の等号は上で示したことと $v_x(f^{-1})>0$ から得られる.
+
+公式($\ast$)(または($\ast\ast$))からも, 
+tame記号が $f,1-f\in K^\times=\C(X)^\times$ のとき, 
+$\tame{x}{f}{g}=1$ を満たしていることを示せる.
+以下でその導出の仕方を説明しよう.
+
+本質的にdilogarithm%
+\footnote{
+二重対数 (dilogarithm) $\Li_2(z)$ は $\Li_2(z)=-\int_0^z d\log w\cdot\log(1-w)$ 
+と定義され, $\Li_2(z)=\sum_{n=1}^\infty z^n/n^2$ ($|z|<1$)とTaylor展開される. 
+より一般に polylogarithm $\Li_r(z)$ 
+が $\Li_r(z)=\int_0^z d\log w\cdot\Li_{r-1}(w)$ と定義され, 
+$\Li_r(z)=\sum_{n=1}^\infty z^n/n^r$ ($|z|<1$)とTaylor展開される.
+\secref{sec:polylog}も参照せよ.
+}%
+のモノドロミーの話になる.
+複素 $w$ 平面上の点 $y_0\ne 0,1$ を任意に取り, 
+$\delta_0$ (もしくは $\delta_1$) は $y_0$ から出発して $0$ (もしくは $1$) を
+反時計回りで一周して $y_0$ に戻る単純閉曲線であるとする.
+このとき
+\begin{align*}
+&
+\frac{1}{2\pi i}\int_{\delta_0}
+\left[
+ \log w\cdot d\log(1-w) - d\log w\cdot\log(1-y_0)
+\right)
+\\ & \quad
+=\frac{1}{2\pi i}\left[
+   (\log y_0+2\pi i)\log(1-y_0) - \log y_0\cdot\log(1-y_0)
+\right]
+\\ & \qquad
+-\frac{1}{2\pi i}\int_{\delta_0} d\log w\cdot\log(1-w)
+-\log(1-y_0)
+\\ & \quad
+= -\frac{1}{2\pi i}\int_{\delta_0} d\log w\cdot\log(1-w)
+= -\log 1
+\in 2\pi i\Z,
+\\[\medskipamount]
+& 
+\frac{1}{2\pi i}\int_{\delta_1}
+\left( 
+ \log w \cdot d\log(1-w) - d\log w\cdot\log(1-y_0)
+\right)
+%\\ &
+=\log 1\in 2\pi i\Z.
+\end{align*}
+$f,1-f\in K^\times=\C(X)^\times$ であるとし, 
+$\gamma$ はRiemann面 $X$ 上の点 $x_0$ から出発して $x_0$ に戻る閉曲線
+で $f,1-f$ の零点と極を通らないものであるとする.
+$\gamma$ の $f$ による像 $\delta=f\circ\gamma$ は複素平面上の閉曲線で $y_0=f(x_0)$ から
+出発して $y_0$ に戻る $0,1$ を通らない閉曲線になる.
+このとき, 上で述べたことより, 
+\begin{align*}
+&
+\frac{1}{2\pi i}\int_\gamma
+\bigl( \log f\cdot d\log(1-f) - d\log f\cdot\log(1-f(x_0)) \bigr)
+\\ & \quad
+=
+\frac{1}{2\pi i}\int_\delta
+\bigl( \log w\cdot d\log(1-w) - d\log w\cdot\log(1-y_0) \bigr)
+\in 2\pi i\Z.
+\end{align*}
+この結果の $\gamma=C_x$ の場合より $\tame{x}{f}{1-f}=1$ が得られる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Contou-Carr\`ere記号とその相互法則}
+
+コンパクトRiemann面に関する前節までの記号をそのまま引き継ぐ.
+例えば, $X$ はコンパクトRiemann面であり, $K$ はその代数函数体であり, 
+点 $x\in X$ における $K$ の完備化は $\Khat_x$ と書かれる.
+$z(x)=0$ を満たす $x$ における局所座標 $z$ を取ると $\Khat_x=\C((z))$
+とみなされる.
+
+この節の内容については \cite{kerr}, 
+\cite{pablosromo}, \cite{luo}, \cite{horozov-luo}を参照した.
+
+簡単のため $A=\C[\eps]/(\eps^{N+1})$ ($A$ の中で $\eps^N\ne0$, $\eps^{N+1}=0$), 
+$\m=\eps A$ とおく%
+\footnote{より一般に以下の議論で $(A,\m)$ は $\C$ 上のArtin局所環でよい.}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{形式Laurent級数の無限積表示}
+
+$K_A=K\otimes A=K[\eps]/(\eps^{N+1})$ とおき, 
+点 $x\in X$ における完備化を $\Khat_{A,x}=A((z))=\Khat_x[\eps]/(\eps^{N+1})$ と書く.  
+点 $x$ におけるLaurent展開によって $\Khat_A\subset\Khat_{A,x}$ とみなせる.
+
+$R$ が環であるとき, $f\in R[\eps]/(\eps^{N+1})$ の $R=R[\eps]/(\eps)$ 
+における像を $f_{\eps=0}=f\MOD\eps$ と書く.
+このとき $R[\eps]/(\eps^{N+1})$ の乗法群は次のように表わされる:
+\[
+ \left( R[\eps]/(\eps^{N+1}) \right)^\times
+ =\{\, f\in R[\eps]/(\eps^{N+1}) \mid f_{\eps=0}\in R^\times \,\}.
+\]
+ゆえに乗法群 $A((z))^\times=\left(\Khat_x[\eps]/(\eps^{N+1})\right)^\times$ は
+以下のような表示を持つ:
+\begin{align*}
+&
+A((z))^\times = \Khat_x[\eps]/(\eps^{N+1})
+\\ &
+=
+\{\, f_0+f_1\eps+f_2\eps^2+\cdots+f_N\eps^N \in\Khat_x[\eps]/(\eps^{N+1}) 
+\mid f_0\in\Khat_x^\times, f_1,\ldots,f_N\in\Khat_x \,\}.
+\end{align*}
+以下ではこの群の元の次の形の無限積表示を証明する.
+
+形式Laurent級数環の可逆元 $f\in A((z))^\times$ は
+次のように一意的に表わされる:
+\[
+f = z^{w_x(f)}a_0\prod_{0\ne i\in\Z}(1-a_i z^i).
+\]
+ただし $w_x(f)\in\Z$, $a_0\in A^\times$, $a_i\in A$, $a_{-i}\in\m$ ($i>0$)であり, 
+十分大きな $i$ について $a_{-i}=0$ であるとする.
+
+この無限積表示を以下で証明しよう. 
+
+$A((z))^\times$ の部分群 $z^\Z$ と $G$ を次のように定める:
+\begin{align*}
+&
+z^\Z = \{\, z^m \mid a\in m\in \Z \,\},
+\\ &
+G=\{\,g\in A((z))^\times\mid g_{\eps=0}\in \C[[z]]^\times \,\}
+\end{align*}
+このとき, $A((z))$ の乗法によって, 
+群の同型 $z^\Z\times H \cong A((z))^\times$ が
+得られることを示そう.
+$\phi\in\C((z))^\times$ の $z$ に関する最低次の項の次数
+を $v_x(\phi)$ と書くのであった. 
+$f\in A((z))^\times$ に対して $m=w_x(f)=v_x(f_{\eps=0})$ とおく
+と, $f$ はある $g\in G$ によって $f=z^m g$ と表わされる.
+このことより群の同型 $z^\Z\times G \cong A((z))^\times$ 
+が成立していることがわかる.
+
+$G$ の部分群 $G_\pm$ を次のように定める:
+\[
+G_+ = A[[z]]^\times, \qquad
+G_- = 1+\eps z^{-1}A[z^{-1}].
+\]
+このとき, $A((z))$ の乗法によって, 群の同型 $G_+\times G_-\cong G$ が
+得られることを示そう. 
+$g\in G$ と $g_\pm\in G_\pm$ は次のように一意に表される:
+\begin{alignat*}{2}
+&
+g = a_0+a_1\eps+\cdots+a_N\eps^N, \qquad
+& &
+a_0\in \C[[z]]^\times,\ a_1,\ldots,a_N\in\C((z)), 
+\\ &
+g_+ = b_0+b_1\eps+\cdots+b_N\eps^N, \qquad
+& &
+b_0\in\C[[z]]^\times,\ b_1,\ldots,b_N\in\C[[z]],
+\\ &
+g_- = 1+c_1\eps+\cdots+c_N\eps^N, \qquad
+& &
+c_1,\ldots,c_N\in\eps z^{-1}\C[z^{-1}].
+\end{alignat*}
+このとき,
+\begin{align*}
+&
+g_+g_- 
+= b_0 + (b_0c_1+b_1)\eps + (b_0c_2+b_1c_1+b_2)\eps
++ (b_0c_2+b_1c_2+b_2c_1+b_3)+\cdots
+\end{align*}
+なので $b_i,c_i$ 達に関する方程式 $g_+g_-=g$ が $b_0=a_0$ から出発して
+低次の係数から順番に一意的に解けて行くことがわかる.
+このことより群の同型 $G_+\times G_-\cong G$ が成立していることがわかる.
+
+以上を合わせると $A((z))$ の乗法によって群の同型
+\[
+ A^\times z^\Z\times G_+\times G_- \cong A((z))^\times 
+= \left(\Khat_x[\eps]/(\eps^{N+1})\right)^\times
+\]
+が得られることがわかる.
+
+$g_+\in G_+=A[[z]]^\times$ が次のように一意的に表わされることを示そう:
+\[
+ g_+ = a_0\prod_{i=1}^\infty(1-a_i z^i), \qquad
+ a_0\in A^\times,\ a_1,a_2,\ldots\in A
+\]
+この等式の右辺を展開すると
+\[
+a_0 - a_0a_1 z - a_0a_2 z^2 
+- \cdots - a_0(a_n + \text{($a_1,\ldots,a_{n-1}$ の多項式)})z^n
+- \cdots
+\]
+の形になる. 一方 $g_+$ は次のように一意的に表わされる:
+\[
+g_+ = c_0 + c_1 z + c_2 z^2 + \cdots, \qquad
+c_0\in A^\times,\ c_1,c_2,\ldots\in A.
+\]
+これと上の右辺の展開結果を比較すると, $a_i$ たちに関する方程式 $g_+=\text{(右辺)}$ が
+一意に解けることがわかる. これで $g_+$ の上のような表示の一意的存在が
+示された. 
+
+$g_-\in G_-=1+\eps z^{-1}A[z^{-1}]$ が次のように一意的に表わされることを示そう:
+\[
+g_- = \prod_{i<0}^{\text{有限積}} (1-a_i z^i), \qquad
+a_i\in \eps A=\m.
+\]
+この等式の右辺を展開すると
+\[
+1 - a_{-1} z^{-1} - a_{-2} z^{-2} 
+- \cdots - (a_{-n} + \text{($a_{-1},\ldots,a_{-(n-1)}$ の多項式)})z^{-n}
+- \cdots \quad (\text{有限和})
+\]
+の形になる. 一方 $g_-$ は次のように一意的に表わされる:
+\[
+g_-=1+c_{-1}z^{-1}+c_{-2}z^{-2}+\cdots, \qquad
+c_i\in\eps A=\m.
+\]
+これらを比較することによって $g_-$ の上のような表示の一意存在が成立することを
+確認できる.
+
+以上によって示すべきことがすべて示された.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Contou-Carr\`ere記号の定義}
+
+任意に $f,g\in A((z))^\times$ を取る.
+それらは次のように一意に表わされる:
+\[
+f = z^{w_x(f)}a_0\prod_{0\ne i\in\Z}(1-a_i z^i), \qquad
+g = z^{w_x(g)}b_0\prod_{0\ne i\in\Z}(1-b_i z^i).
+\]
+ただし $w_x(f),w_x(g)\in\Z$, $a_0,b_0\in A^\times$,
+$a_i,b_i\in A$, $a_{-i},b_{-i}\in\m$ ($i>0$) であり,
+十分大きな $i$ に対して $a_{-i}=0$, $b_{-i}=0$ であるとする.
+このとき $f,g$ の Contou-Carr\`ere記号 $\CC{x}{f}{g}$ 
+(Contou-Carr\`ere symbol, 以下CC記号)を
+\[
+\CC{x}{f}{g} =
+(-1)^{w_x(f)w_x(g)}
+\frac
+{a_0^{w_x(g)}\prod_{i,j=1}^\infty\left(1-a_i^{j/(i,j)}    b_{-j}^{i/(i,j)}\right)^{(i,j)}}
+{b_0^{w_x(f)}\prod_{i,j=1}^\infty\left(1-a_{-i}^{j/(i,j)} b_j^{i/(i,j)}   \right)^{(i,j)}}
+\in A^\times
+\]
+と定める. ここで $(i,j)$ は $i,j$ の最大公約数を表わす.
+十分に大きな $i,j$ に対して $a_{-i}=0$, $b_{-j}=0$ であり, 
+$i>0$ のとき $a_{-i},b_{-j}\in\m=\eps A$ なので十分大きな $m$ に
+対して $a_{-i}^m=0$, $b_{-j}^m=0$ となるので, 
+右辺の積は有限積になることに注意せよ.
+
+このCC記号の定義の仕方は局所座標 $z$ を使っており, 
+局所座標の取り方に依存しないことさえ明らかではない.
+しかし, $CC$ 記号は局所座標によらずに定まっており, 
+tame記号と同様の性質を満たしている.
+以下でそのことを証明しよう.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Contou-Carr\`ere記号の特別な場合}
+
+$A=\C$ ($\eps=0$)のとき, CC記号はtame記号に一致する.
+すなわち, CC記号は特別な場合としてtame記号を含んでいる.
+
+$\eps^2\ne 0$ の場合.
+$f,g\in A((z))$ は上のように表示されており, $w_x(f)=w_x(g)=0$, 
+\begin{alignat*}{4}
+&
+a_0\equiv 1+\eps\alpha_0 & & \pmod{\eps^2}, \qquad
+& &
+b_0\equiv 1+\eps\beta_0  & & \pmod{\eps^2},
+\\ &
+a_i\equiv -\eps\alpha_i  & & \pmod{\eps^2}, \qquad
+& &
+b_i\equiv -\eps\beta_i   & & \pmod{\eps^2}  \qquad (i\ne 0),
+\\ &
+\alpha_i,\beta_i\in\C
+\end{alignat*}
+となっていると仮定する:
+\begin{align*}
+&
+f
+\equiv\prod_{i\in\Z}(1+\eps\alpha_i z^i)
+\equiv 1+\eps\phi \pmod{\eps^2}, \qquad
+\\ &
+g
+\equiv\prod_{i\in\Z}(1+\eps\beta_i z^i)
+\equiv 1+\eps\psi \pmod{\eps^2}.
+\end{align*}
+ここで $\phi,\psi\in\C((z))$ を次のように定めておいた:
+\[
+\phi=\sum_i \alpha_i z^i, \qquad
+\psi=\sum_i \beta_i  z^i.
+\]
+$i,j>0$ のとき modulo $\eps^3$ で $a_i^{j/(i,j)}b_{-j}^{i/(i,j)}$,
+$a_{-i}^{j/(i,j)}b_j^{i/(i,j)}$ が消えないためには $i=j=(i,j)$
+となることが必要なので, mod $\eps^3$ で, 
+\[
+\CC{x}{f}{g}
+\equiv 1 - \sum_{i>0}i a_i b_{-i} + \sum_{j>0}j a_{-j}b_j
+\equiv 1 - \eps^2 \sum_{i\in\Z} i \alpha_i \beta_{-i}
+\equiv 1 + \eps^2 \Res_x(\phi\cdot d\psi)
+\]
+となる. すなわち, CC記号は $(\phi,\psi)$ を留数 $\Res_x(\phi\cdot d\psi)$
+に対応させる写像を含んでいると考えてよい.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Contou-Carr\`ere記号の積分表示と相互法則}
+
+\begin{theorem}[CC記号の相互法則]
+以上の設定のもとで, $f,g\in K_A^\times$ に対して, 
+\[
+\prod_{x\in X}\CC{x}{f}{g} = 1
+\]
+が成立している. 左辺の積は有限積になることに注意せよ. \qed
+\end{theorem}
+
+上に述べたことにより, この定理はWeilの相互法則と留数定理の両方の一般化に
+なっている. 証明はWeilの相互法則の場合と完全に同様である.
+完全に同様の方法で証明できることは次の公式が成立することからわかる:
+$f,g\in K_A^\times$ について, 
+\begin{align*}
+&
+\CC{x}{f}{g}
+\\ &
+=
+\exp\left[
+\frac{1}{2\pi i}\int_{C_x} \bigl(
+  \log f\cdot d\log g - d\log f\cdot\log g(x_0)
+\bigr)
+\right]
+\tag{$\$$}
+\\ &
+=
+\exp\left[
+\frac{1}{2\pi i}\int_{C_x} \bigl(
+  d\log f\circ d\log g + \log f(x_0)\cdot d\log g - d\log f\cdot\log g(x_0)
+\bigr)
+\right]
+\tag{$\$\$$}
+\end{align*}
+公式($\$$),($\$\$$)はそれぞれ前節の公式($\ast$),($\ast\ast$)
+の一般化になっており, 形式的に完全に同じ形をしている.
+この公式からCC記号が局所座標の取り方によらずに決まっていることもわかる.
+
+$K_A=K[\eps]/(\eps^{N+1})$ なので $f\in K_A^\times$ は
+$f=f_0(1-\phi)$, 
+$f_0\in K^\times$, $\phi\in\eps K_A$ と表わされる.
+このとき $\phi^{N+1}=0$ となることに注意せよ.
+$\log f$ は次のように定義される:
+\[
+\log f
+= \log f_0 + \log(1-\phi)
+= \log f_0 - \sum_{n=1}^N \frac{\phi^n}{n}.
+\]
+この定義より, $\log f$ は $X$ から $f_0$ の
+零点と極を除いて得られるRiemann面上の多価函数 $\log f_0$ 
+と $\eps K[\eps]/(\eps^{N+1})$ の元の和になる.
+積分は $\eps$ のべきの係数ごとに実行することによって定義される.
+
+公式($\$$),($\$\$$)を証明しよう.
+前節と同様の議論によって,
+\[
+f=1-az^k, \quad g=1-bz^{-l}, \quad a\in A,\quad b\in\m, \quad k,l\in\Z_{>0}
+\]
+の場合に
+\[
+\exp\left[
+\frac{1}{2\pi i}\int_{C_x} \bigl(
+  \log f\cdot d\log g - d\log f\cdot\log g(x_0)
+\bigr)
+\right]
+=
+\left( 1 - a^{l/(k,l)}b^{k/(k,l)} \right)^{(k,l)}
+\]
+が成立することを示せば十分であることがわかる.
+この場合には, 
+左辺の1つ目の項の積分は留数の計算になり, 
+左辺の2つ目の項の積分は消えるので次を示せば十分である:
+\[
+\exp\left[
+\Res_x(\log f\cdot d\log g)
+\right]
+=
+\left( 1 - a^{l/(k,l)}b^{k/(k,l)} \right)^{(k,l)}.
+\tag{$\$\$\$$}
+\]
+この公式を初めて見た人は
+どのようにして $k,l$ の最大公約数が登場するのか不思議に感じる
+かもしれない. その疑問は以下の計算によって解消される.
+
+上の公式を証明しよう. Taylor展開 $\log(1-X)=-\sum_{i=1}^\infty X^i/i$ より, 
+\begin{align*}
+&
+\log f = \log(1-az^k) = - \sum_{i=1}^\infty \frac{a^i}{i} z^{ik}, 
+\\ &
+\log g = \log(1-bz^{-l}) = - \sum_{j=1}^\infty \frac{b^j}{j} z^{-jl},
+%\\ &
+\qquad
+d\log g = l \sum_{j=1}^\infty b^j z^{-jl-1}\,dz
+\end{align*}
+なので
+\[
+\log f\cdot d\log g
+= -l \sum_{i,j=1}^\infty \frac{a^i b^j}{i} z^{ik-jl-1}\,dz.
+\]
+これの留数は $ik=jl$ を満たす正の整数 $i,j$ の組全体に
+わたる $-la^ib^j/i$ の和になる. 
+$ik=jl$ と $ik/(k,l)=jl/(k,l)$ は同値であり, 
+さらにその条件はある正の整数 $m$ で $i=ml/(k,l)$, $j=mk/(k,l)$ を
+満たすものが存在することと同値である. ゆえに
+\begin{align*}
+\Res_x(\log f\cdot d\log g)
+&
+= -l \sum_{m=1}^\infty \frac{a^{ml/(k,l)}b^{mk/(k,l)}}{ml/(k,l)}
+\\ &
+= -(k,l)\sum_{m=1}^\infty 
+  \frac{\left( a^{l/(k,l)}b^{k/(k,l)} \right)^{m}}{m}
+= (k,l)\log\left( 1 - a^{l/(k,l)}b^{k/(k,l)} \right).
+\end{align*}
+ゆえに公式($\$\$\$$)が成立する.
+
+%公式($\$\$$)を使えば前節のtame記号の場合と同様にして
+%CC記号の相互法則を証明することができる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Contou-Carr\`ere記号のSteinberg性}
+
+前節のtame記号の場合と同様にして, 
+$f,1-f\in K_A^\times$ のとき
+CC記号がSteinberg性 $\CC{x}{f}{1-f}=1$ を
+満たすことを公式($\$\$$)を用いて証明することができる.
+
+さらに $f,g\in\Khat_{A,x}^\times=A((z))^\times$ に
+対する $\CC{x}{f}{g}$ の定義式より, 
+$f,1-f\in K_A^\times$ の場合のCC記号のSteinberg性から 
+$f,1-f\in \Khat_{A,x}^\times$ の場合のSteinberg性が導かれる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{補足}
+
+このノートを書くときに, ``symbols'' に
+関するTateの古典的論文 \cite{tate} も参照した.
+
+さらに, 各種中心拡大達と各種``symbols''の関係について, 
+\cite{brylinski},
+\cite{anderson-pablosromo}
+も参照した. tame記号とその一般化であるCC記号は
+佐藤Grassmann多様体を用いた無限次元Lie群 $GL_\infty$ の中心拡大を
+用いて理解することができる(\cite{anderson-pablosromo}).
+\secref{sec:heisenberg}の内容はそのLie環版だとみなされる.
+\secref{sec:CC-Heis}も参照せよ.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録1: 多重対数函数と線形常微分方程式と反復積分}
+\label{sec:polylog}
+
+多重対数函数(polylogarithm)については \cite{hain} などを参照した.
+
+$A(t)$ は正方行列値函数であるとし%
+\footnote{どのクラスの函数なのかが気になる人は, 
+たとえば連続函数であると思っておけばよい.},  
+正方行列値函数 $U(t)$ に関する線形常微分方程式
+\[
+ \frac{dU(t)}{dt} = U(t)A(t), \qquad U(t_0)=E=\text{(単位行列)}
+\]
+について考える. この微分方程式は
+\[
+ U(t) = E + \int_{t_0}^t U(s)A(s)\,ds
+\]
+と同値である. 以下, 簡単のため $t_0\leqq t$ の場合のみを考える. 
+右辺全体を右辺の積分の中に代入する操作を繰り返すことによって以下を得る:
+\begin{align*}
+U(t)
+&
+= E 
++ \int_{t_0}^t A(t_1)\, dt_1
++ \int_{t_0}^t\int_{t_0}^{t_1} U(t_2)A(t_2)\,dt_2\cdot A(t_1)\,dt_1 
+= \cdots
+\\ &
+= E
++ \int_{t_0}^t A(t_1)\, dt_1
++ \cdots
++ \int_{t_0}^t\int_{t_0}^{t_1}\cdots\int_{t_0}^{t_{n-1}}
+U(t_n)A(t_n)\,dt_n\cdots A(t_2)\,dt_2\cdot A(t_1)\,dt_1.
+\end{align*}
+この操作の極限を取ることによって
+(Picardの逐次近似法, 逐次代入法), 
+次が成立していることがわかる:
+\[
+U(t) 
+= \sum_{n=0}^\infty
+\int\!\cdots\!\int_{t_0<t_n<\cdots<t_1<t}
+A(t_n)\,dt_n\cdots A(t_2)\,dt_2\cdot A(t_1)\,dt_1.
+\]
+時間順序積 $T[A_n(t_n)\cdots A_1(t_1)]$ を次のように定める:
+\[
+T[A_n(t_n)\cdots A_1(t_1)]
+=A_{\sigma(n)}(t_{\sigma(n)})\cdots A_{\sigma(1)}(t_{\sigma(1)}), \quad
+t_{\sigma(n)}<\cdots<t_{\sigma(1)}, \quad
+\sigma\in S_n.
+\]
+すなわち, 時間順序積は左から時刻の小さな順番に並ぶように並べ直す
+ことによって定義される. この記号法のもとで,
+\[
+U(t)=\sum_{n=0}^\infty
+\frac{1}{n!}
+\int_{t_0}^t\!\cdots\!\int_{t_0}^t T[A(t_n)\cdots A(t_1)]\,dt_n\cdots dt_1.
+\]
+形式的に時間順序積を積分と無限和の外側に出して書くことを許せば
+\[
+U(t)
+= T\left[
+\sum_{n=0}^\infty \frac{1}{n!} \left(\int_{t_0}^t A(s)\,ds\right)^n
+\right]
+= T\left[
+\exp\left( \int_{t_0}^t A(s)\, ds \right)
+\right].
+\]
+このような書き方は物理の教科書などでよく見るが, 
+数学の教科書では珍しいと思う.
+この表示を時間順序指数函数(time-ordered exponential)と呼ぶことがある.
+時間ではなく, 経路上の前後で並べ直す場合には経路順序積(path-ordered product)
+と言ったり, 経路順序指数函数(path-ordered exponential)と言ったりする%
+\footnote{共形場理論では半径順序積(radial ordered product)も使われている.
+たとえば, 複素数 $z$, $w$ について, 
+$|z|>|w|$ ならば $R[A(z)B(w)]=A(z)B(w)$ で,
+$|w|>|z|$ ならば $R[A(z)B(w)]=B(w)A(z)$ 
+($A(z)$, $B(w)$ の両方がフェルミオンならば $R[A(z)B(w)]=-B(w)A(z)$)と定める.
+共形場理論の場は $|z|>|w|$ のときにのみ積 $A(z)B(w)$ が
+well-defined になり, 半径順序積 $R[A(z)B(w)]$ に解析接続される.
+この解析接続を純代数的に定式化し直せば頂点代数(vertex algebra)
+の複雑な公理系が得られる.
+頂点代数について学ぶ場合には頂点代数の複雑な公理系にいきなり触れる
+よりも, \cite{yamada} のような優れた共形場理論の教科書などを読んで
+知っておくべき計算の具体例に触れてからにした方が良いと思う.
+}.
+
+\secref{sec:tame-integral}で導入した反復積分(iterated integral)
+の記号法を使えば, 次のように書くこともできる: 
+行列値 1-form $A$ を $A = A(t)\,dt$ と定めると,
+\begin{align*}
+&
+U(t)
+= \sum_{n=0}^\infty
+\int_{t_0}^t \underbrace{A\circ\cdots\circ A}_{\text{$n$ times}},
+\\ &
+\int_{t_0}^t \underbrace{A\circ\cdots\circ A}_{\text{$n$ times}}
+=
+\int\!\cdots\!\int_{t_0<t_n<\cdots<t_1<t}
+A(t_n)\cdots A(t_2)A(t_1) \,dt_n\cdots dt_2\,dt_1.
+\end{align*}
+以上によって反復積分の記号法と時間順序積の記号法の対応は
+明らかでだろう%
+\footnote{反復積分について説明する場合には線形常微分方程式のPicardの
+逐次近似法による解法の話を導入として使うのがよいと思う.}.
+
+
+1-forms $\omega_0$, $\omega_1$ を次のように定める:
+\[
+\omega_0 = d\log t = \frac{dt}{t}, \qquad
+\omega_1 = -d\log(1-t) = \frac{dt}{1-t}
+\]
+多重対数函数 $\Li_r(z)$ は次のように反復積分によって定義される:
+\begin{align*}
+&
+\Li_1(z) = -\log(1-z) = \int_0^z \omega_1,
+\\ &
+\Li_2(z) = \int_0^z \Li_1(t)\omega_0 = \int_0^z \omega_1\circ\omega_0,
+\\ &
+\Li_3(z) = \int_0^z \Li_2(t)\omega_0 = \int_0^z \omega_1\circ\omega_0\circ\omega_0,
+\\ &
+\quad \cdots\cdots\cdots
+\\ &
+\Li_r(z) = \int_0^z \Li_{r-1}(t)\omega_0
+= \int_0^z \omega_1\circ
+\underbrace{\omega_0\circ\cdots\circ\omega_0}_{\text{$r-1$ times}}.
+\end{align*}
+ゆえに $A=A(t)\,dt$ を
+\[
+A =
+\begin{bmatrix}
+0 & \omega_1 &          &          &          & \\
+  & 0        & \omega_0 &          &          & \\
+  &          & 0        & \omega_0 &          & \\
+  &          &          & 0        & \omega_0 & \\
+  &          &          &          & 0        & \ddots \\
+  &          &          &          &          & \ddots \\
+\end{bmatrix}
+\]
+とおいて, 微分方程式 $dU(t)=U(t)A$, $U(0)=E$ を解くと, 
+解行列 $U(z)$ の第 $(1,r+1)$ 成分は $\Li_r(z)$ になる.
+詳しい解説が \cite{hain} にある.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{付録2: Contou-Carr\`ere記号のボソン自由場表示}
+\label{sec:CC-Heis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ボソンの頂点作用素}
+
+以下で説明する計算の仕組みにの詳しい解説は
+共形場理論の教科書 \cite{yamada} 第2章にある.
+
+生成元 $a_m$, $e^{\lambda q}$ ($m\in\Z$, $\lambda\in\C$) と
+次の基本関係式によって定義される $\C$ 上の代数を $\B$ と書くことにする:
+\[
+[a_m,a_n]=m\delta_{m+n,0}, \quad
+[a_m,e^{nq}]=\delta_{m0}e^q, \quad
+e^{\lambda q}e^{\mu q}=e^{(\lambda+\mu)q}, \quad
+e^{0q}=1.
+\]
+$a_m$ ($m\geqq0$) から生成される $\B$ の可換な部分代数を $\B_+$ と書き, 
+$a_m$ ($m<0$), $e^{\lambda q}$ ($\lambda\in\C$) から
+生成される $\B$ の可換な部分代数を $\B_-$ と書く.
+このとき $\B$ の積は次の線形同型を誘導する:
+\[
+ \C[\{a_m\}_{m\in\Z}, \{e^{\lambda q}\}_{\lambda\in\C}]=
+\B_-\otimes\B_+ \isomto \B.
+\]
+このようにして得られる可換環と非可換環 $\B$ の線形同型 
+$\C[\{a_m\}_{m\in\Z}, \{e^{\lambda q\}_{\lambda\in\C}}]\isomto\B$
+を $a\mapsto \np{a}$ と書き, 正規積 (normal product)または
+正規順序積 (normal ordered product)と呼ぶ. 例えば $m>0$ のとき
+\[
+ a_m a_{-m} = a_{-m}a_m + [a_m,a_{-m}]= \np{a_m a_{-m}} + m.
+\]
+などが成立している.
+
+不定元 $z$ に関する形式Laurent級数についても正規積を係数ごとへの
+作用によって拡張しておく. 形式的に
+\[
+\varphi(z) = q + a_0\log z + \sum_{m\ne 0}a_m\frac{z^{-m}}{-m},  \qquad
+a(z)=\varphi'(z)=\sum_{m\in\Z} a_m z^{-m-1}
+\]
+とおいて, それぞれをスカラーボソン自由場, カレント場と呼ぶ.
+このとき $\lambda\in\C$ に対して $\np{e^{n\varphi(z)}}$ 
+が $z^{\lambda a_0}\B$ 係数の形式Laurent級数として,
+\[
+\np{e^{\lambda\varphi(z)}}=
+\exp\left(\lambda\sum_{m<0}a_m\frac{z^{-m}}{-m}\right)
+e^{\lambda q}
+z^{\lambda a_0}
+\exp\left(\lambda\sum_{m>0}a_m\frac{z^{-m}}{-m}\right)
+\]
+と自然に定義される. 
+これはボソンの頂点作用素(bosonic vertex operator)と呼ばれている.
+
+一般に $[A,B]=C$ で $C$ が $A,B$ と可換なとき, 
+\[
+e^A e^B = e^C e^B e^A
+\]
+が成立している. 実際, $l_X Y=XY$, $r_X Y=YX$, $\ad_X Y=[X,Y]$ と
+書くと, 
+\[
+e^{\ad_A} B = e^{r_B-l_A} B = e^{r_A}e^{-l_A} B = e^A B e^{-A}, \qquad
+e^{\ad_A} B = B + [A,B] = B+C
+\]
+なので $e^A B e^{-A}=B+C$ となる. ゆえに
+\[
+e^A e^B e^{-A} = \exp(e^A B e^{-A}) = e^{B+C}=e^C e^B.
+\]
+これで $e^A e^B = e^C e^B e^A$ となることがわかった.
+
+この一般的な公式
+を $\np{e^{\lambda\varphi(z)}}\np{e^{\mu\varphi(w)}}$ の
+計算に応用するために形式的に
+\[
+\varphi(z)_+ = a_0\log z + \sum_{m>0} a_m \frac{z^{-m}}{-m}, \qquad
+\varphi(z)_- = q         + \sum_{m<0} a_m \frac{z^{-m}}{-m}
+\]
+とおき, $[a_m,q]=\delta_{m0}$ という関係式を仮定しておく. このとき
+\begin{align*}
+[\varphi_+(z), \varphi_-(w)]
+= \log z - \sum_{m>0}\frac{(w/z)^m}{m}
+= \log z + \log(1-w/z)
+= \log(z-w). 
+\end{align*}
+ここで形式的に $|z|>|w|$ の場合に使える対数のTaylor展開の公式などを
+形式的に使って整理したことに注意せよ. 
+形式的に $\np{e^{\lambda\varphi(z)}}=e^{\lambda\varphi(z)_-}e^{\lambda\varphi(z)_+}$
+が成立しており, 正規積は $\varphi(z)_+$ を $\varphi(w)_-$ よりも右に
+持って行くことだということと, 上の一般的な公式より形式的に次が成立することがわかる:
+\[
+\np{e^{\lambda\varphi(z)}}\np{e^{\mu\varphi(w)}}
+=(z-w)^{\lambda\mu}\np{e^{\lambda\varphi(z)+\mu\varphi(w)}}.
+\]
+ただし, $(z-w)^\nu$ に $|z|>|w|$ で成立している公式
+\[
+(z-w)^\nu
+= z^\nu\sum_{m\geqq 0}^\infty \binom{\nu}{m} \left(\frac{w}{z}\right)^m
+\]
+を適用して, 右辺を $z,w$ の形式Laurent級数とみなす.
+
+以上の計算と同様の方法でContou-Carr\`ere記号(CC記号)から符号部分を除いた式
+が得られることを次に示したい.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Contou-Carr\`ere記号のボソン自由場表示}
+
+以下では, $\C$ 上ではなく, $A=\C[\eps]/(\eps^{N+1})$ 上で考える.
+
+任意に $f,g\in A((z))^\times$ を取る.
+それらは次のように一意に表わされる:
+\[
+f = z^\lambda b_0\prod_{0\ne i\in\Z}(1-b_i z^i), \qquad
+g = z^\mu     c_0\prod_{0\ne i\in\Z}(1-c_i z^i).
+\]
+ただし $\lambda,\mu\in\Z$, $b_0,c_0\in A^\times$,
+$b_i,c_i\in A$, $b_{-i},c_{-i}\in\m=\eps A$ ($i>0$) であり,
+十分大きな $i$ に対して $b_{-i}=0$, $c_{-i}=0$ であるとする.
+これらは次のように表される:
+\[
+f = \exp\left(\lambda\log z+\sum_{m\in\Z} \beta_m  z^m \right), \quad
+g = \exp\left(\mu\log z    +\sum_{m\in\Z} \gamma_m z^m \right).
+\]
+すなわち
+\[
+\log f = \lambda\log z+\sum_{m\in\Z} \beta_m  z^m, \qquad
+\log g = \mu\log z    +\sum_{m\in\Z} \gamma_m z^m.
+\]
+ここで, $\beta_0=\log b_0$, $\gamma_0=\log c_0$, 
+\[
+\beta_{\pm m}  = - \sum_{i>0,\, i\mid m}\frac{b_{\pm i}^{m/i}}{m/i}, \qquad
+\gamma_{\pm m} = - \sum_{i>0,\, i\mid m}\frac{c_{\pm i}^{m/i}}{m/i}
+\qquad (m>0).
+\]
+$m>0$ ならば $\beta_{-m},\gamma_{-m}\in\m=\eps A$ であり, 
+十分大きな $m$ に対してそれらは $0$ になることに注意せよ. 
+
+上の $f,g$ の表式はボソンの頂点作用素の表式に非常に似ている.
+そこで $\log z\mapsto -q$, $z^m\mapsto a_m$ という置き換えで
+頂点作用素と類似の作用素を作ることを考えよう.
+
+天下り的になってしまうが, $\phi,\psi$ を次のように定める:
+\begin{align*}
+&
+\phi = \pi i\lambda a_0 - \lambda q + \sum_{m\in\Z}\beta_m  a_m,
+\qquad
+\psi = \pi i\mu     a_0 - \mu     q + \sum_{m\in\Z}\gamma_m a_m.
+\end{align*}
+$\pi i\lambda a_0$ と $\pi i\mu a_0$ の項が入っている理由は
+次の部分節を見ればわかる.
+さらに $\phi_\pm$, $\psi_\pm$ を次のように定める:
+\begin{align*}
+&
+\phi_+ = \pi i\lambda a_0 + \sum_{m\geqq0}\beta_m  a_m, \qquad
+\phi_- = -\lambda q + \sum_{m<0}\beta_m a_m, 
+\\ &
+\psi_+ = \pi i\mu     a_0 + \sum_{m\geqq0}\gamma_m a_m, \qquad
+\psi_- = -\mu q     + \sum_{m<0}\gamma_m a_m.
+\end{align*}
+$\np{e^\phi}$, $\np{e^\psi}$ を次のように定めることができる:
+\begin{align*}
+&
+\np{e^\phi}=e^{\phi_-}e^{\phi_+}=
+\exp\left(\sum_{m<0} \beta_m a_m \right) 
+e^{\lambda q}
+\exp\left(\pi i\lambda a_0+\sum_{m\geqq 0} \beta_m a_m \right),
+\\ &
+\np{e^\psi}=e^{\psi_-}e^{\psi_+}=
+\exp\left(\sum_{m<0} \gamma_m a_m \right) 
+e^{\mu q}
+\exp\left(\pi i \mu a_0 + \sum_{m\geqq 0} \gamma_m a_m \right).
+\end{align*}
+
+\begin{lemma*}
+このとき次の公式が成立している:
+\begin{align*}
+&
+\np{e^\phi}\np{e^\psi} = \exp([\phi_+,\psi_-])\np{e^{\phi+\psi}},
+\\ &
+%\quad
+\exp([\phi_+,\psi_-])=
+\left(
+(-1)^{\lambda\mu}b_0^\mu \prod_{i,j=1}^\infty\left(1-b_i^{j/(i,j)}c_{-j}^{i/(i,j)}\right)^{(i,j)}
+\right)^{-1}.
+\end{align*}
+\end{lemma*}
+
+\begin{proof}
+後者の等式のみを示せばよい. 
+$[a_m,q]=\delta_{m0}$, $[a_m,a_n]=m\delta_{m+n,0}$ より
+\begin{align*}
+-[\phi_+,\psi_-]
+&
+=\pi i\lambda\mu+\mu\beta_0 - \sum_{m=1}^\infty m\beta_m\gamma_{-m}
+%\\ &
+=\pi i\lambda\mu+\mu\beta_0 
+-\sum_{m=1}^\infty \sum_{i,j\mid m} 
+  m\frac{b_i^{m/i}}{m/i}\frac{c_{-j}^{m/j}}{m/j}.
+\end{align*}
+$k=m/i$, $l=m/j$ とおくとこの和を $ki=lj$ を満たす正の整数 $i,j,k,l$ に
+関する和に書き直せる. 条件 $ki=lj$ とある正の整数 $n$ で 
+$k=j/(i,j)\cdot n$, $l=i/(i,j)\cdot n$ を満たすものが存在することは同値
+なので, この和は結局次のように書き直される:
+\begin{align*}
+-[\phi_+,\psi_-]
+&
+=\pi i\lambda\mu+\mu\beta_0
+-\sum_{i,j=1}^\infty \sum_{n=1}^\infty 
+  \frac{ij}{(i,j)}n
+  \frac{b_i^{j/(i,j)\cdot n}}{j/(i,j)\cdot n}
+  \frac{c_{-j}^{i/(i,j)\cdot n}}{i/(i,j)\cdot n}
+\\ &
+=\pi i\lambda\mu+\mu\beta_0
+-\sum_{i,j=1}^\infty (i,j)\sum_{n=1}^\infty
+  \frac{\left( b_i^{j/(i,j)} c_{-j}^{i/(i,j)} \right)^n}{n}
+\\ &
+=\pi i\lambda\mu+\mu\beta_0
++\sum_{i,j=1}^\infty (i,j)\log\left( 1 - b_i^{j/(i,j)} c_{-j}^{i/(i,j)} \right).
+\end{align*}
+ゆえに $\beta_0=\log b_0$ より,
+\[
+\left(\exp([\phi_+,\psi_-])\right)^{-1}
+=(-1)^{\lambda\mu}b_0^\mu \prod_{i,j=1}^\infty \left( 1 - b_i^{j/(i,j)} c_{-j}^{i/(i,j)} \right)^{(i,j)}.
+\]
+これは示したい公式と同値である. \qed
+\end{proof}
+
+上の補題から次の定理がただちに導かれる.
+
+\begin{theorem*}
+以上の設定のもとで次の公式が成立している:
+\[
+(\np{e^\phi}\np{e^\psi})^{-1}\np{e^{\psi}}\np{e^{\phi}}
+=
+\frac
+{b_0^\mu    \prod_{i,j=1}^\infty\left(1-b_i^{j/(i,j)}   c_{-j}^{i/(i,j)}\right)^{(i,j)}}
+{c_0^\lambda\prod_{i,j=1}^\infty\left(1-b_{-i}^{j/(i,j)}c_j^{i/(i,j)}\right)^{(i,j)}}
+=(-1)^{\lambda\mu}\CC{}{f}{g}.
+\]
+ここで $\CC{}{f}{g}$ はContou-Carr\`ere記号である.\qed
+\end{theorem*}
+
+このようにContou-Carr\`ere記号は符号部分を除いて
+ボソンの頂点作用素に類似の表示を持つ作用素の
+乗法交換子を用いて表わされる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{$\log f$ のボソン化 $\phi$ の反復積分表示}
+
+$x_0\ne 0$ から出発して原点の周囲を反時計回りに一周して $x_0$ に戻る
+経路を $C$ と書く. $\log f$, $\log g$ は次の形の函数であるとする:
+\[
+\log f = \lambda\log z+\sum_{m\in\Z} \beta_m  z^m, \qquad
+\log g = \mu\log z    +\sum_{m\in\Z} \gamma_m z^m.
+\]
+このとき $c(\log f,\log g)$ を次のように定める:
+\begin{align*}
+c(\log f,\log g)
+&
+=\frac{1}{2\pi i}
+\int_C(\log f\cdot d\log g - d\log f\cdot\log g(x_0))
+\\ &
+=\frac{1}{2\pi i}
+\int_C(\log f\circ d\log g + \log f(x_0)\cdot d\log g- d\log f\cdot\log g(x_0)).
+\end{align*}
+このとき次の公式が成立している:
+\begin{align*}
+&
+c(\log f,\log g)+c(\log g,\log f)=2\pi i\lambda\mu,
+\\ &
+c(\log z,\log z)=\pi i, \qquad
+c(z^m,z^n) = -m\delta_{m,n},
+\\ &
+c(z^m,\log z) = \delta_{m0}, \qquad
+c(\log z, z^n) = -\delta_{0n}.
+\end{align*}
+これらの公式を使えば次が成立していることがわかる:
+\[
+c(\log f,\log g)
+= \pi i \lambda\mu + \mu\beta_0 - \lambda \gamma_0 
+- \sum_{m\ne 0} m\beta_m\gamma_{-m}. 
+\]
+これを
+\[
+\log g = \varphi(z) = q + a_0\log z + \sum_{m\ne 0}a_m\frac{z^{-m}}{-m}
+\]
+すなわち $\mu=a_0$, $\gamma_0=q$, $\gamma_{-m}=-a_m/m$ 
+の場合に形式的に適用すると,
+\[
+c(\log f,\varphi)
+= \pi i \lambda a_0 -\lambda q +\sum_{m\in\Z}\beta_m a_m
+= \phi.
+\]
+この $\phi$ は前部分節で定義された $\log f$ のボソン化 $\phi$ である.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+
+\bibitem{anderson-pablosromo}
+Anderson, Greg W.\ and Pablos Romo, Fernando.
+Simple proofs of classical explicit reciprocity laws on curves 
+using determinant groupoids over an artinian local ring.
+\href{http://arxiv.org/abs/math/0207311}
+{http://arxiv.org/abs/math/0207311}
+
+\bibitem{brylinski}
+Brylinski, Jean-Luc.
+Central extensions and reciprocity laws.
+Cahiers de Topologie et G\'eom\'etrie Diff\'erentielle Cat\'egoriques, 
+1997, Vol.~38, Issue~3, 193--215.
+\href{https://eudml.org/doc/91592}
+{https://eudml.org/doc/91592}
+
+\bibitem{chen}
+Chen, Kuo-Tsai.
+Iterated path integrals.
+Bull.\ Amer.\ Math.| Soc.,
+Vol.~83, no.~5 (1977), pp.~831--879.
+\href{https://projecteuclid.org/euclid.bams/1183539443}
+{https://projecteuclid.org/euclid.bams/1183539443}
+
+\bibitem{deligne}
+Deligne, Pierre.
+Le symbole mod\'er\'e.
+Publ.\ math,\ I.H.\'E.S., tome 73 (1991), p.~147--181.
+\href{https://eudml.org/doc/104074}
+{https://eudml.org/doc/104074}
+
+\bibitem{hain}
+Hain, Richard M.
+Classical polylogarithm.
+\href{http://arxiv.org/abs/alg-geom/9202022}
+{http://arxiv.org/abs/alg-geom/9202022}
+
+\bibitem{horozov-luo}
+Horozov, Ivan and Luo, Zhenbin.
+On the Contou-Carrere symbol for surfaces.
+\href{http://arxiv.org/abs/1310.7065}
+{http://arxiv.org/abs/1310.7065}
+
+\bibitem{kerr}
+Kerr, Matt.
+An elementary proof of suslin reciprocity.
+Canad.\ Math.\ Bull., 48 (2005), 221--236.
+\href{ http://dx.doi.org/10.4153/CMB-2005-020-x}
+{http://dx.doi.org/10.4153/CMB-2005-020-x}
+
+\bibitem{luo}
+Luo, Zhenbin.
+Contou-Carr\`ere symbol via iterated integrals and its reciprocity law.
+\href{http://arxiv.org/abs/1003.1431}
+{http://arxiv.org/abs/1003.1431}
+
+\bibitem{pablosromo}
+Pablos Romo, Fernando.
+On the Steinberg property of the Contou-Carr\`ere symbol.
+\href{http://arxiv.org/abs/math/0602374}
+{http://arxiv.org/abs/math/0602374}
+
+\bibitem{tate}
+Tate, John.
+Symbols in arithmetic.
+Ates.\ Conr\`es intern.\ math., 1970, Tome~1, pp.~201--211.
+\href{http://www.mathunion.org/ICM/ICM1970.1/Main/icm1970.1.0201.0212.ocr.pdf}
+{http://www.mathunion.org/ICM/ICM1970.1/Main/icm1970.1.0201.0212.ocr.pdf}
+
+\bibitem{yamada}
+山田泰彦.
+共形場理論入門. 
+数理物理学シリーズ1, 培風館, 2006, xii+265頁.
+
+\bibitem{yamazaki}
+山崎隆雄. 
+平方剰余の相互法則の函数体類似. 
+数学セミナー, 第55巻第2号/通巻652号, 
+2016年2月号, 
+特集：平方剰余の相互法則,
+pp.~28--32. 
+
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
