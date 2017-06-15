@@ -12,10 +12,69 @@
 </script>
 <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
 </head><body>
+
 <h1>WindowsでJuliaをJupyterから使う</h1>
 <p>2017-06-15</p>
 <p>黒木 玄</p>
+
+<hr>
+
+<p>以下は6月15日の後半の作業。</p>
+
+<p>前半とは別のWindows機にJuliaとAnaconda3を入れた。</p>
+
+<p>2周目なので比較的短時間に手際よくインストールできた。</p>
+
+<ol>
+
+<li><p>次のように環境変数を設定した。</p>
+<pre>
+JULIA_HOME=C:\Julia-0.5.2\bin
+JULIA_PKGDIR=C:\Julia-0.5.2\Pkg
+<!-- JC=C:\Julia-0.5.2\Pkg\v0.5\Conda\deps\usr --></pre>
+<p>おそらく JULIA_PKGDIR の指定が本質的である。これをサボると Jupyter Notebook で Julia のノートブックを作成したときに dead kernel の永久ループで苦しむ。</p>
+
+<li><p>Julia 0.5.2 を C:\Julia-0.5.2 以下にインストール。</p>
+<p><a href="https://julialang.org/downloads/">https://julialang.org/downloads/</a></p>
+
+<li><p>Anaconda 3.6 version を C:\Anaconda3 以下にインストール。</p>
+<p><a href="https://www.continuum.io/downloads">https://www.continuum.io/downloads</a></p>
+
+<li><p>Julia を起動して以下を実行。</p>
+<pre>
+Pkg.init()
+Pkg.add("IJulia")
+ENV["PYTHON"]="C:\\Anaconda3\\python.exe"
+Pkg.add("PyPlot")
+using PyCall
+PyCall.pyversion
+</pre>
+<p>最後に v"3.6.1" と表示された。Anaconda3 の python を使う設定になっている。</p>
+
+<li><p>スタートメニューの Anaconda3　の Jupyter Notebook のショートカットをデスクトップに送ってコピーし、
+プロパティを参照し、リンク先の最後の %USERPROFILE% を自分好みの初期フォルダに変更する。私は次のように変更した。</p>
+
+<p>C:\Anaconda3\python.exe C:\Anaconda3\cwp.py C:\Anaconda3 "C:/Anaconda3/python.exe" "C:/Anaconda3/Scripts/jupyter-notebook-script.py" C:\home\kuroki\Dropbox\Jupyter</p>
+
+<p>これでデスクトップ上の Jupyter Notebook のショートカットをダブルクリックすると、自分好みのフォルダを初期フォルダにして、Jupyter Notebook が起動し、ブラウザにその画面が現われる。</p>
+
+<p>ブラウザのその画面で、New → Jupyter 0.5.2 を選択すると、Jupyter 0.5.2 の notebook を使用可能である。</p>
+
+<li><p>Juliaを起動してさらに以下を実行して、使えるパッケージを増やした。</p>
+<pre>
+Pkg.add("ODE")
+Pkg.add("SymPy")
+</pre>
+
+</ol>
+
+<hr>
+
 <p>
+以下は6月15日の前半の作業。
+</p><p>
+試行錯誤で手間取った様子の記録をすべて残しておく。
+</p><p>
 <a href="https://lectures.quantecon.org/jl/getting_started.html">https://lectures.quantecon.org/jl/getting_started.html</a>
 におおむね従って、古いWindows 7機にJuliaとAnacondaをインストール
 </p><p>
@@ -490,5 +549,6 @@ PyCall.libpython
 多分、Juliaを使うような人はWindows上で使わないことの方が普通なのではないか？
 情報も少なく、試行錯誤が必要になった。
 </p>
+<hr>
 </body>
 </html>
