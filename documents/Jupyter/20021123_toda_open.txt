@@ -1,0 +1,157 @@
+Date: 23 Nov 2002 00:28:31 JST
+From: Kuroki Gen <kuroki@math.tohoku.ac.jp>
+Message-Id: <200211221528.AAA06284@sakaki.math.tohoku.ac.jp>
+Subject: [octave] open Toda lattice and Cholesky method
+
+open Toda lattice の時間発展と一般正値対称行列の対角化の Cholesky
+method の離散時間発展が exp で繋がっていることの数値的な実例。
+
+1. ファイル名 toda_open.m の中身
+
+## open Toda lattice
+##
+## Example: To integrate the open Toda lattice from t = 0 to t = 1,
+##
+## solution = lsode('toda_open', vec(L0), 0:1)
+## L1 = sqreshape(sol(2,:))
+
+function xdot = toda_open(x)
+
+  L = sqreshape(x);
+  M = diag(diag(L))/2 + triu(ones(rows(L),columns(L)), 1).* L;
+  Ldot = M * L - L * M;
+  xdot = reshape(Ldot, rows(x), columns(x));
+
+これは Lax 形式でのオープン戸田格子の定義ファイルである。
+sqreshape() は次のファイルで定義されている。
+他の函数の意味はマニュアルを見よ。
+
+2. sqreshape.m の中身
+
+## Reshape rectangulat matrix to square matrix
+##
+## retval = sqreshape(x)
+##
+## x = matrix
+## retval = square matrix
+
+function retval = sqreshape(x)
+
+  size = prod(size(x));
+  n = ceil(sqrt(size));
+  retval = reshape(x, n, n);
+
+3. Octave での計算 (# の行が解説)
+
+octave:1> source('matrices')
+
+# ファイル matrices の中に数値例として利用する行列の定義が書いてある。
+# たとえば CCC は次のように定義されている。
+
+octave:2> CCC
+CCC =
+
+  -2   1   0   0
+   1  -1   1   0
+   0   1   1   1
+   0   0   1   2
+
+# 戸田格子の初期条件 L0 を CCC と定義
+# 等間隔で質点が並んでおり、運動量は -2, -1, 1, 2
+
+octave:3> L0 = CCC
+L0 =
+
+  -2   1   0   0
+   1  -1   1   0
+   0   1   1   1
+   0   0   1   2
+
+# 対角化したい正値対称行列 X0 を定義する。
+
+octave:4> X0 = expm(L0)
+X0 =
+
+   0.26161   0.38561   0.43429   0.24631
+   0.38561   1.08150   1.93478   1.41954
+   0.43429   1.93478   5.93631   5.94709
+   0.24631   1.41954   5.94709  10.46386
+
+# L0 と X0 の固有値を計算
+
+octave:5> eig(L0)
+ans =
+
+  -2.70493
+  -0.82667
+   0.82667
+   2.70493
+
+octave:6> eig(X0)
+ans =
+
+  14.953210
+   2.285684
+   0.066875
+   0.437506
+
+# 確かに X0 は正値である。
+# Cholesky 法で X0 の次のステップの X1 を計算する。
+
+octave:7> X1 = chol(X0) * chol(X0).'
+X1 =
+
+  1.78285  2.78489  2.17629  0.94154
+  2.78489  5.95483  5.55793  2.88354
+  2.17629  5.55793  6.18306  4.02311
+  0.94154  2.88354  4.02311  3.82254
+
+# 戸田格子を初期条件 L0 で t = 0 から t = 1 まで積分
+
+octave:8> sol = lsode('toda_open', vec(L0), 0:1)
+sol =
+
+ Columns 1 through 8:
+
+  -2.00000   1.00000   0.00000   0.00000   1.00000  -1.00000   1.00000   0.00000
+  -0.52601   1.40051   0.00000   0.00000   1.40051   0.04909   1.94886   0.00000
+
+ Columns 9 through 16:
+
+   0.00000   1.00000   1.00000   1.00000   0.00000   0.00000   1.00000   2.00000
+   0.00000   1.94886  -0.04909   1.40051   0.00000   0.00000   1.40051   0.52601
+
+# 積分した結果を見易く行列の形に直す。
+
+octave:9> L1 = sqreshape(sol(2,:))
+L1 =
+
+  -0.52601   1.40051   0.00000   0.00000
+   1.40051   0.04909   1.94886   0.00000
+   0.00000   1.94886  -0.04909   1.40051
+   0.00000   0.00000   1.40051   0.52601
+
+# 戸田格子で時間を 1 だけ発展させた結果の exp と
+# Cholesky 法の 1 ステップ時間発展の結果を比較してみる。
+
+octave:10> expm(L1)
+ans =
+
+  1.78285  2.78489  2.17629  0.94154
+  2.78489  5.95483  5.55793  2.88354
+  2.17629  5.55793  6.18306  4.02311
+  0.94154  2.88354  4.02311  3.82254
+
+octave:11> X1
+X1 =
+
+  1.78285  2.78489  2.17629  0.94154
+  2.78489  5.95483  5.55793  2.88354
+  2.17629  5.55793  6.18306  4.02311
+  0.94154  2.88354  4.02311  3.82254
+
+# 確かに X1 == expm(L1) が成立している！
+# 数字がぴったり合うと、なんか楽しい。
+
+--
+黒木玄
