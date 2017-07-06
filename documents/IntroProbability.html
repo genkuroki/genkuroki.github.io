@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Probability</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    <style>
+    atom-text-editor {
+  background-color: #fafafa;
+  color: #383a42;
+}.markdown-preview-enhanced pre .line.cursor-line {
+  background-color: rgba(56, 58, 66, 0.05);
+}.markdown-preview-enhanced pre .invisible {
+  color: #383a42;
+}.markdown-preview-enhanced pre .cursor {
+  border-left: 2px solid #526fff;
+}.markdown-preview-enhanced pre .selection .region {
+  background-color: #e5e5e6;
+}.markdown-preview-enhanced pre .bracket-matcher .region {
+  border-bottom: 1px solid #526fff;
+  box-sizing: border-box;
+}.markdown-preview-enhanced pre .invisible-character {
+  color: rgba(56, 58, 66, 0.2);
+}.markdown-preview-enhanced pre .indent-guide {
+  color: rgba(56, 58, 66, 0.2);
+}.markdown-preview-enhanced pre .wrap-guide {
+  background-color: rgba(56, 58, 66, 0.2);
+}.markdown-preview-enhanced pre .find-result .region.region.region,.markdown-preview-enhanced pre .current-result .region.region.region {
+  border-radius: 2px;
+  background-color: rgba(82, 111, 255, 0.2);
+  transition: border-color 0.4s;
+}.markdown-preview-enhanced pre .find-result .region.region.region {
+  border: 2px solid transparent;
+}.markdown-preview-enhanced pre .current-result .region.region.region {
+  border: 2px solid #526fff;
+  transition-duration: .1s;
+}.markdown-preview-enhanced pre .gutter .line-number {
+  color: #9d9d9f;
+  -webkit-font-smoothing: antialiased;
+}.markdown-preview-enhanced pre .gutter .line-number.cursor-line {
+  color: #383a42;
+  background-color: #f2f2f2;
+}.markdown-preview-enhanced pre .gutter .line-number.cursor-line-no-selection {
+  background-color: transparent;
+}.markdown-preview-enhanced pre .gutter .line-number .icon-right {
+  color: #383a42;
+}.markdown-preview-enhanced pre .gutter:not(.git-diff-icon) .line-number.git-line-removed.git-line-removed::before {
+  bottom: -3px;
+}.markdown-preview-enhanced pre .gutter:not(.git-diff-icon) .line-number.git-line-removed::after {
+  content: "";
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 25px;
+  border-bottom: 1px dotted rgba(255, 20, 20, 0.5);
+  pointer-events: none;
+}.markdown-preview-enhanced pre .gutter .line-number.folded,.markdown-preview-enhanced pre .gutter .line-number:after,.markdown-preview-enhanced pre .fold-marker:after {
+  color: #383a42;
+}
+.mpe-syntax--comment {
+  color: #a0a1a7;
+  font-style: italic;
+}
+.mpe-syntax--comment .mpe-syntax--markup.mpe-syntax--link {
+  color: #a0a1a7;
+}
+.mpe-syntax--entity.mpe-syntax--name.mpe-syntax--type {
+  color: #c18401;
+}
+.mpe-syntax--entity.mpe-syntax--other.mpe-syntax--inherited-class {
+  color: #50a14f;
+}
+.mpe-syntax--keyword {
+  color: #a626a4;
+}
+.mpe-syntax--keyword.mpe-syntax--control {
+  color: #a626a4;
+}
+.mpe-syntax--keyword.mpe-syntax--operator {
+  color: #383a42;
+}
+.mpe-syntax--keyword.mpe-syntax--other.mpe-syntax--special-method {
+  color: #4078f2;
+}
+.mpe-syntax--keyword.mpe-syntax--other.mpe-syntax--unit {
+  color: #986801;
+}
+.mpe-syntax--storage {
+  color: #a626a4;
+}
+.mpe-syntax--storage.mpe-syntax--type.mpe-syntax--annotation,
+.mpe-syntax--storage.mpe-syntax--type.mpe-syntax--primitive {
+  color: #a626a4;
+}
+.mpe-syntax--storage.mpe-syntax--modifier.mpe-syntax--package,
+.mpe-syntax--storage.mpe-syntax--modifier.mpe-syntax--import {
+  color: #383a42;
+}
+.mpe-syntax--constant {
+  color: #986801;
+}
+.mpe-syntax--constant.mpe-syntax--variable {
+  color: #986801;
+}
+.mpe-syntax--constant.mpe-syntax--character.mpe-syntax--escape {
+  color: #0184bc;
+}
+.mpe-syntax--constant.mpe-syntax--numeric {
+  color: #986801;
+}
+.mpe-syntax--constant.mpe-syntax--other.mpe-syntax--color {
+  color: #0184bc;
+}
+.mpe-syntax--constant.mpe-syntax--other.mpe-syntax--symbol {
+  color: #0184bc;
+}
+.mpe-syntax--variable {
+  color: #e45649;
+}
+.mpe-syntax--variable.mpe-syntax--interpolation {
+  color: #ca1243;
+}
+.mpe-syntax--variable.mpe-syntax--parameter {
+  color: #383a42;
+}
+.mpe-syntax--string {
+  color: #50a14f;
+}
+.mpe-syntax--string.mpe-syntax--regexp {
+  color: #0184bc;
+}
+.mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--source.mpe-syntax--ruby.mpe-syntax--embedded {
+  color: #c18401;
+}
+.mpe-syntax--string.mpe-syntax--other.mpe-syntax--link {
+  color: #e45649;
+}
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--comment {
+  color: #a0a1a7;
+}
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--method-parameters,
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--function-parameters,
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--parameters,
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--separator,
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--seperator,
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--array {
+  color: #383a42;
+}
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--heading,
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--identity {
+  color: #4078f2;
+}
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--bold {
+  color: #c18401;
+  font-weight: bold;
+}
+.mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--italic {
+  color: #a626a4;
+  font-style: italic;
+}
+.mpe-syntax--punctuation.mpe-syntax--section.mpe-syntax--embedded {
+  color: #ca1243;
+}
+.mpe-syntax--punctuation.mpe-syntax--section.mpe-syntax--method,
+.mpe-syntax--punctuation.mpe-syntax--section.mpe-syntax--class,
+.mpe-syntax--punctuation.mpe-syntax--section.mpe-syntax--inner-class {
+  color: #383a42;
+}
+.mpe-syntax--support.mpe-syntax--class {
+  color: #c18401;
+}
+.mpe-syntax--support.mpe-syntax--type {
+  color: #0184bc;
+}
+.mpe-syntax--support.mpe-syntax--function {
+  color: #0184bc;
+}
+.mpe-syntax--support.mpe-syntax--function.mpe-syntax--any-method {
+  color: #4078f2;
+}
+.mpe-syntax--entity.mpe-syntax--name.mpe-syntax--function {
+  color: #4078f2;
+}
+.mpe-syntax--entity.mpe-syntax--name.mpe-syntax--class,
+.mpe-syntax--entity.mpe-syntax--name.mpe-syntax--type.mpe-syntax--class {
+  color: #c18401;
+}
+.mpe-syntax--entity.mpe-syntax--name.mpe-syntax--section {
+  color: #4078f2;
+}
+.mpe-syntax--entity.mpe-syntax--name.mpe-syntax--tag {
+  color: #e45649;
+}
+.mpe-syntax--entity.mpe-syntax--other.mpe-syntax--attribute-name {
+  color: #986801;
+}
+.mpe-syntax--entity.mpe-syntax--other.mpe-syntax--attribute-name.mpe-syntax--id {
+  color: #4078f2;
+}
+.mpe-syntax--meta.mpe-syntax--class {
+  color: #c18401;
+}
+.mpe-syntax--meta.mpe-syntax--class.mpe-syntax--body {
+  color: #383a42;
+}
+.mpe-syntax--meta.mpe-syntax--method-call,
+.mpe-syntax--meta.mpe-syntax--method {
+  color: #383a42;
+}
+.mpe-syntax--meta.mpe-syntax--definition.mpe-syntax--variable {
+  color: #e45649;
+}
+.mpe-syntax--meta.mpe-syntax--link {
+  color: #986801;
+}
+.mpe-syntax--meta.mpe-syntax--require {
+  color: #4078f2;
+}
+.mpe-syntax--meta.mpe-syntax--selector {
+  color: #a626a4;
+}
+.mpe-syntax--meta.mpe-syntax--separator {
+  background-color: #373b41;
+  color: #383a42;
+}
+.mpe-syntax--meta.mpe-syntax--tag {
+  color: #383a42;
+}
+.mpe-syntax--underline {
+  text-decoration: underline;
+}
+.mpe-syntax--none {
+  color: #383a42;
+}
+.mpe-syntax--invalid.mpe-syntax--deprecated {
+  color: #000000 !important;
+  background-color: #f2a60d !important;
+}
+.mpe-syntax--invalid.mpe-syntax--illegal {
+  color: white !important;
+  background-color: #ff1414 !important;
+}
+.mpe-syntax--markup.mpe-syntax--bold {
+  color: #986801;
+  font-weight: bold;
+}
+.mpe-syntax--markup.mpe-syntax--changed {
+  color: #a626a4;
+}
+.mpe-syntax--markup.mpe-syntax--deleted {
+  color: #e45649;
+}
+.mpe-syntax--markup.mpe-syntax--italic {
+  color: #a626a4;
+  font-style: italic;
+}
+.mpe-syntax--markup.mpe-syntax--heading {
+  color: #e45649;
+}
+.mpe-syntax--markup.mpe-syntax--heading .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--heading {
+  color: #4078f2;
+}
+.mpe-syntax--markup.mpe-syntax--link {
+  color: #0184bc;
+}
+.mpe-syntax--markup.mpe-syntax--inserted {
+  color: #50a14f;
+}
+.mpe-syntax--markup.mpe-syntax--quote {
+  color: #986801;
+}
+.mpe-syntax--markup.mpe-syntax--raw {
+  color: #50a14f;
+}
+.mpe-syntax--source.mpe-syntax--c .mpe-syntax--keyword.mpe-syntax--operator {
+  color: #a626a4;
+}
+.mpe-syntax--source.mpe-syntax--cpp .mpe-syntax--keyword.mpe-syntax--operator {
+  color: #a626a4;
+}
+.mpe-syntax--source.mpe-syntax--cs .mpe-syntax--keyword.mpe-syntax--operator {
+  color: #a626a4;
+}
+.mpe-syntax--source.mpe-syntax--css .mpe-syntax--property-name,
+.mpe-syntax--source.mpe-syntax--css .mpe-syntax--property-value {
+  color: #696c77;
+}
+.mpe-syntax--source.mpe-syntax--css .mpe-syntax--property-name.mpe-syntax--support,
+.mpe-syntax--source.mpe-syntax--css .mpe-syntax--property-value.mpe-syntax--support {
+  color: #383a42;
+}
+.mpe-syntax--source.mpe-syntax--gfm .mpe-syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.mpe-syntax--source.mpe-syntax--gfm .mpe-syntax--link .mpe-syntax--entity {
+  color: #4078f2;
+}
+.mpe-syntax--source.mpe-syntax--go .mpe-syntax--storage.mpe-syntax--type.mpe-syntax--string {
+  color: #a626a4;
+}
+.mpe-syntax--source.mpe-syntax--ini .mpe-syntax--keyword.mpe-syntax--other.mpe-syntax--definition.mpe-syntax--ini {
+  color: #e45649;
+}
+.mpe-syntax--source.mpe-syntax--java .mpe-syntax--storage.mpe-syntax--modifier.mpe-syntax--import {
+  color: #c18401;
+}
+.mpe-syntax--source.mpe-syntax--java .mpe-syntax--storage.mpe-syntax--type {
+  color: #c18401;
+}
+.mpe-syntax--source.mpe-syntax--java .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--instanceof {
+  color: #a626a4;
+}
+.mpe-syntax--source.mpe-syntax--java-properties .mpe-syntax--meta.mpe-syntax--key-pair {
+  color: #e45649;
+}
+.mpe-syntax--source.mpe-syntax--java-properties .mpe-syntax--meta.mpe-syntax--key-pair > .mpe-syntax--punctuation {
+  color: #383a42;
+}
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator {
+  color: #0184bc;
+}
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--delete,
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--in,
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--of,
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--instanceof,
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--new,
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--typeof,
+.mpe-syntax--source.mpe-syntax--js .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--void {
+  color: #a626a4;
+}
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--dictionary.mpe-syntax--json > .mpe-syntax--string.mpe-syntax--quoted.mpe-syntax--json {
+  color: #e45649;
+}
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--dictionary.mpe-syntax--json > .mpe-syntax--string.mpe-syntax--quoted.mpe-syntax--json > .mpe-syntax--punctuation.mpe-syntax--string {
+  color: #e45649;
+}
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--dictionary.mpe-syntax--json > .mpe-syntax--value.mpe-syntax--json > .mpe-syntax--string.mpe-syntax--quoted.mpe-syntax--json,
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--array.mpe-syntax--json > .mpe-syntax--value.mpe-syntax--json > .mpe-syntax--string.mpe-syntax--quoted.mpe-syntax--json,
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--dictionary.mpe-syntax--json > .mpe-syntax--value.mpe-syntax--json > .mpe-syntax--string.mpe-syntax--quoted.mpe-syntax--json > .mpe-syntax--punctuation,
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--array.mpe-syntax--json > .mpe-syntax--value.mpe-syntax--json > .mpe-syntax--string.mpe-syntax--quoted.mpe-syntax--json > .mpe-syntax--punctuation {
+  color: #50a14f;
+}
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--dictionary.mpe-syntax--json > .mpe-syntax--constant.mpe-syntax--language.mpe-syntax--json,
+.mpe-syntax--source.mpe-syntax--json .mpe-syntax--meta.mpe-syntax--structure.mpe-syntax--array.mpe-syntax--json > .mpe-syntax--constant.mpe-syntax--language.mpe-syntax--json {
+  color: #0184bc;
+}
+.mpe-syntax--source.mpe-syntax--ruby .mpe-syntax--constant.mpe-syntax--other.mpe-syntax--symbol > .mpe-syntax--punctuation {
+  color: inherit;
+}
+.mpe-syntax--source.mpe-syntax--python .mpe-syntax--keyword.mpe-syntax--operator.mpe-syntax--logical.mpe-syntax--python {
+  color: #a626a4;
+}
+.mpe-syntax--source.mpe-syntax--python .mpe-syntax--variable.mpe-syntax--parameter {
+  color: #986801;
+}
+.scrollbar-style::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollbar-style::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+.scrollbar-style::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgba(150, 150, 150, 0.66);
+  border: 4px solid rgba(150, 150, 150, 0.66);
+  background-clip: content-box;
+}
+.markdown-preview-enhanced-container .mpe-toolbar {
+  position: absolute;
+  top: 32px;
+  right: 24px;
+  opacity: 0;
+  display: block;
+}
+.markdown-preview-enhanced-container .mpe-toolbar .back-to-top-btn,
+.markdown-preview-enhanced-container .mpe-toolbar .refresh-btn,
+.markdown-preview-enhanced-container .mpe-toolbar .sidebar-toc-btn {
+  float: right;
+  width: 32px;
+  margin-right: 4px;
+  opacity: 0.4;
+}
+.markdown-preview-enhanced-container .mpe-toolbar .back-to-top-btn:hover,
+.markdown-preview-enhanced-container .mpe-toolbar .refresh-btn:hover,
+.markdown-preview-enhanced-container .mpe-toolbar .sidebar-toc-btn:hover {
+  opacity: 1.0;
+}
+.markdown-preview-enhanced-container:hover .back-to-top-btn,
+.markdown-preview-enhanced-container:hover .refresh-btn,
+.markdown-preview-enhanced-container:hover .sidebar-toc-btn {
+  display: block;
+}
+.markdown-preview-enhanced-container.show-sidebar-toc .mpe-sidebar-toc {
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 268px;
+  height: 100%;
+  padding: 32px 0 12px 0;
+  overflow: auto;
+  background-color: #fafafa;
+  color: #383a42;
+  font-size: 14px;
+  box-shadow: -4px 0px 12px rgba(150, 150, 150, 0.33);
+}
+.markdown-preview-enhanced-container.show-sidebar-toc .mpe-sidebar-toc a {
+  color: #383a42;
+}
+.markdown-preview-enhanced-container.show-sidebar-toc .mpe-sidebar-toc ul {
+  padding: 0 1.6em;
+  margin-top: 0.8em;
+}
+.markdown-preview-enhanced-container.show-sidebar-toc .mpe-sidebar-toc li {
+  margin-bottom: 0.8em;
+}
+.markdown-preview-enhanced-container.show-sidebar-toc .mpe-sidebar-toc ul {
+  list-style-type: none;
+}
+.markdown-preview-enhanced-container.show-sidebar-toc .mpe-toolbar {
+  right: 300px;
+}
+.markdown-preview-enhanced-container.show-sidebar-toc .markdown-preview-enhanced {
+  width: calc(100% - 268px);
+}
+.markdown-preview-enhanced-container .mpe-sidebar-toc::-webkit-scrollbar,
+.markdown-preview-enhanced-container .markdown-preview-enhanced::-webkit-scrollbar {
+  width: 8px;
+}
+.markdown-preview-enhanced-container .mpe-sidebar-toc::-webkit-scrollbar-track,
+.markdown-preview-enhanced-container .markdown-preview-enhanced::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+.markdown-preview-enhanced-container .mpe-sidebar-toc::-webkit-scrollbar-thumb,
+.markdown-preview-enhanced-container .markdown-preview-enhanced::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgba(150, 150, 150, 0.66);
+  border: 4px solid rgba(150, 150, 150, 0.66);
+  background-clip: content-box;
+}
+.markdown-preview-enhanced {
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #383a42;
+  background-color: #fafafa;
+  overflow: initial;
+  margin: 10px 13px 10px 13px;
+  padding: 2em;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+.markdown-preview-enhanced > :first-child {
+  margin-top: 0;
+}
+.markdown-preview-enhanced[for="preview"] {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: auto;
+  font-size: 16px;
+  display: block;
+  position: absolute;
+}
+.markdown-preview-enhanced h1,
+.markdown-preview-enhanced h2,
+.markdown-preview-enhanced h3,
+.markdown-preview-enhanced h4,
+.markdown-preview-enhanced h5,
+.markdown-preview-enhanced h6 {
+  line-height: 1.2;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  color: #000000;
+}
+.markdown-preview-enhanced h1 {
+  font-size: 2.25em;
+  font-weight: 300;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #d1d1d2;
+}
+.markdown-preview-enhanced h2 {
+  font-size: 1.75em;
+  font-weight: 400;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #d1d1d2;
+}
+.markdown-preview-enhanced h3 {
+  font-size: 1.5em;
+  font-weight: 500;
+}
+.markdown-preview-enhanced h4 {
+  font-size: 1.25em;
+  font-weight: 600;
+}
+.markdown-preview-enhanced h5 {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+.markdown-preview-enhanced h6 {
+  font-size: 1.0em;
+  font-weight: 600;
+}
+.markdown-preview-enhanced h1,
+.markdown-preview-enhanced h2,
+.markdown-preview-enhanced h3,
+.markdown-preview-enhanced h4,
+.markdown-preview-enhanced h5 {
+  font-weight: 600;
+}
+.markdown-preview-enhanced h5 {
+  font-size: 1em;
+}
+.markdown-preview-enhanced h6 {
+  color: #5e616e;
+}
+.markdown-preview-enhanced h1,
+.markdown-preview-enhanced h2 {
+  border-bottom: 1px solid #d1d1d2;
+}
+.markdown-preview-enhanced strong {
+  color: #000000;
+}
+.markdown-preview-enhanced del {
+  color: #5e616e;
+}
+.markdown-preview-enhanced a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+.markdown-preview-enhanced a {
+  color: #08c;
+  text-decoration: none;
+}
+.markdown-preview-enhanced a:hover {
+  color: #0050a3;
+  text-decoration: none;
+}
+.markdown-preview-enhanced img,
+.markdown-preview-enhanced svg {
+  max-width: 100%;
+}
+.markdown-preview-enhanced > p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  word-wrap: break-word;
+}
+.markdown-preview-enhanced > ul,
+.markdown-preview-enhanced > ol {
+  margin-bottom: 16px;
+}
+.markdown-preview-enhanced ul,
+.markdown-preview-enhanced ol {
+  padding-left: 2em;
+}
+.markdown-preview-enhanced ul.no-list,
+.markdown-preview-enhanced ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+.markdown-preview-enhanced ul ul,
+.markdown-preview-enhanced ul ol,
+.markdown-preview-enhanced ol ol,
+.markdown-preview-enhanced ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.markdown-preview-enhanced li {
+  margin-bottom: 0;
+}
+.markdown-preview-enhanced li.task-list-item {
+  list-style: none;
+}
+.markdown-preview-enhanced li > p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.markdown-preview-enhanced .task-list-item-checkbox {
+  margin: 0 0.2em 0.25em -1.6em;
+  vertical-align: middle;
+}
+.markdown-preview-enhanced .task-list-item-checkbox:hover {
+  cursor: pointer;
+}
+.markdown-preview-enhanced blockquote {
+  margin: 16px 0;
+  font-size: inherit;
+  padding: 0 15px;
+  color: #5e616e;
+  border-left: 4px solid #d1d1d2;
+}
+.markdown-preview-enhanced blockquote > :first-child {
+  margin-top: 0;
+}
+.markdown-preview-enhanced blockquote > :last-child {
+  margin-bottom: 0;
+}
+.markdown-preview-enhanced hr {
+  height: 4px;
+  margin: 32px 0;
+  background-color: #d1d1d2;
+  border: 0 none;
+}
+.markdown-preview-enhanced table {
+  margin: 10px 0 15px 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+.markdown-preview-enhanced table th {
+  font-weight: bold;
+  color: #000000;
+}
+.markdown-preview-enhanced table td,
+.markdown-preview-enhanced table th {
+  border: 1px solid #d1d1d2;
+  padding: 6px 13px;
+}
+.markdown-preview-enhanced dl {
+  padding: 0;
+}
+.markdown-preview-enhanced dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+.markdown-preview-enhanced dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+.markdown-preview-enhanced code {
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-size: 0.85em !important;
+  color: #000000;
+  background-color: #eaeaeb;
+  border-radius: 3px;
+  padding: 0.2em 0;
+}
+.markdown-preview-enhanced code::before,
+.markdown-preview-enhanced code::after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+.markdown-preview-enhanced pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 0.85em !important;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+.markdown-preview-enhanced .highlight {
+  margin-bottom: 16px;
+}
+.markdown-preview-enhanced .highlight pre,
+.markdown-preview-enhanced pre {
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  padding: 16px;
+  overflow: auto;
+  font-size: 0.85em !important;
+  line-height: 1.45;
+  color: #383a42;
+  background-color: #eaeaeb !important;
+  border: #d1d1d2;
+  border-radius: 3px;
+}
+.markdown-preview-enhanced .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+.markdown-preview-enhanced pre {
+  word-wrap: break-word;
+  white-space: normal;
+  word-break: break-all;
+}
+.markdown-preview-enhanced pre .section {
+  opacity: 1;
+}
+.markdown-preview-enhanced pre code,
+.markdown-preview-enhanced pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+.markdown-preview-enhanced pre code:before,
+.markdown-preview-enhanced pre tt:before,
+.markdown-preview-enhanced pre code:after,
+.markdown-preview-enhanced pre tt:after {
+  content: normal;
+}
+.markdown-preview-enhanced p,
+.markdown-preview-enhanced blockquote,
+.markdown-preview-enhanced ul,
+.markdown-preview-enhanced ol,
+.markdown-preview-enhanced dl,
+.markdown-preview-enhanced pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.markdown-preview-enhanced pre.editor-colors.lineNo {
+  counter-reset: lineNo;
+}
+.markdown-preview-enhanced pre.editor-colors.lineNo .line::before {
+  display: inline-block;
+  counter-increment: lineNo;
+  content: counter(lineNo);
+  text-align: right;
+  padding: 0;
+  margin-left: -1em;
+  margin-right: 1.5em;
+}
+.markdown-preview-enhanced pre.editor-colors.lineNo.lineno-100 .line::before {
+  width: 2em;
+}
+.markdown-preview-enhanced pre.editor-colors.lineNo.lineno-1000 .line::before {
+  width: 2.5em;
+}
+.markdown-preview-enhanced pre.editor-colors.lineNo.lineno-10000 .line::before {
+  width: 3em;
+}
+.markdown-preview-enhanced pre.editor-colors.lineNo.lineno-100000 .line::before {
+  width: 3.5em;
+}
+.markdown-preview-enhanced kbd {
+  color: #000000;
+  border: 1px solid #d1d1d2;
+  border-bottom: 2px solid #c1c1c2;
+  padding: 2px 4px;
+  background-color: #eaeaeb;
+  border-radius: 3px;
+}
+.markdown-preview-enhanced .pagebreak,
+.markdown-preview-enhanced .newpage {
+  page-break-before: always;
+}
+@media screen and (min-width: 914px) {
+  .markdown-preview-enhanced {
+    width: 980px;
+    margin: 10px auto;
+    background: #fafafa;
+  }
+}
+@media screen and (max-width: 400px) {
+  .markdown-preview-enhanced {
+    font-size: 14px;
+    margin: 0 auto;
+    padding: 15px;
+  }
+}
+@media print {
+  .markdown-preview-enhanced {
+    background-color: #fafafa;
+    /*table,*/
+  }
+  .markdown-preview-enhanced h1,
+  .markdown-preview-enhanced h2,
+  .markdown-preview-enhanced h3,
+  .markdown-preview-enhanced h4,
+  .markdown-preview-enhanced h5,
+  .markdown-preview-enhanced h6 {
+    color: #000000;
+    page-break-after: avoid;
+  }
+  .markdown-preview-enhanced blockquote {
+    color: #5e616e;
+  }
+  .markdown-preview-enhanced pre {
+    page-break-inside: avoid;
+  }
+  .markdown-preview-enhanced table {
+    display: table;
+  }
+  .markdown-preview-enhanced img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .markdown-preview-enhanced pre,
+  .markdown-preview-enhanced code {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+}
+.markdown-preview-enhanced .mathjax-exps .MathJax_Display {
+  text-align: center !important;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk {
+  position: relative;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk .output-div {
+  overflow-x: auto;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk .output-div svg {
+  display: block;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk pre {
+  cursor: text;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk .btn-group {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: none;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk .btn-group .run-btn,
+.markdown-preview-enhanced[for="preview"] .code-chunk .btn-group .run-all-btn {
+  float: right;
+  margin-left: 4px;
+  border-radius: 3px;
+  font-size: 0.8em;
+  color: #eee;
+  background-color: #528bff;
+  background-image: none;
+  border: none;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk .btn-group .run-btn:hover,
+.markdown-preview-enhanced[for="preview"] .code-chunk .btn-group .run-all-btn:hover {
+  background-color: #4b7fe8;
+  cursor: pointer;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk:hover .btn-group {
+  display: block;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk .status {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 0.85em;
+  color: inherit;
+  padding: 2px 6px;
+  background-color: rgba(0, 0, 0, 0.04);
+  display: none;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk.running .btn-group {
+  display: none;
+}
+.markdown-preview-enhanced[for="preview"] .code-chunk.running .status {
+  display: block;
+}
+.markdown-preview-enhanced:not([for="preview"]) .code-chunk .btn-group {
+  display: none;
+}
+.markdown-preview-enhanced:not([for="preview"]) .code-chunk .status {
+  display: none;
+}
+/*
+ * Reveal.js styles
+ */
+[data-presentation-preview-mode] {
+  background-color: #f4f4f4;
+}
+[data-presentation-preview-mode] .preview-slides {
+  width: 100%;
+}
+[data-presentation-preview-mode] .preview-slides .slide {
+  position: relative;
+  background-color: #fafafa;
+  padding: 2em !important;
+  margin-bottom: 12px;
+  text-align: left !important;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0px 0px 16px 4px #eeeeee;
+  font-size: 24px;
+}
+[data-presentation-preview-mode] .preview-slides .slide h1,
+[data-presentation-preview-mode] .preview-slides .slide h2,
+[data-presentation-preview-mode] .preview-slides .slide h3,
+[data-presentation-preview-mode] .preview-slides .slide h4,
+[data-presentation-preview-mode] .preview-slides .slide h5,
+[data-presentation-preview-mode] .preview-slides .slide h6 {
+  margin-top: 0;
+}
+[data-presentation-preview-mode] .preview-slides .slide .background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+[data-presentation-preview-mode] .preview-slides .slide .background-iframe,
+[data-presentation-preview-mode] .preview-slides .slide .background-iframe-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border: none;
+  z-index: 1;
+}
+[data-presentation-preview-mode] .preview-slides .slide .background-iframe-overlay {
+  z-index: 2;
+}
+[data-presentation-preview-mode] section {
+  display: block;
+  width: 100%;
+  transform-style: preserve-3d;
+  font-size: 100%;
+  font: inherit;
+}
+.markdown-preview-enhanced[data-presentation-mode] {
+  font-size: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.markdown-preview-enhanced[data-presentation-mode] h1,
+.markdown-preview-enhanced[data-presentation-mode] h2,
+.markdown-preview-enhanced[data-presentation-mode] h3,
+.markdown-preview-enhanced[data-presentation-mode] h4,
+.markdown-preview-enhanced[data-presentation-mode] h5,
+.markdown-preview-enhanced[data-presentation-mode] h6 {
+  margin-top: 0;
+}
+.markdown-preview-enhanced[data-presentation-mode] strong {
+  font-weight: bold;
+}
+.markdown-preview-enhanced[data-presentation-mode]::-webkit-scrollbar {
+  display: none;
+}
+.markdown-preview-enhanced .slides {
+  text-align: left !important;
+}
+
+    /*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+/*
+ * Examples
+ * (To see them, uncomment and save)
+ */
+
+    </style>
+
+    <script type="text/x-mathjax-config"> MathJax.Hub.Config({"extensions":["tex2jax.js"],"jax":["input/TeX","output/HTML-CSS"],"messageStyle":"none","tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]],"processEnvironments":false,"processEscapes":true},"TeX":{"extensions":["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]},"HTML-CSS":{"availableFonts":["TeX"]}}); </script> <script type="text/javascript" async src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js"></script>
+
+    
+  </head>
+  <body class="markdown-preview-enhanced   ">
+
+  <h1 id="&#x78BA;&#x7387;&#x8AD6;&#x5165;&#x9580;">確率論入門</h1>
+<p><a href="https://mathtod.online/@genkuroki">黒木 玄</a></p>
+<p>2017年7月5日版 (2017年7月5日作成)
+$\newcommand\R{{\mathbb R}}  \newcommand\eps{\varepsilon}  \newcommand\bra{\langle}  \newcommand\ket{\rangle}$</p>
+<p><strong>要約.</strong>
+このノートでは, 測度論を可能な限り用いずに,
+期待値汎函数 $E[\;\;]$ に関する一般的な性質のみを仮定して,
+Jensenの不等式, 大数の(弱)法則, 中心極限定理を示す.</p>
+<h2 id="&#x78BA;&#x7387;&#x5909;&#x6570;&#x3068;&#x78BA;&#x7387;">確率変数と確率</h2>
+<p>このノートにおいては, $X_1,X_2,\ldots,X_n$ が(実数値の) <strong>確率変数</strong> の組であるとは, 実数 $x_1,x_2,\ldots,x_n$ の適切なクラス(この点はわざと曖昧にしておく)に属する複素数値函数 $f=f(x_1,x_2,\ldots,x_n)$ に対して複素数 $E[f]=E[f(X_1,X_2,\ldots,X_n)]$ を対応させる汎函数 $E[\;\;]$ が与えられていて, 以下の条件が成立していることであると定める:</p>
+<ol>
+<li><p>$E[\;\;]$ は <strong>線形</strong> である. すなわち, 任意の $f=f(x_1,\ldots,x_n)$, $g=g(x_1,\ldots,x_n)$ と複素数 $\alpha,\beta$ に対して
+$$E[\alpha f+\beta g]=\alpha E[f]+\beta E[g]$$
+が成立している.</p></li>
+<li><p>$E[\;\;]$ は <strong>単調</strong> である. すなわち, $f\leqq g$ (すべての点でこの不等式が成立している)ならば $E[f]\leqq E[g]$ が成立している.</p></li>
+<li><p>$E[\;\;]$ は <strong>規格化</strong> されている.
+すなわち, 定数函数 $c$ に対して $E[c]=c$ が成立している.</p></li>
+</ol>
+<p>$f=f(X_1,\ldots,X_n)$ をも確率変数と呼ぶことにする.
+$E[\;\;]$ を確率変数の <strong>期待値汎函数</strong> と呼ぶ.
+$E[f]$ を確率変数 $f$ の <strong>期待値</strong> もしくは <strong>平均</strong> と呼ぶ.</p>
+<p>以下, $X_1,\ldots,X_n$ は確率変数の組であると仮定する.</p>
+<p>$\R^n$ の適切なクラス(この点はわざと曖昧なままにしておく)に属する部分集合 $A$ に対して, $A$ 上で $1$ になり, $A$ の外で $0$ になる函数を $1_A$ と書く:
+$$1_A(x_1,\ldots,x_n)=\begin{cases}1 &amp; ((x_1,\ldots,x_n)\in A)\\0 &amp; ((x_1,\ldots,x_n)\not\in A).\end{cases}$$
+$(X_1,\ldots,X_n)\in A$ となる <strong>確率</strong> $P((X_1,\ldots,X_n)\in A)$ を
+$$P((X_1,\ldots,X_n)\in A) = E[1_A]=E[1_A(X_1,\ldots,X_n)]$$
+と定める. $0\leqq 1_A\leqq 1$ なので, 期待値汎函数の単調性と規格化条件より, 確率は常に0以上1以下になることがわかる.</p>
+<p><strong>例.</strong> 期待値汎函数を
+$$E[f(X)] = \frac16\sum_{k=1}^6 f(k)$$
+と構成することによって、確率変数 $X$ を定めることができる.
+このとき $X\in\{k\}$ となる確率, すなわち $X=k$ となる確率は
+$$P(X=k)=\frac16, \qquad k=1,2,3,4,5,6$$
+になる. これは確率変数 $X$ がサイコロの数学的モデル化になっていることを意味している. <strong>例終</strong></p>
+<p>一般に実数列 $a_1,a_2,\ldots$ と非負の実数列 $p_1,p_2,\ldots$ で $\sum_{k=1}^\infty p_k=1$ を満たすものが与えられたとき,
+$$E[f(X)]=\sum_{k=1}^\infty f(a_k)\,p_k$$
+によって確率変数 $X$ を定めることができる. このようにして定められた確率変数を <strong>離散型確率変数</strong> と呼ぶ. たとえば上のサイコロのモデル化は離散型確率変数である.</p>
+<p>$\rho(x_1,\ldots,x_n)$ は $0$ 以上の実数に値を持つ函数であり,
+$$\int\dotsi\int \rho(x_1,\ldots,x_n)\,dx_1\cdots dx_n = 1$$
+を満たしていると仮定する.
+ただし, 積分領域を省略して書いた場合には $\R^n$ 全域にわたる積分を意味すると約束しておく.
+このとき期待値汎函数を</p>
+<p>$$\begin{align*}&amp;E[f(X_1,\ldots,X_n)]\\&amp;=\int\dotsi\int f(x_1,\ldots,x_n)\rho(x_1,\ldots,x_n)\,dx_1\cdots dx_n\end{align*}$$</p><p>と定めることができる. このとき, $(X_1,\ldots,X_n)$ は <strong>確率密度函数</strong>  $\rho(x_1,\ldots,x_n)$ を持つと言う.</p>
+<p><strong>例.</strong> 確率変数 $X$ が
+$$E[f(X)]=\int_{-\infty}^\infty f(x)\frac{e^{-(x-\mu)^2/(2\sigma^2)}}{\sqrt{2\pi\sigma^2}}\,dx$$
+を満たしているならば, 確率変数 $X$ は平均 $\mu$, 分散 $\sigma^2$ の <strong>正規分布に従う</strong> という. $f(x)$ が多項式函数であれば期待値 $E[f(X)]$ が有限の積分値として well-defined であるが, $f(x)=e^{x^2/\sigma^2}$ のように遠方で急激に増大する函数についてはその期待値 $E[f(X)]$ は無限大になってしまう.
+<strong>例終</strong></p>
+<p><strong>例.</strong> 確率変数 $X$ が
+$$E[f(X)]=\int_{-\infty}^\infty f(x)\frac{dx}{\pi(1+x^2)}$$
+を満たしているとき, $X$ は <strong>Cauchy分布に従う</strong> という.
+このとき $X$ の期待値
+$$E[X] = \frac1\pi\int_{-\infty}^\infty \frac{x\,dx}{1+x^2}$$
+は積分が絶対収束しないので well-defined ではない.
+<strong>例終</strong></p>
+<h2 id="jensen&#x306E;&#x4E0D;&#x7B49;&#x5F0F;">Jensenの不等式</h2>
+<p>$n=1$ で $X=X_1$ であるとする($X$ は確率変数).</p>
+<p>$f(x)$ が上に凸な函数であるとは任意の $x,y$ と0以上1以下の $t$ に対して
+$$(1-t)f(x)+tf(y)\leqq f((1-t)x+ty)$$
+が成立することだと定める. 逆向きの不等号で下に凸であることを定める.
+$f&#x27;&#x27;&lt;0$ ならば $f$ は上に凸であり, $f&#x27;&#x27;&gt;0$ ならば $f$ は上に凸である.</p>
+<p><strong>Jensenの不等式.</strong> $f(x)$ が上に凸なとき
+$$E[f(X)]\leqq f(E[X]).$$
+$f(x)$ が下に凸な場合には逆向きの不等式が成立する.</p>
+<p><strong>証明.</strong>
+$f(x)$ は上に凸であると仮定し,
+$\mu=E[X]$ とおく.
+$f(x)$ は上に凸なのである一次函数 $a(x-\mu)+f(\mu)$ で
+$$f(x)\leqq a(x-\mu)+f(\mu)$$
+を満たすものが存在する. ゆえに</p>
+<p>$$\begin{align*}E[f(X)]&amp;\leqq E[a(X-\mu)+f(\mu)]\\&amp;=a(E[X]-\mu)+f(\mu)=f(E[X]).\end{align*}$$</p><p>1つ目の不等号は期待値汎函数の単調性より.
+1つ目の等号は期待値汎函数の線形性と規格化条件より.
+2つ目の等号は $E[X]=\mu$ より.
+これで示したい不等式が示された.
+$f(x)$ が下に凸な場合も同様である.
+<strong>証明終</strong></p>
+<p><strong>注意.</strong> $0\leqq t\leqq 1$ のとき
+$$E[f(X)] = (1-t)f(a)+tf(b)$$
+と定めると $E[\;\;]$ は期待値汎函数の条件を満たしている.
+だから函数 $f(x)$ が下にもしくは上に凸になるという条件はJensenの不等式の特別な場合になっている.
+すなわち, Jensenの不等式の主張は,
+「Jensenの不等式の特別な場合が成立しているならば,
+Jensenの不等式が一般的に成立している」という形式になっている.
+<strong>注意終</strong></p>
+<p><strong>例.</strong>
+$a_1,\ldots,a_n&gt;0$ であるとし,
+$$E[f(X)] = \frac{f(a_1)+\cdots+f(a_n)}n$$
+とおくと, $E[\;\;]$ は期待値汎函数の条件を満たしている.
+ゆえに上に凸な函数 $f(x)=\log x$ に関するJensenの不等式より
+$$\frac{\log a_1+\cdots+\log a_n}n \leqq \log\frac{a_1+\cdots+a_n}n.$$
+左辺は $\log(a_1\cdots a_n)^{1/n}$ に等しく, $\log x$ は単調増加函数なので
+$$(a_1\cdots a_n)^{1/n}\leqq \frac{a_1+\cdots+a_n}n.$$
+Jensenの不等式から相加相乗平均の不等式が何の苦労も無しに出て来た!
+<strong>例終</strong></p>
+<h2 id="&#x5206;&#x6563;&#x3068;chebyshev&#x306E;&#x4E0D;&#x7B49;&#x5F0F;">分散とChebyshevの不等式</h2>
+<p>$X$ は確率変数であるとする.</p>
+<p>$X$ は平均 $\mu=E[X]$ と有限の <strong>分散</strong> $\sigma^2=E[(X-\mu)^2]&gt;0$ を持つと仮定する. $\sigma=\sqrt{\sigma^2} &gt;0$ は $X$ の <strong>標準偏差</strong> と呼ばれている.</p>
+<p>$a &gt;0$ に対して, 集合 $A$ を次のように定める:
+$$A=\{\,x\in\R\mid (x-\mu)^2\geqq a^2\,\}$$
+このとき
+$$(x-\mu)^2 \geqq a^2 1_A(x) =\begin{cases}a^2 &amp; ((x-\mu)^2\geqq a^2) \\0   &amp; (\text{otherwise})\end{cases}$$
+より, 期待値汎函数の単調性を使うと,
+$$\sigma^2=E[(X-\mu)^2]\geqq E[a^2 1_A]=a^2P((X-\mu)^2\geqq a^2).$$
+したがって,
+$$P((X-\mu)^2\geqq a^2)\leqq \frac{\sigma^2}{a^2}.$$
+これを <strong>Chebyshevの不等式</strong> と呼ぶ.</p>
+<p>Chebyshevの不等式は
+$$P(|X-\mu|\geqq a)\leqq \frac{\sigma^2}{a^2}.$$
+と書き直せる. さらに, $a=m\sigma$ とおくと
+$$P(|X-\mu|\geqq m\sigma)\leqq \frac1{m^2}.$$
+これは確率変数 $X$ の値がその平均から標準偏差の $m$ 倍以上離れる確率が $1/m^2$ 以下になることを意味している.</p>
+<p>以上の結果は後で <strong>大数の法則</strong> を証明するために使われる.
+(このノートでは大数の法則として弱法則のみを扱う.)</p>
+<h2 id="&#x78BA;&#x7387;&#x5909;&#x6570;&#x306E;&#x7D44;&#x306E;&#x540C;&#x5206;&#x5E03;&#x6027;&#x3068;&#x72EC;&#x7ACB;&#x6027;">確率変数の組の同分布性と独立性</h2>
+<p>確率変数の組 $X_1,\ldots,X_n$ が <strong>同分布</strong> であるとは,
+任意の $i,j$ と任意の $f(x)$ について
+$$E[f(X_i)]=E[f(X_j)]$$
+が成立することだと定める.</p>
+<p>確率変数の組 $X_1,\ldots,X_n$ が <strong>独立</strong> であるとは,
+任意の $f_1(x_1),\ldots,f_n(x_n)$ に対して
+$$E[f_1(X_1)\cdots f_n(X_n)]=E[f_1(X_1)]\cdots E[f_n(X_n)]$$
+が成立することだ定める.</p>
+<p><strong>例.</strong> $(X_1,\ldots,X_n)$ が確率密度函数 $\rho(x_1,\ldots,x_n)$ を持つとき,
+$$\rho(x_1,\ldots,x_n)=\rho_1(x_1)\cdots\rho_n(x_n)$$
+が成立しているならば, $X_1,\ldots,X_n$ は独立になる.
+さらに $\rho_i(x)$ がすべて互いに等しいならば $X_1,\ldots,X_n$ は同分布になる.
+<strong>例終</strong></p>
+<p>確率変数の組 $X_1,\ldots,X_n$ が独立でかつ同分布 (independent and identically distributed, i.i.d.) であるとき, $X_1,\ldots,X_n$ はサイズ $n$ の <strong>サンプル (標本)</strong> の数学的モデル化としてよく使われている. そのとき
+$$\frac{X_1+\cdots+X_n}n$$
+は <strong>サンプル平均 (標本平均)</strong> と呼ばれる.</p>
+<p>確率変数列 $X_1,X_2,\ldots$ において任意の $n$ について $X_1,\ldots,X_n$ が独立同分布であるとき, $X_1,X_2,\ldots$ は <strong>独立同分布確率変数列</strong> であるという.</p>
+<h2 id="&#x5927;&#x6570;&#x306E;&#x6CD5;&#x5247;">大数の法則</h2>
+<p>確率変数の組 $X_1,\ldots,X_n$ は独立同分布であるとし,
+$X$ は $X_k$ と同分布の確率変数であるとする.</p>
+<p>$X$ は平均 $\mu=E[X]$ と有限の <strong>分散</strong> $\sigma^2=E[(X-\mu)^2]&gt;0$ を持つと仮定する. $\sigma=\sqrt{\sigma^2}&gt;0$ とおく.</p>
+<p>$X_1,\ldots,X_n$ をサイズ $n$ のサンプルとみなすとき,
+$X$ は母集団分布に従う確率変数だとみなされ,
+以上の $\mu,\sigma^2, \sigma$ はそれぞれ <strong>母集団平均</strong>, <strong>母集団分散</strong>, <strong>母集団標準偏差</strong> と呼ばれる.</p>
+<p>サンプル平均を
+$$M_n = \frac{X_1+\cdots+X_n}n$$
+と書くことにする.</p>
+<p>サンプル平均 $M_n$ も確率変数になる.
+確率変数はサイコロのようにランダムに値が変化する変数のことである.
+サンプル平均はサンプルのランダム抽出をやり直すごとに値が変化する確率変数である.</p>
+<p>サンプル平均 $M_n$ の期待値 $\mu_n$ と分散 $\sigma_n^2$ を求めよう.</p>
+<p>$M_n$ の期待値は $\mu$ に一致する:
+$$\mu_n = E[M_n]=\frac1n\sum_{k=1}^n E[X_k]=\frac1n n\mu=\mu.$$</p>
+<p>$X^\prime_k=X_k-\mu$ とおくと,  $E[X^\prime_k]=0$ となり,
+$X_k$ の分散が $\sigma^2$ で $X_k$ 達が独立であることより,
+$$E[X^\prime_k X^\prime_l]=\begin{cases}\sigma^2 &amp; (k=l)\\0 &amp; (k\ne l)\end{cases}$$
+となる. ゆえに</p>
+<p>$$\begin{align*}\sigma_n^2&amp;=E[(M_n-\mu)^2]=E\left[\left(\frac1n\sum_{k=1}^n X^\prime_k\right)^2\right]\\&amp;=\frac1{n^2}\sum_{k,l=1}^nE[X^\prime_k X^\prime_l]=\frac{\sigma^2}n.\end{align*}$$</p><p>すなわち, サンプル平均の分散は母集団分散のサンプルサイズ分の1になる.
+特にサンプル平均の分散はサンプルサイズが大きくなると小さくなる.</p>
+<p>Chebyshevの不等式をサンプル平均 $M_n$ に適用すると, 任意の $a &gt;0$ に対して
+$$P(|M_n-\mu|\geqq a)\leqq \frac{\sigma_n^2}{a^2}=\frac1n \frac{\sigma^2}{a^2}.$$
+したがって特に
+$$\lim_{n\to\infty}P(|M_n-\mu|\geqq a) = 0.$$
+これは、どんなに小さな $a &gt;0$ に対しても,
+サンプル平均 $M_n$ が母集団平均 $\mu$ から $a$ 以上離れる確率がサンプルサイズを大きくする極限で0に近付くことを意味している.</p>
+<p>これを <strong>大数の弱法則</strong> という.</p>
+<h2 id="&#x6B63;&#x898F;&#x5206;&#x5E03;&#x306E;&#x518D;&#x751F;&#x6027;">正規分布の再生性</h2>
+<p>平均 $0$, 分散 $1$ の正規分布を <strong>標準正規分布</strong> と呼ぶ.</p>
+<p>$X$ が標準正規分布に従う確率変数ならば $\mu\in\R$, $\sigma &gt;0$ に対して $Y=\mu+\sigma X$ は平均 $0$, 分散 $\sigma$ の正規分布に従う. なぜならば</p>
+<p>$$\begin{align*}E[f(Y)]&amp;=E[f(\mu+\sigma X)]=\int f(\mu+\sigma x)\frac{e^{-x^2/2}}{\sqrt{2\pi}}\,dx\\&amp;=\int f(y)\frac{e^{-(y-\mu)^2/(2\sigma^2)}}{\sqrt{2\pi}}\,\frac{dy}{\sigma}\\&amp;=\int f(y)\frac{e^{-(y-\mu)^2/(2\sigma^2)}}{\sqrt{2\pi\sigma^2}}\,dy\end{align*}$$</p><p>3つ目の等号で $x=(y-\mu)/\sigma$ とおいた.
+これは $Y$ が平均 $\mu$, 分散 $\sigma^2$ の正規分布に従うことを意味する.</p>
+<p>一般に確率変数 $X$ の平均が $0$ で分散が $1$ のとき, $Y=\mu+\sigma X$ は平均が $0$ で分散が $\sigma^2$ の確率変数になる.</p>
+<p>$X,Y$ は独立な確率変数の組であり, どちらも標準正規分布に従っていると仮定する.
+このとき任意の $a,b\in\R$, $(a,b)\ne(0,0)$ に対して $Z=aX+bY$ は平均 $0$, 分散 $a^2+b^2$ の標準正規分布に従う確率変数になる. この結果を <strong>正規分布の再生性</strong> という.
+その証明は以下の通り: $a\ne 0$ と仮定する.</p>
+<p>$$\begin{align*}E[f(Z)]&amp;=E[f(aX+bY)]\\&amp;=\iint f(ax+by)\frac{e^{-(x^2+y^2)/2}}{\sqrt{(2\pi)^2}}\,dx\,dy \\&amp;=\iint f(z)\frac{e^{-(z^2+w^2)/(2(a^2+b^2))}}{\sqrt{(2\pi)^2}}\,\frac{dz\,dw}{z^2+b^2}\\&amp;=\int f(z)\frac{e^{-z^2/(2(a^2+b^2))}}{\sqrt{(2\pi)^2}}\frac{\sqrt{2(a^2+b^2)\pi}}{a^2+b^2}\,dz\\&amp;=\int f(z)\frac{e^{-z^2/(2(a^2+b^2))}}{\sqrt{2\pi(a^2+b^2)}}\,dz\end{align*}$$</p><p>3つ目の等号で
+$$x = \frac{az-bw}{a^2+b^2}, \qquad y = \frac{bz+aw}{a^2+b^2}$$
+とおくと,
+$$ax+by=z, \quad x^2+y^2=\frac{z^2+w^2}{a^2+b^2}, \quad dx\wedge dy = \frac{dz\wedge dw}{a^2+b^2}$$
+となることを使った. 4つ目の等号では $w$ に関する積分を一般的に成立しているGauss積分の公式
+$$\int_{-\infty}^\infty e^{-w^2/\alpha}\,dw = \sqrt{\alpha\pi}\quad (\alpha &gt; 0)$$
+を使って行った.</p>
+<p>一般に独立な確率変数 $X,Y$ の分散がそれぞれ $\sigma_X^2,\sigma_y^2$ のとき, $X+Y$ の分散は $\sigma_X^2+\sigma_Y^2$ になる.</p>
+<p>正規分布の再生性から特に確率変数の組 $Y_1,\ldots,Y_n$ が独立同分布でそれぞれが標準正規分布に従うとき,
+$$Z_n = \frac{Y_1+\cdots+Y_n}{\sqrt n}$$
+も標準正規分布に従うことがわかる. $Y_1+\cdots+Y_n$ は平均 $0$, 分散 $n$ の正規分布に従い, それを $\sqrt n$ で割れば分散が $1$ になる. この形での正規分布の再生性を中心極限定理の証明で利用する.</p>
+<h2 id="&#x4E2D;&#x5FC3;&#x6975;&#x9650;&#x5B9A;&#x7406;">中心極限定理</h2>
+<p>確率変数達 $X_1,X_2,\ldots$ と $Y_1,Y_2,\ldots$ の全体は独立であるとし,
+$X_1,X_2,\ldots$ は独立同分布であり, $Y_1,Y_2,\ldots$ も独立同分布であると仮定する. $X$, $Y$ はそれぞれ $X_k$, $Y_k$ と同分布な確率変数であるとする.</p>
+<p>$k=1,2,3$ に対して, $E[X^k], E[Y^k]$ は well-defined でかつ $E[|Y|^3],E[|Y|^3]$ は有限の値になると仮定し, $X$, $Y$ の分散はどちらも 0 でないと仮定する.</p>
+<p>一般に平均 $\mu$, 分散 $\sigma^2$ の確率変数 $X$ に対して $X^\prime=(X-\mu)/\sigma$ は平均 $0$, 分散 $1$ の確率変数になる. この事実を使って $X_k$, $Y_k$ たちを変換してそれらすべての平均と分散を $0$ と $1$ にできる. 以下ではこの状況を仮定する.</p>
+<p>すなわち, $E[X_k]=0$, $E[X_k^2]=1$, $E[|X_k|^3]&lt; \infty$, $E[X_k^3]$ は well-defined と仮定し, $Y_k$ たちも同じ条件を満たしていると仮定する.</p>
+<p>$f(x)$ は有限区間の外で $0$ になる $C^3$ 級函数であるとする.</p>
+<p><strong>補題.</strong>
+以上の条件のもとで $n\to\infty$ のとき
+$$E\left[f\left(\frac{X_1+\cdots+X_n}{\sqrt n}\right)\right]-E\left[f\left(\frac{Y_1+\cdots+Y_n}{\sqrt n}\right)\right]\to 0$$</p>
+<p><strong>証明.</strong>
+Taylor の定理より,
+$$f(a+h)=f(a)+f&#x27;(a)h+\frac{f&#x27;&#x27;(a)h^2}{2}+\frac{f&#x27;&#x27;&#x27;(a+\theta_{a,h}h)h^3}{6},$$
+となる. ここで $0&lt;\theta_{a,h}&lt;1$ である.</p>
+<p>$f$ は有限区間の外で $0$ になる $C^3$ 級函数なので, $f&#x27;&#x27;&#x27;(x)$ は有限区間の外で $0$ になる連続函数になる. ゆえに $|f&#x27;&#x27;&#x27;(x)|/6$ は最大値 $M$ を持ち, 上のTaylor定理から得られた等式の右辺の最後の項の絶対値は $M|h|^3$ 以下になる.</p>
+<p>Tayolorの定理から得られる公式を, 独立な確率変数の組 $A,H,K$ で $E[H]=E[K]=0$, $E[H^2]=E[K^2]=1$, $E[|H|^3],E[|K|^3]\leqq C\infty$ で $E[H^3],E[K^3]$ が well-defined なものに適用してみよう.</p>
+<p>$$\begin{align*}&amp;E\left[f\left(A+\frac{H}{\sqrt n}\right)\right]\\&amp;=E[f(A)]+\frac{E[f&#x27;(A)]E[H]}{\sqrt n}+\frac{E[f&#x27;&#x27;(A)]E[H^2]}{2n}\\&amp;+\frac{E[f&#x27;&#x27;&#x27;(A+\theta_{A,H/\sqrt n}H/\sqrt n)H^3]}{6n\sqrt n}\\&amp;=E[f(A)]+\frac{E[f&#x27;&#x27;(A)]}{2n}+\frac{E[f&#x27;&#x27;&#x27;(A+\theta_{A,H/\sqrt n}H/\sqrt n)H^3]}{6n\sqrt n}.\end{align*}$$</p><p>最後の項の絶対値は次のように上からおさえられる:
+$$\left|\frac{E[f&#x27;&#x27;&#x27;(A+\theta_{A,H/\sqrt n}H/\sqrt n)H^3]}{6n\sqrt n}\right|\leqq\frac{MC}{n\sqrt n}.$$
+以上をまとめると,</p>
+<p>$$\begin{align*}&amp;E\left[f\left(A+\frac{H}{\sqrt n}\right)\right]=E[f(A)]+\frac{E[f&#x27;&#x27;(A)]}{2n}+R, \\&amp;|R|\leqq\frac{MC}{n\sqrt{n}}.\end{align*}$$</p><p>同様の結果が $K$ についても得られるので,</p>
+<p>$$\begin{align*}&amp;E\left[f\left(A+\frac{K}{\sqrt n}\right)\right]=E[f(A)]+\frac{E[f&#x27;&#x27;(A)]}{2n}+S, \\&amp;|S|\leqq\frac{MC}{n\sqrt{n}}.\end{align*}$$</p><p>これらの差を取ることによって
+$$\left|E\left[f\left(A+\frac{H}{\sqrt n}\right)\right]-E\left[f\left(A+\frac{K}{\sqrt n}\right)\right]\right|\leqq \frac{2MC}{n\sqrt n}.$$
+この結果を
+$$A=\frac{X_1+\cdots+X_{k-1}+Y_{k+1}+\cdots+Y_n}{\sqrt{n}},$$
+$H=X_k$, $K=Y_k$ に適用すると,
+$$\left|E\left[f\left(\tfrac{X_1+\cdots+X_k+Y_{k+1}+\cdots+Y_n}{\sqrt n}\right)\right]-E\left[f\left(\tfrac{X_1+\cdots+X_{k-1}+Y_k+\cdots+Y_n}{\sqrt n}\right)\right]\right|\leqq \tfrac{2MC}{n\sqrt n}.$$
+これを $k=1,\ldots,n$ について足し上げることによって
+$$\left|E\left[f\left(\frac{X_1+\cdots+X_n}{\sqrt n}\right)\right]-E\left[f\left(\frac{Y_1+\cdots+Y_n}{\sqrt n}\right)\right]\right|\leqq \frac{2MC}{\sqrt n}.$$
+を得る. これの左辺は $n\to\infty$ で $0$ に収束する.
+<strong>証明終</strong></p>
+<p><strong>定理 (中心極限定理).</strong>
+$X_1,X_2,\ldots$ が独立同分布な確率変数列であり, $E[X_k]=0$, $E[X_k^2]=1$, $E[|X_k|^3]&lt;\infty$, $E[X_k^3]$ は well-defined という条件を満たしていると仮定する. このとき有限区間の外で $0$ になるような $C^3$ 級函数 $f(x)$ について
+$$\lim_{n\to\infty}E\left[f\left(\frac{X_1+\cdots+X_n}{\sqrt n}\right)\right]=\int_{-\infty}^\infty f(y)\frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy.$$</p>
+<p><strong>証明.</strong>
+独立同分布な $Y_k$ 達が標準正規分布に従っていると仮定する.
+このとき正規分布の再生性を使うと,
+$$E\left[f\left(\frac{Y_1+\cdots+Y_n}{\sqrt n}\right)\right]=\int_{-\infty}^\infty f(y)\frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy.$$
+なので, 上の補題から示したい結果が得られる.
+<strong>証明終</strong></p>
+<p><strong>系 (中心極限定理).</strong>
+$X_1,X_2,\ldots$ は独立同分布な確率変数列であり, 各 $X_k$ は平均 $\mu$ と有限の分散 $\sigma^2&gt;0$ を持ち, $E[|X_k|^3]&lt; \infty$ で $E[X^3]$ が存在すると仮定し,
+$$Z_n = \frac{X_1+\cdots+X_n-n\mu}{n\sigma}$$
+とおく. $Z_n$ の平均と分散はそれぞれ $0$ と $1$ になる.
+このとき, 有限区間の外で0になる $C^3$ 函数 $f(x)$ に対して
+$$\lim E[f(Z_n)]=\int_{-\infty}^\infty f(y)\frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy.$$</p>
+<p><strong>証明.</strong>
+$X^\prime_k=(X_k-\mu)/\sigma$ に上の定理を適用すればこの結果が得られる.
+<strong>証明終</strong></p>
+<p><strong>系 (中心極限定理).</strong>
+$X_k,Z_n$ は上の系と同じものであるとする.
+このとき, 任意の有界連続函数 $f(x)$ に対して
+$$\lim_{n\to\infty} E[f(Z_n)]=\int_{-\infty}^\infty f(y)\frac{e^{-y^2/2}}{\sqrt{2\pi}}\,dy.$$</p>
+<p><strong>証明.</strong>
+$Y$ は標準正規分布に従う確率変数であるとする.
+$\lim_{n\to\infty}E[f(Z_n)]=E[f(Y)]$ を示せばよい.</p>
+<p>任意に $\eps&gt;0$ を取る.
+$M$ は $|f(x)|$ の上限より真に大きな実数であるとする.
+任意の $m=1,2,3,\ldots$ に対して, ある　$C^3$ 級函数 $g_m(x)$ で,</p>
+<ul>
+<li><p>$|x|\leqq m$ ならば $|f(x)-g_m(x)|\leqq\eps$,</p></li>
+<li><p>$|x|\geqq m+1$ ならば $g_m(x)=0$,</p></li>
+<li><p>任意の $x\in\R$ について $|g_m|\leqq M$</p></li>
+</ul>
+<p>を満たすものが存在する. $C^3$ 級函数 $h_m(x)$ で</p>
+<ul>
+<li><p>$|x|\leqq m-1$ ならば $2M-h_m(x)=\eps$,</p></li>
+<li><p>$m-1\leqq|x|\leqq m$ ならば $\eps\leqq 2M-h_m(x)\leqq 2M$,</p></li>
+<li><p>$|x|\geqq m$ ならば $2M-h_m(x)=2M$ すなわち $h_m(x)=0$.</p></li>
+</ul>
+<p>を満たすものを取れる.
+$g_m(x)$ と $h_m(x)$ に対しては上の系が適用できることに注意せよ.</p>
+<p>(1) $|x|\leqq m$ ならば
+$$|f(x)-g_m(x)|\leqq\eps\leqq 2M-h_m(x)$$
+であり, $|x|\geqq m$ ならば
+$$|f(x)-g_m(x)|\leqq 2M=2M-h_m(x)$$
+なので
+$$|f-g_m|\leqq 2M-h_m.$$
+$h_m(x)$ には上の系が適用できるので, $n\to\infty$ のとき
+$$E[|f(Z_n)-g_m(Z_n)|]\leqq 2M-E[h_m(Z_n)]\to 2M-E[h_m(Y)].$$
+ゆえに</p>
+<p>$$\begin{align*}\limsup_{n\to\infty}E[|f(Z_n)-g_m(Z_n)|]&amp;\leqq E[2M-h_m(Y)]\\&amp;\leqq \eps + 2M\,P(|Y|&gt;m-1)\end{align*}$$</p><p>(2) $g_m(x)$ には上の系が適用できるので,
+$$\lim_{n\to\infty}\left|E[g_m(Z_n)]-E[g_m(Y)]\right|=0.$$</p>
+<p>(3) さらに $g_m(x)$ の定義より
+$$E[|f(Y)-g_m(Y)|]\leqq \eps + 2M\,P(|Y|&gt;m-1).$$</p>
+<p>三角不等式を使って, 以上の(1),(2),(3)を合わせると
+$$\limsup_{n\to\infty}|E[f(Z_n)]-E[f(Y)]|\leqq 2\eps + 4M\,P(|Y|&gt;m-1)$$
+を得る. 正規分布の性質より $m\to\infty$ で $P(|Y|&gt;m-1)\to 0$ なので
+$$\limsup_{n\to\infty}|E[f(Z_n)]-E[f(Y)]|\leqq2\eps.$$
+$\eps&gt;0$ は任意だったので
+$$\lim_{n\to\infty}E[f(Z_n)]=E[f(Y)]$$
+となることがわかる.
+<strong>証明終</strong></p>
+<h2 id="&#x7D50;&#x8A9E;">結語</h2>
+<p>以上で示したように, 測度論を表に出さずに,
+期待値汎函数に関する基本的な性質のみを仮定すれば,
+統計学入門で必要になる「大数の(弱)法則」と
+「中心極限定理」を証明可能である.</p>
+<p>なお, 筆者の個人的な意見では,
+大数の法則と中心極限定理の他にSanovの定理が基本的である.
+Sanovの定理については次のリンク先のノートを参照してほしい.</p>
+<p><a href="https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf">https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf</a></p>
+<p>期待値汎函数 $E[\;\;]$ を中心に議論を展開することは,
+確率論と量子論の類似性を明瞭にするためにも役に立つ.
+量子論では規格化された純粋状態 $|v\ket$ に対して,
+演算子 $A$ の期待値が
+$$\bra A\ket = \bra v|A|v\ket$$
+と定義される.
+これは $A$ について線形であり, 規格化条件 $\bra c\ket = c$ ($c$ は定数)も満たしている.
+$\bra\;\;\ket$ はこのノートにおける $E[\;\;]$ の量子論における類似物になっている.</p>
+<table>
+<thead>
+<tr><th style="text-align:center">確率論</th><th style="text-align:center">量子論</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:center">測度</td><td style="text-align:center">状態</td></tr>
+<tr><td style="text-align:center">確率変数</td><td style="text-align:center">演算子</td></tr>
+<tr><td style="text-align:center">$E[\;\;]$</td><td style="text-align:center">$\bra\;\;\ket$</td></tr>
+</tbody>
+</table>
+<p>このノートでは省略したGauss積分の計算の仕方については次のノートに詳しい解説がある.</p>
+<p><a href="https://genkuroki.github.io/documents/20160501StirlingFormula.pdf">https://genkuroki.github.io/documents/20160501StirlingFormula.pdf</a></p>
+<p><strong>余談.</strong> このノートはAtomエディターに整備したmarkdownのリアルタイムプレビュー環境のテストのために執筆された. さすがにこれだけ長くなってしまうと、リアルタイムプレビューはとても重い. 素直に $\mathrm{\LaTeX}$ を使って執筆した方が良かったかもしれない.</p>
+
+
+  </body>
+  
+</html>
