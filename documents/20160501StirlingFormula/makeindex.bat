@@ -1,3 +1,3 @@
 rm -f index.html
-make
+gmake.exe"
 pause
