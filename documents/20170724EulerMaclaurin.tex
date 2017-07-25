@@ -1,0 +1,1041 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bfseries Euler-Maclaurinの和公式の一般化}
+\def\AUTHOR{黒木 玄}
+\def\DATE{2017年7月24日作成\thanks{%
+{\bfseries 2017年}7月24日: 作成.
+7月26日(Ver.0.01): まだ書きかけの段階で公開.
+今後も気が向いたら更新することにする.
+}}
+\def\ABSTRACT{%
+  論文 \cite{BCM2009} では, 実数直線上の確率分布に対して,
+  Bernoulli多項式の一般化が構成されている.
+  しかし, その論文では, Euler-Maclaurinの和公式の一般化については,
+  未解決であるとしている(\cite{BCM2009}, Remark 4).
+  このノートでは彼らが構成したBernoulli多項式の一般化を用いて,
+  Euler-Maclaurinの和公式を一般化する.
+}
+\def\URL{https://genkuroki.github.io/documents/20170724EulerMaclaurin.pdf}
+\def\PDFTITLE{Euler-Maclaurin-Taylorの公式}
+\def\PDFAUTHOR{黒木 玄}
+\def\PDFSUBJECT{漸近解析}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathrsfs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\ttfamily arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+\newcommand\BF{\bfseries}
+\newcommand\TT{\ttfamily}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\renewcommand\setminus{\smallsetminus}
+\newcommand\Hom{\operatorname{Hom}}
+\newcommand\Aut{\operatorname{Aut}}
+\newcommand\End{\operatorname{End}}
+\newcommand\diag{\operatorname{diag}}
+\newcommand\A{{\mathscr A}}
+\newcommand\K{{\mathscr K}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% enumerate
+%
+\renewcommand\labelenumi{(\arabic{enumi})}
+\renewcommand\labelenumii{(\alph{enumii})}
+\renewcommand\labelenumiii{(\roman{enumiii})}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+\newtheoremstyle{jplain}% name
+{}% space above
+{}% space below
+{\normalfont}% body  font
+{}% indent amount
+{\bfseries}% theorem head font
+{.}% punctuation after theorem head
+{4pt}% space after theorem head (default: 5pt)
+{\thmname{#1}\thmnumber{#2}\thmnote{\hspace{2pt}(#3)}}% theorem head spec
+
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+\newcommand\fnref[1]{脚注\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\begin{abstract}
+\ABSTRACT
+\end{abstract}
+\begin{center}
+  \href
+  {\URL}
+  {\small\TT \URL}
+\end{center}
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{Bernoulli多項式の一般化}
+\label{sec:Bernoulli}
+
+この節では Borwein-Calkin-Manna (2009) \cite{BCM2009} に基いて,
+実数直線 $\R$ 上の確率分布に対する Bernoulli 多項式の
+一般化 $P_n(x)$ を構成する.
+この節で定めた記号は後の節でもそのまま利用する.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Bernoulli多項式}
+\label{sec:B_n}
+
+読者の便のために, 一般化する前の古典的 Bernoulli 多項式について復習しておこう.
+
+{\BF Bernoulli多項式} $B_n(x)$, $n=0,1,2,\ldots$ は
+次の母函数表示によって定義される:
+\begin{align*}
+  \frac{z e^{xz}}{e^z-1} = \sum_{n=0}^\infty B_n(x)\frac{z^n}{n!}.
+\end{align*}
+たとえば
+\begin{align*}
+  & B_0(x)=1, \\
+  & B_1(x)=x-\frac12,\\
+  & B_2(x)=x^2-x+\frac16, \\
+  & B_3(x)=x^3-\frac32x^2+\frac12x,\\
+  & B_4(x)=x^4-2x^3+x^2-\frac1{30}, \\
+  & B_5(x)=x^5-\frac52x^4+\frac53x^3-\frac16x,\\
+  & B_6(x)=x^6-3x^5+\frac52x^4-\frac12x^2+\frac1{42}.
+\end{align*}
+$B_n=B_n(0)$ は{\BF Bernoulli数}と呼ばれている.
+$B_n(x)$ の母函数表示で $x=0$ とおいて $z/2$ を足すと,
+\begin{equation*}
+  \frac{z}{e^z-1}+\frac{z}2
+  =\frac{z}2\frac{e^{z/2}+e^{-z/2}}{e^{z/2}-e^{-z/2}}
+\end{equation*}
+と $z$ に関する奇函数になる.
+このことから, $n$ が $3$ 以上の奇数のとき,
+Bernoulli数 $B_n$ が0になることがわかる.
+
+Bernoulli多項式の母函数表示を用いて次の公式を示すことができる:
+\begin{align*}
+& B'_n(x) = n B_{n-1}(x), \\
+& B_n(x+h) = \sum_{k=0}^n \binom{n}{k} B_k(x)h^{n-k}.
+\end{align*}
+これらの公式より, Bernoulli多項式の計算は,
+Bernoulli数の計算に帰着することがわかる.
+それらの公式が成立することは以下の計算を見ればわかる:
+\begin{align*}
+  &
+  \frac{d}{dx}\frac{ze^{xz}}{e^z-1}=z\frac{ze^{xz}}{e^z-1},
+  \qquad
+  z\frac{z^{n-1}}{(n-1)!} = n\frac{z^n}{n!},
+  \\ &
+  \frac{ze^{(x+h)z}}{e^z-1}=\frac{ze^{xz}}{e^z-1}e^{hz}
+  =\sum_{k,l=0}^\infty \frac{B_k(x)h^l z^{k+l}}{k!l!}
+  =\sum_{n=0}^\infty
+  \left(\sum_{k=0}^n\binom{n}{k}B_k(x)h^{n-k}\right)
+  \frac{z^n}{n!}.
+\end{align*}
+このようにして証明される上の公式は形式的には次のようにして得られる:
+\begin{enumerate}
+  \item まず $B_n(x)$ を変数 $B$ の多項式 $B^n$ に置き換える.
+  その $B^n$ を $B$ で微分した後に $B^{n-1}$ を $B_{n-1}(x)$ で置き換える.
+  \item まず $B_n(x+h)$ を変数 $B$ の多項式 $(B+h)^n$ で置き換える.
+  二項定理を用いて $(B+h)^n$ を展開した後に $B^k$ を $B_k(x)$ で置き換える.
+\end{enumerate}
+
+{\BF これはどうしてだろうか?}
+
+この疑問は以下の節で解説する文献 \cite{BCM2009} の構成によって解消される%
+\footnote{すぐに答えを知りたい人は\secref{sec:S}の\corref{cor:A}
+の証明を参照せよ.}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{実数直線上の確率分布}
+\label{sec:mu}
+
+この節では後の節で用いる実数直線上の確率分布の記号法を定める.
+$\R$ 上の確率測度を $\mu$ と書き, その累積分布函数を $F(x)$ と書き,
+そのモーメント母函数を $M(z)$ と書く.
+詳しくは以下を参照せよ%
+\footnote{この部分節で解説されている概念と記号法に慣れている読者は
+この部分節をとばして先に進んでよい.}.
+
+$\mu$ は $\R$ 上の{\BF 確率測度}(確率分布)であるとする.
+
+確率測度の例として以下を知っておけばこのノートを読むには十分である%
+\footnote{以下の例を知っていれば測度論について知っている必要はない.}.
+\begin{enumerate}
+  \item $\int_\R \varphi(x)\,\mu(dx) = \varphi(0)$.
+  このような $\mu$ は原点に台を持つ{\BF デルタ分布}と呼ばれる.
+  Diracのデルタ超函数の記号を用いて $\mu(dx)=\delta(x)\,dx$ と書くこともある:
+  \begin{equation*}
+    \int_\R \varphi(x)\,\mu(dx)
+    = \int_\R \varphi(x)\delta(x)\,dx
+    = \varphi(0).
+  \end{equation*}
+  この確率測度は, $x$ の値が確率 $1$ で $0$ になるような確率分布を
+  表現している.
+
+  \item $w_i\geqq 0$, $\sum_i w_i=1$ であるとし,
+  $a_i$ は任意の実数列であるとする. このとき
+  \begin{equation*}
+    \mu(dx)=\sum_i w_i\delta(x-a_i)\,dx
+  \end{equation*}
+  によって, 離散的確率測度 $\mu$ を定めることができる. すなわち
+  \begin{equation*}
+    \int_\R \varphi(x)\,\mu(dx)=\sum_i w_i\varphi(a_i).
+  \end{equation*}
+  例えば $i$ は $0,1$ を動き, $a_0=0$, $a_1=1$, $w_0=w_1=1/2$ のとき
+  \begin{equation*}
+    \int_\R \varphi(x)\,\mu(dx)
+    =\frac12\int_\R \varphi(x)(\delta(x)+\delta(x-1))\,dx
+    = \frac{\varphi(0)+\varphi(1)}2.
+  \end{equation*}
+  この確率測度は, $x$ の値がそれぞれお確率 $1/2$ で $0$ または $1$ に
+  になる確率分布を表現している. この確率分布をこのノートでは仮に
+  {\BF コイン投げ分布}と呼ぶことにする.
+
+  \item $\rho(x)$ が非負Lebesgue可測函数で $\int_\R \rho(x)\,dx=1$ を
+  満たすとき, $\mu(dx) = \rho(x)\,dx$ によって確率測度 $\mu$ が定義され,
+  $\rho(x)$ は $\mu$ の確率密度函数と呼ばれる. このとき
+  \begin{equation*}
+    \int_\R \varphi(x)\,\mu(dx)=\int_\R\varphi(x)\rho(x)\,dx.
+  \end{equation*}
+  この確率測度は $x$ の値が $a\leqq x\leqq b$ となる確率が
+  $\int_a^b\rho(x)\,dx$ であるような確率分布を表現している.
+  例えば, {\BF 標準正規分布}は確率密度函数
+  \begin{align*}
+    \rho(x) = \frac1{\sqrt{2\pi}}e^{-x^2/2}
+  \end{align*}
+  で与えられ, $[0,1]$ 区間上の{\BF 一様分布}は確率密度函数
+  \begin{align*}
+    \rho(x) = \begin{cases}
+      1 & (x\in[0,1]) \\
+      0 & (x\not\in[0,1])\\
+    \end{cases}
+  \end{align*}
+  によって与えられる.
+\end{enumerate}
+
+確率測度 $\mu$ の{\BF 累積分布函数} $F(x)$ は次のように定義される:
+\begin{equation*}
+  F(x)= \int_{(-\infty,x]} \mu(dx).
+\end{equation*}
+例えば $\mu$ が原点に台を持つデルタ分布のとき
+\begin{equation*}
+  F(x)=\begin{cases}
+    0 & (x<0) \\
+    1 & (x\geqq 0). \\
+  \end{cases}
+\end{equation*}
+$\mu$ が確率密度函数 $\rho(x)$ で与えられている場合には
+\begin{equation*}
+  F(x) = \int_{-\infty}^x \rho(y)\,dy.
+\end{equation*}
+例えば $\mu$ が $[0,1]$ 区間上の一様分布のとき
+\begin{equation*}
+  F(x) = \begin{cases}
+    0 & (x<0) \\
+    x & (x\in[0,1]) \\
+    1 & (x>1). \\
+\end{cases}
+\end{equation*}
+さらに $\mu$ がコイン投げ分布の場合には
+\begin{equation*}
+  F(x) = \begin{cases}
+    0 & (x<0) \\
+    1/2 & (0\leqq x < 1) \\
+    1 & (1\leqq x). \\
+  \end{cases}
+\end{equation*}
+
+これ以後ずっと, 確率測度 $\mu$ は, 任意の非負の整数 $n$ に対して
+\begin{equation*}
+  \int_\R |x|^n\,\mu(dx) < \infty
+\end{equation*}
+を満たしていると仮定する.
+このとき確率測度 $\mu$ の $n$ 次の{\BF モーメント} $M_n$ が
+\begin{equation*}
+  M_n = \int_\R x^n\,\mu(dx)
+\end{equation*}
+によって定義される. $M_0=1$ であり,
+$M_1$ は確率分布 $\mu$ の{\BF 平均}
+もしくは{\BF 期待値}と呼ばれる%
+\footnote{分散は $1$ 次と $2$ 次のモーメントから $M_2-M_1^2$ として得られる.}.
+{\BF モーメント母函数} $M(z)$ が
+\begin{equation*}
+  M(z) = \sum_{n=0}^\infty M_n \frac{z^n}{n!}
+\end{equation*}
+と定義される.
+収束半径が $0$ の場合には $z$ の形式べき級数とみなす.
+$M_0=1$ より, モーメント母函数の逆数 $1/M(z)$ も $z$ の形式べき級数とみなせる.
+べき級数として収束する場合に, モーメント母函数は
+\begin{equation*}
+  M(z) = \int_\R e^{xz}\,\mu(dx)
+\end{equation*}
+とも書ける.
+大抵の場合, この公式でモーメント母函数が計算される.
+
+\begin{remark}
+確率論におけるモーメント母函数 $M(z)$ は
+統計力学における分配函数に対応する数学的対象である.
+$z=-\beta$ と書き, $M(z)$ を $Z(\beta)$ と書くと,
+\begin{equation*}
+  Z(\beta) = \int_\R e^{-\beta x}\,\mu(dx).
+\end{equation*}
+このように書けば, 統計力学における記号法との対応が付け易いだろう.
+$\beta$ は物理的には絶対温度の逆数であり, 逆温度と呼ばれる.
+分配函数はBoltzmann因子 $e^{-\beta x}$ で
+ベースになる確率分布 $\mu$ を変形するために使われる.
+そのときベースになる確率分布 $\mu$ はミクロカノニカル分布と呼ばれ,
+Boltzmann因子で変形された確率分布はカノニカル分布と呼ばれる.
+カノニカル分布の導出に関する詳しい解説については,
+筆者による解説ノート \cite{kuroki-KL} を参照せよ.
+\qed
+\end{remark}
+
+例えば $\mu$ が原点に台を持つデルタ分布の場合には
+\begin{equation*}
+  M(z)=\int_\R e^{xz}\delta(x)\,dx = 1
+\end{equation*}
+となり, $\mu$ が $[0,1]$ 区間上の一様分布の場合には
+\begin{equation*}
+  M(z)=\int_0^1 e^{xz}\,dx
+  = \left[\frac{e^{xz}}z\right]_{x=0}^{x=1}
+  = \frac{e^z-1}{z}
+\end{equation*}
+となり, Bernoulli数の母函数の逆数に一致する.
+さらに $\mu$ がコイン投げ分布の場合には
+\begin{equation*}
+  M(z)=\frac{e^{0z}+e^{1z}}2=\frac{1+e^z}{2}.
+\end{equation*}
+
+次の節で, 原点に台を持つデルタ分布には多項式達 $x^n$ が対応し,
+$[0,1]$ 区間上の一様分布にはBernoulli多項式達 $B_n(x)$ が
+対応することが説明される.
+コイン投げ分布に対応する多項式達はEuler多項式達と呼ばれている.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Bernoulli多項式の一般化}
+\label{sec:P_n}
+
+前節で定めたように $\mu$ は $\R$ 上の確率測度であるとし,
+$F(x)$ はその累積分布函数であるとし,
+$M(x)$ はそのモーメント母函数であるとする.
+
+\begin{definition}[一般化されたBernoulli多項式]
+  次の母函数表示で
+  {\BF 一般化されたBernoulli多項式} $P_n(x)$ を定める:
+  \begin{equation*}
+    \frac{e^{xz}}{M(z)} = \sum_{n=0}^\infty P_n(x)\frac{z^n}{n!}.
+  \end{equation*}
+  $M(0)=1$ より $P_0(x)=1$ となることがわかる. \qed
+\end{definition}
+
+\begin{example}[Bernoulli多項式]
+  $\mu$ が $[0,1]$ 区間上の一様分布のとき,
+  そのモーメント母函数 $M(z)$ は
+  \begin{equation*}
+    M(x)=\int_0^1 e^{xz}\,dx = \frac{e^z-1}z
+  \end{equation*}
+  となるので, 一般化されたBernoulli多項式 $P_n(x)$ は
+  \begin{equation*}
+    \frac{ze^{xz}}{e^z-1} = \sum_{n=0}^\infty P_n(x)\frac{z^n}{n!}
+  \end{equation*}
+  によって定められる. これはBernoulli多項式の定義に一致する.
+  すなわち, $[0,1]$ 区間上の一様分布に対応する
+  一般化されたBernoulli多項式はBernoulli多項式に一致する.
+  \qed
+\end{example}
+
+\begin{example}[原点に台を持つデルタ分布の場合]
+  $\mu$ が原点に台を持つデルタ分布のとき,
+  すなわち $\mu(dx)=\delta(x)\,dx$ のとき,
+  モーメント母函数は $M(x)=1$ となるので,
+  \begin{equation*}
+    \frac{e^{xz}}{M(x)}
+    =e^{xz}
+    =\sum_{n=0}^\infty x^n\frac{z^n}{n!}
+  \end{equation*}
+  より $P_n(x)=x^n$ となる.
+  すなわち $x^n$ は原点に台を持つデルタ分布に対応する
+  一般化されたBernoulli多項式になっている.
+  \qed
+\end{example}
+
+\begin{example}[Euler多項式]
+  $\mu$ がコイン投げ分布のとき, すなわち
+  $\mu(dx)=(1/2)(\delta(x)+\delta(x-1))\,dx$
+  のとき, 対応する一般化されたBernoulli多項式は $E_n(x)$ と書かれ,
+  {\BF Euler多項式}と呼ばれる.
+  この場合にモーメント母函数は $M(z)=(1+e^z)/2$ になるので
+  Euler多項式 $E_n(x)$ は
+  \begin{equation*}
+    \frac{2e^{xz}}{1+e^z} = \sum_{n=0} E_n(x)\frac{z^n}{n!}
+  \end{equation*}
+  によって定義される. \qed
+\end{example}
+
+\begin{remark}
+  もしも $e^{xz}/M(z)$ がすべての実数 $x$ について収束していれば,
+  $(e^{xz}/M(z))\,\mu(dx)$ は確率測度になっていることに注意せよ.
+  実際,
+  \begin{equation*}
+    \int_\R \frac{e^{xz}}{M(z)}\,\mu(dx)
+    =\frac{\int_\R e^{xz}\,\mu(dx)}{M(z)}
+    =\frac{M(x)}{M(x)}=1.
+  \end{equation*}
+  確率測度 $(e^{xz}/M(z))\,\mu(dx)$ は
+  統計力学におけるカノニカル分布に対応している.
+  $z=-\beta$ とおき, $M(z)=Z(\beta)$ と書くと,
+  \begin{equation*}
+    \frac{e^{xz}\,\mu(dx)}{M(z)} = \frac{e^{-\beta x}\,\mu(dx)}{Z(\beta)}.
+  \end{equation*}
+  このように書けば統計力学における記号の対応を付け易いだろう.
+  この方面に関する詳しい解説が \cite{kuroki-KL} にある.
+  物理的には $\beta$ は絶対温度の逆数である.
+  だから $z=-\beta$ に関するべき級数展開は絶対温度 $\infty$ に
+  おける展開である. 一般化されたBernoulli多項式はカノニカル分布の
+  高温展開によって定義されていると考えられる.
+  \qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{一般化されたBernoulli多項式の特徴付け}
+\label{sec:S}
+
+この節でも,
+$\mu$ は $\R$ 上の確率測度であるとし,
+$F(x)$ はその累積分布函数であるとし,
+$M(x)$ はそのモーメント母函数であるとする.
+確率分布 $\mu$ に対応する一般化されたBernoulli多項式を $P_n(x)$ と表す:
+\begin{align*}
+  \frac{e^{xz}}{M(z)}=\sum_{n=0}^\infty P_n(x)\frac{z^n}{n!},
+  \qquad
+  M(z) = \int_\R e^{xz}\,\mu(dx).
+\end{align*}
+
+函数 $f(x)$ に対して $\A[f](x)$ を次のように定める:
+\begin{align*}
+  \A[f](x) = \int_\R f(x+y)\,\mu(dy).
+\end{align*}
+このノートでは, $\A[f]$ を $f$ の確率測度 $\mu$ による
+{\BF 移動平均 (moving average)}と呼ぶことにする.
+
+例えば, $\mu$ が原点に台を持つデルタ分布のとき
+\begin{equation*}
+  \A[f](x)=\int_\R f(x+y)\delta(y)\,dy = f(x)
+\end{equation*}
+となり, $\A$ は単なる恒等写像になる.
+
+例えば, $\mu$ が $[0,1]$ 区間上の一様分布ならば
+\begin{equation*}
+  \A[f](x)
+  = \int_0^1 f(x+y)\,dy
+  = \int_{x}^{x+1} f(t)\,dt
+\end{equation*}
+となり, $\A[f]$ は $f$ の幅1の区間にわたる前方移動平均になる.
+
+さらに $\mu$ がコイン投げ分布ならば,
+すなわち $\mu(dx)=(1/2)(\delta(x)+\delta(x-1))\,dx$ ならば
+\begin{equation*}
+  \A[f](x)
+  =\frac12\int_\R f(x+y)(\delta(y)+\delta(y-1))\,dy
+  =\frac{f(x)+f(x+1)}2
+\end{equation*}
+となり, $\A[f]$ は $f$ の離散的な前方移動平均になる.
+
+\begin{lemma}
+  \label{lemma:A}
+  移動平均作用素 $\A$ は $x^n$ を $n$ 次のモニック多項式に移す.
+  ゆえに $\A$ は多項式全体の空間の線形自己同型を与える.
+  さらに $\A$ は微分作用素 $d/dx$ や差分作用素 $f(x)\mapsto f(x+h)$
+  と可換である.
+\end{lemma}
+
+\begin{proof}
+  作用素 $\A$ は多項式を多項式に移す. なぜならば
+  \begin{align*}
+  \A[x^n]
+  = \int_\R (x+y)^n\,\mu(dy)
+  = \sum_{k=0}^n\binom{n}{k}x^k \int_\R y^{n-k}\,\mu(dy)
+  = \sum_{k=0}^n\binom{n}{k}M_{n-k} x^k.
+  \end{align*}
+  この公式より, 移動平均作用素 $\A$ は
+  $x^n$ 次多項式をモニックな $n$ 次多項式に移すことがわかる.
+  したがって, $\A$ の多項式函数への制限は,
+  多項式全体の空間の線形自己同型を与える.
+
+  $\A$ は $d/dx$ と可換であることは次のようにして確かめられる:
+  \begin{align*}
+    \frac{d}{dx}\A[f](x)
+    =\frac{d}{dx}\int_\R f(x+y)\,\mu(dy)
+    =\int_\R f'(x+y)\,\mu(dy)
+    =\A[f'](x).
+  \end{align*}
+
+  $\A$ は $f(x)\mapsto f(x+h)$ と可換であることは
+  次のようにして確かめられる:
+  \begin{align*}
+    \A[f(x+h)]
+    =\int_\R f((x+y)+h)\,\mu(dy)
+    =\int_\R f((x+h)+y)\,\mu(dy)
+    =\A[f](x+h).
+  \end{align*}
+
+  以上によって上の補題が成立していることがわかった.
+  \qed
+\end{proof}
+
+\begin{theorem}[一般化されたBernoulli多項式の特徴付け]
+  \label{theorem:A}
+  一般化されたBernoulli多項式 $P_n(x)$ は次の条件によって一意に特徴付けられる.
+  \begin{equation*}
+    \A[P_n(x)] = \int_\R P_n(x+y)\,\mu(dy) = x^n.
+  \end{equation*}
+\end{theorem}
+
+\begin{proof}
+  \lemmaref{lemma:A}より, $\A$ は多項式全体の空間の線形自己同型を
+  定めるので, もしも $P_n(x)$ が $\A[P_n(x)]=x^n$ という条件を満たす
+  ならばその条件で $P_n(x)$ は一意に特徴付けられる.
+  \begin{align*}
+    \A\left[\frac{e^{xz}}{M(z)}\right]
+    =\frac1{M(z)}\int_\R e^{(x+y)z}\,\mu(dy)
+    =\frac{e^{xz}}{M(z)}\int_\R e^{yz}\,\mu(dy)
+    =e^{xz}.
+  \end{align*}
+  両辺を $z$ に関して展開すれば $\A[P_n(x)]=x^n$ が成立していることがわかる.
+  \qed
+\end{proof}
+
+\begin{cor}
+  \label{cor:A}
+  一般化されたBernoulli多項式は以下を満たす:
+  \begin{align*}
+    & \frac{d}{dx} P_n(x) = n P_{n-1}(x), \\
+    & P_n(x+h) = \sum_{k=0}^n \binom{n}{k} P_k(x)h^{n-k}.
+  \end{align*}
+\end{cor}
+
+\begin{proof}
+  \lemmaref{lemma:A}より, $\A$ は $d/dx$ と可換なので,
+  \begin{align*}
+    \A\left[\frac{d}{dx} P_n(x)\right]
+    =\frac{d}{dx}\A[P_n(x)]
+    =\frac{d}{dx}x^n
+    =nx^{n-1}
+    =\A[nP_{n-1}(x)].
+  \end{align*}
+  $\A$ は多項式全体の空間の線形自己同型なので $P'_n(x)=nP_{n-1}(x)$.
+
+  後者の公式を示そう. 二項展開より,
+  \begin{align*}
+    (x+h)^n = \sum_{k=0}^n\binom{n}{k}x^k h^{n-k}.
+  \end{align*}
+  $\A$ が差分作用素 $f(x)\mapsto f(x+h)$ と可換なことから,
+  二項展開の公式中の $(x+h)^n$, $x^k$ をそれぞれ $P_n(x+h)$, $P_k(x)$
+  で置き換えた公式も成立することがわかる.
+  \qed
+\end{proof}
+
+\begin{cor}
+  \label{cor:AD}
+  一般化されたBernoulli多項式 $P_n(x)$ 達は以下の条件によって
+  帰納的に一意に特徴付けられる: $n\geqq 1$ のとき,
+  \begin{align*}
+    P_0(x)=1,
+    \qquad
+    P'_n(x)=nP_{n-1}(x),
+    \qquad
+    \int_\R P_n(x)\,\mu(dx)=0.
+  \end{align*}
+\end{cor}
+
+\begin{proof}
+  $P_0(x)=1$, $P'_n(x)=nP_{n-1}(x)$ が成立することはすでに示されている.
+  さらに $\A[P_n(x)]=x^n$ は $n\geqq 1$ のとき $x=0$ で0になることから,
+  $\int_\R P_n(y)\,\mu(dy)=0$ となることもわかる.
+
+  $P'_n(x)=nP_{n-1}(x)$ より, $P_n(x)$ は $P_{n-1}(x)$ から積分定数を
+  除いて一意に決定される. そして, その積分定数は $\int_\R P_n(x)\,\mu(dx)=0$
+  という条件から一意に決定される.
+  ゆえに,  $P_0(x)=1$ から出発して,
+  $P_n(x)$ 達が帰納的に一意に決定されることがわかる.
+  \qed
+\end{proof}
+
+\corref{cor:AD}は一般化されたEuler-Maclaurinの和公式の導出で使われる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Euler-Maclaurinの和公式の一般化}
+\label{sec:Euler-Maclaurin}
+
+この節では, Taylorの定理とEuler-Maclaurinの定理の一般化を確立する.
+
+$\mu$ は $\R$ 上の確率分布であり, $F(x)$ はその累積分布函数であり,
+$M(x)$ はそのモーメント母函数であり,
+$P_n(x)$ はそれに対応する一般化されたBernoulli多項式であるとする.
+さらに $\A$ は次のように定義された移動平均作用素であるとする:
+\[
+\A[f](x) = \int_\R f(x+y)\,\mu(dy).
+\]
+函数 $f(x)$ は十分に滑らかであり, 遠方での増大度も大き過ぎないと仮定する.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Taylorの定理}
+\label{sec:Taylor}
+
+Taylorの定理は以下のようにして証明される. 積分型平均値の定理より,
+\[
+f(x+h) = f(x) + \int_0^h f'(x+y_1)\,dy_1.
+\]
+この公式の $f,h,y_1$ を $f',y_1,y_2$ で置き換えた結果を
+右辺の積分の中に代入すると,
+\[
+f(x+h) = f(x) + h f'(x) + \int_0^h dy_1\int_0^{y_1} f''(x+y_2)\,dy_2.
+\]
+同じことを再度繰り返すと
+\[
+f(x+h)
+= f(x) + h f'(x) + \frac{h^2}2 f''(x)
++ \int_0^h dy_1\int_0^{y_1}dy_2\int_0^{y_2} f''(x+y_3)\,dy_3.
+\]
+同様の操作を繰り返すことによって次が得られる:
+\begin{align*}
+  &
+  f(x+h)=f(x)+hf'(x)+\cdots+\frac{h^{n-1}}{(n-1)!}f^{(n-1)}(x)+R_n,
+  \\ &
+  R_n =
+  \int_0^h dy_1\int_0^{y_1}dy_2
+  \cdots\int_0^{y_{n-1}}f^{(n)}(x+y_n)\,dy_n.
+\end{align*}
+剰余項 $R_n$ は, 積分の順序を $y_n$ が一番最後になるように変え,
+$y_1,\ldots,y_{n-1}$ による積分を実行し,
+$y_n$ を $y$ に置き換えることによって,
+\begin{align*}
+  R_n = \int_0^h \frac{(h-y)^{n-1}}{(n-1)!}f^{(n)}(x+y)\,dy
+\end{align*}
+と表されることもわかる.
+以上の結果を{\BF 積分剰余項型のTaylorの定理}と呼ぶことにする.
+
+すぐ上の剰余項の形は部分積分を繰り返すことによっても導出可能である.
+実際, $R_n$ がすでに上の形をしているならば,
+\begin{align*}
+  -\frac{d}{dy}\frac{(h-y)^n}{n!} = \frac{(h-y)^{n-1}}{(n-1)!}
+\end{align*}
+を用いた部分積分によって,
+\begin{align*}
+  R_n
+  &= \left[-\frac{(h-y)^n}{n!}f^{(n)}(x+y)\right]_{y=0}^{y=h}
+  + \int_0^h \frac{(h-y)^n}{n!} f^{(n+1)}(x+y)\,dy
+  \\
+  & = \frac{h^n}{n!}f^{(n)}(x)
+  + \int_0^h \frac{(h-y)^n}{n!} f^{(n+1)}(x+y)\,dy.
+\end{align*}
+この結果を使うことによっても,
+積分型剰余項型のTaylorの定理を帰納的に証明することができる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\subsection{Euler-Maclaurinの和公式}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{一般化されたEuler-Maclaurin-Taylorの公式}
+
+以下では, 計算をやりやすくするために,
+\[
+\mu(dx) = \rho(x)\,dx
+\]
+と書き, 確率測度 $\mu$ が確率密度函数 $\rho(x)$ 持つかのようにみなす.
+実際に確率密度函数を持つ場合には以下の議論は文句なしに正しい.
+そうでない場合にも適切な訂正で以下の議論は正しいとみなせる.
+
+函数 $K(y,y_1)$ を次のように定める:
+\[
+K(y,y_1) = F(y_1) - H(y_1-y).
+\]
+ここで $F(y_1)$ は確率測度 $\mu(dy_1)=\rho(y_1)\,dy_1$ の累積分布函数であり,
+$H(y_1-y)$ はHeaviside函数である:
+\[
+F(y_1) = \int_{-\infty}^{y_1}\rho(y_1)\,dy_1,
+\qquad
+H(y_1-y) = \begin{cases}
+0 & (y_1<y), \\
+1 & (y_1\geqq y).
+\end{cases}
+\]
+任意の $y,y_1\in\R$ に対して $|K(y,y_1)|\leqq 1$ が成立しており,
+$y$ を固定して $y_1\to\pm\infty$ とすると $K(y,y_1)\to 0$ となる.
+
+各 $y$ に対して $K(y,y_1)$ は $y_1$ に関する可積分函数になると仮定する.
+この仮定は $\rho(x)$ が $x\to\infty$ で十分速く減少していれば成立している.
+特にその仮定は $\rho(x)$ の台が有界であれば成立している.
+$\rho(x)$ の台が有界でなくても,
+例えば, 正規分布の場合にはその仮定は成立している.
+
+函数 $K(y,y_1)$ は以下を満たしている:
+\begin{align*}
+  &
+  \frac\d{\d y_1}K(y,y_1) = \rho(y_1) - \delta(y_1-y),
+  \\ &
+  \frac\d{\d y}K(y,y_1) = \delta(y_1-y),
+  \\ &
+  \int_\R dy\,\rho(y)K(y,y_1)
+  = F(y_1) - \int_{-\infty}^{y_1}dy\,\rho(y_1)
+  = 0.
+\end{align*}
+
+積分作用素 $\K$ を次のように定める:
+\[
+\K[\varphi](y) = \int_\R dy_1\,K(y,y_1)\varphi(y_1).
+\]
+
+\begin{lemma}
+  \label{lemma:K}
+  積分作用素 $\K$ は以下を満たしている:
+  \begin{align*}
+    &
+    \K[\varphi'](y)
+    = \int_\R dy_1\,K(y,y_1)\varphi'(y_1)
+    = \varphi(y) - \int_\R\rho(y_1)\varphi(y_1)\,dy_1,
+    \\ &
+    \frac{d}{dy}\K[\varphi](y)
+    = \frac{d}{dy}\int_\R dy_1\,K(y,y_1)\varphi(y_1)
+    = \varphi(y),
+    \\ &
+    \int_\R dy\,\rho(y)\K[\varphi](y) = 0,
+    \\ &
+    \K^n[1](y) = \frac{P_n(y)}{n!}.
+  \end{align*}
+  ここで $P_n(x)$ は一般化されたBernoulli多項式である.
+\end{lemma}
+
+\begin{proof}
+  部分積分によって
+  \begin{align*}
+    \K[\varphi'](y)
+    &= \int_\R dy_1\, K(y,y_1)\varphi'(y_1)
+    \\ &
+    = - \int_\R dy_1\, (\rho(y_1)-\delta(y_1-y))\varphi(y_1)
+    %\\ &
+    = \varphi(y) - \int_\R dy_1\,\rho(y_1)\varphi(y_1).
+  \end{align*}
+  $K_y(y,y_1)=\delta(y_1-y)$ より
+  \begin{align*}
+    \frac{d}{dy}\K[\varphi](y)
+    = \frac{d}{dy}\int_\R dy_1\,K(y,y_1)\varphi(y_1)
+    = \int_\R dy_1\,\delta(y_1-y)\varphi(y_1)
+    =\varphi(y).
+  \end{align*}
+  $\int_\R dy\,\rho(y)K(y,y_1)=0$ より
+  \begin{align*}
+    \int_\R dy\,\rho(y)\K[\varphi](y)
+    &= \int_\R dy\int_\R dy_1\, \rho(y)K(y,y_1)
+    \\ &
+    = \int_\R dy_1\int_\R dy\, \rho(y)K(y,y_1)
+    = \int_\R dy_1\,0
+    = 0.
+  \end{align*}
+  \corref{cor:AD}より, $\K^n[1](y)=P_n(y)/n!$ を示すためには
+  \[
+    \K^0[1](y)=1, \qquad
+    \frac{d}{dy}\K^n[1](y)=\K^{n-1}(y), \qquad
+    \int_\R dy\,\rho(y)\K^n[1](y)=0
+  \]
+  を示せば十分である. 1つ目の条件は自明に成立している.
+  2つ目の条件は上で示した $(d/dy)\K[\varphi](y)=\varphi(y)$ より成立している.
+  3つ目の条件は上で示した $\int_\R dy\,\rho(y)\K[\varphi](y)=0$ より
+  成立している.
+  これで示すべきことがすべて示された. \qed
+\end{proof}
+
+\begin{theorem}[一般化されたEuler-Maclaurinの公式]
+  \label{theorem:GEM}
+  以下の公式が成立している:
+  \begin{align*}
+    &
+    f(x+h)
+    %= \sum_{k=0}^{n-1}\frac{P_n(h)}{n!}\A[f^{(k)}](x) + R_n,
+    = \sum_{k=0}^{n-1}\frac{P_n(h)}{n!}\int_\R dy\,\rho(y)f^{(k)}(x+y) + R_n,
+    \\ &
+    R_n
+    %= \K^n[f^{(n)}(x+y)](y)
+    =\int_\R dy_1\cdots\int_\R dy_n\,
+    K(y,y_1)K(y_1,y_2)\cdots K(y_{n-1},y_n)f(x+y_n).
+  \end{align*}
+\end{theorem}
+
+\begin{proof}
+  \lemmaref{lemma:K}を $\varphi(y)=f(x+y)$ に適用すると,
+  \begin{align*}
+    f(x+h)
+    &= \int_\R \rho(y_1)f(x+y_1) + \int_\R dy_1\,K(h,y_1)f(x+y_1)
+    \\ &
+    = \A[f](x) + \K[y\mapsto f'(x+y)](h)
+  \end{align*}
+  Taylorの定理の証明と同様に,
+  この公式中の左辺 $h\mapsto f(x+h)$ を $y\mapsto f'(x+y)$ に置き換えたものを
+  右辺の $f'(x+y)$ に代入すると,
+  \begin{align*}
+    f(x+h)
+    =\A[f](x) + \K[1](h)\,\A[f'](x) + \K^2[y\mapsto f''(x+y)](h).
+  \end{align*}
+  この式を得るときに, $y$ に関する定数函数 $y\mapsto \A[f'](x)$ に関しては
+  \[
+    \K\bigl[y\mapsto\A[f'](x)\bigr](h)=\K[1](h)\,\A[f'](x)
+  \]
+  が成立していることを使った.  同じことをもう一度実行すると,
+  \begin{align*}
+    f(x+h)
+    =\A[f](x) + \K[1](h)\,\A[f'](x) + \K^2[1](h)\,\A[f''](x)
+    + \K^3[y\mapsto f^{(3)}(x+y)](h).
+  \end{align*}
+  同様に繰り返せば次が得られる:
+  \begin{align*}
+    &
+    f(x+h) = \sum_{k=0}^{n-1}\K^k[1](h)\,\A[f^{(k)}](x) + R_n,
+    \\ &
+    R_n = \K^n[y\mapsto f^{(n)}(x+y)](h).
+  \end{align*}
+  \lemmaref{lemma:K}より $\K^k[1](h)=P_k(h)/k!$ であるので,
+  $\A$ と $\K$ の定義に戻ってこの公式を積分を使って書き直せば
+  欲しい結果が得られる.
+  \qed
+\end{proof}
+
+\begin{example}[Taylorの定理]
+  $\rho(x)=\delta(x)$ の場合には, $P_n(x)=x^n$ であるから,
+  \theoremref{theorem:GEM}より, Taylorの定理
+  \[
+    f(x+h) = \sum_{k=0}^{n-1}\frac{x^k}{k!}f^{(k)}(x) + R_n
+  \]
+  が得られる. \qed
+\end{example}
+
+$\R$ の部分集合 $A$ に対して, $x\in A$ のとき $1$ になり,
+$x\in\R\setminus A$ のとき $0$ になるような函数を $\chi_A(x)$ と
+書き, $A$ の{\BF 特性函数}と呼ぶことにする.
+
+\begin{example}[Euler-Maclaurinの和公式]
+  $\rho(x)=\chi_{[0,1]}(x)$ ($[0,1]$ 区間上の一様分布)の場合には,
+  $k\geqq 1$ のとき
+  \begin{align*}
+    &
+    \int_\R dy\,\rho(y)f(x+y) = \int_x^{x+1} f(t)\,dt,
+    \\ &
+    \int_\R dy\,\rho(y)f^{(k)}(x+y) = f^{(k-1)}(x+1)-f^{(k-1)}(x)
+  \end{align*}
+  となり,  $P_n(x)=B_n(x)$ (Bernoulli多項式)であったので,
+  \theoremref{theorem:GEM}より,
+  次の公式が得られる:
+  \begin{align*}
+    f(x+h)
+    = \int_x^{x+1}f(t)\,dt
+    + \sum_{k=1}^{n-1} \frac{B_k(h)}{k!}(f^{(k-1)}(x+1)-f^{(k-1)}(x))
+    + R_n.
+  \end{align*}
+  特に $h=0$ のとき, Bernoulli数 $B_n=B_n(0)$ を使って書くと,
+  \begin{align*}
+    f(x)
+    = \int_x^{x+1}f(t)\,dt
+    + \sum_{k=1}^{n-1} \frac{B_k}{k!}(f^{(k-1)}(x+1)-f^{(k-1)}(x))
+    + R_n.
+  \end{align*}
+  整数 $a<b$ について,
+  この公式を $x=a,a+1,\ldots,b-2,b-1$ について足し上げ,
+  剰余項 $R_n$ 達の和を $R_{a,b,n}$ と書くことにすると,
+  \begin{align*}
+    \sum_{k=a}^{b-1} f(k)
+    = \int_a^b f(t)\,dt
+    + \sum_{k=1}^{n-1} \frac{B_k}{k!}(f^{(k-1)}(b)-f^{(k-1)}(a))
+    + R_{a,b,n}.
+  \end{align*}
+  さらにBernoulli数について $B_1=-1/2$, $0=B_3=B_5=B_7=\cdots$ が
+  成立していることを用い, $(n-1)/2$ 以下の最大の整数を $m$ と書き,
+  両辺に $f(b)$ を加えると,
+  \begin{align*}
+    \sum_{k=a}^b f(k)
+    = \int_a^b f(t)\,dt + \frac{f(a)+f(b)}{2}
+    + \sum_{j=1}^m \frac{B_{2j}}{(2j)!}(f^{(2j-1)}(b)-f^{(2j-1)}(a))
+    + R_{a,b,n}.
+  \end{align*}
+  これで\theoremref{theorem:GEM}が実質的にEuler-Maclaurinの和公式を
+  特別な場合として含んでいることが確かめられた.
+  \qed
+\end{example}
+
+\begin{remark}
+  以上の例から, \theoremref{theorem:GEM}は
+  積分剰余項型のTaylorの定理とEuler-Maclaurinの和公式の両方の一般化
+  になっていることがわかる\footnote{%
+  文献 \cite{BCM2009} は
+  和公式に関して\theoremref{theorem:GEM}のような統一的定理を示しておらず,
+  case by case の計算によって類似性を指摘するに留まっている.}.
+  \qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+
+  \bibitem{BCM2009}
+  Borwein, Jonathan M., Calkin, Neil J., and Manna, Dante.
+  Euler-Boole Summation Revisited.
+  Amer.\ Math Monthly, Vol.~116, Issue~5, 2009, pp.~387--412.\\
+  \href
+  {https://scholar.google.co.jp/scholar?cluster=1525847545977276960}
+  {\TT
+   https://scholar.google.co.jp/scholar?cluster=1525847545977276960}
+
+   \bibitem{kuroki-KL}
+   黒木玄.
+   Kullback-Leibler情報量とSanovの定理.
+   私的ノート 2016, 2017, 73~pages.\\
+   \href
+   {https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf}
+   {\TT
+    https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf}
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
