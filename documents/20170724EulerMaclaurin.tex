@@ -7,6 +7,10 @@
 今後も気が向いたら更新することにする.
 7月26日(Ver.0.02): 剰余項の評価に関する\secref{sec:R_n}を追加した.
 他にも色々訂正した.
+7月27日(Ver.0.03, 20頁): 和公式の形式的導出に関する\secref{sec:formal-derivation}
+を追加した. このノートは\secref{sec:formal-GEM}から読み始めると読み易いと思われる.
+その節にあるシンプルな導出を見ると, どうして文献 \cite{BCM2009} では
+和公式の統一定理に到達できなかったのか不思議に思えて来る.
 }}
 \def\ABSTRACT{%
   論文 \cite{BCM2009} では, 実数直線上の確率分布に対して,
@@ -970,7 +974,8 @@ $\PDF(x)$ が例えば正規分布の場合には上の曖昧な仮定は成立�
 
 \begin{theorem}[一般化されたEuler-Maclaurinの公式]
   \label{theorem:GEM}
-  以下の公式が成立している:
+  以下の公式が成立している%
+  \footnote{\secref{sec:formal-GEM}における形式的導出も参照せよ.}:
   \begin{align*}
     &
     f(x+h)
@@ -1257,7 +1262,7 @@ $y=a$ の場合の $\int_a^b dy'\,(1-F(y'))=(b-a)-\int_a^b dy'\,F(y')$ の
   ときには, $[a,b]=[0,1]$ かつ $A=1/2$ となる.
   より一般に $r$ が正の整数で
   \[
-  p(x)=\frac{1}{r+1}\sum_{i=0}^r\delta\left(x-\frac{i}{r}\right)
+  \PDF(x)=\frac{1}{r+1}\sum_{i=0}^r\delta\left(x-\frac{i}{r}\right)
   \]
   の場合にも, $[a,b]=[0,1]$ かつ $A=1/2$ になる.
   これらの場合には
@@ -1291,6 +1296,191 @@ $y=a$ の場合の $\int_a^b dy'\,(1-F(y'))=(b-a)-\int_a^b dy'\,F(y')$ の
   \footnote{実際の数値計算例については \cite{kuroki-Julia-EM} を参照せよ.}.
   \qed
 \end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{和公式の形式的導出}
+\label{sec:formal-derivation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Euler-Maclaurin展開の形式的導出 (1)}
+\label{sec:EM(1)}
+
+この節の内容は本質的に \cite[Chapter 25]{KC} の最初の2ページ分の
+引き写しである. ただし, Bernoulli数ではなく, Bernoulli多項式が出て来る
+ようにほんの少し一般化してある.
+
+与えられた函数 $f(x)$ に対して, もしも
+\[
+  F(x+1)-F(x)=f(x+h)
+\]
+を満たす函数 $F(x)$ を見付けることができたならば,
+整数 $a<b$ に対して, $x=a,a+1,\ldots,b-2,b-1$ で足し上げることによって
+\[
+  \sum_{i=a}^{b-1} f(x+h) = F(b) - F(a)
+\]
+が得られる.
+
+$D=d/dx$ とおく. 函数 $F(x)$ に関する方程式 $F(x+1)-F(x)=f(x+h)$ は形式的に
+\[
+  (e^D-1)F(x)
+  = e^{hD}f(x)
+  = De^{hD}\int f(x)\,dx
+\]
+と書き直される. ゆえに $F(x)$ は形式的には次のように求まる:
+\[
+  F(x) = \frac{De^{hD}}{e^D-1}\int f(x)\,dx.
+\]
+Bernoulli多項式の定義より, 形式的にこれは次のように書き直される:
+\[
+  F(x)
+  = \sum_{k=0}^\infty\frac{B_k(h)}{k!}D^k\int f(x)\,dx
+  = \int f(x)\,dx + \sum_{k=1}^\infty \frac{B_k(h)}{k!}f^{(k-1)}(x).
+\]
+
+以上をまとめると, Euler-Maclaurin展開
+\[
+  \sum_{i=a}^{b-1}f(i+h)
+  = F(b)-F(z)
+  = \int_a^b f(x)\,dx
+  + \sum_{k=1}^\infty \frac{B_k(h)}{k!}(f^{(k-1)}(b)-f^{(k-1)}(a))
+\]
+が得られる. この級数は典型的応用例では収束しないが,
+有限項まで和を取ると左辺の良い近似になっていることが多い.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Euler-Boole展開の形式的導出}
+
+前節と同様の議論を繰り返そう.
+
+もしも函数 $f(x)$ に対して
+\[
+  \frac{g(x) + g(x+1)}{2} = f(x+h)
+\]
+を満たす函数 $g(x)$ を見付けることができたならば,
+整数 $a<b$ に対して, 交代和を取ることによって
+\[
+  \sum_{i=a}^{b-1}(-1)^{i-a} f(i+h)
+  = \frac12(g(a) + (-1)^{b-a-1}g(b))
+\]
+を得る.  $(g(x)+g(x+1))/2=f(x+h)$ は形式的に
+\[
+  \frac{1+e^D}{2}g(x) = e^{hD}f(x), \quad D = \frac{d}{dx}
+\]
+と書き直される. これは形式的には
+\[
+  g(x) = \frac{2e^{hD}}{1+e^D}f(x)
+\]
+と解け, さらに, Euler多項式の定義より,
+\[
+  g(x) = \sum_{k=0}^\infty \frac{E_k(h)}{k!}f^{(k)}(x)
+\]
+と書き直される. ゆえに, 形式的に, Euler-Boole展開が
+\[
+  \sum_{i=a}^{b-1}(-1)^{i-a} f(i+h)
+  =\frac12\sum_{k=0}^\infty\frac{E_k(h)}{k!}(f^{(k)}(a)+(-1)^{b-a-1}f^{(k)}(b)).
+\]
+と得られる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Euler-Maclaurin展開の形式的導出 (2)}
+
+本文の内容に整合するように,
+\secref{sec:EM(1)}の議論を書き換えよう.
+
+もしも函数 $f(x)$ に対して
+\[
+  \int_x^{x+1}g(t)\,dt = \int_0^1 g(x+y)\,dy = f(x+h)
+\]
+を満たす $g(x)$ を見付けることができたならば,
+整数 $a<b$ に対して, $x=a,a+n,\ldots,b-2,b-1$ について和を取ることによって.
+\[
+  \sum_{i=a}^{b-1} f(i+h) = \int_a^b g(t)\,gt
+\]
+を得る. $\int_0^1 g(x+y)\,dy=f(x+h)$ は形式的に
+\[
+  \int_0^1 dy\,e^{yD}g(x) = e^{hD}f(x), \qquad D=\frac{d}{dx}
+\]
+と書き直される. 左辺の $y$ による定積分を形式的に実行すると
+\[
+  \frac{e^D-1}{D}g(x) = e^{hD}f(x).
+\]
+これは形式的には
+\[
+  g(x) = \frac{De^{hD}}{e^D-1}f(x)
+\]
+と解け, Bernoulli多項式の定義より,
+\[
+  g(x) = \sum_{k=0}^\infty \frac{B_k(h)}{k!}f^{(k)}(x)
+\]
+と書き直される. ゆえに, 形式的に, Euler-Maclaurin展開が
+\[
+  \sum_{i=a}^{b-1}f(i+h)
+  = \int_a^b g(t)\,dt
+  = \int_a^b f(x)\,dx
+  + \sum_{k=1}^\infty \frac{B_k(h)}{k!}(f^{(k-1)}(b)-f^{(k-1)}(a))
+\]
+と得られる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{一般化されたEuler-Maclaurin展開の形式的導出}
+\label{sec:formal-GEM}
+
+確率測度 $\PM(dy)=\PDF(y)\,dy$ が与えられていると仮定する.
+
+函数 $f(x)$ に対して
+\[
+  \int_\R g(x+y)\,\PM(dy) = f(x+h)
+\]
+を満たす $g(x)$ を形式的に求めたい%
+\footnote{すなわち $g(x)$ でその確率測度 $\PM(dy)$ による移動平均
+が $f(x+h)$ に一致するものを求めたい.}.
+これは形式的には
+\[
+  \int_\R e^{yD} g(x)\,\PM(dy) = e^{hD}f(x),
+  \qquad
+  D = \frac{d}{dx}
+\]
+と書き直される. 左辺の積分をモーメント母函数 $M(z)$ の定義
+\[
+  M(z) = \int_\R e^{yz}\,\PM(dy) = \int_\R e^{yz}\PDF(y)\,dy
+\]
+を使って, 形式的に実行すると
+\[
+  M(D)g(x) = e^{hD}f(x).
+\]
+これは形式的には次のように解ける:
+\[
+  g(x) = \frac{e^{hD}}{M(D)}f(x).
+\]
+ここで一般化されたBernoulli多項式 $P_n(h)$ の定義
+\[
+  \frac{e^{hz}}{M(z)} = \sum_{k=0}^\infty \frac{P_k(h)}{k!}z^k
+\]
+を使うと,
+\[
+  g(x) = \sum_{k=0}^\infty \frac{P_k(h)}{k!}f^{(k)}(x).
+\]
+以上をまとめると, 一般化されたEuler-Maclaurin展開
+\[
+  f(x+h)
+  = \int_\R g(x+y)\,\PM(dy)
+  = \sum_{k=0}^\infty \frac{P_k(h)}{k!} \int_\R f^{(k)}(x+y)\,\PM(dy)
+\]
+が得られる. 測度論的な記号法に慣れていない読者のために
+確率密度函数 $\PDF(y)$ を使った記号法で書き直すと,
+\[
+  f(x+h)
+  = \int_\R g(x+y)\PDF(y)\,dy
+  = \sum_{k=0}^\infty \frac{P_k(h)}{k!} \int_\R f^{(k)}(x+y)\PDF(y)\,dy.
+\]
+以上の形式的導出は筆者には「ほぼ自明な議論」だと感じられる.\\
+どうしてこのようなシンプルな議論を既存の文献で見付けられないのだろうか?\\
+筆者の探し方が悪いのだろうか?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
