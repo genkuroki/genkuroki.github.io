@@ -11,6 +11,8 @@
 を追加した. このノートは\secref{sec:formal-GEM}から読み始めると読み易いと思われる.
 その節にあるシンプルな導出を見ると, どうして文献 \cite{BCM2009} では
 和公式の統一定理に到達できなかったのか不思議に思えて来る.
+7月28日(Ver.0.04, 21頁): \secref{sec:nextK=P+intK}を追加した.
+7月28日(Ver.0.05, 23頁): \secref{sec:formal-Simpson}を追加した.
 }}
 \def\ABSTRACT{%
   論文 \cite{BCM2009} では, 実数直線上の確率分布に対して,
@@ -1153,7 +1155,7 @@ $x\in\R\setminus A$ のとき $0$ になるような函数を $\chi_A(x)$ と
 \subsection{剰余項の絶対値の上からの荒い評価}
 \label{sec:R_n}
 
-この節では, 次のように表わされる剰余項 $R_n$ の絶対値の大きさを
+この節では, 次のように表わされる剰余項 $R_n=R_n(x,h)$ の絶対値の大きさを
 上から大雑把に評価することを試みよう:
 \begin{align*}
   &
@@ -1174,7 +1176,7 @@ $x\in\R\setminus A$ のとき $0$ になるような函数を $\chi_A(x)$ と
     1 & (y\geqq y).
   \end{cases}
 \end{align*}
-ここで $\PDF(t)\,dt=\PM(dt)$ は $\R$ 上の確率測度を表わす.
+ここで $\PDF(t)\,dt=\PM(dt)$ は適切な条件が課せられた $\R$ 上の確率測度であった.
 \theoremref{theorem:GEM}と\remarkref{remark:GEM}より
 \[
   f(x+h)
@@ -1296,6 +1298,104 @@ $y=a$ の場合の $\int_a^b dy'\,(1-F(y'))=(b-a)-\int_a^b dy'\,F(y')$ の
   \footnote{実際の数値計算例については \cite{kuroki-Julia-EM} を参照せよ.}.
   \qed
 \end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{剰余項を与える核函数の不定積分表示}
+\label{sec:nextK=P+intK}
+
+剰余項を表わすために次の核函数 $K_n(h,y)$ が使われたのであった:
+\begin{align*}
+  &
+  K_n(h,y)
+  = \int_\R dy_1\cdots\int_\R dy_{n-1}
+  K(h,y_1)K(y_1,y_2)\cdots K(y_{n-1},y),
+  \\ &
+  K(y,y') = F(y')-H(y'-y),
+  \\ &
+  F(y')
+  =\int_{-\infty}^{y'} \PDF(t)\,dt
+  =\int_{(-\infty,y']} \PM(dt),
+  \\ &
+  H(y'-y) = \begin{cases}
+    0 & (y'<y), \\
+    1 & (y\geqq y).
+  \end{cases}
+\end{align*}
+ここで $\PDF(t)\,dt=\PM(dt)$ は適切な条件が課せられた $\R$ 上の確率測度であった.
+
+\begin{theorem}
+  \label{theorem:nextK=P+intK}
+  次が成立している:
+  \begin{align*}
+    K_{n+1}(h,y)
+    &=\frac{P_n(h)}{n!}F(y) - \int_{-\infty}^y dt\, K_n(h,t)
+    \\ &
+    = - \int_{-\infty}^y dt\,\left(K_n(h,t) - \frac{P_n(h)}{n!}p(t)\right)
+    = \int_y^\infty dt\,\left(K_n(h,t) - \frac{P_n(h)}{n!}p(t)\right).
+  \end{align*}
+\end{theorem}
+
+\begin{proof}
+  2つ目の等号の成立は非自明なので, 1つ目と3つ目の等号の成立を示せばよい.
+
+  1つ目の等号が成立することを示そう.
+  \begin{align*}
+    &
+    K_{n+1}(h,y)
+    \\ &
+    = \int_\R dy_n\,K_n(h,y_n)K(y_n,y)
+    \\ &
+    = \int_\R dy_n
+    \left(\frac{\d}{\d y_n}\int_{-\infty}^{y_n}dt\,K_n(h,t)\right)K(y_n,y)
+    \\ &
+    =\left[
+      \left(\int_{-\infty}^{y_n}dt\,K_n(h,t)\right)K(y_n,y)
+    \right]_{y_n\to-\infty}^{y_n\to\infty}
+    %\\ &
+    -\int_\R dy_n \left(\int_{-\infty}^{y_n}dt\,K_n(h,t)\right)\delta(y-y_n)
+    \\ &
+    =\frac{P_n(h)}{n!}F(y)-\int_{-\infty}^y dt\,K_n(h,t).
+  \end{align*}
+  この計算の3番目の等号では $(\d/\d y_n)K(y_n,y)=\delta(y-y_n)$ を用いて
+  部分積分を実行し, 4番目の等号では $\int_\R dt\, K_n(h,t)=P_n(h)/n!$
+  と $y_n\to\infty$ ならば $K_n(y_n,y)\to F(y)$ となることを使った.
+
+  示すべき3つ目の等号の成立は $\int_\R dt\,(K_n(h,t)-(P_n(h)/n!)p(t))=0$ と
+  同値であるから,
+  \[
+    \int_\R dt\, K_n(h,t) = \int_\R dt\,\frac{P_n(h)}{n!}p(t) = \frac{P_n(h)}{n!}
+  \]
+  と同値である. しかし, これは\lemmaref{lemma:K}で証明されている.
+  \qed
+\end{proof}
+
+上の\theoremref{theorem:nextK=P+intK}より, $K_n(h,x)$ は以下のように
+不定積分の繰り返しによって構成される:
+\begin{align*}
+  K_1(h,y) &= \int_y^\infty dy_1\,[\delta(y_1-h)-p(y_1)],
+  \\
+  K_2(h,y) &= \int_y^\infty dy_2\,[K_1(h,y_2)-P_1(h)p(y_2)]
+  \\
+  &=\int_y^\infty dy_2\,\left[
+      \int_{y_2}^\infty dy_1\,[\delta(y_1-h)-p(y_1)]-P_1(h)p(y_2)
+    \right],
+  \\
+  K_3(h,y)
+  &= \int_y^\infty dy_3\,\left[ K_2(h,y_3)-\frac{P_2(h)}{2}p(y_3) \right]
+  \\
+  &= \int_y^\infty \!\!dy_3 \left[
+    \int_{y_3}^\infty \!\!dy_2 \left[
+      \int_{y_2}^\infty \!\!dy_1 [\delta(y_1-h)-p(y_1)] - P_1(h)p(y_2)
+    \right]
+  -\frac{P_2(h)}{2}p(y_3) \right],
+  \\
+  K_4(h,y)
+  &= \int_y^\infty dy_4\,\left[ K_3(h,y_4)-\frac{P_3(h)}{3!}p(y_4) \right]
+  \\
+  &= \cdots\cdots\cdots
+\end{align*}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1445,7 +1545,7 @@ Bernoulli多項式の定義より, 形式的にこれは次のように書き直
   \qquad
   D = \frac{d}{dx}
 \]
-と書き直される. 左辺の積分をモーメント母函数 $M(z)$ の定義
+と書き直される. これの左辺の積分を, モーメント母函数 $M(z)$ の定義
 \[
   M(z) = \int_\R e^{yz}\,\PM(dy) = \int_\R e^{yz}\PDF(y)\,dy
 \]
@@ -1481,6 +1581,115 @@ Bernoulli多項式の定義より, 形式的にこれは次のように書き直
 以上の形式的導出は筆者には「ほぼ自明な議論」だと感じられる.\\
 どうしてこのようなシンプルな議論を既存の文献で見付けられないのだろうか?\\
 筆者の探し方が悪いのだろうか?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Simpsonの公式の誤差評価の形式的導出}
+\label{sec:formal-Simpson}
+
+$a<b$ であるとし, $N$ は正の整数であるとし,
+\[
+  h = \frac{b-a}{2N}, \qquad x_k = a+2kh
+\]
+とおく. 函数 $f(x)$ の定積分 $\int_a^b f(x)\,dx$ を
+\begin{align*}
+  &
+  \sum_{k=0}^{N-1}2h\frac{f(x_k)+4f(x_k+h)+f(x_k+2h)}{6}
+  \\ &
+  =\frac{h}{3}\left[
+  f(a)+2\sum_{k=1}^{N-1}f(x_k)+4\sum_{k=0}^{N-1}f(x_k+h)+f(b)
+  \right]
+\end{align*}
+で近似計算することができる. これを{\BF Simpsonの公式}と呼ぶ.
+
+Simpsonの公式の区間 $[x_k,x_{k+1}]$ に対応する部分
+\[
+  2h\frac{f(x)+4f(x+h)+f(x+2h)}{6}
+\]
+の形に合わせて, $\R$ 上の確率測度 $P(dy)$ を
+\[
+  \int_\R \varphi(y)\,P(dy) = \frac{\varphi(0)+4\varphi(h)+\varphi(2h)}{6}
+\]
+と定める. そして函数 $f(x)$ に対して,
+\[
+  \int_\R g(x+y)\,P(dy) = \frac{1}{2h}\int_0^{2h} f(x+y)\,dy
+\]
+を満たす函数 $g(x)$ を見付けたい.
+もしもこのような $g(x)$ が見付かれば, Simpsonの公式中の $f(x)$
+を $g(x)$ で置き換えることによって,
+誤差無しで $f(x)$ の定積分を計算できる.
+だから, $g(x)$ と $f(x)$ の違いがどれだけの大きさであるかを
+見積もることができれば, Simpsonの公式による定積分の数値計算の
+誤差の大きさを評価できるだろう.
+
+函数 $g(x)$ に関する上の条件は形式的に次のように書き直される:
+\[
+  \int_\R e^{yD}g(x)\,P(dy) = \frac{1}{2h}\int_0^{2h} e^{yD}f(x)\,dy,
+  \qquad D=\frac{d}{dx}.
+\]
+両辺の積分を形式的に実行すると,
+\[
+  \frac{1+4e^{hD}+e^{2hD}}{6}g(x)
+  = \frac{e^{2hD}-1}{2hD}f(x).
+\]
+これは形式的には
+\[
+  g(x) = \frac{6}{1+4e^{hD}+e^{2hD}}\frac{e^{2hD}-1}{2hD}f(x)
+\]
+と解ける.
+
+ここで, 次のようになっていることに注意せよ:
+\begin{align*}
+  \frac{1+e^{X/2}+e^X}{6}
+  &= 1 + \frac{X}{2} + \frac{X^{2}}{6} + \frac{X^{3}}{24}
+  + \frac{5 X^{4}}{576} + \cdots,
+  \\
+  \frac{e^X-1}{X}
+  &= 1 + \frac{X}{2} + \frac{X^{2}}{6} + \frac{X^{3}}{24}
+  + \frac{X^{4}}{120} + \cdots
+\end{align*}
+これらは3次まで一致しており, 4次の係数もかなり近い:
+\[
+  \frac{1}{120}-\frac{5}{576}=-\frac{1}{2880}.
+\]
+ゆえに
+\begin{align*}
+  \frac{6}{1+e^{X/2}+e^X}\frac{e^X-1}{X}
+  = 1 - \frac{X^4}{2880} + O(X^6)
+\end{align*}
+となることがわかる%
+\footnote{このような計算が苦手な人は %
+\href
+{https://www.wolframalpha.com}
+{\TT WolframAlpha.com}
+などを使ってもよい.}.
+左辺は偶函数なので, 右辺に奇数次の項は出て来ない%
+\footnote{左辺が偶函数であることは分子分母を $e^{X/2}$ で割れば分かる.}.
+
+ゆえに, $X=2hD$ を代入することによって,
+\[
+  g(x)
+  =\left(1-\frac{(2hD)^4}{2880}+O(h^6)\right)f(x)
+  = f(x)-\frac{h^4}{180}f^{(4)}(x) + O(h^6).
+\]
+したがって, Simpsonの公式の誤差の主要部分は,
+$M=\sup_{x\in[a,b]}|f^{(4)}(x)|$ とおくとき,
+\[
+  \left|
+    \sum_{k=0}^n
+    2h\frac{h^4}{180}\frac{f^{(4)}(x_k)+4f^{(4)}(x_k+h)+f^{(4)}(x_k+2h)}{6}
+  \right|
+  \leqq
+  2h\sum_{k=0}^{N-1}\frac{h^4}{180}M
+  = \frac{M(b-a)}{180}h^4
+\]
+のように上から抑えられる.
+Simpsonの公式による定積分の数値計算の誤差は,
+$h$ が小さいとき, 大体 $M(b-a)h^4/180$ 以下になると考えられる.
+
+以上の計算例から, Taylor展開, Euler-Maclaurin展開, Euler-Boole展開
+だけではなく, Simpsonの公式も同種の計算で理解できることがわかった.
+これらはすべてほぼ同じ種類の数学であると考えられる.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
