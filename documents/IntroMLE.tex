@@ -1,0 +1,754 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bfseries 最尤法とカイ二乗検定の基礎}
+\def\AUTHOR{黒木玄}
+\def\DATE{2017年10月14日更新 \quad (2017年10月14日作成)\thanks{%
+2017年10月14日: 作成.
+}}
+\def\PDFTITLE{最尤法}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{統計学}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\ttfamily arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\renewcommand\setminus{\smallsetminus}
+\newcommand\Hom{\operatorname{Hom}}
+\newcommand\Aut{\operatorname{Aut}}
+\newcommand\End{\operatorname{End}}
+\newcommand\diag{\operatorname{diag}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% enumerate
+%
+\renewcommand\labelenumi{(\arabic{enumi})}
+\renewcommand\labelenumii{(\alph{enumii})}
+\renewcommand\labelenumiii{(\roman{enumiii})}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+\newtheoremstyle{jplain}% name
+{}% space above
+{}% space below
+{\normalfont}% body  font
+{}% indent amount
+{\bfseries}% theorem head font
+{.}% punctuation after theorem head
+{4pt}% space after theorem head (default: 5pt)
+{\thmname{#1}\thmnumber{#2}\thmnote{\hspace{2pt}(#3)}}% theorem head spec
+
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+\newcommand\fnref[1]{脚注\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{注意}
+
+すべての前提を正確に述べたり,
+数学的に完璧に厳密な証明を書くつもりがないので読者は注意すること.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Kullback-Leibler情報量とFisher情報量}
+
+\subsection{Kullback-Leibler情報量}
+
+$p(x)$, $q(x)$ は確率密度函数であるとする.
+
+それらの{\bfseries Kullback-Leibler情報量} $D(q||p)$ を次のように定める:
+\begin{align*}
+  D(q||p) = \int dx\, q(x)\log\frac{q(x)}{p(x)}.
+\end{align*}
+Sanovの定理%
+\footnote{Sanovの定理についてはこのノートでは解説しないが,
+統計学を学ぶための必須の教養の一つだと思う.
+統計学を学ぶために必要な確率論の基本的素養は,
+大数の法則(弱法則で十分), 中心極限定理,
+Sanovの定理(大偏差原理)の3つである.
+Sanovの定理についてはよい解説が見付からなかったので,
+自前で解説ノートを作った:
+\href
+{https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf}
+{https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf}
+}より, KL情報量 $D(q||p)$ は確率分布 $p$ で確率分布 $q$ を
+シミュレートしたときの「誤差」の大きさを表わす指標であるとみなせる%
+\footnote{$p$ による $q$ のシミュレーションと $q$ による $p$ の
+シミュレーションは異なるので, Kullback-Leibler情報量が $p,q$ について
+非対称であることは自然である.}.
+KL情報量が小さい方が確率分布 $p$ による確率分布 $q$ の
+シミュレーションの精度が高い.
+
+だから, 未知の確率分布 $q$ をより高い精度でシミュレートする
+確率分布 $p$ を得るためには,
+KL情報量 $D(q||p)$ がより小さくなると予想される
+確率分布 $p$ を構成すればよい%
+\footnote{このような理由で未知の確率分布の推定を考える場合には
+Kullback-Leibler情報量とSanovの定理に関する知識が必須になる.}.
+
+このノートではKL情報量の理論に深入りしないが, 読者の便のために以下の
+性質の証明の概略を説明しておく:
+\begin{align}
+  &
+  D(q||p) \geqq 0,
+  \label{eq:pos}
+  \\ &
+  D(q||p) \geqq \frac{1}{2}\left(\int dx\; |q(x)-p(x)|\right)^2.
+  \label{eq:L1}
+\end{align}
+前者より後者の不等式の方が強い.
+後者の強い方の不等式を使えば,
+Kullback-Leibler情報量について $D(q||p)=0$ が
+成立していれば $p=q$ となることがわかる.
+逆に $p=q$ ならば $\log(q(x)/p(x))=0$
+なので $D(q||p)=0$ となることは自明である.
+
+\subsection{\eqref{eq:pos}の証明}
+
+$f(t)=t\log t$ と定める. $f'(t)=\log t +1$, $f''(t)=1/t$
+なので $t>0$ で $f''(t)>0$ となり, $f(t)$ は $t>0$ で
+下に凸な函数であることがわかる. ゆえにJensenの不等式%
+\footnote{Jensenの不等式の証明は
+\href
+{https://genkuroki.github.io/documents/IntroProbability.pdf}
+{https://genkuroki.github.io/documents/IntroProbability.pdf}
+を参照せよ.}%
+を確率分布 $p(x)$ に関する $f(q(x)/p(x))$ の平均に適用することによって,
+\begin{align*}
+  D(q||p) = \int dx\; p(x)f\left(\frac{q(x)}{p(x)}\right)
+  \geqq f\left(\int dx\; p(x)\frac{q(x)}{p(x)}\right)
+  = f\left(\int dy\;q(x)\right)
+  = f(1)
+  = 0.
+\end{align*}
+Jensenの不等式に頼りたくなければ, $f(t)$ が下に凸な函数であること
+より $f(t)$ がその $t=1$ での接線 $t-1$ 以上であることを使えばよい.
+$f(t)\geqq t-1$ より
+\begin{align*}
+  D(q||p) = \int dx\; p(x)f\left(\frac{q(x)}{p(x)}\right)
+  \geqq \int dx\; p(x)\left(\frac{q(x)}{p(x)}-1\right)
+  =\int dx\;(q(x)-p(x))
+  =0.
+\end{align*}
+
+\subsection{\eqref{eq:L1}の証明}
+
+\eqref{eq:pos}よりも\eqref{eq:L1}の方がより強い不等式である.
+その分だけ証明は面倒になる.
+
+$x$ の積分領域を $\Omega$ と書く.
+$\Omega$ の部分領域 $A$ に対して,
+$p(A)=\int_A dx\;p(x)$, $q(A)=\int_A dx\;q(x)$ のように書く.
+$A$ の $\Omega$ における補集合を $A^c$ と書く.
+
+\begin{lemma}\label{lemma:L1-1}
+  \begin{align*}
+    D(q||p) \geqq q(A)\log\frac{q(A)}{p(A)}+q(A^c)\log\frac{q(A^c)}{p(A^c)}
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  \begin{align*}
+    D(q||p) =
+      \int_A dx\;q(x)\log\frac{q(x)}{p(x)}
+    + \int_{A^c}\;q(x)\log\frac{q(x)}{p(x)}
+  \end{align*}
+  より
+  \begin{align*}
+    \int_A dx\;q(x)\log\frac{q(x)}{p(x)}
+    \geqq
+    q(A)\log\frac{q(A)}{p(A)}
+  \end{align*}
+  を証明すれば十分である.
+  $f(X)=X\log X$ とおくと $f(X)$ は下に凸な函数になるのであった.
+  $A$ 上の確率密度函数 $p(x)/p(A)$ に関する平均にJensenの不等式を適用すると
+  \begin{align*}
+    \int_A dx\;q(x)\log\frac{q(x)}{p(x)}
+    &
+    =\int_A dx\;p(x)f\left(\frac{q(x)}{p(x)}\right)
+    =p(A)\int_A dx\;\frac{p(x)}{p(A)}f\left(\frac{q(x)}{p(x)}\right)
+    \\ &
+    \geqq p(A)f\left(\int_A dx\;\frac{p(x)}{p(A)}\frac{q(x)}{p(x)}\right)
+    \\ &
+    =p(A)f\left(\frac{q(A)}{p(A)}\right)
+    =q(A)\log\frac{q(A)}{p(A)}. \qed
+  \end{align*}
+\end{proof}
+
+\begin{lemma}\label{lemma:L1-2}
+  $a,b$ が0と1のあいだの実数のとき
+  \begin{align*}
+    b\log\frac{b}{a}+(1-b)\log\frac{1-b}{1-a}
+    \geqq
+    2(b-a)^2
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  不等式の左辺から右辺を引いた結果を $f(a)$ と書く:
+  \begin{align*}
+    f(a) = b\log\frac{b}{a}+(1-b)\log\frac{1-b}{1-a} - 2(b-a)^2.
+  \end{align*}
+  $f(a)$ の最小値が0であることを示せば十分である.
+  このとき,
+  \begin{align*}
+    f'(a)
+    = -\frac{b}{a}+\frac{1-b}{1-a}-4(a-b)
+    = \frac{a-b}{a(1-a)}-4(a-b)
+    = (a-b)\left( \frac{1}{a(1-a)} - 4 \right).
+  \end{align*}
+  $a(1-a)$ の最大値は $1/4$ なのでその逆数の最小値は $4$ である.
+  ゆえに $f'(a)$ の符号は $a-b$ の符号に等しい.
+  $a<b$ で $f(a)$ は単調減少し, $a>b$ で $f(a)$ は単調増加する.
+  ゆえに $a=b$ で $f(a)$ は最小になる. その最小値は $f(b)=0$.
+  \qed
+\end{proof}
+
+\begin{lemma}\label{lemma:L1-3}
+  $A = \{\,x\in\Omega \mid p(x)\leqq q(x)\,\}$ とおくと
+  \begin{align*}
+    \int dx\;|q(x)-p(x)| = 2(q(A)-p(A)).
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  \begin{align*}
+    \int dx\;|q(x)-p(x)|
+    &
+    =\int_A dx\;(q(x)-p(x))+\int_{A^c}dx\;(p(x)-q(x))
+    \\ &
+    =q(A)-p(A)+p(A^c)-q(A^c)
+    \\ &
+    =q(A)-p(A)+(1-p(A))-(1-q(A))
+    %\\ &
+    =2(q(A)-p(A)).
+    \qed
+  \end{align*}
+\end{proof}
+
+以上の2つの補題を使って, \eqref{eq:L1}を証明しよう.
+
+$A=\{\,x\in\Omega\mid p(x)\leqq q(x)\,\}$ とおき,
+$a=p(A)$, $b=q(A)$ とおく.
+\lemmaref{lemma:L1-1}より
+\begin{align*}
+  D(q||p) \geqq b\log\frac{b}{a}+(1-b)\log\frac{1-b}{1-a}.
+\end{align*}
+\lemmaref{lemma:L1-2}より
+\begin{align*}
+  b\log\frac{b}{a}+(1-b)\log\frac{1-b}{1-a}
+  \geqq 2(b-a)^2.
+\end{align*}
+\lemmaref{lemma:L1-3}より
+\begin{align*}
+  2(b-a)^2 = \frac{1}{2}(2(b-a))^2
+  \geqq \frac{1}{2}\left(\int dx\;|q(x)-p(x)|\right)^2.
+\end{align*}
+以上を合わせれば \eqref{eq:L1} が得られる.
+
+
+
+\subsection{Fisher情報量}
+\label{sec:Fisher}
+
+$p_w(x)=p(x|w)$ は $r$ 個のパラメーター $w=(w_1,\ldots,w_r)$ を
+持つ $x$ に関する確率密度函数であるとし, $h=(h_1,\ldots,h_r)$ の函数
+\begin{align*}
+  D(h) = D(p_w||p_{w+h})
+  = \int dx\; p(x|w)\log\frac{p(x|w)}{p(x|w+h)}
+\end{align*}
+について考えよう.
+
+まず $D(0)=D(p_w||p_w)=0$ であり,
+Kullback-Leibler情報量が0以上であることより,
+$D(h)\geqq 0$ である.
+ゆえに $D(h)$ は $h=0$ で極小になるので,
+$\d D(0)/\d h_i=0$ となる.
+そうなることは次のようにして, 直接的にも確かめられる:
+\begin{align*}
+  \frac{\d D(0)}{\d h_i}
+  &
+  =-\int dx\, p(x|w)\frac{\d\log p(x|w)}{\d w_i}
+  =-\int dx\, \frac{\d p(x|w)}{\d w_i}
+  \\ &
+  =-\frac{\d}{\d w_i}\int dx\,p(x|w)
+  =-\frac{\d}{\d w_i}1
+  = 0.
+\end{align*}
+これは, 確率分布 $p(x|w)$ に関する $\d\log p(x|w)/\d w_i$ の
+平均が $0$ であることも意味する.
+
+以上によって $D(h)$ の $h=0$ でのTaylor展開の1次以下の項が消えることが
+わかった. 本質的に2次の項がFisher情報量である.
+Fisher情報量がわかると $h$ が小さなときのKL情報量 $D(h)$ の様子が
+わかる.
+
+次のようにして定義される実対称行列 $I(w)=[I_{ij}(w)]_{i,j=1}^r$
+を{\bfseries Fisher情報量}と呼ぶ:
+\begin{align*}
+  I_{ij}(w) = \frac{\d^2 D(0)}{\d h_i\d h_j}
+  = -\int dx\; p(x|w)\frac{\d^2 \log p(x|w)}{\d w_i\d w_j}
+\end{align*}
+$D(h)$ は $h=0$ で極小になるので, Fisher情報量 $I$ の固有値は
+すべて0以上になる%
+\footnote{実対称行列に関する線形代数. 線形代数はとても大事.
+おそらく, 大学1年で線形代数について習っただけだと,
+線形代数の習得は不十分である.
+大学4年間かけないと十分に習得できない可能性が高い.}.
+
+Fisher情報量は次のようにも表せる:
+\begin{align*}
+  I_{ij}(w)
+  = \int dx\; p(x|w)\,\frac{\d p(x|w)}{\d w_i}\,\frac{\d p(x|w)}{\d w_j}.
+\end{align*}
+この公式は, Fisher情報量 $I(w)=[I_{ij}(w)]$ は
+確率分布 $p(x|w)$ に関する $\d\log p(x|w)/\d w_i$ の
+分散共分散行列であることを意味している.
+その公式を証明しよう. $I_{ij}(w)$ の定義より
+\begin{align*}
+  I_{ij}
+  &
+  = -\int dx\;p(x|w)\left(
+    \frac{\d^2 p(x|w)/\d w_i\d w_j}{p(x|w)}
+    -\frac{\d p(x|w)/\d w_i\;\d p(x|w)/\d w_j}{p(x|w)^2}
+  \right)
+  \\ &
+  = -\int dx\; \frac{\d^2 p(x|w)}{\d w_i \d w_j}
+  + \int dx\; p(x|w)\,\frac{\d p(x|w)}{\d w_i}\,\frac{\d p(x|w)}{\d w_j}
+\end{align*}
+であり,
+\begin{align*}
+  \int dx\; \frac{\d^2 p(x|w)}{\d w_i \d w_j}
+  =\frac{\d^2}{\d w_i \d w_j}\int dx\; p(x|w)
+  =0
+\end{align*}
+となるので, 上の公式が成立している.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{最尤法とWilksの定理とカイ二乗検定}
+
+\secref{sec:Fisher}の設定をそのまま用いる.
+
+この節では, $w=0$ でのFisher情報量 $I(0)=[I_{ij}(0)]$ の
+固有値はすべて正であると仮定する%
+\footnote{正則性の仮定. 現実への応用の場合には「精度的に0とみなすことが
+妥当なほど微小な固有値を $I(0)$ が持たない」という条件で置き換える
+必要がある.  この正則性の条件は複雑な $p(x|w)$ については成立
+していない場合がかなり多い.}.
+
+\subsection{対数尤度比の漸近挙動}
+
+$X, X_1,X_2,\ldots$ は確率分布 $p(x|0)$ に従う独立同分布確率変数列である
+とする%
+\footnote{以下で使う確率論の結果については
+\href
+{https://genkuroki.github.io/documents/IntroProbability.pdf}
+{https://genkuroki.github.io/documents/IntroProbability.pdf}
+を参照. この解説では中心極限定理の特性函数やモーメント母函数を
+使わない証明が紹介されている. 本質的にTaylorの定理しか使っていない.}.
+
+
+$-1$ 倍された対数尤度比函数 $\ell_n(w)$ を次のように定める:
+\begin{align*}
+  \ell_n(w) = -\log\frac{\prod_{k=1}^n p(X_k|w)}{\prod_{k=1}^n p(X_k|0)}
+  = \sum_{k=1}^n \log \frac{p(X_k|0)}{p(X_k|w)}.
+\end{align*}
+パラメーター $w$ の函数 $L_n(w)=\prod_{k=1}^n p(X_k|w)$ を
+サイズ $n$ のサンプル  $X_1,X_2,\ldots,X_n$ の{\bfseries 尤度函数}と呼ぶ.
+$\ell_n(w)$ は尤度の比の対数の $-1$ 倍である.
+$\ell_n(w)$ を最小化する $w=\hat w$ は尤度 $L_n(w)$ を最大化する.
+
+大数の法則より,
+\begin{align*}
+  \lim_{n\to\infty}\frac{1}{n}\ell_n(w)
+  =\int dx\;p(x|0)\log\frac{p(x|0)}{p(x|w)}
+  =D(p_{0}||p_w).
+\end{align*}
+これより, $\ell_n(w)$ を
+最小化する $\hat w$ に対応する確率分布 $p(x|\hat w)$
+は $p(x|0)$ を近似していると予想される.
+
+そのことを確認するために $n$ で割る前の $\ell_n(w)$ の $n\to\infty$
+での様子を調べたい. そのためには $\ell_n(w)$
+に $w=0+h/\sqrt{n}$ を代入して, $h=0$ でTaylor展開すればよい.
+自明に $\ell_n(0)=0$ が成立していることがわかるので,
+そのTaylor展開は次のような形になる:
+\begin{align*}
+  &
+  \ell_n\left(\frac{h}{\sqrt{n}}\right)
+  = \frac{1}{\sqrt{n}} \sum_{i=1}^r \frac{\d\ell(0)}{\d w_i}h_i
+  + \frac{1}{2n}\sum_{i,j=1}^r\frac{\d^2\ell(0)}{\d w_i\d w_j}h_i h_j
+  + \cdots
+  \\ &
+  = -\sum_{i=1}^r\left[
+  \frac{1}{\sqrt{n}}\sum_{k=1}^n\frac{\d\log p(X_k|0)}{\d w_i}
+  \right] h_i
+  -\frac{1}{2}\sum_{i,j=1}^r\left[
+  \frac{1}{\sqrt{n}}\sum_{k=1}^n\frac{\d^2\log p(X_k|0)}{\d w_i\d w_j}
+  \right]h_i h_j
+  + \cdots
+\end{align*}
+$\d\log p(X|0)/\d w_i$ の平均は $0$ であり,
+その分散共分散行列はFisher情報量 $I(0)=[I_{ij}(0)]$ に一致する.
+さらに $\d^2 p(X|0)/\d w_i\d w_j$ の平均の $-1$ 倍は $I_{ij}(0)$ の
+定義そのものである.
+ゆえに中心極限定理と大数の法則より, 分散共分散行列が $I(0)$ の
+多変量正規分布に従う確率変数 $(W_1,\ldots,W_r)$ が存在して,
+$n\to\infty$ で
+\begin{align*}
+  \frac{1}{\sqrt{n}}\sum_{k=1}^n\frac{\d\log p(X_k|0)}{\d w_i}
+  \to W_i,
+  \qquad
+  \frac{1}{\sqrt{n}}\sum_{k=1}^n\frac{\d^2\log p(X_k|0)}{\d w_i\d w_j}
+  \to -I_{ij}(0).
+\end{align*}
+大数の法則より, ``$+\cdots$'' の部分は $O(1/\sqrt{n})$ で0に収束
+することもわかる. これで $n\to\infty$ で
+\begin{align*}
+  \ell_n\left(\frac{h}{\sqrt{n}}\right)
+  = -\sum_{i=1}^r W_i h_i
+  + \frac{1}{2}\sum_{i,j=1}^r I_{ij}(0) h_i h_j
+  + O\left(\frac{1}{\sqrt{n}}\right)
+\end{align*}
+となることがわかった.
+
+変数 $h_i$ 達を線形座標変換して, さらにすっきりした形で表示しよう.
+
+$I(0)=[I_{ij}(0)]$ は固有値がすべて正の実対称行列なので,
+固有値がすべて正の実対称行列 $\Sigma$ が存在して
+\begin{align*}
+  I(0) = \Sigma^2
+\end{align*}
+と表せる. $h_i$ 達を成分に持つ列ベクトルを $h$ と書き,
+$W_i$ 達を成分に持つ列ベクトルを $W_i$ と書くことにする.
+$W_i$ 達の分散共分散が $I(0)=\Sigma^2$ になることは
+\begin{align*}
+  E[WW^T] = I(0) = \Sigma^2
+\end{align*}
+となることを意味する.
+ここで $E[\;\;]$ は期待値を取る操作で, $(\;\;)^T$ は転置を取る操作である.
+両辺を左右から $\Sigma^{-1}$ をかけると,
+\begin{align*}
+  E[(\Sigma^{-1}W)(\Sigma^{-1}W)^T] = E
+\end{align*}
+を得る. これは $Z_i$ を成分に持つ列ベクトルを $Z=\Sigma^{-1}W$ と定めると
+$Z_i$ 達の分散共分散行列が単位行列 $E$ になることを意味している.
+$Z_i$ 達は標準正規分布に従う独立な確率変数達になる.
+$\xi_i$ を成分に持つ列ベクトル $\xi$ を $\xi= h$ と定めると,
+\begin{align*}
+  -\sum_{i=1}^r W_i h_i
+  + \frac{1}{2}\sum_{i,j=1}^r I_{ij}(0) h_i h_j
+  &
+  = - W^T h + \frac{1}{2} h^T I(0) h
+  = - Z^T\Sigma h + \frac{1}{2} h^T\Sigma^T\Sigma h
+  \\ &
+  = - Z^T\xi + \frac{1}{2}\xi^T\xi
+  = \frac{1}{2}(\xi-Z)^T(\xi-Z) - \frac{1}{2}Z^T Z
+  \\ &
+  = \frac{1}{2}\sum_{i=1}^r (\xi_i-Z_i)^2
+  - \frac{1}{2}\sum_{i=1}^r Z_i^2.
+\end{align*}
+
+\subsection{最尤法とカイ二乗検定の基礎}
+
+前節の結果をまとめると次を得る:
+\begin{align*}
+  \ell_n\left(\frac{h}{\sqrt{n}}\right)
+  = \frac{1}{2}\sum_{i=1}^r (\xi_i-Z_i)^2
+  - \frac{1}{2}\sum_{i=1}^r Z_i^2
+  +O\left(\frac{1}{\sqrt{n}}\right),
+  \quad
+  h = \Sigma^{-1}\xi, \quad
+  \Sigma = \sqrt{I(0)}.
+\end{align*}
+ゆえに $\ell_n(h/\sqrt{n})$ を最小化する $h=h^*$ は
+\begin{align*}
+  h^* \approx \Sigma^{-1} Z
+\end{align*}
+を満たしており, $\Sigma^{-1} Z$ は分散共分散行列
+が $\Sigma^{-2} = I(0)^{-1}$ の多変量正規分布に従う:
+\begin{align*}
+  h^*
+  \approx \Sigma^{-1}Z
+  \sim \operatorname{Normal}(0,I(0)^{-1}).
+\end{align*}
+ゆえに, $w^*=h^*/\sqrt{n}$ については
+\begin{align*}
+  w^*
+  \approx \frac{1}{\sqrt{n}}\Sigma^{-1}Z
+  \sim \operatorname{Normal}(0, I(0)^{-1}/n).
+\end{align*}
+$w^*$ の分散共分散行列は $O(1/n)$ のオーダーで減少する.
+
+$\ell_n(w)$ は尤度比の対数の $-1$ 倍であった.
+{\bfseries ゆえに, 尤度函数 $L_n(h/\sqrt{n})$ を最大にする $h=h^*$ は
+分散共分散行列がFisher情報量の逆行列であるような多変量正規分布に
+近似的に従う確率変数になる}%
+\footnote{もしも $I(0)$ のある固有値が微小ならば $h^*$ のある成分の分散は
+巨大になってしまう.}.
+これが{\bfseries 最尤法}の基礎である.
+
+$w_0$ の十分小さな近傍を $H_1$ とすると,
+\begin{align*}
+    \min_{w\in H_1}\ell_n(w)
+    \approx -\frac{1}{2}\sum_{i=1}^r Z_i^2
+\end{align*}
+を満たしている. この右辺の $-2$ 倍は自由度 $r$ のカイ二乗分布に従う.
+
+$\ell_n(w)$ は対数尤度比の $-1$ 倍だったので
+\begin{align*}
+  2\log\frac{\max_{w\in H_1} L_n(w)}{L_n(0)}
+  \approx \sum_{i=1}^r Z_i^2
+  \sim \chi^2(r).
+\end{align*}
+すなわち, {\bfseries 最大尤度と尤度 $L_n(0)$ の比の対数の2倍は
+自由度が全パラメーター数 $r$ に等しいカイ二乗分布に近似的に従う.}
+
+上の結果はさらに以下のように一般化される.
+$h_{s+1}=h_{s+2}=\cdots=h_r=0$ で定義される $H_1$ の部分集合を $H_0$
+と書くとき, 必要なら座標系 $\xi$ をさらに回転させることによって,
+$\xi_{s+1}=\xi_{s+2}=\cdots=\xi_r=0$ で定義される部分集合が $H_0$ に
+一致するようにできる. そのとき
+\begin{align*}
+  2\log\frac{\max_{w\in H_0} L_n(w)}{L_n(0)}
+  \approx \sum_{i=1}^s Z_i^2
+  \sim \chi^2(s)
+\end{align*}
+なので, 上の結果との差を取ることによって,
+\begin{align*}
+  2\log\frac{\max_{w\in H_0} L_n(w)}{\max_{w'\in H_0}L_n(w')}
+  \approx \sum_{i=s+1}^r Z_i^2
+  \sim \chi^2(r-s).
+\end{align*}
+すなわち,
+{\bfseries $r$ 次元の $H_1$ における最大尤度
+と $H_1$ の $s$ 次元の部分集合 $H_0$ における最大尤度
+の比の対数の2倍は近似的に自由度 $r-s$ のカイ二乗分布に従う.}
+
+この結果を{\bfseries Wilksの定理}と呼ぶ.
+Wilksの定理は{\bfseries カイ二乗検定}の基礎である.
+
+通常, $r$ 次元の $H_1$ の $s$ 次元の部分集合 $H_0$ として,
+帰無仮説に対応するパラメーターの集合が採用される.
+もしも, サンプルを生成した真の確率分布が $H_0$ に入っているならば,
+最尤法で求めた数値的な最大尤度比の対数の2倍
+\begin{align*}
+  \chi^2 = 2\log\frac{\max_{w\in H_1} L_n(w)}{\max_{w'\in H_0}L_n(w')}
+\end{align*}
+は自由度 $r-s$ のカイ二乗分布に近似的に従っているはずなので,
+自由度 $r-s$ のカイ二乗分布にしてはその値が大き過ぎるということになるならば,
+これがカイ二乗検定の一般的な仕組みである.
+
+\subsection{赤池情報量基準AICへの応用}
+\newcommand\AIC{\operatorname{AIC}}
+
+パラメーター数が $r$ の場合の赤池情報量基準 $\AIC_1$ は
+\begin{align*}
+  \AIC_1 = -2\log\max_{w\in H_1}L_n(w) + 2r
+\end{align*}
+と定義される. 同様に
+\begin{align*}
+  \AIC_0 = -2\log\max_{w\in H_0}L_n(w) + 2s.
+\end{align*}
+AICは小さい方が, 予測分布の予測精度が高いと推定される.
+上の2つのAICについて
+\begin{align*}
+  \AIC_1 < \AIC_0
+\end{align*}
+が成立するための必要十分条件は
+\begin{align*}
+  2\log\frac{\max_{w\in H_1} L_n(w)}{\max_{w'\in H_0}L_n(w')}
+  > 2(r-s).
+\end{align*}
+サンプルを生成した真の分布のパラメーターが $H_0$ に含まれているならば,
+$n$ が大きいとき, 左辺は自由度 $r-s$ のカイ二乗分布に近似的に従う.
+それにも関わらず, $H_1$ のAICの方が $H_0$ のAICよりも小さくなって
+しまう確率の近似値 $P(\chi^2(r-s)>2(r-s))$ は次のようになる:
+\begin{align*}
+  &
+  P(\chi^2(1)>2) = 15.73\%, \\ &
+  P(\chi^2(2)>4) = 13.53\%, \\ &
+  P(\chi^2(3)>6) = 11.16\%, \\ &
+  P(\chi^2(4)>8) =  9.16\%.
+\end{align*}
+これらの数値はAICが真のモデルの選択に失敗する確率である.
+サンプルサイズがどんなに大きくなってもAICによるモデル選択は
+この確率で真のモデル選択に失敗する.
+5\%の有意水準を満足させるためには
+\begin{align*}
+  &
+  P(\chi^2(1)>3.84) = P(\AIC_0-\AIC_1>1.84) = 5\%, \\ &
+  P(\chi^2(2)>5.99) = P(\AIC_0-\AIC_1>1.99) = 5\%, \\ &
+  P(\chi^2(3)>7.81) = P(\AIC_0-\AIC_1>1.81) = 5\%, \\ &
+  P(\chi^2(4)>9.49) = P(\AIC_0-\AIC_1>1.49) = 5\%.
+\end{align*}
+1\%の有意水準では
+\begin{align*}
+  &
+  P(\chi^2(1)>6.63)  = P(\AIC_0-\AIC_1>4.63) = 1\%, \\ &
+  P(\chi^2(2)>9.21)  = P(\AIC_0-\AIC_1>5.21) = 1\%, \\ &
+  P(\chi^2(3)>11.34) = P(\AIC_0-\AIC_1>5.34) = 1\%, \\ &
+  P(\chi^2(4)>13.28) = P(\AIC_0-\AIC_1>5.28) = 1\%.
+\end{align*}
+最大尤度比の対数の2倍の値(もしくはAICの値)で
+モデル選択する場合には以上の数値を覚えておいた方がよいだろう.
+
+\begin{remark}[警告]
+  最大尤度比の対数の2倍によるカイ二乗検定を使用する場合には,
+  比較する確率モデルのあいだに $H_1\supset H_0$
+  (パラメーターの集合の次元が下がる)
+  という包含関係が無ければいけない.
+  \qed
+\end{remark}
+
+\begin{remark}
+  AICによるモデル選択は予測分布の予測精度の推定値の比較による
+  モデル選択であり, 真のモデルを選択することではない.
+  同様のことがWAICにも言える.
+  真のモデルの選択が目的であればBICまたはWBICを使う方が適切である.
+  \qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
