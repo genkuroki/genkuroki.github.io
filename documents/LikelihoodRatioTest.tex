@@ -1,0 +1,365 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bfseries 確率分布の尤度比検定は最強力検定}
+\def\AUTHOR{黒木玄}
+\def\DATE{2017年10月19日}
+\def\ABSTRACT{%
+  2つの確率分布に関する検定において,
+  尤度比検定が最強力であることは易しい.
+}
+\def\PDFTITLE{尤度比検定は最強力検定}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{統計学}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\ttfamily arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfmx]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.3cm}
+\setlength{\textheight}{25cm}
+\setlength{\textwidth}{16cm}
+%\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+\renewcommand\setminus{\smallsetminus}
+\newcommand\Hom{\operatorname{Hom}}
+\newcommand\Aut{\operatorname{Aut}}
+\newcommand\End{\operatorname{End}}
+\newcommand\diag{\operatorname{diag}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% enumerate
+%
+\renewcommand\labelenumi{(\arabic{enumi})}
+\renewcommand\labelenumii{(\alph{enumii})}
+\renewcommand\labelenumiii{(\roman{enumiii})}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+\newtheoremstyle{jplain}% name
+{}% space above
+{}% space below
+{\normalfont}% body  font
+{}% indent amount
+{\bfseries}% theorem head font
+{.}% punctuation after theorem head
+{4pt}% space after theorem head (default: 5pt)
+{\thmname{#1}\thmnumber{#2}\thmnote{\hspace{2pt}(#3)}}% theorem head spec
+
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+%\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\theoremstyle{jplain}
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+\newcommand\fnref[1]{脚注\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\begin{abstract}
+\ABSTRACT
+\end{abstract}
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{最強力検定の定義}
+
+簡単のため確率密度函数 $p(x)$, $q(x)$ を持つ確率分布のみを考え,
+確率密度函数を確率分布と呼んでしまうことにする.
+
+確率分布 $p(x)$ に従う確率変数 $X$ を
+確率分布 $p(x)$ の{\bfseries サンプル}と呼ぶ.
+
+確率分布 $p(x)$ のもとでの事象 $A$ の確率を $P(A|p)$ と書くことにする.
+例えば, 確率変数 $X$ が確率分布 $p(x)$ に従っているという仮定のもと
+での $f(X)>c$ となる確率を $P(f(X)>c|p)$ と書く.
+
+確率分布 $p_0(x), p_1(x)$ について次の2つの仮説を考える:
+\begin{description}
+  \item[帰無仮説] $X$ は確率分布 $p_0(x)$ のサンプルである.
+  \item[対立仮説] $X$ は確率分布 $p_1(x)$ のサンプルである.
+\end{description}
+函数 $f$ と定数 $c$ に対する $(f,c)$ 検定の手続きを以下のように定める:
+\begin{enumerate}
+  \item 未知の確率分布のサンプル $X$ を採取する.
+  \item $f(X)$ の値を計算する.
+  \item もしも $f(X)>c$ ならば帰無仮説を棄却する.\\
+    (対立仮説の方がもっともらしいと判断する.)
+  \item もしも $f(X)\leqq c$ ならば帰無仮説を棄却しない.
+\end{enumerate}
+
+$(f,c)$ 検定の{\bfseries 有意水準}を
+{\bfseries 帰無仮説が正しいのに, 帰無仮説が棄却される確率}
+$$P(f(X) > c|p_0)$$と定義し,
+$(f,c)$ 検定の{\bfseries 検出力}を
+{\bfseries 対立仮説が正しいときに、対立仮説の方がもっともらしいと判断する確率}
+$$P(f(X) > c|p_1)$$と定義する.
+
+有意水準は低い方がよく, 検出力は高い方がよい.
+しかし, 一般に, 有意水準を低くすると検出力も低くなる.
+有意水準が同じならば検出力が高い検定の方が優れていると考えられる.
+
+$(f,c)$ 検定と $(g,d)$ 検定の有意水準が等しいとき,
+$(f,c)$ 検定が $(g,d)$ 検定よりも{\bfseries 強力}であるとは,
+$(f,c)$ 検定の方が $(g,d)$ 検定よりも検出力が高いことであると定める.
+$(f,c)$ 検定が同じ有意水準の検定の中で
+最強力なとき $(f,c)$ 検定は{\bfseries 最強力検定}であると言う.
+
+もしも任意の定数 $c$ に対して, $(f,c)$ 検定が最強力検定であるとき,
+函数 $f$ は{\bfseries 最強力検定を与える}と言うことにする.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{確率分布の尤度比検定は最強力検定}
+
+前節の設定をそのまま引き継ぐ.
+
+2つの確率分布 $p_0(x),p_1(x)$ のあいだの検定については
+次の一般的な定理が成立している.
+
+\begin{theorem}
+  尤度比函数 $L(x)$ を次のように定義する:
+  \begin{align*}
+    L(x) = \frac{p_1(x)}{p_0(x)}
+  \end{align*}
+  と定義する. 尤度比函数は最強力検定を与える.
+\end{theorem}
+
+\begin{proof}
+  定数 $a$ を任意に固定し, $(f,c)$ 検定と尤度比検定 $(L,a)$ は同じ
+  有意水準を持つと仮定する. すなわち
+  \begin{align*}
+    P(L(X)>a|p_0)=P(f(X)>c|p_0).
+  \end{align*}
+  と仮定する. このとき任意の確率分布 $p$ に関する
+  確率 $P(\;)=P(\;\;|p)$ について
+  \begin{align*}
+    &
+    P(L(X)>a) = P(L(X)>a,\,f(X)>c) + P(L(X)>a,\,f(X)\leqq c),
+    \\ &
+    P(f(X)>c) = P(L(X)>a,\,f(X)>c) + P(L(X)\leqq a,\,f(X)> c),
+  \end{align*}
+  なので, これらの差を取ると共通部分の確率はキャンセルする
+  (これが証明のポイント!).
+  ゆえに, $L(x)>a$ と $p_1(x)>p_0(x)$ が同値であることに注意すると,
+  \begin{align*}
+    &
+    P(L(X)>a|p_1) - P(f(X)>c|p_1)
+    \\ &
+    =P(L(X)>a,\,f(X)\leqq c|p_1)
+    -P(L(X)\leqq a,\,f(X)>c|p_1)
+    \\ &
+    =\int_{p_1(x)>ap_0(x),\,f(x)\leqq c}p_1(x)\,dx
+    -\int_{p_1(x)\leqq ap_0(x),\,f(x)>c}p_1(x)\,dx
+    \\ &
+    \geqq
+     \int_{p_1(x)>ap_0(x),\,f(x)\leqq c}ap_0(x)\,dx
+    -\int_{p_1(x)\leqq ap_0(x),\,f(x)>c}ap_0(x)\,dx
+    \\ &
+    =aP(L(X)>a,\,f(X)\leqq c|p_0)
+    -aP(L(X)\leqq a,\,f(X)>c|p_0)
+    %\\ &
+    =0.
+  \end{align*}
+  これで尤度比検定 $(L,a)$ 検定の方が
+  任意の $(f,c)$ 検定よりも検出力が高いこと
+  \[
+    P(L(X)>a|p_1)\geqq P(f(X)>c|p_1)
+  \]
+  が示された.
+  \qed
+\end{proof}
+
+\begin{example}[Neyman–Pearsonの補題]
+  独立同分布な試行で生成されたサンプル $(X_1,\ldots,X_n)$
+  が従う確率分布は $\prod_{k=1}^n p(x_k)$ の形になる.
+  その形の確率分布に定理を適用すると, 尤度比函数
+  \begin{align*}
+    L(x_1,\ldots,x_n)
+    = \frac{\prod_{k=1}^n p_1(x_k)}{\prod_{k=1}^n p_0(x_k)}
+  \end{align*}
+  が最強力検定を与える.
+  確率分布がパラメーター $w$ によって $p(x|w)$ の形で与えられている場合には
+  2つのパラメーターの値 $w_0,w_1$ に関する最強力検定が尤度比函数
+  \begin{align*}
+    L(x_1,\ldots,x_n)
+    = \frac{\prod_{k=1}^n p(x_k|w_1)}{\prod_{k=1}^n p(x_k|w_0)}
+  \end{align*}
+  によって得られる.
+  \qed
+\end{example}
+
+\begin{example}[Bayes検定]
+  パラメーター $w$ に関する確率分布 $\varphi(w)$ と
+  パラメーター $w$ 付きの $x$ に関する確率分布 $p(x|w)$ に対して,
+  $(x_1,\ldots,x_n)$ に関する確率分布 $Z(x_1,\ldots,x_n)$ が
+  \begin{align*}
+    Z(x_1,\ldots,x_n) = \int dw\, \varphi(w)\prod_{k=1}^n p(x_k|w)
+  \end{align*}
+  によって定義される. この形の確率分布に定理を適用すると,
+  パラメーターの確率分布 $\varphi_0(w)$, $\varphi_1(w)$ に関する
+  最強力検定が尤度比函数
+  \begin{align*}
+    L(x_1,\ldots,x_n)
+    =\frac
+    {\int dw\, \varphi_1(w)\prod_{k=1}^n p(x_k|w)}
+    {\int dw\, \varphi_0(w)\prod_{k=1}^n p(x_k|w)}
+  \end{align*}
+  によって得られる. この検定を{\bfseries Bayes検定}と呼ぶ.
+  $\varphi_\nu(w)=\delta_{w_\nu}(w)$ (デルタ分布)の場合が
+  ちょうどNeyman–Pearsonの補題の場合になっている.
+
+  Bayes検定に関するより詳しい説明については,
+  渡辺澄夫著『ベイズ統計の理論と方法』(2012)の第6.4節を参照せよ.
+  \qed
+\end{example}
+
+\begin{remark}[最尤法の尤度比検定は要注意]
+  パラメーター空間 $W_\nu$ における最尤法の解を $\hat w_\nu$ と書いたときの
+  尤度比函数
+  \begin{align*}
+    L(x_1,\ldots,x_n)
+    = \frac{\prod_{k=1}^n p(x_k|\hat w_1)}{\prod_{k=1}^n p(x_k|\hat w_0)}
+  \end{align*}
+  は2つの確定したパラメーター値 $\hat w_0, \hat w_1$ のあいだの
+  最強力検定を与えるが, 上の定理を用いても,
+  2つのパラメーター空間 $W_0,W_1$ のあいだの最強力検定を与えるとは言えない.
+  特に, 最尤法に関するWilksの定理の文脈における対数尤度比検定
+  は最強力検定を与えるとは言えない.
+  この点に関しては誤解し易いところなので注意した方がよい.
+
+  それに対して, 上のBayes検定は $W_0, W_1$ のそれぞれに台を持つ
+  確率分布 $\varphi_0, \varphi_1$
+  (例えば $W_0,W_1$ のそれぞれに台を持つ一様分布)
+  のあいだの最強力検定を与える.
+  \qed
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
