@@ -361,5 +361,265 @@ $(f,c)$ 検定が同じ有意水準の検定の中で
 \end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Bayes検定の例}
+
+ベイズ検定とは, 確率モデル $p(x|w)$ と
+二つの事前分布 $\varphi_0(w), \varphi_1(w)$ に関する
+\begin{description}
+  \item[帰無仮説] サンプル $X$ は
+  確率分布 $p_0(x) = \int p(x|w)\varphi_0(w)\,dw$ によって生成された.
+  \item[対立仮説] サンプル $X$ は
+  確率分布 $p_1(x) = \int p(x|w)\varphi_1(w)\,dw$ によって生成された.
+\end{description}
+について,
+\begin{align*}
+  L(x) := \frac{\int p(x|w)\varphi_1(w)\,dw}{\int p(x|w)\varphi_0(w)\,dw}
+  > a
+\end{align*}
+という条件が満たされたら帰無仮説を棄却するという方法で行う検定のことである.
+この検定は有意水準が
+\begin{align*}
+  \alpha = \int_{L(x)>a} p_0(x)\,dx
+\end{align*}
+に等しい検定の中で最強力である.
+以下ではBayes検定の簡単な例について説明する.
+
+\subsection{指数型分布族モデルの場合}
+
+$w=(w_1,\ldots,w_r)$ と $g=(g_1,\ldots,g_r)$ に対して,
+\begin{align*}
+  \bra w, g\ket = \sum_{i=1}^r w_i g_i
+\end{align*}
+と書く. $f(x)=(f_1(x),\ldots,f_r(x))$ についても同様である.
+
+パラメーター $w$ を持つ確率密度函数 $p(x|w)$ が指数型分布族であるとは,
+それが以下の形をしていることだと定義される:
+\begin{align*}
+  &
+  p(x|w) = Z(w)^{-1} \exp(-\bra w, f(x)\ket) q(x),
+  \\ &
+  Z(w) = \int \exp(-\bra w, f(x)\ket) q(x)\,dx.
+\end{align*}
+この指数型分布族の共役事前分布族 $\varphi(w|\nu,g)$ は次のように定義される:
+\begin{align*}
+  &
+  \varphi(w|\nu,g) = W(\nu,g)^{-1}Z(w)^{-\nu}\exp(-\bra w,g\ket),
+  \\ &
+  W(\nu,g) = \int Z(w)^{-\nu}\exp(-\bra w, g\ket)\,dw.
+\end{align*}
+このとき, パラメーター $\nu,g$ 付きの確率密度函数 $p(x|\nu,g)$ を
+\begin{align*}
+  p(x|\nu,g) &= \int p(x|w)\varphi(w|\nu,g)\,dw
+  \\ &
+  = \frac{q(x)}{W(\nu,g)}\int Z(w)^{-(\nu+1)}\exp(-\bra w, g+f(x)\ket)\,dw
+  \\ &
+  = q(x)\frac{W(\nu+1,g+f(x))}{W(\nu,g)}
+\end{align*}
+と定義する. このとき, 2つの事前分布 $\varphi_0(w)=\varphi(w|\nu_0,g_0)$,
+$\varphi_1(w)=\varphi_1(w|\nu_1,g_1)$ のあいだのBayes検定は次の尤度比
+によって行われる:
+\begin{align*}
+  L(x) = \frac{p(x|\nu_1,g_1)}{p(x|\nu_0,g_0)}
+  =
+  \frac{W(\nu_1+1, g_1+f(x))}{W(\nu_1, g_1)}
+  \frac{W(\nu_0, g_0)}{W(\nu_0+1, g_0+f(x))}.
+\end{align*}
+このように $W(\nu,g)$ の形さえ決定できれば,
+指数型分布族の共役事前分布のあいだのBayes検定の条件は具体的に書き下せる.
+
+\subsection{二項分布モデルの場合}
+
+二項分布は $k=0,1,\ldots,n$ に
+関する次の形の離散確率分布 $p(k|\theta)$ として定義される:
+\begin{align*}
+  &
+  p(k|\theta) = \binom{n}{k}\theta^k(1-\theta)^{n-k}
+  = (1-\theta)^n \left(\frac{\theta}{1-\theta}\right)^k\binom{n}{k}
+  = Z(\beta)^{-1}\exp(-\beta k) q(k),
+  \\ &
+  Z(\beta)^{-1} = (1-\theta)^n = (1-e^{-\beta})^n, \qquad
+  q(k) = \binom{n}{k}.
+\end{align*}
+ここで $e^{-\beta} = \theta/(1-\theta)$,
+すなわち $\theta=e^{-\beta}/(1+e^{-\beta})$ とおいた.
+これより二項分布は指数型分布族であることがわかる.
+以下では座標系 $\beta$ ではなく, $\theta$ の方を使う.
+
+二項分布の共役事前分布は次の形になる:
+\begin{align*}
+  &
+  \varphi(\theta|\nu,g)
+  = W(\nu,g)^{-1}(1-\theta)^{n\nu} \left(\frac{\theta}{1-\theta}\right)^g
+  = W(\nu,g)^{-1} \theta^g (1-\theta)^{n\nu-g},
+  \\ &
+  W(\nu, g) = B(g+1, n\nu-g+1).
+\end{align*}
+ゆえに,
+\begin{align*}
+  p(k|\nu,g)
+  &=\binom{n}{k}\frac{B(g+k+1, n\nu-(g+k)+1)}{B(g+1,n\nu-g+1)}
+  \\ &
+  =\binom{n}{k}
+  \frac
+  {(\alpha+1)\cdots(\alpha+k)\cdot(\beta+1)\cdots(\beta+(n-k))}
+  {(\alpha+\beta+1+1)\cdots(\alpha+\beta+1+n)}.
+\end{align*}
+ここで $\alpha=g$, $\beta=n\nu-g$ とおいた.
+
+$\alpha=\beta=0$ すなわち $\nu=g=0$ のとき
+\begin{align*}
+  p(k|0,0) = \frac{1}{n+1}.
+\end{align*}
+これは $k=0,1,\ldots,n$ に関する離散一様分布である.
+
+$0<\theta<1$ であるとする.
+このとき, $\alpha = N\theta$, $\beta=N(1-\theta)$
+すなわち $g = N\theta$, $n\nu=N$ とおき,
+$N\to\infty$ とすると,
+\begin{align*}
+  \lim_{N\to\infty}p(k|N/n, N\theta)
+  = \binom{n}{k}\theta^k(1-\theta)^{n-k}
+  = p(k|\theta).
+\end{align*}
+これは, 確率 $\theta$ の二項分布である.
+
+このように $p(k|\nu,g)$ は極端な場合として離散一様分布と通常の二項分布
+を含んでいると考えてよい.
+
+Bayes検定を与える尤度比は次のように表わされる:
+\begin{align*}
+  L(x)
+  & =
+  \frac
+  {(\alpha_1+1)\cdots(\alpha_1+k)\cdot(\beta_1+1)\cdots(\beta_1+(n-k))}
+  {(\alpha_1+\beta_1+1+1)\cdots(\alpha_1+\beta_1+1+n)}
+  \\&
+  \times\frac
+  {(\alpha_0+\beta_0+1+1)\cdots(\alpha_0+\beta_0+1+n)}
+  {(\alpha_0+1)\cdots(\alpha_0+k)\cdot(\beta_0+1)\cdots(\beta_0+(n-k))}.
+\end{align*}
+たとえば $\alpha_1=\beta_1=0$,
+$\alpha_0=N\theta_0$, $\beta_0=N(1-\theta_0)$
+とおいて $N\to\infty$ とすると
+\begin{align*}
+  L(x) = \frac{1}{(n+1)p(k|\theta_0)}.
+\end{align*}
+これは $\varphi_0(\theta)=\delta(\theta-\theta_0)$ (デルタ分布)と
+$\varphi_1(\theta)=1$ (一様分布)のあいだの尤度比
+\begin{align*}
+  L(x) = \frac{p(k|0,0)}{p(k|\theta_0)}
+\end{align*}
+に一致する. そして, この尤度比による検定の条件 $L(x)>a$ は
+\begin{align*}
+  p(k|\theta_0) < \frac{1}{a(n+1)}
+\end{align*}
+と同値である. そしてこの条件は二項分布に関する通常の両側仮説検定
+で使われる条件に等しい.
+
+以上によって, これで二項分布の事前分布に関するBayes検定は
+通常の両側仮説検定を特別な場合として含んでいることがわかった.
+
+\subsection{正規分布モデルの場合}
+
+$p(x|\mu)$ を次のように定める:
+\begin{align*}
+  p(x|\mu) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2}\right).
+\end{align*}
+これは次のように表わされる:
+\begin{align*}
+  p(x|\mu)
+  = \exp\left(-\frac{\mu^2}{2}\right)\exp\left(\mu x\right)
+    \frac{e^{-x^2/2}}{\sqrt{2\pi}}.
+\end{align*}
+ゆえにこれの共役事前分布は次のように表わされる:
+\begin{align*}
+  \varphi(\mu|\nu,g)
+  = W(\nu,g)^{-1}\exp(-\nu\frac{\mu^2}{2})\exp(\mu g).
+\end{align*}
+ここで $W(\nu,g)$ の形は以下のようにして決定される:
+\begin{align*}
+  W(\nu,g)
+  &
+  = \int_\R \exp\left(-\nu\frac{\mu^2}{2}+\mu g\right)\,d\mu
+  = \int_\R \exp\left(
+    -\frac{\nu}{2}\left(\mu-\frac{g}{\nu}\right)^2
+    +\frac{g^2}{2\nu}
+    \right)\,d\mu
+  \\ &
+  =\sqrt{\frac{2\pi}{\nu}}
+  \exp\left(\frac{g^2}{2\nu}\right).
+\end{align*}
+ゆえに
+\begin{align*}
+  p(x|\nu,g)
+  = \frac{e^{-x^2/2}}{\sqrt{2\pi}}\frac{W(\nu+1,g+x)}{W(\nu,g)}
+  = \sqrt{\frac{\nu}{2\pi(\nu+1)}}
+  \exp\left(
+    -\frac{1}{2}\frac{\nu}{\nu+1}\left(x-\frac{g}{\nu}\right)^2
+  \right).
+\end{align*}
+これは平均 $g/\nu$, 分散 $(\nu+1)/\nu=1+1/\nu>1$ の正規分布である.
+$g = \nu\mu$, $\nu=1/(\rho^2-1)$, $\rho^2>1$ とおくと
+\begin{align*}
+  \lim_{\rho^2\to1}
+  p(x|\mu/(\rho^2-1),1/(\rho^2-1))
+  = \frac{1}{\sqrt{2\pi\rho^2}}\exp\left(-\frac{(x-\mu)^2}{2\rho^2}\right)
+  =: p_{\mathrm{Normal}}(x|\mu,\rho).
+\end{align*}
+ゆえに, 以上のケース内のBayes検定で使われる尤度比は
+分散が $1$ より大きい正規分布の比になる.
+
+$\rho^2\to 1$ の極限で
+\begin{align*}
+  \lim_{\rho^2\to1}
+  p(x|\mu/(\rho^2-1),1/(\rho^2-1))
+  =\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2}\right)
+  =p(x|\mu).
+\end{align*}
+ゆえに $p(x|\nu,g)$ は極限として, $p(x|\mu)$ を含んでいる.
+これの $\mu$ を $\mu_0$ に置き換えたものは
+デルタ事前分布 $\varphi_0(\mu)=\delta(\mu-\mu_0)$ に対する $p_0(x)$ に
+一致する:
+\begin{align*}
+  p_0(x) = \int_\R p(x|\mu)\varphi_0(\mu)\,d\mu = p(x|\mu_0)
+  =p_{\mathrm{Normal}}(x|\mu_0,1).
+\end{align*}
+これと $\varphi_1(x)=\varphi(x|\mu_1/(\rho_1^2-1),1/(\rho_1^2-1))$ に
+対する
+\begin{align*}
+  p_1(x) = \int_\R p(x|\mu)\varphi_1(\mu)\,d\mu
+  = \frac{1}{\sqrt{2\pi\rho_1^2}}
+  \exp\left(-\frac{(x-\mu_1)^2}{2\rho_1^2}\right)
+  =p_{\mathrm{Normal}}(x|\mu_1,\rho_1)
+\end{align*}
+のあいだのBayes検定を与える尤度比は
+\begin{align*}
+  L(x)
+  =\frac{p_1(x)}{p_0(x)}
+  =\frac
+  {p_{\mathrm{Normal}}(x|\mu_1,\rho_1)}
+  {p_{\mathrm{Normal}}(x|\mu_0,1)}
+  \qquad (\rho_1>1)
+\end{align*}
+である. Bayes検定の条件 $L(x)>a$ は
+\begin{align*}
+  p_{\mathrm{Normal}}(x|\mu_0,1)
+  < a^{-1} p_{\mathrm{Normal}}(x|\mu_1,\rho_1)
+  = \frac{a^{-1}}{\sqrt{2\pi\rho_1^2}}
+  \exp\left(-\frac{(x-\mu_1)^2}{2\rho_1^2}\right)
+\end{align*}
+と書き直せる.  $a^{-1} = c\sqrt{2\pi\rho_1^2}$ とおき,
+$\rho_1\to\infty$ の極限をとると,
+\begin{align*}
+  p_{\mathrm{Normal}}(x|\mu_0,1) < c.
+\end{align*}
+これは通常の両側仮説検定の条件と同じである.
+
+このように, 分散が $1$ に固定されていてパラメーターが平均 $\mu$ のみの
+正規分布族に関するBayes検定は通常の両側仮説検定を極限として
+含んでいると考えられる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
