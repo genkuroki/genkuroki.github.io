@@ -95,6 +95,8 @@ Riemann-Lebesgueの定理の説明を詳しくした(\secref{sec:Riemann-Lebesgu
 \secref{sec:Dirichlet-integral}を設けた.
 7月21日Ver.0.35a: 微修正.
 10月1日Ver.0.35b: 微修正.
+10月22日Ver.0.36: \secref{sec:Binet1}での
+Euler定数の積分表示の証明の説明を少し詳しくした.
 }
 \\[\bigskipamount]
 {\small
@@ -3657,45 +3659,63 @@ Euler定数の定義に $1/k=\int_0^1 x^{k-1}\,dx$
 \begin{align*}
 \gamma
 &
-=\lim_{n\to\infty}\left[\sum_{k=1}^n \frac{1}{k} - \log n\right]
-=\lim_{n\to\infty}\left[\sum_{k=1}^n \int_0^1 x^{k-1}\,dx - \int_1^n \frac{du}{u}\right]
+\overset1=
+\lim_{n\to\infty}\left[\sum_{k=1}^n \frac{1}{k} - \log n\right]
+\overset2=
+\lim_{n\to\infty}\left[\sum_{k=1}^n \int_0^1 x^{k-1}\,dx - \int_1^n \frac{du}{u}\right]
 \\ &
-=\lim_{n\to\infty}\left[\int_0^1\frac{1-x^n}{1-x}\,dx - \int_1^n \frac{du}{u}\right]
-=\lim_{n\to\infty}\left[\int_0^1\frac{1-(1-y)^n}{y}\,dy - \int_1^n \frac{du}{u}\right]
+\overset3=
+\lim_{n\to\infty}\left[\int_0^1\frac{1-x^n}{1-x}\,dx - \int_1^n \frac{du}{u}\right]
+\overset4=
+\lim_{n\to\infty}\left[\int_0^1\frac{1-(1-y)^n}{y}\,dy - \int_1^n \frac{du}{u}\right]
 \\ &
-=\lim_{n\to\infty}\left[\int_0^n\frac{1-(1-u/n)^n}{u}\,du - \int_1^n \frac{du}{u}\right]
+\overset5=
+\lim_{n\to\infty}\left[\int_0^n\frac{1-(1-u/n)^n}{u}\,du - \int_1^n \frac{du}{u}\right]
 \\ &
-=\lim_{n\to\infty}
+\overset6=
+\lim_{n\to\infty}
 \left[\int_0^1\frac{1-(1-u/n)^n}{u}\,du - \int_1^n \frac{(1-u/n)^n}{u}\,du\right]
 \\ &
-= \int_0^1 \frac{1-e^{-u}}{u}\,du - \int_1^\infty \frac{e^{-u}}{u}\,du
+\overset7=
+\int_0^1 \frac{1-e^{-u}}{u}\,du - \int_1^\infty \frac{e^{-u}}{u}\,du
 \\ &
-= \lim_{\delta\searrow 0}
+\overset8=
+\lim_{\delta\searrow 0}\left[
+\int_\delta^1 \frac{du}{u} - \int_\delta^1 \frac{e^{-u}}{u}\,du
+\right] - \int_1^\infty \frac{e^{-u}}{u}\,du
+\\ &
+\overset9=
+\lim_{\delta\searrow 0}
 \left[ \int_\delta^1 \frac{du}{u} - \int_\delta^\infty \frac{e^{-u}}{u}\,du \right]
 %\\ &
-= \lim_{\delta\searrow 0}
+\overset{10}=
+\lim_{\delta\searrow 0}
 \left[
  \int_\Delta^1 \frac{du}{u}
 -\int_\Delta^\delta \frac{du}{u}
 -\int_\delta^\infty \frac{e^{-u}}{u}\,du
 \right]
 \\ &
-= \lim_{\delta\searrow 0}
+\overset{11}=
+\lim_{\delta\searrow 0}
 \left[ \int_\Delta^1 \frac{du}{u} - \int_\delta^\infty \frac{e^{-u}}{u}\,du \right]
-= \lim_{\delta\searrow 0}
+\overset{12}=
+\lim_{\delta\searrow 0}
 \left[
    \int_\delta^\infty \frac{e^{-t}}{1-e^{-t}}\,dt
  - \int_\delta^\infty \frac{e^{-t}}{t}\,dt
 \right]
 \\ &
-= \lim_{\delta\searrow 0}
+\overset{13}=
+\lim_{\delta\searrow 0}
 \int_\delta^\infty
 \left(
   \frac{e^{-t}}{1-e^{-t}}
  -\frac{e^{-t}}{t}
 \right) \,dt
 \\ &
-= \int_0^\infty
+\overset{14}=
+\int_0^\infty
 \left(
   \frac{e^{-t}}{1-e^{-t}}
  -\frac{e^{-t}}{t}
@@ -3704,13 +3724,18 @@ Euler定数の定義に $1/k=\int_0^1 x^{k-1}\,dx$
 1つ目の等号はEuler定数の定義であり, 2つ目の等号で積分の代入を行ない,
 3つ目の等号で等比数列の和 $1+x+\cdots+x^{n-1}=(1-x^n)/(1-x)$ を使った.
 さらに4つ目の等号で積分変数の変換 $y=1-x$ を行ない,
-5つ目の等号でさらに $y=t/n$ とおき,
-6つ目の等号で $0$ から $1$ までの積分と $1$ から $\infty$ までの積分を分けた.
+5つ目の等号でさらに $y=u/n$ とおき,
+6つ目の等号で $0$ から $1$ までの積分と $1$ から $n$ までの積分に分け直した.
 6つ目の等号の右辺は $n\to\infty$ の極限が取れる形式になっていることに注意せよ.
-9つ目の等号で $0<\Delta=1-e^{-\delta}<\delta$ とおいた.
-10個目の等号で $\delta\searrow 0$ のとき
+7つ目の等号でその極限を実際に取った.
+8つ目の等号で0からの積分を $\delta$ からの積分の $\delta\searrow 0$ の
+極限に書き直した.
+9つ目の等号で被積分函数が同じ項をまとめた.
+10個目の等号で $0<\Delta=1-e^{-\delta}<\delta$ とおいた.
+11個目の等号で $\delta\searrow 0$ のとき
 $\int_\Delta^\delta du/u=\log(\delta/(1-e^{-\delta}))\to 0$ となることを使った.
-11個目の等号で1つ目の積分で $u=1-e^{-t}$ とおき, 2つ目の積分で $u=t$ とおいた.
+12個目の等号では,
+左辺の1つ目の積分で $u=1-e^{-t}$ とおき, 2つ目の積分で $u=t$ とおいた.
 
 次に, Euler定数の積分表示式に似ているディガンマ函数の積分表示式
 \[
