@@ -97,6 +97,8 @@ Riemann-Lebesgueの定理の説明を詳しくした(\secref{sec:Riemann-Lebesgu
 10月1日Ver.0.35b: 微修正.
 10月22日Ver.0.36: \secref{sec:Binet1}での
 Euler定数の積分表示の証明の説明を少し詳しくした.
+11月20日Ver0.37: 逆ガンマ分布に関する節(\secref{sec:InverseGamma})
+を追加した.
 }
 \\[\bigskipamount]
 {\small
@@ -291,7 +293,7 @@ Euler定数の積分表示の証明の説明を少し詳しくした.
 {\small
 \href
 {https://genkuroki.github.io/documents/20160501StirlingFormula/}
-{\tt https://genkuroki.github.io/documents/20160501StirlingFormula/}
+{\ttfamily https://genkuroki.github.io/documents/20160501StirlingFormula/}
 }
 \end{center}
 最初のVer.0.1は3ページしかなかった.
@@ -304,7 +306,7 @@ Euler定数の積分表示の証明の説明を少し詳しくした.
 {\small
 \href
 {https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf}
-{\tt https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf}
+{\ttfamily https://genkuroki.github.io/documents/20160616KullbackLeibler.pdf}
 }
 \end{center}
 この続編ではKullback-Leibler情報量(相対エントロピーの $-1$ 倍)と
@@ -4490,7 +4492,7 @@ E[f(T)]
 =\alpha^{-s}\Gamma(s)
 \qquad (\alpha,s>0).
 \]
-証明のためには必要な計算であるが, さらに,
+証明のためには不要な計算であるが, さらに,
 \[
 \frac{2^{(n+1)/2}\Gamma((n+1)/2)a_n}{\sqrt{n}}
 =\frac{2^{(n+1)/2}\Gamma((n+1)/2)}{\sqrt{n}\,\sqrt{2\pi}\, 2^{n/2}\Gamma(n/2)}
@@ -4702,6 +4704,60 @@ T=\frac{M_1-M_2}{\sqrt{\dfrac{1}{n_1}+\dfrac{1}{n_2}}\,\sqrt{\dfrac{Y'}{n_1+n_2-
 平均が等しいと言えるどうかの検定に使われる.}.
 \qed
 \end{cor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{逆ガンマ分布}
+\label{sec:InverseGamma}
+
+$X$ が shape $\alpha > 0$, scale $\tau > 0$ の
+ガンマ分布に従う確率変数であるとき,
+$Y=X^{-1}$ が従う確率分布を{\bfseries 逆ガンマ分布}と呼ぶ.
+$\theta = \tau^{-1}$ とおくと, 逆ガンマ分布の確率密度函数は
+次のように表わされる:
+\begin{align*}
+  f_{\alpha,\theta}(y)\,dy
+  = \frac{e^{-\theta/y} y^{-\alpha-1}}{\Gamma(\alpha)\theta^{-\alpha}}
+  \,dy.
+\end{align*}
+$\theta$ を逆ガンマ分布の scale と呼ぶことにする. 次の公式はよく使われる:
+\begin{align*}
+  \int_0^\infty e^{-\theta/y} y^{-\alpha-1}\,dy
+  =\Gamma(\alpha)\theta^{-\alpha}.
+\end{align*}
+
+$Z$ が標準正規分布に
+$Y$ が shape $\alpha = n/2$, scale $\theta = n/2$ の逆ガンマ分布に従う
+確率変数であるとき,
+\begin{align*}
+  T = \sqrt{Y}\;Z
+\end{align*}
+は自由度 $n$ の $t$ 分布に従う. すなわち, 分散が shape $\alpha=n/2$,
+scale $\theta=n/2$ の逆ガンマ分布に従う確率変数 $Y$ で,
+平均が $0$ の正規分布に従う確率変数 $T$ は自由度 $n$ の $t$ 分布に従う.
+そのことは以下のようにして確認される:
+\begin{align*}
+  E[f(T)]
+  &
+  =\text{const.}\int_0^\infty\left(
+  \int_{-\infty}^\infty f\left(\sqrt{y}\;z\right)
+  e^{-z^2/2}e^{-n/(2y)}y^{-n/2-1}\,dz
+  \right)\,dy
+  \\ &
+  =\text{const.}\int_0^\infty\left(
+  \int_{-\infty}^\infty f(t)
+  e^{-t^2/(2y)}e^{-n/(2y)}y^{-n/2-1}\frac{dt}{\sqrt{y}}
+  \right)\,dy
+  \\ &
+  =\text{const.}\int_{-\infty}^\infty\left(
+   f(t)\int_0^\infty e^{-(1+t^2/n)(1/(2y))}y^{-(n+1)/2-1}\,dy
+  \right)\,dt
+  \\ &
+  = \text{const.}\int_{-\infty}^\infty
+  f(t) \left(1+\frac{t^2}{n}\right)^{-(n+1)/2}\,dt.
+\end{align*}
+2つ目の等号で $z=t/\sqrt{y}$ とおき, 4つ目の等号で上で言及した
+よく使われる公式を使った.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
