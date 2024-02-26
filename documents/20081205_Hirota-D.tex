@@ -1,0 +1,362 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf 広田のD-operator入門}
+\def\AUTHOR{黒木 玄}
+\def\DATE{2008年12月5日更新 \quad (2008年12月5日作成)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,theorem}
+\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-1.5cm}
+\setlength{\textheight}{25.5cm}
+%\setlength{\topmargin}{-1.3cm}
+%\setlength{\textheight}{25cm}
+%\setlength{\topmargin}{-0.8cm}
+%\setlength{\textheight}{24cm}
+\setlength{\textwidth}{16cm}
+\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\eps{\varepsilon}
+\renewcommand\d{\partial}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+\renewcommand\P{{\mathbb P}} % projective spaces
+%
+\theorembodyfont{\normalfont} % theorem 環境で斜体を使わない.
+%
+\newtheorem{theorem}{定理}
+\newtheorem{prop}[theorem]{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem{remark}[theorem]{注意}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem{problem}[theorem]{問題}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+%
+% proof
+%
+\makeatletter
+\newenvironment{proof}[1][\proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+%\newcommand{\proofname}{Proof}
+\newcommand{\proofname}{証明}
+\makeatother
+%
+% \qed
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\newcommand\qed{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setcounter{section}{-1}
+
+\section{広田のD-operator}
+
+このノートはほとんど広田良吾 \cite{hirota1} 
+(もしくは青カバーの本\cite{hirota2}の1-6節) からの引き写し.
+
+\subsection{定義}
+
+記号の簡単のため $\dfrac\d{\d x}$, $\dfrac\d{\d y}$, $\dfrac\d{\d t}$ 
+のそれぞれを $\d_x$, $\d_y$, $\d_t$ と書くことにする.
+
+$x,y,t$ の多項式 $P(x,y,t)$ に対して, 
+函数 $f,g$ の双線形作用素 $P(D_x,D_y,D_t)$ を次のように定める:
+\begin{equation*}
+ P(D_x,D_y,D_t) f\cdot g = 
+  P(\d_x-\d_{x'}, \d_y-\d_{y'}, \d_t-\d_{t'})
+  (f(x,y,t)g(x',y',t'))
+ \bigr|_{(x',y',t)=(x,y,t)}.
+\end{equation*}
+たとえば
+\begin{align*}
+ &
+ D_x f\cdot g = f_xg - fg_x,
+ \\ &
+ D_x^2 f\cdot g = f_{xx}g - 2f_xg_x + fg_{xx},
+ \\ &
+ D_x^3 f\cdot g = f_{xxx}g - 3f_{xx}g_x + 3f_xg_{xx} - fg_{xxx},
+ \\ &
+ \cdots\cdots\cdots\cdots\cdots
+ \\ &
+ D_x^n f\cdot g = 
+ \sum_{k=0}^n(-1)^{n-k}\binom{n}{k}
+ \frac{\d^k f}{\d x^k}\frac{\d^{n-k}g}{\d x^{n-k}},
+ \\ &
+ D_xD_t f\cdot g = f_{xt}g - f_xg_t - f_tg_x + fg_{xt}.
+\end{align*}
+
+
+$f=g$ のとき
+\begin{align*}
+ &
+ P(-D_x,-D_y,-D_t) f\cdot f
+ \\ &
+ = 
+  P(-\d_x+\d_{x'}, -\d_y+\d_{y'}, -\d_t+\d_{t'})
+  (f(x,y,t)f(x',y',t'))
+ \bigr|_{(x',y',t)=(x,y,t)}
+ \\ &
+ =
+  P(\d_{x'}-\d_x, \d_{y'}-\d_y, \d_{t'}-\d_t)
+  (f(x',y',t')f(x,y,t))
+ \bigr|_{(x',y',t)=(x,y,t)}
+ \\ &
+ = P(D_x,D_y,D_t) f\cdot f.
+\end{align*}
+特に $P(-x,-y,-t)=-P(x,y,t)$ ($P$ が奇函数)のとき %
+$P(D_x,D_y,D_t)f\cdot f=0$ となる. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{対数微分の表示公式}
+
+パラメータ $\eps$ に関するMaclaurin展開より
+\begin{equation*}
+  e^{\eps D_x} f(x)\cdot g(x)
+  = f(x+\eps)g(x-\eps).
+\end{equation*}
+$e^x=\cosh x + \sinh x$ で $\sinh x$ は $x$ の奇函数なので
+\begin{equation*}
+  \cosh(\eps D_x) f(x)\cdot f(x)
+  = e^{\eps D_x} f(x)\cdot f(x)
+  = f(x+\eps)f(x-\eps).
+\end{equation*}
+さらに
+\begin{equation*}
+ 2\cosh(\eps\d_x)\log f(x)
+ = (e^{\eps\d_x}+e^{-\eps\d_x})\log f(x)
+% = \log f(x+\eps)+\log f(x-\eps)
+ = \log[f(x+\eps)f(x-\eps)],
+\end{equation*}
+なので次が成立している:
+\begin{equation*}
+ 2\cosh(\eps\d_x)\log f(x) 
+ = \log\left[\cosh(\eps D_x) f(x)\cdot f(x)\right].
+\end{equation*}
+右辺で $\log(1+X)=X-X^2/2+X^3/3-X^4/4+\cdots$ を用い, 
+両辺を $\eps$ について展開して比較すると
+\begin{align*}
+ &
+ 2\d_x^2\log f = \frac{D_x^2f\cdot f}{f^2},
+ \\ &
+ 2\d_x^4\log f
+ =\frac{D_x^4f\cdot f}{f^2} 
+ -3\left(\frac{D_x^2f\cdot f}{f^2}\right)^2,
+ \\ &
+ 2\d_x^6\log f 
+ =\frac{D_x^6f\cdot f}{f^2} 
+ - 15\frac{D_x^4f\cdot f}{f^2} \frac{D_x^2f\cdot f}{f^2}
+ + 30\left(\frac{D_x^3f\cdot f}{f^2}\right)^3.
+\end{align*}
+さらに以上の議論の $\eps D_x$ を $\eps D_x+\eta D_t$ で置き換え, 
+$\eps\eta$ の係数を比較すると
+\begin{equation*}
+ 2\d_x\d_t\log f 
+ = \frac{D_xD_t f\cdot f}{f^2}.
+\end{equation*}
+これらの公式はKdV方程式やKP方程式を双線形形式に変形するときに使われる.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{商の微分の表示公式}
+
+$e^{\eps D_x} a\cdot b = a(x+\eps)b(x-\eps)$, 
+$\cosh(\eps D_x)b\cdot b = e^{\eps D_x} b\cdot b = b(x+\eps)b(x-\eps)$,
+$e^{\eps\d_x}(a/b)=a(x+\eps)/b(x+\eps)$ より
+\begin{equation*}
+ e^{\eps\d_x} \frac{a}{b}
+ = \frac{e^{\eps D_x}a\cdot b}{\cosh(\eps D_x)b\cdot b}.
+\end{equation*}
+右辺で $(1+X)^{-1}=1-X+X^2-X^3+\cdots$ を用い, 
+両辺を $\eps$ について展開して比較すると
+\begin{align*}
+ &
+ \d_x\frac{a}{b}
+ = \frac{D_xa\cdot b}{b^2},
+ \\ &
+ \d_x^2\frac{a}{b}
+ = \frac{D_x^2a\cdot b}{b^2} 
+ - \frac{a}{b}\frac{D_x^2b\cdot b}{b^2},
+ \\ &
+ \d_x^3\frac{a}{b}
+ = \frac{D_x^3a\cdot b}{b^2} 
+ -3\frac{D_xa\cdot b}{b^2}\frac{D_x^2b\cdot b}{b^2}.
+\end{align*}
+このノートではこれらの公式を使わない.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{KdVとKPの2次形式化}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{KdV方程式}
+
+KdV方程式
+\begin{equation*}
+ u_t + 6uu_x + u_{xxx} = 0
+\end{equation*}
+で $u=v_{xx}$ とおくと
+\begin{equation*}
+ (v_{xt} + 3v_{xx}^2 + v_{xxxx})_x = 0.
+\end{equation*}
+さらに $v=2\log f$ ($u=2(\log f)_{xx}$) とおくと,
+対数微分をD-operatorsで表示する公式より,
+\begin{align*}
+ &
+ v_{xt}
+ = 2\d_x\d_t\log f 
+ = \frac{D_xD_t f\cdot f}{f^2},
+ \\ &
+ v_{xx}^2
+ = (2\d_x^2\log f)^2
+ = \left(\frac{D_x^2f\cdot f}{f^2}\right)^2,
+ \\ &
+ v_{xxxx}
+ = 2\d_x^4\log f
+ =\frac{D_x^4f\cdot f}{f^2} 
+ -3\left(\frac{D_x^2f\cdot f}{f^2}\right)^2.
+\end{align*}
+これを上の式に代入すると $(D_x^2f\cdot f/f^2)^2$ の項が消えて
+\begin{equation*}
+ \left(
+ \frac{D_xD_tf\cdot f + D_x^4 f\cdot f}{f^2}
+ \right)_x = 0
+\end{equation*}
+となる.  したがって次の方程式はKdV方程式の十分条件になる:
+\begin{equation*}
+ (D_xD_t + D_x^4) f\cdot f = 0.
+\end{equation*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{KP方程式}
+
+KP方程式
+\begin{equation*}
+ (u_t + 6uu_x + u_{xxx})_x\pm u_{yy}=0
+\end{equation*}
+で $u=v_{xx}$ とおくと
+\begin{align*}
+ (v_{tx} + 3v_{xx}^2 + v_{xxxx}\pm v_{yy})_{xx} = 0.
+\end{align*}
+さらに $v=2\log f$ ($u=2(\log f)_{xx}$) と置くと
+\begin{align*}
+ &
+ v_{xt}
+ = 2\d_x\d_t\log f 
+ = \frac{D_xD_t f\cdot f}{f^2},
+ \\ &
+ v_{xx}^2
+ = (2\d_x^2\log f)^2
+ = \left(\frac{D_x^2f\cdot f}{f^2}\right)^2,
+ \\ &
+ v_{xxxx}
+ = 2\d_x^4\log f
+ =\frac{D_x^4f\cdot f}{f^2} 
+ -3\left(\frac{D_x^2f\cdot f}{f^2}\right)^2,
+ \\ &
+ v_{yy}
+ = 2\d_y^2\log f
+ = \frac{D_y^2f\cdot f}{f^2}.
+\end{align*}
+これを上の式に代入すると $(D_x^2f\cdot f/f^2)^2$ の項が消えて
+\begin{equation*}
+ \left(
+ \frac{D_xD_tf\cdot f + D_x^4 f\cdot f \pm D_y^2 f\cdot f}{f^2}
+ \right)_{xx} = 0
+\end{equation*}
+となる.  したがって次の方程式はKP方程式の十分条件になる:
+\begin{equation*}
+ (D_xD_t + D_x^4 \pm D_y^2) f\cdot f = 0.
+\end{equation*}
+
+Kac-Raina \cite{kac-raina} の第7.5節との関係は以下の通り.
+KP方程式(7.18)は次のように書き直される:
+\begin{equation*}
+ \left(u_t-\frac{3}{2}uu_x-\frac{1}{4}u_{xxx}\right)_x-\frac{3}{4}u_{yy}=0
+\end{equation*}
+$u=v_{xx}$ とおくとこれは次と同値である:
+\begin{equation*}
+ (4v_{xt}-3v_{xx}^2-v_{xxxx}-3v_{yy})_{xx}=0
+\end{equation*}
+さらに $v=2\log\tau$ とおき, 
+対数微分のD-operatorsによる表示公式を代入すると, 
+$(D_x^2\tau\cdot \tau/\tau^2)^2$ の項が消えて
+\begin{equation*}
+ \left(
+   \frac{(4D_xD_t-D_x^4-3D_y^2)\tau\cdot\tau}{\tau^2}
+ \right)_{xx} = 0
+\end{equation*}
+となる. したがって次の方程式はKP方程式(7.18)の十分条件になる:
+\begin{equation*}
+ (4D_xD_t-D_x^4-3D_y^2)\tau\cdot\tau = 0.
+\end{equation*}
+これは p.~75 の最初の式に同値である.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{12}
+ \bibitem{hirota1} 広田良吾, ソリトン理論における直接法(2次形式化法),
+  月刊フィジクス SYMPOSIUM 10: 続・数理物理学, 海洋出版, 1980.4.1, 
+  279--285
+ \bibitem{hirota2} 広田良吾, 直接法によるソリトンの数理, 岩波書店, 
+  202~pages, 1992
+ \bibitem{kac-raina} Kac, V.~G.\ and Raina, A.~K.,
+  Bombay Lectures on Highest weight representations of infinite dimensional
+  Lie algebras, Advanced Series in Mathematical Physics Vol.~2,
+ World Scientific, 1987, 145 pages.
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
