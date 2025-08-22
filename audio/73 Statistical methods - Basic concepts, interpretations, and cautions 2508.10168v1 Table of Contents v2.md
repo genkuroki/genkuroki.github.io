@@ -154,13 +154,13 @@ Sander Greenland, Professor Emeritus
         *   P値を、仮説モデルとデータとの**相性の良さの尺度** (compatibility measures) として再解釈すること。
         *   区間推定を、データ生成プロセスの挙動に関する明示的な仮定の下で、データと**相性が良い (highly compatible)** 関連性の範囲として再解釈すること。
         *   統計量を推論や決定に用いる前に、統計量を計算するために用いられた仮定の不確実性を記述し、説明すること。
-    3. **相互参照 (Cross-references)**
-        *   疫学における**ベイズ的手法 (Bayesian Methods)**
-        *   因果**有向非巡回グラフ (Causal Directed Acyclic Graphs)**
-        *   疫学における**因果推論 (Causal Reasoning and Inference)**
-        *   **交絡** (Confounding) と**交互作用** (Interaction)
-        *   疫学分析のための**回帰分析法 (Regression Methods)**
-        *   **感度分析** (Sensitivity Analysis) と**バイアス分析** (Bias Analysis)
-    4. **参考文献 (References)**
+27. **相互参照 (Cross-references)**
+    1. 疫学における**ベイズ的手法 (Bayesian Methods)**
+    2. 因果**有向非巡回グラフ (Causal Directed Acyclic Graphs)**
+    3. 疫学における**因果推論 (Causal Reasoning and Inference)**
+    4. **交絡** (Confounding) と**交互作用** (Interaction)
+    5. 疫学分析のための**回帰分析法 (Regression Methods)**
+    6. **感度分析** (Sensitivity Analysis) と**バイアス分析** (Bias Analysis)
+28. **参考文献 (References)**
 
 ---
