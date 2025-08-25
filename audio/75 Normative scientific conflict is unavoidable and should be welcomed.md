@@ -5,6 +5,8 @@ Andrew Gelman<br>
 
 以下、このpdfの内容を各節各段落ごとに忠実かつ正確に翻訳します(NotebookLMによる)。
 
+* [NotebookLMで作成した音声概要](https://genkuroki.github.io/audio/75%20Normative%20scientific%20conflict%20is%20unavoidable%20and%20should%20be%20welcomed.m4a)
+
 ------
 
 # 規範的な科学対立は不可避であり、歓迎されるべきである

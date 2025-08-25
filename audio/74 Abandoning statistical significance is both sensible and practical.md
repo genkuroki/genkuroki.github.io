@@ -1,7 +1,10 @@
 * https://statmodeling.stat.columbia.edu/2019/04/16/abandoning-statistical-significance-is-both-sensible-and-practical/
 * https://sites.stat.columbia.edu/gelman/research/unpublished/Amrhein_Gelman_Greenland_McShane2019.pdf
 * https://peerj.com/preprints/27657/
+
 の翻訳
+
+* [NotebookLMで作成した音声概要](https://genkuroki.github.io/audio/74%20Abandoning%20statistical%20significance%20is%20both%20sensible%20and%20practical.m4a)
 
 ----------
 
