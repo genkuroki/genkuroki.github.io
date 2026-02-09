@@ -1,0 +1,962 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\TITLE{\bf 有限Abel群とJordan標準形}
+\def\AUTHOR{黒木玄}
+\def\DATE{2015年12月17日(木)\footnote{%
+2026年2月9日: \lemmaref{lemma:product}の証明中の「$\pi(G')\Hbar=G$」を「$\pi(G')\Hbar=\Gbar$」に訂正した.  最後に良書紹介を追加した.
+}}
+\def\PDFTITLE{有限Abel群の構造}
+\def\PDFAUTHOR{黒木玄}
+\def\PDFSUBJECT{有限Abek群}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,twoside]{jarticle}
+\usepackage{amsmath,amssymb,amsthm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{hyperref}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ setpagesize=false,%
+ pdftitle={\PDFTITLE},%
+ pdfauthor={\PDFAUTHOR},%
+ pdfsubject={\PDFSUBJECT},%
+ pdfkeywords={TeX; dvipdfmx; hyperref; color;}}
+\newcommand\arxivref[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:#1}}
+\newcommand\TILDE{\textasciitilde}
+\newcommand\US{\textunderscore}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfm]{graphicx}
+\usepackage[all]{xy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvipdfm]{color}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\green{\color{green}}
+\newcommand\magenta{\color{magenta}}
+\newcommand\cyan{\color{cyan}}
+\newcommand\yellow{\color{yellow}}
+\newcommand\white{\color{white}}
+\newcommand\black{\color{black}}
+\renewcommand\r{\red}
+\renewcommand\b{\blue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pagestyle{headings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\topmargin}{-2.5cm}
+\setlength{\textheight}{26.5cm}
+\setlength{\textwidth}{16cm}
+\allowdisplaybreaks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand\N{{\mathbb N}} % natural numbers
+\newcommand\Z{{\mathbb Z}} % rational integers
+\newcommand\F{{\mathbb F}} % finite field
+\newcommand\Q{{\mathbb Q}} % rational numbers
+\newcommand\R{{\mathbb R}} % real numbers
+\newcommand\C{{\mathbb C}} % complex numbers
+%\renewcommand\P{{\mathbb P}} % projective spaces
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 定理環境
+%
+%\theoremstyle{plain} % 見出しをボールド、本文で斜体を使う
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理} % 番号を付けない
+\newtheorem{prop}[theorem]{命題}
+\newtheorem*{prop*}{命題}
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem*{lemma*}{補題}
+\newtheorem{cor}[theorem]{系}
+\newtheorem*{cor*}{系}
+\newtheorem{example}[theorem]{例}
+\newtheorem*{example*}{例}
+\newtheorem{axiom}[theorem]{公理}
+\newtheorem*{axiom*}{公理}
+\newtheorem{problem}[theorem]{問題}
+\newtheorem*{problem*}{問題}
+\newtheorem{summary}[theorem]{要約}
+\newtheorem*{summary*}{要約}
+\newtheorem{guide}[theorem]{参考}
+\newtheorem*{guide*}{参考}
+%
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義} % 番号を付けない
+%
+%\theoremstyle{remark} % 見出しをイタリック、本文で斜体を使わない
+\theoremstyle{definition} % 見出しをボールド、本文で斜体を使わない
+\newtheorem{remark}[theorem]{注意}
+\newtheorem*{remark*}{注意}
+%
+\numberwithin{theorem}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%
+% 引用コマンド
+%
+\newcommand\secref[1]{第\ref{#1}節}
+\newcommand\theoremref[1]{定理\ref{#1}}
+\newcommand\propref[1]{命題\ref{#1}}
+\newcommand\lemmaref[1]{補題\ref{#1}}
+\newcommand\corref[1]{系\ref{#1}}
+\newcommand\exampleref[1]{例\ref{#1}}
+\newcommand\axiomref[1]{公理\ref{#1}}
+\newcommand\problemref[1]{問題\ref{#1}}
+\newcommand\summaryref[1]{要約\ref{#1}}
+\newcommand\guideref[1]{参考\ref{#1}}
+\newcommand\definitionref[1]{定義\ref{#1}}
+\newcommand\remarkref[1]{注意\ref{#1}}
+%
+\newcommand\figureref[1]{図\ref{#1}}
+\newcommand\tableref[1]{表\ref{#1}}
+%
+% \qed を自動で入れない proof 環境を再定義
+%
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+%\newenvironment{Proof}[1][\Proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep{\bfseries #1}\@addpunct{\bfseries.}]\ignorespaces
+}{%
+  \endtrivlist
+}
+\renewcommand{\proofname}{証明}
+%\newcommand{\Proofname}{証明}
+\makeatother
+%
+% 正方形の \qed を長方形に再定義
+%
+\makeatletter
+\def\BOXSYMBOL{\RIfM@\bgroup\else$\bgroup\aftergroup$\fi
+  \vcenter{\hrule\hbox{\vrule height.85em\kern.6em\vrule}\hrule}\egroup}
+\makeatother
+\newcommand{\BOX}{%
+  \ifmmode\else\leavevmode\unskip\penalty9999\hbox{}\nobreak\hfill\fi
+  \quad\hbox{\BOXSYMBOL}}
+\renewcommand\qed{\BOX}
+%\newcommand\QED{\BOX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\isomto{\xrightarrow{
+   \,\smash{\raisebox{-0.3ex}{\ensuremath{\scriptstyle\sim}}}\,}}
+\newcommand\MOD{\mathop{\mathrm{mod}}\nolimits}
+\newcommand\Gbar{{\overline{G}}}
+\newcommand\Hbar{{\overline{H}}}
+\newcommand\Mbar{{\overline{M}}}
+\newcommand\Nbar{{\overline{N}}}
+\newcommand\bra{\langle}
+\newcommand\ket{\rangle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\DATE}
+\maketitle
+%\begin{abstract}
+%このノートの目標は, 有限Abel群が巡回群の直積に分解する
+%というよく知られた結果を単因子論に頼らずに証明することと, 
+%それと全く同様の方法で正方行列のJordan標準形の存在と一意性を
+%証明できることを説明することである.
+%\end{abstract}
+%\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setcounter{section}{-1} % 最初の節番号を0にする
+
+\section{有限Abel群}\label{sec:Abel}
+
+%この節の目標は有限Abel群が巡回群の直積に分解することを証明することである.
+
+\subsection{準備}
+
+読者は巡回群やLagrangeの定理や群の準同型定理などの群論に関する基本的な事柄
+については知っていると仮定する.
+
+正の整数 $n$ に対して, 
+$n=p_1^{e_1}\cdots p_N^{e_N}$ かつ,  
+$p_i$ たちが互いに異なる素数であり, $e_i$ たちが $0$ 以上の整数であるとき, 
+$n=p_1^{e_1}\cdots p_N^{e_N}$ を $n$ の素因数分解と呼ぶことにする.
+
+以下の2つの補題を証明抜きに利用する.
+
+\begin{lemma}[中国式剰余定理]
+$r,s$ が互いに素な正の整数であるならば, 群の同型写像
+\begin{align*}
+ \Z/rs\Z \isomto \Z/r\Z \times \Z/s\Z, \quad
+ a \MOD rs \mapsto (a \MOD r, a\MOD s)
+\end{align*}
+が得られる. ゆえに正の整数 $n$ の素因数分解が $n=p_1^{e_1}\cdots p_N^{e_N}$ 
+であるとき, 群の同型写像
+\begin{align*}
+ \Z/n\Z \isomto \Z/p_1^{e_1}\Z \times\cdots\times \Z/p_N^{e_N}\Z, \quad
+ a \MOD n \mapsto (a\MOD p_1^{e_1},\dots,a\MOD p_N^{e_N})
+\end{align*}
+が得られる. \qed
+\end{lemma}
+
+群 $G$ とその部分群 $H_1,\dots,H_N$ について, 写像
+\[
+H_1\times\cdots\times H_N\to G, \quad
+(h_1,\ldots,h_N)\mapsto h_1\cdots h_N
+\]
+が群の同型写像になるとき, 群 $G$ は部分群 $H_1,\cdots,H_N$ の直積に分解する
+という.
+
+\begin{lemma}[直積]
+群 $G$ とその部分群 $H$, $K$ について以下の二条件は互いに同値である:
+\begin{itemize}
+\item 群 $G$ は部分群 $H$, $K$ の直積に分解する.
+\item $H$, $K$ は $G$ の正規部分群であり, $H\cap K=\{1\}$ かつ $HK=G$.
+\qed
+\end{itemize}
+\end{lemma}
+
+以上の補題と注意は以下において断り無しに自由に用いられる.
+
+次の補題は後で群 $G$ の剰余群における直積分解の存在から
+元の群 $G$ 自身の直積分解の存在を導くために使われる.
+
+\begin{lemma}\label{lemma:product}
+$G$ は群であるとし, $G'$ はその正規部分群であるとする.
+$N$ は $G$ の正規部分群であるとし, $\Gbar=G/N$ とおき, 
+自然な射影を $\pi:G\to\Gbar$, $x\mapsto xN$ と書く.
+$G'\cap N=\{1\}$ でかつ, $\Gbar$ が $\pi(G')$ とある部分群 $\Hbar$ の
+直積に分解するならば, $G$ は $G'$ と $\pi^{-1}(\Hbar)$ の直積に分解する.
+\end{lemma}
+
+\begin{proof}
+$\Hbar$ は $\Gbar$ の正規部分群であり, 
+一般に正規部分群の準同型写像による逆像も正規部分群になるので, 
+$H=\pi^{-1}(\Hbar)$ とおくと $H$ は $G$ の正規部分群である.
+
+あとは $G'\cap H=\{1\}$ かつ $G'H=G$ となることを示せば十分である.
+
+$G'\cap H=\{1\}$ を示そう. $x\in G'\cap H$ を任意に取る.
+このとき $\pi(x)\in\pi(G')\cap\Hbar=\{1\}$ 
+すなわち $\pi(x)=1$ なので $x\in N$ となる.
+ゆえに $x\in G'\cap N=\{1\}$ すなわち $x=1$ となる.
+これで $G'\cap H=\{1\}$ が示された.
+
+$G'H=G$ を示そう. $x\in G$ を任意に取る.
+$\pi(G')\pi(H)=\pi(G')\Hbar=\Gbar$ より $\pi(x)\in\Gbar$ 
+は $\pi(x)=\pi(x')\pi(h)=\pi(x'h)$, $x'\in G'$, $h\in H$ と表される.
+このとき, ある $n\in N$ が存在して $x=x'hn$ となる. 
+$N=\pi^{-1}(1)\subset\pi^{-1}(\Hbar)=H$ なので $n\in H$ ゆえに $hn\in H$ となる.
+これで $G'H=G$ が示された.
+\qed
+\end{proof}
+
+\begin{remark}\label{remark:lcm}
+$G$ は Abel群であるとし, $\alpha,\beta$ はその有限位数の元であるとし, 
+それぞれの位数 $r,s$ は互いに素であるならば, $\alpha\beta$ の位数は $rs$ になる.
+その理由は以下の通り.
+ 
+$x\in\bra\alpha\ket\cap\bra\beta\ket$ の位数
+は $\alpha$ の位数 $r$ と $\beta$ の位数 $s$ の公約数になるので $1$ になる.
+つまり $x=1$ となる. これで $\bra\alpha\ket\cap\bra\beta\ket=\{1\}$
+となることがわかった.
+
+ゆえに $G$ の部分群 $\bra\alpha,\beta\ket=\bra\alpha\ket\bra\beta\ket$ は
+その部分群 $\bra\alpha\ket$, $\bra\beta\ket$ の直積に分解する.
+
+中国式剰余定理は $\Z/r\Z\times \Z/s\Z$ が $(1\MOD r, 1\MOD s)$ から
+生成される位数 $rs$ の巡回群になることを意味している.
+そのことから $\bra\alpha,\beta\ket$ が $\alpha\beta$ から
+生成されることと $\alpha\beta$ の位数が $rs$ になることが
+ただちに導かれる.
+\qed
+\end{remark}
+
+
+\subsection{有限Abel群の構造}
+
+\begin{lemma}\label{lemma:lcm}
+Abel群 $G$ の有限位数を持つ元 $a$, $b$ の位数はそれぞれ $r$, $s$ である
+とし, それらの最小公倍数を $m$ と書く. このとき位数 $m$ の $G$ の元が存在する.
+\end{lemma}
+
+\begin{proof}
+$r,s$ の素因数分解を
+\[
+r=p_1^{e_1}\cdots p_N^{e_N}, \quad
+s=p_1^{f_1}\cdots p_N^{f_N}
+\]
+と書く. 必要があれば番号を付け変えて
+\[
+e_1\geqq f_1,\;\ldots,\; e_n\geqq f_n,\;
+e_{n+1}\leqq f_{n+1}, \;\ldots,\; e_N\leqq f_N
+\]
+が成立していると仮定してよい. 正の整数 $r',r'',s',s''$ を
+\[
+r'=p_1^{e_1}\cdots p_n^{e_n}, \quad
+r''=p_{n+1}^{e_{n+1}}\cdots p_N^{e_N}, \quad
+s'=p_1^{f_1}\cdots p_n^{f_n}, \quad
+s''=p_{n+1}^{f_{n+1}}\cdots p_N^{f_N}
+\]
+と定める. このとき $r=r'r''$, $s=s's''$, $r's''=m$ が成立し, 
+$r'$ と $s''$ は互いに素になる.
+
+$\alpha=a^{r''}$, $\beta=b^{s'}$ とおく. 
+このとき $\alpha, \beta$ それぞれの
+位数は $r'=r/r''$, $s''=s/s'$ になる.
+ゆえに\remarkref{remark:lcm}より $\alpha\beta$ の位数は $r's''=m$ になる.
+\qed
+\end{proof}
+
+この補題から次の補題がただちに導かれる.
+
+\begin{lemma}\label{lemma:maxord}
+$G$ は有限Abel群であるとし, $G$ の元の位数の最大値を $r$ と書く.
+このとき $G$ の任意の元の位数は $r$ の約数になる.
+\end{lemma}
+
+\begin{proof}
+$G$ の最大位数 $r$ の元 $a$ を取る. 
+$G$ の元 $b$ を任意に取ってその位数を $s$ と書き, 
+$r$, $s$ の最小公倍数を $m$ と書く. 
+\lemmaref{lemma:lcm}より $G$ の中に位数 $m$ の元が存在する.
+しかし $r$ の最大性から $m\leqq r$ でなければいけない.
+ゆえに $s$ は $r$ の約数でなければいけない.
+(もしも $s$ が $r$ の約数でなければ $m>r$ となってしまう.)
+\qed
+\end{proof}
+
+次の補題を証明できれば, 
+\lemmaref{lemma:product}を用いた群の位数に関する帰納法で
+有限Abel群が巡回群の直積になることを容易に証明できる.
+
+\begin{lemma}\label{lemma:N}
+$G$ は有限Abel群であるとし, $a$ はその位数最大の元であるとし, 
+$G\ne\bra a\ket$ であると仮定する.
+このとき $G$ の部分群 $N\ne\{1\}$ で $\bra a\ket\cap N=\{1\}$ を
+みたすものが存在する.
+\end{lemma}
+
+\begin{proof}
+$\Gbar=G/\bra a\ket$ とおき, 
+自然な射影を $\pi:G\to\Gbar$, $x\mapsto \pi(x)=x\bra a\ket$ と書く.
+仮定 $G\ne\bra a\ket$ より, ある $b\in G$ で $b\not\in\bra a\ket$ となるもの
+が存在する. 
+$a,b$ の位数をそれぞれ $r,s$ と書く.
+\lemmaref{lemma:maxord}より $s$ は $r$ の約数である.
+
+$b\not\in\bra a\ket$ なので $\pi(b)\ne 1$ である. 
+$\pi(b)$ の位数 $t$ は $s$ の約数になり, 
+$\pi(b)\ne1$ より $t>1$ となる.  
+$\pi(b^t)=1$ なので $b^t\in\bra a\ket$ となる.
+ゆえにある整数 $k$ で $b^t=a^k$ を満たすものが存在する.
+このとき
+\[
+1 = b^s = b^{t\cdot s/t} = a^{k\cdot s/t}
+\]
+なのである整数 $l$ が存在して $ks/t = lr$ となる.
+このとき $k/t = l\cdot r/s$ は整数になる.
+ゆえに $G$ の元 $c$ を次のように定めることができる:
+\[
+ c = a^{-k/t}b.
+\]
+$N=\bra c\ket$ が構成したい $G$ の部分群であることを示そう.
+まず, $\pi(c)=\pi(b)$ の位数は $t>1$ なので $c$ の位数も $1$ より大きい
+ので $N=\bra c\ket\ne\{1\}$ である.
+次に, $x\in\bra a\ket\cap N=\bra a\ket\cap\bra c\ket$ とすると, 
+$x=a^i=c^j$, $i,j\in\Z$ と書ける.
+$1=\pi(a^i)=\pi(x)=\pi(c^j)=\pi(c)^j$ より, $j$ は $t$ の倍数になる.
+しかし $c^t=a^{-k}b^t=1$ なので $x=c^j=c^{t\cdot j/t}=1$ となる.
+これで $\bra a\ket\cap N=\bra a\ket\cap\bra c\ket=\{1\}$
+となることもわかった.
+\qed
+\end{proof}
+
+\begin{lemma}\label{lemma:H}
+有限Abel群 $G$ の最大位数の元を $a$ と書くと, 
+$G$ は $\bra a\ket$ とある部分群 $H$ の直積に分解する.
+\end{lemma}
+
+\begin{proof}
+$G$ の位数に関する帰納法で証明する.
+
+$|G|=1$ のときに定理の結論は自明に成立している.
+
+$|G|>1$ のとき. 位数が $|G|$ より小さなAbel群について定理の結論が成立していると
+仮定する.  $G=\bra a\ket$ の場合には定理の結論は自明に成立しているので, 
+$G\ne\bra a\ket$ と仮定してよい
+\lemmaref{lemma:N}より, $G$ の部分群 $N\ne\{1\}$ で $\bra a\ket\cap N=\{1\}$ 
+をみたすものが存在する.
+$\Gbar=G/N$ とおき, 自然な射影を $\pi:G\to\Gbar$, $x\mapsto xN$ と書く. 
+$N\ne\{1\}$ より $\Gbar$ の位数は $G$ の位数より小さいので, 
+帰納法の仮定より, $\Gbar$ は $\pi(\bra a\ket)$ とある部分群 $\Hbar$ の
+直積に分解する. ゆえに, \lemmaref{lemma:product}より, 
+$G$ は $\bra a\ket$ と $H=\pi^{-1}(\Hbar)$ の直積に分解する. 
+\qed
+\end{proof}
+
+\begin{theorem}\label{theorem:finAbel-1}
+有限Abel群 $G$ に対して, 単位元以外の $a_1,a_2,\ldots,a_N\in G$ で
+以下の条件を満たすものが存在する($G=\{1\}$ の場合には $N=0$ だとみなす):
+\begin{itemize}
+\item $G$ は巡回部分群 $\bra a_1\ket,\ldots,\bra a_N\ket$ の直積に
+分解する.
+\item $a_i$ の位数を $r_i$ と書くと, 
+$r_N|\cdots|r_2|r_1$. 
+\end{itemize}
+ここで整数 $r,s$ に対する $s|r$ は $s$ が $r$ を割り切ることを意味する.
+\end{theorem}
+
+\begin{proof}
+$G$ の位数 $|G|$ に関する帰納法で証明する.
+
+$|G|=1$ のとき, 定理の結論は自明に成立している.
+
+$|G|>1$ のとき. 位数が $|G|$ より小さなAbel群について定理の結論が成立していると
+仮定する.  $G$ の位数最大の元を $a_1$ とし, その位数を $r_1$ と書く.
+\lemmaref{lemma:H}より, $G$ は $\bra a_1\ket$ とある部分群 $H$ の直積に
+分解する. $H$ の位数は $G$ の位数より小さいので, 帰納法の仮定より, 
+単位元以外のある $a_2,\ldots,a_N\in H$ が存在して,
+$H$ は $\bra a_2\ket,\ldots,\bra a_N\ket$ の直積に分解し, 
+$a_i$ の位数を $r_i$ と書くと $r_N|\cdots|r_3|r_2$ が成立する.
+ゆえに $G$ は $\bra a_1\ket,\bra a_2\ket,\ldots,\bra a_N\ket$
+の直積に分解する.
+\lemmaref{lemma:maxord}より $a_i$ の位数 $r_i$ たちは
+すべて $a_1$ の位数 $r_1$ の約数になる. 
+これで示すべきことがすべて示された.
+\qed
+\end{proof}
+
+\begin{cor}\label{cor:finAbel-1}
+有限Abel群は素数べき位数の巡回部分群たちの直積に分解する.
+\end{cor}
+
+\begin{proof}
+\theoremref{theorem:finAbel-1}より, 有限Abel群は巡回部分群たちの直積に分解する.
+中国式剰余定理より, 巡回群は素数べき位数の巡回部分群の直積に分解する.
+ゆえに有限Abel群は素数べき位数の巡回群たちの直積に分解する.
+\qed
+\end{proof}
+
+Abel群 $A$ と整数 $k$ に対して, $A^k=\{\,a^k\mid a\in A\,\}$ と定める. 
+そのとき $A^k$ は $A$ の部分群になる.
+Abel群 $A$ が部分群 $B,C$ の直積に分解しているとき, 
+$A^k$ は $B^k,C^k$ の直積に分解する.
+群 $G,H$ とそれぞれの正規部分群 $M,N$ に対して, 
+$M\times N$ は $G\times H$ の正規部分群になり, 
+自然な群の同型 $(G\times H)/(M\times N)\cong(G/M)\times(H/N)$ が成立している.
+
+\begin{lemma}\label{lemma:C^k}
+位数 $r$ の有限巡回群 $C$ と正の整数 $k$ に対して,
+$r$ と $k$ の最大公約数を $g$ と書くと, 
+$C^k=\bra a^k\ket$ は位数 $r/g$ の巡回部分群になる.
+ゆえに剰余群 $C/C^k$ は位数 $g$ の巡回群になる.
+\end{lemma}
+
+\begin{proof}
+$C$ の生成元の1つを $a$ と書く.
+ある整数 $l,m$ で $lr+mk=g$ を満たすものが存在する.
+ゆえに $a^g=a^{lr+mk}=a^{mk}\in C^k$.
+任意の整数 $i$ に対して $(a^i)^k=(a^g)^{ki/g}\in\bra a^g\ket$.
+ゆえに $C^k=\bra a^g\ket$.
+したがって $C^k$ は $a^g$ から生成される位数 $r/g$ の巡回部分群になり, 
+$C/C^k$ は $a$ の像から生成される位数 $g$ の巡回群になる.
+\qed
+\end{proof}
+
+\begin{theorem}\label{theorem:finAbel-2}
+\theoremref{theorem:finAbel-1}の $r_1,r_2,\ldots,r_N$ は $G$ から一意的に決まる.
+($(r_1,r_2,\ldots,r_N)$ を $G$ の{\bf 単因子 (elementary divisors)}と呼ぶ.)
+\end{theorem}
+
+\begin{proof}
+この定理を証明するためには
+正の整数 $k$ に対する $|G/G^k|$ たちから $r_i$ たちが一意に決まることを示せばよい.
+(以下のように実際には素数べき $k=p^e$ に対する $|G/G^k|$ たちから $r_i$ たち
+が一意に決まることを示せる.)
+
+$G$ の元の位数の最大値を $r$ と書くと, 
+\lemmaref{lemma:maxord}より, $G$ の元の位数はすべて $r$ の約数になる.
+\theoremref{theorem:finAbel-1}の状況を仮定し, $r_{N+1}=1$ とおく.
+そのとき $r_1=r$ となる\footnote{理由を考えよ.}.
+
+各 $r_i$ の素因数分解を $r_i=p_1^{e_1(i)}\cdots p_N^{e_N(i)}$ と書いておく.
+$r_N|\cdots|r_2|r_1$ より, 
+各素数 $p_t$ ごとに $e_t(N)\leqq\cdots\leqq e_t(2)\leqq e_t(1)$ が成立している.
+$e_t(i)$ たちが $|G/G^k|$ たちから一意に決まることを示せばよい.
+
+\lemmaref{lemma:C^k}より, 
+位数 $r_i$ の巡回群 $C_i$ に対して, 
+$\left|C_i/C_i^{p_t^e}\right|=p_t^{\min\{e,e_t(i)\}}$ となる. ゆえに
+\[
+\text{$e_t(i+1)\leqq e\leqq e_t(i)$ のとき}\quad
+\left|G/G^{p_t^e}\right|
+=p_t^{e_t(N)+\cdots+e_t(i+2)+e_t(i+1)+ie}.
+\]
+これより $e_t(1),e_t(2),\ldots$ が 
+数列 $\left|G/G^{p_t^e}\right|$ ($e=0,1,2,\ldots$)から
+一意的に決まってしまうことがわかる\footnote{それはなぜかを自分で考えてみよ.}.
+\qed
+\end{proof}
+
+\begin{remark}
+上の証明中の記号のもとで\corref{cor:finAbel-1}の結果は
+\[
+G \cong \prod_{t,i}\left(\Z/p_t^{e_t(i)}\Z \right)
+\]
+と書ける. この素数べき位数の巡回群への直積分解も $G$ から本質的に一意的に決まる.
+このようにして有限Abel群の同型類と素数べきの組は一対一に対応している.
+\qed
+\end{remark}
+
+\begin{example}
+$p$ は素数であり, $n$ は $0$ 以上の整数であるとする. 位数が素数べき $p^n$ の
+有限Abel群の同型類全体と $n$ の分割全体は一対一に対応している.
+$n$ の分割とは整数の列 $e_1\geqq e_2\geqq\cdots\geqq e_N\geqq 1$ 
+で $n_1+n_2+\cdots+n_N=n$ をみたすもののことである.
+$n$ の分割に対して $\Z/p^{n_1}\Z\oplus\cdots\oplus\Z/p^{n_N}\Z$ の同型類
+を対応させることによって, 
+$n$ の分割と位数 $p^e$ の有限Abel群の同型類の一対一対応が定まる.
+$n$ の分割全体の個数を $p(n)$ と書き, $n$ の{\bf 分割数 (partition number)}と
+呼ぶ%
+\footnote{分割数の母函数表示 
+$\sum_{n=0}^\infty p(n)q^n = \prod_{k=1}^\infty(1-q^k)^{-1}$ が
+成立している.
+$q=e^{2\pi i\tau}$ とおく.　\\
+$\eta(q)=q^{1/24}\prod_{k=1}^\infty(1-q^k)$ は
+Dedekindのeta函数と呼ばれる数論的に特別な函数である.}.
+例えば $p(0)=1$, $p(1)=1$, $p(2)=2$, $p(3)=3$, $p(4)=5$, $p(5)=7$ である.
+\qed
+\end{example}
+
+\begin{example}
+位数 $540000=2^5 3^3 5^4$ の有限Abel群の同型類全体の個数
+は $p(5)p(3)p(4)=7\cdot3\cdot5=105$ 個である.
+\qed
+\end{example}
+
+\section{Jordan標準形}
+
+\subsection{有限Abel群の場合との類似}
+
+実は前節と全く同様にしてJordan標準形の存在と一意性を証明できる.
+有限Abel群とJordan標準形の理論は
+主イデアル整域(PID)上の有限生成加群の一般論に吸収されてしまうのだが,
+このノートでは一般論に頼らずに有限Abel群の場合の証明との類似を
+追及することによってJordan標準形の存在と一意性の証明を
+見付ける方法を解説する.
+ただし, 可換環上の加群に関する基礎的な事柄は既知であると仮定する.
+
+以下, $K$ は任意の代数閉体であると仮定する.
+(代数閉体の定義を知らない人は $K=\C$ と仮定してよい.)
+
+以下のような類似を考えることになる.
+\begin{itemize}
+\item 有理整数環 $\Z$ $\longleftrightarrow$ 多項式環 $K[x]$
+\item Abel群の元の整数乗 $\longleftrightarrow$ $K[x]$ 加群の元の多項式倍
+\item 有限Abel群 $\longleftrightarrow$ $K$ 上有限次元の $K[x]$ 加群
+\item Abel群の位数 $\longleftrightarrow$ $K[x]$ 加群の $K$ 上のベクトル空間としての次元
+\item 巡回群 $Z/n\Z$ $\longleftrightarrow$ 巡回 $K[x]$ 加群 $K[x]/f(x)K[x]$
+\item 素数べき $p^e$ $\longleftrightarrow$ $\alpha\in K$ に対する $(x-\alpha)^e$
+\item 素数べき位数の巡回群 $\Z/p^e\Z$ $\longleftrightarrow$ 
+点 $\alpha$ に台を持つ巡回 $K[x]$ 加群 $K[x]/(x-\alpha)^eK[x]$
+\end{itemize}
+$K[x]$ 加群の世界における行列の対応物は $K[x]$ 加群への $x$ 倍の作用である.
+有限Abel群の世界には行列の類似物は存在しない. 
+完全な類似が不可能になっているおかげで話が面白くなっているとも考えられる.
+
+$A$ は $K$ の元を成分とする $n\times n$ 行列であるとする.
+$A$ は行列の積によって列ベクトルの空間 $K^n$ に左から作用している.
+だから $x$ の作用を行列 $A$ の作用で定めることによって, 
+$M=K^n$ を $K[x]$ 加群とみなせる:
+\[
+f(x)v := f(A)v \quad (v\in M=K^n,\; f(x)\in K[x]).
+\]
+$M=K^n$ は $K[x]$ 加群でかつ $K$ 上のベクトル空間として有限次元である.
+$K$ 上有限次元の $K[x]$ 加群を考えること
+と $K$ の元を成分に持つ $n\times n$ 行列を考えることは同じことである.
+
+もしも $K$ 上有限次元な $K[x]$ 加群 $M$ が
+\[
+  C_{\alpha,e}:=K[x]/(x-\alpha)^eK[x]
+\]
+に同型な $K[x]$ 加群の直和%
+\footnote{$K[x]$ 加群の有限直和と有限直積は同じもの}になっていることが
+わかれば, 行列 $A$ のJordan標準形が存在することが示されたことになる.
+
+なぜならば, 
+$C_{\alpha,e}=K[x]/(x-\alpha)^eK[x]$ の
+基底として $(x-\alpha)^{e-1},(x-\alpha)^{e-2},\ldots,(x-\alpha)^0$ 
+の像を取るとき, $x$ の作用が定める線形写像の行列表示が
+ちょうどJordanブロックの形になるからである.
+そのことは以下のようにして確かめられる.
+以下の $\equiv$ はすべて $\MOD\; (x-\alpha)^e$ の合同関係である: 
+\begin{align*}
+&
+x(x-\alpha)^{e-1} = (x-\alpha)^e+\alpha(x-\alpha)^{e-1} \equiv \alpha(x-\alpha)^{e-1},
+\\ &
+x(x-\alpha)^{e-2} = (x-\alpha)^{e-1}+\alpha(x-\alpha)^{e-2},
+\\ &
+\qquad\qquad\cdots\cdots\cdots
+\\ &
+x(x-\alpha)^0     = (x-\alpha)^1 + \alpha(x-\alpha)^0.
+\end{align*}
+すなわち, 
+\begin{align*}
+&
+[x(x-\alpha)^{e-1},x(x-\alpha)^{e-1},\ldots,x(x-\alpha)^0]
+\\[-\medskipamount] & \qquad\qquad
+\equiv
+[(x-\alpha)^{e-1},(x-\alpha)^{e-1},\ldots,(x-\alpha)^0]
+\begin{bmatrix}
+ \alpha & 1      &        & \\
+        & \alpha & \ddots & \\
+        &        & \ddots & 1 \\
+        &        &        & \alpha \\
+\end{bmatrix}.
+\end{align*}
+ゆえに $x$ の $C_{\alpha,e}$ への作用が定める線形写像の上の基底に関する行列表示は
+\[
+J_{\alpha,e}=
+\begin{bmatrix}
+ \alpha & 1      &        & \\
+        & \alpha & \ddots & \\
+        &        & \ddots & 1 \\
+        &        &        & \alpha \\
+\end{bmatrix}
+\quad (\text{$e\times e$ 行列})
+\]
+というJordanブロックの形になる.
+
+これで, 有限Abel群が素数べき位数の巡回群の直積に分解するという
+結果(\corref{cor:finAbel-1})の類似を $K$ 上有限次元
+の $K[x]$ 加群について証明できればJordan標準形の存在を
+証明できることわかった.
+($C_{\alpha,e}=K[x]/(x-\alpha)^eK[x]$ は素数べき位数の巡回群の類似物になっている.)
+
+モニックな%
+\footnote{最高次の係数が1であるという意味.
+ある意味でモニックな多項式全体の集合は正の整数全体の集合の類似物だとみなされる.}%
+多項式 $f(x)\in K[x]$ に対して, 
+$f(x)=(x-\alpha_1)^{e_1}\cdots(x-\alpha_N)^{e_N}$ かつ, 
+$\alpha_i$ たちが $K$ の互いに異なる元であり, 
+$e_i$ たちが $0$ 以上の整数であるとき, 
+\[
+f(x)=(x-\alpha_1)^{e_1}\cdots(x-\alpha_N)^{e_N}
+\]
+を $f(x)$ の素因数分解と呼ぶことにする.
+
+多項式環でも中国式剰余定理がそのまま成立しており, 
+たとえば素因数分解 $f(x)=(x-\alpha_1)^{e_1}\cdots(x-\alpha_N)^{e_N}$
+について次が成立している:
+\[
+K[x]/f(x)K[x]\cong 
+C_{\alpha_1,e_1}\times\cdots\times C_{\alpha_N,e_N}.
+\]
+このことから, 行列 $A$ のJordan標準形の存在と一意性を証明するためには
+\theoremref{theorem:finAbel-1}, \ref{theorem:finAbel-2}と類似の結果を
+$K$ 上有限次元の $K[x]$ 加群について証明できればよいことがわかる.
+次の節で有限Abel群の場合との類似をたどった証明の概略について説明しよう.
+
+
+\subsection{$K$ 上有限次元の $K[x]$ 加群の構造}
+
+$M$ は $K$ 上のベクトル空間として
+有限次元であるような $K[x]$ 加群であるとする.
+$M$ の $K$ 上の基底を取ることに
+よって $M$ は $K^n$ と同一視できる.
+その同一視のもとで $x$ の $M$ への作用が定める $M$ の一次変換
+は $K$ の元を成分とするある $n\times n$ 行列 $A$ と同一視される.
+行列 $A$ を直接扱う代わりに我々は $K[x]$ 加群 $M$ を扱うことになる.
+
+$\dim_K M=n$ なので任意の $v\in M$ に対して $n+1$ 個の
+元 $v,xv,x^2v,\ldots,x^nv$ は $K$ 上一次従属になる.
+ゆえにあるモニックな多項式 $f(x)\in K[x]$ で $f(x)v=0$ となるもの
+が存在する. そのようなモニックな多項式の中で次数が最小の多項式が
+一意的に定まることを示せる\footnote{示してみよ}.
+そのモニックな多項式を $\phi_v(x)\in K[x]$ と書く.
+
+$K[x]$ 加群の準同型定理によって同型
+$K[x]v\cong K[x]/\phi_v(x)K[x]$ が成立していることを示せる.
+この結果は有限Abel群 $G$ の元 $a$ の位数を $r$ と
+書くと $\bra a\ket\cong\Z/r\Z$が成立することの類似である.
+
+$\dim_K K[x]v = \deg \phi_v(x)\leqq n$ が成立している.
+$v\in M$ に対する $\phi_v(x)$ は有限Abel群 $G$ の元 $a$ の位数 $r$ の類似物であり,  
+$\deg \phi_v(x)\leqq\dim_K M$ は $r\leqq|G|$ の類似である.
+
+\begin{lemma}[\lemmaref{lemma:lcm}の類似]\label{lemma:lcm'}
+任意の $u,v\in M$ に対して $\phi_u(x), \phi_v(x)$ の
+最小公倍多項式を $m(x)$ と書くと, ある $w\in M$ が
+存在して $\phi_w(x)=m(x)$ となる.
+\end{lemma}
+
+\begin{proof}
+あるモニック多項式 $f(x),g(x),h(x),k(x)$ で
+$\phi_u(x)=f(x)g(x)$, $\phi_v(x)=h(x)k(x)$, $m(x)=f(x)k(x)$ を満たし, 
+$f(x)$ と $k(x)$ が互いに素であるものが存在する
+(多項式の素因数分解を使えば存在を示せる).
+$u'=g(x)u$, $v'=h(x)v$ とおくと, $\phi_{u'}(x)=f(x)$, $\phi_{v'}(x)=k(x)$ となり, 
+それらは互いに素になる.
+
+$z\in K[x]u'\cap K[x]v'$ に対する $\phi_z(x)$ は $f(x)$ と $k(x)$ の
+共約多項式になるので $1$ になる. ゆえに $z=1z=\phi_z(x)z=0$ となる.
+これで $K[x]u'\cap K[x]v'=0$ となることがわかった.
+
+ゆえに $K[x]u'+K[x]v'$ は直和になる.
+
+$K[x]$ に関する中国式剰余定理は,  
+$(K[x]/f(x)K[x])\times(K[x]/k(x)K[x])$ が
+\[
+a=(1 \MOD f(x), 1 \MOD k(x))
+\]
+から生成される巡回 $K[x]$ 加群になり, $\phi_a(x)=f(x)k(x)$ 
+となることを意味している($K[x]a\cong K[x]/f(x)k(x)K[x]$).
+そのことから, $K[x]u'+K[x]v'$ は $w=u'+v'$ から生成される巡回 $K[x]$ 加群に
+なり, $\phi_w(x)=f(x)k(x)=m(x)$ となることがただちに導かれる.
+\qed
+\end{proof}
+
+上の証明は\remarkref{remark:lcm}の内容の焼き直しに過ぎない.
+
+この\lemmaref{lemma:lcm'}を使えば, 
+\lemmaref{lemma:maxord}の証明とまったく同様にして次の補題が示される.
+
+\begin{lemma}[\lemmaref{lemma:maxord}の類似]\label{lemma:maxord'}
+$w$ は $M$ の元で $\deg \phi_w(x)$ が最大になるものであるとする.
+このとき任意の $v\in M$ に対して $\phi_v(x)|\phi_w(x)$ となる.
+ここで多項式 $f(x),g(x)$ に
+対して $f(x)|g(x)$ は $f(x)$ が $g(x)$ を割り切ることを意味する.
+\qed
+\end{lemma}
+
+\begin{lemma}[\lemmaref{lemma:N}の類似]\label{lemma:N'}
+$w$ は $M$ の元で $\deg \phi_w(x)$ が最大になるものであるとし, 
+$M\ne K[x]w$ であると仮定する.
+このとき $M$ の $K[x]$ 部分加群 $L\ne 0$ で
+$K[x]w\cap L=0$ をみたすものが存在する.
+\end{lemma}
+
+\begin{proof}
+$\Mbar=M/K[x]w$ とおき, 自然な射影を $\pi:M\to\Mbar$, $v\mapsto v+K[x]w$ と
+書く. 仮定 $M\ne K[x]w$ より, ある $z\in M$ で $z\not\in K[x]w$ となるもの
+が存在する.  \lemmaref{lemma:maxord'}より, $\phi_z(x)$ は $\phi_w(x)$ を割り切る.
+
+$z\not\in K[x]w$ なので $\pi(w)\ne 0$ である.  $\phi_{\pi(z)}(x)$ は $\phi_z(x)$ 
+を割り切り, $\pi(z)\ne 0$ より $\deg \phi_{\pi(z)}(x)>1$ となる.
+$\pi(\phi_{\pi(z)}(x)z)=0$ なので $\phi_{\pi(z)}(x)z\in K[x]w$ となる.
+ゆえにある多項式 $g(x)\in K[x]$ で $\phi_{\pi(z)}(x)z=g(x)w$ を
+満たすものが存在する. このとき
+\[
+0 = \phi_z(x)z 
+= \frac{\phi_z(x)}{\phi_{\pi(z)}(x)} \phi_{\pi(z)}(x)z
+=  \frac{\phi_z(x)}{\phi_{\pi(z)}(x)} g(x)w
+\]
+なので, ある多項式 $h(x)\in K[x]$ が存在して $\phi_z(x)g(x)/\phi_{\pi(z)}(x)=h(x)\phi_w(x)$
+となる. このとき $g(x)/\phi_{\pi(z)}(x) = h(x)\cdot \phi_w(x)/\phi_z(x)\in K[x]$ となる.
+ゆえに $M$ の元 $u$ を次のように定めることができる:
+\[
+u = z - \frac{g(x)}{\phi_{\pi(z)}(x)}w.
+\]
+$L=K[x]u$ が構成したい $M$ の $K[x]$ 部分加群であることを示そう.
+まず, $\pi(u)=\pi(z)$ なので $\phi_{\pi(u)}(x)=\phi_{\pi(z)}(x)$ の次数は $1$ より
+大きく, ゆえに $\phi_u(x)$ の次数も $1$ より大きいので, $L=K[x]u\ne 0$ である.
+次に, $v\in K[x]w\cap L=K[x]w\cap K[x]u$ とすると, 
+$v=p(x)w=q(x)u$, $p(x),q(x)\in K[x]$ と書ける.
+$0=\pi(p(x)w)=\pi(v)=\pi(q(x)u)=q(x)\pi(u)$ より, $q(x)$ は $\phi_{\pi(u)}(x)=\phi_{\pi(z)}(x)$
+で割り切れる. しかし, $\phi_{\pi(z)}(x)u=\phi_{\pi(z)}(x)z-g(x)w=0$ なので  
+$v=q(x)u=(q(x)/\phi_{\pi(z)}(x))\phi_{\pi(z)}(x)u=0$ となる.
+これで $K[x]w\cap L=K[x]w\cap K[x]u=0$ となることもわかった.
+\qed
+\end{proof}
+
+上の証明は\lemmaref{lemma:N}の証明の焼き直しに過ぎない.
+
+以上の準備のもとで, 
+以下の結果は有限Abel群の場合とまったく同様に証明できる.
+
+\begin{lemma}[\lemmaref{lemma:H}の類似]\label{lemma:H'}
+$w$ を $M$ の元で $\deg \phi_w(x)$ が最大になるものとすると, 
+$M$ は巡回 $K[x]$ 部分加群 $K[x]w$ とある $K[x]$ 部分加群 $W$ の直和に分解する.
+\qed
+\end{lemma}
+
+\begin{theorem}[\theoremref{theorem:finAbel-1}の類似]\label{theorem:finK[x]mod-1}
+$K$ 上有限次元の $K[x]$ 加群 $M$ に対して, $0$ 以外の $w_1,w_2,\ldots,w_N\in M$ で
+以下の条件を満たすものが存在する($M=0$ の場合には $N=0$ とみなす):
+\begin{itemize}
+\item $M$ は巡回 $K[x]$ 部分加群 $K[x]w_1,\ldots,K[x]w_N$ の直和に分解する.
+\item $d_i(x)=\phi_{w_i}(x)$ とおくと, $d_N(x)|\cdots|d_2(x)|d_1(x)$.
+\qed
+\end{itemize}
+\end{theorem}
+
+\begin{theorem}[\theoremref{theorem:finAbel-2}の類似]\label{theorem:finK[x]mod-2}
+\theoremref{theorem:finK[x]mod-1}の多項式 $d_1(x),d_2(x),\ldots,d_N(x)$ 
+は $M$ から一意的に決まる. 
+(この $(d_1(x),d_2(x),\ldots,d_N(x))$ を $M$ の
+{\bf 単因子 (elementary divisors)}と呼ぶ.)
+\qed
+\end{theorem}
+
+\begin{remark}
+\theoremref{theorem:finK[x]mod-1}, \ref{theorem:finK[x]mod-2}は
+$K$ が代数閉体とは限らない任意の体の場合にも成立している.
+\qed
+\end{remark}
+
+証明を省略した部分を自力で埋めよ. 
+
+このノートの全体を自分好みに書き直してみよ.
+
+このノートの内容に誤りがあれば訂正せよ.
+
+%以上の議論を単項イデアル整域上の有限生成ねじれ加群の場合に一般化せよ.
+
+
+
+\section{有限Abel群の巡回群の直積への分解の別証明}
+
+\secref{sec:Abel}
+の証明と内容的には本質的に同じなのだが, 
+正方行列の一般固有空間分解と類似の分解を使ったより短い証明も
+可能なので紹介しておく.
+
+有限Abel群 $G$ が巡回群の直積に分解することを証明しよう.
+
+\begin{proof}
+$G$ は位数 $n$ の有限Abel群であるとし, 
+$n$ の素因数分解を $n=p_1^{e_1}\cdots p_N^{e_N}$ 
+($p_i$ たちは互いに異なる素数で $e_i$ たちは正の整数)と書いておく.
+任意の $a\in G$ について $a^n=1$ となる.
+
+$q_i=n/p_i^{e_i}$ とおく. $q_1,\ldots,q_N$ の最大公約数は $1$ 
+なので, ある整数 $k_1,\ldots,k_N$ で
+\[
+k_1q_1+\cdots+k_Nq_N=1
+\]
+を満たすものが存在する. 
+$r_i=k_iq_i$ とおくと $r_1+\cdots+r_N\equiv 1 \pmod{n}$ となり, 
+$i\ne j$ のとき $q_iq_j$ は $n$ で割り切れるので $r_ir_j\equiv 0\pmod{n}$
+となる. $r_1+\cdots+r_N\equiv 1 \pmod{n}$ の両辺に $r_i$ をかける
+ことによって $r_i^2\equiv r_i\pmod{n}$ も得られる.
+
+$G$ の部分集合 $G_i$ を
+\[
+ G_i=G^{r_i}=\{\,a^{r_i}\mid a\in G\,\}
+\]
+と定めると, $G_i$ は $G$ の部分群になる.
+
+$G$ が $G_1,\ldots,G_N$ の直積に分解することを示そう.
+
+任意の $a\in G$ に対して,
+\[
+ a = a^{r_1+\cdots+r_N} = a^{r_1}\cdots a^{r_N} 
+\]
+が成立するので, $G=G_1\cdots G_N$.
+
+$a_i\in G_i$ かつ $a_1\cdots a_N=1$ のとき, 
+各 $a_i$ はある $b_i\in G$ によって $a_i=b_i^{r_i}$ と表される.
+ゆえに
+\[
+1=(a_1\cdots a_N)^{r_i}=b_1^{r_1r_i}\cdots b_i^{r_i^2}\cdots b_N^{r_Nr_i}
+=b_i^{r_i}=a_i
+\]
+となり, $a_1=\cdots=a_N=1$ となることがわかる.
+
+以上の結果を合わせると, 
+$G$ が $G_1,\ldots,G_N$ の直積に分解することがわかる.
+
+各 $G_i$ はそのすべての元の位数が $p_i$ のべきであるような
+有限Abel群になる. ゆえにすべての元の位数が素数 $p$ のべきであるような
+有限Abel群 $G$ が巡回群の直積に分解することを示せば十分である.
+そのことを $G$ の位数に関する数学的帰納法で証明しよう.
+
+$G$ はすべての元の位数が
+素数 $p$ のべきであるような有限Abel群であると仮定する.
+$G$ の位数最大の元 $a$ を取り, 
+その位数を $p^r$ と表わす.
+$G$ が $\bra a\ket$ とある部分群の直積に分解することを
+$G$ の位数に関する数学的帰納法で証明しよう.
+
+もしも $G=\bra a\ket$ なら証明するべきことはないので, 
+$G\ne\bra a\ket$ と仮定してよい.
+そのとき, ある $b\in G$ で $b\not\in\bra a\ket$ をみたすものが存在する.
+$b$ の位数は $p^s$, $s\leqq r$ の形をしている.
+
+$G/\bra a\ket$ での $b$ の像の位数を $p^t$, $0<t\leqq s$ と書くと, 
+$b^{p^t}\in\bra a\ket$ となるので, ある整数 $k$ が存在して $b^{p^t}=a^k$ となる.
+このとき $1=b^{p^s}=b^{p^tp^{s-t}}=a^{kp^{s-t}}$ より, $kp^{s-t}$ は $p^m$ で
+割り切れるので, $p^s$ でも割り切れる. ゆえに $c\in G$ を $c=a^{-kp^{-t}}b$
+と定めることができる. $c$ と $b$ の $G/\bra a\ket$ での像は等しく, 
+その像の位数 $p^t$ は $1$ より大きいので, $c$ の位数も $1$ より大きい.
+ゆえに $\bra c\ket\ne\{1\}$.
+
+さらに $x\in\bra a\ket\cap\bra c\ket$ のとき, 
+$x=a^i=c^j$, $i,j\in\Z$ と書け, 
+その $G/\bra a\ket$ での像は $1$ になり, 
+$b^j$ の像に一致するので,  
+$j$ は $p^t$ で割り切れることになり,
+$x=c^j=c^{p^t\cdot j/p^t}=(a^{-k}b^t)^{j/p^t}=1^{j/p^t}=1$.
+これで $\bra a\ket\cap\bra c\ket=\{1\}$ が示された.
+
+$G/\bra c\ket$ の位数は $G$ より小さく, 
+その元の位数は $p$ のべきになる.
+ゆえに $G/\bra c\ket$ は $\bra a\ket$ の像とある部分群 $\Hbar$ の直積に
+分解する. $G$ が $\bra a\ket$ と $\Hbar$ の逆像 $H$ の直積に分解することを
+示せる.
+
+$G$ が $\bra a\ket$ とある部分群 $H$ の直積に分解することを示せた.
+$H$ の位数は $G$ の位数より小さいと仮定してよい.
+ゆえに帰納法の過程によって $H$ は巡回群の直積に分解する.
+したがって $G$ も巡回群の直積に分解する.
+\qed
+\end{proof}
+
+$K$ が代数閉体であるとき, $K$ の元を要素とする任意の $n$ 次正方行列 $A$
+について $K^n$ が $A$ の一般固有空間の直和に分解されることは
+以下のようにして示される. 上の証明の最初の部分と比較してみよ.
+
+\begin{proof}
+$A$ の特性多項式を $\varphi(x)=|xE-A|$ と書くと, Cayley-Hamiltonの定理より, 
+$\varphi(A)=0$ が成立する. 
+$\varphi(x)$ の素因数分解を $\varphi(x)=(x-\alpha_1)^{e_1}\cdots(x-\alpha_N)^{e_N}$
+($\alpha_i$ たちは $K$ の互いに異なる元であり, $e_i$ たちは正の整数)
+と書いておく.
+$\varphi_i(x)=\varphi_i(x)/(x-\alpha_i)^{e_i}$ とおくと, 
+$\varphi_i(x)$ たちの最大公約公式は $1$ なので
+ある $a_1(x),\ldots,a_N(x)\in K[x]$ が存在して
+\[
+a_1(x)\varphi_1(x)+\cdots+a_N(x)\varphi_N(x)=1
+\]
+となる. このとき, $P_i=a_i(A)\varphi_i(A)$ とおくと, $P_1+\cdots+P_N=E$
+であり, $i\ne j$ のとき $\varphi_i(x)\varphi_j(x)$ は $\varphi(x)$ で
+割り切れるので $P_iP_j=0$ となる.  $P_1+\cdots+P_N=E$ の両辺に $P_i$ を
+かけることによって $P_i^2=P_i$ も得られる.
+
+$K^n$ の部分空間 $W_i$ を $W_i=P_iK^n$ と定める.
+$(x-\alpha_i)^{e_i}\varphi_i(x)=\varphi(x)$ より
+$(A-\alpha_i)^{e_i}W_i=\{0\}$ となることもわかる.
+ゆえに $K^n$ が $W_i$ たちの直和に分解されていることを示せれば, 
+$K^n$ が一般固有空間の直和に分解することを示せたことになる.
+
+$P_1+\cdots+P_N=E$ より $W_1+\cdots+W_N=K^n$ となることがわかる.
+$w_i\in W_i$, $w_1+\cdots+w_N=0$ のとき, 両辺に $P_i$ を
+作用させると $P_i^2=P_i$, $P_iP_j=0$ ($i\ne j$) より, $w_i=0$ を得る.
+これで直和分解 $K^n=W_1\oplus\cdots\oplus W_N$ が
+成立していることが示された.
+\qed
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{良書紹介}
+
+有限Abel群の構造論とJordan標準形の理論の類似性は単項イデアル整域上(PID上)の有限生成加群の構造定理に統一される.
+その辺りの話は次の本の第3話に書いてある(最初にpp.~50--51を参照せよ):
+
+\begin{itemize}
+\item 堀田良之, 加群十話―代数学入門―, すうがくぶっくす3, 朝倉書店, 1988年, ii頁+186頁
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
