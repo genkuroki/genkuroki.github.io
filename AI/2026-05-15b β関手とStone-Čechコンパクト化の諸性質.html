@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完全解説：β関手とStone-Čechコンパクト化の諸性質</title>
+    <!-- MathJax 3 Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --danger-color: #e74c3c;
+            --success-color: #27ae60;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            line-height: 1.7;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .main-content {
+            max-width: 950px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2.4em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: var(--primary-color);
+            border-left: 6px solid var(--accent-color);
+            padding-left: 15px;
+            margin-top: 45px;
+            background: #f8f9fa;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .problem-statement {
+            background-color: #eef2f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 6px solid var(--primary-color);
+        }
+        .theorem-env {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-left: 6px solid var(--success-color);
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .proof-box {
+            background-color: #fdfdfd;
+            border: 1px solid #ddd;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .counter-example {
+            border-left: 6px solid var(--danger-color);
+            background-color: #fff5f5;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .note {
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: var(--primary-color);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h1>$\beta$関手とStone-Čechコンパクト化の諸性質</h1>
+
+        <div class="problem-statement">
+            <strong>問題提起：</strong><br>
+            集合 $Y$ と位相空間 $X$、および写像 $\phi: \beta Y \to X$ が与えられている。
+            $f = \phi \circ \iota_Y$ とおくとき、等式 
+            $$\beta f = \iota_X \circ \phi$$ 
+            は常に成立するか？
+        </div>
+
+        <section>
+            <h2>1. 集合圏（Sets）における検討と反例</h2>
+            <p>結論から述べると、単なる集合と写像の枠組み（連続性を仮定しない場合）において、この等式は<strong>一般には成立しません</strong>。</p>
+            
+            <div class="counter-example">
+                <h3>反例の構成</h3>
+                <p>$Y$ を自然数の集合 $\mathbb{N}$、$X$ を2点集合 $\{0, 1\}$ とします。</p>
+                <p>$\beta \mathbb{N}$ には少なくとも1つの自由ウルトラフィルター（どの有限集合も含まないウルトラフィルター）が存在します。これを $U_\infty \in \beta \mathbb{N}$ とします。</p>
+                <p>ここで、写像 $\phi: \beta \mathbb{N} \to \{0, 1\}$ を次のように定義します：</p>
+                <ul>
+                    <li>$U$ が単項ウルトラフィルター $\iota_{\mathbb{N}}(n)$ であるとき： $\phi(U) = 0$</li>
+                    <li>$U$ が自由ウルトラフィルターであるとき（$U_\infty$ を含む）： $\phi(U) = 1$</li>
+                </ul>
+
+                <h4>(1) 左辺 $\beta f$ の評価</h4>
+                <p>$f = \phi \circ \iota_{\mathbb{N}}: \mathbb{N} \to \{0, 1\}$ を考えると、すべての $n \in \mathbb{N}$ に対して $f(n) = \phi(\iota_{\mathbb{N}}(n)) = 0$ です。つまり $f$ は定数写像です。したがって、$\beta f$ はすべてのウルトラフィルターを $\iota_X(0)$ に写します。
+                $$\beta f(U_\infty) = \iota_X(0)$$</p>
+
+                <h4>(2) 右辺 $\iota_X \circ \phi$ の評価</h4>
+                <p>$\phi$ の定義により $\phi(U_\infty) = 1$ なので、
+                $$(\iota_X \circ \phi)(U_\infty) = \iota_X(\phi(U_\infty)) = \iota_X(1)$$</p>
+                
+                <p>$\iota_X(0) \neq \iota_X(1)$ であるため、自由ウルトラフィルター上で値が異なり、等式は成立しません。</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. 位相空間圏（Top）における成立</h2>
+            <p>$\phi: \beta Y \to X$ が<strong>連続写像</strong>であるという条件が加わると、等式は常に成立します。</p>
+
+            <div class="theorem-env">
+                <strong>定理：</strong> $X$ が位相空間であり、$\phi: \beta Y \to X$ が連続であれば、$\beta f = \iota_X \circ \phi$ が成立する。
+            </div>
+
+            <div class="proof-box">
+                <h3>成立の論理的証明</h3>
+                <ol>
+                    <li><strong>部分集合上の一致：</strong> 
+                        $\iota$ は自然変換 $\text{Id} \to \beta$ であるため、任意の $f: Y \to X$ に対し $\beta f \circ \iota_Y = \iota_X \circ f$ が成立する。
+                        ここに $f = \phi \circ \iota_Y$ を代入すると：
+                        $$(\beta f) \circ \iota_Y = (\iota_X \circ \phi) \circ \iota_Y$$
+                        となり、$\beta Y$ の部分空間である $\iota_Y(Y)$ 上で両辺は一致する。
+                    </li>
+                    <li><strong>写像の連続性：</strong> 
+                        $\beta f$ は定義により連続である。また、$\phi$ が連続であり $\iota_X: X \to \beta X$ も連続であるため、合成写像 $\iota_X \circ \phi$ も連続である。
+                    </li>
+                    <li><strong>Hausdorff性と稠密性：</strong> 
+                        $\beta X$ はコンパクト Hausdorff 空間であり、$\iota_Y(Y)$ は $\beta Y$ において稠密である（後述の証明参照）。
+                        Hausdorff 空間への連続写像が稠密な部分集合上で一致するならば、空間全体で一致する。
+                    </li>
+                </ol>
+                <p style="text-align: right;">（証明終）</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. 基礎となる定理の詳細な証明</h2>
+
+            <div class="proof-box">
+                <h3>定理 A: $\iota_Y(Y)$ の $\beta Y$ における稠密性</h3>
+                <p>$\beta Y$ の位相の基底を $\hat{A} = \{ \mathcal{U} \in \beta Y \mid A \subseteq Y, A \in \mathcal{U} \}$ とする。</p>
+                <p><strong>【証明】</strong><br>
+                $\beta Y$ の空でない任意の開集合 $G$ をとる。基底の定義より、ある空でない $A \subseteq Y$ に対して $\hat{A} \subseteq G$ となる。<br>
+                $A$ は空ではないので、ある元 $y \in A$ が存在する。このとき、単項ウルトラフィルター $\iota_Y(y)$ は $A$ を元として持つため（$A \in \iota_Y(y)$）、定義により $\iota_Y(y) \in \hat{A}$ である。<br>
+                したがって $\iota_Y(y) \in G$ となり、$\iota_Y(Y) \cap G \neq \emptyset$ が示された。よって $\iota_Y(Y)$ は $\beta Y$ において稠密である。$\square$</p>
+            </div>
+
+            <div class="proof-box">
+                <h3>定理 B: 連続写像の一致の定理</h3>
+                <p><strong>【証明】</strong><br>
+                $g, h: S \to Z$ を連続写像、$Z$ を Hausdorff 空間とする。稠密な $A \subseteq S$ 上で $g(a) = h(a)$ とする。<br>
+                ある $s \in S$ で $g(s) \neq h(s)$ と仮定する。$Z$ の Hausdorff 性より、$g(s)$ と $h(s)$ の互いに素な開近傍 $V_g, V_h$ が存在する。<br>
+                連続性より、$g^{-1}(V_g)$ と $h^{-1}(V_h)$ は共に $s$ の開近傍である。その共通部分 $U = g^{-1}(V_g) \cap h^{-1}(V_h)$ も $s$ の開近傍であり、空ではない。<br>
+                $A$ の稠密性より、ある $a \in A \cap U$ が存在する。このとき $g(a) \in V_g$ かつ $h(a) \in V_h$ であるが、仮定 $g(a) = h(a)$ より $V_g \cap V_h \neq \emptyset$ となり、互いに素であることに矛盾する。$\square$</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. 連続性の有無による比較</h2>
+            <table>
+                <tr>
+                    <th>特性</th>
+                    <th>集合圏（Sets）</th>
+                    <th>位相空間圏（Top）</th>
+                </tr>
+                <tr>
+                    <td><strong>自由ウルトラフィルターの挙動</strong></td>
+                    <td>単項ウルトラフィルターの像とは独立に決定可能</td>
+                    <td>単項ウルトラフィルターの極限として一意に決定</td>
+                </tr>
+                <tr>
+                    <td><strong>等式の成立</strong></td>
+                    <td>$\phi$ の定義に依存（反例あり）</td>
+                    <td><strong>常に成立する</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>背景理論</strong></td>
+                    <td>単なる関手性</td>
+                    <td>Stone-Čechコンパクト化の普遍性</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>5. カテゴリー論的視点：随伴性と普遍性</h2>
+            <p>Stone-Čechコンパクト化の普遍性は、包含関手 $U: \mathbf{KHaus} \to \mathbf{Top}$ の左随伴関手として理解できます。</p>
+            <div class="note">
+                $$ \text{Hom}_{\mathbf{Top}}(Y, U(X)) \cong \text{Hom}_{\mathbf{KHaus}}(\beta Y, X) $$
+            </div>
+            <p>任意の連続写像 $f: Y \to X$ に対して、その延長である $\bar{f}: \beta Y \to X$ が唯一存在します。
+            問題の $\phi$ が連続であるという仮定は、$\phi$ がまさに $f$ のStone-Čech延長としての役割を果たしていることを意味します。連続写像としての「延長の一意性」が、$\beta f$ と $\phi$ の（埋め込みを通じた）一致を強制しているのです。</p>
+        </section>
+
+        <div class="footer">
+            <p>© 2026 数学基礎論・位相空間論 統合講義ドキュメント</p>
+        </div>
+    </div>
+</body>
+</html>

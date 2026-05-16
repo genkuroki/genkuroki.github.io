@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクト生成位相空間の定義・特徴付け・証明</title>
+    <!-- MathJaxの設定と読み込み -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #fefefe;
+        }
+        h1 {
+            font-size: 1.8em;
+            color: #111;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-top: 40px;
+            border-left: 5px solid #2980b9;
+            padding-left: 15px;
+            padding-bottom: 2px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #34495e;
+            margin-top: 25px;
+            background-color: #ecf0f1;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        p {
+            margin: 1.2em 0;
+            text-align: justify;
+        }
+        ul, ol {
+            padding-left: 25px;
+            margin: 1.2em 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        blockquote {
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            border-left: 4px solid #7f8c8d;
+            margin: 1.5em 0;
+            padding: 15px 20px;
+            font-style: normal;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 40px 0;
+        }
+        .proof {
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .proof-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+        }
+        .proof-end {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 15px;
+        }
+        .important {
+            font-weight: bold;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>コンパクト生成位相空間の定義、特徴付け、およびその証明</h1>
+    
+    <p>
+        <strong>コンパクト生成位相空間（Compactly generated topological space）</strong>（あるいは <strong>$k$空間（$k$-space）</strong>）は、代数的位相幾何学や圏論的位相幾何学において、関数空間や積空間を心地よく扱う（デカルト閉圏を構成する）ために導入される、極めて重要な空間のクラスです。
+    </p>
+    <p>
+        以下に、その厳密な定義、3つの強力な特徴付け、およびそれらの詳細な証明をまとめます。なお、便宜上、位相空間 $X$ に対し、コンパクトハウスドルフ空間 $K$ からの連続写像 $g: K \to X$ 全体の集合を $\mathcal{C}(X)$ と表記します。
+    </p>
+
+    <hr>
+
+    <h2>1. コンパクト生成位相空間の定義</h2>
+    
+    <p>
+        位相空間 $X$ がコンパクト生成であるとは、その位相（開集合や閉集合）が「コンパクトハウスドルフ空間からの引き戻し」によって完全に決定されていることを指します。
+    </p>
+
+    <blockquote>
+        <strong>【定義】</strong><br>
+        位相空間 $X$ の部分集合 $A \subset X$ が<strong>「$k$閉集合」</strong>であるとは、任意のコンパクトハウスドルフ空間 $K$ と任意の連続写像 $g: K \to X$ に対し、$g^{-1}(A)$ が $K$ の閉集合となること（すなわち任意の $g \in \mathcal{C}(X)$ に対して $g^{-1}(A)$ が閉）をいう。<br>
+        空間 $X$ が<strong>コンパクト生成位相空間</strong>であるとは、<span class="important">「任意の $k$閉集合は、元の位相における閉集合である」</span>が成り立つ空間のことをいう。
+    </blockquote>
+    
+    <p>※ 連続写像による閉集合の逆像は常に閉集合であるため、「通常の閉集合 $\implies$ $k$閉集合」は常に自明に成り立ちます。したがって、コンパクト生成空間とは「通常の閉集合」と「$k$閉集合」が完全に一致する空間のことです（開集合で定義しても同値です）。</p>
+
+    <hr>
+
+    <h2>2. 有用な特徴付け（同値な条件）と詳細な証明</h2>
+
+    <!-- 特徴付け 1 -->
+    <h2>特徴付け ①：写像の連続性による特徴付け</h2>
+    <blockquote>
+        <strong>【定理】</strong><br>
+        位相空間 $X$ がコンパクト生成空間、$Y$ を任意の位相空間とする。写像 $f: X \to Y$ が連続であるための必要十分条件は、任意のコンパクトハウスドルフ空間 $K$ と任意の連続写像 $g: K \to X$ に対し、合成写像 $f \circ g: K \to Y$ が連続となることである。
+    </blockquote>
+
+    <div class="proof">
+        <div class="proof-title">【特徴付け ① の詳細な証明】</div>
+        <p><strong>$(\Rightarrow)$ の証明：</strong></p>
+        <p>
+            $f: X \to Y$ が連続であると仮定します。このとき、任意の $g \in \mathcal{C}(X)$（すなわち連続写像 $g: K \to X$）に対して、連続写像の合成 $f \circ g: K \to Y$ も連続写像の一般的な性質から当然連続となります。
+        </p>
+        
+        <p><strong>$(\Leftarrow)$ の証明：</strong></p>
+        <p>
+            任意の $g \in \mathcal{C}(X)$ に対して $f \circ g: K \to Y$ が連続であると仮定します。$f$ が $X$ 上で連続であることを示すために、$Y$ の任意の閉集合 $B$ を取ります。このとき、逆像 $A = f^{-1}(B)$ が $X$ の閉集合であることを示せば十分です。
+        </p>
+        <p>
+            $X$ はコンパクト生成空間であるため、$A$ が「$k$閉集合」であることを示せば、元の位相でも閉集合であることが従います。そこで、任意の $g \in \mathcal{C}(X)$ （$g: K \to X$）を取ると、集合の基本性質より以下が成り立ちます：
+            $$ g^{-1}(A) = g^{-1}(f^{-1}(B)) = (f \circ g)^{-1}(B) $$
+            仮定より合成写像 $f \circ g$ は連続であり、$B$ は $Y$ の閉集合なので、$(f \circ g)^{-1}(B)$ は $K$ の閉集合です。
+        </p>
+        <p>
+            したがって、任意の $g \in \mathcal{C}(X)$ に対して $g^{-1}(A)$ は $K$ の閉集合となるため、$A$ は $k$閉集合の定義を満たします。$X$ はコンパクト生成空間なので、$A = f^{-1}(B)$ は $X$ の通常の位相における閉集合となります。ゆえに $f$ は連続です。
+        </p>
+        <div class="proof-end">$\blacksquare$</div>
+    </div>
+
+    <!-- 特徴付け 2 -->
+    <h2>特徴付け ②：$k$化（$k$-ification）による特徴付け</h2>
+    <blockquote>
+        <strong>【定理】</strong><br>
+        任意の位相空間 $(X, \mathcal{T})$ に対し、補集合が $k$閉集合である集合（$k$開集合）の全体を $\mathcal{T}_k$ とする。このとき $\mathcal{T}_k$ は $X$ 上の位相を定め、この位相空間を $kX$ と書く。このとき、<br>
+        <span class="important">$X$ がコンパクト生成空間である $\iff \mathcal{T} = \mathcal{T}_k$ （すなわち $X = kX$）</span><br>
+        が成り立つ。
+    </blockquote>
+
+    <div class="proof">
+        <div class="proof-title">【特徴付け ② の詳細な証明】</div>
+        <p>まず、$\mathcal{T}_k$ が位相の公理（閉集合の条件）を満たすことを確認します。</p>
+        <ol>
+            <li>
+                <strong>空集合と全体集合：</strong> 任意の $g \in \mathcal{C}(X)$ に対して $g^{-1}(\emptyset) = \emptyset$ であり、$g^{-1}(X) = K$ です。これらはコンパクトハウスドルフ空間 $K$ の閉集合なので、$\emptyset, X$ はともに $k$閉集合です。
+            </li>
+            <li>
+                <strong>任意の共通部分：</strong> $k$閉集合の任意の族 $\{A_{\lambda}\}_{\lambda \in \Lambda}$ に対し、その共通部分を考えると、
+                $$ g^{-1}\left(\bigcap_{\lambda \in \Lambda} A_{\lambda}\right) = \bigcap_{\lambda \in \Lambda} g^{-1}(A_{\lambda}) $$
+                となります。各 $g^{-1}(A_{\lambda})$ は $K$ の閉集合であり、閉集合の任意の共通部分は閉集合なので、これも $K$ の閉集合です。よって共通部分も $k$閉集合です。
+            </li>
+            <li>
+                <strong>有限個の和集合：</strong> 有限個の $k$閉集合 $A_1, A_2, \dots, A_n$ に対し、その和集合を考えると、
+                $$ g^{-1}\left(\bigcup_{i=1}^n A_i\right) = \bigcup_{i=1}^n g^{-1}(A_i) $$
+                となります。閉集合の有限和は閉集合なので、これも $K$ の閉集合です。よって有限和も $k$閉集合です。
+            </li>
+        </ol>
+        <p>
+            以上から $\mathcal{T}_k$ は位相を定めます。また、元の位相 $\mathcal{T}$ の閉集合 $A$ は、任意の連続写像 $g$ に対し $g^{-1}(A)$ が必ず閉集合になるため、自動的に $k$閉集合です。したがって、常に <span class="important">$\mathcal{T} \subset \mathcal{T}_k$</span> （$\mathcal{T}_k$ の方が開集合・閉集合が多く、位相が強い）が成り立ちます。
+        </p>
+        
+        <p><strong>必要十分条件の証明：</strong></p>
+        <p>
+            コンパクト生成空間の定義は、「すべての $k$閉集合が、元の位相 $\mathcal{T}$ においても閉集合である」ということです。これは「$\mathcal{T}_k$ の閉集合 $\implies$ $\mathcal{T}$ の閉集合」すなわち $\mathcal{T}_k \subset \mathcal{T}$ を意味します。
+        </p>
+        <p>
+            すでに $\mathcal{T} \subset \mathcal{T}_k$ は普遍的に成り立つことを示しているため、次の同値関係が得られます：
+            $$ X \text{ がコンパクト生成} \iff \mathcal{T}_k \subset \mathcal{T} \iff \mathcal{T} = \mathcal{T}_k \iff X = kX $$
+        </p>
+        <div class="proof-end">$\blacksquare$</div>
+    </div>
+
+    <!-- 特徴付け 3 -->
+    <h2>特徴付け ③：商空間としての特徴付け</h2>
+    <blockquote>
+        <strong>【定理】</strong><br>
+        位相空間 $X$ がコンパクト生成空間であるための必要十分条件は、$X$ が「コンパクトハウスドルフ空間たちの離散和」からの商空間として表せることである。
+    </blockquote>
+
+    <div class="proof">
+        <div class="proof-title">【特徴付け ③ の詳細な証明】</div>
+        <p><strong>$(\Rightarrow)$ の証明：</strong></p>
+        <p>
+            $X$ をコンパクト生成空間とします。$X$ へのすべての連続写像 $g: K \to X$（ただし $K$ はコンパクトハウスドルフ空間）の全体を添字集合 $\mathcal{I} = \{(K_g, g)\}$ として集めます。
+        </p>
+        <p>
+            これらのドメインであるコンパクトハウスドルフ空間の離散和（Disjoint union）空間を $H$ と定義します：
+            $$ H = \coprod_{(K_g, g) \in \mathcal{I}} K_g $$
+            各成分からの自然な注入写像（包含）を $i_g: K_g \to H$ とします。ここで、全射写像 $p: H \to X$ を、各成分の上で $p \circ i_g = g$ となるように一意に定義します。
+        </p>
+        <ul>
+            <li>
+                <strong>$p$ の全射性：</strong> $X$ の任意の点 $x \in X$ に対し、1点空間 $K_x = \{*\}$（これはコンパクトハウスドルフ空間）から $x$ への定値写像 $h_x: \{*\} \to X$ を考えると、これは $\mathcal{I}$ の元です。したがって、$x = h_x(*) = p(i_{h_x}(*))$ となり、 $x$ は $p$ の像に含まれます。よって $p$ は全射です。
+            </li>
+            <li>
+                <strong>$p$ が商写像であることの確認：</strong> 商位相の定義より、「$X$ の部分集合 $A$ が閉集合 $\iff p^{-1}(A)$ が $H$ の閉集合」を示します。<br>
+                離散和の位相の定義から、$H$ の部分集合 $p^{-1}(A)$ が閉集合であるための必要十分条件は、すべての成分への引き戻し $i_g^{-1}(p^{-1}(A))$ が $K_g$ の閉集合となることです。ここで、
+                $$ i_g^{-1}(p^{-1}(A)) = (p \circ i_g)^{-1}(A) = g^{-1}(A) $$
+                ですから、次が成り立ちます：
+                $$ p^{-1}(A) \text{ が } H \text{ の閉集合} \iff \text{任意の } g \in \mathcal{I} \text{ に対して } g^{-1}(A) \text{ が } K_g \text{ の閉集合} $$
+                この右辺の条件はまさに「$A$ が $k$閉集合である」という条件そのものです。いま $X$ はコンパクト生成空間であると仮定しているので、これは「$A$ が $X$ の通常の閉集合である」ことと同値です。
+            </li>
+        </ul>
+        <p>
+            したがって、$A \subset X$ が閉集合 $\iff p^{-1}(A) \subset H$ が閉集合 となり、$p$ は商写像です。すなわち、$X$ はコンパクトハウスドルフ空間の離散和 $H$ からの商空間です。
+        </p>
+        
+        <p><strong>$(\Leftarrow)$ の証明：</strong></p>
+        <p>
+            ある商写像 $p: H \to X$ が存在し、その定義域が $H = \coprod_{\lambda \in \Lambda} K_\lambda$（各 $K_\lambda$ はコンパクトハウスドルフ空間）であると仮定します。このとき $X$ がコンパクト生成空間であることを示します。
+        </p>
+        <p>
+            $X$ の $k$閉集合 $A$ を任意に取ります。目標は $A$ が $X$ の通常の閉集合であることを示すことです。$p$ は商写像なので、商位相の定義より $p^{-1}(A)$ が $H$ の閉集合であることを示せば十分です。
+        </p>
+        <p>
+            離散和の位相の定義より、$p^{-1}(A)$ が $H$ の閉集合であることを示すには、任意の $\lambda \in \Lambda$ に対して、自然な包含 $i_\lambda: K_\lambda \to H$ による逆像 $i_\lambda^{-1}(p^{-1}(A))$ が $K_\lambda$ の閉集合であることを示せばよいです。
+        </p>
+        <p>
+            ここで、合成写像 $p \circ i_\lambda: K_\lambda \to X$ を考えます。$p$ も $i_\lambda$ も連続なので、$p \circ i_\lambda$ はコンパクトハウスドルフ空間 $K_\lambda$ から $X$ への連続写像です（すなわち $p \circ i_\lambda \in \mathcal{C}(X)$）。<br>
+            したがって、次の等式が成り立ちます：
+            $$ i_\lambda^{-1}(p^{-1}(A)) = (p \circ i_\lambda)^{-1}(A) $$
+            いま $A$ は $X$ の $k$閉集合であり、$p \circ i_\lambda$ はコンパクトハウスドルフ空間からの連続写像なので、$k$閉集合の定義より $(p \circ i_\lambda)^{-1}(A)$ は $K_\lambda$ の閉集合となります。
+        </p>
+        <p>
+            これがすべての $\lambda \in \Lambda$ について成り立つため、$H$ の離散和位相の定義から $p^{-1}(A)$ は $H$ の閉集合となります。そして $p$ が商写像であることから、$A$ は $X$ の通常の閉集合です。したがって、$X$ はコンパクト生成空間です。
+        </p>
+        <div class="proof-end">$\blacksquare$</div>
+    </div>
+
+</body>
+</html>

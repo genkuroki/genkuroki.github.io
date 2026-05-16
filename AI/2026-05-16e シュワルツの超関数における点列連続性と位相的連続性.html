@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シュワルツの超関数における点列連続性と位相的連続性</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            color: #2c3e50;
+            font-size: 1.8em;
+        }
+        h2 {
+            border-left: 5px solid #3498db;
+            padding-left: 10px;
+            color: #2980b9;
+            margin-top: 30px;
+            font-size: 1.4em;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+        }
+        h5 {
+            color: #2c3e50;
+            font-size: 1.05em;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .reader-note {
+            background-color: #e8f8f5;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #d35400;
+        }
+        blockquote {
+            background-color: #f9f9f9;
+            border-left: 5px solid #ccc;
+            margin: 20px 0;
+            padding: 15px 20px;
+            font-style: italic;
+        }
+        .theorem-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .proof {
+            padding-left: 15px;
+            border-left: 2px dashed #bdc3c7;
+            margin-bottom: 20px;
+        }
+        .nested-proof {
+            background-color: #fcfcfc;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <h1>シュワルツの超関数における点列連続性と位相的連続性</h1>
+
+    <div class="reader-note">
+        <strong>読者への案内：</strong><br>
+        本ドキュメントは、「シュワルツの超関数（distribution）の定義において、なぜ一般の位相空間論で必要とされるネット（有向点列）ではなく、可算な点列が使われているのか？」という疑問に対する回答と、その数学的・位相空間論的な厳密な証明を一つにまとめた解説記事です。関数解析学におけるローラン・シュワルツの枠組み設定の背景を理解するための助けとなるよう構成されています。
+    </div>
+
+    <h2>はじめに</h2>
+    <p>シュワルツの超関数（distribution）の定義において、なぜ一般の位相空間論で必要とされる「ネット（有向点列）」ではなく、「可算な点列」による連続性の定義で十分なのかという疑問は、関数解析と位相空間論の交差点にある非常に鋭く本質的な問いです。</p>
+    <p>結論から言うと、<span class="highlight">テスト関数の空間が「距離空間の帰納極限（LF空間）」という特殊で性質の良い位相を持っているため、点列連続性と位相的な連続性が完全に同値になるから</span>です。</p>
+    <p>以下に、テスト関数の空間、超関数の空間、それらの位相の定義を整理し、なぜ点列で大丈夫なのかを順を追って解説します。</p>
+
+    <hr>
+
+    <h2>1. テスト関数の空間 $\mathcal{D}$ とその位相</h2>
+    <p>テスト関数の空間 $\mathcal{D}(\mathbb{R}^n)$（または単に $\mathcal{D}$）は、<strong>コンパクトな台を持つ無限回微分可能な関数の集合</strong> $C_c^\infty(\mathbb{R}^n)$ です。</p>
+    <p>この空間に適切な位相を入れることが、超関数を定義する上での最大の難所です。$\mathcal{D}$ 全体には一気に距離（ノルム）を入れることができないため、次のように段階的に位相を定義します。</p>
+
+    <ol>
+        <li>
+            <strong>部分空間 $\mathcal{D}_K$ の位相（フレシェ空間）:</strong><br>
+            まず、ある固定されたコンパクト集合 $K \subset \mathbb{R}^n$ に台を持つ関数の集合 $\mathcal{D}_K$ を考えます。この $\mathcal{D}_K$ には、各階の導関数の最大値による可算個の半ノルムの族を与えます。
+            $$p_m(\phi) = \sup_{|\alpha| \le m, x \in K} |\partial^\alpha \phi(x)| \quad (m = 0, 1, 2, \dots)$$
+            可算個の半ノルム古参で位相が定まるため、<strong>$\mathcal{D}_K$ は距離付け可能（完備な距離空間＝フレシェ空間）</strong>になります。
+        </li>
+        <li>
+            <strong>$\mathcal{D}$ 全体の位相（帰納極限位相）:</strong><br>
+            $\mathbb{R}^n$ を覆うようなコンパクト集合の増大列 $K_1 \subset K_2 \subset \dots$ をとります（$\bigcup K_j = \mathbb{R}^n$）。テスト関数空間は $\mathcal{D} = \bigcup_{j=1}^\infty \mathcal{D}_{K_j}$ と書けます。<br>
+            ここで $\mathcal{D}$ に、<strong>「すべての包含写像 $\mathcal{D}_{K_j} \hookrightarrow \mathcal{D}$ が連続になるような最強の位相」</strong>を入れます。これを<strong>厳密帰納極限位相</strong>と呼び、このような空間を <strong>LF空間</strong> と呼びます。
+        </li>
+    </ol>
+
+    <h2>2. 超関数の空間 $\mathcal{D}'$ の定義</h2>
+    <p>超関数の空間 $\mathcal{D}'$ は、<strong>$\mathcal{D}$ 上の連続線形汎関数の空間（位相的双対空間）</strong>として定義されます。</p>
+    <p>つまり、線形写像 $T: \mathcal{D} \to \mathbb{C}$ であって、連続性を持つものが超関数です。通常、教科書ではこの「連続性」を以下の<strong>点列連続性</strong>を用いて定義します。</p>
+
+    <blockquote>
+        <strong>教科書でよく見る定義:</strong><br>
+        $\mathcal{D}$ の任意の点列 $\{\phi_j\}_{j=1}^\infty$ が $\mathcal{D}$ の意味で $\phi_j \to 0$ となるならば、$T(\phi_j) \to 0$ となる。<br>
+        <small>（※ $\mathcal{D}$ の意味の収束とは、「ある共通のコンパクト集合 $K$ が存在して、すべての $\phi_j$ の台が $K$ に含まれ、かつ各階の導関数が一様収束すること」です。）</small>
+    </blockquote>
+
+    <h2>3. なぜネットではなく点列で十分なのか？（どうして大丈夫なのか？）</h2>
+    <p>ここが核心です。一般の位相空間において、連続性を判定するには可算な点列では不十分であり、ネット（有向点列）やフィルターが必要です。実際、<strong>$\mathcal{D}$ は第1可算公理を満たさない（距離付け不可能な）巨大な空間</strong>です。それにもかかわらず点列で十分なのは、以下の論理的なステップが成立するからです。</p>
+
+    <h3>理由1: LF空間上の連続性は、各部分空間上の連続性に還元できる</h3>
+    <p>位相空間の帰納極限の普遍性質から、$\mathcal{D}$ 上の線形汎関数 $T$ が連続であるための必要十分条件は、<strong>すべての $K$ に対して、制限された写像 $T|_{\mathcal{D}_K}: \mathcal{D}_K \to \mathbb{C}$ が連続であること</strong>です。</p>
+
+    <h3>理由2: 部分空間 $\mathcal{D}_K$ は距離空間である</h3>
+    <p>前述の通り、固定されたコンパクト台を持つ空間 $\mathcal{D}_K$ はフレシェ空間であり、<strong>距離付け可能</strong>です。位相空間論の基本定理として、「距離空間（より一般に第1可算空間）においては、位相的な連続性と点列連続性は完全に同値」です。したがって、$\mathcal{D}_K$ 上の連続性をチェックするには、ネットは不要で（可算な）点列のチェックだけで完璧に足ります。</p>
+
+    <h3>理由3: $\mathcal{D}$ での点列の収束の特殊性</h3>
+    <p>LF空間の強力な性質（Dieudonné-Schwartzの定理など）により、$\mathcal{D}$ の中で点列 $\phi_j \to 0$ が収束する場合、<strong>「番号 $j$ が十分大きくなれば、すべての $\phi_j$ はある一つの $\mathcal{D}_K$ にすっぽり収まる」</strong>という性質があります。つまり、$\mathcal{D}$ 全体で点列が動いているように見えても、実質的にはある距離空間 $\mathcal{D}_K$ の中だけで動いている点列しか存在しません。</p>
+
+    <h3>結論</h3>
+    <p>以上の論理を繋ぎ合わせます。</p>
+    <ol>
+        <li>$T$ が $\mathcal{D}$ で点列連続であるとする。</li>
+        <li>各 $\mathcal{D}_K$ に制限しても $T$ は点列連続である（$\because$ 理由3）。</li>
+        <li>$\mathcal{D}_K$ は距離空間なので、$T$ は $\mathcal{D}_K$ 上で位相的に連続である（$\because$ 理由2）。</li>
+        <li>すべての $\mathcal{D}_K$ 上で連続なので、$T$ は $\mathcal{D}$ 全体で位相的に連続（ネットの意味でも連続）である（$\because$ 理由1）。</li>
+    </ol>
+    <p>このように、$\mathcal{D}$ が「距離空間のパッチワーク（帰納極限）」として構成されているため、<strong>部分空間が持つ「点列だけで十分」という良い性質が、空間全体に遺伝します</strong>。</p>
+    <p>これが、距離付け不可能で第1可算でもない $\mathcal{D}$ に対して、ネットという抽象的な道具を持ち出さずとも、直観的で扱いやすい「点列連続性」を定義とするだけで数学的に一切の破綻なく（大丈夫に）超関数理論を構築できる理由です。</p>
+
+    <hr>
+
+    <h2>4. 厳密な証明のための準備と定義</h2>
+    <p>上記で挙げた3つの理由を正当化するため、位相ベクトル空間（特に局所凸空間）の枠組みを用いて厳密な証明を行います。まずは必要な語句と記号を定義します。</p>
+
+    <ul>
+        <li><strong>局所凸空間 (Locally Convex Space):</strong> 原点の基本近傍系が凸集合からなる位相ベクトル空間。同値な定義として、半ノルムの族によって位相が定まる空間です。</li>
+        <li><strong>フレシェ空間 (Fréchet Space):</strong> 完備かつ距離付け可能な局所凸空間。距離付け可能であることは、位相を定める半ノルムの族が<strong>可算個</strong>であることと同値です（第1可算公理を満たします）。</li>
+        <li><strong>厳密帰納極限 (Strict Inductive Limit):</strong> 局所凸空間の増大列 $X_1 \subset X_2 \subset \dots$ があり、各包含写像 $i_n: X_n \to X_{n+1}$ が相対位相を保つ（すなわち、$X_n$ の位相は $X_{n+1}$ から誘導される位相と一致する閉部分空間である）とします。このとき、和集合 $X = \bigcup_{n=1}^\infty X_n$ に、「すべての包含写像 $j_n: X_n \to X$ が連続となるような最強の局所凸位相」を入れたものを厳密帰納極限と呼びます。</li>
+        <li><strong>LF空間 (LF-space):</strong> 各 $X_n$ がフレシェ空間であるような厳密帰納極限 $X$ のこと。</li>
+    </ul>
+
+    <p><strong>テスト関数空間 $\mathcal{D}$ の位置づけ:</strong><br>
+    $\mathbb{R}^n$ のコンパクト集合の増大列 $K_1 \subset K_2 \subset \dots$ （$\bigcup K_n = \mathbb{R}^n$）をとります。$\mathcal{D}_{K_n}$ は可算個の半ノルムで定まるため<strong>フレシェ空間</strong>です。また、$\mathcal{D}_{K_n}$ は $\mathcal{D}_{K_{n+1}}$ の閉部分空間としての位相を持ちます。したがって、$\mathcal{D} = \bigcup_{n=1}^\infty \mathcal{D}_{K_n}$ は<strong>厳密LF空間</strong>となります。</p>
+
+    <hr>
+
+    <h2>5. $X_n$ が $X_{n+1}$ の閉部分空間になる理由（厳密帰納極限の条件の確認）</h2>
+    <p>第4節で定義した「厳密帰納極限」において、$X_n$ が $X_{n+1}$ の「閉部分空間」になるという条件がなぜ必要なのか、精度とテスト関数空間 $\mathcal{D}$ においてそれがなぜ成り立つのかを説明します。</p>
+
+    <h3>(1) 抽象論：なぜ「閉部分空間」であることを求めるのか？（定義上の要請）</h3>
+    <p>一般の<strong>厳密帰納極限（Strict Inductive Limit）</strong>の定義において、列 $X_1 \subset X_2 \subset \dots$ に対して以下の2つの条件があらかじめ課されます。</p>
+
+    <ol>
+        <li>$X_n$ の位相は、$X_{n+1}$ から誘導される<strong>相対位相（部分空間としての位相）と一致</strong>する。</li>
+        <li>$X_n$ は $X_{n+1}$ の<strong>閉部分空間</strong>である。</li>
+    </ol>
+
+    <p><strong>【なぜ閉集合であることを要求するのか？】</strong><br>
+    もし単に包含関係 $X_n \subset X_{n+1}$ と相対位相の一致（条件1）だけを要請し、閉集合であること（条件2）を外してしまうと、帰納極限空間 $X = \bigcup X_n$ の位相が非常に扱いづらいもの（ハウスドルフ空間にすらならないなど）になってしまいます。<br>
+    特に、前回の「理由3」で登場した<strong>「$X$ のコンパクト集合は、必ずどこかの有限な段階 $X_N$ にすっぽり含まれる」という強力な性質（Dieudonné-Schwartzの定理）を担保するために、各ステップが「閉じている（閉部分空間である）」という性質が決定的に重要</strong>になります。</p>
+
+    <h3>(2) 具体論：テスト関数空間 $\mathcal{D}_{K_n}$ での厳密な証明</h3>
+    <p>$\mathbb{R}^n$ のコンパクト集合の増大列 $K_1 \subset K_2 \subset \dots$ を固定します。定義に戻ると、各段階の空間は以下のように定められています。</p>
+
+    <ul>
+        <li><strong>集合としての定義:</strong><br>
+        $$\mathcal{D}_{K_n} = \{ \phi \in C^\infty(\mathbb{R}^n) \mid \operatorname{supp}(\phi) \subset K_n \}$$
+        ここで $\operatorname{supp}(\phi)$（台）とは、$\phi(x) \neq 0$ となる点の閉包（closure）のことです。</li>
+        <li><strong>位相（半ノルム）の定義:</strong><br>
+        $\mathcal{D}_{K_n}$ の位相は、次の可算個の半ノルムの族 $\{q_m\}_{m=0}^\infty$ で定まります。
+        $$q_m(\phi) = \sup_{|\alpha| \le m, x \in K_n} |\partial^\alpha \phi(x)|$$
+        同様に、一歩進んだ空間 $\mathcal{D}_{K_{n+1}}$ の位相は、次の半ノルムの族 $\{p_m\}_{m=0}^\infty$ で定まります。
+        $$p_m(\phi) = \sup_{|\alpha| \le m, x \in K_{n+1}} |\partial^\alpha \phi(x)|$$</li>
+    </ul>
+
+    <p>この定義に基づいて、「相対位相の一致」と「閉部分空間であること」の2つを証明します。</p>
+
+    <div class="theorem-box">
+        <h4>(A) 相対位相の一致の証明</h4>
+        <div class="proof">
+            <p>$\mathcal{D}_{K_n} \subset \mathcal{D}_{K_{n+1}}$ であることは、台の包含関係 $K_n \subset K_{n+1}$ から明らかです。いま、任意の $\phi \in \mathcal{D}_{K_n}$ をとります。$\phi$ の台は $K_n$ に含まれるため、<strong>$K_n$ の外側（特に $K_{n+1} \setminus K_n$）では、$\phi$ もそのすべての導関数 $\partial^\alpha \phi$ も値は完全に $0$</strong> です。</p>
+            <p>したがって、$\mathcal{D}_{K_{n+1}}$ の半ノルム $p_m$ を $\phi \in \mathcal{D}_{K_n}$ に適用して上限（sup）をとると、 $K_{n+1} \setminus K_n$ の部分は $0$ なので、結局 $K_n$ の上だけで上限をとることと同じになります。
+            $$p_m(\phi) = \sup_{x \in K_{n+1}} |\partial^\alpha \phi(x)| = \sup_{x \in K_n} |\partial^\alpha \phi(x)| = q_m(\phi)$$
+            このように、$\mathcal{D}_{K_n}$ の元に対する半ノルムの値が完全に一致するため、$\mathcal{D}_{K_n}$ の元の位相と、$\mathcal{D}_{K_{n+1}}$ から制限されて伝わってくる相対位相は完全に一致します。</p>
+        </div>
+        
+        <h4>(B) 閉部分空間であることの証明</h4>
+        <div class="proof">
+            <p>$\mathcal{D}_{K_n}$ が $\mathcal{D}_{K_{n+1}}$ の中で「閉じている」ことを示します。これを示すには、<strong>「$\mathcal{D}_{K_n}$ の中の点列（またはネット） $\phi_j$ が、$\mathcal{D}_{K_{n+1}}$ の位相で関数 $\phi$ に収束したならば、その極限 $\phi$ もまた $\mathcal{D}_{K_{n+1}}$ からはみ出さず $\mathcal{D}_{K_{n}}$ に属している」</strong>ことを言えば十分です。</p>
+            <ol>
+                <li>$\phi_j \in \mathcal{D}_{K_n}$ が $\mathcal{D}_{K_{n+1}}$ の位相で $\phi \in \mathcal{D}_{K_{n+1}}$ に収束すると仮定します。</li>
+                <li>$\mathcal{D}_{K_{n+1}}$ での収束は、すべての半ノルム $p_m$ での収束を意味します。特に $m=0$（微分なし）の場合を考えると、
+                    $$p_0(\phi_j - \phi) = \sup_{x \in K_{n+1}} |\phi_j(x) - \phi(x)| \to 0 \quad (j \to \infty)$$
+                    これは、点列 $\phi_j$ が $K_{n+1}$ 上で $\phi$ に<strong>一様収束</strong>していることを意味します。一様収束すれば、当然各点収束も成り立ちます。</li>
+                <li>ここで、$K_n$ に含まれない任意の点 $x \notin K_n$ を考えます。
+                    <ul>
+                        <li>$\phi_j \in \mathcal{D}_{K_n}$ より、各 $\phi_j$ の台は $K_n$ にあるので、すべての $j$ について $\phi_j(x) = 0$ です。</li>
+                        <li>各点収束の性質から、極限関数の値は $\phi(x) = \lim_{j\to\infty} \phi_j(x) = \lim_{j\to\infty} 0 = 0$ となります。</li>
+                    </ul>
+                </li>
+                <li>つまり、極限関数 $\phi$ もまた、$K_n$ の外側では完全に値が $0$ になります。
+                    $$\{ x \in \mathbb{R}^n \mid \phi(x) \neq 0 \} \subset K_n$$
+                    $K_n$ はコンパクト集合（したがって閉集合）なので、この両辺の閉包をとることで、極限の台も $K_n$ からはみ出さないことが分かります。
+                    $$\operatorname{supp}(\phi) = \overline{\{ x \in \mathbb{R}^n \mid \phi(x) \neq 0 \}} \subset K_n$$
+                </li>
+                <li>台が $K_n$ に含まれ、かつ $\phi \in C^\infty$ であるため、定義より $\phi \in \mathcal{D}_{K_n}$ です。</li>
+            </ol>
+            <p>極限が空間から飛び出さずに $\mathcal{D}_{K_n}$ の中に留まったため、<strong>$\mathcal{D}_{K_n}$ は $\mathcal{D}_{K_{n+1}}$ の閉部分空間である</strong>ことが証明されました。</p>
+        </div>
+    </div>
+
+    <p>事情を要約すると、以下のようになります。</p>
+    <ul>
+        <li>一般論として、帰納極限がバラバラに壊れないために「閉部分空間になっていてほしい」という<strong>要請</strong>がある。</li>
+        <li>関数空間の定義を見ると、「台（サポート）がコンパクト集合 $K_n$ に含まれる」という条件そのものが、各点収束（一様収束）の極限をとっても保存される<strong>閉じた性質</strong>である。</li>
+    </ul>
+    <p>この2つが綺麗に噛み合っているため、テスト関数空間の列は厳密帰納極限の条件を完璧に満たし、結果として超関数の世界では「ネットの代わりに点列を使っても破綻しない」という恩恵を受けられるようになっています。</p>
+
+    <hr>
+
+    <h2>6. 理由達の証明</h2>
+
+    <div class="theorem-box">
+        <h3>理由1の証明：帰納極限位相の普遍性質</h3>
+        <p><strong>【命題】</strong><br>
+        $X = \bigcup X_n$ を局所凸空間の帰納極限とする。線形写像 $T: X \to \mathbb{C}$ が連続であるための必要十分条件は、すべての $n$ について制限 $T|_{X_n}: X_n \to \mathbb{C}$ が連続であることである。</p>
+        
+        <div class="proof">
+            <p><strong>【証明】</strong></p>
+            <p>($\Rightarrow$)<br>
+            各包含写像 $j_n: X_n \to X$ は帰納極限位相の定義から連続である。$T$ が連続であると仮定すれば、その制限 $T|_{X_n} = T \circ j_n$ は連続写像の合成なので連続である。</p>
+            
+            <p>($\Leftarrow$)<br>
+            すべての $T|_{X_n}$ が連続であると仮定する。$T$ が連続であることを示すには、$\mathbb{C}$ における原点 $0$ の任意の凸な開近傍 $V$ に対して、その逆像 $T^{-1}(V)$ が $X$ における原点の開近傍になることを示せばよい。<br>
+            帰納極限の位相の定義（すべての $j_n$ が連続となる最強の局所凸位相）から、部分集合 $U \subset X$ が $X$ の開集合であることと、すべての $n$ に対して $j_n^{-1}(U) = U \cap X_n$ が $X_n$ の開集合であることは同値である。<br>
+            いま、$U = T^{-1}(V)$ とおくと、
+            $$j_n^{-1}(T^{-1}(V)) = (T \circ j_n)^{-1}(V) = (T|_{X_n})^{-1}(V)$$
+            となる。仮定より $T|_{X_n}$ は連続なので、これは $X_n$ の開近傍である。したがって、$T^{-1}(V)$ は $X$ の開近傍となり、$T$ は連続である。（証明終）</p>
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h3>理由2の証明：第1可算空間における連続性と点列連続性の同値性</h3>
+        <p><strong>【命題】</strong><br>
+        $X$ を第1可算公理を満たす位相ベクトル空間（例えばフレシェ空間 $\mathcal{D}_K$）とする。線形写像 $T: X \to \mathbb{C}$ について、$T$ が（位相的に）連続であることと、$T$ が点列連続であることは同値である。</p>
+        
+        <div class="proof">
+            <p><strong>【証明】</strong></p>
+            <p>($\Rightarrow$) 位相的に連続であれば、点列連続であることは一般の位相空間で常に成り立つ。</p>
+            
+            <p>($\Leftarrow$) 対偶を示す。すなわち、$T$ が原点 $0$ で位相的に連続でないと仮定し、点列連続でもないことを導く。<br>
+            $X$ は第1可算なので、原点 $0$ の可算な基本近傍系 $\{U_n\}_{n=1}^\infty$ が存在する。必要なら $U_n \cap U_{n-1}$ を取り直すことで、$U_1 \supset U_2 \supset \dots$ と縮小していくようにとれる。<br>
+            $T$ が連続でないため、$\mathbb{C}$ におけるある原点の近傍 $V$ （例えば半径 $1$ の円板）が存在して、任意の $n$ に対して $T(U_n) \not\subset V$ となる。<br>
+            これは、各 $n$ に対して、ある点 $x_n \in U_n$ が存在して $T(x_n) \notin V$ となることを意味する。<br>
+            このようにして作った点列 $\{x_n\}_{n=1}^\infty$ を考える。任意の原点の近傍 $W$ に対して、ある $N$ が存在して $U_N \subset W$ となる（基本近傍系の定義）。$n \ge N$ ならば $x_n \in U_n \subset U_N \subset W$ となるため、点列 $x_n$ は $X$ の位相で $0$ に収束する。<br>
+            しかし、すべての $n$ について $T(x_n) \notin V$ であるため、数列 $\{T(x_n)\}$ は $\mathbb{C}$ において $0$ に収束しない。<br>
+            これは $T$ が点列連続であることに矛盾する。（証明終）</p>
+        </div>
+    </div>
+
+    <div class="theorem-box">
+        <h3>理由3の証明：LF空間における収束点列の局所化</h3>
+        <p><strong>【命題】</strong><br>
+        $X = \bigcup X_n$ を厳密LF空間とする。$X$ において点列 $x_j \to 0$ と収束するならば、ある番号 $N$ が存在して、すべての $j$ について $x_j \in X_N$ となり、かつ $X_N$ の位相で $x_j \to 0$ となる。</p>
+        
+        <div class="proof">
+            <p><strong>【証明】</strong></p>
+            <p>収束する点列に極限点 $0$ を加えた集合 $K = \{x_j\}_{j=1}^\infty \cup \{0\}$ は、$X$ において<strong>コンパクト集合</strong>である。<br>
+            厳密LF空間の基本的な性質として、「$X$ の任意のコンパクト集合 $K$ は、ある段階の $X_N$ に含まれる」という事実がある。これを示す（背理法）。<br>
+            もし $K$ がいかなる $X_n$ にも含まれないとすると、部分列をとることで、可算無限個の点 $y_m \in K$であって、$y_m \in X_{k_m} \setminus X_{k_{m-1}}$ となるものを拾い出せる（$k_m$ は単調増加な整数の列）。<br>
+            厳密帰納極限の性質から、$X_n$ は $X_{n+1}$ の閉部分空間であるため、各 $y_m$ を他の $y_l \ (l \neq m)$ から分離する開集合を帰納的に構成できる。これにより、無限集合 $\{y_m\}$ は $X$ において集積点を持たない離散的な閉集合となる。<br>
+            しかし、$\{y_m\} \subset K$ であり、コンパクト集合の無限部分集合は必ず集積点を持たなければならないため矛盾する。<br>
+            したがって、ある $N$ が存在して $K \subset X_N$、すなわちすべての $j$ について $x_j \in X_N$ となる。</p>
+            
+            <p>最後に位相の同値性について。厳密帰納極限では、$X_N$ の元々の位相と、$X$ の位相から $X_N$ に誘導される相対位相は一致する。したがって、$X$ の位相で $x_j \to 0$ であるならば、$X_N$ の位相でも $x_j \to 0$ である。（証明終）</p>
+
+            <div class="nested-proof">
+                <h4>【詳細補足：「各 $y_m$ を他の $y_l\ (l \neq m)$ から分離する開集合を帰納的に構成できる」の厳密な構成手順】</h4>
+                <p>厳密帰納極限の強力な性質である「各段階での相対位相が保たれ、かつ閉部分空間であること」をフル活用して、空間全体 $X$ における原点の開近傍をパッチワークのように帰納的に縫い合わせていくことでこれを証明します。</p>
+                
+                <h5>準備：記号の整理</h5>
+                <p>コンパクト集合 $K$ のいかなる段階 $X_n$ にも含まれない無限集合 $\{y_m\}$ について、部分列の番号を付け替えて、部分空間の増大列を新たに $Z_1 \subset Z_2 \subset \dots$ とします（これらも厳密帰納極限をなします）。そして、各点がちょうど1段ずつはみ出している状況、すなわち
+                $$y_m \in Z_m \setminus Z_{m-1} \quad (m = 2, 3, \dots)$$
+                となっていると仮定して証明を進めます。目標は、$X$ の原点の開近傍 $U$ を上手く構成し、そこから作られる開集合によってすべての $y_m$ が互いに交わらず分離されることを示すことです。</p>
+
+                <h5>ステップ1：原点近傍 $U_n$ の帰納的構成</h5>
+                <p>各部分空間 $Z_n$ の中での原点の「絶対凸な開近傍 $U_n$」を、次の条件を満たすように帰納的に構成します。</p>
+                <ol>
+                    <li><strong>相対位相の保持:</strong> $U_n \cap Z_{n-1} = U_{n-1}$</li>
+                    <li><strong>新しい点の排除:</strong> $y_n \notin Z_{n-1} + U_n$ （ここで $+$ はミンコフスキー和です）</li>
+                </ol>
+                <p><strong>【構成の手順】</strong><br>
+                まず、$Z_1$ における原点の絶対凸な開近傍 $U_1$ を適当に1つ選びます。次に、条件を満たす $Z_{n-1}$ の開近傍 $U_{n-1}$ が得られたと仮定し、$U_n$ を作ります。<br>
+                厳密帰納極限の定義により、$Z_{n-1}$ の位相は $Z_n$ から誘導される相対位相です。したがって、$Z_n$ における原点の絶対凸な開近傍 $V$ が存在して、$V \cap Z_{n-1} = U_{n-1}$ となります。<br>
+                さらに、仮定より $y_n \notin Z_{n-1}$ であり、厳密帰納極限の条件から <strong>$Z_{n-1}$ は $Z_n$ の閉部分空間</strong>です。位相ベクトル空間において、閉部分空間とその外にある点は開近傍を用いて分離できます。すなわち、$Z_n$ におけるある原点の絶対凸な開近傍 $W$ が存在して、$y_n$ の近傍 $y_n + W$ は $Z_{n-1} + W$ と交わりません。ゆえに $y_n \notin Z_{n-1} + W$ とできます。<br>
+                ここで、$U_n = V \cap W$ と置きます。$U_n$ は有限個の開近傍の共通部分なので $Z_n$ の開近傍であり、絶対凸性も保たれます。また、
+                <ul>
+                    <li>$U_n \cap Z_{n-1} = (V \cap W) \cap Z_{n-1} \subset V \cap Z_{n-1} = U_{n-1}$</li>
+                    <li>$W$ より小さいので $y_n \notin Z_{n-1} + U_n$</li>
+                </ul>
+                となり、要求する条件を満たす $U_n$ が構成できました。</p>
+
+                <h5>ステップ2：全空間の開近傍 $U$ への統合</h5>
+                <p>得られた $U_n$ たちの無限の和集合をとります。
+                $$U = \bigcup_{n=1}^\infty U_n$$
+                この $U$ は、帰納極限空間 $X$ 全体における原点の開近傍になります。なぜなら、構成条件 $U_n \cap Z_{n-1} = U_{n-1}$ を繰り返し適用することで、任意の整数 $m$ に対して
+                $$U \cap Z_m = U_m$$
+                が成り立つからです。帰納極限の位相の定義（「各 $Z_m$ 与えられた共通部分が開集合になるような集合が、$X$ の開集合である」）により、各 $Z_m$ 上で開近傍 $U_m$ と一致する $U$ は、$X$ において間違いなく開近傍となります。</p>
+
+                <h5>ステップ3：各 $y_m$ の完全な分離</h5>
+                <p>構成した全空間の開近傍 $U$ が、点列 $\{y_m\}$ を分離することを示します。<br>
+                任意の異なる2つの点 $y_m, y_l$ をとります。対称性から $l < m$ と仮定します。このとき、$y_l \in Z_l \subset Z_{m-1}$ です。もし仮に $y_m - y_l \in U$ だとすると、左辺の2点はどちらも $Z_m$ に含まれるため、
+                $$y_m - y_l \in U \cap Z_m = U_m$$
+                となります。これを変形すると $y_m = y_l + u \quad (u \in U_m)$ となります。$y_l \in Z_{m-1}$ なので、これは $y_m \in Z_{m-1} + U_m$ を意味します。しかし、これはステップ1で $U_m$ を構成した際の「新しい点の排除」の条件（$y_m \notin Z_{m-1} + U_m$）に真っ向から矛盾します。したがって、すべての $l \neq m$ について $y_m - y_l \notin U$ であることが証明されました。<br>
+                最後に、原点の開近傍を半分に縮小した $W = \frac{1}{2}U$ を考えます。各点 $y_m$ の開近傍として $O_m = y_m + W$ をとります。もし $O_l$ と $O_m$ が交わったとすると、ある点 $x$ が存在して $x \in y_l + W$ かつ $x \in y_m + W$ となり、
+                $$y_m - y_l = (y_m - x) + (x - y_l) \in W - W = \frac{1}{2}U + \frac{1}{2}U = U$$
+                となってしまい、先ほどの結論に矛盾します。ゆえに、$O_l \cap O_m = \emptyset \ (l \neq m)$ であり、互いに素な開集合 $O_m$ によってすべての $y_m$ を完全に分離することができました。</p>
+
+                <h5>【さらに詳細な補足：等式 $\frac{1}{2}U + \frac{1}{2}U = U$ が成り立つ論理】</h5>
+                <p>集合の足し算（ミンコフスキー和）において、一般のいびつな形の集合（例えばドーナツ型など）では、$\frac{1}{2}A + \frac{1}{2}A = A$ は成り立たず、元の $A$ より大きく膨らんでしまいます。しかし、今回この等式が成立するのは、ステップ1において <strong>「$U$ を凸集合（絶対凸集合）として構成しているから」</strong> です。</p>
+                
+                <p><strong>1. ミンコフスキー和とスカラー倍の定義:</strong><br>
+                * $A + B = \{ a + b \mid a \in A, b \in B \}$<br>
+                * $cA = \{ ca \mid a \in A \}$<br>
+                したがって、$\frac{1}{2}U + \frac{1}{2}U$ という集合の要素は、ある $u_1, u_2 \in U$ を用いて $x = \frac{1}{2}u_1 + \frac{1}{2}u_2$ と書ける元の全体です。</p>
+
+                <p><strong>2. 凸集合の性質の適用:</strong><br>
+                凸集合の幾何学的な定義は「集合内の任意の2点を結ぶ線分が、完全にその集合の中に含まれる」というものです。数式では、任意の $u_1, u_2 \in U$ と $0 \le t \le 1$ に対し、$t u_1 + (1 - t) u_2 \in U$ が成り立ちます。</p>
+                
+                <ul>
+                    <li><strong>$\frac{1}{2}U + \frac{1}{2}U \subset U$ の証明:</strong><br>
+                    $\frac{1}{2}U + \frac{1}{2}U$ の任意の元 $x$ は、ある $u_1, u_2 \in U$ によって $x = \frac{1}{2}u_1 + \frac{1}{2}u_2$ と表せます。これは凸集合の定義式で $t = \frac{1}{2}$ とした場合（幾何学的には $U$ 内の2点の中点）に相当します。$U$ は凸集合なので中点も必ず $U$ に属します。したがって $x \in U$ となり、包含関係が示されます。</li>
+                    <li><strong>$U \subset \frac{1}{2}U + \frac{1}{2}U$ の証明:</strong><br>
+                    $U$ の任意の元 $u$ は、無理やり $u = \frac{1}{2}u + \frac{1}{2}u$ と分解できます。$\frac{1}{2}u \in \frac{1}{2}U$ なので、この和は $\frac{1}{2}U + \frac{1}{2}U$ に属します。したがって $U \subset \frac{1}{2}U + \frac{1}{2}U$ も示されます。</li>
+                </ul>
+                <p>このように、$U$ を「へこみのない凸な空間」として丁寧に構成したため、$\frac{1}{2}U$ の中からどの2点を選んで足し合わせても、元の $U$ の枠組みからはみ出さないことが保証されています。（※なお、背理法の文脈においては、$\frac{1}{2}U + \frac{1}{2}U \subset U$ という包含関係が言えるだけで、矛盾を導くには十分です。）</p>
+            </div>
+        </div>
+    </div>
+
+    <p>以上の3つの命題を組み合わせることで、「$\mathcal{D}$ 上の点列連続性 $\implies$ 各 $\mathcal{D}_K$ 上の点列連続性 $\implies$ 各 $\mathcal{D}_K$ 上の位相的連続性 $\implies$ $\mathcal{D}$ 全体での位相的連続性」という完全な論理チェーンが構成されます。</p>
+
+</body>
+</html>

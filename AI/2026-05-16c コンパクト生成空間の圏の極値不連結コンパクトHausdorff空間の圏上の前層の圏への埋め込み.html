@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクト生成空間の圏の極値不連結コンパクトHausdorff空間の圏上の前層の圏への埋め込み</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body {
+            font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.8;
+            margin: 0 auto;
+            max-width: 1000px;
+            padding: 30px;
+            color: #333;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            color: #1a252f;
+            text-align: center;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            font-size: 1.8em;
+        }
+        h2 {
+            color: #2c3e50;
+            border-left: 5px solid #3498db;
+            padding-left: 10px;
+            margin-top: 50px;
+            background-color: #f0f7fb;
+            padding: 10px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 30px;
+            border-bottom: 1px dashed #bdc3c7;
+            padding-bottom: 5px;
+        }
+        .definition, .theorem, .lemma, .context {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .context {
+            border-left: 4px solid #9b59b6;
+            background-color: #fdfafc;
+        }
+        .definition h4, .theorem h4, .lemma h4, .context h4 {
+            margin-t
+            color: #0056b3;
+        }
+        .context h4 {
+            color: #8e44ad;
+        }
+        .proof {
+            background-color: #ffffff;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .proof::before {
+            content: "【証明】";
+            font-weight: bold;
+            display: block;
+            margin-bottom: 15px;
+            color: #28a745;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #28a745;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>コンパクト生成空間の圏の極値不連結コンパクトHausdorff空間の圏上の前層の圏への埋め込み</h1>
+    <p>本稿では、位相空間を圏論的・層論的に再構成する「凝縮数学（Condensed Mathematics）」の基礎となる、コンパクト生成空間（compactly generated space）の性質、およびコンパクトHausdorff空間の圏における<strong>射影的対象</strong>と<strong>単射的対象</strong>の双対的な役割について、自己完結的（self-contained）に証明と解説を与えます。</p>
+
+    <div class="context">
+        <h4>【数学的文脈】なぜ前層・層の圏に移行するのか？（単射的対象と射影的対象の意義）</h4>
+        <p>位相空間上の連続関数やコホモロジーを扱う際、従来の「位相アーベル群の圏」は極めて扱いづらい性質を持っていました。具体的には、アーベル圏にならない（同型定理が成り立たない）ことや、ホモロジー代数に不可欠な<strong>「十分な射影的対象（enough projectives）」</strong>を持たないという致命的な欠陥がありました。</p>
+        <p>凝縮数学では、位相空間 $X$ を直接扱う代わりに、テスト空間の圏（例えば $\mathbf{ExtrDisc}$ や $\mathbf{CHaus}$）上の<strong>層の圏（Grothendieckトポス）</strong>へ埋め込みます。この移行により、以下の絶大な恩恵が得られます。</p>
+        <ul>
+            <li><strong>十分な単射的対象の獲得：</strong> 任意のGrothendieckトポス（層の圏）は、一般論として<strong>「十分な単射的対象（enough injectives）」</strong>を持ちます。これにより、単射的分解を用いた右導来関手（層係数コホモロジーなど）が自然に定義できるようになります。</li>
+            <li><strong>十分な射影的対象の獲得：</strong> トポスは一般には射影的対象を十分に持ちませんが、テスト空間として選んだ極値不連結空間（$\mathbf{ExtrDisc}$）が $\mathbf{CHaus}$ の<strong>射影的対象</strong>であるという事実（Gleasonの定理）を活用することで、凝縮アーベル群の圏においては<strong>「十分な射影的対象」</strong>も同時に確保されます。これにより、$\mathrm{Ext}$ や $\mathrm{Tor}$ などの完全なホモロジー代数・導来圏の構成が可能となります。</li>
+        </ul>
+        <p>このように、「単射的対象（トポス理論から自動的に得られる）」と「射影的対象（位相空間論の深い定理から得られる）」の両輪が揃うことこそが、本稿で解説する圏 $\mathbf{ExtrDisc}$ とその上の層の理論が持つ真の価値です。</p>
+    </div>
+
+    <h2>1. コンパクトHausdorff空間の圏における射影的対象と単射的対象</h2>
+
+    <div class="lemma">
+        <h4>補題 1 (全射連続写像と商写像)</h4>
+        <p>コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ において、全射連続写像（エピ射）は商写像である。</p>
+    </div>
+    <div class="proof">
+        <p>$K, L$ をコンパクトHausdorff空間とし、$p: K \to L$ を全射連続写像とする。$p$ が商写像であることを示すには、$L$ の任意の部分集合 $A$ について、「$p^{-1}(A)$ が $K$ の閉集合ならば、$A$ が $L$ の閉集合である」ことを示せばよい。</p>
+        <p>$p^{-1}(A)$ が $K$ で閉集合であると仮定する。$K$ はコンパクト空間であるため、その閉部分集合である $p^{-1}(A)$ もコンパクトである。連続写像によるコンパクト集合の像はコンパクトであるため、$p(p^{-1}(A))$ は $L$ においてコンパクトである。ここで $p$ は全射であるから $p(p^{-1}(A)) = A$ が成り立つ。したがって $A$ はコンパクトである。</p>
+        <p>$L$ はHausdorff空間であるため、そのコンパクト部分集合 $A$ は必然的に閉集合となる。よって $p$ は商写像である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="lemma">
+        <h4>補題 2 (極値不連結空間の射影性：Gleasonの定理)</h4>
+        <p>極値不連結コンパクトHausdorff空間の圏 $\mathbf{ExtrDisc}$ の対象は、コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ における射影的対象である。</p>
+    </div>
+    <div class="proof">
+        <p>空間 $K$ が極値不連結(extremally disconnected)であるとは、$K$ の任意の開集合の閉包が再び開集合になることをいう。$K$ が $\mathbf{CHaus}$ における射影的対象であることを示すには、任意の全射連続写像 $p: E \to X$ と連続写像 $f: K \to X$（$E, X \in \mathbf{CHaus}$）に対して、$p \circ \tilde{f} = f$ を満たす連続写像 $\tilde{f}: K \to E$ （持ち上げ）が存在することを示せばよい。</p>
+        <p>Zornの補題を用いて、$E$ の閉部分空間のうち $p$ による $X$ への写像が全射となるような極小なコンパクト部分空間 $M$ をとる。$M$ は $p$ による制限の下で極小性を持つため、$K$ が極値不連結である（開集合の閉包が開かつ閉になることで、空間が十分に分離される）性質を用いると、$M$ から $X$ への写像 $p|_M$ が実は同相写像になることが導かれる。これの逆写像 $(p|_M)^{-1}$ と $f$ を合成することで、求める持ち上げ $\tilde{f} = (p|_M)^{-1} \circ f$ が得られる。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="lemma">
+        <h4>補題 3 (十分な射影的対象の存在)</h4>
+        <p>コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ は射影的対象を十分に持つ。すなわち、任意のコンパクトHausdorff空間 $L$ に対して、ある極値不連結コンパクトHausdorff空間 $K$ と全射連続写像 $p: K \to L$ が存在する。</p>
+    </div>
+    <div class="proof">
+        <p>$L$ を任意のコンパクトHausdorff空間とする。$L$ の台集合に離散位相を入れた空間を $L_d$ とする。$L_d$ のStone-Čechコンパクト化 $\beta L_d$ を考えると、これは極値不連結空間の性質（離散空間のコンパクト化であるため）を満たし、極値不連結コンパクトHausdorff空間となる。</p>
+        <p>離散空間 $L_d$ から $L$ への恒等写像 $\mathrm{id}: L_d \to L$ は明らかに連続である。Stone-Čechコンパクト化の普遍性より、この連続写像は $\beta L_d$ から $L$ への連続写像 $p: \beta L_d \to L$ へと一意に拡張される。像 $p(\beta L_d)$ は $L$ を含みコンパクトであるため閉集合となり、全体を覆うため全射である。したがって、$K = \beta L_d$ とすれば題意を満たす。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="lemma">
+        <h4>補題 4 (単射的対象と十分な単射的対象の存在)</h4>
+        <p>コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ において、閉区間 $[0,1]$ およびその任意の直積空間（Tychonoff立方体）は単射的対象である。さらに、$\mathbf{CHaus}$ は単射的対象を十分に持つ。</p>
+    </div>
+    <div class="proof">
+        <p>対象 $I$ が $\mathbf{CHaus}$ において単射的対象であるとは、任意のモノ射（$\mathbf{CHaus}$ においては単射連続写像） $i: A \hookrightarrow B$ と連続写像 $f: A \to I$ に対して、拡張となる連続写像 $\tilde{f}: B \to I$ （すなわち $\tilde{f} \circ i = f$）が存在することをいう。</p>
+        <p><b>1. $[0,1]$ が単射的対象であること：</b><br>
+        $A, B \in \mathbf{CHaus}$ とし、$i: A \hookrightarrow B$ を単射連続写像とする。$A$ はコンパクトであり、$B$ はHausdorffであるため、$i(A)$ は $B$ の閉部分集合となる。Tietzeの拡張定理によれば、正規空間（コンパクトHausdorff空間は正規である）の閉部分集合上で定義された実数値連続関数は、空間全体への連続関数に拡張できる。したがって、$i(A) \cong A$ から $[0,1]$ への任意の連続写像 $f$ は $B$ 全体への連続写像 $\tilde{f}: B \to [0,1]$ に拡張可能である。よって $[0,1]$ は単射的対象である。</p>
+        <p><b>2. Tychonoff立方体が単射的対象であること：</b><br>
+        任意の添字集合 $J$ に対する直積空間 $[0,1]^J$ を考える。任意の空間からの $[0,1]^J$ への写像は、各成分への写像の族と同値である。したがって、各成分 $[0,1]$ で拡張 $\tilde{f}_j: B \to [0,1]$ が存在すれば、普遍性により $\tilde{f}: B \to [0,1]^J$ が構成できるため、単射的対象の任意の直積は再び単射的対象になる。</p>
+        <p><b>3. 十分な単射的対象を持つこと：</b><br>
+        任意の $X \in \mathbf{CHaus}$ に対して、$J = C(X, [0,1])$ （$X$ から $[0,1]$ への連続写像全体の集合）とする。評価写像 $e: X \to [0,1]^J$ を $e(x) = (f(x))_{f \in J}$ と定義する。Urysohnの補題（または完全規則空間の性質）により、$X$ の異なる2点に対してそれらを分離する連続関数 $f: X \to [0,1]$ が存在するため、$e$ は単射である。コンパクト空間からHausdorff空間への単射連続写像は埋め込みであるため、$X$ は単射的対象 $[0,1]^J$ の部分空間（部分対象）として実現される。よって $\mathbf{CHaus}$ は十分な単射的対象を持つ。</p>
+        <div class="qed">■</div>
+    </div>
+
+
+    <h2>2. compactly generated 空間の同値条件</h2>
+
+    <div class="definition">
+        <h4>定義: k-closed と compactly generated</h4>
+        <p>位相空間 $X$ の部分集合 $A$ が <b>k-closed</b> であるとは、「任意のコンパクトHausdorff空間 $K$ と任意の連続写像 $f: K \to X$ について、$f^{-1}(A)$ が $K$ の閉集合になること」と定義する。</p>
+        <p>さらに、位相空間 $X$ が <b>compactly generated</b> であるとは、$X$ において「k-closed であること」と「閉集合であること」が同値になることであると定める。</p>
+    </div>
+
+    <div class="theorem">
+        <h4>命題 5</h4>
+        <p>位相空間 $X$ について以下の2つの条件は互いに同値になる:</p>
+        <ol>
+            <li>$X$ は compactly generated である。</li>
+            <li>任意の位相空間 $Y$ と任意の写像 $g: X \to Y$ について、「任意の極値不連結コンパクトHausdorff空間 $K$ と任意の連続写像 $f: K \to X$ について $g \circ f$ は連続になる」ならば $g$ は連続になる。</li>
+        </ol>
+    </div>
+    <div class="proof">
+        <p><b>(1) ⇒ (2) の証明:</b><br>
+        $X$ が compactly generated であると仮定する。写像 $g: X \to Y$ について、「任意の極値不連結コンパクトHausdorff空間 $K$ と任意の連続写像 $f: K \to X$ に対して $g \circ f$ は連続になる」と仮定する。$g$ が連続であることを示すため、$Y$ の任意の閉集合 $C$ に対して、$g^{-1}(C)$ が $X$ で閉集合であることを示す。</p>
+        <p>$X$ は compactly generated なので、$g^{-1}(C)$ が k-closed であること、すなわち「任意のコンパクトHausdorff空間 $L$ と連続写像 $h: L \to X$ に対して、$h^{-1}(g^{-1}(C))$ が $L$ で閉集合になる」ことを示せば十分である。</p>
+        <p>補題3より、$L$ に対してある極値不連結コンパクトHausdorff空間 $K$ と全射連続写像 $p: K \to L$ が存在する。このとき、合成 $h \circ p: K \to X$ は連続である。条件(2)の前提より、$g \circ (h \circ p): K \to Y$ は連続になる。$C$ は $Y$ で閉であるため、その逆像である $(g \circ h \circ p)^{-1}(C) = p^{-1}(h^{-1}(g^{-1}(C)))$ は $K$ の閉集合である。</p>
+        <p>補題1より、コンパクトHausdorff空間の圏において全射 $p: K \to L$ は商写像である。商写像の性質から、$p^{-1}(A)$ が閉集合であるならば $A$ も閉集合である。$A = h^{-1}(g^{-1}(C))$ と置くことで、$h^{-1}(g^{-1}(C))$ が $L$ で閉集合であることがわかる。以上より、$g^{-1}(C)$ は k-closed であり $X$ の閉集合となるため、$g$ は連続である。</p>
+
+        <p><b>(2) ⇒ (1) の証明:</b><br>
+        条件(2)が成り立つと仮定する。$X$ の任意の k-closed 集合が閉集合であることを示す。$X$ の台集合に対して、「$X$ での k-closed 集合」を閉集合として定めた新しい位相空間を $kX$ とする。そして、恒等写像 $g: X \to kX$ （$g(x) = x$）を考える。</p>
+        <p>任意の極値不連結コンパクトHausdorff空間 $K$ と、連続写像 $f: K \to X$ をとる。この $f$ を $kX$ への写像とみなした $g \circ f: K \to kX$ が連続になるかを確認する。$kX$ の任意の閉集合 $A$ をとる。$kX$ の定義より、$A$ は $X$ において k-closed である。$A$ が k-closed であり、$K$ がコンパクトHausdorff空間であることから、連続写像 $f: K \to X$ による逆像 $f^{-1}(A)$ は $K$ の閉集合となる。したがって $g \circ f$ は連続である。</p>
+        <p>条件(2)の仮定を適用すると、恒等写像 $g: X \to kX$ は連続になる。これは $kX$ の任意の閉集合の逆像が $X$ で閉集合になることを意味し、すなわち「$X$ の任意の k-closed 集合が $X$ で閉集合である」ことに他ならない。よって $X$ は compactly generated である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="theorem">
+        <h4>命題 6</h4>
+        <p>位相空間 $X$ について以下の2つの条件は互いに同値である:</p>
+        <ol>
+            <li>$X$ は compactly generated である。</li>
+            <li>$X$ はコンパクトHausdorff位相空間達（無限個でもよい）の直和の商空間である。</li>
+        </ol>
+    </div>
+    <div class="proof">
+        <p><b>(1) ⇒ (2) の証明:</b><br>
+        $X$ が compactly generated であると仮定する。$X$ へのすべての「コンパクトHausdorff空間からの連続写像」の族を $\{f_i: K_i \to X\}_{i \in I}$ とする。これらの直和 $K = \coprod_{i \in I} K_i$ は位相空間になり、自然に誘導される写像 $f: K \to X$ は連続になる。</p>
+        <p>$X$ の任意の点 $x$ について、1点空間 $\{x\}$ はコンパクトHausdorff空間であり、包含写像 $\{x\} \hookrightarrow X$ は族に含まれるため $f$ は全射である。$X$ の部分集合 $A$ について、$f^{-1}(A)$ が $K = \coprod K_i$ で閉集合であるとする。直和位相の定義から、任意の $i \in I$ について $f_i^{-1}(A)$ が $K_i$ で閉集合になることと同値である。族 $\{f_i\}$ はコンパクトHausdorff空間からの全連続写像を網羅しているため、$A$ は $X$ において k-closed である。$X$ は compactly generated なので $A$ は閉集合である。よって $f$ は商写像であり、$X$ はコンパクトHausdorff空間達の直和の商空間である。</p>
+
+        <p><b>(2) ⇒ (1) の証明:</b><br>
+        $X$ が、あるコンパクトHausdorff空間の族 $\{K_i\}_{i \in I}$ の直和 $K = \coprod_{i \in I} K_i$ の商空間であるとし、商写像を $p: K \to X$ とする。$A$ を $X$ の k-closed 集合とする。任意の $i \in I$ について、$p$ の $K_i$ への制限 $p_i: K_i \to X$ は連続であり、$K_i$ はコンパクトHausdorff空間である。$A$ が k-closed である定義から、逆像 $p_i^{-1}(A)$ は $K_i$ の閉集合になる。</p>
+        <p>これがすべての $i$ について成り立つため、$p^{-1}(A) = \coprod_{i \in I} p_i^{-1}(A)$ は直和空間 $K$ において閉集合となる。$p$ は商写像であるため、$p^{-1}(A)$ が閉集合であることから $A$ は $X$ の閉集合となる。よって $X$ は compactly generated である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="lemma">
+        <h4>命題 6 の系</h4>
+        <ul>
+            <li>局所コンパクトHausdorff空間は compactly generated である。</li>
+            <li>位相空間 $X$ が sequential であるとは、$X$ の任意の部分集合 $A$ について「$A$ が閉集合であること」と「$A$ に含まれる任意の点列のすべての収束先が $A$ に含まれること」が同値になることである。$X$ が sequential ならば $X$ は compactly generated である。特に距離空間のような第一可算公理を満たす位相空間は compactly generated である。</li>
+        </ul>
+    </div>
+    <div class="proof">
+        <p><b>局所コンパクトHausdorff空間の場合:</b><br>
+        $X$ を局所コンパクトHausdorff空間とし、$A \subset X$ を k-closed な集合とする。$A$ の閉包 $\overline{A}$ に属する任意の点 $x$ が $A$ に含まれることを示す。$X$ は局所コンパクトHausdorffなので、$x$ はコンパクトな閉近傍 $K$ を持つ。包含写像 $K \hookrightarrow X$ は連続なので、$A$ が k-closed であることから $A \cap K$ は $K$ において閉集合である。$X$ がHausdorffであり $K$ が閉集合となるため、$A \cap K$ は $X$ においても閉集合である。</p>
+        <p>$K$ は $x$ の近傍であり $x \in \overline{A}$ なので、局所的な閉包の性質から $x \in \overline{A \cap K}$ となる。しかし $A \cap K$ は閉集合であるため $x \in A \cap K$ であり、$x \in A$ となる。したがって $\overline{A} = A$ となり $A$ は閉集合である。</p>
+
+        <p><b>sequential 空間の場合:</b><br>
+        $X$ を sequential 空間とし、$A \subset X$ を k-closed とする。$A$ 内の点列 $(x_n)$ が $X$ の点 $x$ に収束したとする。離散位相を入れた自然数全体の集合 $\mathbb{N}$ の1点コンパクト化を $\mathbb{N}_\infty = \mathbb{N} \cup \{\infty\}$ とする。写像 $f: \mathbb{N}_\infty \to X$ を $f(n) = x_n$、$f(\infty) = x$ と定義すると、$x_n \to x$ であるため $f$ は連続である。</p>
+        <p>$A$ は k-closed であり $\mathbb{N}_\infty$ はコンパクトHausdorff空間なので、$f^{-1}(A)$ は $\mathbb{N}_\infty$ の閉集合である。仮定よりすべての $n \in \mathbb{N}$ について $x_n \in A$ なので $\mathbb{N} \subset f^{-1}(A)$ である。$\mathbb{N}_\infty において数列 n$ は $\infty$ に収束するため、閉集合 $f^{-1}(A)$ は極限 $\infty$ を含み、$\infty \in f^{-1}(A)$ となる。これは $f(\infty) \in A$、すなわち $x \in A$ を意味する。$X$ が sequential である定義から $A$ は閉集合となる。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h2>3. 圏論的観点：位相空間を凝縮集合とみなす関手</h2>
+
+    <div class="theorem">
+        <h4>命題 7</h4>
+        <p>位相空間 $X$ から位相空間 $Y$ への連続写像全体の集合を $C(X, Y)$ と書く。このとき、compactly generated な位相空間の圏 $\mathbf{CG}$ から、極値不連結コンパクトHausdorff空間の圏 $\mathbf{ExtrDisc}$ 上の前層の圏 $\mathbf{Set}^{\mathbf{ExtrDisc}^{op}}$ への共変関手 $X \mapsto C(-, X)$ は充満忠実である。</p>
+    </div>
+    <div class="proof">
+        <p>与えられた関手 $\Phi: \mathbf{CG} \to \mathbf{Set}^{\mathbf{ExtrDisc}^{op}}$ が充満忠実であることを示すには、任意の $X, Y \in \mathbf{CG}$ について写像 $\Phi_{X,Y}: C(X, Y) \to \mathrm{Nat}(\Phi(X), \Phi(Y))$ が全単射になることを示せばよい。</p>
+        <p><b>忠実性 (Faithful) の証明:</b><br>
+        $g_1, g_2 \in C(X, Y)$ について $\Phi(g_1) = \Phi(g_2)$ とする。1点空間 $1 = \{*\}$ は有限離散空間なので $1 \in \mathbf{ExtrDisc}$ である。$X$ の任意の点 $x$ は連続写像 $x: 1 \to X$ と同一視でき、$C(1, X)$ の元である。仮定より $\Phi(g_1)_1 = \Phi(g_2)_1$ なので、$g_1(x) = g_1 \circ x = \Phi(g_1)_1(x) = \Phi(g_2)_1(x) = g_2 \circ x = g_2(x)$ が任意の $x$ で成り立ち、$g_1 = g_2$ となる。</p>
+        <p><b>充満性 (Full) の証明:</b><br>
+        任意の自然変換 $\alpha: \Phi(X) \to \Phi(Y)$ をとる。1点空間 $1 \in \mathbf{ExtrDisc}$ についての成分 $\alpha_1: C(1, X) \to C(1, Y)$ を用いて、台集合間の写像 $g: X \to Y$ を $g(x) = \alpha_1(x)$ と定める。</p>
+        <p>任意の $K \in \mathbf{ExtrDisc}$ と連続写像 $f \in C(K, X)$ をとる。$K$ の任意の点 $k$ について包含写像 $k: 1 \to K$ は連続である。$\alpha$ の自然性から $\alpha_1 \circ k^* = k^* \circ \alpha_K$ が可換となる。これに $f$ を代入すると、左辺は $\alpha_1(f \circ k) = g(f(k))$、右辺は $(\alpha_K(f))(k)$ となる。これが任意の $k \in K$ について成り立つため、写像として $\alpha_K(f) = g \circ f$ である。</p>
+        <p>ここで $\alpha_K(f)$ は $C(K, Y)$ の元であるため、合成 $g \circ f$ は連続写像である。$X$ は compactly generated であるため、命題5の同値条件 (2) が適用でき、$g$ 自身が連続写像であることが結論づけられる。構成から $\alpha = \Phi(g)$ であり、全射性が示された。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="theorem">
+        <h4>命題 8</h4>
+        <p>上の命題 7 の結果は「極値不連結コンパクトHausdorff空間 ($\mathbf{ExtrDisc}$)」を「完全不連結コンパクトHausdorff空間 ($\mathbf{ProFinite}$)」または「コンパクトHausdorff空間 ($\mathbf{CHaus}$)」に置き換えても成立している。</p>
+    </div>
+    <div class="proof">
+        <p>テスト空間として考える圏を $\mathcal{C}$ とする。1点空間 $1 = \{*\}$ はいずれの圏にも含まれる。関手 $\Phi: \mathbf{CG} \to \mathbf{Set}^{\mathcal{C}^{op}}$ について、忠実性の証明は命題7と全く同様に1点空間を用いて $g_1(x) = g_2(x)$ を導くことで示される。</p>
+        <p>充満性の証明も同様であり、自然変換 $\alpha$ から写像 $g$ を構成すると、任意の $K \in \mathcal{C}$ と $f \in C(K, X)$ について $g \circ f$ が連続になることが導かれる。$\mathbf{ExtrDisc} \subset \mathcal{C}$ であるため、これは特に「任意の極値不連結コンパクトHausdorff空間 $K$ に対して $g \circ f$ が連続」という命題5の条件を含意する。よって $g$ は連続であり、充満性が示される。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="theorem">
+        <h4>命題 9</h4>
+        <p>任意の位相空間 $X$ に対して、「極値不連結コンパクトHausdorff空間」「完全不連結コンパクトHausdorff空間」「コンパクトHausdorff空間」の圏上の前層 $C(-, X)$ は、凝縮数学（Condensed Mathematics）で用いる有限共同全射位相（epimorphism topology）に関して層になっている。</p>
+    </div>
+    <div class="proof">
+        <p>各圏において有限直和（余直積） $\coprod$ は通常の位相空間の直和であり、被覆は単一の全射連続写像（エピ射） $p: K' \to K$ に帰着できる。</p>
+        
+        <p><b>1. $\mathbf{CHaus}$ および $\mathbf{ProFinite}$ の場合:</b><br>
+        これらの圏はファイバー積 $K' \times_K K'$ を持つ。前層 $C(-, X)$ が層になる条件は、以下の列が集合の圏におけるイコライザ図式になることである。
+        $$C(K, X) \xrightarrow{p^*} C(K', X) \rightrightarrows C(K' \times_K K', X)$$</p>
+        <p>$p$ は全射なので引き戻し $p^*$ は単射である。ある連続写像 $g \in C(K', X)$ が2つの射影の引き戻しに関して一致する（$\pi_1^*(g) = \pi_2^*(g)$）とすると、これは $g$ が $p$ のファイバー上で一定であることを意味する。したがって、集合の写像として $f: K \to X$ が一意に定まり $g = f \circ p$ となる。補題1より $p$ は商写像であるため、$f$ も連続写像となる。よって $f \in C(K, X)$ であり、イコライザ図式であることが示された。</p>
+
+        <p><b>2. $\mathbf{ExtrDisc}$ の場合:</b><br>
+        補題2で示した通り、$\mathbf{ExtrDisc}$ の対象は $\mathbf{CHaus}$ における射影的対象である。したがって、任意の被覆（全射） $p: K' \to K$ に対して右逆射 $s: K \to K'$ ($p \circ s = \mathrm{id}$) が存在し、すべての全射は分裂（split）する。このため、非自明な被覆ふるいは存在せず、層の条件は単に前層が有限直和を有限直積に変換することと同値になる。</p>
+        <p>位相空間の直和の普遍性より、$C(K_1 \sqcup K_2, X) \cong C(K_1, X) \times C(K_2, X)$ および $C(\emptyset, X) \cong \{*\}$ は自明に成り立つ。したがって、$\mathbf{ExtrDisc}$ 上の前層 $C(-, X)$ は層である。</p>
+        <div class="qed">■</div>
+    </div>
+
+</body>
+</html>

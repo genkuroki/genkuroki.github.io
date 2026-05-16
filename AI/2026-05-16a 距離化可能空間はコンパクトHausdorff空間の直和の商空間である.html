@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>距離化可能空間はコンパクトHausdorff空間の直和の商空間である</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5em;
+            border-bottom: 2px solid #555;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.2em;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 1.5em;
+        }
+        p {
+            margin-bottom: 1em;
+        }
+        ul {
+            margin-bottom: 1em;
+        }
+    </style>
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <h1>距離化可能空間はコンパクトHausdorff空間の直和の商空間である</h1>
+
+    <p>この命題は、一般位相幾何学において「距離空間（より一般に第1可算空間）はコンパクト生成空間（k-空間）である」という重要な性質に基づいています。</p>
+
+    <p>以下に証明のステップを示します。</p>
+
+    <h2>1. コンパクトHausdorff空間の族と写像の構成</h2>
+    <p>空間 $X$ に含まれるすべてのコンパクト部分集合の族を $\mathcal{K} = \{K \subset X \mid K \text{ はコンパクト} \}$ とします。$X$ は距離化可能空間であるため、当然ハウスドルフ空間（Hausdorff空間）です。したがって、各 $K \in \mathcal{K}$ はそれに相対位相を入れるとコンパクトHausdorff空間になります。</p>
+
+    <p>これらを非交和として集めた直和位相空間を $Y = \bigsqcup_{K \in \mathcal{K}} K$ とします。<br>
+    ここで、自然な写像 $q: Y \to X$ を次のように定義します。<br>
+    $Y$ の元は、あるコンパクト部分集合 $K \in \mathcal{K}$ の元 $x$ として定まるので、そのまま $q(x) = x$ とします。</p>
+
+    <h2>2. qの連続性と全射性</h2>
+    <ul>
+        <li><strong>全射性:</strong> 任意の $x \in X$ に対して、1点集合 $\{x\}$ はコンパクトなので $\{x\} \in \mathcal{K}$ です。したがって、$x$ は $Y$ の元として（少なくとも1つ）存在し、$q(x) = x$ となるため、$q$ は全射です。</li>
+        <li><strong>連続性:</strong> 各 $K \in \mathcal{K}$ から $X$ への包含写像 $\iota_K : K \hookrightarrow X$ は連続です。直和位相空間の普遍性質により、各成分空間での写像が連続であれば、それらをまとめた写像 $q$ 全体も連続となります。</li>
+    </ul>
+
+    <h2>3. qが商写像であることの証明</h2>
+    <p>$X$ が $Y$ の商位相空間になることを示すには、$q$ が<strong>商写像</strong>であること、すなわち「$X$ の部分集合 $A$ が閉集合である $\iff q^{-1}(A)$ が $Y$ で閉集合である」を示せば十分です。</p>
+
+    <ul>
+        <li>($\implies$) $q$ は連続写像なので、$A$ が $X$ で閉集合ならば、$q^{-1}(A)$ は自動的に $Y$ で閉集合になります。</li>
+        <li>($\impliedby$) 逆に、$q^{-1}(A)$ が $Y$ で閉集合であると仮定します。<br>
+        直和位相の定義から、これは任意の成分 $K \in \mathcal{K}$ に対して、$q^{-1}(A) \cap K$ が $K$ において閉集合であることを意味します（ここでは $K$ を $Y$ の部分空間と同一視しています）。写像 $q$ の定義上、$q^{-1}(A) \cap K = A \cap K$ ですから、これは「任意のコンパクト部分集合 $K \subset X$ に対して、$A \cap K$ は $K$ で閉集合である」という状態を意味します。</li>
+    </ul>
+
+    <h2>4. 距離化可能性（第1可算公理）の利用</h2>
+    <p>ここで、$X$ が距離化可能空間であるという前提を用います。<br>
+    距離化可能空間は<strong>第1可算公理</strong>を満たします。第1可算空間においては、「点列閉集合」と「通常の閉集合」が一致します。これを利用して、$A$ が実際に $X$ において閉集合であることを示します。</p>
+
+    <p>$A$ の任意の収束する点列 $(x_n)_{n=1}^{\infty} \subset A$ をとり、その $X$ における極限を $x$ とします。<br>
+    このとき、集合 $C = \{x_n \mid n \in \mathbb{N}\} \cup \{x\}$ を考えると、これは収束する点列とその極限点のみからなるため、$X$ のコンパクト部分集合になります。<br>
+    したがって $C \in \mathcal{K}$ です。<br>
+    前提より、$A \cap C$ は $C$ において閉集合です。<br>
+    点列 $(x_n)$ はすべて $A \cap C$ に含まれており、$C$ 内で $x$ に収束するため、$A \cap C$ が閉集合であることから極限 $x$ も $A \cap C$ に含まれます。<br>
+    よって $x \in A$ となり、$A$ は点列の極限について閉じている（点列閉集合である）ことが示されました。<br>
+    前述の通り、$X$ は第1可算空間なので、点列閉集合であることは通常の閉集合であることと同値です。したがって、$A$ は $X$ において閉集合です。</p>
+
+    <h2>結論</h2>
+    <p>以上より、$q: Y \to X$ は連続な全射であり、かつ商写像であることが示されました。<br>
+    したがって、$X$ はコンパクトHausdorff空間の族 $\mathcal{K}$ の直和位相空間 $Y = \bigsqcup_{K \in \mathcal{K}} K$ の商位相空間と同相になります。 $\blacksquare$</p>
+
+</body>
+</html>

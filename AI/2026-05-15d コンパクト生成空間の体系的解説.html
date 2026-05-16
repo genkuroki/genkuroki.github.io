@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクト生成空間（k-空間）の完全解説</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                renderActions: {
+                    addMenu: []
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #f4f7f6;
+        }
+        .main-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 15px;
+            text-align: center;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #2c3e50;
+            border-left: 6px solid #3498db;
+            padding-left: 15px;
+            margin-top: 50px;
+            background: linear-gradient(to right, #e8f4fd, #fff);
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 30px;
+            font-size: 1.4em;
+        }
+        .box {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .definition {
+            background-color: #f0f7ff;
+            border: 1px solid #b3d7ff;
+        }
+        .definition::before {
+            content: "定義";
+            background: #3498db;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .theorem {
+            background-color: #fff4fc;
+            border: 1px solid #f8bbd0;
+        }
+        .theorem::before {
+            content: "定理";
+            background: #d81b60;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .proof {
+            background-color: #fdfdfd;
+            border: 1px solid #ddd;
+            border-left: 4px solid #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .proof-title {
+            font-weight: bold;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .example {
+            background-color: #fff9e6;
+            border: 1px solid #ffe082;
+        }
+        .example-title {
+            font-weight: bold;
+            color: #f39c12;
+            display: block;
+            margin-bottom: 10px;
+        }
+        ul li { margin-bottom: 12px; }
+        .math-block { overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+<div class="main-card">
+    <h1>コンパクト生成空間（$k$-空間）の体系的解説</h1>
+
+    <p>位相空間論における<strong>コンパクト生成空間（Compactly Generated Space）</strong>、別名 <strong>$k$-空間（$k$-space）</strong>は、局所的なコンパクト部分集合の情報から全体の位相を再構成できる空間のクラスです。</p>
+
+    <h2>1. 定義と基本的性質</h2>
+
+    <div class="box definition">
+        位相空間 $X$ が<strong>コンパクト生成空間</strong>であるとは、以下の条件を満たすことをいう：<br>
+        $X$ の部分集合 $A$ に対して、「任意のコンパクト空間 $K$ および任意の連続写像 $f: K \to X$ について $f^{-1}(A)$ が $K$ の閉集合である」ならば、$A$ は $X$ の閉集合である。
+    </div>
+
+    <p>より扱いやすい特徴付けとして、ハウスドルフ空間を仮定した場合には以下が成立します。</p>
+
+    <div class="box theorem">
+        ハウスドルフ空間 $X$ において、以下の条件は同値である。
+        <ul>
+            <li>(1) $X$ はコンパクト生成空間である。</li>
+            <li>(2) $A \subset X$ が閉集合 $\iff$ 任意のコンパクト部分集合 $K \subset X$ に対して $A \cap K$ が $K$ で閉集合。</li>
+            <li>(3) $A \subset X$ が開集合 $\iff$ 任意のコンパクト部分集合 $K \subset X$ に対して $A \cap K$ が $K$ で開集合。</li>
+        </ul>
+    </div>
+
+    <h2>2. 詳細な証明：局所コンパクト空間はコンパクト生成か？</h2>
+
+    <div class="box theorem">
+        ハウスドルフ空間 $X$ が局所コンパクトならば、$X$ はコンパクト生成である。
+    </div>
+
+    <div class="box proof">
+        <span class="proof-title">【証明】</span>
+        $A \subset X$ を、「任意のコンパクト部分集合 $K \subset X$ に対して $A \cap K$ が閉」を満たす集合とする。$A$ が $X$ で閉であることを示すために、$X \setminus A$ が開であることを示す。
+        <br><br>
+        任意の $x \in X \setminus A$ をとる。$X$ は局所コンパクトハウスドルフなので、$x$ の開近傍 $V$ でその閉包 $\overline{V}$ がコンパクトであるものが存在する。
+        <br>
+        $K = \overline{V}$ とおくと、仮定より $A \cap K$ は $K$ における閉集合である。
+        ハウスドルフ空間のコンパクト部分集合は閉集合であるから、$A \cap K$ は $X$ 全体でも閉集合である。
+        <br><br>
+        ここで、$x \in V$ であり、$x \notin A$ なので、$x \notin A \cap K$ である。
+        $A \cap K$ は閉集合なので、その補集合 $X \setminus (A \cap K)$ は開集合であり、
+        $$ W = V \cap (X \setminus (A \cap K)) $$
+        とおくと、$W$ は $x$ の開近傍である。
+        <br><br>
+        $W$ と $A$ の共通部分を考えると：
+        $$ W \cap A = (V \cap (X \setminus (A \cap K))) \cap A = (V \cap A) \setminus (A \cap K) $$
+        ここで $V \subset K$ であるから $V \cap A \subset K \cap A$ であり、したがって $W \cap A = \emptyset$ となる。
+        これは $W \subset X \setminus A$ を意味し、点 $x$ が $X \setminus A$ の内点であることを示している。
+        よって $X \setminus A$ は開集合、すなわち $A$ は閉集合である。 $\square$
+    </div>
+
+    <h2>3. 弱い十分条件：列型空間</h2>
+
+    <div class="box theorem">
+        すべての列型空間（Sequential Space）はコンパクト生成空間である。
+    </div>
+
+    <div class="box proof">
+        <span class="proof-title">【証明】</span>
+        列型空間の定義により、$A \subset X$ が閉 $\iff$ $A$ 内の任意の収束点列 $\{x_n\}$ の極限 $x$ が $A$ に属する。
+        <br><br>
+        今、$A$ と任意のコンパクト集合 $K$ の交わり $A \cap K$ が閉であると仮定する。
+        $X$ 内の点列 $x_n \to x$ で $x_n \in A$ とする。
+        集合 $K = \{x_n \mid n \in \mathbb{N}\} \cup \{x\}$ を考えると、これは収束点列とその極限からなるため、$X$ のコンパクト部分集合である。
+        <br><br>
+        仮定より $A \cap K$ は $K$ の閉集合である。
+        すべての $n$ で $x_n \in A \cap K$ であり、かつ $x_n \to x$ である。
+        閉集合は点列の極限について閉じているため、$x \in A \cap K$ となり、特に $x \in A$ である。
+        したがって $A$ は $X$ の閉集合の条件を満たし、$X$ はコンパクト生成である。 $\square$
+    </div>
+
+    <div class="box example">
+        <span class="example-title">【包含関係のまとめ】</span>
+        <ul>
+            <li><strong>距離空間 $\subset$ 第一可算空間 $\subset$ 列型空間 $\subset$ コンパクト生成空間</strong></li>
+            <li><strong>局所コンパクトハウスドルフ空間 $\subset$ コンパクト生成空間</strong></li>
+        </ul>
+    </div>
+
+    <h2>4. 写像による特徴付けと商空間の証明</h2>
+
+    <div class="box theorem">
+        $X$ がコンパクト生成であるための必要十分条件は、任意の空間 $Y$ への写像 $f: X \to Y$ について、
+        「任意のコンパクト空間 $K$ と連続写像 $g: K \to X$ の合成 $f \circ g: K \to Y$ が連続 $\implies f$ が連続」
+        が成り立つことである。
+    </div>
+
+    <div class="box theorem">
+        コンパクト生成空間の商空間はコンパクト生成である。
+    </div>
+
+    <div class="box proof">
+        <span class="proof-title">【証明】</span>
+        $p: X \to Y$ を商写像、 $X$ をコンパクト生成空間とする。
+        $B \subset Y$ について、任意のコンパクト空間 $K$ と連続写像 $g: K \to Y$ に対して $g^{-1}(B)$ が閉であると仮定する。$B$ が $Y$ で閉であることを示す。
+        <br><br>
+        商位相の定義より、$B$ が $Y$ で閉 $\iff p^{-1}(B)$ が $X$ で閉。
+        $X$ はコンパクト生成なので、任意のコンパクト空間 $K'$ と連続写像 $h: K' \to X$ について $h^{-1}(p^{-1}(B))$ が閉であることを示せばよい。
+        <br><br>
+        ここで $h^{-1}(p^{-1}(B)) = (p \circ h)^{-1}(B)$ である。
+        $h: K' \to X$ は連続、$p: X \to Y$ も連続なので、その合成 $g' = p \circ h: K' \to Y$ はコンパクト空間 $K'$ からの連続写像である。
+        最初の仮定により、このような写像による $B$ の逆像 $(g')^{-1}(B)$ は $K'$ で閉集合となる。
+        したがって $p^{-1}(B)$ は $X$ で閉、ゆえに $B$ は $Y$ で閉である。 $\square$
+    </div>
+
+    <h2>5. 圏論的観点：なぜコンパクト生成空間か？</h2>
+
+    <p>一般的な位相空間の圏 $\mathbf{Top}$ では、直積位相と写像空間の位相の間に期待される「随伴関係」が一般には成立しません。しかし、コンパクト生成空間のクラスに制限し、必要に応じて「弱ハウスドルフ」の条件を加えると、<strong>デカルト閉圏（Cartesian Closed Category）</strong>に近い非常に良い性質を持つようになります。</p>
+
+    <div class="box definition">
+        <strong>指数法則の成立：</strong><br>
+        $X, Y$ をコンパクト生成空間とするとき、写像空間 $Map(X, Y)$ に適切な位相（コンパクト開位相の $k$-化）を導入すれば、任意の $Z$ に対して以下の同型が成り立つ：
+        $$ Map(X \times Y, Z) \cong Map(X, Map(Y, Z)) $$
+    </div>
+
+    <p>この性質により、ホモトピー論において「パス空間のパス（＝ホモトピー）」を扱う際に、位相的な破綻を気にすることなく議論を進めることが可能になります。</p>
+
+</div>
+
+</body>
+</html>

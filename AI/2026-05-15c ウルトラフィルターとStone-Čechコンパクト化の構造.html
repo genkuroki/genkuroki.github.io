@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ウルトラフィルターとStone-Čechコンパクト化に関する解説</title>
+    <style>
+        :root {
+            --bg-color: #eef2f5;
+            --text-color: #333333;
+            --h1-color: #2c3e50;
+            --h2-bg: linear-gradient(135deg, #2980b9, #2c3e50);
+            --h3-color: #16a085;
+            --h3-bg: #f0f9f7;
+            --container-bg: #ffffff;
+            --accent-bold: #c0392b;
+            --def-bg: #ebf5fb;
+            --def-border: #3498db;
+            --proof-bg: #f9fbf9;
+            --proof-border: #2ecc71;
+            --example-bg: #fdfae6;
+            --example-border: #f1c40f;
+            --note-bg: #fafafa;
+            --note-border: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 50px 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-radius: 12px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            color: var(--h1-color);
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.6em;
+            color: #ffffff;
+            background: var(--h2-bg);
+            padding: 12px 25px;
+            border-radius: 8px;
+            margin-top: 60px;
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.2);
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--h3-color);
+            border-left: 6px solid var(--h3-color);
+            padding-left: 15px;
+            margin-top: 40px;
+            background-color: var(--h3-bg);
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        p {
+            margin: 16px 0;
+            text-align: justify;
+            font-size: 1.05em;
+        }
+
+        strong {
+            color: var(--accent-bold);
+        }
+
+        ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .definition {
+            background-color: var(--def-bg);
+            border-left: 6px solid var(--def-border);
+            padding: 20px 25px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .definition strong {
+            color: #21618c; /* 定義内の強調は専用の色に */
+        }
+
+        .proof, .example {
+            padding: 25px 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+
+        .proof {
+            background-color: var(--proof-bg);
+            border: 1px solid var(--proof-border);
+            border-left: 6px solid var(--proof-border);
+        }
+
+        .proof::before {
+            content: "証明";
+            font-weight: bold;
+            display: inline-block;
+            background-color: var(--proof-border);
+            color: white;
+            padding: 4px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            letter-spacing: 2px;
+        }
+
+        .example {
+            background-color: var(--example-bg);
+            border: 1px solid var(--example-border);
+            border-left: 6px solid var(--example-border);
+        }
+
+        .example::before {
+            content: "例";
+            font-weight: bold;
+            display: inline-block;
+            background-color: var(--example-border);
+            color: #333;
+            padding: 4px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            letter-spacing: 2px;
+        }
+
+        .note {
+            background-color: var(--note-bg);
+            border: 2px dashed var(--note-border);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 60px;
+            color: #555;
+        }
+
+        .note strong {
+            color: #7f8c8d;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+            margin: 50px 0;
+        }
+
+        /* 数式のスクロール対応（スマホ閲覧時など） */
+        .math-scroll {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 5px;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>ウルトラフィルターとStone-Čechコンパクト化の構造</h1>
+
+        <p>ウルトラフィルターとStone-Čechコンパクト化に関する圏論的および位相空間論的な構造について、順を追って詳細に解説します。</p>
+
+        <hr>
+
+        <h2>1. ウルトラフィルターモナドの構造と証明</h2>
+
+        <div class="definition">
+            <p><strong>定義（フィルターとウルトラフィルター）</strong><br>
+            集合 $X$ 上の<strong>フィルター</strong> $\mathcal{F}$ とは、冪集合 $\mathcal{P}(X)$ の部分集合で、以下の3条件を満たすものです。<br>
+            1. $X \in \mathcal{F}$ かつ $\emptyset \notin \mathcal{F}$<br>
+            2. $A, B \in \mathcal{F} \implies A \cap B \in \mathcal{F}$<br>
+            3. $A \in \mathcal{F}$ かつ $A \subseteq B \subseteq X \implies B \in \mathcal{F}$</p>
+
+            <p><strong>ウルトラフィルター</strong>とは、包含関係に関して極大であるフィルターのことです。同値な条件として、「任意の $A \subseteq X$ に対して、$A \in \mathcal{F}$ または $X \setminus A \in \mathcal{F}$ のいずれか一方が必ず成り立つ」ことが挙げられます。集合 $X$ 上のウルトラフィルター全体の集合を $\beta X$ と表記します。</p>
+        </div>
+
+        <div class="example">
+            $X = \mathbb{N}$ （自然数全体の集合）とします。
+            <ul>
+                <li><strong>単項フィルター（principal filter）：</strong> 特定の元 $n \in \mathbb{N}$ を固定し、$\mathcal{F}_n = \{ A \subseteq \mathbb{N} \mid n \in A \}$ とします。これはウルトラフィルターです。</li>
+                <li><strong>自由フィルター（free filter）：</strong> 補集合が有限であるような部分集合全体 $\mathcal{F}_{cof}$ （補有限フィルター）はフィルターですが、ウルトラフィルターではありません。Zornの補題を用いればこれを拡張したウルトラフィルターが存在することが証明できますが、具体的に書き下すことは不可能です。</li>
+            </ul>
+        </div>
+
+        <h3>1.1 関手構造 $\beta f$</h3>
+        <p>写像 $f: X \to Y$ に対して、写像 $\beta f: \beta X \to \beta Y$ を次のように定義します。<br>
+        <span class="math-scroll">$$\beta f(\mathcal{F}) = \{ B \subseteq Y \mid f^{-1}(B) \in \mathcal{F} \} \quad (\mathcal{F} \in \beta X)$$</span></p>
+
+        <div class="proof">
+            <strong>well-definedである（$\beta f(\mathcal{F})$ が $Y$ 上のウルトラフィルターになる）ことの証明：</strong><br>
+            $\mathcal{G} = \beta f(\mathcal{F})$ とおきます。<br>
+            1. $f^{-1}(Y) = X \in \mathcal{F}$ より $Y \in \mathcal{G}$。$f^{-1}(\emptyset) = \emptyset \notin \mathcal{F}$ より $\emptyset \notin \mathcal{G}$。<br>
+            2. $B_1, B_2 \in \mathcal{G}$ ならば、$f^{-1}(B_1), f^{-1}(B_2) \in \mathcal{F}$。$\mathcal{F}$ はフィルターなので $f^{-1}(B_1) \cap f^{-1}(B_2) = f^{-1}(B_1 \cap B_2) \in \mathcal{F}$。ゆえに $B_1 \cap B_2 \in \mathcal{G}$。<br>
+            3. $B \in \mathcal{G}$ かつ $B \subseteq C \subseteq Y$ ならば、$f^{-1}(B) \in \mathcal{F}$ かつ $f^{-1}(B) \subseteq f^{-1}(C)$。よって $f^{-1}(C) \in \mathcal{F}$ となり $C \in \mathcal{G}$。<br>
+            4. 任意の $B \subseteq Y$ について、$f^{-1}(Y \setminus B) = X \setminus f^{-1}(B)$ です。$\mathcal{F}$ はウルトラフィルターなので、$f^{-1}(B) \in \mathcal{F}$ または $X \setminus f^{-1}(B) \in \mathcal{F}$ のいずれかが成り立ちます。したがって、$B \in \mathcal{G}$ または $Y \setminus B \in \mathcal{G}$ となり、$\mathcal{G}$ は極大性を満たします。
+        </div>
+
+        <h3>1.2 モナド構造 $\eta_X$ と $\mu_X$</h3>
+        <p><strong>単位射 $\eta_X: X \to \beta X$ の定義:</strong><br>
+        各 $x \in X$ に対して、$\eta_X(x) = \{ A \subseteq X \mid x \in A \}$ とします（前述の単項ウルトラフィルター）。</p>
+
+        <p><strong>乗法射 $\mu_X: \beta\beta X \to \beta X$ の定義:</strong><br>
+        $\mathfrak{U} \in \beta\beta X$ （$\beta X$ 上のウルトラフィルター）とします。任意の $A \subseteq X$ に対して、$A^* = \{ \mathcal{F} \in \beta X \mid A \in \mathcal{F} \}$ と表記することにします。<br>
+        <span class="math-scroll">$$\mu_X(\mathfrak{U}) = \{ A \subseteq X \mid A^* \in \mathfrak{U} \}$$</span></p>
+
+        <div class="proof">
+            <strong>well-definedである（$\mu_X(\mathfrak{U})$ が $X$ 上のウルトラフィルターになる）ことの証明：</strong><br>
+            $\mathcal{H} = \mu_X(\mathfrak{U})$ とおきます。<br>
+            1. $X^* = \{ \mathcal{F} \in \beta X \mid X \in \mathcal{F} \} = \beta X$。$\beta X \in \mathfrak{U}$ より $X \in \mathcal{H}$。$\emptyset^* = \emptyset \notin \mathfrak{U}$ より $\emptyset \notin \mathcal{H}$。<br>
+            2. $A, B \in \mathcal{H} \implies A^*, B^* \in \mathfrak{U}$。ここで $A^* \cap B^* = \{ \mathcal{F} \mid A \in \mathcal{F} \text{かつ} B \in \mathcal{F} \} = (A \cap B)^*$。$\mathfrak{U}$ はフィルターなので $(A \cap B)^* \in \mathfrak{U}$、よって $A \cap B \in \mathcal{H}$。<br>
+            3. $A \in \mathcal{H}$ かつ $A \subseteq B \implies A^* \subseteq B^*$ （$A \in \mathcal{F}$ ならば $B \in \mathcal{F}$ だから）。$A^* \in \mathfrak{U}$ より $B^* \in \mathfrak{U}$、よって $B \in \mathcal{H}$。<br>
+            4. 任意の $A \subseteq X$ について、$\mathcal{F}$ がウルトラフィルターであるため $(X \setminus A)^* = \beta X \setminus A^*$ となります。$\mathfrak{U}$ もウルトラフィルターなので、$A^* \in \mathfrak{U}$ または $\beta X \setminus A^* \in \mathfrak{U}$ のいずれかが成り立ちます。よって $A \in \mathcal{H}$ または $X \setminus A \in \mathcal{H}$ となります。
+        </div>
+
+        <h3>1.3 モナドの公理の証明</h3>
+        <div class="proof">
+            <strong>(1) 左単位律 $\mu_X \circ \eta_{\beta X} = id_{\beta X}$ :</strong><br>
+            任意の $\mathcal{F} \in \beta X$ をとります。$\eta_{\beta X}(\mathcal{F}) = \{ \mathcal{V} \subseteq \beta X \mid \mathcal{F} \in \mathcal{V} \} \in \beta\beta X$ です。<br>
+            $\mu_X(\eta_{\beta X}(\mathcal{F})) = \{ A \subseteq X \mid A^* \in \eta_{\beta X}(\mathcal{F}) \} = \{ A \subseteq X \mid \mathcal{F} \in A^* \} = \{ A \subseteq X \mid A \in \mathcal{F} \} = \mathcal{F}$。<br><br>
+
+            <strong>(2) 右単位律 $\mu_X \circ \beta(\eta_X) = id_{\beta X}$ :</strong><br>
+            $\mathcal{F} \in \beta X$ をとります。$\beta(\eta_X)(\mathcal{F}) = \{ \mathcal{V} \subseteq \beta X \mid \eta_X^{-1}(\mathcal{V}) \in \mathcal{F} \}$ です。<br>
+            ここで $A^* \in \beta(\eta_X)(\mathcal{F}) \iff \eta_X^{-1}(A^*) \in \mathcal{F}$ ですが、$\eta_X^{-1}(A^*) = \{ x \in X \mid \eta_X(x) \in A^* \} = \{ x \in X \mid A \in \eta_X(x) \} = \{ x \in X \mid x \in A \} = A$ となります。<br>
+            よって $A^* \in \beta(\eta_X)(\mathcal{F}) \iff A \in \mathcal{F}$ となり、$\mu_X(\beta(\eta_X)(\mathcal{F})) = \{ A \subseteq X \mid A \in \mathcal{F} \} = \mathcal{F}$ が示されます。<br><br>
+
+            <strong>(3) 結合律 $\mu_X \circ \mu_{\beta X} = \mu_X \circ \beta(\mu_X)$ :</strong><br>
+            $\mathbb{U} \in \beta\beta\beta X$ とします。<br>
+            左辺は $(\mu_X \circ \mu_{\beta X})(\mathbb{U}) = \{ A \subseteq X \mid (A^*)^{**} \in \mathbb{U} \}$ （ただし $\mathcal{V}^{**} = \{ \mathfrak{U} \in \beta\beta X \mid \mathcal{V} \in \mathfrak{U} \}$）となります。<br>
+            右辺は $(\mu_X \circ \beta(\mu_X))(\mathbb{U}) = \{ A \subseteq X \mid \mu_X^{-1}(A^*) \in \mathbb{U} \}$ となります。<br>
+            ここで任意の $\mathfrak{U} \in \beta\beta X$ に対して、$\mathfrak{U} \in \mu_X^{-1}(A^*) \iff \mu_X(\mathfrak{U}) \in A^* \iff A \in \mu_X(\mathfrak{U}) \iff A^* \in \mathfrak{U} \iff \mathfrak{U} \in (A^*)^{**}$ が成り立つため、両者は一致します。
+        </div>
+
+        <hr>
+
+        <h2>2. $\beta X$ の位相と極度不連結コンパクトHausdorff空間</h2>
+
+        <p><strong>位相の定義と clopen 性:</strong><br>
+        $\beta X$ 上の位相を、部分集合族 $\{ A^* \mid A \subseteq X \}$ を開基として定めます。$A^* \cap B^* = (A \cap B)^*$ と $X^* = \beta X$ を満たすためこれは開基となります。<br>
+        また、任意の $A \subseteq X$ について $\beta X \setminus A^* = (X \setminus A)^*$ であり、$(X \setminus A)^*$ も開基の元なので開集合です。したがって、$A^*$ は開かつ閉、すなわち <strong>clopen</strong> な集合です。</p>
+
+        <div class="proof">
+            <strong>像の稠密性の証明：</strong><br>
+            $X$ の像は $\eta_X(X)$ です。$\beta X$ の任意の空でない開集合は、ある $A \neq \emptyset$ に対する基本開集合 $A^*$ を含みます。$x \in A$ を一つ選ぶと、$A \in \eta_X(x)$ より $\eta_X(x) \in A^*$ となります。任意の開集合が $\eta_X(X)$ の元を含むため、$\eta_X(X)$ は稠密です。<br><br>
+
+            <strong>Hausdorff性の証明：</strong><br>
+            $\mathcal{F} \neq \mathcal{G}$ なる異なるウルトラフィルターをとります。互いに極大なので、ある $A \in \mathcal{F}$ が存在して $A \notin \mathcal{G}$、すなわち $X \setminus A \in \mathcal{G}$ となります。<br>
+            このとき $\mathcal{F} \in A^*$ かつ $\mathcal{G} \in (X \setminus A)^*$ です。$A^*$ と $(X \setminus A)^*$ は共通部分が $\emptyset^* = \emptyset$ となる互いに素な開集合であるため、$\beta X$ はHausdorffです。<br><br>
+
+            <strong>コンパクト性の証明：</strong><br>
+            基本開集合の族 $\{ A^* \mid A \subseteq X \}$ を準開基とし、Alexanderの準開基の定理を用います。<br>
+            $\beta X = \bigcup_{i \in I} A_i^*$ と被覆されたとし、有限部分被覆を持たないと仮定します。すると任意の有限部分集合 $J \subseteq I$ に対して $\bigcap_{j \in J} (X \setminus A_j)^*$ が空でない、すなわち $\bigcap_{j \in J} (X \setminus A_j) \neq \emptyset$ です。<br>
+            これは $\{ X \setminus A_i \mid i \in I \}$ が有限交叉性を持つことを意味します。これを生成系とするウルトラフィルター $\mathcal{U}$ が存在しますが、このとき任意の $i$ について $X \setminus A_i \in \mathcal{U}$ となるため、$\mathcal{U} \in \bigcap_{i \in I} (X \setminus A_i)^* = \bigcap_{i \in I} (\beta X \setminus A_i^*)$ となり、$\bigcup_{i \in I} A_i^*$ が $\beta X$ 全体を被覆していることに矛盾します。よってコンパクトです。<br><br>
+
+            <strong>極度不連結性の証明：</strong><br>
+            位相空間が極度不連結であるとは、任意の開集合の閉包が開集合になることです。<br>
+            $U \subseteq \beta X$ を任意の開集合とし、開基の和として $U = \bigcup_{i \in I} A_i^*$ と表します。$A = \bigcup_{i \in I} A_i$ とおきます。<br>
+            $A_i^* \subseteq A^*$ であり、$A^*$ は閉集合なので $\overline{U} \subseteq A^*$ です。<br>
+            逆に、$\mathcal{F} \notin \overline{U}$ とすると、$\mathcal{F} \in B^*$ かつ $B^* \cap U = \emptyset$ となる開傍受 $B^*$ があります。$B^* \cap A_i^* = \emptyset \implies B \cap A_i = \emptyset$ がすべての $i$ で成り立つため、$B \cap A = \emptyset$、すなわち $B^* \cap A^* = \emptyset$ です。<br>
+            $\mathcal{F} \in B^*$ なので $\mathcal{F} \notin A^*$ となり、$A^* \subseteq \overline{U}$ が示されます。結果として $\overline{U} = A^*$ となり、閉包は clopen な開基に一致し開集合となります。
+        </div>
+
+        <hr>
+
+        <h2>3. フィルターの収束とコンパクトHausdorff性の同値性</h2>
+
+        <p><strong>フィルターの収束の定義:</strong><br>
+        位相空間 $Y$ と $Y$ 上のフィルター $\mathcal{F}$、点 $y \in Y$ に対して、$\mathcal{F}$ が $y$ に<strong>収束する</strong>（$\mathcal{F} \to y$ と書く）とは、$y$ の任意の開傍受 $V$ に対して、$V \in \mathcal{F}$ となることです。</p>
+
+        <h3>3.1 Hausdorff性と収束先の一意性</h3>
+        <div class="proof">
+            <strong>$(\implies)$ の証明:</strong> $Y$ がHausdorffとし、$\mathcal{F}$ が異なる2点 $y, z$ に収束したとします。Hausdorff性より $V_y \cap V_z = \emptyset$ なる開傍受が存在します。収束の定義から $V_y \in \mathcal{F}$ かつ $V_z \in \mathcal{F}$ ですが、フィルターの性質により $V_y \cap V_z = \emptyset \in \mathcal{F}$ となり矛盾します。<br><br>
+            <strong>$(\impliedby)$ の証明:</strong> 対偶を示します。$Y$ がHausdorffでないとすると、相異なる $y, z$ の任意の開傍受 $V_y, V_z$ に対して $V_y \cap V_z \neq \emptyset$ となります。族 $\{ V_y \cap V_z \}$ は有限交叉性を持つため、これを生成系として拡張したウルトラフィルター $\mathcal{F}$ が存在します。構成から $\mathcal{F}$ は $y, z$ 両方のすべての開傍受を含むため、$\mathcal{F} \to y$ かつ $\mathcal{F} \to z$ となり一意性が崩れます。
+        </div>
+
+        <h3>3.2 コンパクト性と収束先の存在</h3>
+        <div class="proof">
+            <strong>$(\implies)$ の証明:</strong> $Y$ がコンパクトとし、ウルトラフィルター $\mathcal{F}$ がどの点にも収束しないと仮定します。各 $y \in Y$ に対して開傍受 $V_y \notin \mathcal{F}$ が存在し、$\mathcal{F}$ の極大性から $Y \setminus V_y \in \mathcal{F}$ です。$\{ V_y \}$ は開被覆となるため、コンパクト性より有限部分被覆 $\{ V_{y_1}, \dots, V_{y_n} \}$ を持ちます。ド・モルガンの法則から $\bigcap_{i=1}^n (Y \setminus V_{y_i}) = \emptyset$ となりますが、各 $Y \setminus V_{y_i}$ は $\mathcal{F}$ に属するため有限交叉性により $\emptyset \in \mathcal{F}$ となり矛盾します。<br><br>
+            <strong>$(\impliedby)$ の証明:</strong> 対偶を示します。$Y$ がコンパクトでないとすると、有限部分被覆を持たない開被覆 $\{ U_i \}_{i \in I}$ が存在します。すなわち閉集合族 $\{ Y \setminus U_i \}$ は有限交叉性を持ち、これを含むウルトラフィルター $\mathcal{F}$ が作れます。もし $\mathcal{F} \to y$ となると、被覆であるため $y \in U_{i_0}$ なる $U_{i_0}$ があり $U_{i_0} \in \mathcal{F}$ となります。一方で構成から $Y \setminus U_{i_0} \in \mathcal{F}$ なので $\emptyset \in \mathcal{F}$ となり矛盾。よって収束しないウルトラフィルターが存在します。
+        </div>
+
+        <hr>
+
+        <h2>4. $\beta X$ におけるウルトラフィルターの収束とモナド乗法</h2>
+
+        <p>任意のウルトラフィルター $\mathfrak{U} \in \beta\beta X$ に対して、モナドの乗法 $\mu_X(\mathfrak{U})$ が $\mathfrak{U}$ の $\beta X$ におけるただ一つの収束先になることを示します。</p>
+
+        <div class="proof">
+            $\beta X$ はコンパクトHausdorff空間であるため、前節の同値性により $\mathfrak{U} \in \beta\beta X$ は $\beta X$ 内のただ一つの元に収束します。その収束先が $\mathcal{F} = \mu_X(\mathfrak{U})$ と一致することを示します。<br><br>
+            $\mathfrak{U} \to \mathcal{F}$ を示すには、位相空間 $\beta X$ における $\mathcal{F}$ の任意の開傍受 $\mathcal{O}$ に対して、$\mathcal{O} \in \mathfrak{U}$ となることを示せば十分です。<br>
+            $\beta X$ の開基は $\{ A^* \}$ なので、$\mathcal{O}$ はある基本開集合 $A^*$ を含み、$\mathcal{F} \in A^* \subseteq \mathcal{O}$ を満たすように取れます。<br>
+            $\mathcal{F} \in A^*$ ということは、定義から $A \in \mathcal{F}$ です。<br>
+            ここで $\mathcal{F} = \mu_X(\mathfrak{U}) = \{ A \subseteq X \mid A^* \in \mathfrak{U} \}$ の定義を用いると、$A \in \mathcal{F} \iff A^* \in \mathfrak{U}$ が成り立ちます。<br>
+            したがって $A^* \in \mathfrak{U}$ となります。$\mathfrak{U}$ はフィルターであり $A^* \subseteq \mathcal{O}$ であるから、条件より $\mathcal{O} \in \mathfrak{U}$ となります。<br>
+            これは収束の定義を満たしており、$\beta X$ はHausdorffであるため、$\mu_X(\mathfrak{U})$ が唯一の収束先であることが証明されました。
+        </div>
+
+        <hr>
+
+        <h2>まとめ</h2>
+        <p>本解説では、集合 $X$ からそのウルトラフィルターの空間 $\beta X$ を構成するプロセスが、圏論的な<strong>モナド</strong>を形成することを証明しました。さらに $\beta X$ に適切な開基を導入することで、それが元の集合の像を稠密に含む<strong>極度不連結なコンパクトHausdorff空間</strong>（Stone-Čechコンパクト化）となることを確認しました。</p>
+        <p>最後に「コンパクトHausdorff性」が「ウルトラフィルターの一意的な収束」と同値であることを示し、モナドの乗法射 $\mu_X$ が、$\beta\beta X$ の元（ウルトラフィルター上のウルトラフィルター）を「その位相的な収束先へ対応させる写像」として完全に一致することを明らかにしました。代数・圏論的構造（モナド）と位相的構造（コンパクト化と収束）が完璧に符合する美しい数学的帰結です。</p>
+
+        <div class="note">
+            <p><strong>用語に関する注意:</strong></p>
+            <ul>
+                <li>Stone-Čechとclopenはそのままの綴りでカタカナにしない。</li>
+                <li>人の名前もカタカナにしない。</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

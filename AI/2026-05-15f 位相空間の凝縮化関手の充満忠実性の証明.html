@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>関手の充満忠実性の証明</title>
+    <!-- MathJaxの設定と読み込み -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            font-size: 1.6em;
+            color: #1a1a1a;
+            border-bottom: 2px solid #333;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-top: 35px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            font-size: 1.1em;
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 1em 0;
+            text-align: justify;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 1em 0;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 30px 0;
+        }
+        .proof-end {
+            text-align: right;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>関手の充満忠実性の証明</h1>
+    
+    <p>
+        コンパクト生成位相空間の圏 $\mathbf{CGTop}$ から、極度不連結コンパクトHausdorff空間の圏 $\mathbf{EDCHaus}$ 上の集合の前層の圏 $\widehat{\mathbf{EDCHaus}} = \mathbf{Set}^{\mathbf{EDCHaus}^{\mathrm{op}}}$ への関手
+        $$ F: \mathbf{CGTop} \longrightarrow \mathbf{Set}^{\mathbf{EDCHaus}^{\mathrm{op}}}, \quad X \mapsto C(-, X) $$
+        が充満忠実であることを証明します。
+    </p>
+    <p>
+        ここで、コンパクト生成位相空間 $X$ の定義として、「任意のコンパクトHausdorff空間 $K$ からの連続写像 $g: K \to X$ に関して写像の連続性が判定できる（位相が緊密（coherent）である）」という標準的な定義を用います。
+    </p>
+
+    <hr>
+
+    <h2>1. 忠実性 (Faithfulness) の証明</h2>
+    <p>
+        任意の対象 $X, Y \in \mathbf{CGTop}$ と、2つの連続写像 $f, g: X \to Y$ を考えます。これらが $F(f) = F(g)$ を満たすと仮定します。
+    </p>
+    <p>
+        関手 $F$ の定義より、これは任意の $E \in \mathbf{EDCHaus}$ と任意の連続写像 $h: E \to X$ に対して、
+        $$ f \circ h = g \circ h $$
+        が成り立つことを意味します。
+    </p>
+    <p>
+        ここで、1点空間 $\{*\}$ は極度不連結コンパクトHausdorff空間の対象（すなわち $\{*\} \in \mathbf{EDCHaus}$）です。任意の点 $x \in X$ に対し、恒等的に $x$ を値に持つ連続写像 $h_x: \{*\} \to X \, (* \mapsto x)$ を考えることができます。
+    </p>
+    <p>
+        この $h_x$ に対して上記の条件を適用すると、
+        $$ f(x) = f(h_x(*)) = (f \circ h_x)(*) = (g \circ h_x)(*) = g(h_x(*)) = g(x) $$
+        が任意の $x \in X$ について成り立ちます。したがって $f = g$ となり、関手 $F$ は<strong>忠実</strong>です。
+    </p>
+
+    <hr>
+
+    <h2>2. 充満性 (Fullness) の証明</h2>
+    <p>
+        任意の自然変換 $\alpha: C(-, X) \to C(-, Y)$ が与えられたとき、$\alpha = F(f)$（すなわち $\alpha_E(h) = f \circ h$）を満たす連続写像 $f: X \to Y$ が存在することを示します。
+    </p>
+
+    <h3>写像 $f$ の構成</h3>
+    <p>
+        1点空間 $\{*\} \in \mathbf{EDCHaus}$ を用いて写像 $f: X \to Y$ を定義します。<br>
+        各 $x \in X$ に対し、先ほどと同様に写像 $h_x: \{*\} \to X \, (* \mapsto x)$ を対応させると、$\alpha_{\{* \}}(h_x)$ は $C(\{*\}, Y)$ の元（すなわち $\{*\}$ から $Y$ への連続写像）になります。そこで、
+        $$ f(x) := \alpha_{\{* \}}(h_x)(*) $$
+        によって写像 $f: X \to Y$ を定めます。
+    </p>
+
+    <h3>任意の $E \in \mathbf{EDCHaus}$ に対する $\alpha_E(h) = f \circ h$ の証明</h3>
+    <p>
+        任意の $E \in \mathbf{EDCHaus}$ と任意の連続写像 $h: E \to X$ を取ります。<br>
+        $E$ の任意の点 $e \in E$ に対し、包含写像 $i_e: \{*\} \to E \, (* \mapsto e)$ を考えます。これは連続写像です。
+    </p>
+    <p>
+        $\alpha$ の自然性（naturality）により、射 $i_e: \{*\} \to E$ に対して次の図式が可換となります：
+        $$
+        \begin{array}{ccc}
+        C(E, X) & \xrightarrow{\alpha_E} & C(E, Y) \\
+        \downarrow -\circ i_e & & \downarrow -\circ i_e \\
+        C(\{*\}, X) & \xrightarrow{\alpha_{\{* \}}} & C(\{*\}, Y)
+        \end{array}
+        $$
+        したがって、次の関係式が得られます：
+        $$ \alpha_{\{* \}}(h \circ i_e) = \alpha_E(h) \circ i_e $$
+    </p>
+    <p>
+        この両辺を $\{*\}$ の点 $*$ で評価します。
+    </p>
+    <ul>
+        <li>
+            <strong>左辺の評価:</strong><br>
+            $h \circ i_e: \{*\} \to X$ は $*$ を $h(e) \in X$ に写す写像、すなわち $h_{h(e)}$ そのものです。したがって、$f$ の定義より以下になります。
+            $$ \alpha_{\{* \}}(h \circ i_e)(*) = \alpha_{\{* \}}(h_{h(e)})(*) = f(h(e)) $$
+        </li>
+        <li>
+            <strong>右辺の評価:</strong><br>
+            $$ (\alpha_E(h) \circ i_e)(*) = \alpha_E(h)(i_e(*)) = \alpha_E(h)(e) $$
+        </li>
+    </ul>
+    <p>
+        これらが一致するため、任意の $e \in E$ に対して $\alpha_E(h)(e) = f(h(e))$、すなわち <strong>$\alpha_E(h) = f \circ h$</strong> が成り立ちます。
+    </p>
+
+    <h3>$f$ の連続性の証明</h3>
+    <p>
+        写像 $f: X \to Y$ が連続であることを示します。<br>
+        $X$ はコンパクト生成位相空間であるため、「任意のコンパクトHausdorff空間 $K$ と任意の連続写像 $g: K \to X$ に対して、合成写像 $f \circ g: K \to Y$ が連続である」ことを示せば、$f$ の連続性が従います。
+    </p>
+    <p>
+        任意のコンパクトHausdorff空間 $K$ と連続写像 $g: K \to X$ を固定します。<br>
+        <strong>Gleasonの定理</strong>により、任意のコンパクトHausdorff空間 $K$ には、ある極度不連結コンパクトHausdorff空間 $E(K)$ からの全射連続写像
+        $$ p: E(K) \longrightarrow K $$
+        （Gleason被覆）が存在します。コンパクト空間からHausdorff空間への全射連続写像は<strong>商写像（quotient map）</strong>となります。
+    </p>
+    <p>
+        ここで、合成写像 $g \circ p: E(K) \to X$ を考えます。$E(K) \in \mathbf{EDCHaus}$ であるため、先ほど示された一般の性質（$\alpha_E(h) = f \circ h$）を適用すると、
+        $$ \alpha_{E(K)}(g \circ p) = f \circ (g \circ p) = (f \circ g) \circ p $$
+        が成り立ちます。
+    </p>
+    <p>
+        $\alpha_{E(K)}(g \circ p)$ は $C(E(K), Y)$ の元であるため、写像 $(f \circ g) \circ p: E(K) \to Y$ は連続写像です。<br>
+        いま、$p: E(K) \to K$ は商写像であるため、商位相の普遍性により、$(f \circ g) \circ p$ が連続であれば、<strong>$f \circ g: K \to Y$ も連続</strong>でなければなりません。
+    </p>
+    <p>
+        これが任意のコンパクトHausdorff空間 $K$ と連続写像 $g: K \to X$ について成り立つため、$X$ がコンパクト生成位相空間であることから $f: X \to Y$ は連続です。
+    </p>
+    <p>
+        以上により、$\alpha = F(f)$ を満たす連続写像 $f$ が存在することが示され、関手 $F$ は<strong>充満</strong>です。
+    </p>
+
+    <hr>
+
+    <h2>結論</h2>
+    <p>
+        関手 $X \mapsto C(-, X)$ は忠実かつ充満であるため、<strong>充満忠実（fully faithful）</strong>であることが証明されました。
+    </p>
+    <div class="proof-end">$\blacksquare$</div>
+
+</body>
+</html>
