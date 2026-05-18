@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ぎりぎりsoberにならない位相空間の反例集</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #34495e;
+            padding-bottom: 10px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #2980b9;
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 50px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 35px;
+            border-left: 5px solid #16a085;
+            padding-left: 10px;
+        }
+        p {
+            margin-bottom: 1.5em;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 1.5em;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 0.7em;
+        }
+        .box {
+            background-color: #fff;
+            border-left: 4px solid #2980b9;
+            padding: 22px;
+            margin: 25px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-radius: 0 6px 6px 0;
+        }
+        .definition {
+            border-left-color: #16a085;
+            background-color: #f0fdf4;
+        }
+        .proof {
+            background-color: #f8f9fa;
+            border-left: 4px solid #7f8c8d;
+            font-size: 0.95em;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .proof-title {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .note-box {
+            background-color: #eef7fa;
+            border-left: 4px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace;
+            background-color: #eee;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+    <h1>ぎりぎりsoberにならない位相空間の反例集</h1>
+    <p>位相空間論において、<strong>sober（ソバー）空間</strong>は、代数幾何学（代数多様体やスキーム論）およびロジックの分野で基礎となる重要な概念です。ハウスドルフ空間（$T_2$空間）の持つ「点を開集合で分離する性質」とは異なる角度から空間の良さを捉えたものであり、「幾何学的な図形（閉集合）」と「代数的な対象（点）」を美しく1対1に対応させる足場となります。</p>
+    <p>本稿では、初学者の方向けに基礎定義の厳密な証明を交えて復習したあと、<strong>「あと一歩でsober空間になれるのに、絶妙な理由でなり損ねている」</strong>という5つの魅力的な反例を、代数幾何学的な視点（1次元から2次元への一般化）も含めて非常に詳しく解説します。</p>
+
+    <hr>
+
+    <h2>1. 基礎知識の精緻な復習</h2>
+    <p>まず、sober空間を定義するために必要な概念である「$T_0$空間」「irreducible closed set（既約閉集合）」「generic point（生成点）」の定義を、論理的なギャップがないよう厳密に確認しましょう。</p>
+
+    <div class="box definition">
+        <strong>定義 1.1：$T_0$ 空間（コルモゴロフの分離公理）</strong><br>
+        位相空間 $X$ の任意の相異なる2点 $x, y \in X$ ($x \neq y$) に対して、「 $x$ を含み $y$ を含まない開集合」または「 $y$ を含み $x$ を含まない開集合」の少なくとも一方が存在するとき、 $X$ を <strong>$T_0$ 空間</strong>といいます。
+    </div>
+
+    <div class="box definition">
+        <strong>定義 1.2：既約閉集合 (irreducible closed set)</strong><br>
+        位相空間 $X$ の空でない閉集合 $F$ が<strong>既約（irreducible）</strong>であるとは、 $F$ を2つの真の閉部分集合の和集合として表すことができないことをいいます。<br>
+        対偶をとって言い換えると、 $F = F_1 \cup F_2$ （ただし $F_1, F_2$ は $X$ の閉集合）ならば、 $F = F_1$ または $F = F_2$ が成り立つということです。
+    </div>
+    <p><em>補足：</em> 通常の幾何学でいう「これ以上分解できない図形」に相当します。例えば、実数直線において、2つの放物線の交点や、相異なる2点の和集合 $\{1\} \cup \{2\}$ は既約ではありません。しかし、1つの点はこれ以上分解できないため既約閉集合になります。</p>
+
+    <div class="box definition">
+        <strong>定義 1.3：生成点 (generic point)</strong><br>
+        位相空間 $X$ の閉集合 $F$ に対して、ある点 $x \in X$ が存在して
+        $$ F = \overline{\{x\}} $$
+        （ただし $\overline{\{x\}}$ は1点集合 $\{x\}$ の閉包）と表せるとき、この点 $x$ を $F$ の<strong>生成点（generic point）</strong>と呼びます。
+    </div>
+    <p><em>補足：</em> 点 $x$ の「閉包」が $F$ 全体に広がっているということは、 $x$ を含む最小の閉集合が $F$ 自身であるということです。つまり、 $x$ は $F$ の中を「どこまでも稠密に動き回る代表点」のようなイメージです。</p>
+
+    <div class="box definition">
+        <strong>定義 1.4：sober 空間</strong><br>
+        位相空間 $X$ における<strong>すべての既約閉集合 $F$ が、ただ1つのgeneric pointを持つ</strong>とき、 $X$ を <strong>sober 空間</strong>といいます。
+    </div>
+
+    <p>この定義から、空間がsoberにならない原因は、論理的に以下の2パターンしかあり得ないことが分かります。</p>
+    <ul>
+        <li><span class="highlight">generic pointの一意性の欠如</span>：既約閉集合にgeneric pointは存在するが、2つ以上存在して決まらない（これは空間が $T_0$ でないことと同値です）。</li>
+        <li><span class="highlight">generic pointの存在の欠如</span>：図形としては綺麗にまとまっている（既約である）のに、それを代表する点だけが空間から「ぽっかりと抜け落ちて」存在しない。</li>
+    </ul>
+
+    <hr>
+
+    <h2>2. ぎりぎり非soberな空間：5つの詳細な反例</h2>
+
+    <h3>反例1：2点集合の密着空間（最小の非sober空間）</h3>
+    <p>「generic pointの一意性」が崩れることで、最も小さなサイズ（要素数2）でsober性を満たさなくなった典型例です。</p>
+    
+    <div class="box">
+        <strong>【空間の定義】</strong><br>
+        2つの要素からなる集合 $X = \{a, b\}$ を考えます。ここに<strong>密着位相</strong>を入れます。すなわち、開集合の全体 $\mathcal{O}$ と閉集合の全体 $\mathcal{F}$ はそれぞれ以下の2つのみです。
+        $$ \mathcal{O} = \{ \emptyset, X \}, \quad \mathcal{F} = \{ \emptyset, X \} $$
+    </div>
+
+    <h4>① 既約閉集合の決定</h4>
+    <p>この空間の空でない閉集合は、空間全体 $X$ のみです。この $X$ が既約であることを示します。</p>
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        $X = F_1 \cup F_2$ （ $F_1, F_2 \in \mathcal{F}$ ）と仮定します。閉集合の定義より、 $F_1, F_2$ として選べるのは $\emptyset$ または $X$ のみです。和集合が $X$ になるためには、 $F_1$ と $F_2$ の少なくとも一方は $X$ でなければなりません。したがって、 $F_1 = X$ または $F_2 = X$ が成り立ちます。これは既約閉集合の定義を満たしています。<br>
+        よって、<strong>既約閉集合全体は $\{ X \}$</strong> です。
+    </div>
+
+    <h4>② なぜぎりぎりsoberにならないのか？</h4>
+    <p>既約閉集合 $X$ のgeneric pointを特定するため、各点の閉包を計算します。</p>
+    <div class="proof">
+        <span class="proof-title">【考察】</span>
+        点 $a$ を含む最小の閉集合は $X$ なので、 $\overline{\{a\}} = X$ です。したがって $a$ は $X$ のgeneric pointです。<br>
+        同様に、点 $b$ を含む最小の閉集合も $X$ なので、 $\overline{\{b\}} = X$ です。したがって $b$ も $X$ のgeneric pointです。<br>
+        結果として、既約閉集合 $X$ はgeneric pointを持ちますが、それが $a$ と $b$ の<strong>2つ存在し、一意ではない</strong>ため、sober空間にはなれません（空間が $T_0$ を満たしていないためです）。
+    </div>
+
+    <h3>反例2：頂上が無い階段（自然数 $\mathbb{N}$ の下限位相）</h3>
+    <p>「無限の彼方」にあるべき極限点が欠落している、順序構造に基づいた非sober空間です。</p>
+
+    <div class="box">
+        <strong>【空間の定義】</strong><br>
+        自然数の集合 $X = \{1, 2, 3, \dots\}$ に対し、閉集合の集まり（閉集合系） $\mathcal{F}$ を以下のように定義します。
+        $$ \mathcal{F} = \{ \emptyset, X \} \cup \{ \{1, 2, \dots, n\} \mid n \in \mathbb{N} \} $$
+    </div>
+
+    <h4>① 既約閉集合の決定</h4>
+    <p>この空間の既約閉集合は、<strong>すべての有限閉集合 $V_n = \{1, 2, \dots, n\}$</strong> および <strong>空間全体 $X$</strong> です。</p>
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        1. まず $V_n$ が既約であることを示します。 $V_n = F_1 \cup F_2$ （ $F_1, F_2 \in \mathcal{F}$ ）とします。 $\mathcal{F}$ の定義から、 $F_1 = V_k, F_2 = V_m$ と表せます。和集合をとると $V_n = V_{\max(k, m)}$ となるため、 $\max(k, m) = n$ です。すなわち、 $k=n$ または $m=n$ となり、 $F_1 = V_n$ または $F_2 = V_n$ が成立します。よって $V_n$ は既約です。<br>
+        2. 次に $X$ が既約であることを示します（背理法）。 $X = F_1 \cup F_2$ かつ $F_1 \neq X$ かつ $F_2 \neq X$ と仮定します。このとき $F_1, F_2$ は共にある有限閉集合なので、 $F_1 = V_k, F_2 = V_m$ とおけます。すると $F_1 \cup F_2 = V_{\max(k, m)}$ となりますが、これは有限集合であり、無限集合である $X$ と一致することに矛盾します。したがって、 $X$ は真の閉集合の和に分解できず、既約です。
+    </div>
+
+    <h4>② なぜぎりぎりsoberにならないのか？</h4>
+    <div class="proof">
+        <span class="proof-title">【考察と背理法による証明】</span>
+        各点 $k \in X$ の閉包を考えると、 $k$ を含む最小の閉集合は $V_k$ なので、 $\overline{\{k\}} = V_k$ です。
+        <ul>
+            <li>既約閉集合 $V_n$ に対しては、 $\overline{\{n\}} = V_n$ となるため、唯一のgeneric point $n$ が存在し、条件をクリアしています。</li>
+            <li>しかし、既約閉集合である<strong>空間全体 $X$ のgeneric pointが存在しません</strong>。実際、もしある点 $g \in X$ が $X$ のgeneric pointだと仮定すると、 $\overline{\{g\}} = X$ となるはずですが、実際の閉包は有限集合 $\overline{\{g\}} = V_g \neq X$ となり矛盾します。</li>
+        </ul>
+        自然数の列の上限（無限大 $\infty$）が空間に存在しないため、全体を代表する点がなく、非soberとなります。
+    </div>
+
+    <h3>反例3：境界の1点が抜けた空間（半開区間 $[0, 1)$ の左閉位相）</h3>
+    <p>反例2の「離散的な階段」を、実数を用いて滑らかな「連続体」に焼き直した空間です。極限点が抜けている様子が視覚的に分かります。</p>
+
+    <div class="box">
+        <strong>【空間の定義】</strong><br>
+        実数の半開区間 $X = [0, 1)$ を考えます。この空間の閉集合の全体 $\mathcal{F}$ を、 $\emptyset$, 空間全体 $X$, および<strong>すべての左側に閉じた有限閉区間 $[0, a]$ （ただし $0 \le a < 1$）</strong>と定めます。
+    </div>
+
+    <h4>① 既約閉集合の決定</h4>
+    <p>この空間の既約閉集合は、<strong>すべての閉区間 $[0, a]$</strong> および <strong>空間全体 $X = [0, 1)$</strong> です。</p>
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        反例2と同様の論理が成り立ちます。 $X = F_1 \cup F_2$ かつ $F_1, F_2 \neq X$ と仮定すると、 $F_1 = [0, a], F_2 = [0, b]$ （ $a, b < 1$ ）と表せます。これらの和集合は $[0, \max(a, b)]$ となりますが、 $\max(a, b) < 1$ なので、右端の開境界 $1$ に決して到達せず、 $X$ 全体を覆うことができません。これは $X = F_1 \cup F_2$ に矛盾するため、 $X$ は既約です。
+    </div>
+
+    <h4>② なぜぎりぎりsoberにならないのか？</h4>
+    <div class="proof">
+        <span class="proof-title">【考察】</span>
+        任意の点 $x \in X$ の閉包は $\overline{\{x\}} = [0, x]$ です。
+        <ul>
+            <li>既約閉集合 $[0, a]$ のgeneric pointは、その右端の点 $a$ （ただ1つ）です。</li>
+            <li>しかし、既約閉集合 $X$ のgeneric pointとなるべき「 $1$ 」という点が空間の定義からあらかじめくり抜かれているため、 $\overline{\{g\}} = X$ を満たす $g \in X$ は存在しません。</li>
+        </ul>
+        あと1点（境界点 $1$）さえ空間に添加されていれば完全なsober空間（閉区間 $[0, 1]$）になれたという意味で、非常にぎりぎりな非sober空間です。
+    </div>
+
+    <h3>反例4：無限集合の補有限位相（1次元アフィン空間から生成点を抜いた空間）</h3>
+    <p>すべての1点集合が閉集合である（＝ $T_1$ 空間である）にもかかわらずsoberにならない著名な例です。ここでは代数幾何学における重要概念である「1次元アフィン空間（アフィン直線）」の構造を用いて詳しく解説します。</p>
+
+    <div class="box">
+        <strong>【空間の定義と代数幾何的な背景】</strong><br>
+        代数閉体 $k$（例えば複素数体 $\mathbb{C}$）上の<strong>1次元アフィン空間 $\mathbb{A}^1$</strong> を考えます。ザリスキ位相において、 $\mathbb{A}^1$ の閉集合は「多項式の零点集合」として定義されるため、有限個の点の集合（および空集合、空間全体）となります。<br>
+        本来のスキーム論における $\mathbb{A}^1$ は、通常の座標点（閉点）のほかに、空間全体を閉包に持つ代数的な「生成点 $\eta$」を1つ含んでおり、sober空間となっています。<br>
+        ここで、この空間から<b>生成点 $\eta$ だけを意図的に取り除いた空間</b>を $X$ とします。このとき、 $X$ は純粋な<b>「無限集合の補有限位相空間」</b>（閉集合は空集合、空間全体、およびすべての有限部分集合）に一致します。
+    </div>
+
+    <h4>① 既約閉集合の決定</h4>
+    <p>この空間 $X$ の既約閉集合は、<strong>すべての1点集合 $\{x\}$</strong> および <strong>空間全体 $X$</strong> です。</p>
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        1. 1点集合 $\{x\}$ はそれ以上分解できないので既約閉集合です（また、2点以上の有限集合 $\{x_1, \dots, x_n\}$ は $\{x_1\} \cup \{x_2, \dots, x_n\}$ のように真の閉部分集合に分解できるため既約ではありません）。<br>
+        2. 空間全体 $X$ が既約であることを背理法で示します。 $X = F_1 \cup F_2$ （ $F_1, F_2 \neq X$ ）と仮定します。補有限位相の定義より、 $F_1$ と $F_2$ は共に有限集合でなければなりません。しかし、有限集合の和集合 $F_1 \cup F_2$ は有限集合にしかならず、これが無限集合である $X$ と一致することになり矛盾します。したがって、 $X$ は既約閉集合です。
+    </div>
+
+    <h4>② なぜぎりぎりsoberにならないのか？</h4>
+    <div class="proof">
+        <span class="proof-title">【考察と証明】</span>
+        この空間の任意の点 $x \in X$ について、 $\{x\}$ は有限集合なのでそれ自体が閉集合です。したがって、どの点の閉包をとっても $\overline{\{x\}} = \{x\}$ のまま変化しません。
+        <ul>
+            <li>任意の1点集合 $\{x\}$ という既約閉集合に対しては、その点 $x$ 自身が唯一のgeneric pointとなります。</li>
+            <li>しかし、既約閉集合である<strong>空間全体 $X$ のgeneric pointが存在しません</strong>。なぜなら、 $\overline{\{g\}} = X$ となる点 $g$ を探そうとしても、あらゆる点において $\overline{\{g\}} = \{g\} \neq X$ となってしまうからです。</li>
+        </ul>
+        空間全体という巨大な図形を1点で代表するための「重たい点（生成点 $\eta$）」を私たちが最初にくり抜いてしまったため、sober性が崩壊しています。
+    </div>
+
+    <h3>反例5：2次元アフィン平面から生成点をくり抜いた空間（反例4の一般化）</h3>
+    <p>代数幾何学における反例4の構造を、2次元（平面）へと自然に拡張・一般化した空間です。次元が上がることで、点だけでなく「曲線」という中間層の幾何学的対象が現れますが、非soberとなる本質的な原因は共通しています。</p>
+
+    <div class="box">
+        <strong>【空間の定義】</strong><br>
+        代数閉体 $k$ 上の<strong>2次元アフィン空間（アフィン平面） $\mathbb{A}^2$</strong> を考えます（ザリスキ位相）。<br>
+        本来の $\mathbb{A}^2$ には、個々の座標点（閉点）や代数曲線のgeneric pointに加えて、平面全体を閉包に持つ「平面全体の生成点 $\eta$ （イデアル $(0)$ に対応する点）」が存在しています。<br>
+        このアフィン平面から、最高次元の親玉である点 $\eta$ だけを取り除いた空間を $X = \mathbb{A}^2 \setminus \{\eta\}$ と定義します。
+    </div>
+
+    <div class="note-box">
+        <strong>★反例4から反例5への「一般化」の注意点</strong><br>
+        1次元の反例4（ $\mathbb{A}^1 \setminus \{\eta\}$ ）では、空間内の閉集合は「0次元のオブジェクト（点）」しかありませんでした。<br>
+        2次元の反例5（ $\mathbb{A}^2 \setminus \{\eta\}$ ）に拡張されると、空間内に「1次元のオブジェクト（代数曲線）」という新しい階層が加わります。しかし、「最高次元（空間全体）の生成点がくり抜かれている」という構造の病理は全く同じであり、高次元化における自然な一般化になっています。
+    </div>
+
+    <h4>① 既約閉集合の決定</h4>
+    <p>この空間 $X$ の既約閉集合は、以下の3つのグループに分類されます。</p>
+    <ol>
+        <li><strong>すべての閉点</strong> （通常の座標 $(x, y) \in k^2$ で表される1点集合）</li>
+        <li><strong>すべての既約代数曲線</strong> （多項式 $f(x,y)=0$ で定義される直線や放物線などで、これ以上因数分解できないもの）</li>
+        <li><strong>空間全体 $X$</strong></li>
+    </ol>
+    <div class="proof">
+        <span class="proof-title">【空間全体 $X$ が既約であることの証明】</span>
+        ザリスキ位相において、平面の真の閉集合は、有限個の代数曲線と有限個の点の和集合でしか表せません。代数曲線の本質的な次元は1次元であり、平面全体（2次元）を覆い尽くすことはできません。したがって、 $X = F_1 \cup F_2$ （ $F_1, F_2 \neq X$ ）と分解しようとしても、1次元の図形の和で2次元の広がりをカバーすることは不可能なため矛盾が生じます。よって $X$ は既約です。
+    </div>
+
+    <h4>② なぜぎりぎりsoberにならないのか？</h4>
+    <div class="proof">
+        <span class="proof-title">【考察】</span>
+        空間 $X$ に残された各幾何学的対象のgeneric pointの有無を確認します。
+        <ul>
+            <li><strong>閉点</strong>：1点集合はそれ自身が閉集合なので、その点自身が唯一のgeneric pointです。</li>
+            <li><strong>既約代数曲線</strong>：代数幾何学の仕組み（素イデアルの性質）により、各曲線の中には、その曲線全体を稠密にカバーする「曲線のgeneric point」がそれぞれ<b>ただ1つずつ綺麗に残っています</b>。</li>
+            <li><strong>空間全体 $X$</strong>：しかし、この既約閉集合 $X$ の生成点となるべき平面全体の点 $\eta$ は、定義によって<b>意図的に排除されています</b>。空間内のどの点（閉点や曲線のgeneric point）をとっても、その閉包は高々1次元の点や曲線にしかならず、2次元の広がりを持つ $X$ 全体に一致することはありません。</li>
+        </ul>
+        「点」も「曲線」もすべて相棒（生成点）がいてsoberの条件を満たしているのに、最後の「空間全体」というパーツだけが相棒を失っているため、空間全体としてsoberになれません。
+    </div>
+
+    <hr>
+
+    <h2>3. 全体のまとめ</h2>
+    <p>5つの「ぎりぎりsoberにならない空間」の構造を整理すると以下の表のようになります。幾何学的な次元と、欠落した generic point の関係性に注目してください。</p>
+
+    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background-color: #2c3e50; color: #fff;">
+                <th>反例の名称</th>
+                <th>空間の次元・構造</th>
+                <th>問題となった既約閉集合</th>
+                <th>soberにならなかった詳細な原因</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1. 2点密着空間</strong></td>
+                <td>離散・有限（2点）</td>
+                <td>空間全体 $X$</td>
+                <td>generic pointが $a, b$ の <span class="highlight">2つ存在してしまい</span>、一意性に欠ける（非 $T_0$）。</td>
+            </tr>
+            <tr>
+                <td><strong>2. 自然数の下限位相</strong></td>
+                <td>離散・無限階層</td>
+                <td>空間全体 $X$</td>
+                <td>上限となる「無限大」の点が空間になく、generic pointが <span class="highlight">存在しない</span>。</td>
+            </tr>
+            <tr>
+                <td><strong>3. $[0,1)$ の左閉位相</strong></td>
+                <td>連続（1次元・境界なし）</td>
+                <td>空間全体 $X$</td>
+                <td>右端の境界点 「 $1$ 」 がくり抜かれているためgeneric pointが <span class="highlight">存在しない</span>。</td>
+            </tr>
+            <tr>
+                <td><strong>4. 補有限位相 ($\mathbb{A}^1 \setminus \{\eta\}$)</strong></td>
+                <td>代数幾何（1次元）</td>
+                <td>空間全体 $X$</td>
+                <td>1次元アフィン直線の生成点 $\eta$ を消したため、全体のgeneric pointが <span class="highlight">存在しない</span>。</td>
+            </tr>
+            <tr>
+                <td><strong>5. 生成点を除いた $\mathbb{A}^2$</strong></td>
+                <td>代数幾何（2次元）</td>
+                <td>空間全体 $X$</td>
+                <td>反例4の2次元版。曲線層は正常だが、平面全体の生成点 $\eta$ を消したため <span class="highlight">存在しない</span>。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 30px;">これらの反例から、空間がsober性を失うときの多くは、<strong>「空間全体 $X$」という最大次元の既約閉集合</strong>に対して、その広がりを1点で代表するような「生成点（generic point）」が、重複して区別できなくなったり（パターン1）、あるいは境界の向こう側やメタ的な操作によって消失したり（パターン2）するという病理的な構造を持っていることが分かります。この絶妙な「穴あき構造」を理解することは、代数幾何学におけるザリスキ位相やスキームの概念をより深く直感するための強力な一歩となります。</p>
+
+</body>
+</html>
