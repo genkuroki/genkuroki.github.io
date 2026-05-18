@@ -2,95 +2,33 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生成AIで作成したファイル一覧</title>
-    <style>
-        body { font-family: sans-serif; margin: 40px; background: #f9f9f9; color: #333; }
-        h1 { border-bottom: 1px solid #ccc; padding-bottom: 10px; font-size: 24px; }
-        ul { list-style: none; padding: 0; }
-        li { padding: 8px 12px; border-bottom: 1px solid #eee; display: flex; align-items: center; }
-        li:hover { background: #f0f0f0; }
-        a { text-decoration: none; color: #0066cc; font-weight: bold; flex-grow: 1; }
-        a:hover { text-decoration: underline; }
-        .size { color: #666; font-size: 0.9em; }
-        .dir-icon { margin-right: 8px; }
-    </style>
+    <title>Directory Index</title>
 </head>
 <body>
-
-    <h1 id="title">生成AIで作成したファイル一覧</h1>
-    <ul id="file-list">
-        <li>読み込み中...</li>
-    </ul>
-
+    <h1>生成AIで作成したファイル一覧</h1>
+    <ul id="file-list"></ul>
     <script>
-        // =================【設定セクション】=================
-        const GITHUB_USER = 'genkuroki'; // GitHubのユーザー名
-        const REPO_NAME   = 'genkuroki.github.io'; // リポジトリ名
-        const FOLDER_PATH = 'AI'; // 一覧を表示したいフォルダのパス（ルートなら空文字 ''）
-        // ===================================================
+        // 自分のユーザー名、リポジトリ名、フォルダパスに書き換えてください
+        const user = 'genkuroki';
+        const repo = 'genkuroki.gothub.io';
+        const path = 'documents/AI'; // ルートの場合は空文字 ''
 
-        // ページのタイトルなどを設定
-        document.getElementById('title').textContent = `Index of /${FOLDER_PATH}`;
-        document.title = `Index of /${FOLDER_PATH}`;
+        const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/${path}`;
 
-        // GitHub APIのURLを構築
-        const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/${FOLDER_PATH}`;
-
-        // 実際にファイルを取得して画面に描画する関数
-        async function fetchFiles() {
-            const listElement = document.getElementById('file-list');
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('データの取得に失敗しました。設定を確認してください。');
-                
-                const files = await response.json();
-                listElement.innerHTML = ''; // 「読み込み中」を消去
-
-                // 親ディレクトリへのリンク（ルートフォルダでない場合のみ）
-                if (FOLDER_PATH !== '') {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById('file-list');
+                data.forEach(file => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<span class="dir-icon">📁</span><a href="../">../ (親ディレクトリへ)</a>`;
-                    listElement.appendChild(li);
-                }
-
-                // 取得したファイルをループ処理
-                files.forEach(file => {
-                    // 自分自身（index.html）は一覧に表示しない
-                    if (file.name === 'index.html') return;
-
-                    const li = document.createElement('li');
-                    
-                    // フォルダかファイルかでアイコンとリンク先を分岐
-                    const isDir = file.type === 'dir';
-                    const icon = isDir ? '📁' : '📄';
-                    
-                    // GitHub Pages上の実際のURLを生成
-                    // ※カスタムドメインを使っていない一般的なアドレスを想定
-                    const baseUrl = `https://${GITHUB_USER}.github.io`;
-                    const fileUrl = isDir ? `${file.name}/` : `${baseUrl}/${file.path}`;
-
-                    // サイズ表記（フォルダの場合は表示しない）
-                    const sizeText = isDir ? '' : `<span class="size">${(file.size / 1024).toFixed(1)} KB</span>`;
-
-                    li.innerHTML = `
-                        <span class="dir-icon">${icon}</span>
-                        <a href="${fileUrl}">${file.name}</a>
-                        ${sizeText}
-                    `;
-                    listElement.appendChild(li);
+                    const a = document.createElement('a');
+                    a.href = file.name; // ファイルへのリンク
+                    a.textContent = file.name + (file.type === 'dir' ? '/' : '');
+                    li.appendChild(a);
+                    list.appendChild(li);
                 });
-
-                if (listElement.children.length === 0) {
-                    listElement.innerHTML = '<li>このフォルダにはファイルがありません。</li>';
-                }
-
-            } catch (error) {
-                listElement.innerHTML = `<li style="color: red;">エラー: ${error.message}</li>`;
-            }
-        }
-
-        fetchFiles();
+            })
+            .catch(error => console.error('Error fetching directory:', error));
     </script>
 </body>
 </html>
