@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=scale=1.0">
+    <title>位相空間論 特論資料：開基と準開基の完全解説</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #1a365d;
+            border-bottom: 3px solid #2b6cb0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.6rem;
+            color: #2c5282;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+        h3 {
+            font-size: 1.25rem;
+            color: #4a5568;
+            margin-top: 25px;
+        }
+        p {
+            margin: 1em 0;
+            text-align: justify;
+        }
+        .intro-box {
+            background-color: #ebf8ff;
+            border-left: 5px solid #3182ce;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .definition {
+            background-color: #f7fafc;
+            border-left: 5px solid #4a5568;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .definition::before {
+            content: "【定義】";
+            font-weight: bold;
+            color: #4a5568;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .theorem {
+            background-color: #fffaf0;
+            border-left: 5px solid #dd6b20;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .theorem::before {
+            content: "【定理】";
+            font-weight: bold;
+            color: #dd6b20;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .proof {
+            background-color: #fafafa;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            margin: 15px 0 30px 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .proof::before {
+            content: "【証明】";
+            font-weight: bold;
+            color: #2d3748;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .proof-end {
+            text-align: right;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace;
+            background-color: #edf2f7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .emphasis {
+            font-weight: bold;
+            color: #c53030;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>位相空間論：開基と準開基の完全解説</h1>
+    
+    <div class="intro-box">
+        <p><strong>講義ノートの目的：</strong><br>
+        位相空間 $(X, \mathcal{O})$ において、開集合の集まりである位相 $\mathcal{O}$ は巨大で複雑になりがちです。これを「より小さく扱いやすい基本パーツ」に分解して記述するための道具が<strong>開基（Base）</strong>と<strong>準開基（Subbase）</strong>です。本資料では、これらの定義、同値条件、重要な関連定理の完全な証明を網羅しています。</p>
+    </div>
+
+    
+
+    <h2>第1章：開基（Base）</h2>
+    
+    <p>開基とは、直感的には「その要素の和集合をとるだけで、すべての開集合を復元できるような開集合の骨組み」のことです。</p>
+
+    <div class="definition">
+        位相空間 $(X, \mathcal{O})$ において、部分集合族 $\mathcal{B} \subset \mathcal{O}$ が位相 $\mathcal{O}$ の<strong>開基（または基底）</strong>であるとは、以下の条件を満たすことをいう：<br>
+        任意の開集合 $O \in \mathcal{O}$ に対して、ある部分族 $\mathcal{B}' \subset \mathcal{B}$ が存在して、
+        $$O = \bigcup_{B \in \mathcal{B}'} B$$
+        と表せること。（※ $O = \emptyset$ のときは $\mathcal{B}' = \emptyset$ とみなす。）
+    </div>
+
+    <h3>1.1 与えられた位相の開基となるための同値条件</h3>
+    <p>実際の証明問題などでは、上記の定義（和集合による表現）よりも、次の各点（局所的）の条件の方が圧倒的に扱いやすいため、重要です。</p>
+
+    <div class="theorem" id="thm-base-equiv">
+        位相空間 $(X, \mathcal{O})$ において、$\mathcal{B} \subset \mathcal{O}$ が開基であるための必要十分条件は、以下の条件を満たすことである：<br>
+        任意の開集合 $O \in \mathcal{O}$ と、その任意の元 $x \in O$ に対して、である $B \in \mathcal{B}$ が存在して、
+        $$x \in B \subset O$$
+        を満たす。
+    </div>
+
+    <div class="proof">
+        <p><strong>(必要性 $\implies$):</strong><br>
+        $\mathcal{B}$ を $\mathcal{O}$ の開基とする。任意の $O \in \mathcal{O}$ と $x \in O$ をとる。<br>
+        開基の定義より、$O$ は $\mathcal{B}$ のある部分族 $\{B_\lambda\}_{\lambda \in \Lambda}$ の和集合として表される：
+        $$O = \bigcup_{\lambda \in \Lambda} B_\lambda \quad (B_\lambda \in \mathcal{B})$$
+        $x \in O$ であるから、和集合の定義より、ある添え字 $\lambda_0 \in \Lambda$ が存在して $x \in B_{\lambda_0}$ となる。<br>
+        また、各 $B_\lambda$ は $O$ の部分集合であるから、当然 $B_{\lambda_0} \subset O$ である。<br>
+        よって、$B = B_{\lambda_0}$ とおけば、$B \in \mathcal{B}$ であり、 $x \in B \subset O$ を満たす。</p>
+
+        <p><strong>(十分性 $\impliedby$):</strong><br>
+        条件「任意の $O \in \mathcal{O}$ と $x \in O$ に対し、 $x \in B_x \subset O$ となる $B_x \in \mathcal{B}$ がある」が成り立つと仮定する。<br>
+        $O \in \mathcal{O}$ を任意の開集合とする。各 $x \in O$ に対して上記の条件を適用し、それぞれの点に対して選ばれた開基の元を $B_x$ とする。<br>
+        このとき、各 $x \in O$ について $x \in B_x$ であるから、これらすべての和集合を考えると $O \subset \bigcup_{x \in O} B_x$ が成り立つ。<br>
+        一方、すべての $x$ について $B_x \subset O$ であるから、その和集合もまた $O$ に含まれる（$\bigcup_{x \in O} B_x \subset O$）。<br>
+        したがって、
+        $$O = \bigcup_{x \in O} B_x$$
+        となり、$O$ は $\mathcal{B}$ の要素の和集合として表された。すなわち $\mathcal{B}$ は開基である。</p>
+        <div class="proof-end">■</div>
+    </div>
+
+    <h3>1.2 部分集合族から位相を生成する条件</h3>
+    <p>位相があらかじめ与えられていない単なる集合 $X$ に対して、ある部分集合族 $\mathcal{B}$ を開基とするような位相を新たに創り出したい場合、 $\mathcal{B}$ は何でも良いわけではなく、次の同値条件（適合条件）を満たす必要があります。</p>
+
+    <div class="theorem">
+        集合 $X$ の部分集合族 $\mathcal{B}$ が、 $X$ 上のある唯一の位相の開基となるための必要十分条件は、次の2条件を満たすことである：
+        <ol>
+            <li><strong>（被覆条件）</strong> $\bigcup_{B \in \mathcal{B}} B = X$ （すなわち、任意の $x \in X$ に対し、 $x \in B$ となる $B \in \mathcal{B}$ が存在する。）</li>
+            <li><strong>（共通部分条件）</strong> 任意の $B_1, B_2 \in \mathcal{B}$ と、任意の $x \in B_1 \cap B_2$ に対して、ある $B_3 \in \mathcal{B}$ が存在して、
+            $$x \in B_3 \subset B_1 \cap B_2$$
+            を満たす。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <p><strong>（必要性の証明）：</strong><br>
+        $\mathcal{B}$ がある位相 $\mathcal{O}$ の開基であるとする。<br>
+        位相の公理より $X \in \mathcal{O}$ である。 $\mathcal{B}$ は開基なので $X$ は $\mathcal{B}$ の元の和集合で書ける。よって条件1を満たす。<br>
+        次に、 $B_1, B_2 \in \mathcal{B}$ とすると、 $\mathcal{B} \subset \mathcal{O}$ よりこれらは開集合である。有限個の開集合の共通部分は開集合なので $B_1 \cap B_2 \in \mathcal{O}$ である。<br>
+        <a href="#thm-base-equiv">定理1.1</a>の局所同値条件より、開集合 $B_1 \cap B_2$ の任意の元 $x$ に対して、 $x \in B_3 \subset B_1 \cap B_2$ となる $B_3 \in \mathcal{B}$ が存在する。よって条件2を満たす。</p>
+
+        <p><strong>（十分性の証明）：</strong><br>
+        条件1, 2を満たす族 $\mathcal{B}$ が与えられたとする。 $X$ の部分集合族 $\mathcal{O}$ を「 $\mathcal{B}$ の要素の任意の和集合として表される集合の全体（空集合も含む）」と定義する。この $\mathcal{O}$ が位相の3公理を満たすことを示す。</p>
+        
+        <p>① $X, \emptyset \in \mathcal{O}$ について：<br>
+        空集合は定義より含まれる。また、条件1より $X = \bigcup_{B \in \mathcal{B}} B$ であるから、 $X \in \mathcal{O}$ である。</p>
+        
+        <p>② 任意の和集合について閉じていること：<br>
+        $\mathcal{O}$ の元の族 $\{O_\lambda\}_{\lambda \in \Lambda}$ をとる。各 $O_\lambda$ は $\mathcal{B}$ の元の和集合であるから、それら全体の和集合 $\bigcup_{\lambda \in \Lambda} O_\lambda$ もまた、結局は $\mathcal{B}$ の元の巨大な和集合に過ぎない。よって $\bigcup_{\lambda \in \Lambda} O_\lambda \in \mathcal{O}$ である。</p>
+        
+        <p>③ 有限個の共通部分について閉じていること：<br>
+         $O_1, O_2 \in \mathcal{O}$ とする。 $O_1 \cap O_2 \in \mathcal{O}$ を示せば十分である。 
+        任意の $x \in O_1 \cap O_2$ をとる。 $x \in O_1$ より、ある $B_1 \in \mathcal{B}$ があって $x \in B_1 \subset O_1$ 。同様に $x \in O_2$ より、ある $B_2 \in \mathcal{B}$ があって $x \in B_2 \subset O_2$ 。<br>
+        ゆえに $x \in B_1 \cap B_2$ である。ここで条件2を適用すると、ある $B_x \in \mathcal{B}$ が存在して
+        $$x \in B_x \subset B_1 \cap B_2 \subset O_1 \cap O_2$$
+        となる。この $B_x$ をすべての $x \in O_1 \cap O_2$ について集めて和集合をとると、
+        $$O_1 \cap O_2 = \bigcup_{x \in O_1 \cap O_2} B_x$$
+        となり、 $O_1 \cap O_2$ は $\mathcal{B}$ の元の和集合で表された。ゆえに $O_1 \cap O_2 \in \mathcal{O}$ である。</p>
+        
+        <p>以上より $\mathcal{O}$ は位相の公理を満たし、その構成から $\mathcal{B}$ は $\mathcal{O}$ の開基となる。一意性は開基の定義から自明である。</p>
+        <div class="proof-end">■</div>
+    </div>
+
+    <h2>第2章：準開基（Subbase）</h2>
+    
+    <p>開基が「和集合だけで開集合を作れるパーツ」であったのに対し、準開基はさらに制約を緩め、「<strong>有限個の共通部分（交わり）をとってから、和集合をとる</strong>」という2段階の手順によって任意の開集合を構成できるパーツのことです。</p>
+
+    <div class="definition">
+        位相空間 $(X, \mathcal{O})$ において、部分集合族 $\mathcal{S} \subset \mathcal{O}$ が位相 $\mathcal{O}$ の<strong>準開基</strong>であるとは、
+        $\mathcal{S}$ の要素の有限個の共通部分として表される集合の全体
+        $$\mathcal{B} = \{ S_1 \cap S_2 \cap \dots \cap S_n \mid S_i \in \mathcal{S}, n \in \mathbb{N} \}$$
+        が、位相 $\mathcal{O}$ の開基となることをいう。
+        （※ただし、 $n=0$ 個の共通部分は全体集合 $X$ になると約束する。よって $X \in \mathcal{B}$ である。）
+    </div>
+
+    <h3>2.1 準開基による位相の任意生成性</h3>
+    <p>開基として位相を生成するためには厳しい2条件が必要でしたが、準開基には<strong>何の制約もありません</strong>。どんな集合族であっても、それを準開基として持つ位相を必ず作ることができます。</p>
+
+    <div class="theorem">
+        任意の集合 $X$ の【任意】の部分集合族 $\mathcal{S}$ は、必ず $X$ 上のある唯一の位相の準開基となる。
+    </div>
+
+    <div class="proof">
+        任意の族 $\mathcal{S}$ から、有限共通部分の全体として族 $\mathcal{B}$ を作る：
+        $$\mathcal{B} = \{ S_1 \cap \dots \cap S_n \mid S_i \in \mathcal{S}, n \ge 0 \}$$
+        この $\mathcal{B}$ が「開基として位相を生成するための2条件」を満たすことを示せばよい。<br><br>
+        <strong>1. 被覆条件：</strong><br>
+        $n=0$ のとき、空な集合族の共通部分は全体集合 $X$ と定義されるため、 $X \in \mathcal{B}$ である。したがって、 $\bigcup_{B \in \mathcal{B}} B = X$ は自動的に満たされる。<br><br>
+        <strong>2. 共通部分条件：</strong><br>
+        任意の $B_1, B_2 \in \mathcal{B}$ をとる。定義よりこれらは $\mathcal{S}$ の有限個の元の共通部分である：
+        $$B_1 = S_1 \cap \dots \cap S_n, \quad B_2 = S'_1 \cap \dots \cap S'_m \quad (S_i, S'_j \in \mathcal{S})$$
+        このとき、 $B_1 \cap B_2$ は次のように書ける：
+        $$B_1 \cap B_2 = S_1 \cap \dots \cap S_n \cap S'_1 \cap \dots \cap S'_m$$
+        これは $\mathcal{S}$ の $n+m$ 個（有限個）の元の共通部分そのものであるから、定義よりそのまま $B_1 \cap B_2 \in \mathcal{B}$ となる。<br>
+        したがって、任意の $x \in B_1 \cap B_2$ に対し、 $B_3 = B_1 \cap B_2$ 自身をとれば、 $x \in B_3 \subset B_1 \cap B_2$ が成り立ち、条件を満たす。<br><br>
+        以上より、 $\mathcal{B}$ は開基の条件を満たすため、 $\mathcal{B}$ を開基とする位相（すなわち $\mathcal{S}$ を準開基とする位相）が一意に定まる。
+        <div class="proof-end">■</div>
+    </div>
+
+    
+
+    <h2>第3章：直積位相とチコノフの定理</h2>
+    
+    <p>準開基の最も強力な応用先が、無限個の位相空間の直積に位相を入れる<strong>直積位相</strong>の定義、および<strong>チコノフの定理</strong>の証明です。</p>
+
+    <h3>3.1 直積位相の定義</h3>
+    <p>位相空間の族 $\{ (X_\lambda, \mathcal{O}_\lambda) \}_{\lambda \in \Lambda}$ の直積集合 $X = \prod_{\lambda \in \Lambda} X_\lambda$ を考える。各成分への射影を $p_\lambda: X \to X_\lambda$ とする。<br>
+    各 $p_\lambda$ をすべて連続にするような「最も弱い（元が少ない）位相」を直積位相と呼ぶ。この位相は、以下の族 $\mathcal{S}$ を準開基として生成される位相として定義される：
+    $$\mathcal{S} = \{ p_\lambda^{-1}(O_\lambda) \mid \lambda \in \Lambda, O_\lambda \in \mathcal{O}_\lambda \}$$
+    </p>
+
+    <h3>3.2 Alexanderの準開基定理</h3>
+    <p>空間のコンパクト性を判定する際、すべての開被覆を調べる代わりに「準開基の元だけで作られた被覆」だけを調べれば十分であるという、極めて強力な定理です。</p>
+
+    <div class="theorem">
+        <strong>（Alexanderの準開基定理）</strong><br>
+        位相空間 $X$ とその準開基 $\mathcal{S}$ が与えられたとき、次の2つの条件は同値である：
+        <ol>
+            <li> $X$ はコンパクトである。</li>
+            <li> $\mathcal{S}$ の要素のみからなる $X$ の任意の開被覆は、有限部分被覆を持つ。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <p><strong>(1 $\implies$ 2):</strong> コンパクト空間の定義そのものであるから自明。</p>
+        <p><strong>(2 $\implies$ 1):</strong> 背理法とツォルンの補題（Zorn's Lemma）を用いる。<br>
+        「 $\mathcal{S}$ の元による被覆は有限部分被覆を持つのに、 $X$ はコンパクトではない」と仮定する。<br>
+        $X$ の開被覆のうち、有限部分被覆を【持たない】もの全体の集合族を $\mathcal{F}$ とおく。仮定より $\mathcal{F} \neq \emptyset$ である。 $\mathcal{F}$ に包含関係 $\subset$ による偏順序を入れる。<br>
+         $\mathcal{F}$ の任意の全順序鎖 $\{ \mathcal{C}_\gamma \}$ に対し、その上界は $\bigcup \mathcal{C}_\gamma$ となる（これが有限部分被覆を持たないことは、もし持てば有限個の元がどれか1つの $\mathcal{C}_\gamma$ に含まれてしまい矛盾することから従う）。<br>
+        ツォルンの補題より、 $\mathcal{F}$ には極大元（これ以上開集合を追加すると有限部分被覆ができてしまう最大の被覆）が存在する。これを $\mathcal{C}$ とする。</p>
+        
+        <p>この極大被覆 $\mathcal{C}$ は次の性質を持つ：<br>
+        「 $\mathcal{C}$ に属さない任意の開集合 $V$ に対し、 $\mathcal{C} \cup \{V\}$ は有限部分被覆を持つ。」</p>
+
+        <p>ここで、 $\mathcal{C}$ と準開基の共通部分 $\mathcal{C} \cap \mathcal{S}$ を考える。これが $X$ の被覆であることを示す。<br>
+        もし被覆でないとすると、ある点 $x \in X$ が存在して、 $x$ は $\mathcal{C} \cap \mathcal{S}$ のどの元にも含まれない。<br>
+         $\mathcal{C}$ 自身は $X$ の被覆なので、ある $U \in \mathcal{C}$ があって $x \in U$ である。 $\mathcal{S}$ は準開基なので、ある有限個の $S_1, \dots, S_n \in \mathcal{S}$ があって、
+        $$x \in S_1 \cap \dots \cap S_n \subset U$$
+        となる。もし、すべての $i=1,\dots,n$ について $S_i \notin \mathcal{C}$ であるならば、極大性より各 $\mathcal{C} \cup \{S_i\}$ は有限部分被覆を持つ。すなわち、 $\mathcal{C}$ の有限部分族の和集合を $W_i$ とすると、 $X = S_i \cup W_i$ と書ける。<br>
+        共通部分をとると、
+        $$X = \bigcap_{i=1}^n (S_i \cup W_i) = \left( \bigcap_{i=1}^n S_i \right) \cup \left( \text{finite union of } W_i \right) \subset U \cup \left( \text{finite union of } W_i \right)$$
+        これは、 $X$ が $\mathcal{C}$ の有限個の元（ $U$ と $W_i$ を構成する開集合）で覆われることを意味し、 $\mathcal{C}$ が有限部分被覆を持たないことに矛盾する。<br>
+        したがって、ある $S_i$ は $\mathcal{C}$ に属さねばならない。すなわち $S_i \in \mathcal{C} \cap \mathcal{S}$ となり、 $x \in S_i$ である。よって $\mathcal{C} \cap \mathcal{S}$ は $X$ を被覆する。</p>
+
+        <p>定理の仮定(2)より、準開基の元からなる被覆 $\mathcal{C} \cap \mathcal{S}$ は有限部分被覆を持つはずである。しかし $\mathcal{C} \cap \mathcal{S} \subset \mathcal{C}$ であるから、これは $\mathcal{C}$ 自身が有限部分被覆を持つことを意味し、 $\mathcal{C} \in \mathcal{F}$ に大矛盾する。<br>
+        ゆえに、 $X$ はコンパクトでなければならない。</p>
+        <div class="proof-end">■</div>
+    </div>
+
+    <h3>3.3 チコノフの定理（Tychonoff's Theorem）</h3>
+    <div class="theorem">
+        コンパクト空間の任意の族 $\{X_\lambda\}_{\lambda \in \Lambda}$ の直積空間 $X = \prod_{\lambda \in \Lambda} X_\lambda$ は、直積位相に関してコンパクトである。
+    </div>
+
+    <div class="proof">
+        直積位相の準開基 $\mathcal{S} = \{ p_\lambda^{-1}(O_\lambda) \mid \lambda \in \Lambda, O_\lambda \in \mathcal{O}_\lambda \}$ を考える。<br>
+        Alexanderの準開基定理より、 $\mathcal{S}$ の元からなる任意の被覆 $\mathcal{C} \subset \mathcal{S}$ が有限部分被覆を持つことを示せばよい。<br>
+        背理法のため、 ** $\mathcal{C}$ は有限部分被覆を持たない**と仮定する。<br><br>
+        各 $\lambda \in \Lambda$ について、 $\mathcal{C}$ に含まれる $\lambda$ 成分の開集合の族を次のように集める：
+        $$\mathcal{C}_\lambda = \{ O_\lambda \in \mathcal{O}_\lambda \mid p_\lambda^{-1}(O_\lambda) \in \mathcal{C} \}$$
+        もし、ある $\mu \in \Lambda$ が存在して、 $\mathcal{C}_\mu$ が $X_\mu$ の被覆であったとする。 $X_\mu$ はコンパクトなので、有限部分被覆 $O_{\mu,1}, \dots, O_{\mu,n}$ が取れる。このとき、それらの引き戻し $p_\mu^{-1}(O_{\mu,1}), \dots, p_\mu^{-1}(O_{\mu,n})$ は $\mathcal{C}$ の元であり、かつ $X$ 全体を被覆するため、 $\mathcal{C}$ が有限部分被覆を持つことになり矛盾する。<br><br>
+        したがって、**いかなる $\lambda \in \Lambda$ に対しても、 $\mathcal{C}_\lambda$ は $X_\lambda$ を被覆しない**。<br>
+        よって、各 $\lambda$ について、 $\mathcal{C}_\lambda$ のどの開集合にも含まれない点 $x_\lambda \in X_\lambda$ が存在する。<br>
+        選択公理を用いて、これらを座標に持つ点 $x = (x_\lambda)_{\lambda \in \Lambda} \in X$ を構成する。<br><br>
+         $\mathcal{C}$ は $X$ の被覆なので、この点 $x$ を含む元 $p_\alpha^{-1}(O_\alpha) \in \mathcal{C}$ が存在するはずである。定義より、これは $x$ の $\alpha$ 成分が $O_\alpha$ に属すること（ $x_\alpha \in O_\alpha \in \mathcal{C}_\alpha$）を意味する。<br>
+        しかし、 $x_\alpha$ は「 $\mathcal{C}_\alpha$ のどの開集合にも含まれない点」として選ばれたため、これは矛盾である。<br>
+        ゆえに、 $\mathcal{C}$ は有限部分被覆を持たねばならず、 $X$ はコンパクトである。
+        <div class="proof-end">■</div>
+    </div>
+
+    <h2>第4章：開基・準開基に関する重要定理</h2>
+
+    <h3>4.1 リンデレフの定理（Lindelöf's Theorem）</h3>
+    <p>可算な開基を持つ空間（第二可算空間）が持つ、コンパクト性に酷似した強力な性質です。</p>
+    <div class="theorem">
+        第二可算公理を満たす位相空間 $X$ の任意の開被覆は、可算部分被覆を持つ。
+    </div>
+    <div class="proof">
+         $X$ の可算開基を $\mathcal{B} = \{B_n \mid n \in \mathbb{N}\}$ とし、 $\mathcal{U} = \{U_\lambda\}$ を任意の開被覆とする。<br>
+        各 $x \in X$ に対し、 $x \in U_\lambda$ となる $U_\lambda \in \mathcal{U}$ がある。 $\mathcal{B}$ は開基なので、 $x \in B_{n_x} \subset U_\lambda$ を満たす $B_{n_x} \in \mathcal{B}$ が存在する。<br>
+        このような $B_{n_x}$ 全体の族を $\mathcal{B}'$ とすると、 $\mathcal{B}' \subset \mathcal{B}$ より $\mathcal{B}'$ は可算族である。これを $\{B_{k_1}, B_{k_2}, \dots\}$ と並べる。<br>
+        各 $B_{k_i}$ に対して、 $B_{k_i} \subset U_{k_i}$ となるような元の被覆の元 $U_{k_i} \in \mathcal{U}$ を1つ選ぶ。選ばれた $\{U_{k_1}, U_{k_2}, \dots\}$ は可算族であり、かつ $X$ を被覆する（なぜなら任意の $x$ はある $B_{k_i}$ に含まれ、それは $U_{k_i}$ に含まれるため）。よって可算部分被覆が存在する。
+        <div class="proof-end">■</div>
+    </div>
+
+    <h3>4.2 第二可算公理と可分性</h3>
+    <div class="theorem">
+         第二可算公理を満たす位相空間 $X$ は、可分（可算な稠密部分集合を持つ）である。
+    </div>
+    <div class="proof">
+         $X$ の可算開基を $\mathcal{B} = \{B_n \mid n \in \mathbb{N}\}$ とし、空集合は除いておく。各 $B_n$ から元 $x_n$ を1つずつ選び、集合 $D = \{x_n \mid n \in \mathbb{N}\}$ を作る。 $D$ は明らかに可算集合である。<br>
+         $D$ が稠密であること、すなわち「任意の空でない開集合 $O$ と交わること」を示す。 $O$ の元 $x$ をとると、開基の性質より $x \in B_k \subset O$ となる $B_k \in \mathcal{B}$ がある。 $D$ の作り方から $x_k \in B_k \subset O$ なので、 $x_k \in O \cap D$ となり、 $O \cap D \neq \emptyset$ である。よって $D$ は稠密である。
+        <div class="proof-end">■</div>
+    </div>
+
+    <h3>4.3 距離空間における同値定理</h3>
+    <div class="theorem">
+        距離空間 $(X, d)$ において、次の3つは互いに同値である：<br>
+        (1) 第二可算公理を満たす \quad (2) 可分である \quad (3) リンデレフ空間である
+    </div>
+    <div class="proof">
+        (1 $\implies$ 2) と (1 $\implies$ 3) は一般の位相空間で成立することを示した。残りの逆を距離の構造を用いて示す。<br><br>
+        <strong>[(2 $\implies$ 1) の証明]:</strong><br>
+         $X$ が可分であるとし、可算稠密部分集合を $D = \{x_n\}$ とする。有理数全体の集合 $\mathbb{Q}_{>0}$ も可算である。開球の族 $\mathcal{B} = \{ B(x_n, q) \mid x_n \in D, q \in \mathbb{Q}_{>0} \}$ を考えると、これは可算族である。これが開基となることを示す。<br>
+        任意の開集合 $O$ と $y \in O$ に対し、 $B(y, \epsilon) \subset O$ となる $\epsilon > 0$ がある。 $D$ の稠密性より、 $d(y, x_n) < \epsilon/3$ となる $x_n \in D$ が選べる。ここで $\epsilon/3 < q < 2\epsilon/3$ を満たす有理数 $q$ をとると、三角不等式より $y \in B(x_n, q) \subset B(y, \epsilon) \subset O$ となり、 $\mathcal{B}$ は開基である。<br><br>
+        <strong>[(3 $\implies$ 2) の証明]:</strong><br>
+        各 $n \in \mathbb{N}$ に対し、開被覆 $\mathcal{U}_n = \{ B(x, 1/n) \mid x \in X \}$ を考える。 $X$ はリンデレフなので、これは可算部分被覆を持つ。その中心の集合を $D_n$（可算集合）とする。 $D = \bigcup_{n=1}^\infty D_n$ とおくと、可算和なので $D$ も可算である。この $D$ が稠密になることは、任意の $B(y, \epsilon)$ に対して $1/n < \epsilon/2$ となる $n$ を選び、 $y$ を覆う $D_{2n}$ の元との距離を評価することで従う。
+        <div class="proof-end">■</div>
+    </div>
+
+    <h3>4.4 部分空間の開基</h3>
+    <div class="theorem">
+         $\mathcal{B}$ を位相空間 $X$ の開基、 $Y \subset X$ を部分空間とするとき、
+        $$\mathcal{B}_Y = \{ B \cap Y \mid B \in \mathcal{B} \}$$
+        は部分空間 $Y$ の相対位相の開基となる。
+    </div>
+    <div class="proof">
+         $Y$ の任意の開集合 $V$ と $y \in V$ をとる。相対位相の定義より、 $V = U \cap Y$ となる $X$ の開集合 $U$ が存在する。 $y \in U$ であり $\mathcal{B}$ は $X$ の開基なので、 $y \in B \subset U$ となる $B \in \mathcal{B}$ がある。全体の $Y$ との共通部分をとれば、 $y \in B \cap Y \subset U \cap Y = V$ となり、 $B \cap Y \in \mathcal{B}_Y$ であるから、これが $Y$ の開基であることが示された。
+        <div class="proof-end">■</div>
+    </div>
+
+    <h3>4.5 ウリゾーンの距離化定理（Urysohn's Metrization Theorem）</h3>
+    <p>「どのような位相空間であれば、後から距離（計量）を導入できるか」という位相空間論最大の課題に対する、開基の概念を用いた美しい解答です。</p>
+    <div class="theorem">
+        第二可算公理を満たす正則空間（$T_3$ 空間）は、距離化可能である。
+    </div>
+    <div class="proof-outline">
+        <ol>
+            <li><strong>正規空間への格上げ：</strong> 「第二可算公理を満たす正則空間は、正規空間（$T_4$ 空間）である」というチコノフの補題を適用し、空間が正規であることを保証する。</li>
+            <li><strong>ウリゾーンの補題の適用：</strong> 可算開基 $\mathcal{B} = \{B_n\}$ から、 $\overline{B_i} \subset B_j$ となるペア $(B_i, B_j)$ をすべて抽出する（可算個）。空間の正規性より、各ペア $n$ に対して、 $\overline{B_i}$ 上で 1、 $X \setminus B_j$ 上で 0 となる連続関数 $f_n: X \to [0, 1]$ が構成できる。</li>
+            <li><strong>ヒルベルト立方体への埋め込み：</strong> これら可算個の関数を並べて、写像 $F: X \to [0, 1]^\mathbb{N}$ を $F(x) = (f_1(x), f_2(x), \dots)$ と定義する。この無限直積空間（ヒルベルト立方体）は、可算個の距離空間の直積なので距離化可能である。</li>
+            <li><strong>同相の証明：</strong> 開基の性質から、関数族 $\{f_n\}$ が「点と閉集合を分離する」ため、写像 $F$ は $X$ から $F(X)$ への同相写像になる。距離空間の部分空間は距離空間なので、それと同相な $X$ も距離化可能となる。</li>
+        </ol>
+        <div class="proof-end">（証明概要終）■</div>
+    </div>
+
+</body>
+</html>

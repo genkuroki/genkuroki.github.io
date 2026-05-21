@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frobenius群（フロベニウス群）に関する解説</title>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    line-height: 1.8;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    color: #2c3e50;
+    background-color: #f8f9fa;
+  }
+  .container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+    border-bottom: 3px solid #34495e;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+  }
+  h2 {
+    color: #2980b9;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 8px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  h3 {
+    color: #16a085;
+    border-left: 4px solid #16a085;
+    padding-left: 12px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+  h4 {
+    color: #d35400;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+  }
+  ul, ol {
+    margin-bottom: 1.5em;
+    padding-left: 25px;
+  }
+  li {
+    margin-bottom: 0.5em;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 25px 0;
+    font-size: 0.95em;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 12px 15px;
+    text-align: left;
+  }
+  th {
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: bold;
+  }
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  blockquote {
+    border-left: 4px solid #f39c12;
+    background-color: #fff9eb;
+    margin: 25px 0;
+    padding: 15px 20px;
+    border-radius: 0 4px 4px 0;
+  }
+  blockquote p {
+    margin-bottom: 0;
+  }
+  hr {
+    border: 0;
+    height: 1px;
+    background: #e2e8f0;
+    margin: 40px 0;
+  }
+  strong {
+    color: #e74c3c;
+  }
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Frobenius群（フロベニウス群）に関する解説</h1>
+
+  <h2>第1章：Frobenius群 $F_{20}$ とは？</h2>
+  <p>数学の「群論」における、<strong>位数20（要素の数が20個）の特定の非可換群</strong>のことです。</p>
+  <p>もっともイメージしやすい具体的な姿は、<strong>「5で割った余りの世界（有限体 $\mathbb{F}_5$）における、1次関数（アフィン変換）が集まった群」</strong>であり、記号では $\text{AGL}(1, 5)$ とも書かれます。</p>
+
+  <h3>1. どんな要素でできている？（具体的なイメージ）</h3>
+  <p>$F_{20}$ の要素は、高校数学でもお馴染みの次のような1次関数の形をしています。ただし、5で割った余りの世界（$\mathbb{Z}_5 = \{0, 1, 2, 3, 4\}$）で計算します。</p>
+  $$f(x) = ax + b \pmod 5$$
+  <ul>
+    <li><strong>$a$ の選び方</strong>： $\{1, 2, 3, 4\}$ の <strong>4通り</strong> （0を掛けると1次関数ではなくなるので除きます）</li>
+    <li><strong>$b$ の選び方</strong>： $\{0, 1, 2, 3, 4\}$ の <strong>5通り</strong></li>
+  </ul>
+  <p>この組み合わせが $4 \times 5 = 20$ 通りあるため、位数が20になります。群の演算は「関数の合成（順番に適用すること）」です。</p>
+  <ul>
+    <li><strong>平行移動（$a = 1$ のとき）</strong>: $f(x) = x + b$。これは5つの要素を持ち、群の「核（コア）」になります。</li>
+    <li><strong>拡大縮小（$b = 0$ のとき）</strong>: $f(x) = ax$。これは4つの要素を持ち、原点（0）を固定して数値を変化させる役割を持ちます。</li>
+  </ul>
+
+  <h3>2. 代数的な構造（フロベニウス群の性質）</h3>
+  <p>$F_{20}$ は、2つの巡回群の<strong>半直積</strong>として表されます。</p>
+  $$F_{20} \cong \mathbb{Z}_5 \rtimes \mathbb{Z}_4$$
+  <p>これが「フロベニウス群」と呼ばれるのは、以下の特別な性質（フロベニウスの条件）を満たしているからです。</p>
+  <ul>
+    <li><strong>フロベニウス核（核）</strong>： 位数5の正規部分群（上記の平行移動 $x + b$ の集まり）。単位元（何もしない変換）以外の元は、どの点も固定しません（全員が一斉に動く）。</li>
+    <li><strong>フロベニウス補群（補群）</strong>： 位数4の巡回部分群（原点を固定する $ax$ の集まり）。</li>
+  </ul>
+  <blockquote>
+    <p>💡 <strong>フロベニウス群の面白い特徴</strong><br>
+    $a \neq 1$ であるような変換（平行移動ではないもの）は、<strong>必ず世界のどこか「1点だけ」を固定し、それ以外の点はすべて別の場所に動かす</strong>という性質を持っています。この綺麗に統制された動きのルールを持つ群をフロベニウス群と呼びます。</p>
+  </blockquote>
+
+  <h3>3. 位数20の群の中での立ち位置</h3>
+  <p>位数20の群は、世界に（同型を除いて）<strong>5種類</strong>しか存在しません。$F_{20}$ はその中のユニークな1つです。</p>
+  <table>
+    <thead>
+      <tr>
+        <th>群の記号</th>
+        <th>構造</th>
+        <th>特徴・性質</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>$\mathbb{Z}_{20}$</td>
+        <td>巡回群</td>
+        <td>可換群（時計の針のような構造）</td>
+      </tr>
+      <tr>
+        <td>$\mathbb{Z}_2 \times \mathbb{Z}_{10}$</td>
+        <td>直積群</td>
+        <td>可換群</td>
+      </tr>
+      <tr>
+        <td>$D_{20}$</td>
+        <td>二面体群</td>
+        <td>非可換群（正10角形の対称性・裏返し）</td>
+      </tr>
+      <tr>
+        <td>$\text{Dic}_5$</td>
+        <td>ディクソン群</td>
+        <td>非可換群（四元数群の親戚のような構造）</td>
+      </tr>
+      <tr>
+        <td><strong>$F_{20}$</strong></td>
+        <td><strong>フロベニウス群</strong></td>
+        <td><strong>非可換群（本記事の対象、$\text{AGL}(1,5)$）</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>4. なぜこの群が重要視されるのか？</h3>
+  <h4>① ガロア理論（方程式の解の公式）での主役</h4>
+  <p>5次以上の方程式には一般的な「解の公式」が存在しませんが、<strong>「代数的に解ける（ルートで表せる）特殊な5次方程式」</strong> も存在します。そのような方程式のガロア群（根の対称性を表す群）を調べると、この $F_{20}$ や、その部分群（位数10の二面体群 $D_{10}$ など）がぴったり現れます。</p>
+  <h4>② 群論の教科書的なグッドサンプル</h4>
+  <p>「半直積」や「フロベニウス群」という抽象的で迷子になりやすい概念を、具体的な「$y = ax + b$」という親しみやすい数式で目撃できるため、群論を学ぶ人にとって非常に理解を助けてくれる名脇役なのです。</p>
+
+  <hr>
+
+  <h2>第2章：Frobenius群（フロベニウス群） $F_n$ とは？</h2>
+  <p>数学の群論における<strong>フロベニウス群（Frobenius群）</strong>とは、非常に美しく、かつ厳格な規則を持った<strong>「非可換な置換群」の一種</strong>です。有限集合に対する「要素の並び替え（置換）」の集まりの中で、特定の条件を満たすものを指します。</p>
+
+  <h3>1. 直感的なイメージと定義</h3>
+  <p>ある集合（例えば $\{1, 2, 3, \dots, n\}$）を並び替えるルール（群 $G$）を考えます。この群 $G$ が<strong>フロベニウス群</strong>であるとは、以下の2つの条件を両方満たす場合を言います。</p>
+  <ol>
+    <li><strong>推移的（Transitive）である</strong><br>任意の要素を、別の任意の要素へと移すような並び替えルールが必ず存在すること。（全員がどこへでも移動できる）</li>
+    <li><strong>「2点を固定する並び替え」は単位元（何もしない）しかない</strong><br>単位元以外のどんなルールを持ってきても、<strong>「2箇所以上の位置を同時に動かさない（固定する）」ということは絶対にできない</strong>。言い換えると、何か1箇所でも位置が変わらない点（不動点）があるルールは、それ以外のすべての点を必ず動かしてしまう。</li>
+  </ol>
+  <p>この「2点以上を固定する要素が存在しない」という強い制限が、フロベニウス群の最大の特徴です。</p>
+
+  <h3>2. 代数的な構造（核と補群）</h3>
+  <p>フロベニウス群 $G$ は、内部の構造に非常に強力な対称性を持っています。1901年に数学者ゲオルク・フロベニウスが証明した定理により、フロベニウス群は必ず次の2つの部分群に綺麗に分解できることが分かっています。</p>
+  $$G = K \rtimes H$$
+  <ul>
+    <li><strong>フロベニウス核（Frobenius Kernel） $K$</strong><br>「どの要素も1点すら固定しない（全員を完全に動かす）並び替え」に単位元を加えた集合です。これは必ず $G$ の<strong>正規部分群</strong>になります。</li>
+    <li><strong>フロベニウス補群（Frobenius Complement） $H$</strong><br>「特定の1点だけを固定し、残りを動かす並び替え」の集合です。</li>
+  </ul>
+  <p>群全体 $G$ は、この核 $K$ と補群 $H$ の<strong>半直積（$\rtimes$）</strong>という形で作られています。</p>
+
+  <h3>3. 具体例：アフィン変換群 $\text{AGL}(1, q)$</h3>
+  <p>フロベニウス群の最も代表的で分かりやすい例は、有限体 $\mathbb{F}_q$（$q$ は素数のベキ）上の<strong>1次関数（アフィン変換）の集まり</strong>です。</p>
+  $$f(x) = ax + b \quad (a \neq 0)$$
+  <p>この変換全体の群を $\text{AGL}(1, q)$ と呼びますが、これはフロベニウス群になります。</p>
+  <ul>
+    <li><strong>フロベニウス核 $K$</strong>： $a = 1$ のとき（$f(x) = x + b$：平行移動）。これは1点も固定せず、全員を一斉にずらします。</li>
+    <li><strong>フロベニウス補群 $H$</strong>： $b = 0$ のとき（$f(x) = ax$：拡大縮小）。これは「原点 $x = 0$」だけを絶対に動かさず、他の点はすべて動かします。</li>
+  </ul>
+  <h4>代表的なサイズ（位数）の例</h4>
+  <ul>
+    <li><strong>$F_{6}$（3次二面体群 $D_6 \cong S_3$）</strong><br>正三角形の対称性の群です。1点を固定する裏返し（補群・位数2）と、1点も固定しない回転（核・位数3）に分解できます。</li>
+    <li><strong>$F_{20}$（位数20のフロベニウス群）</strong><br>5で割った余りの世界（$\mathbb{F}_5$）での1次関数 $f(x) = ax + b \pmod 5$ の集まりです。核の位数が5、補群の位数が4となります。</li>
+  </ul>
+
+  <h3>4. なぜ重要なのか？</h3>
+  <h4>① ガロア理論と方程式の可解性</h4>
+  <p>5次以上の方程式には一般的な解の公式ありませんが、「代数的に解ける（べき根で表せる）特殊な方程式」のガロア群を調べると、このフロベニウス群（やその部分群）が頻繁に登場します。方程式の解の「対称性の乱れ方」を綺麗に説明してくれる道具になります。</p>
+  <h4>② 表現論（キャラクター理論）の試金石</h4>
+  <p>フロベニウスがこの群を定義した動機は、彼が創始した「群の表現論（群を行列で表す理論）」にあります。フロベニウス群の性質を使うことで、部分群の指標（キャラクター）を群全体に綺麗に「誘導（インダクション）」できることが証明されており、有限群の構造を解き明かす上で極めて重要なベンチマークとなっています。</p>
+
+  <hr>
+
+  <h2>第3章：$F_{20}$ の部分群（正規部分群）の証明付き分類</h2>
+  <p>ここでは、生成元と基本関係式を用いて群を定義し、シローの定理（Sylow's theorems）を活用しながら、すべての部分群を漏れなく分類・証明していきます。</p>
+
+  <h3>1. $F_{20}$ の定義と準備</h3>
+  <p>$F_{20}$ は位数5の巡回群 $\mathbb{Z}_5$ と位数4の巡回群 $\mathbb{Z}_4$ の半直積 $\mathbb{Z}_5 \rtimes \mathbb{Z}_4$ として表されます。<br>生成元 $a, b$ を用いると、次のような基本関係式で定義できます。</p>
+  $$F_{20} = \langle a, b \mid a^5 = 1, b^4 = 1, b a b^{-1} = a^2 \rangle$$
+  <ul>
+    <li>$a$ は位数5の元（フロベニウス核の生成元）</li>
+    <li>$b$ は位数4の元（フロベニウス補群の生成元）</li>
+    <li>関係式 $b a b^{-1} = a^2$ より、群の要素はすべて $a^i b^j$ （$0 \le i \le 4$、$0 \le j \le 3$）の形に一意に表せます。</li>
+  </ul>
+  <p>また、計算の準備として $b^2$ の性質を確認しておきます。</p>
+  $$b^2 a b^{-2} = b(b a b^{-1})b^{-1} = b a^2 b^{-1} = (b a b^{-1})^2 = (a^2)^2 = a^4 = a^{-1}$$
+  <p>つまり、$b^2 a = a^{-1} b^2$ となり、これは二面体群と同じ反転の規則を持ちます。</p>
+
+  <h3>2. 部分群の分類結果まとめ</h3>
+  <p>分類の結論を一覧表で示します。（同型を除いた部分群の「種類」ではなく、群の中に存在する「個数」です）</p>
+  <table>
+    <thead>
+      <tr>
+        <th>部分群の位数</th>
+        <th>同型な群</th>
+        <th>個数</th>
+        <th>正規部分群か？</th>
+        <th>生成元の例</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>自明な群 $\{1\}$</td>
+        <td>1個</td>
+        <td><strong>正規</strong></td>
+        <td>$1$</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>巡回群 $\mathbb{Z}_2$</td>
+        <td>5個</td>
+        <td>非正規</td>
+        <td>$a^i b^2$</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>巡回群 $\mathbb{Z}_4$</td>
+        <td>5個</td>
+        <td>非正規</td>
+        <td>$a^i b$</td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td>巡回群 $\mathbb{Z}_5$</td>
+        <td>1個</td>
+        <td><strong>正規</strong></td>
+        <td>$a$</td>
+      </tr>
+      <tr>
+        <td><strong>10</strong></td>
+        <td>二面体群 $D_{10}$</td>
+        <td>1個</td>
+        <td><strong>正規</strong></td>
+        <td>$a, b^2$</td>
+      </tr>
+      <tr>
+        <td><strong>20</strong></td>
+        <td>$F_{20}$ 自身</td>
+        <td>1個</td>
+        <td><strong>正規</strong></td>
+        <td>$a, b$</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>合計 <strong>14個</strong> の部分群が存在し、そのうち正規部分群は <strong>4個</strong> です。</p>
+
+  <h3>3. 分類の証明</h3>
+  <p>ラグランジュの定理より、位数20の群の部分群の位数は 1, 2, 4, 5, 10, 20 のいずれかです。自明な部分群（位数1と20）は常に正規部分群なので省略し、それ以外の位数を詳細に調べます。</p>
+
+  <h4>① 位数5の部分群（シロー5部分群）</h4>
+  <p>シローの定理を用いて、位数5（$5^1$）の部分群の数 $n_5$ を求めます。</p>
+  <ul>
+    <li>$n_5 \equiv 1 \pmod 5$</li>
+    <li>$n_5 \mid 4$ （20 = 4 × 5 なので）</li>
+  </ul>
+  <p>これを満たす自然数は <strong>$n_5 = 1$</strong> しかありません。<br>シロー部分群が唯一であることと、それが正規部分群であることは同値です。<br>したがって、位数5の部分群は $P_5 = \langle a \rangle \cong \mathbb{Z}_5$ の <strong>1個のみ</strong> であり、これは <strong>正規部分群</strong> です。</p>
+
+  <h4>② 位数4の部分群（シロー2部分群）</h4>
+  <p>同様に、位数4（$2^2$）の部分群の数 $n_2$ を求めます。</p>
+  <ul>
+    <li>$n_2 \equiv 1 \pmod 2$ （つまり奇数）</li>
+    <li>$n_2 \mid 5$</li>
+  </ul>
+  <p>これを満たすのは $n_2 = 1$ または $n_2 = 5$ です。<br>もし $n_2 = 1$ だとすると、シロー2部分群も正規部分群となり、$F_{20}$ は $P_5$ との直積 $\mathbb{Z}_5 \times \mathbb{Z}_4 \cong \mathbb{Z}_{20}$ （可換群）になってしまいます。しかし $F_{20}$ は非可換群なので矛盾します。<br>したがって、<strong>$n_2 = 5$</strong> です。<br>これらは $P_5$ の要素 $a^i$ によって共役になるため、$\langle a^i b a^{-i} \rangle$ と表せます。各シロー2部分群は生成元 $b$（位数4）を持つため $\mathbb{Z}_4$ に同型であり、全部で <strong>5個</strong> 存在します（互いに共役なので<strong>非正規</strong>です）。</p>
+
+  <h4>③ 位数2の部分群</h4>
+  <p>素数位数の部分群なので、位数2の要素を数え上げます。<br>位数2の要素は、シロー2部分群（$\cong \mathbb{Z}_4$）の中にしか存在しません。各 $\mathbb{Z}_4$ は、その中に唯一の位数2の要素（生成元の2乗）を含みます。</p>
+  <p>各シロー2部分群の生成元は $a^i b$ の形をしています。これを2乗してみましょう。<br>関係式 $b a = a^2 b$ を繰り返し使うと、$b a^i = a^{2i} b$ となります。</p>
+  $$(a^i b)^2 = a^i b a^i b = a^i a^{2i} b^2 = a^{3i} b^2$$
+  <p>$i$ が 0 から 4 まで変化するとき、$3i \pmod 5$ は 0, 3, 1, 4, 2 とすべて異なる値を取ります。<br>したがって、位数2の要素は $b^2, a b^2, a^2 b^2, a^3 b^2, a^4 b^2$ のちょうど5個存在します。<br>これらが生成する $\langle a^i b^2 \rangle \cong \mathbb{Z}_2$ が、位数2の部分群 <strong>5個</strong> となります（互いに共役なので<strong>非正規</strong>です）。</p>
+
+  <h4>④ 位数10の部分群</h4>
+  <p>指数（$20 \div 10$）が2の部分群は、群論の一般法則として<strong>必ず正規部分群</strong>になります。<br>ある群 $H$ が $F_{20}$ の位数10の部分群だとします。$H$ 自身にシローの定理を適用すると、位数5の部分群を唯一持ちます。$F_{20}$ の位数5の部分群は $P_5$ しかないため、<strong>$H$ は必ず $P_5 = \langle a \rangle$ を含みます</strong>。</p>
+  <p>これにより、$H$ は $P_5$ と「位数2の要素」によって生成される必要があります。<br>上で求めた位数2の要素 $b^2$ を用いて $\langle a, b^2 \rangle$ を作ると、この位数は10になります。<br>準備段階で確認した通り $b^2 a b^{-2} = a^{-1}$ を満たすため、これは二面体群 $D_{10}$ と同型です。<br>（※どの $a^i b^2$ を選んでも、結果的に作られる集合 $\langle a, a^i b^2 \rangle$ は同じ $D_{10}$ に一致します）。</p>
+  <p>したがって、位数10の部分群は $N_{10} = \langle a, b^2 \rangle \cong D_{10}$ の <strong>1個のみ</strong> であり、<strong>正規部分群</strong>です。</p>
+
+  <hr>
+
+  <p>以上の証明から、提示した表の通り、14個の部分群（うち4個が正規部分群）への完全な分類が完了しました。シローの定理と半直積の基本関係式が綺麗に噛み合う、群論の美しい構造です。</p>
+
+</div>
+
+</body>
+</html>

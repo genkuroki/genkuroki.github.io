@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>局所Hausdorff空間におけるKC性とHausdorff性の乖離と回復についての詳細解説</title>
+    
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #2c3e50;
+            --accent-color: #800020;
+            --bg-color: #fdfbf7;
+            --text-color: #2c3e50;
+            --box-bg: #f4f1ea;
+            --border-color: #1e3a8a;
+            --proof-border: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Times New Roman', 'Hiragino Mincho ProN', 'MS Mincho', serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 50px 40px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2.2em;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.1em;
+            color: #4b5563;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 1.25em;
+            color: var(--secondary-color);
+            margin-top: 35px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 5px;
+        }
+
+        h4 {
+            font-size: 1.1em;
+            color: #111827;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1.2em;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-top: 0;
+            margin-bottom: 1.5em;
+            padding-left: 2em;
+        }
+
+        li {
+            margin-bottom: 0.6em;
+        }
+
+        .em {
+            font-weight: bold;
+            color: #111827;
+        }
+
+        /* 数学環境ボックス */
+        .box {
+            background-color: var(--box-bg);
+            border-left: 4px solid var(--border-color);
+            padding: 18px 20px;
+            margin: 25px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #111827;
+            font-size: 1.05em;
+        }
+
+        .proof {
+            margin: 20px 0 40px 0;
+            padding-left: 20px;
+            border-left: 3px solid var(--proof-border);
+        }
+
+        .proof-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .qed {
+            text-align: right;
+            display: block;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 40px 0;
+            color: #cbd5e1;
+            font-size: 18pt;
+            letter-spacing: 0.3em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>局所Hausdorff空間におけるKC性とHausdorff性の乖離と回復についての詳細解説</h1>
+
+    <p>本解説では、位相空間論における「分離公理（特にHausdorff性）」と「コンパクト性」、およびその局所的な性質について、定義から定理の証明までを自己完結（self-contained）の形で懇切丁寧に解説します。大学の学部数学で位相空間論を学ぶ学生の皆さんが、論理のつながりを一行ずつ納得しながら読み進められるよう、厳密な証明を記述しています。</p>
+
+    <h2>第1章：基礎定義の厳密な整理</h2>
+    <p>まずは、議論の土台となる定義を正確に確認しておきましょう。</p>
+
+    <h3>1. 位相空間と相対位相</h3>
+    <p>集合 $X$ とその部分集合の族 $\tau$ の組 $(X, \tau)$ が<span class="em">位相空間</span>であるとは、$\tau$ が空集合と $X$ を含み、任意の和集合と有限個の共通部分について閉じていることを言います。$\tau$ の元を<span class="em">開集合</span>と呼びます。</p>
+
+    <div class="box">
+        <div class="box-title">【定義：相対位相（Subspace Topology）】</div>
+        位相空間 $(X, \tau)$ とその部分集合 $A \subseteq X$ に対し、
+        $$ \tau_A = \{ U \cap A \mid U \in \tau \} $$
+        と定義すると、$\tau_A$ は $A$ 上の位相になります。これを<span class="em">相対位相</span>と呼び、$(A, \tau_A)$ を $X$ の<span class="em">部分空間</span>と呼びます。
+    </div>
+
+    <h3>2. 分離公理（$T_1$ 空間と Hausdorff 空間）</h3>
+    <p>空間の点同士を「開集合によってどれくらい区別できるか」を表す指標が分離公理です。</p>
+
+    <div class="box">
+        <div class="box-title">【定義：$T_1$ 空間】</div>
+        位相空間 $X$ の相異なる任意の2点 $x, y \in X$ ($x \neq y$) に対して、$x$ を含み $y$ を含まない開集合 $U$、および $y$ を含み $x$ を含まない開集合 $V$ が存在するとき、$X$ を<span class="em">$T_1$ 空間</span>という。（※これは「任意の1点集合 $\{x\}$ が閉集合であること」と同値です。）
+    </div>
+
+    <div class="box">
+        <div class="box-title">【定義：Hausdorff 空間（$T_2$ 空間）】</div>
+        位相空間 $X$ の相異なる任意の2点 $x, y \in X$ ($x \neq y$) に対して、<span class="em">互いに素な</span>開集合 $U, V$ ($U \cap V = \empty$) が存在して、$x \in U$ かつ $y \in V$ とできるとき、$X$ を<span class="em">Hausdorff（ハウスドルフ）空間</span>という。
+    </div>
+
+    <h3>3. コンパクト性とKC空間</h3>
+    <p>有限性への架け橋となる最も重要な概念の一つがコンパクト性です。</p>
+
+    <div class="box">
+        <div class="box-title">【定義：コンパクト（Compact）】</div>
+        位相空間 $X$ の部分集合 $K$ が<span class="em">コンパクト</span>であるとは、$K$ の任意の開被覆（$K \subseteq \bigcup_{\lambda\in\Lambda} U_{\lambda}$ となる開集合の族）に対して、そこから<span class="em">有限個の開集合</span>を選ぶだけで $K$ を覆い尽くせる（有限部分被覆を持つ）ことをいう。
+    </div>
+
+    <p>本稿の主役となるのは、次の性質を持つ空間です。</p>
+    <div class="box">
+        <div class="box-title">【定義：KC空間】</div>
+        位相空間 $X$ の任意のコンパクト部分集合が、常に $X$ の閉集合になるとき、$X$ を<span class="em">KC空間</span>と呼ぶ。
+    </div>
+
+    <h3>4. 局所的な公理たち</h3>
+    <p>空間の各点が「どのような都合の良い近傍を持っているか」を規定する公理です。</p>
+    <ul>
+        <li><span class="em">局所Hausdorff空間：</span> 任意の点 $x \in X$ が、相対位相に関してHausdorff空間となるような開近傍を持つ空間。</li>
+        <li><span class="em">第一可算公理（First-countable）：</span> 任意の点 $x \in X$ が、可算個の開近傍からなる基本近傍系を持つ空間。</li>
+        <li><span class="em">局所コンパクト（Locally compact）：</span> 任意の点 $x \in X$ が、コンパクトな近傍を持つ空間。</li>
+        <li><span class="em">局所Euclid（Euclidean）：</span> 任意の点 $x \in X$ が、ある次元 $n$ のEuclid空間 $\mathbb{R}^n$ の開集合と同相な開近傍を持つ空間。</li>
+    </ul>
+
+    <h2>第2章：【定理1】Hausdorff空間におけるコンパクト集合の閉性</h2>
+    <p>もっとも基本となる定理です。「Hausdorff空間であれば、必ずKC空間になる」ことを示します。</p>
+
+    <div class="box">
+        <div class="box-title">【定理1】</div>
+        $X$ をHausdorff空間とする。このとき、$X$ の任意のコンパクト部分集合 $K$ は、$X$ の閉集合である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        <p>$K$ が閉集合であることを示すために、その補集合 $X \setminus K$ が開集合であることを示します。すなわち、$X \setminus K$ の任意の点 $y$ に対して、$y$ のある開近傍 $W$ が存在して $W \subseteq X \setminus K$（つまり $W \cap K = \empty$）となることを証明します。</p>
+        <ol>
+            <li><span class="em">点を分離する：</span> $y \in X \setminus K$ を任意の点とする。このとき、任意の $x \in K$ に対して $x \neq y$ である。$X$ はHausdorff空間であるから、相異なる2点 $x$ と $y$ を分離する互いに素な開集合 $U_x, V_x$ が存在する：
+                $$ x \in U_x, \quad y \in V_x, \quad U_x \cap V_x = \empty $$
+            </li>
+            <li><span class="em">コンパクト性による有限個への縮小：</span> 点 $y$ を固定したまま、$x$ を $K$ 全体に動かす。このとき、開集合の族 $\{ U_x \}_{x\in K}$ は $K$ の開被覆をなす（なぜなら各 $x \in K$ は $U_x$ に含まれるため）。$K$ はコンパクトであるから、この開被覆から<span class="em">有限個</span>の開集合を選んで $K$ を覆うことができる。すなわち、ある有限個の点 $x_1, x_2, \dots, x_m \in K$ が存在して、
+                $$ K \subseteq U_{x_1} \cup U_{x_2} \cup \dots \cup U_{x_m} $$
+                とできる。
+            </li>
+            <li><span class="em"> $y$ の開近傍の構成：</span> この有限個の点に対応する $y$ 側の開集合 $V_{x_1}, V_{x_2}, \dots, V_{x_m}$ に着目し、これらの<span class="em">有限個の共通部分</span>を $W$ とおく：
+                $$ W = V_{x_1} \cap V_{x_2} \cap \dots \cap V_{x_m} $$
+                有限個の開集合の共通部分であるから、$W$ も<span class="em">開集合</span>である。また、各 $V_{x_i}$ は $y$ を含むため、$y \in W$ である。
+            </li>
+            <li><span class="em">交わりを持たないことの確認：</span> 一方、$K$ を覆っている側の有限和を $U = U_{x_1} \cup U_{x_2} \cup \dots \cup U_{x_m}$ とおく。各 $i$ について $U_{x_i} \cap V_{x_i} = \empty$ であったから、慎重に計算すると $U \cap W = \empty$ となることがわかる。実際、もし $z \in U \cap W$ が存在したとすると、ある $i$ で $z \in U_{x_i}$ となり、かつ $W$ の定義から $z \in V_{x_i}$ となるため、$U_{x_i} \cap V_{x_i} \neq \empty$ となり矛盾する。
+            </li>
+            <li><span class="em">結論：</span> $K \subseteq U$ かつ $U \cap W = \empty$ であるから、当然 $K \cap W = \empty$ である。これは $W \subseteq X \setminus K$ を意味する。以上より、$X \setminus K$ の各点 $y$ が $X \setminus K$ に含まれる開近傍 $W$ を持つため、$X \setminus K$ は開集合である。したがって、$K$ は閉集合である。
+            </li>
+        </ol>
+        <span class="qed">■</span>
+    </div>
+
+    <h2>第3章：【定理2】局所Hausdorff空間における反例（KCだが非Hausdorff）</h2>
+    <p>一見すると、「局所的にHausdorffであれば、グローバルな性質である『コンパクト $\implies$ 閉』さえ満たしていればHausdorff空間になりそうだ」と思えるかもしれません。しかし、それは間違いです。ここでは、「局所Hausdorffであり、かつKC空間（コンパクトなら閉）であるが、全体としてはHausdorffではない」という、トポロジーの奥深さを物語る2つの精巧な反例を提示します。</p>
+
+    <h3>反例1：2つの無限点を持つ Arens-Fort 空間</h3>
+    <p>集合 $X$ を、無限行列の格子点 $\mathbb{N} \times \mathbb{N}$ に、2つの異なる「無限点」 $\infty_1, \infty_2$ を付け足した集合とします：</p>
+    $$ X = (\mathbb{N} \times \mathbb{N}) \cup \{ \infty_1, \infty_2 \} $$
+    <p>この $X$ 上に、以下のルールで開集合の族（位相）を定めます。</p>
+    <ol>
+        <li>格子点 $p \in \mathbb{N} \times \mathbb{N}$ は、すべて<span class="em">孤立点</span>とする（すなわち、単元素集合 $\{p\}$ は開集合）。</li>
+        <li>$\infty_1$ の開近傍 $U_1$ は、$\infty_1 \in U_1$ であり、かつ<span class="em">「有限個の列を除いて、各列の有限個を除くすべての格子点を含む」</span>ような集合とする。</li>
+        <li>$\infty_2$ の開近傍 $U_2$ も同様に、$\infty_2 \in U_2$ であり、かつ<span class="em">「有限個の列を除いて、各列の有限個を除くすべての格子点を含む」</span>ような集合とする。</li>
+    </ol>
+
+    <h4>1. この空間 $X$ はHausdorffではない</h4>
+    <p>$\infty_1$ と $\infty_2$ を分離できるか試みてみましょう。どんなに小さな $\infty_1$ の開近傍 $U_1$ と $\infty_2$ の開近傍 $U_2$ を持ってきても、定義からこれらは「ほとんどすべての列の、ほとんどすべての格子点」を両方とも含んでいなければなりません。したがって、必ず $U_1 \cap U_2 \neq \empty$ となり、この2点を互いに素な開集合で分離することは不可能です。よって<span class="em">$X$ はHausdorff空間ではありません</span>。</p>
+
+    <h4>2. この空間 $X$ は局所Hausdorffである</h4>
+    <p>部分空間 $V_1 = X \setminus \{ \infty_2 \}$ を考えます。これは $\infty_2$ の近傍の条件を全く満たさない単元素集合の補集合なので、開集合です。この $V_1$ は、数学において有名な<span class="em">「Arens-Fort（アレンス＝フォート）空間」</span>そのものであり、これはHausdorff空間であることが知られています。同様に、$V_2 = X \setminus \{ \infty_1 \}$ もHausdorffな開集合です。$X = V_1 \cup V_2$ ですから、$X$ はふたつのHausdorffな開集合で覆われています。すなわち<span class="em">$X$ は局所Hausdorff空間</span>です。</p>
+
+    <h4>3. この空間 $X$ はKC空間である（コンパクト部分集合は閉集合）</h4>
+    <p>この性質を証明するために、まず次の補題を示します。</p>
+    <div class="box">
+        <div class="box-title">【補題】</div>
+        $X$ の任意のコンパクト部分集合 $K$ は、<span class="em">有限集合</span>である。
+    </div>
+    <div class="proof">
+        <span class="proof-title">【補題の証明】</span>
+        <p>$K \subseteq X$ を無限集合と仮定して、矛盾（コンパクトではないこと）を導きます。$K$ が無限集合なら、格子点集合 $\mathbb{N} \times \mathbb{N}$ の中に無限個の点を含みます。これを $M = K \cap (\mathbb{N} \times \mathbb{N})$ とおきます。</p>
+        <ul>
+            <li><span class="em">ケースA：ある特定の列に無限個の点がある場合</span><br>
+            第 $m_0$ 列の中に $M$ の点（つまり $K$ の点）が無限個存在するとします。このとき、$\infty_1$ の開近傍 $U_1$ として「第 $m_0$ 列を丸ごと一列含まないもの」を選べます（有限個の列の除外として $m_0$ を指定すればよい）。同様に $\infty_2$ の開近傍 $U_2$ としても「第 $m_0$ 列を丸ごと含まないもの」を選べます。ここで、$W = U_1 \cup U_2$ という開集合を作ると、これは $\infty_1, \infty_2$ を含み、かつ第 $m_0$ 列の点を一切含みません。$K$ の開被覆として、この $W$ と、第 $m_0$ 列の各格子点 $p$ に対する単元素開集合 $\{p\}$ の族を考えます。この被覆から有限個の開集合を選んでも、第 $m_0$ 列に無限個ある $K$ の点たちを覆いきることはできません。したがって $K$ はコンパクトではなく、矛盾します。</li>
+            <li><span class="em">ケースB：どの列にも有限個しか点がないが、無限に多くの列に分散している場合</span><br>
+            相異なる無限個の列から、 $K$ の点を1つずつ選んで無限集合 $M' = \{ q_1, q_2, q_3, \dots \}$ を作ります。$\infty_1$ の開近傍 $U_1$ として、「各列からこの $q_i$ の点だけを1点ずつ除外した集合」を作ることができます（各列で除外されるのは1点だけなので、近傍の条件である『各列有限個を除く』をクリアしています）。同様に $U_2$ も $M'$ と交わらないように選べます。すると、 $W = U_1 \cup U_2$ は $\infty_1, \infty_2$ を含み、 $M'$ の点を一切含まない開集合になります。先ほどと同様に、$K$ の開被覆として $W$ と各 $q_i \in M'$ に対する $\{q_i\}$ を考えると、有限部分被覆を持たないため $K$ はコンパクトではなく、矛盾します。</li>
+        </ul>
+        <p>以上より、すべてのコンパクト部分集合 $K$ は有限集合でなければなりません。この空間 $X$ は各点が閉集合である（$T_1$ 空間の条件を満たす）ため、<span class="em">有限集合は常に閉集合</span>です。したがって、すべてのコンパクト部分集合は閉集合となり、 $X$ はKC空間です。</p>
+    </div>
+
+    <div class="divider">♦ ♦ ♦</div>
+
+    <h3>反例2：補可算位相を交えた「2つの原点を持つ実数直線」</h3>
+    <p>もう一つの強力な反例として、非可算の濃度をもつ実数直線 $\mathbb{R}$ をベースにした幾何学的なモデルを構成しましょう。</p>
+
+    <h4>1. 空間 $Z$ の準備</h4>
+    <p>まず、実数集合 $\mathbb{R}$ に対して、次のルールで新しい位相を与えた空間を $Z$ とします。</p>
+    <div class="box">
+        $Z$ の開集合とは、<span class="em">「通常の意味の開集合 $U \subseteq \mathbb{R}$ から、任意の可算集合 $C$ を差し引いた集合 $U \setminus C$」</span>全体とする。
+    </div>
+    <p>この空間 $Z$ は以下の著しい性質を持ちます：</p>
+    <ul>
+        <li><span class="em">Hausdorff空間である：</span> 通常の位相よりも開集合が「増えて強く」なっているため、通常の位相で分離できる2点は、 $Z$ でも当然分離できます。</li>
+        <li><span class="em">任意の可算集合が閉集合になる：</span> どんな可算集合 $C$ に対しても、 $\mathbb{R} \setminus C$ は「通常の開集合 $\mathbb{R}$ から可算集合 $C$ を除いたもの」なので、定義から $Z$ の開集合です。補集合が開集合なので、 $C$ は閉集合です。</li>
+        <li><span class="em">コンパクト部分集合は有限集合に限られる：</span> $Z$ の部分集合 $K$ が無限集合であると仮定します。このとき $K$ は可算無限部分集合 $A = \{a_1, a_2, a_3, \dots \}$ を含みます。各 $n \in \mathbb{N}$ に対し、各点の「尻尾」を切り落とした集合 $U_n = Z \setminus \{a_n, a_{n+1}, a_{n+2}, \dots \}$ を定義します。各 $\{a_n, a_{n+1}, \dots \}$ は可算集合なので、その補集合である $U_n$ は $Z$ の開集合です。これらの和集合をとると、
+        $$ \bigcup_{n=1}^{\infty} U_n = Z \setminus \bigcap_{n=1}^{\infty} \{a_n, a_{n+1}, a_{n+2}, \dots \} = Z \setminus \empty = Z $$
+        となり、 $\{U_n\}_{n=1}^{\infty}$ は $Z$ の開被覆（当然 $K$ の開被覆）をなします。しかし、ここからいかに有限個の開集合を選んでも、最大インデックスの $U_N$ の外側にある点 $a_N$ などを覆うことができません。これは $K$ がコンパクトであることに矛盾します。したがって、<span class="em">$Z$ のコンパクト集合は有限集合のみ</span>です。</li>
+    </ul>
+
+    <h4>2. 貼り合わせ空間 $X$ の構成</h4>
+    <p>この $Z$ のコピーを2つ用意し、<span class="em">原点 0 以外のすべての点を同一視して貼り合わせた空間</span>を $X$ とします。数式で書けば、 $X = (Z \setminus \{0\}) \cup \{0_1, 0_2\}$ です。原点だけが2つに分裂した実数直線のようなイメージです。</p>
+
+    <h4>3. $X$ の性質の検証</h4>
+    <ul>
+        <li><span class="em">X はHausdorff空間ではない：</span> 2つの原点 $0_1$ と $0_2$ を分離しようと試みます。 $0_1$ の任意の開近傍 $V_1$ と $0_2$ の任意の開近傍 $V_2$ は、それぞれ「0を含む通常の開区間」から「ある可算集合」を除いた形をベースにしています。通常の開区間同士は必ず 0 のまわりで非可算無限個（連続体濃度）の点たちを共有して交わります。そこから可算個の点を除外したところで、実数の濃度（非可算）のほうが圧倒的に大きいため、交わりが空になることは絶対にありません。したがって、 $V_1 \cap V_2 \neq \empty$ となり、 $0_1$ と $0_2$ は分離できません。</li>
+        <li><span class="em">X は局所Hausdorff空間である：</span> $X$ から $0_2$ を取り除いた部分空間 $X \setminus \{0_2\}$ は、空間 $Z$ そのもの（同常）であり、これは前述の通りHausdorff空間です。同様に $X \setminus \{0_1\}$ もHausdorff空間です。これら2つの開集合で $X$ 全体を覆えるため、 $X$ は局所Hausdorffです。</li>
+        <li><span class="em">X はKC空間である：</span> $X$ から $Z$ への自然な射影（$0_1, 0_2$ を両方とも 0 に写し、それ以外はそのまま写す写像） $\pi: X \to Z$ を考えると、これは連続写像になります。$X$ の任意のコンパクト部分集合 $K$ をとると、連続写像によるコンパクト集合の像はコンパクトなので、 $\pi(K)$ は $Z$ のコンパクト部分集合になります。先ほど証明した通り、 $Z$ のコンパクト集合は有限集合に限られるため、 $\pi(K)$ は有限集合です。写像 $\pi$ は高々2対1（原点以外は1対1）なので、その原像に含まれる $K$ もまた<span class="em">有限集合</span>でなければなりません。この空間 $X$ は $T_1$ 空間（1点集合が閉）なので、有限集合 $K$ は常に閉集合です。したがって、 $X$ の任意のコンパクト部分集合は閉集合であり、 $X$ はKC空間です。</li>
+    </ul>
+
+    <h2>第4章：【定理3】第一可算公理の下での回復</h2>
+    <p>前章の恐るべき反例（可算性を巧みにすり抜ける構造）を阻止し、「KC $\implies$ Hausdorff」を正しく成り立たせるための最初の処方箋が<span class="em">「第一可算公理」</span>です。</p>
+
+    <div class="box">
+        <div class="box-title">【定理3】</div>
+        位相空間 $X$ は、局所Hausdorffであり、かつ各点で第一可算公理を満たすとする。このとき、 $X$ がKC空間（任意のコンパクト部分集合が閉集合）ならば、 $X$ はHausdorff空間である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        <p>背理法で示します。$X$ がHausdorff空間でないと仮定します。このとき、どんなに開集合を小さく選んでも分離できない相異なる2点 $x, y \in X$ （$x \neq y$）が存在します。</p>
+        <ol>
+            <li><span class="em">局所Hausdorff性の適用：</span> $X$ は局所Hausdorffなので、$x$ はあるHausdorffな開近傍 $U_x$ を持ちます。もし $y \in U_x$ であれば、Hausdorff空間 $U_x$ の中で $x$ と $y$ は分離できてしまうため、必ず <span class="em">$y \notin U_x$</span> です。同様に $y$ もHausdorffな開近傍 $U_y$ を持ち、<span class="em">$x \notin U_y$</span> です。</li>
+            <li><span class="em">第一可算公理による点列の構成：</span> $X$ は第一可算なので、$x$ は可算基本近傍系 $\{ V_n \}_{n=1}^{\infty}$ を持ち、$y$ は可算基本近傍系 $\{ W_n \}_{n=1}^{\infty}$ を持ちます。これらは包含関係について縮小列（$V_{n+1} \subseteq V_n$）としてよく、また最初から $V_n \subseteq U_x$, $W_n \subseteq U_y$ となるように選んでおけます。$x$ と $y$ は分離できないので、任意の $n$ について $V_n \cap W_n \neq \empty$ です。各 $n$ に対して、共通部分から1点を選び、点列 $\{ z_n \}$ を作ります：
+                $$ z_n \in V_n \cap W_n $$
+            </li>
+            <li><span class="em">2点への収束：</span> この点列 $\{ z_n \}$ は、構成から <span class="em">$x$ にも $y$ にも両方に収束</span> します。（任意の $x$ の開近傍は、ある $V_N$ を含むため、 $n \ge [N]$ のすべての $z_n$ を含みます。$y$ 側も同様です。）</li>
+            <li><span class="em">コンパクト集合の作成とKC仮定の矛盾：</span> ここで、点列の要素と極限点 $x$ を集めた集合 $K$ を作ります：
+                $$ K = \{ z_n \mid n \in \mathbb{N} \} \cup \{ x \} $$
+                点列が $x$ に収束することから、この $K$ は<span class="em">コンパクト部分集合</span>になります。（$x$ を含む開集合は、有限個を除くすべての $z_n$ を含むため、残りの有限個の点をそれぞれの開集合で覆えば、必ず有限部分被覆が作れます。）<br><br>
+                仮定より $X$ はKC空間なので、コンパクト集合 $K$ は<span class="em">閉集合</span>でなければなりません。閉集合であるなら、その閉包は自身に一致します（$\text{Cl}(K) = K$）。しかし、点列 $\{ z_n \}$ は $y$ にも収束するため、極限の定義から <span class="em">$y \in \text{Cl}(K)$</span> となります。<br><br>
+                もし $\text{Cl}(K) = K$ が正しいなら、 $y \in K$ でなければなりません。しかし、
+                <ul>
+                    <li>$y = x$ となることは $x \neq y$ に矛盾。</li>
+                    <li>ある $n$ で $y = z_n$ となることは、$z_n \in V_n \subseteq U_x$ より $y \in U_x$ となり、ステップ1の $y \notin U_x$ に矛盾。</li>
+                </ul>
+                したがって、 $y \notin K$ であり、 $y \in \text{Cl}(K)$ と矛盾します。不可能性が示されたため、初めの仮定「$X$ はHausdorffではない」は誤りであり、$X$ はHausdorff空間です。
+            </li>
+        </ol>
+        <span class="qed">■</span>
+    </div>
+
+    <h2>第5章：【定理4】局所コンパクト性の下での回復</h2>
+    <p>もう一つの強力な処方箋が<span class="em">「局所コンパクト性」</span>です。こちらは点列（可算性）を一切使わず、近傍の議論だけで鮮やかに証明することができます。</p>
+
+    <div class="box">
+        <div class="box-title">【定理4】</div>
+        位相空間 $X$ は、局所Hausdorffであり、かつ各点で局所コンパクトであるとする。このとき、 $X$ がKC空間ならば、 $X$ はHausdorff空間である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        <p>$X$ がKC空間であるため、1点集合はコンパクト $\implies$ 閉集合となり、 <span class="em">$X$ は $T_1$ 空間</span> です。定理3と同様に、背理法のために $X$ がHausdorff空間でないと仮定し、分離できない相異なる2点 $x, y \in X$ をとります。</p>
+        <ol>
+            <li><span class="em">都合の良いコンパクト近傍の選定：</span> $X$ は局所Hausdorffなので、$x$ はHausdorffな開近傍 $U$ を持ちます（$y \notin U$）。また $X$ は局所コンパクトなので、$x$ はコンパクト近傍を持ちます。局所Hausdorff空間 $U$ の中において、各点はコンパクト近傍の基底を持つため、$x$ のコンパクト近傍 $K$ を、<span class="em">最初から開集合 $U$ の中にすっぽり収まるように</span> 選ぶことができます：
+                $$ x \in \text{int}(K) \subseteq K \subseteq U $$
+            </li>
+            <li><span class="em">K の閉集合性：</span> この $K$ は $X$ のコンパクト部分集合です。今、 $X$ はKC空間であると仮定しているので、この $K$ は <span class="em">$X$ における閉集合</span> でもあります。
+            </li>
+        </ol>
+        <p>ここで、分離できないもう一方の点 $y$ と、この閉集合 $K$ の位置関係について、以下の2つのケースに分けて矛盾を導きます。</p>
+        <ul>
+            <li><span class="em">ケースA：$y \notin K$ のとき</span><br>
+            $K$ は $X$ の閉集合なので、その補集合 $X \setminus K$ は $y$ の開近傍です。一方、$\text{int}(K)$ は $x$ の開近傍です。これら2つの開集合の共通部分を考えると、
+            $$ \text{int}(K) \cap (X \setminus K) = \empty $$
+            となり、互いに素です。これは $x$ と $y$ が開集合で分離できることを意味し、最初の「分離できない」という仮定に矛盾します。</li>
+            <li><span class="em">ケースB：$y \in K$ のとき</span><br>
+            ステップ1より $K \subseteq U$ ですから、これは <span class="em">$y \in U$</span> であることを意味します。しかし、$U$ はもともとHausdorffな<span class="em">開集合</span>でした。したがって、Hausdorff空間 $U$ の中で、 $x$ と $y$ を分離する互いに素な $U$ の開集合 $W_x, W_y$ が存在します。$U$ は $X$ の開集合なので、部分空間の開集合である $W_x, W_y$ は、そのまま $X$ における開集合としても機能します。これは $X$ 全体において $x$ と $y$ が分離できることを意味し、やはり矛盾します。</li>
+        </ul>
+        <p>どちらのケースでも矛盾が生じるため、「$X$ はHausdorff空間ではない」という仮定は誤りであり、$X$ はHausdorff空間です。</p>
+        <span class="qed">■</span>
+    </div>
+
+    <h2>第6章：【定理5】Euclid空間（多様体）への応用</h2>
+    <p>最後に、幾何学や多様体論で最も頻出する「局所Euclid空間」の場合についてまとめます。</p>
+
+    <div class="box">
+        <div class="box-title">【定理5】</div>
+        Euclid空間の開集合と同相な開集合達で覆われている位相空間（局所Euclid空間） $X$ について、 $X$ がKC空間であることと、 $X$ がHausdorff空間であることは同値である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">【証明】</span>
+        <ul>
+            <li><span class="em">（$\Longleftarrow$ 方向）：</span> 定理1より、Hausdorff空間であれば、追加の条件なしに常にKC空間になります。</li>
+            <li><span class="em">（$\Longrightarrow$ 方向）：</span> $X$ は局所Euclid空間なので、任意の点 $x \in X$ は、ある $\mathbb{R}^n$ の開集合 $V$ と同相な開近傍 $U$ を持ちます。ここで、ベースとなるEuclid空間 $\mathbb{R}^n$ およびその開集合 $V$ のトポロジーの性質を思い出しましょう。
+                <ol>
+                    <li>$\mathbb{R}^n$ はHausdorff空間なので、その開集合 $V$ （および同相な $U$）も<span class="em">Hausdorff空間</span>です。したがって、 $X$ は「局所Hausdorff」です。</li>
+                    <li>$\mathbb{R}^n$ は各点が可算な球近傍を持つので第一可算であり、かつ閉球というコンパクト近傍を持つので局所コンパクトです。その開集合 $V$ （および同相な $U$）も同様に<span class="em">第一可算</span>かつ<span class="em">局所コンパクト</span>です。</li>
+                </ol>
+                したがって、局所Euclid空間 $X$ は、定理3の前提（局所第一可算）および定理4の前提（局所コンパクト）を<span class="em">自動的に、かつ完璧に満たしています</span>。よって、定理3（または定理4）をそのまま適用することにより、 $X$ がKC空間であれば、 $X$ はHausdorff空間になります。
+            </li>
+        </ul>
+        <span class="qed">■</span>
+    </div>
+
+    <h2>まとめ</h2>
+    <p>今回の議論の流れをまとめると以下のようになります。</p>
+    $$ \text{Hausdorff空間} \iff \text{KC空間（コンパクト} \implies \text{閉）} $$
+    <p>この同値関係は一般には崩れてしまいますが、空間に<span class="em">「局所的なHausdorff性」</span>があるという前提のもとでは、以下のいずれかの個性を1つトッピングするだけで、見事に同値性が復活します。</p>
+    <ol>
+        <li><span class="em">第一可算公理</span>（点列の極限が1点に縛られるアプローチ。反例2を撃退）</li>
+        <li><span class="em">局所コンパクト性</span>（コンパクト近傍の閉性を利用するアプローチ。反例1, 2を双方撃退）</li>
+        <li><span class="em">局所Euclid性</span>（多様体の卵であり、上の2つを両方とも内包する強力な環境）</li>
+    </ol>
+    <p>追加された実数直線の反例（反例2）を眺めると、可算集合を閉集合に追い込む強すぎる位相が、コンパクト集合を有限集合にまで極限に縮小させてしまう様子が観察できたかと思います。局所性と大域性のバランスを、ぜひ深く味わってみてください！</p>
+</div>
+
+</body>
+</html>
