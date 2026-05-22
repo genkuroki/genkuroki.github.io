@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mod 2 における既約多項式の分類と詳細証明（2次〜5次）</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+        h3 {
+            font-size: 1.2rem;
+            color: #2980b9;
+            margin-top: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .filter-box {
+            background-color: #ebf5fb;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+        }
+        .proof-box {
+            background-color: #fdfefe;
+            border: 1px solid #d5dbdb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.02);
+        }
+        .proof-box h4 {
+            margin-top: 0;
+            color: #34495e;
+            border-bottom: 1px dashed #bdc3c7;
+            padding-bottom: 5px;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #dcdde1;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f1f2f6;
+            color: #2c3e50;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .badge-irreducible {
+            background-color: #e8f8f5;
+            color: #117a65;
+            border: 1px solid #a3e4d7;
+        }
+        .badge-reducible {
+            background-color: #f9ebea;
+            color: #922b21;
+            border: 1px solid #f5b7b1;
+        }
+        .poly-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .poly-item {
+            border: 1px solid #f1f2f6;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .formula {
+            font-size: 1.1rem;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .math-block {
+            background-color: #fcfcfc;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .calc-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>$\bmod 2$ における既約多項式の分類と証明</h1>
+    <div class="subtitle">有限体 $\mathbb{F}_2$ 上のモニック多項式の厳密な判定と網羅リスト</div>
+
+    <h2>第1部：証明と判定アルゴリズム</h2>
+
+    <div class="proof-box">
+        <h3>ステップ1：1次因数の排除（超強力フィルター）</h3>
+        <p>多項式 $f(x)$ が既約であるための大前提は、1次因数を持たない（$\mathbb{F}_2$ 内に根を持たない）ことです。これにより以下の2条件が導かれます。</p>
+        <ul>
+            <li><strong>条件①：$f(0) \neq 0 \pmod 2$</strong><br>
+                $\implies$ 定数項は必ず $1$ でなければならない（定数項がないと $x$ で括れてしまうため）。</li>
+            <li><strong>条件②：$f(1) \neq 0 \pmod 2$</strong><br>
+                $\bmod 2$ において $x=1$ を代入すると、値は「存在する項の個数」そのものになる。<br>
+                $\implies$ したがって、<strong>全体の項数は必ず「奇数個」でなければならない</strong>（偶数項だと和が $0$ になり $x+1$ を因数に持つため）。</li>
+        </ul>
+        <p>※2次式・3次式の場合は、1次因数を持たないことが証明できれば、自動的に既約が確定します。</p>
+    </div>
+
+    <div class="proof-box">
+        <h3>ステップ2：2次因数の特定と合同式判定（4次・5次用）</h3>
+        <p>4次以上の多項式の場合、1次因数がなくても「2次既約式」や「3次既約式」の積に分解される可能性があります。</p>
+        <p>ステップ1の条件を満たす2次式を調べると、<strong>$x^2 + x + 1$ のただ1つ</strong>しか存在しません。したがって、4次・5次式でステップ1を通過したものが可約であるとすれば、それは必ず $x^2 + x + 1$ を因数に持ちます。</p>
+        <p>多項式 $x^2 + x + 1$ による剰余環（$\mathbb{F}_2[x] / (x^2+x+1)$）を考えます。$x^2 \equiv x + 1$ であり、$\bmod 2$ では $-1 \equiv 1$ であるため、以下の強力な「次数下げ」ルールが得られます。</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^2 &\equiv x + 1 \\
+            x^3 &\equiv x \cdot x^2 \equiv x(x+1) = x^2+x \equiv (x+1)+x = 2x+1 \equiv 1 \\
+            x^4 &\equiv x \cdot x^3 \equiv x \cdot 1 = x \\
+            x^5 &\equiv x \cdot x^4 \equiv x^2 \equiv x + 1
+            \end{aligned}$$
+        </div>
+        <p>このルールを候補の多項式に適用し、<strong>結果が $0$ になれば可約、そうでなければ既約</strong>であると厳密に証明できます。</p>
+    </div>
+
+    <h2>第2部：5次多項式の具体的な計算過程</h2>
+    <div class="card">
+        <p>ステップ1のフィルター（定数項が1、項数が奇数）を突破した8個の候補式に対し、ステップ2の次数下げルールを適用して余りを求める詳細なプロセスです。（$\bmod 2$ においれは $2=0, 3=1, 4=0$ となる点に注意して展開します）</p>
+
+        <div class="calc-title">【3項式のグループ（4個）】</div>
+        
+        <p>① $x^5 + x^4 + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x^4 + 1 &\equiv (x+1) + x + 1 \\
+            &= 2x + 2 \\
+            &\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{可約}
+            \end{aligned}$$
+        </div>
+
+        <p>② $x^5 + x^3 + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x^3 + 1 &\equiv (x+1) + 1 + 1 \\
+            &= x + 3 \\
+            &\equiv x + 1 \not\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{既約}
+            \end{aligned}$$
+        </div>
+
+        <p>③ $x^5 + x^2 + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x^2 + 1 &\equiv (x+1) + (x+1) + 1 \\
+            &= 2x + 3 \\
+            &\equiv 1 \not\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{既約}
+            \end{aligned}$$
+        </div>
+
+        <p>④ $x^5 + x + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x + 1 &\equiv (x+1) + x + 1 \\
+            &= 2x + 2 \\
+            &\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{可約}
+            \end{aligned}$$
+        </div>
+
+        <div class="calc-title" style="margin-top: 30px;">【5項式のグループ（4個）】</div>
+
+        <p>⑤ $x^5 + x^4 + x^3 + x^2 + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x^4 + x^3 + x^2 + 1 &\equiv (x+1) + x + 1 + (x+1) + 1 \\
+            &= (x + x + x) + (1 + 1 + 1 + 1) \\
+            &= 3x + 4 \\
+            &\equiv x \not\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{既約}
+            \end{aligned}$$
+        </div>
+
+        <p>⑥ $x^5 + x^4 + x^3 + x + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x^4 + x^3 + x + 1 &\equiv (x+1) + x + 1 + x + 1 \\
+            &= (x + x + x) + (1 + 1 + 1) \\
+            &= 3x + 3 \\
+            &\equiv x + 1 \not\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{既約}
+            \end{aligned}$$
+        </div>
+
+        <p>⑦ $x^5 + x^4 + x^2 + x + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x^4 + x^2 + x + 1 &\equiv (x+1) + x + (x+1) + x + 1 \\
+            &= (x + x + x + x) + (1 + 1 + 1) \\
+            &= 4x + 3 \\
+            &\equiv 1 \not\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{既約}
+            \end{aligned}$$
+        </div>
+
+        <p>⑧ $x^5 + x^3 + x^2 + x + 1$</p>
+        <div class="math-block">
+            $$\begin{aligned}
+            x^5 + x^3 + x^2 + x + 1 &\equiv (x+1) + 1 + (x+1) + x + 1 \\
+            &= (x + x + x) + (1 + 1 + 1 + 1) \\
+            &= 3x + 4 \\
+            &\equiv x \not\equiv 0 \pmod 2 \quad \longrightarrow \mathbf{既約}
+            \end{aligned}$$
+        </div>
+    </div>
+
+    <h2>第3部：各次数の分類リストサマリー（2次〜5次）</h2>
+
+    <p>各次数 $n$ における既約多項式の個数は、ガウスの公式 $N_2(n) = \frac{1}{n} \sum_{d|n} \mu(d) 2^{n/d}$ と一致します。</p>
+    <table>
+        <thead>
+            <tr>
+                <th>次数</th>
+                <th>すべてのモニック多項式</th>
+                <th>根なしフィルター通過数</th>
+                <th>既約多項式の総数</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>2次</strong></td>
+                <td>$2^2 = 4$ 個</td>
+                <td>1 個</td>
+                <td><strong>1 個</strong></td>
+            </tr>
+            <tr>
+                <td><strong>3次</strong></td>
+                <td>$2^3 = 8$ 個</td>
+                <td>2 個</td>
+                <td><strong>2 個</strong></td>
+            </tr>
+            <tr>
+                <td><strong>4次</strong></td>
+                <td>$2^4 = 16$ 個</td>
+                <td>4 個</td>
+                <td><strong>3 個</strong></td>
+            </tr>
+            <tr>
+                <td><strong>5次</strong></td>
+                <td>$2^5 = 32$ 個</td>
+                <td>8 個</td>
+                <td><strong>6 個</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card">
+        <h3>■ 2次多項式（総数：1個）</h3>
+        <p>定数項が $1$ で、全体の項数が奇数（3項式）となる2次式は、以下の1個のみです。</p>
+        <div class="poly-list">
+            <div class="poly-item">
+                <span class="formula">$x^2 + x + 1$</span>
+                <span class="badge badge-irreducible">既約 (唯一の2次既約)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>■ 3次多項式（総数：2個）</h3>
+        <p>定数項が $1$ で項数が奇数（3項式）となるものは $\binom{2}{1} = 2$ 個です。3次式もフィルター通過時点で既約確定です。</p>
+        <div class="poly-list">
+            <div class="poly-item">
+                <span class="formula">$x^3 + x + 1$</span>
+                <span class="badge badge-irreducible">既約 (1)</span>
+            </div>
+            <div class="poly-item">
+                <span class="formula">$x^3 + x^2 + 1$</span>
+                <span class="badge badge-irreducible">既約 (2)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>■ 4次多項式（総数：3個）</h3>
+        <p>項数が奇数となるものは $\binom{3}{1} + \binom{3}{3} = 4$ 個。ここから、唯一の2次既約式の平方 $(x^2+x+1)^2 = x^4 + x^2 + 1$ を排除します。</p>
+        
+        <div class="poly-list">
+            <div class="poly-item">
+                <span class="formula">$x^4 + x^3 + 1$</span>
+                <span class="badge badge-irreducible">既約 (1)</span>
+            </div>
+            <div class="poly-item">
+                <span class="formula">$x^4 + x + 1$</span>
+                <span class="badge badge-irreducible">既約 (2)</span>
+            </div>
+            <div class="poly-item">
+                <span class="formula">$x^4 + x^3 + x^2 + x + 1$</span>
+                <span class="badge badge-irreducible">既約 (3)</span>
+            </div>
+            <div class="poly-item" style="opacity: 0.6;">
+                <span class="formula">$x^4 + x^2 + 1$</span>
+                <span class="badge badge-reducible">可約 ($(x^2+x+1)^2$)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>■ 5次多項式（総数：6個）</h3>
+        <p>第2部で計算した通り、3項式から2個、5項式から4個が生き残ります。</p>
+        
+        <h4 style="margin-bottom: 5px; color:#555;">【3項式のグループ】</h4>
+        <div class="poly-list">
+            <div class="poly-item">
+                <span class="formula">$x^5 + x^3 + 1$</span>
+                <span class="badge badge-irreducible">既約</span>
+            </div>
+            <div class="poly-item">
+                <span class="formula">$x^5 + x^2 + 1$</span>
+                <span class="badge badge-irreducible">既約</span>
+            </div>
+            <div class="poly-item" style="opacity: 0.6;">
+                <span class="formula">$x^5 + x^4 + 1$</span>
+                <span class="badge badge-reducible">可約 ($(x^2+x+1)(x^3+x^2+1)$)</span>
+            </div>
+            <div class="poly-item" style="opacity: 0.6;">
+                <span class="formula">$x^5 + x + 1$</span>
+                <span class="badge badge-reducible">可約 ($(x^2+x+1)(x^3+x+1)$)</span>
+            </div>
+        </div>
+
+        <h4 style="margin-top: 20px; margin-bottom: 5px; color:#555;">【5項式のグループ】</h4>
+        <div class="poly-list">
+            <div class="poly-item">
+                <span class="formula">$x^5 + x^4 + x^3 + x^2 + 1$</span>
+                <span class="badge badge-irreducible">既約</span>
+            </div>
+            <div class="poly-item">
+                <span class="formula">$x^5 + x^4 + x^3 + x + 1$</span>
+                <span class="badge badge-irreducible">既約</span>
+            </div>
+            <div class="poly-item">
+                <span class="formula">$x^5 + x^4 + x^2 + x + 1$</span>
+                <span class="badge badge-irreducible">既約</span>
+            </div>
+            <div class="poly-item">
+                <span class="formula">$x^5 + x^3 + x^2 + x + 1$</span>
+                <span class="badge badge-irreducible">既約</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
