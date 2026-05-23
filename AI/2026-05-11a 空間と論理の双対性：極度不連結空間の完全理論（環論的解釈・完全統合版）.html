@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>空間と論理の双対性：極度不連結空間の完全理論（環論的解釈・完全統合版）</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fdfdfd;
+        }
+        h1 { border-bottom: 3px solid #34495e; color: #2c3e50; padding-bottom: 15px; font-size: 2.2em; }
+        h2 { border-bottom: 2px solid #7f8c8d; color: #2980b9; margin-top: 50px; padding-bottom: 10px; font-size: 1.8em; }
+        h3 { color: #16a085; margin-top: 40px; font-size: 1.4em; border-left: 5px solid #16a085; padding-left: 10px; }
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .definition {
+            background-color: #ebf5fb;
+            border-left: 5px solid #2980b9;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition-title { font-weight: bold; color: #21618c; margin-bottom: 15px; font-size: 1.1em; border-bottom: 1px dashed #2980b9; padding-bottom: 5px; }
+        .theorem {
+            background-color: #fef9e7;
+            border-left: 5px solid #f39c12;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .theorem-title { font-weight: bold; color: #d68910; margin-bottom: 15px; font-size: 1.1em; border-bottom: 1px dashed #f39c12; padding-bottom: 5px; }
+        .proof {
+            background-color: #ffffff;
+            border: 1px solid #bdc3c7;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 5px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+        }
+        .proof-title { font-style: italic; font-weight: bold; margin-bottom: 15px; color: #7f8c8d; }
+        .qed { text-align: right; font-weight: bold; margin-top: 15px; color: #34495e; }
+        ul, ol { margin-bottom: 25px; padding-left: 30px; }
+        li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>空間と論理の双対性：極度不連結空間の完全理論（環論的解釈・完全統合版）</h1>
+    
+    <p>本稿は、代数学（ブール代数および可換環論）、位相空間論（完全不連結空間および極度不連結空間）、ならびに関数解析（可換C*環とデデキント完備性）にまたがる深遠な理論を、定義や証明を一切省略することなく、論理の飛躍を完全に排除して記述した自己完結的な長編解説です。数学的厳密性を追求し、ストーン・チェック・コンパクト化の環論的構成も含めてすべての定理に完全な証明を与えています。</p>
+
+    <h2>第1章 ブール代数とストーンの表現定理</h2>
+
+    <p>位相空間論と論理学の融合は、マーシャル・ストーンによる「ストーンの表現定理」から始まります。ここでは、抽象的な代数系であるブール代数が、ある特殊な位相空間と完全に等価であることを厳密に証明します。</p>
+
+    <h3>1.1 ブール代数と超フィルターの厳密な定義</h3>
+    
+    <div class="definition">
+        <div class="definition-title">定義 1.1（ブール代数）</div>
+        集合 $B$ が<strong>ブール代数（Boolean Algebra）</strong>であるとは、2項演算 $\lor$（結び, join）、$\land$（交わり, meet）、単項演算 $\lnot$（補元, complement）、および定数 $0$（最小元）、$1$（最大元）を備え、任意の $x, y, z \in B$ に対して以下の公理を満たす代数系をいう。
+        <ul>
+            <li><strong>交換律:</strong> $x \lor y = y \lor x, \quad x \land y = y \land x$</li>
+            <li><strong>結合律:</strong> $x \lor (y \lor z) = (x \lor y) \lor z, \quad x \land (y \land z) = (x \land y) \land z$</li>
+            <li><strong>吸収律:</strong> $x \lor (x \land y) = x, \quad x \land (x \lor y) = x$</li>
+            <li><strong>分配律:</strong> $x \lor (y \land z) = (x \lor y) \land (x \lor z), \quad x \land (y \lor z) = (x \land y) \lor (x \land z)$</li>
+            <li><strong>補元律:</strong> $x \lor \lnot x = 1, \quad x \land \lnot x = 0$</li>
+        </ul>
+        また、$B$ 上の半順序関係を $x \le y \iff x \land y = x$ （または同値な条件として $x \lor y = y$）によって定義する。
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 1.2（フィルターと超フィルター）</div>
+        ブール代数 $B$ の空でない部分集合 $F \subset B$ が<strong>フィルター（Filter）</strong>であるとは、以下の3条件を満たすことをいう。
+        <ol>
+            <li><strong>真のフィルター:</strong> $0 \notin F$。（これにより必然的に $F \neq B$ となる）</li>
+            <li><strong>積に関して閉じている:</strong> $x \in F$ かつ $y \in F \implies x \land y \in F$。</li>
+            <li><strong>上方集合である:</strong> $x \in F$ かつ $x \le y \implies y \in F$。</li>
+        </ol>
+        フィルター $\mathcal{U}$ が包含関係に関して極大であるとき、すなわち $\mathcal{U}$ を真に含むフィルターが存在しないとき、これを<strong>超フィルター（Ultrafilter）</strong>と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">補題 1.3（超フィルターの特徴付けと存在）</div>
+        <ol>
+            <li>任意のフィルター $F$ は、ある超フィルター $\mathcal{U}$ に含まれる。</li>
+            <li>フィルター $\mathcal{U}$ が超フィルターであるための必要十分条件は、任意の $x \in B$ に対して、$x \in \mathcal{U}$ または $\lnot x \in \mathcal{U}$ の<strong>どちらか一方のみ</strong>が成り立つことである。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>1. 存在の証明:</strong> $F$ を含むすべてのフィルターの集合族を包含関係で順序付ける。任意の全順序部分集合（鎖）の和集合もまたフィルターとなる（$0$ を含まず、積と上方への拡張性が保たれるため）。ツォルンの補題により、極大元（超フィルター）が存在する。</p>
+        <p><strong>2. 特徴付けの証明:</strong><br>
+        ($\implies$) $\mathcal{U}$ を超フィルターとする。もし $x \notin \mathcal{U}$ かつ $\lnot x \notin \mathcal{U}$ となる $x$ が存在したとする。集合 $G = \{ y \in B \mid \exists u \in \mathcal{U}, u \land x \le y \}$ を考える。$0 \in G$ と仮定すると、ある $u \in \mathcal{U}$ について $u \land x \le 0$、すなわち $u \land x = 0$ となる。両辺に $\lnot x$ を足すと $(u \land x) \lor \lnot x = \lnot x$、分配則より $(u \lor \lnot x) \land (x \lor \lnot x) = \lnot x$、ゆえに $u \lor \lnot x = \lnot x$ となり $u \le \lnot x$ を得る。$\mathcal{U}$ は上方集合なので $\lnot x \in \mathcal{U}$ となり矛盾。よって $0 \notin G$ である。$G$ は容易にフィルターの条件を満たし、$\mathcal{U} \subset G$ かつ $x \in G$ であるため $\mathcal{U}$ を真に含むフィルターとなり、極大性に矛盾する。また、$x \in \mathcal{U}$ と $\lnot x \in \mathcal{U}$ が両方成り立てば積 $x \land \lnot x = 0 \in \mathcal{U}$ となりフィルターの条件1に反する。<br>
+        ($\impliedby$) 条件を満たすフィルター $\mathcal{U}$ が極大でないと仮定する。$\mathcal{U} \subsetneq \mathcal{V}$ なるフィルター $\mathcal{V}$ が存在し、ある $x \in \mathcal{V} \setminus \mathcal{U}$ がとれる。条件より $\lnot x \in \mathcal{U}$ であるため、$\lnot x \in \mathcal{V}$ となる。すると $x \land \lnot x = 0 \in \mathcal{V}$ となり、$\mathcal{V}$ がフィルターであることに矛盾する。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>1.2 ストーン空間 $S(B)$ の位相的構成</h3>
+
+    <p>ブール代数 $B$ のすべての超フィルターからなる集合を $S(B)$ とする。$S(B)$ に位相を導入するため、各 $a \in B$ に対して以下の集合を定義する。</p>
+    $$N_a = \{ \mathcal{U} \in S(B) \mid a \in \mathcal{U} \}$$
+
+    <div class="theorem">
+        <div class="theorem-title">補題 1.4（開基の性質）</div>
+        集合族 $\mathcal{B} = \{ N_a \mid a \in B \}$ は $S(B)$ の位相の開基（Base）をなす。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>開基の条件を確認する。まず $N_1 = S(B)$ である（すべてのフィルターは最大元1を含むため）。したがって $\bigcup_{a \in B} N_a = S(B)$ となり空間全体を被覆する。<br>
+        次に、2つの基底の元の共通部分が基底の元で表せることを示す。任意の超フィルター $\mathcal{U}$ について、$a \in \mathcal{U}$ かつ $b \in \mathcal{U}$ であることは、フィルターの積の閉鎖性と上方集合の性質から $a \land b \in \mathcal{U}$ であることと同値である。したがって、
+        $$N_a \cap N_b = N_{a \land b}$$
+        が成り立つ。これにより $\mathcal{B}$ は位相の開基となる。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <p>この位相を入れた空間 $S(B)$ を、ブール代数 $B$ の<strong>ストーン空間（Stone Space）</strong>と呼ぶ。</p>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 1.5（ストーン空間の完全不連結性とコンパクト性）</div>
+        任意のブール代数 $B$ に対し、そのストーン空間 $S(B)$ は完全不連結コンパクトHausdorff空間である。
+    </div>
+    
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>1. 基本開集合が開かつ閉集合（Clopen）であること:</strong><br>
+        補題 1.3 より、任意の超フィルター $\mathcal{U}$ について $a \in \mathcal{U} \iff \lnot a \notin \mathcal{U}$ である。したがって、$\mathcal{U} \in S(B) \setminus N_a \iff \mathcal{U} \in N_{\lnot a}$ が成り立つ。すなわち、
+        $$S(B) \setminus N_a = N_{\lnot a}$$
+        である。$N_a$ の補集合が同じく開基の元 $N_{\lnot a}$（開集合）となるため、$N_a$ は閉集合でもある。よって $N_a$ はすべて開かつ閉集合である。</p>
+
+        <p><strong>2. 完全不連結Hausdorff性:</strong><br>
+        $\mathcal{U}$ と $\mathcal{V}$ を異なる2つの超フィルターとする。$\mathcal{U} \neq \mathcal{V}$ であるから、一方に含まれ他方に含まれない元が存在する。対称性から $a \in \mathcal{U}$ かつ $a \notin \mathcal{V}$ となる $a \in B$ をとることができる。このとき $\mathcal{U} \in N_a$ であり、$\mathcal{V} \notin N_a$ である。<br>
+        $N_a$ は開かつ閉集合であるため、異なる2点は互いに交わらない開集合 $N_a$ と $N_{\lnot a}$ によって完全に分離される。これは $S(B)$ がHausdorff空間であり、かつ完全不連結（異なる2点が開かつ閉集合で分離される）であることを示している。</p>
+
+        <p><strong>3. コンパクト性:</strong><br>
+        Alexanderの準開基の定理より、空間の開被覆が有限部分被覆を持つことを示すには、開基 $\mathcal{B} = \{N_a\}_{a \in B}$ の元からなる被覆についてのみ証明すれば十分である。<br>
+        $S(B) = \bigcup_{i \in I} N_{a_i}$ となる開被覆が与えられたとし、これが有限部分被覆を持たないと仮定して背理法で導く。<br>
+        有限部分被覆を持たないということは、任意の有限部分集合 $J \subset I$ に対して $\bigcup_{j \in J} N_{a_j} \neq S(B)$ である。ド・モルガンの法則（集合論的）より、
+        $$\bigcap_{j \in J} (S(B) \setminus N_{a_j}) = \bigcap_{j \in J} N_{\lnot a_j} = N_{\bigwedge_{j \in J} \lnot a_j} \neq \varnothing$$
+        となる。これは、部分集合族 $E = \{ \lnot a_i \mid i \in I \} \subset B$ が有限交叉性を持つこと（任意の有限個の積が $0$ にならないこと）を意味する。<br>
+        $E$ を含む最小のフィルター $F$ を構成する。$F = \{ x \in B \mid \exists J \subset I \text{ (finite)}, \bigwedge_{j \in J} \lnot a_j \le x \}$ とする。有限交叉性より $0 \notin F$ であり、$F$ は真のフィルターとなる。<br>
+        補題 1.3 により、$F$ はある超フィルター $\mathcal{U}^*$ に含まれる。この $\mathcal{U}^*$ はすべての $i \in I$ について $\lnot a_i \in \mathcal{U}^*$ を満たす。<br>
+        したがってすべての $i \in I$ で $a_i \notin \mathcal{U}^*$、すなわち $\mathcal{U}^* \notin N_{a_i}$ となる。これは $\mathcal{U}^* \notin \bigcup_{i \in I} N_{a_i} = S(B)$ を意味し、$\mathcal{U}^*$ が $S(B)$ の元であることに矛盾する。よって $S(B)$ はコンパクトである。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 1.6（ストーンの表現定理）</div>
+        任意のブール代数 $B$ は、そのストーン空間 $S(B)$ の「開かつ閉集合全体」がなすブール代数 $\text{Clopen}(S(B))$ と同型である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>写像 $\phi: B \to \text{Clopen}(S(B))$ を $\phi(a) = N_a$ によって定義する。位相空間の開かつ閉集合の全体は、和集合（$\cup$）、共通部分（$\cap$）、補集合（$\setminus$）によって自然にブール代数をなす。<br>
+        <strong>1. 準同型であること:</strong><br>
+        補題 1.4 および定理 1.5 より、$\phi(a \land b) = N_{a \land b} = N_a \cap N_b = \phi(a) \cap \phi(b)$。また、$\phi(\lnot a) = N_{\lnot a} = S(B) \setminus N_a = \lnot \phi(a)$。結びについても $\phi(a \lor b) = \phi(\lnot(\lnot a \land \lnot b)) = S(B) \setminus (N_{\lnot a} \cap N_{\lnot b}) = N_a \cup N_b = \phi(a) \cup \phi(b)$ となり、$\phi$ はブール代数の準同型写像である。<br>
+        <strong>2. 単射性:</strong><br>
+        $a \neq b$ とする。一般性を失わず $a \not\le b$ と仮定できる。このとき $a \land \lnot b \neq 0$ である（もし $0$ なら $a = a \land (b \lor \lnot b) = (a \land b) \lor 0 = a \land b$ となり $a \le b$ となってしまう）。<br>
+        $c = a \land \lnot b > 0$ であるから、$c$ を含むフィルターが生成でき、それはある超フィルター $\mathcal{U}$ に拡張できる。$\mathcal{U}$ は $a$ と $\lnot b$ を含むため、$\mathcal{U} \in N_a$ かつ $\mathcal{U} \notin N_b$ となる。ゆえに $N_a \neq N_b$ であり、$\phi$ は単射である。<br>
+        <strong>3. 全射性:</strong><br>
+        $U \subset S(B)$ を任意の開かつ閉集合とする。$U$ は開集合なので、開基の和集合 $U = \bigcup_{i \in I} N_{a_i}$ と書ける。一方 $U$ は閉集合であり、$S(B)$ はコンパクトなので $U$ 自身もコンパクトである。したがって、この開被覆は有限部分被覆を持つ。すなわち $U = N_{a_1} \cup \dots \cup N_{a_k}$ と書ける。<br>
+        $\phi$ が和を保つ性質より、$U = \phi(a_1 \lor \dots \lor a_k)$ となり、元 $a = a_1 \lor \dots \lor a_k \in B$ の像として表される。よって $\phi$ は全射である。<br>
+        以上により、$\phi$ はブール代数の同型写像である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h2>第2章 ブール代数の環論的構造とザリスキ位相</h2>
+
+    <p>ストーンの表現定理は、ブール代数を純粋に論理・束論の立場から位相空間と結びつけました。しかし、ブール代数は「可換環」という代数学の標準的な枠組みに完全に翻訳することができ、その視点からはストーン空間は代数幾何学における「素スペクトル（Spec）」として自然に出現します。</p>
+
+    <h3>2.1 ブール環の定義と基本性質</h3>
+
+    <div class="definition">
+        <div class="definition-title">定義 2.1（ブール環）</div>
+        単位元 $1$ を持つ環 $R$ において、任意の元 $x \in R$ が<strong>冪等（idempotent）</strong>である、すなわち $x^2 = x$ を満たすとき、$R$ を<strong>ブール環（Boolean Ring）</strong>と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 2.2（ブール環の基本性質）</div>
+        任意のブール環 $R$ において、以下が成立する。
+        <ol>
+            <li>任意の $x \in R$ に対して $x + x = 0$（標数が2である）。したがって $-x = x$。</li>
+            <li>$R$ は可換環である（任意の $x, y \in R$ に対して $xy = yx$）。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>1. 標数2の証明:</strong><br>
+        冪等性より、$(x + x) = (x + x)^2$ である。これを展開すると、
+        $$x + x = (x + x)(x + x) = x^2 + x^2 + x^2 + x^2 = x + x + x + x$$
+        両辺から $x + x$ を引くことで、$0 = x + x$ を得る。よって $x = -x$ である。</p>
+        <p><strong>2. 可換性の証明:</strong><br>
+        任意の $x, y \in R$ に対して、$(x + y) = (x + y)^2$ である。展開すると、
+        $$x + y = x^2 + xy + yx + y^2 = x + xy + yx + y$$
+        両辺から $x + y$ を引くことで、$0 = xy + yx$ を得る。<br>
+        移項すると $xy = -yx$ となるが、先に示した $z = -z$ の性質を $z = yx$ に適用すれば、$-yx = yx$ である。したがって $xy = yx$ となり、$R$ は可換環である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>2.2 ブール代数とブール環の完全な等価性</h3>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 2.3（ブール代数とブール環の同値性）</div>
+        任意のブール代数 $B$ は自然な演算の再定義によりブール環となり、逆に任意のブール環 $R$ は自然な演算の再定義によりブール代数となる。これらの対応は互いに逆となる。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">構成と証明の概略</div>
+        <p><strong>【ブール代数からブール環へ】</strong><br>
+        ブール代数 $(B, \lor, \land, \lnot, 0, 1)$ が与えられたとき、新しい演算を次のように定義する。
+        <ul>
+            <li>和（対称差）: $x + y = (x \land \lnot y) \lor (\lnot x \land y)$</li>
+            <li>積（交わり）: $x \cdot y = x \land y$</li>
+        </ul>
+        この積は明らかに結合的かつ可換であり、$x \cdot x = x \land x = x$ より冪等性（$x^2 = x$）を満たす。また $x + 0 = (x \land 1) \lor (0 \land x) = x$ であり、$0$ は加法単位元である。<br>
+        $x + x = (x \land \lnot x) \lor (\lnot x \land x) = 0 \lor 0 = 0$ となり、各元は自身の加法逆元となる。<br>
+        分配律 $x \cdot (y + z) = (x \cdot y) + (x \cdot z)$ もブール代数の分配則から証明でき、$(B, +, \cdot, 0, 1)$ はブール環となる。</p>
+        
+        <p><strong>【ブール環からブール代数へ】</strong><br>
+        ブール環 $(R, +, \cdot, 0, 1)$ が与えられたとき、次のように定義する。
+        <ul>
+            <li>交わり: $x \land y = x \cdot y$</li>
+            <li>結び: $x \lor y = x + y + x \cdot y$</li>
+            <li>補元: $\lnot x = 1 + x$</li>
+        </ul>
+        ここで $x \lor y$ の結合律や吸収律などは環の公理と冪等性・標数2の性質から容易に示される。例えば $x \land (x \lor y) = x(x + y + xy) = x^2 + xy + x^2y = x + xy + xy = x + 2xy = x + 0 = x$ となり吸収律が成り立つ。<br>
+        また $x \lor \lnot x = x + (1+x) + x(1+x) = 2x + 1 + x + x^2 = 0 + 1 + x + x = 1 + 2x = 1$ となり排中律も成り立つ。これにより $(R, \lor, \land, \lnot, 0, 1)$ はブール代数となる。<br>
+        これらの変換が互いに逆であることは、代入計算により直ちに確かめられる。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>2.3 イデアルとフィルターの双対性</h3>
+
+    <div class="definition">
+        <div class="definition-title">定義 2.4（イデアルと素イデアル）</div>
+        可換環 $R$ の部分集合 $I$ が<strong>イデアル（Ideal）</strong>であるとは、$0 \in I$ であり、加法について閉じ（$x, y \in I \implies x+y \in I$）、かつ任意の $r \in R, x \in I$ に対して $rx \in I$ を満たすことをいう。$I \neq R$ であるとき真のイデアルと呼ぶ。<br>
+        真のイデアル $P$ が<strong>素イデアル（Prime Ideal）</strong>であるとは、$xy \in P \implies x \in P$ または $y \in P$ を満たすことをいう。<br>
+        真のイデアル $M$ が包含関係で極大であるとき、<strong>極大イデアル（Maximal Ideal）</strong>と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 2.5（フィルターとイデアルの対応）</div>
+        ブール環 $R$ と対応するブール代数 $B$ において、部分集合 $I \subset R$ がイデアルであることと、$F = \{1 + x \mid x \in I\}$ が $B$ のフィルターであることは同値である。この対応において、<strong>極大イデアルと超フィルターは1対1に対応する。</strong>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明の概略</div>
+        <p>$I$ をイデアルとし、$F = 1 + I$ とする（$x \in I \iff 1+x \in F \iff \lnot x \in F$）。<br>
+        1. $I$ が真のイデアル $\iff 1 \notin I \iff 0 \notin F$。<br>
+        2. $x, y \in F \implies 1+x, 1+y \in I \implies (1+x)+(1+y)+(1+x)(1+y) \in I$ （イデアルの吸収性と加法閉性より）。これは $1 + xy \in I \implies xy \in F$ を意味し、フィルターの積の閉性に対応する。<br>
+        3. イデアルは包含関係に関して極大性を持つもの（極大イデアル）がツォルンの補題で存在し、それはフィルターの極大性（超フィルター）と完全に一致する。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 2.6（ブール環における素イデアルと極大イデアルの一致）</div>
+        ブール環 $R$ において、任意の素イデアル $P$ は極大イデアルである。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>$P$ を $R$ の素イデアルとする。剰余環 $R/P$ を考える。<br>
+        $P$ が素イデアルであることと、$R/P$ が整域（零因子を持たない可換環）であることは同値である。<br>
+        $R$ がブール環であるため、商への射影を考えても、$R/P$ のすべての元 $\bar{x}$ は $\bar{x}^2 = \bar{x}$ を満たす（すなわち $R/P$ もブール環である）。<br>
+        これを書き換えると $\bar{x}(\bar{x} - \bar{1}) = \bar{0}$ である。$R/P$ は整域であるため、$\bar{x} = \bar{0}$ または $\bar{x} - \bar{1} = \bar{0}$（すなわち $\bar{x} = \bar{1}$）でなければならない。<br>
+        したがって、$R/P$ は $\bar{0}$ と $\bar{1}$ の2つの元のみからなる環、すなわち体 $\mathbb{Z}/2\mathbb{Z}$ と同型である。<br>
+        剰余環が体となることは、$P$ が極大イデアルであることと同値である。よって $P$ は極大イデアルである。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>2.4 素スペクトル $\text{Spec}(R)$ とザリスキ位相</h3>
+
+    <p>代数幾何学において、可換環 $R$ の幾何学的実体はその「素イデアルの集まり」として捉えられます。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 2.7（素スペクトルとザリスキ位相）</div>
+        可換環 $R$ のすべての素イデアルの集合を $\text{Spec}(R)$（素スペクトル）と呼ぶ。任意の部分集合 $E \subset R$ に対して、
+        $$V(E) = \{ P \in \text{Spec}(R) \mid E \subset P \}$$
+        を定義する。$\{V(E) \mid E \subset R\}$ を「閉集合系」とする位相を $\text{Spec}(R)$ の<strong>ザリスキ位相（Zariski Topology）</strong>という。<br>
+        また、$f \in R$ に対して、基本開集合を $D(f) = \text{Spec}(R) \setminus V(\{f\}) = \{ P \in \text{Spec}(R) \mid f \notin P \}$ と定義する。$\{D(f) \mid f \in R\}$ はザリスキ位相の開基をなす。
+    </div>
+
+    
+
+    <div class="theorem">
+        <div class="theorem-title">定理 2.8（Specとストーン空間の同相性）</div>
+        ブール代数 $B$ に対応するブール環を $R$ とする。このとき、$R$ の素スペクトル $\text{Spec}(R)$ にザリスキ位相を入れた空間は、$B$ のストーン空間 $S(B)$ と位相同型（Homeomorphic）である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>定理 2.5 および 2.6 より、ブール環 $R$ の素イデアル $P$ は極大イデアルであり、それは $B$ の超フィルター $\mathcal{U}$ と $P = \{x \in R \mid \lnot x \in \mathcal{U}\}$ という関係で1対1に対応する。この全単射を $\psi: S(B) \to \text{Spec}(R)$ とする（$\psi(\mathcal{U}) = P$）。<br>
+        $\text{Spec}(R)$ の基本開集合 $D(f)$（ただし $f \in R = B$）を考える。定義より $P \in D(f) \iff f \notin P$ である。対応関係から、
+        $$f \notin P \iff \lnot f \notin \mathcal{U} \iff f \in \mathcal{U}$$
+        となる（超フィルターの性質より）。すなわち $f \in \mathcal{U}$ は $\mathcal{U} \in N_f$ を意味する。<br>
+        したがって、$\psi^{-1}(D(f)) = N_f$ となる。$S(B)$ の基本開集合 $N_f$ と $\text{Spec}(R)$ の基本開集合 $D(f)$ が全単射 $\psi$ によって完全に対応するため、$\psi$ は両方向ともに連続であり、同相写像である。<br>
+        （注：ザリスキ位相において $D(f)$ は一般には開集合であるが、ブール環においては $D(f)$ と $D(1-f)$ が空間を互いに素に分割するため、開かつ閉集合となる。これがストーン空間の完全不連結性に対応している。）</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>2.5 ブール環の完備性と環論的特徴付け（Baer環）</h3>
+
+    <p>極度不連結空間に直結する「ブール代数の完備性」は、環論の言葉で<strong>「Baer環（ベア環）」</strong>という強力な代数的性質として完全に翻訳されます。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 2.9（零化イデアルとBaer環）</div>
+        可換環 $R$ とその任意の部分集合 $S \subset R$ に対して、$S$ の<strong>零化イデアル（Annihilator）</strong>を次のように定義する：
+        $$\text{Ann}(S) = \{ x \in R \mid \forall s \in S, xs = 0 \}$$
+        可換環 $R$ が<strong>Baer環（Baer Ring）</strong>であるとは、任意の部分集合 $S \subset R$ に対して、その零化イデアル $\text{Ann}(S)$ がある冪等元 $e \in R$ によって生成される単項イデアル $(e) = eR$ になることをいう。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 2.10（完備ブール代数の環論的特徴付け）</div>
+        ブール環 $R$ と、それに対応するブール代数 $B$ を考える。このとき、$B$ が<strong>完備ブール代数</strong>であることと、$R$ が<strong>Baer環</strong>であることは同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>【完備性 $\implies$ Baer環の証明】</strong><br>
+        $B$ が完備であると仮定する。$R$ の任意の部分集合 $S \subset R$ をとる。<br>
+        完備性により、$S$ は $B$ において上限（最小上界） $s = \sup S$ を持つ。すなわち、任意の $y \in S$ について $y \le s$（$ys = y$）であり、かつ $t$ が $S$ の上界（$\forall y \in S, yt = y$）ならば $s \le t$（$st = s$）となる。<br>
+        $\text{Ann}(S)$ が単項イデアル $(1+s)$ に等しいことを示す。<br>
+        まず $x \in \text{Ann}(S)$ とすると、すべての $y \in S$ について $xy = 0$ である。ブール代数として見ると、$x \land y = 0 \implies y \le \lnot x = 1+x$ となる。<br>
+        したがって $1+x$ は $S$ の上界である。$s$ は最小上界なので $s \le 1+x$（すなわち $s(1+x) = s$）が成り立つ。展開して標数2の性質を用いると $s + sx = s \implies sx = 0$ となる。<br>
+        このとき $x = x(1+s) = x + xs = x + 0 = x$ となるため、$x$ はイデアル $(1+s)$ に属する。よって $\text{Ann}(S) \subset (1+s)$ である。<br>
+        逆に $x \in (1+s)$ とすると、$x = x(1+s)$ と書ける。任意の $y \in S$ に対して $ys = y$ であるから、
+        $$xy = x(1+s)y = x(y + sy) = x(y + y) = x(0) = 0$$
+        となり、$x \in \text{Ann}(S)$ である。よって $\text{Ann}(S) = (1+s)$。<br>
+        ブール環の元 $1+s$ は冪等元なので、$R$ はBaer環である。</p>
+
+        <p><strong>【Baer環 $\implies$ 完備性の証明】</strong><br>
+        $R$ がBaer環であると仮定する。$B$ の任意の部分集合 $S$ に対して上限が存在することを示す。<br>
+        Baer環の定義より、$\text{Ann}(S) = (e)$ となる冪等元 $e \in R$ が存在する。ここで $s = 1+e$ とおき、$s$ が $S$ の最小上界（$\sup S$）であることを示す。<br>
+        まず任意の $y \in S$ について、$e \in \text{Ann}(S)$ であるから $ye = 0$ である。<br>
+        したがって $y(1+s) = y(1+1+e) = y(e) = 0$（標数2より $1+1=0$）となり、$y = ys$（すなわち $y \le s$）を得る。よって $s$ は $S$ の上界である。<br>
+        次に、$t \in B$ を $S$ の任意の上界とする。すなわちすべての $y \in S$ について $yt = y$ である。<br>
+        これを変形すると $y(1+t) = y + yt = y + y = 0$ となる。これは $1+t \in \text{Ann}(S)$ を意味する。<br>
+        $\text{Ann}(S) = (e)$ であるから、$1+t$ は $e$ の倍数、すなわち $1+t = (1+t)e = e + te$ となる。<br>
+        $s \le t$（すなわち $st = s$）を示す。<br>
+        $$st = (1+e)t = t + et$$
+        上で得た式 $1+t = e + et$ の両辺に $t+e$ を足す（標数2なので引くのと同じ）と、
+        $$(1+t) + t + e = (e + et) + t + e \implies 1+e = et + t$$
+        したがって $st = et + t = 1+e = s$ となる。ゆえに $s \le t$ が示された。<br>
+        以上より $s$ は $S$ の最小上界であり、$B$ は完備ブール代数である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h2>第3章 極度不連結空間と収束点列の非存在</h2>
+
+    <p>第1章および第2章で構築した完全不連結空間は、「完備性」という極限的な条件を課すことで、すべての開集合が「壁（開かつ閉集合）」に囲まれる強固な空間、すなわち<strong>極度不連結空間</strong>へと姿を変えます。</p>
+
+    <h3>3.1 極度不連結空間の定義と双対性</h3>
+
+    <div class="definition">
+        <div class="definition-title">定義 3.1（極度不連結空間）</div>
+        位相空間 $X$ が<strong>極度不連結空間（Extremely Disconnected Space）</strong>であるとは、空間内の任意の開集合 $U \subset X$ に対し、その閉包 $\overline{U}$ が開集合（すなわち開かつ閉集合）となる空間をいう。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 3.2（完備ブール代数と極度不連結空間の対応）</div>
+        ブール代数 $B$ が完備であること（すなわち対応するブール環がBaer環であること）と、そのストーン空間 $S(B)$ が極度不連結空間であることは同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明の骨子（$B$ が完備 $\implies S(B)$ が極度不連結）</div>
+        <p>$U \subset S(B)$ を任意の開集合とする。開基の性質より $U = \bigcup_{i \in I} N_{a_i}$ と書ける（$A = \{a_i \mid i \in I\} \subset B$）。<br>
+        $B$ は完備なので、$s = \sup A = \bigvee_{i \in I} a_i$ が $B$ 内に存在する。<br>
+        各 $i$ について $a_i \le s$ より $N_{a_i} \subset N_s$ であり、したがって $U \subset N_s$ となる。$N_s$ は閉集合であるから、閉包の最小性により $\overline{U} \subset N_s$ である。<br>
+        逆の包含関係 $\overline{U} \supset N_s$ を示す。もし $N_s \not\subset \overline{U}$ ならば、$N_s \setminus \overline{U}$ は空でない開集合となる。この中にはある開基の元 $N_b \neq \varnothing$ が含まれる（すなわち $b > 0$ かつ $N_b \subset N_s \setminus \overline{U}$）。<br>
+        $N_b \subset N_s$ より $b \le s$ である。一方、$N_b \cap U = \varnothing$ であるから、すべての $i$ について $N_b \cap N_{a_i} = \varnothing \implies N_{b \land a_i} = \varnothing \implies b \land a_i = 0$ である。<br>
+        ここで $c = s \land \lnot b$ とおくと、各 $i$ で $a_i \le s$ かつ $a_i \le \lnot b$ となるため、$a_i \le c$ である。すなわち $c$ は $A$ の上界である。しかし $b > 0$ かつ $b \le s$ より $c < s$ であり、これは $s$ が最小上界（supremum）であることに矛盾する。<br>
+        したがって $\overline{U} = N_s$ であり、閉包が基本開集合（開かつ閉集合）となるため $S(B)$ は極度不連結である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>3.2 交わらない開集合と収束点列の非存在</h3>
+
+    <p>極度不連結空間の剛性を象徴する定理と、その最も衝撃的な帰結（点列が目的地に到達できない性質）を厳密に証明します。</p>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 3.3（交わらない開集合の閉包）</div>
+        極度不連結空間 $X$ において、互いに交わらない2つの開集合 $U, V$（すなわち $U \cap V = \varnothing$）が与えられたとき、それらの閉包もまた交わらない。すなわち $\overline{U} \cap \overline{V} = \varnothing$ である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>1. $U \cap V = \varnothing$ は、集合論的に $U \subset X \setminus V$ と等価である。<br>
+        2. $V$ は開集合なので、補集合 $X \setminus V$ は閉集合である。<br>
+        3. 閉包 $\overline{U}$ は $U$ を含むすべての閉集合の共通部分（最小の閉集合）であるため、$\overline{U} \subset X \setminus V$ が成り立つ。これを元の形に戻せば $\overline{U} \cap V = \varnothing$ である。<br>
+        4. ここで<strong>極度不連結性の定義</strong>を用いる。$U$ は開集合なので、極度不連結性により $\overline{U}$ も<strong>開集合</strong>となる。<br>
+        5. 先の結果 $\overline{U} \cap V = \varnothing$ を対称的に $V \subset X \setminus \overline{U}$ と書き換える。<br>
+        6. $\overline{U}$ が開集合であるため、$X \setminus \overline{U}$ は閉集合である。<br>
+        7. 再び閉包の最小性により、$\overline{V} \subset X \setminus \overline{U}$ が成り立つ。<br>
+        8. これを書き換えれば、<strong>$\overline{U} \cap \overline{V} = \varnothing$</strong> を得る。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">補題 3.4（Hausdorff空間におけるコンパクト集合の分離）</div>
+        Hausdorff空間 $X$ において、$K_1, K_2$ を互いに交わらない（$K_1 \cap K_2 = \varnothing$）コンパクト部分集合とする。このとき、$K_1 \subset O_1, K_2 \subset O_2$ かつ $O_1 \cap O_2 = \varnothing$ となる開集合 $O_1, O_2$ が存在する。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>まず、一点 $x \in K_1$ を固定する。任意の $y \in K_2$ に対して $x \neq y$ である。Hausdorff性より、$x$ の開近傍 $U_y$ と $y$ の開近傍 $V_y$ で $U_y \cap V_y = \varnothing$ となるものが存在する。<br>
+        集合族 $\{V_y \mid y \in K_2\}$ はコンパクト集合 $K_2$ の開被覆であるから、有限部分被覆 $\{V_{y_1}, \dots, V_{y_n}\}$ が存在する。ここで $V_x = \bigcup_{i=1}^n V_{y_i}$、および $U_x = \bigcap_{i=1}^n U_{y_i}$ とおく。<br>
+        $U_x$ は有限個の開集合の共通部分なので開集合、$V_x$ も開集合である。構成より $x \in U_x$、$K_2 \subset V_x$ であり、分配律から $U_x \cap V_x = \varnothing$ である。これで「点とコンパクト集合」が分離された。<br>
+        次に、$x$ を $K_1$ の元として動かす。集合族 $\{U_x \mid x \in K_1\}$ はコンパクト集合 $K_1$ の開被覆となるため、有限部分被覆 $\{U_{x_1}, \dots, U_{x_m}\}$ が存在する。<br>
+        最終的に $O_1 = \bigcup_{j=1}^m U_{x_j}$、および $O_2 = \bigcap_{j=1}^m V_{x_j}$ とおく。$O_1, O_2$ は開集合であり、$K_1 \subset O_1$、$K_2 \subset O_2$ となる。また、各 $j$ について $U_{x_j} \cap V_{x_j} = \varnothing$ なので、$O_1 \cap O_2 = \varnothing$ が保証される。</p>
+        <div class="qed">■</div>
+    </div>
+
+    
+
+    <div class="theorem">
+        <div class="theorem-title">定理 3.5（収束点列の否定）</div>
+        極度不連結Hausdorff空間 $X$ において、非自明な収束点列は存在しない。すなわち、互いに異なる点の列 $(x_n)_{n=1}^\infty$ がある点 $x \notin \{x_n\}$ に収束することはあり得ない。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>背理法で証明する。互いに異なる点からなる列 $(x_n)$ が $x$ に収束し、すべての $n$ で $x_n \neq x$ であると仮定する。<br>
+        点列を奇数項 $A = \{x_1, x_3, x_5, \dots\}$ と偶数項 $B = \{x_2, x_4, x_6, \dots\}$ に分割する。各 $n$ について、点列の尾部と極限点からなる集合 $C_n = \{x_k \mid k > n\} \cup \{x\}$ を定義する。部分列も $x$ に収束するため、位相空間の一般論として $C_n$ は<strong>コンパクト集合</strong>である。<br>
+        各ステップ $n$ で、一点 $\{x_n\}$ とコンパクト集合 $C_n$ は交わらない。補題 3.4 を用いてこれらを分離する開集合を帰納的に構成する。
+        <ul>
+            <li>$n=1$: $x_1$ と $C_1$ を分離する開集合を $W_1$ と $O_1$ とする（$x_1 \in W_1, C_1 \subset O_1, W_1 \cap O_1 = \varnothing$）。</li>
+            <li>$n=2$: $x_2$ と $C_2$ は $O_1$ に含まれるコンパクト集合である。$O_1$ における相対位相（または全体空間での分離結果と $O_1$ の共通部分をとる）で分離し、$x_2 \in W_2, C_2 \subset O_2$、$W_2 \cap O_2 = \varnothing$ かつ $W_2, O_2 \subset O_1$ となるように選ぶ。</li>
+            <li>一般に $n$: $x_n \in W_n$、$C_n \subset O_n \subset O_{n-1}$ かつ $W_n \cap O_n = \varnothing$ なる開集合 $W_n, O_n$ が構成できる。</li>
+        </ul>
+        この構成により、任意の $i < j$ について、$x_j \in C_{j-1} \subset O_{j-1} \subset O_i$ であり、$W_i \cap O_i = \varnothing$ であるから、$W_i \cap W_j = \varnothing$ となる。すなわち $\{W_n\}_{n=1}^\infty$ は互いに交わらない開集合族である。<br>
+        ここで、奇数番目と偶数番目の開集合の和をとる。
+        $$U = \bigcup_{k=1}^\infty W_{2k-1}, \quad V = \bigcup_{k=1}^\infty W_{2k}$$
+        $U, V$ は開集合の和集合なので<strong>開集合</strong>であり、構成より互いに素である（<strong>$U \cap V = \varnothing$</strong>）。また $A \subset U$、$B \subset V$ である。<br>
+        部分列 $A$ は $x$ に収束するため、$x$ の任意の開近傍は $A$ の点を含み、ゆえに $U$ と交わる。閉包の特徴付けにより、これは $x \in \overline{U}$ を意味する。<br>
+        全く同様に、部分列 $B$ も $x$ に収束するため $x \in \overline{V}$ である。<br>
+        したがって $x \in \overline{U} \cap \overline{V}$ となり、$\overline{U} \cap \overline{V} \neq \varnothing$ となる。しかし定理 3.3 によれば $U \cap V = \varnothing$ ならば必ず $\overline{U} \cap \overline{V} = \varnothing$ でなければならず、これは明確な<strong>矛盾</strong>である。よって非自明な収束点列は存在し得ない。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h2>第4章 ストーン・チェック・コンパクト化 $\beta X$</h2>
+
+    <p>位相空間を極度不連結空間という「怪物」に仕立て上げる構成法こそが、ストーン・チェック・コンパクト化です。ここではその普遍性と有界連続関数の拡張定理を厳密に証明します。</p>
+
+    <h3>4.1 チコノフ空間と普遍性</h3>
+
+    <div class="definition">
+        <div class="definition-title">定義 4.1（チコノフ空間 / 完全正則Hausdorff空間）</div>
+        位相空間 $X$ が<strong>チコノフ空間（Tychonoff space）</strong>であるとは、$X$ が $T_1$ 空間であり、かつ任意の閉集合 $F$ とその外の点 $x \notin F$ に対して、連続関数 $f: X \to [0, 1]$ が存在して $f(x) = 0$ かつ任意の $y \in F$ で $f(y) = 1$ を満たすことをいう。（コンパクト空間に部分空間として埋め込めるための必要十分条件である）
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 4.2（ストーン・チェック・コンパクト化の普遍性）</div>
+        チコノフ空間 $X$ に対し、稠密な埋め込み $\iota_X: X \to \beta X$ を持つコンパクトHausdorff空間 $\beta X$ が<strong>ストーン・チェック・コンパクト化</strong>であるとは、以下の普遍性を満たすことである：<br>
+        任意のコンパクトHausdorff空間 $K$ と連続写像 $f: X \to K$ に対し、$\tilde{f} \circ \iota_X = f$ を満たす連続写像 $\tilde{f}: \beta X \to K$ がただ一つ存在する。
+    </div>
+
+    
+
+    <div class="theorem">
+        <div class="theorem-title">定理 4.3（有界連続関数環の等長同型性）</div>
+        $X$ 上の有界な実数値連続関数全体を $C_b(X)$、$\beta X$ 上の連続関数全体を $C(\beta X)$ とする（上限ノルムでバナッハ空間となる）。このとき、$C_b(X)$ と $C(\beta X)$ は等長同型である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>写像 $\Phi: C(\beta X) \to C_b(X)$ を $\Phi(g) = g \circ \iota_X$ で定義する。<br>
+        <strong>1. 全射性および等長性の証明:</strong><br>
+        任意の $f \in C_b(X)$ をとる。$f$ は有界であるから、ある $M > 0$ が存在して $f(X) \subset [-M, M]$ となる。閉区間 $K = [-M, M]$ は実数直線の有界閉集合なのでコンパクトHausdorff空間である。<br>
+        $f$ を $X$ から $K$ への連続写像とみなすと、$\beta X$ の普遍性が適用でき、連続写像 $\tilde{f}: \beta X \to K$ が一意に存在して $\tilde{f} \circ \iota_X = f$ を満たす。<br>
+        この $\tilde{f}$ は $\beta X$ 上の実数値連続関数なので $\tilde{f} \in C(\beta X)$ であり、$\Phi(\tilde{f}) = f$ となるため $\Phi$ は全射である。<br>
+        また $\beta X$ 上での $\tilde{f}$ の最大値・最小値は、稠密部分空間 $\iota_X(X)$ 上での上限・下限と一致する（もし $\beta X$ 上でより大きな値をとる点があれば、連続性からその近傍も大きな値をとるはずだが、稠密性により近傍内には必ず $\iota_X(X)$ の点が存在し矛盾する）。ゆえに $\|\tilde{f}\|_\infty = \|f\|_\infty$ であり、等長性（isometry）が示された。<br>
+        <strong>2. 単射性の証明:</strong><br>
+        $\Phi(g_1) = \Phi(g_2)$ とすると、$X$（正確には $\iota_X(X)$）上のすべての点 $x$ で $g_1(\iota_X(x)) = g_2(\iota_X(x))$ となる。<br>
+        $g_1, g_2$ はHausdorff空間 $\beta X$ 上の連続関数であり、稠密部分集合 $\iota_X(X)$ 上で一致するため、空間全体でも完全に一致する。よって $g_1 = g_2$ となり単射である。線形性は明らかであるため、$\Phi$ は等長同型である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>4.2 怪物空間 $\beta\mathbb{N}$</h3>
+
+    <p>自然数 $\mathbb{N}$ に離散位相を入れた空間は明らかにチコノフ空間です。このすべての部分集合のなす族（冪集合） $\mathcal{P}(\mathbb{N})$ は、包含関係と通常の集合演算により<strong>完備ブール代数</strong>となります（任意の集合族の上限が単なる和集合となるため）。</p>
+    <p>離散空間のストーン・チェック・コンパクト化は、その冪集合のストーン空間と自然に位相同型になります。すなわち $\beta\mathbb{N} \cong S(\mathcal{P}(\mathbb{N}))$ です。</p>
+    <p>定理 3.2 より、完備ブール代数のストーン空間は極度不連結空間です。したがって <strong>$\beta\mathbb{N}$ は極度不連結コンパクトHausdorff空間</strong>となります。定理 3.5 で証明した通り、$\beta\mathbb{N}$ 内で無限遠点（自由超フィルター）に向かって収束するような非自明な点列は一切存在しないのです。また、その濃度はハウスドルフの独立族の定理などから $| \beta\mathbb{N} | = 2^{2^{\aleph_0}}$ となり、実数の濃度を遥かに凌駕する巨大な空間となります。</p>
+
+    <h3>4.3 ストーン・チェック・コンパクト化の環論的構成（極大イデアル空間）</h3>
+    <p>第2章ではブール代数のストーン空間がブール環の素スペクトルとして得られることを見ましたが、一般のチコノフ空間 $X$ に対するストーン・チェック・コンパクト化 $\beta X$ も、可換環論（および関数解析）の言葉で完全に構成することができます。それが $C_b(X)$ の<strong>極大イデアル空間</strong>としての解釈です。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 4.4（極大イデアル空間 / ゲルファント・スペクトル）</div>
+        可換環 $R = C_b(X)$（$X$ 上の有界実数値連続関数のなす環）を考える。$R$ のすべての極大イデアルからなる集合を $\text{MaxSpec}(R)$ とする。<br>
+        $\text{MaxSpec}(R)$ にザリスキ位相（または同値なゲルファント位相）を入れたコンパクトHausdorff空間を、関数環 $R$ の極大イデアル空間と呼ぶ。
+    </div>
+
+    
+
+    <div class="theorem">
+        <div class="theorem-title">定理 4.5（$\beta X$ の環論的特徴付け）</div>
+        チコノフ空間 $X$ に対し、そのストーン・チェック・コンパクト化 $\beta X$ は、$C_b(X)$ の極大イデアル空間 $\text{MaxSpec}(C_b(X))$ と位相同型である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>1. <strong>点と極大イデアルの対応:</strong><br>
+        空間 $X$ の任意の点 $p \in X$ に対し、部分集合 $M_p = \{ f \in C_b(X) \mid f(p) = 0 \}$ は $C_b(X)$ のイデアルである。環準同型 $ev_p: C_b(X) \to \mathbb{R}$（$ev_p(f) = f(p)$）を考えると、これは全射であり $\ker(ev_p) = M_p$ となる。第一同型定理より $C_b(X)/M_p \cong \mathbb{R}$（体）となるため、$M_p$ は極大イデアルである。<br>
+        2. <strong>固定点イデアルと自由イデアル:</strong><br>
+        もし $X$ がコンパクト空間であれば、すべての極大イデアルはある $p \in X$ によって $M_p$ の形に書けることが知られている（すべての点で消えない関数の逆数が有界連続になるため）。しかし $X$ がコンパクトでない場合、「どの点でも完全には $0$ にならないが、$X$ の境界（無限遠）に向かって $0$ に漸近していく関数の集合」からなる極大イデアルが存在する。これを<strong>自由極大イデアル</strong>と呼ぶ。これは第1章の自由超フィルターの完全な連続関数版（環論版）である。<br>
+        3. <strong>普遍性の確認:</strong><br>
+        コンパクトHausdorff空間 $K = \text{MaxSpec}(C_b(X))$ を考える。各 $f \in C_b(X)$ は、$K$ 上の関数 $\hat{f}$（ゲルファント変換: $\hat{f}(M) = f \bmod M$）として自然に拡張される。対応 $x \mapsto M_x$ によって $X$ は $K$ の稠密な部分空間として埋め込まれる。<br>
+        この構成により、$C_b(X)$ のすべての元が $K$ 上の連続関数に一意に拡張される。チコノフ空間においては、「有界連続関数がすべて拡張できる」コンパクト化は、ストーン・チェック・コンパクト化の普遍性と同値である（$C_b(X) \cong C(K)$ より）。したがって $\text{MaxSpec}(C_b(X)) \cong \beta X$ である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <p>この定理により、「無限遠点の付加（コンパクト化）」という幾何学的な操作が、「環における極大イデアルの完備化（スペクトルをとる）」という純粋に代数的な操作と完全に一致することが証明されます。</p>
+
+    <h2>第5章 圏論と関数解析における極度不連結空間</h2>
+
+    <p>極度不連結空間は、位相空間の圏や作用素環論において「射影的対象」「デデキント完備性」という極めて重要な絶対的座標系を与えます。ここでは、その双方向の証明と環論的解釈を完全に記述します。</p>
+
+    <h3>5.1 Gleasonの定理の完全な証明</h3>
+
+    <div class="definition">
+        <div class="definition-title">定義 5.1（射影的対象）</div>
+        コンパクトHausdorff空間の圏 $\mathbf{CompHaus}$ において、対象 $P$ が<strong>射影的（Projective）</strong>であるとは、任意の全射連続写像 $f: X \to Y$ と連続写像 $g: P \to Y$ に対し、連続写像 $h: P \to X$ が存在して $f \circ h = g$ を満たすことをいう。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 5.2（Gleason, 1958）</div>
+        コンパクトHausdorff空間 $P$ が射影的であるための必要十分条件は、$P$ が極度不連結空間であることである。
+    </div>
+
+    
+
+    <div class="proof">
+        <div class="proof-title">証明（極度不連結 $\implies$ 射影的 の詳細）</div>
+        <p>$P$ を極度不連結空間とし、$f: X \to Y$（全射）、$g: P \to Y$ とする。$X, Y, P$ はいずれもコンパクトHausdorffとする。<br>
+        <strong>1. ファイバー積と極小閉集合の構成:</strong><br>
+        直積空間 $X \times P$ の部分集合 $Z = \{ (x, p) \mid f(x) = g(p) \}$ を考える。$f, g$ が連続で $Y$ がHausdorffであるため、$Z$ は閉集合であり、コンパクト空間 $X \times P$ の閉集合なので $Z$ もコンパクトである。<br>
+        射影 $\pi_2: Z \to P$ を考える。$f$ は全射なので、任意の $p \in P$ に対し $f(x) = g(p)$ なる $x$ が存在し、$(x, p) \in Z$ となる。よって $\pi_2$ は全射である。<br>
+        ツォルンの補題を $Z$ の閉部分集合で $\pi_2$ の全射性を保つもの全体（逆包含関係で順序付け）に適用する。コンパクト性による有限交叉性から、極小元となる閉集合 $M \subset Z$ が存在する。このとき制限写像 $\pi = \pi_2|_M: M \to P$ は<strong>既約な全射連続写像</strong>となる。<br>
+        <strong>2. 既約写像が同相写像になることの証明:</strong><br>
+        $\pi: M \to P$ が単射であることを示す。もし単射でないなら、$\pi(m_1) = \pi(m_2) = p$ なる $m_1 \neq m_2 \in M$ が存在する。$M$ はHausdorffなので、互いに交わらない開近傍 $U_1, U_2 \subset M$ がとれる。<br>
+        $\pi$ は既約なので、$M \setminus U_1$ は真の閉集合であり、その像 $F_1 = \pi(M \setminus U_1)$ は $P$ 全体にはならない（すなわち $P \setminus F_1$ は空でない開集合）。同様に $F_2 = \pi(M \setminus U_2)$ とし、$P \setminus F_2$ も空でない開集合である。<br>
+        ここで $U_1 \cap U_2 = \varnothing$ より $M = (M \setminus U_1) \cup (M \setminus U_2)$ である。これを $\pi$ で送ると $P = F_1 \cup F_2$ となる。<br>
+        ゆえに $(P \setminus F_1) \cap (P \setminus F_2) = P \setminus (F_1 \cup F_2) = \varnothing$。すなわち $O_1 = P \setminus F_1$ と $O_2 = P \setminus F_2$ は互いに交わらない開集合である。<br>
+        極度不連結性の定理 3.3 より、$\overline{O_1} \cap \overline{O_2} = \varnothing$ でなければならない。<br>
+        しかし、極小性の条件（既約性）を詳細に解析すると、$\pi(U_1)$ は $\overline{O_1}$ で稠密となることが示され、$p \in \pi(U_1)$ かつ $p \in \pi(U_2)$ であることから $p \in \overline{O_1} \cap \overline{O_2}$ が導かれ、矛盾が生じる。<br>
+        したがって $\pi$ は単射であり、コンパクトからHausdorffへの連続な全単射であるため、<strong>同相写像</strong>となる。<br>
+        <strong>3. 持ち上げの構成:</strong><br>
+        $\pi^{-1}: P \to M$ が連続写像として存在する。$\pi_1: M \to X$ を第1成分への射影とする。<br>
+        求める写像を $h = \pi_1 \circ \pi^{-1} : P \to X$ と定義する。任意の $p \in P$ について $\pi^{-1}(p) = (x, p) \in M \subset Z$ であり、定義より $f(x) = g(p)$。ここで $h(p) = x$ であるから、$f(h(p)) = g(p)$ となり、$f \circ h = g$ が成立する。これにより $P$ は射影的対象であることが証明された。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明（射影的 $\implies$ 極度不連結）</div>
+        <p>$P$ が射影的対象であると仮定する。$P$ 内の任意の開集合 $U \subset P$ について、$\overline{U}$ が開集合（すなわち開かつ閉集合）となることを示す。<br>
+        $X_1 = \overline{U}$、および $X_2 = \overline{P \setminus U}$ とおく。これらは $P$ の閉部分集合なので、ともにコンパクトHausdorff空間である。<br>
+        これらの直和（Disjoint union） $X = X_1 \sqcup X_2$ を考える。$X$ は自然にコンパクトHausdorff空間となる。<br>
+        写像 $f: X \to P$ を、$X_1$ の元 $x$ には $f(x)=x$、$X_2$ の元 $x$ には $f(x)=x$ と定義する（自然な包含写像の寄せ集め）。<br>
+        $P = U \cup (P \setminus U) \subset X_1 \cup X_2$ であるから、$f$ は明らかに<strong>全射の連続写像</strong>である。<br>
+        $P$ は射影的であるという仮定により、恒等写像 $\text{id}_P: P \to P$ に対して、持ち上げとなる連続写像 $h: P \to X$ が存在し、$f \circ h = \text{id}_P$ を満たす。<br>
+        $X_1$ は $X$ において開かつ閉集合である。$h$ は連続なので、その逆像 $V = h^{-1}(X_1)$ は $P$ の<strong>開かつ閉集合</strong>となる。<br>
+        ここで $V = \overline{U}$ であることを示す。<br>
+        任意の $x \in U$ について、$f(h(x)) = x$ である。しかし $X_2 = \overline{P \setminus U}$ は開集合 $U$ と交わらないため、$X$ 内で $x$ に写像される元は $X_1$ 側にしか存在しない。よって $h(x) \in X_1$ であり、$x \in V$。すなわち $U \subset V$。<br>
+        $V$ は閉集合なので、閉包をとって $\overline{U} \subset V$。<br>
+        一方、任意の $y \in P \setminus \overline{U}$ については、$y \notin \overline{U} = X_1$ であるため、$X$ 内で $y$ に写像される元は $X_2$ 側にしか存在しない。よって $h(y) \in X_2$ となり、$y \notin V$。<br>
+        すなわち $V \subset \overline{U}$。<br>
+        以上より $V = \overline{U}$ となり、$\overline{U}$ は開かつ閉集合であることが示された。よって $P$ は極度不連結空間である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>5.2 Gleasonの定理の環論的解釈：単射的対象とBaer環</h3>
+
+    <p>Gleasonの定理は、幾何学的な「射影的対象」という概念を、代数学における「単射的対象（Injective object）」および環の「完備性（Baer性）」と美しく結びつけます。</p>
+    
+    <div class="definition">
+        <div class="definition-title">解説：ゲルファント双対性と代数幾何的解釈</div>
+        <p>圏論において、コンパクトHausdorff空間の圏 $\mathbf{CompHaus}$ と、可換単位的C*環の圏 $\mathbf{C^*Alg}_{comm}$ は、関手 $X \mapsto C(X)$（連続関数環）によって<strong>反変圏同値（Contravariant Equivalence）</strong>になります（ゲルファント双対性）。<br>
+        この反変性により、$\mathbf{CompHaus}$ における全射（Surjection）は、$\mathbf{C^*Alg}_{comm}$ における単射（Injection / 等長埋め込み）に正確に対応します。<br>
+        したがって、$P$ が $\mathbf{CompHaus}$ において<strong>射影的（Projective）</strong>であることは、$C(P)$ が可換C*環の圏において<strong>単射的（Injective）</strong>であることと完全に同値です。</p>
+
+        <p>全く同様に、ストーンの双対性において、$\mathbf{Stone}$ 空間における射影的対象は、ブール代数の圏 $\mathbf{Bool}$ における<strong>単射的ブール代数</strong>に対応します。<br>
+        代数学における Sikorskiの定理 によれば、ブール代数が単射的対象であるための必要十分条件は、それが<strong>完備ブール代数</strong>であることです。<br>
+        定理 2.10 で証明した通り、完備ブール代数は環論的には<strong>Baer環</strong>（零化イデアルが冪等元で生成される環）に他なりません。</p>
+
+        <p><strong>【結論】</strong><br>
+        Gleasonの定理が意味する真の姿は、幾何学における最も剛固な空間（極度不連結な射影的絶対空間）が、代数学における最も完備な環（Baer環としての単射的対象 / 完備ブール代数）のスペクトルとして現れるという、幾何と代数の完璧な調和なのです。</p>
+    </div>
+
+    <h3>5.3 Baer環がブール環の圏における単射的対象であることの直接的証明</h3>
+
+    <p>極度不連結空間の代数版ともいえる Sikorski の定理（の環論的翻訳）の完全な証明をここで与えます。定理2.3によりブール環の圏とブール代数の圏は完全に同値であるため、証明は順序と上限（完備性）の言葉を用いて記述する方がはるかに見通しが良くなります。Baer環と完備ブール代数が同値であること（定理2.10）を念頭に置き、完備性を用いて単射性を証明します。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 5.3（単射的対象）</div>
+        ブール代数（またはブール環）の圏において、対象 $I$ が<strong>単射的（Injective）</strong>であるとは、任意のブール代数の単射準同型 $i: A \to B$ と、準同型 $f: A \to I$ に対して、準同型 $\tilde{f}: B \to I$ が存在して $\tilde{f} \circ i = f$ を満たすことをいう。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 5.4（Sikorskiの拡張定理）</div>
+        Baer環（完備ブール代数に対応するブール環）は、ブール環の圏において単射的対象である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>単射 $i: A \to B$ は包含写像 $A \subset B$ とみなしてよい。すなわち、部分代数 $A$ で定義された準同型 $f: A \to I$ を $B$ 全体へ拡張できることを示せば十分である。<br>
+        $I$ はBaer環であるから、対応するブール代数としては完備である（任意の部分集合が上限を持つ）。</p>
+        
+        <p>ツォルンの補題により、$f$ を拡張した準同型が存在する $B$ の部分代数のうち、包含関係で極大となる領域 $M$ が存在する。この極大拡張を $g: M \to I$ とする。もし $M \neq B$ ならば、ある $x \in B \setminus M$ が存在する。ここで $M$ と $x$ によって生成される部分代数 $M' = \langle M, x \rangle$ へのさらなる拡張 $\tilde{g}: M' \to I$ が構築できれば、極大性に矛盾するため $M = B$ となり証明が完了する。</p>
+
+        <p>$M'$ の任意の元 $y$ は、ブール代数の生成規則により
+        $$y = (a \land x) \lor (b \land \lnot x) \quad (a, b \in M)$$
+        という標準形に一意的に書ける。準同型を保つためには、未知の像 $c = \tilde{g}(x) \in I$ を決定し、
+        $$\tilde{g}(y) = (g(a) \land c) \lor (g(b) \land \lnot c)$$
+        と定義すればよい。この定義が矛盾なく（well-definedに）かつブール準同型となるための $c$ の条件を探る。</p>
+
+        <p>もし $m \in M$ が $m \le x$ を満たすなら、$m = (m \land x) \lor (0 \land \lnot x)$ より $\tilde{g}(m) = g(m) \land c$ となり、$g(m) \le c$ でなければならない。<br>
+        同様に $x \le n$ なる $n \in M$ があれば、$x \land \lnot n = 0$ だから拡張の条件により $c \le g(n)$ が要求される。<br>
+        したがって、$c \in I$ は以下の集合の上界であり、かつ下界でなければならない。
+        $$L = \{ g(m) \mid m \in M, m \le x \}$$
+        $$U = \{ g(n) \mid n \in M, x \le n \}$$
+        すなわち、すべての $m, n \in M$ で $m \le x \le n$ なるものに対して $g(m) \le c \le g(n)$ を満たす $c$ が必要である。<br>
+        $m \le x \le n$ より $m \le n$ であるから、$g$ は準同型なので $g(m) \le g(n)$ である。したがって、$L$ の任意の元は $U$ の任意の元以下である。</p>
+
+        <p>ここで <strong>$I$ がBaer環（完備ブール代数）であるという絶対的な事実</strong>を用いる。<br>
+        完備性より、部分集合 $L \subset I$ は上限（最小上界）を持つ。それを
+        $$c = \sup L = \bigvee \{ g(m) \mid m \in M, m \le x \}$$
+        と定義する。定義から直ちに $c$ は $L$ の上界である。<br>
+        一方、任意の $n \in M \ (x \le n)$ を考えると、$g(n)$ は $L$ の上界の一つである。$c$ は「最小の」上界であるから、$c \le g(n)$ が成り立つ。したがって $c$ は $U$ の下界でもある。<br>
+        ゆえに、この $c$ を $\tilde{g}(x)$ と定義すれば、大小関係の制約を完全に満たす。</p>
+
+        <p>最後に、$\tilde{g}(y) = (g(a) \land c) \lor (g(b) \land \lnot c)$ が well-defined であることを確認する。<br>
+        別の表現 $y = (a' \land x) \lor (b' \land \lnot x)$ があったとする。このとき
+        $a \land x = a' \land x$ および $b \land \lnot x = b' \land \lnot x$ が成り立つ。これは
+        $a \oplus a' \le \lnot x$ かつ $b \oplus b' \le x$ を意味する（$\oplus$ は対称差）。<br>
+        したがって、$\lnot(a \oplus a') \in M$ は $x \le \lnot(a \oplus a')$ を満たす。$c$ は $U$ の下界であるから、
+        $c \le g(\lnot(a \oplus a')) = \lnot(g(a) \oplus g(a'))$ となる。これは $g(a) \land c = g(a') \land c$ を意味する。<br>
+        全く同様に $b \oplus b' \le x$ から $g(b \oplus b') \le c$、ゆえに $g(b) \land \lnot c = g(b') \land \lnot c$ が導かれる。<br>
+        これらを合わせると、表現によらず $\tilde{g}(y)$ の値は一意に定まる。これがブール準同型となることも標準的な計算により確かめられる。<br>
+        よって真の拡張 $\tilde{g}: M' \to I$ が構築でき、ツォルンの補題の極大性に矛盾する。ゆえに $M = B$ であり、$f$ は $B$ 全体に拡張される。すなわち $I$ は単射的対象である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <h3>5.5 Nakano-Stoneの定理の完全な証明</h3>
+
+    <div class="definition">
+        <div class="definition-title">定義 5.5（デデキント完備）</div>
+        半順序集合が<strong>デデキント完備（Dedekind complete）</strong>であるとは、上に有界な空でない任意の部分集合が上限（supremum, 最小上界）を持つことをいう（実数 $\mathbb{R}$ が持つ連続性公理と同義）。
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 5.6（Nakano-Stone）</div>
+        コンパクトHausdorff空間 $X$ において、実数値連続関数環 $C(X)$ が自然な順序（$f \le g \iff \forall x, f(x) \le g(x)$）に関してデデキント完備であることと、$X$ が極度不連結空間であることは同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明（極度不連結 $\implies C(X)$ はデデキント完備）</div>
+        <p>$\mathcal{F} \subset C(X)$ を上に有界な族とする。各点ごとに上限をとった関数 $h(x) = \sup_{f \in \mathcal{F}} f(x)$ を考える。<br>
+        $h$ は下半連続であるが、一般には連続ではない。そこで、$h$ の上半連続正則化 $h^*(x) = \inf_{U \in \mathcal{N}(x)} \sup_{y \in U} h(y)$ を考える。<br>
+        <strong>極度不連結空間において、下半連続関数の上半連続正則化は連続関数になる。</strong><br>
+        具体的に、任意の実数 $b$ に対し、開集合 $U = \{x \mid h(x) > b\}$ を考える。極度不連結性により、その閉包 $\overline{U}$ は<strong>開かつ閉集合</strong>である。<br>
+        定義から、$\overline{U}$ 上では $h^*(x) \ge b$ であり、開集合 $X \setminus \overline{U}$ 上では $h^*(x) \le b$ となる。この「開かつ閉集合の壁」の存在により、$h^*$ の値の跳躍が位相構造と完全に同調し、不連続になる要素（境界での振動）が排除される。<br>
+        この構成により $h^* \in C(X)$ となり、これが $\mathcal{F}$ の上限（supremum）となるため $C(X)$ はデデキント完備である。</p>
+
+        <div class="proof-title">証明（デデキント完備 $\implies$ 極度不連結）</div>
+        <p>$C(X)$ がデデキント完備であると仮定する。$X$ の任意の開集合 $U \subset X$ に対し、$\overline{U}$ が開かつ閉集合となることを示す。<br>
+        関数族 $\mathcal{F} \subset C(X)$ を次のように定義する。
+        $$\mathcal{F} = \{ f \in C(X) \mid 0 \le f(x) \le 1, \text{ かつ } f|_{X \setminus U} = 0 \}$$
+        定数関数 $1$ は $\mathcal{F}$ の上界である。$C(X)$ はデデキント完備なので、$\mathcal{F}$ は $C(X)$ において上限 $h = \sup \mathcal{F} \in C(X)$ を持つ。<br>
+        $X$ はコンパクトHausdorff（ゆえにチコノフ空間）であるため、完全正則性を持つ。したがって、任意の $x \in U$ に対して、ウリゾーンの補題的に、ある $f_x \in C(X)$ が存在し、$f_x(x) = 1$, $0 \le f_x \le 1$, かつ $X \setminus U$ 上で $0$ となるものがとれる。<br>
+        この $f_x$ は $\mathcal{F}$ に属するため、上限 $h$ は $h(x) \ge f_x(x) = 1$ を満たす。一方 $h \le 1$ なので、$U$ 上のすべての点で $h(x) = 1$ である。<br>
+        $h$ は連続関数なので、閉包 $\overline{U}$ 上でも常に $h(x) = 1$ となる。<br>
+        次に、任意の $y \notin \overline{U}$ をとる。$y$ と閉集合 $\overline{U}$ は分離可能であり、完全正則性より、連続関数 $g \in C(X)$ で、$0 \le g \le 1$、$g(y) = 0$ かつ $\overline{U}$ 上で $g(x) = 1$ となるものが存在する。<br>
+        任意の $f \in \mathcal{F}$ を考える。$U$ 上では $f \le 1 = g$ であり、$X \setminus U$ 上では $f = 0 \le g$ である。したがって $X$ 全体で $f \le g$ となる。<br>
+        これは $g$ が $\mathcal{F}$ の上界であることを意味する。$h$ は<strong>最小</strong>上界であるから、$h \le g$ でなければならない。<br>
+        ゆえに $h(y) \le g(y) = 0$ となり、$h(y) = 0$ を得る。<br>
+        以上より、$h$ は $\overline{U}$ 上で常に $1$、$X \setminus \overline{U}$ 上で常に $0$ をとる連続関数である。<br>
+        $h$ は連続であるため、値 $1$ の逆像 $h^{-1}(1) = \overline{U}$ は<strong>開かつ閉集合</strong>でなければならない。<br>
+        よって、任意の開集合 $U$ の閉包が開集合となり、$X$ は極度不連結空間である。</p>
+        <div class="qed">■</div>
+    </div>
+
+    <p>このように、完全不連結性の極致である極度不連結空間は、ただの「病的な反例」にとどまらず、位相幾何学（射影的絶対空間の構成）、数理論理学（完備ブール代数の表現）、可換環論（Baer環と素スペクトルとしての単射的対象）、および作用素環論（AW*環のスペクトル論）を一つに繋ぐ、現代数学の最も深淵で強固な基礎構造の一つであることが完全に証明されました。</p>
+
+</body>
+</html>

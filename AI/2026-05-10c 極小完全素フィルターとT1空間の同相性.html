@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>極小完全素フィルターとT1空間の同相性</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { font-size: 1.8em; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { font-size: 1.4em; border-bottom: 1px solid #ccc; margin-top: 40px; padding-bottom: 5px; }
+        h3 { font-size: 1.2em; color: #0056b3; margin-top: 25px; }
+        p { margin-bottom: 15px; }
+        ul, ol { margin-bottom: 15px; padding-left: 25px; }
+        li { margin-bottom: 8px; }
+        .box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .lemma { border-left: 5px solid #17a2b8; background-color: #f0f9fa; }
+        .theorem { border-left: 5px solid #0056b3; background-color: #f4f8fc; }
+        .proof { padding-left: 15px; border-left: 3px solid #ccc; margin-bottom: 25px; color: #444; }
+        .proof-title { font-weight: bold; font-style: italic; margin-bottom: 10px; }
+        .qed { text-align: right; font-style: italic; margin-top: -10px; margin-bottom: 20px; }
+        .example { border-left: 5px solid #28a745; background-color: #fdfdfd; }
+    </style>
+</head>
+<body>
+
+    <h1>極小完全素フィルターと$T_1$空間の同相性</h1>
+
+    <h2>1. 空間の名称について</h2>
+    <div class="box">
+        <p><strong>質問：</strong> $\mathcal{O}(X)$ の極小完全素フィルター全体の集合（自然な位相を入れたもの）は通常どう呼ばれていますか？</p>
+        <p><strong>回答：</strong> 位相空間 $X$ の開集合系 $\mathcal{O}(X)$ の「完全素フィルター全体」からなる空間は一般に <strong>Sober化 (Soberification)</strong> と呼ばれます。<br>
+        その中で「極小」なものだけを集めた部分空間には、単一の決まった固有名詞はありませんが、文脈に応じて以下のように呼ばれます。</p>
+        <ul>
+            <li><strong>閉点空間 (Space of closed points):</strong> 代数幾何学などの文脈。極小完全素フィルターは閉点に1対1対応するため。</li>
+            <li><strong>$T_1$化 ($T_1$-reflection):</strong> 圏論的位相空間論の文脈。任意の空間から最も自然に作られる$T_1$空間の構成物として扱われます。</li>
+            <li><strong>極大スペクトル (Maximal spectrum):</strong> 束論や可換環論の対応（完全素フィルター $\iff$ 素イデアル、極小完全素フィルター $\iff$ 極大イデアル）からの呼称。</li>
+        </ul>
+    </div>
+
+    <h2>2. 定義と前提知識 (Self-contained)</h2>
+    <p>定理を厳密に証明するために必要なすべての定義を列挙します。</p>
+    <ul>
+        <li><strong>位相空間 $X$ と開集合系 $\mathcal{O}(X)$:</strong> $X$ は集合、$\mathcal{O}(X)$ は $X$ の部分集合の族で、空集合 $\emptyset$ と $X$ 全体を含み、任意個の和集合、有限個の共通部分について閉じているもの（開集合の集合）です。$X \setminus U \ (U \in \mathcal{O}(X))$ を閉集合と呼びます。</li>
+        <li><strong>完全素フィルター (Completely prime filter):</strong> $\mathcal{O}(X)$ の部分集合 $F$ が以下の4条件を満たすとき、完全素フィルターと呼びます。
+            <ol>
+                <li>$\emptyset \notin F$ かつ $X \in F$ （真のフィルター）</li>
+                <li>$U \in F$ かつ $U \subseteq V$ ならば $V \in F$ （上方閉）</li>
+                <li>$U, V \in F$ ならば $U \cap V \in F$ （有限交叉性）</li>
+                <li>任意の開集合の族 $\{U_i\}_{i \in I}$ について、$\bigcup_{i \in I} U_i \in F$ ならば、ある $k \in I$ が存在して $U_k \in F$ （完全素性）</li>
+            </ol>
+        </li>
+        <li><strong>極小完全素フィルター:</strong> 完全素フィルターの中で、包含関係 $\subseteq$ について極小なもの。自分より真に小さな完全素フィルターを持たない $F$ のことです。極小完全素フィルター全体の集合を $\mathcal{M}$ と置きます。</li>
+        <li><strong>既約閉集合 (Irreducible closed set):</strong> 閉集合 $Z$ が空ではなく、$Z = Z_1 \cup Z_2$ （$Z_1, Z_2$ は閉集合）と書けるならば、$Z = Z_1$ または $Z = Z_2$ となるような閉集合。</li>
+        <li><strong>$T_1$空間:</strong> 任意の相異なる2点 $x, y \in X$ について、$x$ を含み $y$ を含まない開集合が存在する空間。これは<strong>「任意の1点集合 $\{x\}$ が閉集合である」</strong>ことと同値です。</li>
+    </ul>
+
+    <h2>3. 定理の証明のための補題</h2>
+    <p>主定理の証明を飛躍なく行うため、3つの重要な補題を証明します。</p>
+
+    <div class="box lemma">
+        <h3>補題 1：完全素フィルターと既約閉集合の反変的対応</h3>
+        <p>$\mathcal{O}(X)$ の完全素フィルター $F$ と、$X$ の既約閉集合 $Z$ は以下の写像で包含関係を逆転させて1対1に対応する。<br>
+        $F \mapsto Z_F = X \setminus \bigcup_{U \notin F} U$<br>
+        $Z \mapsto F_Z = \{ U \in \mathcal{O}(X) \mid U \cap Z \neq \emptyset \}$</p>
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明のスケッチ:</div>
+        <p><strong>$Z_F$ が既約閉集合であること:</strong> 開集合の和集合の補集合なので $Z_F$ は閉集合。$X \in F$ より $\emptyset \notin F$ なので $Z_F \neq \emptyset$。もし $Z_F = C_1 \cup C_2$（$C_1, C_2$は閉）と書けたとする。$V_i = X \setminus C_i$ とおくと、$X \setminus Z_F = V_1 \cap V_2$。$Z_F$ の定義より、$X \setminus Z_F$ は「$F$ に含まれない開集合の最大の和集合」である。もし $V_1 \in F$ かつ $V_2 \in F$ なら $V_1 \cap V_2 \in F$ となり矛盾。よって $V_1 \notin F$ または $V_2 \notin F$。$V_1 \notin F$ なら $V_1 \subseteq X \setminus Z_F$ より $C_1 \supseteq Z_F$ となり $Z_F = C_1$。ゆえに既約。</p>
+        <p><strong>$F_Z$ が完全素フィルターであること:</strong> $Z \neq \emptyset$ より $X \in F_Z$。$Z$ が既約であることから、$\bigcup U_i \in F_Z \iff (\bigcup U_i) \cap Z \neq \emptyset \iff \exists i, U_i \cap Z \neq \emptyset \iff \exists i, U_i \in F_Z$ となり完全素性が成り立つ。</p>
+        <p><strong>対応が互いに逆であること:</strong> 定義から $U \in F_{Z_F} \iff U \cap Z_F \neq \emptyset \iff U \not\subseteq \bigcup_{V \notin F} V \iff U \in F$（完全素性による）。よって $F_{Z_F} = F$。逆も同様。包含関係が $F_1 \subseteq F_2 \iff Z_2 \subseteq Z_1$ と逆転することは定義から明らか。</p>
+    </div>
+    <div class="qed">$\square$</div>
+
+    <div class="box lemma">
+        <h3>補題 2：1点集合の閉包</h3>
+        <p>任意の位相空間 $X$ において、任意の点 $x \in X$ の閉包 $\overline{\{x\}}$ は既約閉集合である。また、これに対応する完全素フィルターは $F_x = \{ U \in \mathcal{O}(X) \mid x \in U \}$ である。</p>
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <p>$\overline{\{x\}} = C_1 \cup C_2$（$C_1, C_2$は閉集合）と仮定する。$x \in \overline{\{x\}}$ なので、$x \in C_1$ または $x \in C_2$ である。対称性から $x \in C_1$ とすると、閉包の最小性から $\overline{\{x\}} \subseteq C_1$。よって $\overline{\{x\}} = C_1$ となり既約である。</p>
+        <p>$\overline{\{x\}}$ に対応するフィルター $F_{\overline{\{x\}}}$ は、補題1より $\{ U \mid U \cap \overline{\{x\}} \neq \emptyset \}$。開集合 $U$ が $\overline{\{x\}}$ と交わることは、$U$ が $x$ を含むことと同値（$x \notin U \iff U \subseteq X \setminus \overline{\{x\}}$ の対偶）であるため、これは $\{ U \mid x \in U \} = F_x$ に一致する。</p>
+    </div>
+    <div class="qed">$\square$</div>
+
+    <div class="box lemma">
+        <h3>補題 3：極小完全素フィルター空間 $\mathcal{M}$ の位相</h3>
+        <p>$\mathcal{M}$ の開集合の基底は、各 $U \in \mathcal{O}(X)$ に対して $\Sigma_U = \{ F \in \mathcal{M} \mid U \in F \}$ で与えられる。</p>
+    </div>
+
+
+    <h2>4. 主定理とその証明</h2>
+    <div class="box theorem">
+        <h3>定理</h3>
+        <p>「写像 $f: X \to \mathcal{M}, \ x \mapsto F_x$ が同相写像になるのは、空間 $X$ が $T_1$空間であるとき、かつそのときに限る。」</p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">【十分性の証明（$X$ が $T_1$空間ならば同相）】</div>
+        <p>$X$ が $T_1$空間であると仮定する。定義より、任意の $x \in X$ について $\overline{\{x\}} = \{x\}$ である。</p>
+        <ol>
+            <li><strong>$f$ が well-defined であること:</strong><br>
+            補題2より $F_x$ は既約閉集合 $\overline{\{x\}} = \{x\}$ に対応する完全素フィルターである。1点集合 $\{x\}$ は空でない閉集合の中で包含関係に関して明らかに極小である（部分集合は $\emptyset$ と $\{x\}$ しかないため）。補題1の反変性より、$F_x$ は極小完全素フィルターである。よって $f(x) \in \mathcal{M}$。</li>
+            <li><strong>$f$ が単射であること:</strong><br>
+            $x \neq y$ ならば $\{x\} \neq \{y\}$。一方が他方を包含することはないため、$F_x \neq F_y$ となり単射。</li>
+            <li><strong>$f$ が全射であること:</strong><br>
+            任意の極小完全素フィルター $F \in \mathcal{M}$ を取る。対応する極小既約閉集合を $Z$ とする。$Z \neq \emptyset$ より、ある $x \in Z$ が存在する。すると $\{x\} \subseteq Z$。$X$ は $T_1$ なので $\{x\}$ は閉集合であり、補題2より既約閉集合。$Z$ の極小性から $Z = \{x\}$ とならざるを得ない。よって $F = F_x = f(x)$ となり全射。</li>
+            <li><strong>$f$ が同相写像であること:</strong><br>
+            $\mathcal{M}$ の基底 $\Sigma_U$ の $f$ による逆像を考える。<br>
+            $f^{-1}(\Sigma_U) = \{ x \in X \mid f(x) \in \Sigma_U \} = \{ x \in X \mid F_x \in \Sigma_U \} = \{ x \in X \mid U \in F_x \}$<br>
+            $F_x$ の定義より $U \in F_x \iff x \in U$ なので、$f^{-1}(\Sigma_U) = U$。これにより $f$ は連続であり、かつ $f(U) = \Sigma_U$ となるため開写像でもある。全単射・連続・開写像であるから、$f$ は同相写像である。</li>
+        </ol>
+
+        <div class="proof-title">【必要性の証明（同相ならば $X$ は $T_1$空間）】</div>
+        <p>写像 $f: X \to \mathcal{M}, \ x \mapsto F_x$ が全単射な同相写像であると仮定する。</p>
+        <ol>
+            <li>$f$ の値域が $\mathcal{M}$ であることから、任意の $x \in X$ について $F_x$ は極小完全素フィルターである。</li>
+            <li>補題1の反変性より、対応する既約閉集合 $\overline{\{x\}}$ は、既約閉集合の中で<strong>極小</strong>である。</li>
+            <li>任意の点 $x \in X$ について、$\overline{\{x\}} = \{x\}$ であることを背理法で示す。<br>
+            もし $\overline{\{x\}} \neq \{x\}$ だとすると、ある点 $y \in \overline{\{x\}}$ が存在して $y \neq x$ である。<br>
+            $y \in \overline{\{x\}}$ であるから、閉包の性質より $\overline{\{y\}} \subseteq \overline{\{x\}}$ が成り立つ。</li>
+            <li>補題2より $\overline{\{y\}}$ も既約閉集合である。しかし $\overline{\{x\}}$ は極小な既約閉集合であったから、真の部分集合となる既約閉集合は存在しない。したがって、$\overline{\{y\}} = \overline{\{x\}}$ でなければならない。</li>
+            <li>これは対応するフィルターが一致すること、すなわち $F_x = F_y$ を意味する。<br>
+            つまり $f(x) = f(y)$ であるが、$f$ は同相写像（単射）であると仮定したため、$x = y$ となり矛盾する。</li>
+            <li>ゆえに、任意の $x$ について $\overline{\{x\}} = \{x\}$ である。1点集合がすべて閉集合であるため、$X$ は $T_1$空間である。</li>
+        </ol>
+    </div>
+    <div class="qed">$\square$</div>
+
+    <h2>5. 任意の位相空間 $X$ に対して $\mathcal{M}$ が $T_1$空間になること</h2>
+    <p>元の空間 $X$ が $T_1$ であろうとなかろうと、そこから構成された空間 $\mathcal{M}$ は<strong>自動的に $T_1$空間としての性質を備えます。</strong></p>
+
+    <div class="box theorem">
+        <h3>定理（$\mathcal{M}$ の $T_1$性）</h3>
+        <p>任意の位相空間 $X$ に対して、極小完全素フィルターの空間 $\mathcal{M}$ は常に $T_1$空間になる。</p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <p>空間 $\mathcal{M}$ から任意の相異なる2点（すなわち極小完全素フィルター）$F_1, F_2$ を取る。$\mathcal{M}$ が $T_1$空間であることを示すためには、$F_1 \in O_1$ かつ $F_2 \notin O_1$ となる開集合 $O_1$ と、$F_2 \in O_2$ かつ $F_1 \notin O_2$ となる開集合 $O_2$ が存在することを示せばよい。</p>
+        <ol>
+            <li><strong>極小性からの帰結:</strong><br>
+            $F_1, F_2$ はともに極小完全素フィルターであり、$F_1 \neq F_2$ である。もし仮に $F_1 \subseteq F_2$ であったとすると、$F_2$ が極小であること（自分より真に小さな完全素フィルターを持たないこと）から $F_1 = F_2$ とならざるを得ず、$F_1 \neq F_2$ に矛盾する。したがって $F_1 \not\subseteq F_2$ である。対称性により、全く同様の理由で $F_2 \not\subseteq F_1$ も成り立つ。</li>
+            <li><strong>分離する開集合の構成:</strong><br>
+            $F_1 \not\subseteq F_2$ であることから、ある開集合 $U \in \mathcal{O}(X)$ が存在して $U \in F_1$ かつ $U \notin F_2$ を満たす。<br>
+            $\mathcal{M}$ の開基の定義から、$\Sigma_U = \{ F \in \mathcal{M} \mid U \in F \}$ は $\mathcal{M}$ の開集合である。<br>
+            このとき、$F_1 \in \Sigma_U$ かつ $F_2 \notin \Sigma_U$ が成り立つ（これを $O_1$ とする）。<br>
+            同様に、$F_2 \not\subseteq F_1$ より、ある開集合 $V \in \mathcal{O}(X)$ が存在して $V \in F_2$ かつ $V \notin F_1$ を満たす。<br>
+            $\Sigma_V = \{ F \in \mathcal{M} \mid V \in F \}$ を考えれば、これは $\mathcal{M}$ の開集合であり、$F_2 \in \Sigma_V$ かつ $F_1 \notin \Sigma_V$ が成り立つ（これを $O_2$ とする）。</li>
+        </ol>
+        <p>以上より、任意の異なる2点に対して、相手を含まず自分を含む開集合がそれぞれ存在することが示されたため、位相空間の定義より $\mathcal{M}$ は $T_1$空間である。</p>
+    </div>
+    <div class="qed">$\square$</div>
+
+    <div class="box">
+        <h3>直感的な意味</h3>
+        <p>位相空間論において、極小完全素フィルター（あるいは極小既約閉集合）を集めるという操作は、<strong>「元の空間 $X$ の位相的な構造から、$T_1$空間として振る舞う最も骨格となる部分（閉点に相当する部分）だけを抽出・再構成する」</strong>という役割を持っています。</p>
+        <p>そのため、「$\mathcal{M}$ と $X$ が同相になる $\iff X$ が $T_1$空間である」という定理が成り立ちます。<br>
+        $X$ が初めから $T_1$ ならば、骨格を抽出しても元の姿のままなので $\mathcal{M}$ と $X$ はぴったり一致（同相）します。しかし、$X$ が $T_1$ でない場合は、$\mathcal{M}$ は $X$ を強制的に $T_1$空間へ「スリム化」または「商化」したような別の空間になるため、全体とは同相になりません。</p>
+    </div>
+
+    <h2>6. 10個の具体例による検証</h2>
+
+    <div class="box example">
+        <h3>例1：実数直線 $\mathbb{R}$（通常の位相）</h3>
+        <p><strong>性質：</strong> $T_1$空間である（ハウスドルフなので）。</p>
+        <p><strong>解説：</strong> 任意の1点 $\{x\}$ は閉集合です。極小な既約閉集合は1点集合 $\{x\}$ のみです。したがって極小完全素フィルターの空間 $\mathcal{M}$ は点 $x$ に対応するもののみからなり、$\mathcal{M}$ は $\mathbb{R}$ と同相になります。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例2：離散位相空間（任意の集合 $X$）</h3>
+        <p><strong>性質：</strong> $T_1$空間である。</p>
+        <p><strong>解説：</strong> すべての部分集合が開集合かつ閉集合です。閉包 $\overline{\{x\}} = \{x\}$ なので、すべての点が閉点です。既約閉集合も1点集合のみです。よって $\mathcal{M}$ は $X$ と同相になります。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例3：シェルピンスキー空間 $X = \{0, 1\}$</h3>
+        <p><strong>性質：</strong> $T_1$空間ではない（$T_0$空間ではある）。</p>
+        <p><strong>解説：</strong> 開集合は $\emptyset, \{1\}, \{0, 1\}$ です。閉集合は $\{0, 1\}, \{0\}, \emptyset$ です。既約閉集合は $\{0\}$ と $\{0, 1\}$ の2つです。このうち極小なものは $\{0\}$ のみです。<br>
+        したがって、極小完全素フィルターの空間 $\mathcal{M}$ には $\{0\}$ に対応する1点しか存在しません。$X$ は2点あるため、$\mathcal{M}$ と $X$ は同相ではありません。（※$\mathcal{M}$ 自体は1点空間であり、明らかに $T_1$空間です）。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例4：密着位相空間 $X = \{a, b\}$</h3>
+        <p><strong>性質：</strong> $T_1$空間ではない（$T_0$空間でもない）。</p>
+        <p><strong>解説：</strong> 開集合は $\emptyset, X$ のみ。閉集合も $\emptyset, X$ のみ。既約閉集合は $X$ のみで、これが極小です。<br>
+        $\mathcal{M}$ は $X$ 全体に対応するフィルター1つだけを持ちます。$\mathcal{M}$ は1点空間ですが、$X$ は2点空間なので同相ではありません。（※$\mathcal{M}$ は1点空間なので $T_1$空間です）。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例5：整数環の素スペクトル $\operatorname{Spec}(\mathbb{Z})$</h3>
+        <p><strong>性質：</strong> $T_1$空間ではない（$T_0$空間であり、Sober空間である）。</p>
+        <p><strong>解説：</strong> 点は素イデアル $(p)$ と $(0)$ です。閉点（極大イデアル）は $(p)$ であり、$\overline{\{(p)\}} = \{(p)\}$ は極小既約閉集合です。しかし $\overline{\{(0)\}} = \operatorname{Spec}(\mathbb{Z})$ 全体となり、これは極小ではありません（$(p)$ を含むため）。<br>
+        よって極小完全素フィルターを集めると、$(0)$ に対応する点が欠落し、閉点のみの空間 $\operatorname{Spm}(\mathbb{Z})$ になります。全体とは同相になりません。（※$\operatorname{Spm}(\mathbb{Z})$ は $T_1$空間です）。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例6：極大スペクトル $\operatorname{Spm}(\mathbb{C}[x])$ （ザリスキー位相）</h3>
+        <p><strong>性質：</strong> $T_1$空間である。</p>
+        <p><strong>解説：</strong> 点は極大イデアル $(x-a)$ のみからなります。すべての点が閉点なので $T_1$空間です。<br>
+        極小な既約閉集合は各1点集合 $\{(x-a)\}$ のみです。よって極小完全素フィルターの空間 $\mathcal{M}$ は元の空間と完全に一致し、同相になります。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例7：補有限位相 (Cofinite topology) を入れた無限集合 $\mathbb{N}$</h3>
+        <p><strong>性質：</strong> $T_1$空間である（Sober空間ではない）。</p>
+        <p><strong>解説：</strong> 閉集合は有限集合と $\mathbb{N}$ 全体です。既約閉集合は、1点集合 $\{x\}$ と $\mathbb{N}$ 全体です。このうち極小なものは 1点集合 $\{x\}$ のみです。<br>
+        極小既約閉集合が点と1対1に対応するため、極小完全素フィルターの空間 $\mathcal{M}$ は $\mathbb{N}$ と同相になります。（※Sober化すると全体 $\mathbb{N}$ に対応する「生成点」が追加されてしまいますが、「極小」フィルターに限定することで元の空間に戻ります）。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例8：包含点位相 (Included point topology) を入れた $X = \{a, b, c\}$ （点 $a$ を含む）</h3>
+        <p><strong>性質：</strong> $T_1$空間ではない。</p>
+        <p><strong>解説：</strong> 空でない開集合は必ず点 $a$ を含みます。閉集合は $X$ 全体か、$a$ を含まない部分集合（$\{b, c\}$ の部分集合）です。<br>
+        閉包は $\overline{\{a\}} = X$, $\overline{\{b\}} = \{b\}$, $\overline{\{c\}} = \{c\}$ です。既約閉集合は $X, \{b\}, \{c\}$ です。<br>
+        極小既約閉集合は $\{b\}$ と $\{c\}$ の2つです。$\mathcal{M}$ は離散な2点空間になり $T_1$空間ですが、$X$ は3点あるため同相ではありません。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例9：ゾルゲンフライ直線（下限位相を入れた実数 $\mathbb{R}$）</h3>
+        <p><strong>性質：</strong> $T_1$空間である。</p>
+        <p><strong>解説：</strong> 開基は $[a, b)$ の形をしています。1点集合 $\{x\}$ は閉集合になるため、$T_1$空間です。$T_1$空間であるため、これまでの議論通り極小完全素フィルターの空間 $\mathcal{M}$ は $\mathbb{R}$ と同相になります。</p>
+    </div>
+
+    <div class="box example">
+        <h3>例10：右半直線位相 (Right ray topology) を入れた実数 $\mathbb{R}$</h3>
+        <p><strong>性質：</strong> $T_1$空間ではない。</p>
+        <p><strong>解説：</strong> 開集合は $(a, \infty)$ と $\emptyset, \mathbb{R}$。閉集合は $(-\infty, a]$ と $\mathbb{R}, \emptyset$ です。<br>
+        空でない閉集合 $(-\infty, a]$ はすべて既約閉集合です。しかし、任意の $a$ について、より小さな既約閉集合 $(-\infty, a-1]$ が存在するため、<strong>極小な既約閉集合が存在しません</strong>。<br>
+        したがって、極小完全素フィルターの空間 $\mathcal{M}$ は「空集合」になってしまいます。空空間も自明な $T_1$空間ですが、$\mathbb{R}$ とは同相ではありません。</p>
+    </div>
+
+</body>
+</html>

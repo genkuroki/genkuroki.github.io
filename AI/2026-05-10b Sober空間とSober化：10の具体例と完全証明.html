@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sober空間とSober化：10の具体例と完全証明</title>
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: {'[+]': ['ams']}
+            },
+            chtml: {
+                matchFontHeight: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #c53030;
+            --bg: #f7fafc;
+            --box-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #2d3748;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--box-bg);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        h1 { color: var(--primary); font-size: 2.2em; border-bottom: 3px solid var(--secondary); padding-bottom: 10px; }
+        h2 { color: var(--secondary); margin-top: 2.5em; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-size: 1.6em; }
+        h3 { color: var(--primary); margin-top: 2em; border-left: 5px solid var(--secondary); padding-left: 15px; background: #edf2f7; padding: 10px 15px; border-radius: 0 5px 5px 0;}
+        
+        .toc { background: #fffff0; padding: 25px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 3em; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .toc ul { list-style-type: none; padding-left: 15px; }
+        .toc li { margin-bottom: 8px; font-weight: bold; }
+        .toc ul ul { font-weight: normal; margin-top: 5px; padding-left: 20px; list-style-type: disc; }
+        
+        .def, .thm, .lem, .proof, .example {
+            margin: 1.8em 0; padding: 25px; border-radius: 8px;
+        }
+        .def { background: #ebf8ff; border-left: 5px solid #3182ce; }
+        .def::before { content: "【定義】"; font-weight: bold; color: #2b6cb0; display: block; margin-bottom: 15px; font-size: 1.1em; }
+        
+        .thm { background: #fff5f5; border-left: 5px solid #e53e3e; }
+        .thm::before { content: "【定理】"; font-weight: bold; color: #c53030; display: block; margin-bottom: 15px; font-size: 1.1em; }
+        
+        .lem { background: #f7fafc; border-left: 5px solid #718096; }
+        .lem::before { content: "【補題】"; font-weight: bold; color: #4a5568; display: block; margin-bottom: 15px; font-size: 1.1em; }
+        
+        .proof { background: #fff; border: 1px solid #cbd5e0; border-left: 5px solid #cbd5e0; }
+        .proof::before { content: "【証明】"; font-weight: bold; font-style: italic; color: #4a5568; display: block; margin-bottom: 15px; }
+        .proof::after { content: "■"; display: block; text-align: right; margin-top: 15px; color: #718096; }
+
+        .example { background: #f0fff4; border: 1px solid #c6f6d5; border-left: 5px solid #38a169; }
+        .example::before { content: "【具体例と証明】"; font-weight: bold; color: #2f855a; display: block; margin-bottom: 15px; font-size: 1.1em; }
+
+        ul, ol { padding-left: 1.8em; }
+        hr { border: 0; height: 1px; background: var(--border); margin: 4em 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sober空間論：開集合束からの空間復元とSober化の全貌</h1>
+        
+        <div class="toc">
+            <strong>目次</strong>
+            <ul>
+                <li>I. 基礎理論
+                    <ul>
+                        <li>1. 位相空間論と順序集合の基礎定義</li>
+                        <li>2. 既約閉集合とSober空間の定義</li>
+                        <li>3. 開集合の束と完全素フィルター</li>
+                        <li>4. 空間の復元定理（主定理）の完全な証明</li>
+                        <li>5. Sober化（Soberification）の構成メカニズム</li>
+                    </ul>
+                </li>
+                <li>II. Sober化の10の具体例と完全な証明
+                    <ul>
+                        <li>例1. ハウスドルフ空間（常にSoberである例）</li>
+                        <li>例2. 密着空間（点が同一視されて消える例）</li>
+                        <li>例3. 一般の有限空間（点は絶対に追加されないことの証明）</li>
+                        <li>例4. $\operatorname{MaxSpec}(\mathbb{Z})$（代数幾何・生成点の追加）</li>
+                        <li>例5. 実数直線 $\mathbb{R}$ の補有限位相（非可算無限における点の追加）</li>
+                        <li>例6. 実数直線 $\mathbb{R}$ の可算補位相（無限次元の概念的生成点）</li>
+                        <li>例7. 整数 $\mathbb{Z}$ の右半直線位相（無限遠点の追加）</li>
+                        <li>例8. 有理数 $\mathbb{Q}$ の右半直線位相（デデキント切断による実数の構成）</li>
+                        <li>例9. 半順序集合のアレクサンドロフ位相（イデアル完備化）</li>
+                        <li>例10. 2次元アフィン空間 $\mathbb{C}^2$（ザリスキー位相と重層的生成点）</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <p>本稿は、いかなる外部文献も参照することなく、Sober（ソバー / 簡素）空間に関する主定理とSober化の多様な具体例を完全に理解できるように記述された自己完結的な解説テキストである。</p>
+
+        <hr>
+
+        <h2>I. 基礎理論</h2>
+
+        <h3>1. 位相空間論と順序集合の基礎定義</h3>
+
+        <div class="def">
+            <strong>位相空間 (Topological Space) と閉集合</strong><br>
+            集合$X$とその部分集合族$\mathcal{O} \subseteq \mathcal{P}(X)$の組$(X, \mathcal{O})$が<strong>位相空間</strong>であるとは、以下の3条件を満たすことである。
+            <ol>
+                <li>$\emptyset, X \in \mathcal{O}$</li>
+                <li>任意の$U_1, U_2 \in \mathcal{O}$に対し、$U_1 \cap U_2 \in \mathcal{O}$（有限交叉）</li>
+                <li>任意の開集合族$\{U_i\}_{i \in I} \subseteq \mathcal{O}$に対し、$\bigcup_{i \in I} U_i \in \mathcal{O}$（任意和）</li>
+            </ol>
+            $\mathcal{O}$の元を<strong>開集合</strong>と呼ぶ。部分集合$C \subseteq X$が<strong>閉集合</strong>であるとは、$X \setminus C \in \mathcal{O}$となることである。
+        </div>
+
+        <div class="def">
+            <strong>閉包 (Closure) と $T_0$ 分離公理</strong><br>
+            部分集合$A \subseteq X$を含む最小の閉集合を$A$の<strong>閉包</strong>と呼び、$\overline{A}$と表す。<br>
+            空間$X$が<strong>$T_0$空間（コルモゴロフ空間）</strong>であるとは、任意の異なる2点$x, y \in X$（$x \neq y$）に対して「$\overline{\{x\}} \neq \overline{\{y\}}$」が成り立つことと同値である。
+        </div>
+
+        <h3>2. 既約閉集合とSober空間の定義</h3>
+
+        <div class="def">
+            <strong>既約閉集合 (Irreducible Closed Set)</strong><br>
+            位相空間$X$の空でない閉集合$C$が<strong>既約</strong>であるとは、$C$が2つの真の閉部分集合の和集合として表せないことである。<br>
+            すなわち、任意の閉集合$C_1, C_2 \subseteq X$について、
+            $$C = C_1 \cup C_2 \implies C = C_1 \text{ または } C = C_2$$
+            が成り立つことである。
+        </div>
+
+        <div class="def">
+            <strong>生成点 (Generic Point) と Sober空間</strong><br>
+            閉集合$C$に対して、$\overline{\{x\}} = C$を満たす点$x \in X$を$C$の<strong>生成点</strong>と呼ぶ。<br>
+            位相空間$X$が<strong>Sober空間</strong>であるとは、以下の条件を満たすことである：
+            <blockquote>「$X$の<strong>空でない任意の既約閉集合</strong>$C$に対して、生成点$x \in X$が<strong>ただ一つ</strong>存在する。」</blockquote>
+        </div>
+
+        <h3>3. 開集合の束と完全素フィルター</h3>
+
+        <div class="def">
+            <strong>完全素フィルター (Completely Prime Filter)</strong><br>
+            開集合系$\mathcal{O}(X)$の部分集合$F \subseteq \mathcal{O}(X)$が<strong>完全素フィルター</strong>であるとは、以下の4条件を満たすことである。
+            <ol>
+                <li>$X \in F$</li>
+                <li>$U \in F$かつ$U \subseteq V$ならば、$V \in F$</li>
+                <li>$U, V \in F$ならば、$U \cap V \in F$</li>
+                <li>任意の開集合族$\{U_i\}_{i \in I}$に対し、$\bigcup_{i \in I} U_i \in F \implies \exists i \in I, U_i \in F$</li>
+            </ol>
+            （※条件4において添字集合が空の場合を考えると、空集合$\emptyset \notin F$が直ちに従う。）
+        </div>
+
+        <h3>4. 空間の復元定理（主定理）の完全な証明</h3>
+
+        <div class="lem">
+            <strong>【補題】完全素フィルターと既約閉集合の全単射</strong><br>
+            任意の位相空間$X$において、以下の2つの集合の間に自然な全単射が存在する。
+            <ul>
+                <li>$\mathcal{I}(X)$：$X$の空でない既約閉集合の全体</li>
+                <li>$\mathcal{F}(X)$：$\mathcal{O}(X)$の完全素フィルターの全体</li>
+            </ul>
+            対応は以下で与えられる：
+            <ul>
+                <li>$C \in \mathcal{I}(X)$に対し、$\Phi(C) = \{ U \in \mathcal{O}(X) \mid U \cap C \neq \emptyset \}$</li>
+                <li>$F \in \mathcal{F}(X)$に対し、$\Psi(F) = X \setminus \bigcup_{U \notin F} U$</li>
+            </ul>
+        </div>
+
+        <div class="proof">
+            <strong>Step 1: $\Phi(C)$が完全素フィルターであること</strong><br>
+            $C$を空でない既約閉集合とする。$F = \Phi(C)$とおく。<br>
+            1. $C \neq \emptyset$より$X \cap C \neq \emptyset$。よって$X \in F$。<br>
+            2. $U \in F, U \subseteq V$なら$U \cap C \neq \emptyset \implies V \cap C \neq \emptyset$。よって$V \in F$。<br>
+            3. $U, V \in F$とする。もし$U \cap V \notin F$と仮定すると、$(U \cap V) \cap C = \emptyset$。すると、
+            $$C = C \setminus (U \cap V) = (C \setminus U) \cup (C \setminus V)$$
+            $C$の既約性より$C = C \setminus U$または$C = C \setminus V$。すなわち$C \cap U = \emptyset$または$C \cap V = \emptyset$となるが、これは$U, V \in F$に矛盾。ゆえに$U \cap V \in F$。<br>
+            4. $\bigcup U_i \in F$とする。$C \cap (\bigcup U_i) \neq \emptyset \implies \bigcup (C \cap U_i) \neq \emptyset$。よってある$i$で$C \cap U_i \neq \emptyset$、すなわち$U_i \in F$。<br><br>
+
+            <strong>Step 2: $\Psi(F)$が空でない既約閉集合であること</strong><br>
+            $F$を完全素フィルターとする。$W = \bigcup_{U \notin F} U$とおく。$C = \Psi(F) = X \setminus W$は閉集合である。<br>
+            $F$の完全素性より、$W \notin F$。$X \in F$なので$W \neq X$。ゆえに$C \neq \emptyset$。<br>
+            $C$が既約であることを示す。$C \subseteq A \cup B$（$A, B$は閉集合）と仮定する。補集合をとると$(X \setminus A) \cap (X \setminus B) \subseteq W$。<br>
+            $W \notin F$であり上方閉性より$(X \setminus A) \cap (X \setminus B) \notin F$。<br>
+            もし$X \setminus A \in F$かつ$X \setminus B \in F$なら有限交叉性で共通部分も$F$に入り矛盾。よって一方は$F$に属さない。一般性を失わず$X \setminus A \notin F$とすると、$X \setminus A$は$W$の構成要素の1つとなり、$X \setminus A \subseteq W$。補集合をとって$C \subseteq A$。よって$C$は既約。<br><br>
+
+            <strong>Step 3: $\Phi$と$\Psi$が互いに逆であること</strong><br>
+            ・$\Psi(\Phi(C)) = X \setminus \bigcup_{U \cap C = \emptyset} U$。$U \cap C = \emptyset$を満たす最大の開集合は$X \setminus C$なので、和集合は$X \setminus C$に一致し、$X \setminus (X \setminus C) = C$。<br>
+            ・$\Phi(\Psi(F)) = \{ U \mid U \not\subseteq W \}$。$U \not\subseteq W \iff U \in F$より、$\Phi(\Psi(F)) = F$。
+        </div>
+
+        <div class="def">
+            <strong>点付き空間 (Pointed Space) $\operatorname{pt}(\mathcal{O}(X))$ と評価写像</strong><br>
+            完全素フィルター全体の集合を$\operatorname{pt}(\mathcal{O}(X))$とする。各$U \in \mathcal{O}(X)$に対して、$\tilde{U} = \{ F \in \operatorname{pt}(\mathcal{O}(X)) \mid U \in F \}$を開集合とする位相を入れる。<br>
+            各$x \in X$に対し、開近傍系$F_x = \{ U \in \mathcal{O}(X) \mid x \in U \}$は完全素フィルターである。自然な評価写像：
+            $$\eta_X : X \to \operatorname{pt}(\mathcal{O}(X)), \quad x \mapsto F_x$$
+            が定まる。
+        </div>
+
+        <div class="thm">
+            <strong>【主定理】</strong> 評価写像 $\eta_X$ が同相写像であるための必要十分条件は、$X$ が Sober空間であることである。
+        </div>
+
+        <div class="proof">
+            $F_x = \{ U \mid U \cap \overline{\{x\}} \neq \emptyset \} = \Phi(\overline{\{x\}})$ である。<br>
+            1. $\eta_X$が単射 $\iff F_x = F_y \implies x=y \iff \overline{\{x\}} = \overline{\{y\}} \implies x=y$。これは$X$が$T_0$空間であることと同値。<br>
+            2. $\eta_X$が全射 $\iff$ 任意の完全素フィルター$F$（すなわち既約閉集合$C$）に対し、$F = \Phi(\overline{\{x\}})$となる$x$が存在する。これは全ての既約閉集合が生成点を持つことと同値。<br>
+            3. よって$\eta_X$の全単射性はSober性の定義そのものである。<br>
+            4. 位相同型性：$\eta_X^{-1}(\tilde{U}) = \{ x \mid F_x \in \tilde{U} \} = \{ x \mid x \in U \} = U$より連続かつ開写像。全単射であれば同相写像となる。
+        </div>
+
+        <h3>5. Sober化（Soberification）の構成メカニズム</h3>
+
+        <p>Soberでない空間$X$に対して構築される空間 $X^s = \operatorname{pt}(\mathcal{O}(X))$ を<strong>Sober化</strong>と呼ぶ。写像 $\eta_X : X \to X^s$ は以下の2つの作用をもたらす。</p>
+        <ol>
+            <li><strong>点の同一視（$T_0$商）：</strong> $\overline{\{x\}} = \overline{\{y\}}$ なる位相的に区別できない点は、$F_x$ という1つの点にまとめられる。</li>
+            <li><strong>生成点の追加：</strong> 生成点を持たない既約閉集合$C$に対して、対応するフィルター$\Phi(C)$が新たな「点」として空間に補充される。</li>
+        </ol>
+        <p>※重要な性質として、$U \mapsto \tilde{U}$ は、元の空間とSober化空間の<strong>開集合の束の同型 $\mathcal{O}(X) \cong \mathcal{O}(X^s)$</strong> を与える。</p>
+
+        <hr>
+
+        <h2>II. Sober化の10の具体例と完全な証明</h2>
+
+        <h3>例1. ハウスドルフ空間（常にSoberである例）</h3>
+        <div class="example">
+            <strong>【証明】</strong> $X$をハウスドルフ空間（$T_2$空間）とし、$C$を既約閉集合とする。<br>
+            もし$C$が2つ以上の異なる点$x, y$を含むと仮定する。$T_2$分離公理より、互いに素な開集合$U, V$で$x \in U, y \in V$となるものが存在する。<br>
+            $C$の相対閉集合 $C_1 = C \setminus U$ と $C_2 = C \setminus V$ を考える。<br>
+            $U \cap V = \emptyset \implies C_1 \cup C_2 = C \setminus (U \cap V) = C$。<br>
+            $x \in U$より$x \notin C_1$なので$C_1 \neq C$。同様に$C_2 \neq C$。<br>
+            よって$C$は真の部分閉集合の和で書けてしまい、既約であることに矛盾する。<br>
+            したがって、$C$は1点のみからなる集合$\{x\}$でなければならない。$T_2$より1点は閉集合なので$\overline{\{x\}} = \{x\} = C$。生成点は自明に一意であり、Sober空間である。
+        </div>
+
+        <h3>例2. 密着空間（点が同一視されて消える例）</h3>
+        <div class="example">
+            <strong>【設定】</strong> $X = \{a, b\}$ に密着位相 $\mathcal{O} = \{\emptyset, X\}$ を入れる。<br>
+            <strong>【証明】</strong> 閉集合は $\emptyset, X$ のみ。空間全体$X$は空集合の和で書けないため既約閉集合である。<br>
+            $\overline{\{a\}} = X, \overline{\{b\}} = X$ であり、既約閉集合$X$を生成する点が2つ存在するためSoberではない（一意性の破れ）。<br>
+            開集合系 $\{\emptyset, X\}$ から作られる完全素フィルターは $F = \{X\}$ のただ1つである。<br>
+            よってSober化空間 $X^s$ は、要素を1つしか持たない <strong>1点空間 $\{ \ast \}$</strong> となり、位相的に区別できない点$a, b$が同一視されたことがわかる。
+        </div>
+
+        <h3>例3. 一般の有限空間（点は絶対に追加されないことの証明）</h3>
+        <div class="example">
+            <strong>【事実】</strong> 有限空間$X$において、Sober化とは単なる$T_0$商をとる操作に等しく、新たな生成点が追加されることは決してない。<br>
+            <strong>【証明】</strong> $X = \{x_1, \dots, x_n\}$ を有限空間とする。任意の閉集合$C$は、それに含まれる有限個の点の閉包の和集合として記述できる：
+            $$C = \bigcup_{x_i \in C} \overline{\{x_i\}}$$
+            $C$が既約閉集合であるとする。上の式は有限個の閉集合の和であるから、既約性の定義（和集合に対して分解できない）を帰納的に適用すると、ある$x_i \in C$が存在して$C = \overline{\{x_i\}}$とならざるを得ない。<br>
+            したがって、有限空間においては<strong>任意の既約閉集合は必ず生成点を持つ</strong>。<br>
+            Sober性の要件である「存在性」は常に満たされるため、Soberでない原因は「一意性」の欠如（非$T_0$）のみである。よって有限空間のSober化は点の追加を伴わない。
+        </div>
+
+        <h3>例4. $\operatorname{MaxSpec}(\mathbb{Z})$（代数幾何・生成点の追加）</h3>
+        <div class="example">
+            <strong>【設定】</strong> $X = \{ (p) \mid p \text{ は素数 } \}$ （素数が生成する極大イデアルの集合）に、補有限位相（有限集合と全体のみが閉集合）を入れる。<br>
+            <strong>【証明】</strong> 空間全体$X$は無限集合なので、2つの有限集合（真の閉部分集合）の和で書けず、既約閉集合である。<br>
+            しかし任意の点$(p)$はそれ自身が閉集合なので $\overline{\{(p)\}} = \{(p)\} \neq X$。<br>
+            $X$全体を生成する点が存在しないためSoberではない。<br>
+            Sober化によって、全体$X$を生成するための仮想的な点として「零イデアル $(0)$」が空間に自動的に追加され、$X^s = \operatorname{Spec}(\mathbb{Z})$ （すべての素イデアルの空間）が復元される。
+        </div>
+
+        <h3>例5. 実数直線 $\mathbb{R}$ の補有限位相（非可算無限における点の追加）</h3>
+        <div class="example">
+            <strong>【設定】</strong> $X = \mathbb{R}$ に補有限位相を入れる。閉集合は有限集合と $\mathbb{R}$ 全体のみ。<br>
+            <strong>【証明】</strong> 例4と全く同様に、$\mathbb{R}$ は無限集合であるため2つの有限集合の和で書けず、既約閉集合である。<br>
+            任意の点 $x \in \mathbb{R}$ について $\overline{\{x\}} = \{x\} \neq \mathbb{R}$。<br>
+            Sober化により、$\mathbb{R}$ 全体を閉包とするただ1つの「生成点 $\eta$」が追加され、$X^s = \mathbb{R} \cup \{\eta\}$ となる。この $\eta$ は特定の実数ではなく、実数直線全体に遍在する概念的な点である。
+        </div>
+
+        <h3>例6. 実数直線 $\mathbb{R}$ の可算補位相（無限次元の概念的生成点）</h3>
+        <div class="example">
+            <strong>【設定】</strong> $X = \mathbb{R}$ に可算補位相を入れる。閉集合は「可算集合」と「$\mathbb{R}$ 全体」のみである。<br>
+            <strong>【証明】</strong> $\mathbb{R}$ 全体は既約閉集合であるか？ もし $\mathbb{R} = C_1 \cup C_2$（共に真の部分閉集合）とすると、$C_1, C_2$ は可算集合である。しかし可算集合の和集合は可算であり、非可算集合である $\mathbb{R}$ と一致することはなく矛盾する。よって $\mathbb{R}$ は既約閉集合である。<br>
+            一方で各点 $x$ について $\overline{\{x\}} = \{x\}$ （有限なので可算）であり、生成点が存在しない。<br>
+            Sober化により、非可算の広大な空間全体を束ねる生成点 $\eta$ が<strong>ただ1つ</strong>追加される。
+        </div>
+
+        <h3>例7. 整数 $\mathbb{Z}$ の右半直線位相（無限遠点の追加）</h3>
+        <div class="example">
+            <strong>【設定】</strong> $X = \mathbb{Z}$。開集合を $U_n = \{x \in \mathbb{Z} \mid x \ge n\}$ と $\emptyset, \mathbb{Z}$ とする。<br>
+            閉集合は左半直線 $C_n = \{x \in \mathbb{Z} \mid x < n\}$ と $\emptyset, \mathbb{Z}$ である。<br>
+            <strong>【証明】</strong> 空間全体 $\mathbb{Z}$ は既約である。なぜなら、真の部分閉集合は上に有界な $C_n$ の形をしており、2つの上に有界な集合の和は必ず上に有界で $\mathbb{Z}$ にならないからである。<br>
+            任意の $x \in \mathbb{Z}$ について、$\overline{\{x\}} = C_{x+1} \neq \mathbb{Z}$ であるため生成点がない。<br>
+            Sober化によって $\mathbb{Z}$ を生成する点（ $+\infty$ に相当）が1つ追加され、$X^s = \mathbb{Z} \cup \{+\infty\}$ となる。
+        </div>
+
+        <h3>例8. 有理数 $\mathbb{Q}$ の右半直線位相（デデキント切断による実数の構成）</h3>
+        <div class="example">
+            <strong>【設定】</strong> $X = \mathbb{Q}$。開集合を右半直線 $(a, \infty) \cap \mathbb{Q}$ と $\emptyset, \mathbb{Q}$ とする。<br>
+            閉集合は左半直線 $(-\infty, a] \cap \mathbb{Q}$ と $\emptyset, \mathbb{Q}$。<br>
+            <strong>【証明】</strong> $C = \{ x \in \mathbb{Q} \mid x^2 < 2 \text{ または } x < 0 \}$ を考える。これは閉集合（$\sqrt{2}$未満の左半直線）であり既約である。しかし $\mathbb{Q}$ の中にこの集合の最大値（上限）は存在しないため、閉包の起点となる生成点がない。<br>
+            Sober化によって、すべての「無理数の位置で切断された左半直線」に対して新しい生成点（無理数）が追加され、さらに $\mathbb{Q}$ 全体の生成点 $\{+\infty\}$ も追加される。<br>
+            結果として、$X^s = \mathbb{R} \cup \{+\infty\}$ へと空間が拡張され、位相的Sober化が実数の完備化を自動的に実行する。
+        </div>
+
+        <h3>例9. 半順序集合のアレクサンドロフ位相（イデアル完備化）</h3>
+        <div class="example">
+            <strong>【設定】</strong> 半順序集合 $(P, \le)$ に、上方閉集合を開集合とするアレクサンドロフ位相を入れる。閉集合は下方閉集合となる。<br>
+            <strong>【証明】</strong> この位相における既約閉集合は、順序集合における「有向イデアル（directed lower set）」に完全に一致する。各点 $x$ の閉包は単項イデアル $\downarrow x$ である。<br>
+            上限（極限）を持たない有向イデアルが存在する場合、それを生成する点が存在せずSoberではない。<br>
+            Sober化を行うと、極限を持たなかったすべての有向イデアルに対して仮想的な「上限の点」が追加される。<br>
+            これは順序集合論において、半順序集合に極限を付け加えて有向完備半順序集合 (DCPO) を作る<strong>イデアル完備化 (Ideal completion)</strong> と全く同値である。
+        </div>
+
+        <h3>例10. 2次元アフィン空間 $\mathbb{C}^2$（ザリスキー位相と重層的生成点）</h3>
+        <div class="example">
+            <strong>【設定】</strong> 複素平面 $\mathbb{C}^2$ にザリスキー位相を入れる。閉集合は多項式の方程式で描かれる代数多様体（点、曲線、全体）である。<br>
+            <strong>【証明】</strong> 座防 $(a, b)$ は閉集合であり問題ない。しかし、既約な代数曲線（例えば放物線 $y = x^2$）や空間全体 $\mathbb{C}^2$ は既約閉集合である。<br>
+            元の空間の点は0次元であるため、1次元の曲線や2次元の全体を一撃で生成する（閉包をとるとそれになる）ただ1つの点は $\mathbb{C}^2$ 内に存在しない。<br>
+            Sober化空間 $X^s = \operatorname{Spec}(\mathbb{C}[x, y])$ を構築すると、すべての既約な代数曲線に対して「その曲線を代表する生成点（generic point）」が無数に追加され、さらに空間全体を代表する生成点も追加される。これにより、次元の階層構造を持った代数幾何の標準空間が完成する。
+        </div>
+
+    </div>
+</body>
+</html>

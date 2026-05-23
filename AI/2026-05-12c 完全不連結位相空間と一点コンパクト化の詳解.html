@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完全不連結位相空間と一点コンパクト化の詳解</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                renderActions: {
+                    addMenu: []
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Times New Roman', serif; line-height: 1.8; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 30px; background-color: #fdfdfd; }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 3px double #2c3e50; padding-bottom: 10px; }
+        h2 { background-color: #2c3e50; color: white; padding: 10px 15px; margin-top: 40px; border-radius: 4px; }
+        h3 { border-bottom: 1px solid #bdc3c7; color: #2980b9; padding-bottom: 5px; }
+        .definition, .theorem, .proof, .example { margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .definition { background-color: #f4f9ff; border-left: 6px solid #2980b9; }
+        .theorem { background-color: #fff9f4; border-left: 6px solid #e67e22; }
+        .proof { background-color: #ffffff; border: 1px solid #ddd; }
+        .example { background-color: #f0fff0; border-left: 6px solid #27ae60; }
+        .label { font-weight: bold; font-variant: small-caps; margin-right: 10px; color: #333; }
+        .clopen { color: #c0392b; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>位相空間論：完全不連結性と一点コンパクト化</h1>
+
+    <h2>1. 基礎的な定義</h2>
+    <div class="definition">
+        <span class="label">定義：完全不連結 (Totally Disconnected)</span>
+        位相空間 $X$ の連結部分集合が、空集合または1点集合のみであるとき、$X$ は完全不連結であるという。
+    </div>
+    <div class="definition">
+        <span class="label">定義：クロープン集合 (Clopen Set)</span>
+        開集合 (open set) であり、かつ閉集合 (closed set) でもある集合を<span class="clopen">クロープン集合</span>と呼ぶ。
+    </div>
+    <div class="definition">
+        <span class="label">定義：一点コンパクト化 (One-point Compactification)</span>
+        局所コンパクトなハウスドルフ空間 $X$ に対し、新しい点 $\infty$ を加え、$X^* = X \cup \{\infty\}$ とする。$\infty$ の開近傍を $U = X^* \setminus K$（$K$ は $X$ のコンパクト部分集合）と定義することで得られるコンパクト空間を $X$ の一点コンパクト化と呼ぶ。
+    </div>
+
+    <h2>2. 完全不連結空間の性質と $T_1$ 性</h2>
+    <div class="theorem">
+        完全不連結空間 $X$ は $T_1$ 空間である。
+    </div>
+    <div class="proof">
+        <span class="label">証明：</span>
+        任意の点 $x \in X$ に対し、その連結成分を $C(x)$ とする。
+        一般に、連結成分は常に閉集合である（連結集合の閉包も連結であり、連結成分は極大であるため）。
+        完全不連結の定義より、$C(x) = \{x\}$ である。
+        したがって、任意の1点集合 $\{x\}$ は閉集合となり、$X$ は $T_1$ 空間の定義を満たす。$\square$
+    </div>
+
+    <h2>3. 無限離散空間の一点コンパクト化</h2>
+    <p>無限離散空間 $D$ の一点コンパクト化 $E = D \cup \{\infty\}$ を考える。$D$ の部分は離散位相であるため、コンパクト集合は有限集合に限られる。</p>
+    <div class="proof">
+        <span class="label">完全不連結・コンパクト・ハウスドルフ性の証明：</span>
+        <ol>
+            <li><strong>コンパクト性</strong>：任意の開被覆 $\mathcal{U}$ に対し、$\infty$ を含む $U \in \mathcal{U}$ が存在する。$E \setminus U$ は $D$ の有限集合であるため、残りの点は有限個の開集合で覆える。</li>
+            <li><strong>ハウスドルフ性</strong>：$x, y \in D$ は単元集合で分離可能。$x \in D$ と $\infty$ については、$V = \{x\}$（開集合）と $W = E \setminus \{x\}$（$\infty$ を含み補集合が有限なため開集合）により分離可能。</li>
+            <li><strong>完全不連結性</strong>：任意の点 $x \in D$ に対し、$\{x\}$ は開集合かつ、補集合 $E \setminus \{x\}$ も開集合である。よって $\{x\}$ はクロープン集合である。2点を含む集合は、これらのクロープン集合によって必ず分離（不連結化）される。</li>
+        </ol>
+    </div>
+
+    <h2>4. 非ハウスドルフな完全不連結コンパクト空間</h2>
+    <div class="example">
+        <span class="label">構成：</span>
+        無限離散空間 $D$ の一点コンパクト化のコピーを2つ用意し、$D$ の部分のみを貼り合わせた空間 $X = D \cup \{\infty, \infty'\}$ を考える。
+    </div>
+    <div class="proof">
+        <span class="label">性質の証明：</span>
+        <ul>
+            <li><strong>非ハウスドルフ性</strong>：$\infty$ の近傍は $D$ の有限個を除く全点を含み、$\infty'$ の近傍も同様である。$D$ が無限集合であるため、これら2つの近傍の交わりは常に空にならない。</li>
+            <li><strong>完全不連結性</strong>：$D$ 内の点は単元クロープン集合で分離される。また、部分空間 $\{\infty, \infty'\}$ は、一方が $D$ と共に開集合（例：$D \cup \{\infty\}$）となるため、相対位相において不連結である。</li>
+        </ul>
+    </div>
+
+    <h2>5. その他の完全不連結空間の例</h2>
+    <div class="example">
+        <span class="label">1. 有理数の集合 $\mathbb{Q}$</span>
+        通常の数直線 $\mathbb{R}$ の相対位相において、$\mathbb{Q}$ は完全不連結である。任意の2つの有理数の間には必ず無理数が存在するため、それを用いて空間を2つの開集合に分断できる。
+    </div>
+    <div class="example">
+        <span class="label">2. カントール集合 $\mathcal{C}$</span>
+        カントール集合は、コンパクト・ハウスドルフかつ完全不連結な空間の代表例である。この空間は「孤立点を持たない完全不連結なコンパクト・ハウスドルフ空間は、カントール集合と同相である」という極めて強い性質を持つ。
+    </div>
+
+    <div style="margin-top: 50px; text-align: center; color: #7f8c8d; font-size: 0.8em;">
+        &copy; 2026 Topology Reference - Rendered with MathJax
+    </div>
+</body>
+</html>

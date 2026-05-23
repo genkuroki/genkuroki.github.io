@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有限次元位相線型空間における位相の一意性</title>
+    
+    <!-- MathJaxの設定 -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <!-- 基本的なスタイリング -->
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            color: #2c3e50;
+        }
+        h2 {
+            border-left: 5px solid #3498db;
+            padding-left: 10px;
+            margin-top: 40px;
+            color: #2980b9;
+        }
+        h3 {
+            margin-top: 30px;
+            color: #34495e;
+        }
+        .box {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #e8f4f8;
+            border-left: 5px solid #1abc9c;
+        }
+        .theorem {
+            background-color: #fdf2e9;
+            border-left: 5px solid #e67e22;
+        }
+        .proof {
+            background-color: #f9f9f9;
+            border-left: 5px solid #95a5a6;
+        }
+        .proof-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>有限次元位相線型空間における位相の一意性</h1>
+    <p>
+        幾何学的な構造（距離やノルムなど）を一切仮定せず、純粋に「代数的な演算が連続である」ことと「点が分離できる」ことだけから、強引にユークリッド位相が導き出されるという、関数解析・一般位相における非常に美しい結果です。証明は論理の飛躍がないよう、必要な準備を含めて自己完結的（self-contained）に記述しています。
+    </p>
+
+    <h2>1. 定理のステートメントと準備</h2>
+
+    <div class="box definition">
+        <strong>【定義：位相線型空間】</strong><br>
+        実数体 $\mathbb{R}$ 上のベクトル空間 $V$ に位相 $\tau$ が与えられており、以下の2つの演算がそれぞれの直積位相に関して連続であるとき、$(V, \tau)$ を<strong>位相線型空間（Topological Vector Space, TVS）</strong>と呼ぶ。
+        <ol>
+            <li><strong>ベクトルの和:</strong> $+ : V \times V \to V \quad ((u, v) \mapsto u + v)$</li>
+            <li><strong>スカラー倍:</strong> $\cdot : \mathbb{R} \times V \to V \quad ((\lambda, v) \mapsto \lambda v)$</li>
+        </ol>
+    </div>
+
+    <div class="box theorem">
+        <strong>【定理】</strong><br>
+        $V$ を実数体 $\mathbb{R}$ 上の $n$ 次元ベクトル空間とし、$V$ にハウスドルフ（Hausdorff）な位相線型空間の構造が入っているとする。<br>
+        このとき、$V$ は位相空間として $\mathbb{R}^n$ （標準的なユークリッド位相を持つ）と同相である。特に、$V$ に入るハウスドルフな位相線型空間の位相はただ一つに決定される。
+    </div>
+
+    <h3>記号の設定</h3>
+    <p>
+        $V$ は $n$ 次元なので、基底 $\{e_1, e_2, \dots, e_n\}$ を一つ固定する。これを用いて、標準的なユークリッド空間 $\mathbb{R}^n$ から $V$ への線型同型写像 $T$ を次のように定義する。
+    </p>
+    $$T : \mathbb{R}^n \to V, \quad T(x_1, x_2, \dots, x_n) = x_1 e_1 + x_2 e_2 + \dots + x_n e_n$$
+    <p>
+        <strong>目標</strong>は、この代数的な同型写像 $T$ が、両空間の位相に関しても<strong>同相写像（連続かつ逆写像も連続）</strong>であることを示すことである。
+    </p>
+
+    <h2>2. 証明のステップ1：写像 $T$ の連続性</h2>
+
+    <div class="box proof">
+        <div class="proof-title">証明（$T$ の連続性）:</div>
+        <p>
+            まず、$\mathbb{R}^n$ の標準位相から $V$ の位相への写像として、$T$ が連続であることを示す。これは位相線型空間の公理から直接導かれる。
+        </p>
+        <ol>
+            <li><strong>成分ごとの連続性:</strong><br>
+                各 $i = 1, \dots, n$ に対して、写像 $f_i : \mathbb{R} \to V$ を $f_i(x_i) = x_i e_i$ と定義する。これは、「スカラー倍の連続性」においてベクトルを $e_i$ に固定した場合の写像である。したがって、各 $f_i$ は連続写像である。
+            </li>
+            <li><strong>和の連続性:</strong><br>
+                写像 $T$ は、これらの和として表される。<br>
+                $$T(x_1, \dots, x_n) = f_1(x_1) + f_2(x_2) + \dots + f_n(x_n)$$<br>
+                ベクトルの和の演算は連続であると仮定されているため、連続写像の有限回の和である $T$ もまた連続写像となる。
+            </li>
+        </ol>
+        <p>これにより、$T$ は $\mathbb{R}^n$ 全体で連続であることが示された。</p>
+    </div>
+
+    <h2>3. TVSの基本性質：「均衡な近傍」の存在</h2>
+
+    <p>
+        逆写像 $T^{-1}$ の連続性を示すための強力なツールとして、「均衡（balanced）」な近傍という概念を準備する。
+    </p>
+
+    <div class="box definition">
+        <strong>定義:</strong> $V$ の部分集合 $W$ が<strong>均衡</strong>であるとは、すべてのスカラー $|\lambda| \leq 1$ に対して、$\lambda W \subset W$ が成り立つことをいう。
+    </div>
+
+    <div class="box proof">
+        <div class="proof-title">【補題】原点の任意の開近傍 $U$ は、原点の均衡な開近傍 $W$ を内包する（$W \subset U$）。</div>
+        <p>
+            <strong>証明:</strong><br>
+            スカラー倍の写像 $\Phi: \mathbb{R} \times V \to V \ (\lambda, v \mapsto \lambda v)$ を考える。$\Phi(0, 0) = 0$ であり、$0 \in U$ である。<br>
+            $\Phi$ は連続なので、$0 \in \mathbb{R}$ の開近傍 $(-\delta, \delta)$ （ただし $\delta > 0$）と、$0 \in V$ の開近傍 $U_0$ が存在して、
+            $$\Phi((-\delta, \delta) \times U_0) \subset U$$
+            が成り立つ。すなわち、$|\lambda| < \delta$ なる任意の $\lambda$ と $v \in U_0$ に対して、$\lambda v \in U$ である。<br>
+            ここで、次のように $W$ を定義する。
+            $$W = \bigcup_{|\lambda| < \delta} \lambda U_0$$
+        </p>
+        <ul>
+            <li>各 $\lambda \neq 0$ について、写像 $v \mapsto \lambda v$ は同相写像なので、$\lambda U_0$ は開集合である。よってその和集合である $W$ も開集合である。</li>
+            <li>構成から明らかに $W \subset U$ である。</li>
+            <li>$|\alpha| \leq 1$ とすると、$\alpha W = \bigcup_{|\lambda| < \delta} (\alpha\lambda) U_0$ となるが、$|\alpha\lambda| < \delta$ であるため、この和集合は $W$ 自身に含まれる。よって $W$ は均衡である。</li>
+        </ul>
+        <div class="qed">補題の証明終</div>
+    </div>
+
+    <h2>4. 証明のステップ2：逆写像 $T^{-1}$ の連続性</h2>
+
+    <p>
+        ここが証明の核心部である。「コンパクト性」と「ハウスドルフ性」を組み合わせることで、$T^{-1}: V \to \mathbb{R}^n$ の連続性（特に原点での連続性）を証明する。
+    </p>
+
+    <div class="box proof">
+        <div class="proof-title">証明（$T^{-1}$ の連続性）:</div>
+        <ol>
+            <li><strong>単位球面のコンパクト性:</strong><br>
+                $\mathbb{R}^n$ の標準的なユークリッドノルムを $\| \cdot \|$ とし、単位球面を $S = \{ x \in \mathbb{R}^n : \|x\| = 1 \}$ とする。ハイネ・ボレルの定理より、$S$ は $\mathbb{R}^n$ における有界閉集合なので、<strong>コンパクト</strong>である。
+            </li>
+            <li><strong>像の閉集合性:</strong><br>
+                ステップ1で示したように $T$ は連続写像である。連続写像によるコンパクト集合の像はコンパクトになるため、$T(S)$ は $V$ においてコンパクトな部分集合となる。<br>
+                ここで、$V$ は<strong>ハウスドルフ空間</strong>であると仮定している。ハウスドルフ空間におけるコンパクト部分集合は必ず閉集合になるため、<strong>$T(S)$ は $V$ の閉集合</strong>である。
+            </li>
+            <li><strong>原点との分離:</strong><br>
+                $T$ は同型写像（単射）であり、$0 \notin S$ であるため、$0 \notin T(S)$ である。<br>
+                $T(S)$ は閉集合なので、その補集合 $V \setminus T(S)$ は開集合であり、かつ原点 $0$ を含む。つまり、$V \setminus T(S)$ は原点の開近傍である。
+            </li>
+            <li><strong>均衡な近傍を用いた逆写像の評価:</strong><br>
+                先ほどの【補題】を用いると、この開近傍 $V \setminus T(S)$ の中に、原点の<strong>均衡な開近傍 $W$</strong> をとることができる。
+                $$W \subset V \setminus T(S) \quad \text{すなわち} \quad W \cap T(S) = \emptyset$$
+            </li>
+            <li><strong>ノルムによる束縛:</strong><br>
+                任意の $v \in W$ をとる。$T$ は全単射なので、$v = T(x)$ となる $x \in \mathbb{R}^n$ が唯一存在する。<br>
+                もし仮に、$\|x\| \geq 1$ であったとする。<br>
+                このとき、$y = \frac{1}{\|x\|} x$ とおくと、$\|y\| = 1$ なので $y \in S$ である。<br>
+                $W$ が均衡であることと、$v \in W$、$1/\|x\| \leq 1$ であることから、
+                $$\frac{1}{\|x\|} v \in W$$
+                が成り立つ。しかし、線型性より $\frac{1}{\|x\|} v = \frac{1}{\|x\|} T(x) = T(y)$ であり、$y \in S$ なので $T(y) \in T(S)$ である。<br>
+                これは $W \cap T(S) = \emptyset$ であることに矛盾する。<br>
+                したがって、背理法により、<strong>$v \in W$ ならば必ず $\|x\| < 1$</strong> とならなければならない。
+            </li>
+            <li><strong>$T^{-1}$ の連続性の結論:</strong><br>
+                上記の結果は、
+                $$T^{-1}(W) \subset \{ x \in \mathbb{R}^n : \|x\| < 1 \} \text{ （$\mathbb{R}^n$の開単位球）}$$
+                であることを意味している。<br>
+                $\epsilon > 0$ を任意に取る。スカラー倍の性質から、$\epsilon W$ も $V$ における原点の開近傍であり、
+                $$T^{-1}(\epsilon W) = \epsilon T^{-1}(W) \subset \{ x \in \mathbb{R}^n : \|x\| < \epsilon \}$$
+                となる。<br>
+                これはまさに、$T^{-1}$ が原点 $0$ において連続であることの定義（任意の $\epsilon$-球の逆像が、ある開近傍を含む）を満たしている。
+            </li>
+        </ol>
+    </div>
+
+    <h2>5. 結論</h2>
+    <p>
+        以上の議論により、以下の結論が得られる。
+    </p>
+    <ul>
+        <li>ステップ1により、$T$ は $\mathbb{R}^n$ から $V$ への連続写像である。</li>
+        <li>ステップ2により、$T^{-1}$ は $V$ から $\mathbb{R}^n$ への連続写像である。</li>
+        <li>$T$ は全単射であるため、$T$ は<strong>同相写像</strong>となる。</li>
+    </ul>
+    <p>
+        これにより、代数的な同型写像 $T$ によって空間の位相構造も完全に結び付けられることが証明された。つまり、どのようなハウスドルフ位相 $\tau$ を $V$ に入れたとしても、それは $T$ を通じて $\mathbb{R}^n$ の標準位相から誘導される位相と完全に一致してしまうのである。
+    </p>
+
+</body>
+</html>

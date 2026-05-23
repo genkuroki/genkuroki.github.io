@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完全正則空間における微細一様構造：定義と証明の詳説</title>
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            chtml: {
+                matchFontHeight: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Times New Roman', 'Hiragino Mincho ProN', serif;
+            line-height: 1.8;
+            color: #1a1a1a;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        .article {
+            background-color: white;
+            padding: 60px;
+            border: 1px solid #e1e1e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 { border-bottom: 3px double #333; text-align: center; padding-bottom: 20px; font-size: 2.2em; }
+        h2 { background: #2c3e50; color: white; padding: 12px 20px; margin-top: 50px; border-radius: 2px; font-size: 1.5em; }
+        h3 { border-left: 5px solid #2c3e50; padding-left: 15px; margin-top: 40px; color: #2c3e50; font-size: 1.3em; }
+
+        .definition-box, .theorem-box, .proof-box, .remark-box {
+            margin: 25px 0;
+            padding: 25px;
+            border-radius: 4px;
+        }
+        .definition-box { background-color: #f1f8ff; border: 1px solid #c8e1ff; }
+        .theorem-box { background-color: #fff9e6; border: 1px solid #ffe58f; }
+        .proof-box { background-color: #ffffff; border: 1px solid #eeeeee; border-left: 3px solid #666; }
+        .remark-box { background-color: #f8f9fa; border-left: 5px solid #e74c3c; }
+
+        .label { font-weight: bold; margin-right: 10px; color: #333; }
+        .qed { float: right; font-weight: bold; margin-top: 10px; }
+        
+        ul, ol { margin-bottom: 20px; }
+        li { margin-bottom: 10px; }
+        p { margin-bottom: 20px; text-align: justify; }
+    </style>
+</head>
+<body>
+
+<div class="article">
+    <h1>完全正則空間における微細一様構造</h1>
+    <p>
+        本稿の目的は、任意の完全正則空間に対し、その空間上のすべての実数値連続関数を一様連続たらしめるような「最大の一様構造（微細一様構造）」を厳密に構成し、その性質を証明することにある。さらに、空間がコンパクトHausdorff空間である場合には、位相から一様構造がただ一つに定まること（一様構造の一意性）についても自己完結的に解説を行う。
+    </p>
+
+    <h2>1. 基礎定義：位相、一様性、完全正則性</h2>
+
+    <h3>1.1 フィルターによる一様構造の定義</h3>
+    <div class="definition-box">
+        <span class="label">定義 1.1（一様構造）</span>
+        集合 $X$ 上の<b>一様構造</b>とは、直積集合 $X \times X$ 上のフィルター $\mathcal{U}$（すなわち、$\emptyset \notin \mathcal{U}$ であり、上方集合かつ有限交差について閉じている集合族）であって、以下の公理を満たすものである。
+        <ol>
+            <li>任意の $V \in \mathcal{U}$ に対し、対角集合 $\Delta = \{ (x,x) \mid x \in X \} \subseteq V$ である。</li>
+            <li>$V \in \mathcal{U} \implies V^{-1} = \{ (y,x) \mid (x,y) \in V \} \in \mathcal{U}$ である。</li>
+            <li>任意の $V \in \mathcal{U}$ に対し、ある $W \in \mathcal{U}$ が存在して $W \circ W \subseteq V$ を満たす。<br>
+                ここで $W \circ W = \{ (x,z) \mid \exists y \in X \text{ s.t. } (x,y) \in W, (y,z) \in W \}$ である。
+            </li>
+        </ol>
+        $\mathcal{U}$ の元を<b>近縁 (entourage)</b> と呼ぶ。また、$x \in X$ と $V \in \mathcal{U}$ に対し、$V(x) = \{ y \in X \mid (x,y) \in V \}$ は $x$ の近傍系を形成し、これにより $X$ に一様位相が定まる。
+    </div>
+
+    <h3>1.2 完全正則空間の定義</h3>
+    <div class="definition-box">
+        <span class="label">定義 1.2（完全正則空間 / $T_{3\frac{1}{2}}$ 空間）</span>
+        位相空間 $(X, \tau)$ が<b>完全正則</b>であるとは、任意の閉集合 $F \subseteq X$ と、その中に含まれない点 $x \in X \setminus F$ に対し、ある連続関数 $f: X \to [0, 1]$ が存在して、
+        $$ f(x) = 0 \quad \text{かつ} \quad f(F) = \{1\} $$
+        を満たすことをいう。
+    </div>
+
+    <h3>1.3 擬距離</h3>
+    <div class="definition-box">
+        <span class="label">定義 1.3（擬距離）</span>
+        集合 $X$ 上の関数 $p: X \times X \to [0, \infty)$ が<b>擬距離 (pseudometric)</b> であるとは、任意の $x, y, z \in X$ に対して以下を満たすことである。
+        <ul>
+            <li>$p(x, x) = 0$</li>
+            <li>$p(x, y) = p(y, x)$ （対称性）</li>
+            <li>$p(x, z) \le p(x, y) + p(y, z)$ （三角不等式）</li>
+        </ul>
+        擬距離 $p$ が積位相 $\tau \times \tau$ に関して連続であるとき、これを連続な擬距離と呼ぶ。
+    </div>
+
+    <h2>2. 完全正則空間の位相再構成</h2>
+    <p>完全正則空間の重要な性質は、その位相 $\tau$ が連続関数の族、あるいは連続な擬距離の族によって完全に「再定義」可能である点にある。これにより、位相構造と一様構造の橋渡しが可能となる。</p>
+
+    <div class="theorem-box">
+        <span class="label">定理 2.1（位相の再構成）</span>
+        完全正則空間 $(X, \tau)$ において、その位相 $\tau$ は、$X$ 上のすべての連続な擬距離の族 $\mathcal{P}_{all}$ によって誘導される一様位相と一致する。
+    </div>
+
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        擬距離の族 $\mathcal{P}_{all}$ が誘導する位相を $\tau_{\mathcal{P}}$ とする。
+        <br><br>
+        1. <b>$\tau_{\mathcal{P}} \subseteq \tau$ の証明</b>：<br>
+        $\tau_{\mathcal{P}}$ の基本開集合は、擬距離 $p \in \mathcal{P}_{all}$ と $\epsilon > 0$ を用いた開球 $B_p(x, \epsilon) = \{ y \mid p(x, y) < \epsilon \}$ である。$p$ は $\tau \times \tau$ に関して連続であるから、一変数を固定した写像 $y \mapsto p(x, y)$ は $\tau$-連続である。よって $B_p(x, \epsilon)$ は $\tau$-開集合となり、$\tau_{\mathcal{P}} \subseteq \tau$。
+        <br><br>
+        2. <b>$\tau \subseteq \tau_{\mathcal{P}}$ の証明</b>：<br>
+        任意の $U \in \tau$ と $x \in U$ をとる。$F = X \setminus U$ は閉集合であり $x \notin F$。
+        完全正則性より、連続関数 $f: X \to [0, 1]$ で $f(x)=0, f(F)=\{1\}$ なるものが存在する。
+        ここで、擬距離 $p(a, b) = |f(a) - f(b)|$ を定義すると、これは $f$ の連続性より $\mathcal{P}_{all}$ に属する。
+        このとき、$B_p(x, 1/2) = \{ y \mid |f(x) - f(y)| < 1/2 \}$ は $\tau_{\mathcal{P}}$-開集合であり、
+        $f(x)=0$ より $f(y) < 1/2$ を意味する。$y \in F$ ならば $f(y)=1$ であるから、この開球に含まれる点はすべて $U$ に属する。
+        すなわち $x \in B_p(x, 1/2) \subseteq U$。ゆえに $U \in \tau_{\mathcal{P}}$。
+        <br><br>
+        以上より $\tau = \tau_{\mathcal{P}}$。
+        <span class="qed">■</span>
+    </div>
+
+    <h2>3. 微細一様構造の構成と一様連続性</h2>
+
+    <h3>3.1 微細一様構造の定義</h3>
+    <div class="definition-box">
+        <span class="label">定義 3.1（微細一様構造）</span>
+        完全正則空間 $(X, \tau)$ において、すべての連続な擬距離の族 $\mathcal{P}_{all}$ を考える。
+        任意の $p_1, \dots, p_n \in \mathcal{P}_{all}$ と $\epsilon > 0$ に対し、集合
+        $$ V(p_1, \dots, p_n; \epsilon) = \bigcap_{i=1}^n \{ (x, y) \in X \times X \mid p_i(x, y) < \epsilon \} $$
+        を基 (base) とするフィルターを、$(X, \tau)$ 上の<b>微細一様構造 (fine uniformity)</b> $\mathcal{U}_F$ と呼ぶ。
+    </div>
+
+    <h3>3.2 連続関数の一様連続性</h3>
+    <p>微細一様構造を導入する最大の動機は、空間上のあらゆる連続関数を一様連続にすることである。</p>
+
+    <div class="theorem-box">
+        <span class="label">定理 3.2</span>
+        完全正則空間 $(X, \tau)$ に微細一様構造 $\mathcal{U}_F$ を導入したとき、任意の連続関数 $f: (X, \tau) \to \mathbb{R}$ は、一様空間 $(X, \mathcal{U}_F)$ から $\mathbb{R}$（標準的な距離構造）への<b>一様連続写像</b>である。
+    </div>
+
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        一様連続性の定義を再確認する。写像 $f$ が一様連続であるとは、$\mathbb{R}$ 上の任意の近縁 $W_{\epsilon} = \{ (r_1, r_2) \mid |r_1 - r_2| < \epsilon \}$ に対し、その引き戻し
+        $$ (f \times f)^{-1}(W_{\epsilon}) = \{ (x, y) \in X \times X \mid |f(x) - f(y)| < \epsilon \} $$
+        が $X$ の一様構造 $\mathcal{U}_F$ の近縁であることを示すことと同値である。
+        <br><br>
+        1. 連続関数 $f: X \to \mathbb{R}$ に対し、関数 $p_f(x, y) = |f(x) - f(y)|$ を考える。<br>
+        2. $p_f$ は明らかに擬距離の公理（非負性、対称性、三角不等式）を満たす。<br>
+        3. $p_f$ が $X \times X$ 上で連続であることを確認する。三角不等式より、
+           $$ |p_f(x, y) - p_f(x', y')| = \left| |f(x) - f(y)| - |f(x') - f(y')| \right| \le |(f(x) - f(y)) - (f(x') - f(y'))| $$
+           $$ \le |f(x) - f(x')| + |f(y) - f(y')| $$
+           が成り立つ。$f$ は連続であるため、$(x', y') \to (x, y)$ のとき右辺は $0$ に収束する。したがって $p_f$ は連続な擬距離である。<br>
+        4. 微細一様構造 $\mathcal{U}_F$ の定義において、$\mathcal{P}_{all}$ は「すべての」連続擬距離を含んでいる。ゆえに $p_f \in \mathcal{P}_{all}$ である。<br>
+        5. 定義 3.1 より、$V_{p_f, \epsilon} = \{ (x, y) \mid p_f(x, y) < \epsilon \}$ は $\mathcal{U}_F$ の生成系（準基）に含まれる元である。<br>
+        6. フィルターの性質より $V_{p_f, \epsilon} \in \mathcal{U}_F$ である。この集合はまさに $(f \times f)^{-1}(W_{\epsilon})$ に他ならない。
+        <br><br>
+        以上より、$f$ は一様連続であることが示された。
+        <span class="qed">■</span>
+    </div>
+
+    <h2>4. 一様構造の非一意性に関する考察</h2>
+    <div class="remark-box">
+        <span class="label">考察：なぜ一意的ではないのか</span>
+        <p>
+            前節で定義した $\mathcal{U}_F$ は、その名の通り位相と両立する「もっとも細かい（最大・最強の）」一様構造である。一方で、同じ完全正則空間 $X$ に対して、より「粗い（小さい）」一様構造を入れることも一般には可能である。
+        </p>
+        <p>
+            例えば、$X$ 上の<b>有界な</b>連続関数全体の族 $C_b(X)$ のみから生成される一様構造 $\mathcal{U}_0$ を考える。もし $X$ が非コンパクトであれば、非有界な連続関数は $\mathcal{U}_0$ に関して一様連続にはならないが、$\mathcal{U}_F$ に関しては一様連続になる。つまり、一様構造の選択によって「どの関数が一様連続となるか」が変わるのである。
+        </p>
+        <p>
+            しかし、もし空間が<b>コンパクト</b>かつ<b>Hausdorff</b>であるならば、すべての連続関数は有界となり、さらに強力な結果として「位相と両立する一様構造はただ一つしか存在しない」ことが知られている。次章でこれを証明する。
+        </p>
+    </div>
+
+    <h2>5. コンパクトHausdorff空間における一様構造の構成と一意性</h2>
+    <p>
+        本章では、空間がコンパクトHausdorff空間である場合、その位相構造から一様構造が自然かつ一意に定まることを自己完結的に証明する。
+    </p>
+
+    <h3>5.1 コンパクト空間と対角集合の近傍</h3>
+    <div class="definition-box">
+        <span class="label">定義 5.1（対角集合の近傍フィルター）</span>
+        位相空間 $(X, \tau)$ において、$X \times X$ の対角集合 $\Delta = \{ (x,x) \mid x \in X \}$ の積位相 $\tau \times \tau$ におけるすべての開近傍の族を基とするフィルターを $\mathcal{U}_C$ とする。すなわち、
+        $$ \mathcal{U}_C = \{ V \subseteq X \times X \mid \exists W \in \tau \times \tau \text{ s.t. } \Delta \subseteq W \subseteq V \} $$
+        である。
+    </div>
+
+    <div class="theorem-box">
+        <span class="label">定理 5.2（コンパクトHausdorff空間における一意性）</span>
+        コンパクトHausdorff空間 $(X, \tau)$ において、位相 $\tau$ を誘導する一様構造 $\mathcal{U}$ はただ一つ存在し、それは対角集合の近傍フィルター $\mathcal{U}_C$ と一致する（すなわち $\mathcal{U} = \mathcal{U}_C = \mathcal{U}_F$）。
+    </div>
+
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        まず、$\mathcal{U}$ を $(X, \tau)$ の位相を誘導する任意の一様構造とする。このとき $\mathcal{U} = \mathcal{U}_C$ となることを示せば一意性が証明される。証明は $\mathcal{U} \subseteq \mathcal{U}_C$ と $\mathcal{U}_C \subseteq \mathcal{U}$ の2段階で行う。
+        <br><br>
+        <b>ステップ 1: $\mathcal{U} \subseteq \mathcal{U}_C$ の証明</b><br>
+        $\mathcal{U}$ が $\tau$ を誘導する一様構造であるとき、任意の一様近縁 $V \in \mathcal{U}$ の内部（開核）$V^\circ$ もまた $\mathcal{U}$ の元であり、$\Delta \subseteq V^\circ \subseteq V$ を満たす（一様構造の基本的な性質）。$V^\circ$ は $\tau \times \tau$ の開集合であるから、$V$ は対角集合 $\Delta$ の近傍である。したがって $V \in \mathcal{U}_C$ となり、$\mathcal{U} \subseteq \mathcal{U}_C$ が成立する。
+        <br><br>
+        <b>ステップ 2: $\mathcal{U}_C \subseteq \mathcal{U}$ の証明</b><br>
+        任意の $W \in \mathcal{U}_C$（すなわち $\Delta$ の開近傍）をとる。$W \in \mathcal{U}$ を示せばよい。<br>
+        各点 $x \in X$ に対し、$(x,x) \in \Delta \subseteq W$ である。$\mathcal{U}$ は $\tau$ を誘導するため、ある対称な近縁 $V_x \in \mathcal{U}$（すなわち $V_x = V_x^{-1}$）が存在し、
+        $$ V_x(x) \times V_x(x) \subseteq W $$
+        を満たすようにできる（ここで $V_x(x)$ は $x$ の開近傍として選べる）。<br>
+        さらに、一様構造の公理3より、ある近縁 $U_x \in \mathcal{U}$ が存在して $U_x \circ U_x \subseteq V_x$ を満たす。
+        <br><br>
+        開集合の族 $\{ U_x(x) \mid x \in X \}$ は $X$ の開被覆である。
+        $X$ は<b>コンパクト</b>であるため、有限個の点 $x_1, \dots, x_n$ を選んで有限部分被覆を構成できる。すなわち、
+        $$ X = \bigcup_{i=1}^n U_{x_i}(x_i) $$
+        となる。ここで、有限交差性より $U = \bigcap_{i=1}^n U_{x_i}$ とおくと、$U \in \mathcal{U}$ である。
+        <br><br>
+        最後に $U \subseteq W$ であることを示す。任意の $(y, z) \in U$ をとる。
+        $y \in X$ であるから、被覆の性質よりある $i \in \{1, \dots, n\}$ が存在して $y \in U_{x_i}(x_i)$ となる。すなわち $(x_i, y) \in U_{x_i}$ である。<br>
+        また、$(y, z) \in U$ であり、$U \subseteq U_{x_i}$ であるから、$(y, z) \in U_{x_i}$ である。<br>
+        これらを合成すると、$(x_i, z) \in U_{x_i} \circ U_{x_i} \subseteq V_{x_i}$ となる。すなわち $z \in V_{x_i}(x_i)$ である。<br>
+        一方、$(x_i, y) \in U_{x_i}$ より $y \in U_{x_i}(x_i)$ であるが、$U_{x_i} \subseteq V_{x_i}$ （$\Delta \subseteq U_{x_i}$ より $U_{x_i} \subseteq U_{x_i} \circ U_{x_i} \subseteq V_{x_i}$）であるため、$y \in V_{x_i}(x_i)$ も成り立つ。<br>
+        したがって、$(y, z) \in V_{x_i}(x_i) \times V_{x_i}(x_i)$ である。
+        構成時の条件 $V_{x_i}(x_i) \times V_{x_i}(x_i) \subseteq W$ より、$(y, z) \in W$ が導かれる。
+        <br><br>
+        ゆえに $U \subseteq W$ であり、$U \in \mathcal{U}$ であるからフィルターの上方集合の性質より $W \in \mathcal{U}$ となる。これで $\mathcal{U}_C \subseteq \mathcal{U}$ が示された。
+        <br><br>
+        以上より、$\mathcal{U} = \mathcal{U}_C$ であり、位相と両立する一様構造は唯一 $\mathcal{U}_C$ のみであることが証明された。
+        <span class="qed">■</span>
+    </div>
+
+</div>
+
+</body>
+</html>

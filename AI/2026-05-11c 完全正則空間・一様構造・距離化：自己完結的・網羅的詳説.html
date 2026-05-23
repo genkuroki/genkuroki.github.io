@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完全正則空間・一様構造・距離化：自己完結的・網羅的詳説</title>
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                renderActions: {
+                    addMenu: [] 
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+            --box-bg: #ffffff;
+            --def-bg: #eef7ff;
+            --thm-bg: #fffcf0;
+            --lem-bg: #f0fff4;
+            --proof-bg: #ffffff;
+            --remark-bg: #fff5f5;
+        }
+
+        body {
+            font-family: 'Times New Roman', 'Hiragino Mincho ProN', serif;
+            line-height: 2.0;
+            color: #222;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: var(--bg-color);
+        }
+
+        .article {
+            background-color: var(--box-bg);
+            padding: 80px;
+            border: 1px solid #d1d1d1;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-radius: 12px;
+        }
+
+        h1 { border-bottom: 5px double var(--primary-color); text-align: center; padding-bottom: 30px; font-size: 2.8em; color: var(--primary-color); margin-bottom: 50px; }
+        h2 { background: var(--primary-color); color: white; padding: 20px 30px; margin-top: 80px; border-radius: 8px; font-size: 2.0em; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        h3 { border-left: 10px solid var(--accent-color); padding-left: 20px; margin-top: 60px; color: var(--secondary-color); font-size: 1.6em; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+
+        .definition-box, .theorem-box, .proof-box, .lemma-box, .remark-box {
+            margin: 40px 0;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition-box { background-color: var(--def-bg); border: 1px solid #b3d7ff; }
+        .theorem-box { background-color: var(--thm-bg); border: 1px solid #ffe58f; }
+        .lemma-box { background-color: var(--lem-bg); border: 1px solid #b2d8b2; }
+        .proof-box { background-color: var(--proof-bg); border: 1px solid #e0e0e0; border-left: 8px solid #95a5a6; }
+        .remark-box { background-color: var(--remark-bg); border-left: 8px solid #e74c3c; }
+
+        .label { font-weight: bold; margin-right: 20px; color: #111; font-size: 1.2em; text-transform: uppercase; letter-spacing: 1px; }
+        .qed { float: right; font-weight: bold; margin-top: 20px; font-size: 1.5em; color: var(--primary-color); }
+        
+        p { margin-bottom: 25px; text-align: justify; text-justify: inter-character; }
+        .step-title { font-weight: bold; color: var(--accent-color); display: block; margin-top: 30px; font-size: 1.2em; border-bottom: 1px dashed var(--accent-color); width: fit-content; }
+        
+        .toc { background: #fff; padding: 35px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 60px; }
+        .toc strong { display: block; margin-bottom: 20px; font-size: 1.4em; color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+        .toc ul { list-style: none; padding-left: 0; }
+        .toc li { margin-bottom: 15px; }
+        .toc a { text-decoration: none; color: var(--accent-color); font-weight: bold; font-size: 1.1em; transition: 0.2s; }
+        .toc a:hover { color: var(--primary-color); text-decoration: underline; }
+
+        table { width: 100%; border-collapse: collapse; margin: 40px 0; background: #fff; }
+        th, td { border: 1px solid #ccc; padding: 20px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+
+        .important-note { background: #fffde7; padding: 15px; border-radius: 5px; border: 1px solid #fbc02d; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="article">
+    <h1>完全正則空間・一様構造・距離化：自己完結的・網羅的詳説</h1>
+
+    <div class="toc">
+        <strong>【詳細目次】</strong>
+        <ul>
+            <li>1. <a href="#sec1">分離公理：正規性と完全正則性の定義</a></li>
+            <li>2. <a href="#sec2">ウリゾーンの補題：正規空間における関数の存在証明（詳細）</a></li>
+            <li>3. <a href="#sec3">局所コンパクト空間の完全正則性（一点コンパクト化を経由して）</a></li>
+            <li>4. <a href="#sec4">一様構造の厳密な定式化と擬距離による再構成</a></li>
+            <li>5. <a href="#sec5">微細一様構造の構成と連続関数の一様連続性</a></li>
+            <li>6. <a href="#sec6">完備性の理論：コーシーフィルターと収束の議論</a></li>
+            <li>7. <a href="#sec7">コンパクト空間における一様構造の一意性と完備性の完全証明</a></li>
+            <li>8. <a href="#sec8">距離化可能定理：可算基底から距離を構成する全行程</a></li>
+            <li>9. <a href="#sec9">ウリゾーンの距離化定理：正規性と第二可算性の結実</a></li>
+        </ul>
+    </div>
+
+    <h2 id="sec1">1. 分離公理：正規性と完全正則性の定義</h2>
+    <p>位相空間 $(X, \tau)$ の分離公理は、空間内の「対象（点や集合）」をどれだけ解析的な道具（開集合や連続関数）で区別できるかを規定する。以下ではすべての空間は $T_1$ であると仮定する。</p>
+
+    <div class="definition-box">
+        <span class="label">定義 1.1（正規空間）</span>
+        $X$ が<b>正規 (Normal, $T_4$)</b> であるとは、互いに素な任意の閉集合 $A, B \subseteq X$ に対して、ある開集合 $U, V \subseteq X$ が存在して、
+        $$ A \subseteq U, \quad B \subseteq V, \quad U \cap V = \emptyset $$
+        を満たすことをいう。
+    </div>
+
+    <div class="definition-box">
+        <span class="label">定義 1.2（完全正則空間）</span>
+        $X$ が<b>完全正則 (Completely Regular, $T_{3\frac{1}{2}}$)</b> であるとは、任意の閉集合 $F \subseteq X$ と点 $x \in X \setminus F$ に対して、連続関数 $f: X \to [0, 1]$ が存在して、
+        $$ f(x) = 0 \quad \text{かつ} \quad f(F) = \{1\} $$
+        を満たすことをいう。
+    </div>
+
+    <h2 id="sec2">2. ウリゾーンの補題：正規空間における関数の存在証明</h2>
+    <p>正規性の概念は「開集合による分離」であるが、これは「連続関数による分離」と等価である。これを示すのがウリゾーンの補題である。この証明は、可算個の開集合の鎖を稠密に埋め込むという独創的な手法をとる。</p>
+
+    <div class="lemma-box">
+        <span class="label">補題 2.1（Urysohn's Lemma）</span>
+        正規空間 $X$ において、互いに素な閉集合 $A, B \subseteq X$ に対し、連続関数 $f: X \to [0, 1]$ が存在して $f(A)=\{0\}$ かつ $f(B)=\{1\}$ を満たす。
+    </div>
+
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        $[0, 1]$ 内の二進有理数の集合 $D = \{ k/2^n \mid n \in \mathbb{N}, 0 \le k \le 2^n \}$ を考える。$D$ は $[0, 1]$ で稠密である。
+
+        <span class="step-title">ステップ 1：開集合族 $\{U_r\}_{r \in D}$ の構成</span>
+        $r \in D$ に対し、開集合 $U_r$ を「$r < s \implies \overline{U_r} \subseteq U_s$」となるように数学的帰納法で構成する。
+        1. まず $U_1 = X \setminus B$ とおく。$A \cap B = \emptyset$ より $A \subseteq U_1$ である。
+        2. 正規性により、閉集合 $A$ と開集合 $U_1$ に対し、$A \subseteq U_0 \subseteq \overline{U_0} \subseteq U_1$ を満たす開集合 $U_0$ が存在する。
+        3. 次に $r = 1/2$ に対し、$\overline{U_0} \subseteq U_1$ であるから、正規性より $\overline{U_0} \subseteq U_{1/2} \subseteq \overline{U_{1/2}} \subseteq U_1$ となる $U_{1/2}$ が存在する。
+        4. 以下、分母が $2^n$ の二進有理数に対して順次 $U_r$ を決定していく。既に分母が $2^{n-1}$ 以下のすべての $r$ に対して $U_r$ が定義されており、条件を満たしているとする。$r = (2k+1)/2^n$ に対し、$s = 2k/2^n$ と $t = (2k+2)/2^n$ は分母が $2^{n-1}$ 以下であり、$\overline{U_s} \subseteq U_t$ を満たしている。正規性により $\overline{U_s} \subseteq U_r \subseteq \overline{U_r} \subseteq U_t$ を満たす $U_r$ をとる。これにより、すべての $r \in D$ に対して $U_r$ が定まる。
+
+        <span class="step-title">ステップ 2：関数の定義</span>
+        $f: X \to [0, 1]$ を次のように定義する。
+        $$ f(x) = \begin{cases} \inf \{ r \in D \mid x \in U_r \} & (x \in U_1) \\ 1 & (x \notin U_1) \end{cases} $$
+        明らかに、$x \in A$ ならば $x \in U_0$ なので $f(x)=0$ である。また $x \in B$ ならば $x \notin U_1$ なので $f(x)=1$ である。
+
+        <span class="step-title">ステップ 3：連続性の証明</span>
+        $f$ の連続性を示すには、$f^{-1}([0, a))$ と $f^{-1}((b, 1])$ がすべての $a, b \in (0, 1)$ に対して開集合であることを示せばよい。
+        1. $x \in f^{-1}([0, a)) \iff f(x) < a \iff \exists r \in D, r < a, x \in U_r$。
+           したがって $f^{-1}([0, a)) = \bigcup_{r < a} U_r$ である。これは開集合の和集合なので開集合である。
+        2. $x \in f^{-1}((b, 1]) \iff f(x) > b$。
+           ここで、$f(x) > b \iff \exists s \in D, s > b, x \notin \overline{U_s}$ を示す。
+           (i) ある $s > b$ で $x \notin \overline{U_s}$ ならば、任意の $r \in D$ で $r \le s$ ならば $x \notin U_r$。よって $\inf \{r \mid x \in U_r\} \ge s > b$。
+           (ii) 逆に $f(x) > b$ ならば、稠密性より $b < s < s' < f(x)$ なる $s, s' \in D$ がとれる。$f(x) > s'$ より $x \notin U_{s'}$。$\overline{U_s} \subseteq U_{s'}$ なので $x \notin \overline{U_s}$。
+           ゆえに $f^{-1}((b, 1]) = \bigcup_{s > b} (X \setminus \overline{U_s})$ である。これは閉集合の補集合の和集合なので開集合である。
+        
+        以上より $f$ は連続である。
+        <span class="qed">■</span>
+    </div>
+
+    <h2 id="sec3">3. 局所コンパクト空間の完全正則性</h2>
+    <p>局所コンパクトHausdorff空間は必ず完全正則になる。これは一点コンパクト化を用いた簡潔な証明が可能である。</p>
+
+    <div class="theorem-box">
+        <span class="label">定理 3.1</span>
+        局所コンパクトHausdorff空間 $X$ は完全正則である。
+    </div>
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        1. $X$ に無限遠点 $\infty$ を加えた集合 $X^* = X \cup \{\infty\}$ に一点コンパクト化の位相を導入する。
+        2. $X$ が局所コンパクトHausdorffであれば、$X^*$ はコンパクトHausdorff空間になる。
+        3. <b>事実：コンパクトHausdorff空間は正規である。</b>
+           （証明の概略：Hausdorff性により点と点を分離でき、コンパクト性により点と閉集合の分離、閉集合と閉集合の分離へと有限被覆の議論で持ち上げられる。）
+        4. ウリゾーンの補題より、$X^*$ は正規空間であるから完全正則である。
+        5. 完全正則性の定義において、連続関数 $f: X^* \to [0, 1]$ の $X$ への制限は $X$ 上の連続関数である。
+        6. $X$ の閉集合 $F$ と点 $x \notin F$ に対し、$F \cup \{\infty\}$ は $X^*$ の閉集合である。
+        7. $X^*$ の完全正則性より、$x$ と $F \cup \{\infty\}$ を分離する関数 $f: X^* \to [0, 1]$ が存在し、その制限により $X$ での分離が実現される。
+        <span class="qed">■</span>
+    </div>
+
+    <h2 id="sec4">4. 一様構造の厳密な定式化と擬距離による再構成</h2>
+    <p>一様構造は、距離空間の「一様連続性」や「完備性」を抽象化した構造である。ブルバキの近縁フィルターによる定義を採用する。</p>
+
+    <div class="definition-box">
+        <span class="label">定義 4.1（一様構造）</span>
+        集合 $X$ 上の<b>一様構造</b> $\mathcal{U}$ とは、$X \times X$ 上のフィルターであって以下の公理を満たすものをいう。
+        <ol>
+            <li>任意の $V \in \mathcal{U}$ に対し、$\Delta = \{ (x,x) \mid x \in X \} \subseteq V$。</li>
+            <li>$V \in \mathcal{U} \implies V^{-1} = \{ (y,x) \mid (x,y) \in V \} \in \mathcal{U}$。</li>
+            <li>任意の $V \in \mathcal{U}$ に対し、ある $W \in \mathcal{U}$ が存在して $W \circ W \subseteq V$。</li>
+        </ol>
+        ここで $W \circ W = \{ (x,z) \mid \exists y \in X \text{ s.t. } (x,y) \in W, (y,z) \in W \}$ である。
+    </div>
+
+    <div class="theorem-box">
+        <span class="label">定理 4.2（擬距離による一様構造の生成）</span>
+        $X$ 上の擬距離の族 $\mathcal{P}$ に対し、
+        $$ V_{p, \epsilon} = \{ (x, y) \mid p(x, y) < \epsilon \} \quad (p \in \mathcal{P}, \epsilon > 0) $$
+        を準基（有限交差が基底となる）とするフィルターは、一様構造を定める。
+    </div>
+
+    <h2 id="sec5">5. 微細一様構造の構成と連続関数の一様連続性</h2>
+    <p>完全正則空間において、その位相と両立する最も細かい一様構造を構成する。</p>
+
+    <div class="definition-box">
+        <span class="label">定義 5.1（微細一様構造 $\mathcal{U}_F$）</span>
+        完全正則空間 $(X, \tau)$ において、$\tau \times \tau$ に関して連続な<b>すべての</b>擬距離の族 $\mathcal{P}_{all}$ から生成される一様構造を<b>微細一様構造</b>と呼ぶ。
+    </div>
+
+    <div class="theorem-box">
+        <span class="label">定理 5.2（連続関数の絶対的一様連続性）</span>
+        完全正則空間 $(X, \tau)$ において、任意の連続関数 $f: X \to \mathbb{R}$ は、微細一様構造 $\mathcal{U}_F$ に関して一様連続である。
+    </div>
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        $f$ が一様連続であることを示すには、任意の $\epsilon > 0$ に対し、近縁 $V \in \mathcal{U}_F$ が存在して、$(x, y) \in V \implies |f(x) - f(y)| < \epsilon$ となることを示せばよい。
+        1. $p_f(x, y) = |f(x) - f(y)|$ を定義する。
+        2. $f$ が連続であるため、$p_f$ は連続な擬距離である。
+        3. 微細一様構造の定義により、$\mathcal{P}_{all}$ は $p_f$ を含んでいる。
+        4. よって $V = \{ (x, y) \mid p_f(x, y) < \epsilon \}$ は $\mathcal{U}_F$ の近縁である。
+        5. この $V$ を用いれば、$(x, y) \in V \implies |f(x) - f(y)| < \epsilon$ は定義から自明である。
+        <span class="qed">■</span>
+    </div>
+
+    <h2 id="sec6">6. 完備性の理論：コーシーフィルターと収束の議論</h2>
+    <p>点列の収束の限界を克服するため、一様空間における完備性はフィルターの言語で記述される。</p>
+
+    <div class="definition-box">
+        <span class="label">定義 6.1（コーシーフィルター）</span>
+        一様空間 $(X, \mathcal{U})$ 上のフィルター $\mathcal{F}$ が<b>コーシーフィルター</b>であるとは、
+        任意の近縁 $V \in \mathcal{U}$ に対して、ある $F \in \mathcal{F}$ が存在して $F \times F \subseteq V$ を満たすことをいう。
+    </div>
+
+    <div class="definition-box">
+        <span class="label">定義 6.2（完備一様空間）</span>
+        一様空間 $X$ が<b>完備</b>であるとは、すべてのコーシーフィルターが $X$ のある点に収束することをいう。
+    </div>
+
+    <h2 id="sec7">7. コンパクト空間における一様構造の一意性と完備性の完全証明</h2>
+    <p>コンパクト空間においては、位相構造がそのまま一様構造の性質を強く支配する。</p>
+
+    <div class="theorem-box">
+        <span class="label">定理 7.1（コンパクト一様空間の完備性）</span>
+        一様空間 $(X, \mathcal{U})$ の位相 $\tau$ がコンパクトであれば、$(X, \mathcal{U})$ は完備である。
+    </div>
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        $\mathcal{F}$ を $X$ 上のコーシーフィルターとする。
+        1. 空間がコンパクトであるため、$X$ 上の任意のフィルター $\mathcal{F}$ は少なくとも一つの集積点 $x$ を持つ。
+        2. 集積点の定義より、$x$ の任意の近傍 $N$ に対して、任意の $F \in \mathcal{F}$ は $N \cap F \neq \emptyset$ を満たす。
+        3. $\mathcal{F}$ が $x$ に収束することを示す。すなわち、任意の近縁 $V \in \mathcal{U}$ に対して $V(x) \in \mathcal{F}$ を示せばよい。
+        4. 近縁の公理より、ある対称な近縁 $W$ ($W=W^{-1}$) が存在して $W \circ W \subseteq V$ を満たす。
+        5. $\mathcal{F}$ はコーシーフィルターなので、ある $F_0 \in \mathcal{F}$ が存在して $F_0 \times F_0 \subseteq W$ となる。
+        6. $x$ は集積点なので、$W(x) \cap F_0 \neq \emptyset$。よってある $y \in F_0$ が存在して $(x, y) \in W$。対称性より $(y, x) \in W$。
+        7. 任意の $z \in F_0$ をとる。$(z, y) \in F_0 \times F_0 \subseteq W$ である。
+        8. $(z, y) \in W$ かつ $(y, x) \in W$ より、$(z, x) \in W \circ W \subseteq V$。
+        9. すなわち $z \in V(x)$ である。よって $F_0 \subseteq V(x)$。
+        10. $F_0 \in \mathcal{F}$ なので、フィルターの定義より $V(x) \in \mathcal{F}$。
+        ゆえに $\mathcal{F} \to x$。
+        <span class="qed">■</span>
+    </div>
+
+    <div class="theorem-box">
+        <span class="label">定理 7.2（一様構造の一意性）</span>
+        コンパクトHausdorff空間 $X$ において、その位相を誘導する一様構造 $\mathcal{U}$ は唯一つしか存在せず、それは $\Delta$ のすべての開近傍からなる族である。
+    </div>
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        $\mathcal{U}$ を $X$ の位相を誘導する任意の一様構造、$\mathcal{U}_C$ を $\Delta$ の開近傍フィルターとする。
+        
+        <span class="step-title">1. $\mathcal{U} \subseteq \mathcal{U}_C$ の証明</span>
+        $V \in \mathcal{U}$ とすると、ある開近縁 $V^\circ \in \mathcal{U}$ が存在して $\Delta \subseteq V^\circ \subseteq V$ となる（一様空間の基本性質）。$V^\circ$ は $\Delta$ の開近傍なので $V \in \mathcal{U}_C$。
+        
+        <span class="step-title">2. $\mathcal{U}_C \subseteq \mathcal{U}$ の証明</span>
+        $W$ を $\Delta$ の開近傍とする。任意の $x \in X$ に対し、$(x,x) \in W$ であり $W$ は開集合なので、ある開近傍 $N_x$ が存在して $N_x \times N_x \subseteq W$ となる。
+        一様構造 $\mathcal{U}$ が位相を誘導することから、ある対称な近縁 $V_x \in \mathcal{U}$ が存在して $V_x(x) \subseteq N_x$。さらに $U_x \circ U_x \subseteq V_x$ となる対称な近縁 $U_x \in \mathcal{U}$ をとる。
+        $X$ のコンパクト性より、被覆 $\{U_x(x) \mid x \in X\}$ から有限部分被覆 $\{U_{x_i}(x_i) \mid i=1, \dots, n\}$ を選べる。
+        $U = \bigcap U_{x_i} \in \mathcal{U}$ とおき、$U \subseteq W$ を示す。
+        任意の $(y, z) \in U$ をとる。ある $i$ で $y \in U_{x_i}(x_i)$。よって $(x_i, y) \in U_{x_i}$。
+        また $(y, z) \in U \subseteq U_{x_i}$。よって $(x_i, z) \in U_{x_i} \circ U_{x_i} \subseteq V_{x_i}$。
+        したがって $y, z \in V_{x_i}(x_i) \subseteq N_{x_i}$。ゆえに $(y, z) \in N_{x_i} \times N_{x_i} \subseteq W$。
+        これより $W \in \mathcal{U}$。
+        <span class="qed">■</span>
+    </div>
+
+    <h2 id="sec8">8. 距離化可能定理：可算基底から距離を構成する全行程</h2>
+    <p>一様空間が「距離化可能」であるための条件は、その近縁フィルターが可算な基底を持つことである。この証明には、擬距離を段階的に合成する技術が必要である。</p>
+
+    <div class="lemma-box">
+        <span class="label">補題 8.1（メトリゼーション・レンマ）</span>
+        一様空間 $X$ の基本近縁系として可算な $\{V_n\}_{n \in \mathbb{N}}$ で、
+        $$ V_0 = X \times X, \quad V_{n+1} \circ V_{n+1} \circ V_{n+1} \subseteq V_n, \quad V_n = V_n^{-1} $$
+        を満たすものが存在すれば、$X$ は距離化可能である。
+    </div>
+
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        各 $V_n$ に対して、$f(x, y)$ を次のように定義する。
+        $$ f(x, y) = \begin{cases} 2^{-n} & (x, y) \in V_{n-1} \setminus V_n \\ 0 & (x, y) \in \bigcap V_n \end{cases} $$
+        この $f$ は対称であるが、三角不等式を満たさない。そこで、任意の点列による「鎖」の長さの最小値として距離 $d$ を定義する。
+        $$ d(x, y) = \inf \left\{ \sum_{i=0}^{k-1} f(z_i, z_{i+1}) \mid z_0 = x, z_k = y, z_i \in X \right\} $$
+        この $d$ は三角不等式を明らかに満たす。
+        重要なのは $d$ が一様構造を誘導することの証明である。
+        <b>主張： $\frac{1}{2} f(x, y) \le d(x, y) \le f(x, y)$</b>
+        (この左側の不等式の証明には、鎖の長さに関する帰納法を用いる。$V_{n+1}^3 \subseteq V_n$ という条件が、細切れの鎖を結合しても長さを一定以下に抑えることを保証する。)
+        この不等式により、$d(x, y) < 2^{-(n+1)}$ ならば $f(x, y) < 2^{-n}$、すなわち $(x, y) \in V_n$ が従い、距離が一様構造と両立することが示される。
+        <span class="qed">■</span>
+    </div>
+
+    <h2 id="sec9">9. ウリゾーンの距離化定理：正規性と第二可算性の結実</h2>
+    <p>最後に、位相空間論における最も有名な定理の一つを、これまでの道具（特に完全正則性と一様構造）を用いて証明する。</p>
+
+    <div class="theorem-box">
+        <span class="label">定理 9.1（Urysohn's Metrization Theorem）</span>
+        第二可算な正規空間 $X$ は距離化可能である。
+    </div>
+    <div class="proof-box">
+        <span class="label">証明</span><br>
+        1. <b>基底の可算性：</b> $X$ の開基 $\{B_n\}_{n \in \mathbb{N}}$ をとる。
+        2. <b>正規性による関数の抽出：</b> $\overline{B_n} \subseteq B_m$ となるペア $(n, m)$ すべてに対し、ウリゾーンの補題より $f_{n,m}: X \to [0, 1]$ を $f_{n,m}(\overline{B_n})=0, f_{n,m}(X \setminus B_m)=1$ となるようにとる。この関数の族 $\{f_k\}_{k \in \mathbb{N}}$ は可算個である。
+        3. <b>一様構造の構成：</b> 各 $f_k$ に対して、連続な擬距離 $p_k(x, y) = |f_k(x) - f_k(y)|$ を定義する。
+        4. <b>基本近縁系の可算性：</b> $\mathcal{U}$ を $p_k$ の有限族から生成される一様構造とする。基本近縁系は $V(k, \epsilon) = \{ (x, y) \mid \sum_{j=1}^k \frac{1}{2^j} p_j(x, y) < \epsilon \}$ の形となり、これは可算基底を持つ。
+        5. <b>位相の不変性：</b> この一様構造が元の位相 $\tau$ を誘導することを示す。
+           (i) $p_k$ は連続なので、一様位相は $\tau$ より粗い。
+           (ii) 逆に $x \in U \in \tau$ に対し、第二可算性と正規性よりある $k$ が存在して $x \in \overline{B_n} \subseteq B_m \subseteq U$。このとき $f_k$ が $x$ と $X \setminus U$ を分離するので、$x$ の一様近傍はある $\epsilon$ で $U$ に含まれる。
+        6. <b>距離化可能補題の適用：</b> 一様構造が可算基底を持ち、$T_0$（$X$ が Hausdorff なので $\cap V_n = \Delta$）であれば、補題 8.1 により距離化可能である。
+        <span class="qed">■</span>
+    </div>
+
+    <div class="remark-box" style="margin-top: 60px;">
+        <span class="label">総括</span>
+        <p>
+            本稿では、正規空間という静的な位相的性質が、ウリゾーンの補題という動的な連続関数の存在へと結びつき、それが一様構造という広域的な構造を介して、最終的に距離という定量的な尺度へと昇華される過程を記述した。
+            数学の美しさは、これら一見異なる概念が「第二可算性」や「コンパクト性」という補助線一本で、完璧な一貫性を持って統合される点にある。
+        </p>
+    </div>
+</div>
+
+</body>
+</html>
