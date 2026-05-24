@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体の無限直積のイデアルとフィルターの対応関係および剰余体の構造</title>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']],
+        packages: {'[+]': ['base', 'ams']}
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            color: #2c3e50;
+        }
+        h2 {
+            border-bottom: 1px solid #7f8c8d;
+            padding-bottom: 5px;
+            margin-top: 40px;
+            color: #34495e;
+        }
+        h3 {
+            margin-top: 30px;
+            color: #2980b9;
+        }
+        .definition, .theorem, .proof, .user-claim {
+            background-color: #fff;
+            border-left: 5px solid;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .definition { border-color: #27ae60; }
+        .definition::before { content: "【定義】"; font-weight: bold; color: #27ae60; display: block; margin-bottom: 10px; }
+        .theorem { border-color: #e67e22; }
+        .theorem::before { content: "【定理・命題】"; font-weight: bold; color: #e67e22; display: block; margin-bottom: 10px; }
+        .proof { border-color: #95a5a6; }
+        .proof::before { content: "【証明】"; font-weight: bold; color: #7f8c8d; display: block; margin-bottom: 10px; }
+        .user-claim { border-color: #8e44ad; }
+        .user-claim::before { content: "【設定・主張】"; font-weight: bold; color: #8e44ad; display: block; margin-bottom: 10px; }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>体の無限直積のイデアルとフィルターの対応関係および剰余体の構造</h1>
+
+    <p>本稿は、無限集合の添字を持つ体の直積環におけるイデアルと、添字集合上のフィルターとの間の深い対応関係、およびその極大イデアルによる剰余体（超積・超冪）の構造に関する一連の議論と証明をまとめたものです。</p>
+
+    <h2>第0章：準備と基本定義（補足）</h2>
+
+    <div class="definition">
+        <strong>フィルター (filter)</strong><br>
+        集合 $\Lambda$ 上のフィルター $F$ とは、$\Lambda$ の部分集合の族（すなわち冪集合 $\mathcal{P}(\Lambda)$ の部分集合）であり、以下の3条件を満たすものをいう。
+        <ol>
+            <li>$\Lambda \in F$ である。（非空性）</li>
+            <li>$X \in F$ かつ $Y \in F$ ならば、$X \cap Y \in F$ である。（有限交叉性）</li>
+            <li>$X \in F$ かつ $X \subseteq Y \subseteq \Lambda$ ならば、$Y \in F$ である。（上位集合を包含）</li>
+        </ol>
+        さらに、$\emptyset \notin F$ を満たすとき、$F$ を<strong>固有のフィルター (proper filter)</strong>と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <strong>超フィルター (ultrafilter)</strong><br>
+        $\Lambda$ 上の固有のフィルターの中で、包含関係に関して極大であるものを超フィルターと呼ぶ。
+        これは以下の条件と同値である：
+        「任意の $X \subseteq \Lambda$ に対して、$X \in F$ または $X^c = \Lambda \setminus X \in F$ のいずれか一方が必ず成り立つ。」
+    </div>
+
+    <div class="definition">
+        <strong>単項超フィルター (principal ultrafilter) と非単項超フィルター (non-principal ultrafilter)</strong><br>
+        ある元 $\lambda \in \Lambda$ に対して、$U_\lambda = \{ X \subseteq \Lambda \mid \lambda \in X \}$ で定義される超フィルターを<strong>単項超フィルター</strong>と呼ぶ。
+        単項超フィルターではない超フィルターを<strong>非単項超フィルター</strong>と呼ぶ。これは有限集合を一切要素として持たない（後述の定理で証明）超フィルターである。
+    </div>
+
+    <div class="definition">
+        <strong>補有限フィルター (cofinite filter / Fréchet filter)</strong><br>
+        $\Lambda$ の部分集合のうち、その補集合が有限集合であるような集合全体からなる族を補有限フィルターと呼ぶ。
+        $$F_{\text{cofin}} = \{ X \subset \Lambda \mid X\text{の補集合は有限集合} \}$$
+    </div>
+
+    <div class="definition">
+        <strong>フィルター全体の集合とイデアル全体の集合</strong><br>
+        集合 $\Lambda$ 上の（固有とは限らない）フィルター全体の集合を $\text{Filter}(\Lambda)$ と書く。<br>
+        可換環 $R$ のイデアル全体の集合を $\text{Ideal}(R)$ と書く。
+    </div>
+
+    <div class="definition">
+        <strong>環のイデアル (ideal) と素イデアル・極大イデアル</strong><br>
+        可換環 $A$ の部分集合 $I$ がイデアルであるとは、以下の条件を満たすことをいう。
+        <ol>
+            <li>$0 \in I$ であり、$I$ は加法について部分群をなす（$f, g \in I \implies f-g \in I$）。</li>
+            <li>任意の $f \in I$ と $a \in A$ について、$af \in I$ である。</li>
+        </ol>
+        イデアル $I$ が $I \neq A$ を満たし、かつ $fg \in I \implies f \in I \text{ または } g \in I$ を満たすとき<strong>素イデアル</strong>と呼ぶ。<br>
+        イデアル $I$ が $I \neq A$ を満たし、包含関係について極大であるとき<strong>極大イデアル</strong>と呼ぶ。
+    </div>
+
+    <hr>
+
+    <h2>第1章：イデアルとフィルターの対応関係</h2>
+
+    <div class="user-claim">
+        $\Lambda$ は無限集合であるとし、各 $\lambda \in \Lambda$ に対して体 $K_\lambda$ が与えられているとし、環 $A$ を直積環 $A = \prod_{\lambda \in \Lambda} K_\lambda$ と定める。<br>
+        各 $f \in A$ に対して零点集合 $Z(f) = \{\lambda \in \Lambda \mid f(\lambda) = 0\}$ と定める。<br>
+        $A$ のイデアル $I$ に対して $\phi(I) = \{Z(f) \mid f \in I\}$ と定める。<br>
+        $\Lambda$ の（固有とは限らない）フィルター $F$ に対して $\psi(F) = \{f \in A \mid Z(f) \in F\}$ と定める。<br>
+        $\Lambda$ の（固有とは限らない）フィルター全体の集合を $\text{Filter}(\Lambda)$ と書き、可換環 $A$ のイデアル全体の集合を $\text{Ideal}(A)$ と書く。
+    </div>
+
+    <div class="theorem">
+        以下の4つが成り立つ。<br>
+        (1) $I \in \text{Ideal}(A)$ ならば $\phi(I) \in \text{Filter}(\Lambda)$.<br>
+        (2) $F \in \text{Filter}(\Lambda)$ ならば $\psi(F) \in \text{Ideal}(A)$.<br>
+        (3) $I \in \text{Ideal}(A)$ ならば $\psi(\phi(I)) = I$.<br>
+        (4) $F \in \text{Filter}(\Lambda)$ ならば $\phi(\psi(F)) = F$.
+    </div>
+
+    <div class="proof">
+        <h3>(1) の証明：$\phi(I)$ がフィルター条件を満たすこと</h3>
+        <ol>
+            <li><strong>$\Lambda \in \phi(I)$ の証明:</strong><br>
+            $I$ は $A$ のイデアルなので、零元 $0 \in A$ （全ての $\lambda$ で $0$ を取る関数）は $I$ に属する。$Z(0) = \Lambda$ であるため、$\Lambda \in \phi(I)$ である。</li>
+            <li><strong>$X, Y \in \phi(I) \implies X \cap Y \in \phi(I)$ の証明:</strong><br>
+            $X, Y \in \phi(I)$ とすると、定義より $X = Z(f), Y = Z(g)$ となる $f, g \in I$ が存在する。<br>
+            ここで、$A$ の元 $e_f, e_g$ を次のように定義する：<br>
+            $$e_f(\lambda) = \begin{cases} 0 & (\lambda \in Z(f)) \\ 1 & (\lambda \notin Z(f)) \end{cases}, \quad e_g(\lambda) = \begin{cases} 0 & (\lambda \in Z(g)) \\ 1 & (\lambda \notin Z(g)) \end{cases}$$
+            各 $\lambda$ において $K_\lambda$ は体であるため、$f(\lambda) \neq 0$ ならば逆元 $f(\lambda)^{-1}$ が存在する。そこで $A$ の元 $f^*$ を、$\lambda \notin Z(f)$ のとき $f^*(\lambda) = f(\lambda)^{-1}$、$\lambda \in Z(f)$ のとき $f^*(\lambda) = 0$ と定めると、$e_f = f f^*$ となる。$f \in I$ なのでイデアルの性質より $e_f \in I$ であり、同様に $e_g \in I$ である。<br>
+            ここで $h = e_f + e_g - e_f e_g$ とおくと、$e_f, e_g \in I$ より $h \in I$ となる。<br>
+            $\lambda \in X \cap Y$ のとき、$e_f(\lambda) = 0, e_g(\lambda) = 0$ なので $h(\lambda) = 0$ である。<br>
+            $\lambda \notin X \cap Y$ のとき、$e_f(\lambda)$ または $e_g(\lambda)$ の少なくとも一方は $1$ となり、$h(\lambda) = 1$ となる。<br>
+            したがって $Z(h) = X \cap Y$ となり、$h \in I$ であるため $X \cap Y \in \phi(I)$ である。</li>
+            <li><strong>$X \in \phi(I), X \subseteq Y \subseteq \Lambda \implies Y \in \phi(I)$ の証明:</strong><br>
+            $X \in \phi(I)$ より、$X = Z(f)$ となる $f \in I$ が存在する。<br>
+            $A$ の元 $g, k$ を次のように定義する：<br>
+            $$g(\lambda) = \begin{cases} 0 & (\lambda \in Y) \\ 1 & (\lambda \notin Y) \end{cases}, \quad k(\lambda) = \begin{cases} 0 & (\lambda \in Y) \\ f(\lambda)^{-1} & (\lambda \notin Y) \end{cases}$$
+            $\lambda \notin Y$ ならば $\lambda \notin X$ なので $f(\lambda) \neq 0$ であり、$k$ は well-defined である。<br>
+            任意の $\lambda$ で $g(\lambda) = k(\lambda)f(\lambda)$ が成り立つため、$g = kf$ となる。<br>
+            $I$ はイデアルで $f \in I$ なので $g \in I$ である。$Z(g) = Y$ であるため、$Y \in \phi(I)$ である。</li>
+        </ol>
+
+        <h3>(2) の証明：$\psi(F)$ がイデアル条件を満たすこと</h3>
+        <ol>
+            <li><strong>$0 \in \psi(F)$ の証明:</strong><br>
+            $0 \in A$ について $Z(0) = \Lambda$ である。$F$ はフィルターなので $\Lambda \in F$ であり、よって $0 \in \psi(F)$ である。</li>
+            <li><strong>$f, g \in \psi(F) \implies f-g \in \psi(F)$ の証明:</strong><br>
+            $f, g \in \psi(F)$ ならば $Z(f) \in F$ かつ $Z(g) \in F$ である。<br>
+            $F$ はフィルターなので、共通部分 $Z(f) \cap Z(g) \in F$ である。<br>
+            $\lambda \in Z(f) \cap Z(g)$ ならば、$f(\lambda) = 0$ かつ $g(\lambda) = 0$ なので $(f-g)(\lambda) = 0$ となる。これは $Z(f) \cap Z(g) \subseteq Z(f-g)$ を意味する。<br>
+            $F$ は上位集合を含むため、$Z(f-g) \in F$ となる。したがって $f-g \in \psi(F)$ である。</li>
+            <li><strong>$f \in \psi(F), a \in A \implies af \in \psi(F)$ の証明:</strong><br>
+            $f \in \psi(F)$ より $Z(f) \in F$ である。<br>
+            $\lambda \in Z(f)$ ならば $f(\lambda) = 0$ なので、$(af)(\lambda) = a(\lambda)f(\lambda) = 0$ となる。これは $Z(f) \subseteq Z(af)$ を意味する。<br>
+            $F$ は上位集合を含むため $Z(af) \in F$ となり、したがって $af \in \psi(F)$ である。</li>
+        </ol>
+
+        <h3>(3) の証明：$\psi(\phi(I)) = I$</h3>
+        包含関係を双方向に示す。
+        <ol>
+            <li><strong>$I \subseteq \psi(\phi(I))$:</strong><br>
+            任意の $f \in I$ をとる。$\phi(I)$ の定義から $Z(f) \in \phi(I)$ である。<br>
+            $\psi$ の定義から、$Z(f) \in \phi(I)$ を満たす $f$ は $\psi(\phi(I))$ に属する。よって $I \subseteq \psi(\phi(I))$ である。</li>
+            <li><strong>$\psi(\phi(I)) \subseteq I$:</strong><br>
+            任意の $f \in \psi(\phi(I))$ をとる。定義より $Z(f) \in \phi(I)$ である。<br>
+            したがって、$Z(f) = Z(g)$ を満たす $g \in I$ が存在する。<br>
+            ここで、$A$ の元 $h$ を次のように定義する：<br>
+            $$h(\lambda) = \begin{cases} 0 & (\lambda \in Z(f)) \\ f(\lambda)g(\lambda)^{-1} & (\lambda \notin Z(f)) \end{cases}$$
+            $\lambda \notin Z(f)$ ならば $\lambda \notin Z(g)$ であるため $g(\lambda) \neq 0$ となり、$h$ は well-defined である。<br>
+            このとき、任意の $\lambda$ について $f(\lambda) = h(\lambda)g(\lambda)$ が成り立つ。（$\lambda \in Z(f)$ のときは $0 = 0 \cdot 0$）<br>
+            ゆえに $f = hg$ となる。$g \in I$ であり $I$ はイデアルなので、$f \in I$ である。<br>
+            よって $\psi(\phi(I)) \subseteq I$ である。</li>
+        </ol>
+
+        <h3>(4) の証明：$\phi(\psi(F)) = F$</h3>
+        包含関係を双方向に示す。
+        <ol>
+            <li><strong>$\phi(\psi(F)) \subseteq F$:</strong><br>
+            任意の $X \in \phi(\psi(F))$ をとる。定義より、$X = Z(f)$ を満たす $f \in \psi(F)$ が存在する。<br>
+            $f \in \psi(F)$ ということは、定義より $Z(f) \in F$ である。<br>
+            $X = Z(f)$ なので、$X \in F$ となる。よって $\phi(\psi(F)) \subseteq F$ である。</li>
+            <li><strong>$F \subseteq \phi(\psi(F))$:</strong><br>
+            任意の $X \in F$ をとる。$A$ の元 $e$ を次のように定義する：<br>
+            $$e(\lambda) = \begin{cases} 0 & (\lambda \in X) \\ 1 & (\lambda \notin X) \end{cases}$$
+            すると明らかに $Z(e) = X$ である。<br>
+            $X \in F$ なので $Z(e) \in F$ であり、これは $e \in \psi(F)$ を意味する。<br>
+            したがって $X = Z(e) \in \{Z(f) \mid f \in \psi(F)\} = \phi(\psi(F))$ である。<br>
+            よって $F \subseteq \phi(\psi(F))$ である。</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>第2章：素イデアルの分類</h2>
+
+    <div class="user-claim">
+        $A$ の素イデアルはすべて極大イデアルになり、以下の2種類に分類される。<br>
+        <ul>
+            <li>$\lambda \in \Lambda$ に対する $\Lambda$ の単項超フィルター $U_\lambda = \{X \subset \Lambda \mid \lambda \in X\}$ に対応する極大イデアル $\mathfrak{m}_\lambda = \psi(U_\lambda) = \{f \in A \mid f(\lambda) = 0\}$.</li>
+            <li>$\Lambda$ の非単項超フィルター $U$ に対応する極大イデアル $\mathfrak{m} = \psi(U) = \{f \in A \mid Z(f) \in U\}$.</li>
+        </ul>
+    </div>
+
+    <p>前章で示した通り、イデアル $I$ とフィルター $F = \phi(I)$ は一対一に対応します。このとき、$I$ が素イデアルであることと、$F$ が超フィルターであることは同値になります。</p>
+    <p>各 $K_\lambda$ は体（整域）であるため、任意の $f, g \in A$ について $(fg)(\lambda) = 0 \iff f(\lambda) = 0 \text{ または } g(\lambda) = 0$ が成り立ちます。すなわち $Z(fg) = Z(f) \cup Z(g)$ です。<br>
+    $I$ が素イデアルである条件 $fg \in I \implies f \in I \text{ または } g \in I$ をフィルターの言葉に翻訳すると、<br>
+    $$Z(f) \cup Z(g) \in F \implies Z(f) \in F \text{ または } Z(g) \in F$$
+    となり、これは $F$ が極大フィルター（超フィルター）であることの性質に他なりません。</p>
+
+    <hr>
+
+    <h2>第3章：非単項超フィルターの性質と素イデアル的性質</h2>
+
+    <div class="user-claim">
+        $\Lambda$ の非単項超フィルター $U$ について以下を示す。
+        <ul>
+            <li>$U$ は補有限フィルター $F_{\text{cofin}} = \{ X \subset \Lambda \mid X\text{の補集合は有限集合} \}$ を含む。</li>
+            <li>任意の $X \in U$ は有限集合ではない。</li>
+        </ul>
+    </div>
+
+    <p>これらの証明を行うにあたり、まず超フィルターが持つ強力な「素イデアル的性質」を証明します。</p>
+
+    <div class="theorem">
+        <strong>【準備：超フィルターの素イデアル的性質】</strong><br>
+        $U$ を $\Lambda$ 上の超フィルターとする。<br>
+        (a) $A, B \subseteq \Lambda$ について、$A \cup B \in U$ ならば、$A \in U$ または $B \in U$ である。<br>
+        (b) より一般に、$A_1, A_2, \dots, A_n \subseteq \Lambda$ について、$\bigcup_{i=1}^n A_i \in U$ ならば、ある $k$ ($1 \le k \le n$) が存在して $A_k \in U$ である。
+    </div>
+
+    <div class="proof">
+        <strong>(a) の証明:</strong><br>
+        背理法で示す。$A \cup B \in U$ であるにもかかわらず、「$A \notin U$ かつ $B \notin U$」であると仮定する。
+        <ol>
+            <li>$U$ は超フィルターなので、任意の集合についてそれ自身か補集合のいずれかが必ず $U$ に属する。したがって、$A \notin U$ よりその補集合 $A^c \in U$ となる。</li>
+            <li>同様の理由で、$B \notin U$ よりその補集合 $B^c \in U$ となる。</li>
+            <li>フィルターの定義より、$U$ は有限個の共通部分について閉じている。$A^c \in U$ かつ $B^c \in U$ なので、その共通部分 $A^c \cap B^c \in U$ となる。</li>
+            <li>ここで、De Morganの法則により $A^c \cap B^c = (A \cup B)^c$ である。したがって、$(A \cup B)^c \in U$ が成り立つ。</li>
+        </ol>
+        すると、前提である $A \cup B \in U$ と、今導かれた $(A \cup B)^c \in U$ の両方が成り立つことになる。<br>
+        フィルターは共通部分について閉じているため、これら2つの集合の共通部分 $(A \cup B) \cap (A \cup B)^c \in U$ でなければならない。<br>
+        しかし、ある集合とその補集合の共通部分は空集合であり、すなわち $\emptyset \in U$ となってしまう。固有のフィルターが空集合を含むことはあり得ないため、これは矛盾である。<br>
+        したがって、$A \in U$ または $B \in U$ の少なくとも一方が成り立つ。
+        <br><br>
+        <strong>(b) の証明（数学的帰納法）:</strong><br>
+        <ul>
+            <li>$n=1, 2$ のときは(a)より成立。</li>
+            <li>$n=m$ で成り立つと仮定し、$n=m+1$ のときを考える。<br>
+            $\bigcup_{i=1}^{m+1} A_i \in U$ とし、これを $\left( \bigcup_{i=1}^m A_i \right) \cup A_{m+1} \in U$ とみる。<br>
+            $n=2$ の結果より、$\bigcup_{i=1}^m A_i \in U$ または $A_{m+1} \in U$ のいずれかが成り立つ。<br>
+            $A_{m+1} \in U$ ならば条件を満たす。$\bigcup_{i=1}^m A_i \in U$ の場合、帰納法の仮定よりある $k$ ($1 \le k \le m$) について $A_k \in U$ となり、やはり条件を満たす。</li>
+        </ul>
+        したがって任意の自然数 $n$ について成り立つ。
+    </div>
+
+    <div class="theorem">
+        非単項超フィルター $U$ は補有限フィルター $F_{\text{cofin}}$ を含む。
+    </div>
+
+    <div class="proof">
+        任意の $X \in F_{\text{cofin}}$ をとる。補有限フィルターの定義より、$X$ の補集合 $X^c = \Lambda \setminus X$ は有限集合である。
+        <ol>
+            <li><strong>$X^c$ が空集合の場合:</strong> $X = \Lambda$ である。$U$ はフィルターであるため、当然 $\Lambda \in U$ となる。</li>
+            <li><strong>$X^c$ が空ではない有限集合の場合:</strong><br>
+            $X^c = \{\lambda_1, \lambda_2, \dots, \lambda_n\}$ と書くことができる。このとき、$X$ は以下のように単集合の補集合の有限交叉として表せる。<br>
+            $$X = \Lambda \setminus \{\lambda_1, \lambda_2, \dots, \lambda_n\} = \bigcap_{i=1}^n (\Lambda \setminus \{\lambda_i\})$$
+            $U$ は非単項超フィルターであるため、任意の $i$ について単集合 $\{\lambda_i\} \notin U$ である。（もし属すれば単項超フィルターになってしまうため）。<br>
+            $U$ は超フィルターなので、$\{\lambda_i\} \notin U$ より、その補集合 $\Lambda \setminus \{\lambda_i\} \in U$ となる。<br>
+            フィルターは有限交叉について閉じているため、$\Lambda \setminus \{\lambda_i\}$ たちの有限交叉である $X$ もまた $U$ に属する。</li>
+        </ol>
+        以上より、$F_{\text{cofin}} \subseteq U$ である。
+    </div>
+
+    <div class="theorem">
+        非単項超フィルター $U$ に対して、任意の $X \in U$ は有限集合ではない。
+    </div>
+
+    <div class="proof">
+        背理法で示す。ある有限集合 $X$ が $U$ に属すると仮定する。<br><br>
+        <strong>【証明方法1：補有限フィルターを用いる方法】</strong><br>
+        $X$ は有限集合であるため、その補集合 $X^c = \Lambda \setminus X$ は補有限フィルターの定義を満たし、$X^c \in F_{\text{cofin}}$ である。<br>
+        先ほど証明した通り、$F_{\text{cofin}} \subseteq U$ なので、$X^c \in U$ が成り立つ。<br>
+        すると、$U$ には $X$ と $X^c$ の両方が属することになるため、その共通部分 $X \cap X^c = \emptyset \in U$ となり矛盾する。<br><br>
+        <strong>【証明方法2：超フィルターの素イデアル的性質を用いる別証】</strong><br>
+        $X$ は有限集合なので $X = \{\lambda_1, \lambda_2, \dots, \lambda_n\}$ と表せる。これは単集合の有限和 $X = \bigcup_{i=1}^n \{\lambda_i\}$ である。<br>
+        仮定より $X \in U$ なので、前述の素イデアル的性質から、ある $k$ が存在して単集合 $\{\lambda_k\} \in U$ となる。<br>
+        フィルターは上位集合を含むため、$\lambda_k$ を含むすべての集合が $U$ に属することになり、$U$ は単項超フィルター $U_{\lambda_k}$ と一致してしまう。これは $U$ が非単項であることに矛盾する。<br><br>
+        したがって、いずれの方法でも矛盾が導かれ、$U$ に属する任意の集合は無限集合であることが示された。
+    </div>
+
+    <hr>
+
+    <h2>第4章：剰余体の構造論</h2>
+
+    <div class="user-claim">
+        任意の $\lambda \in \Lambda$ に対して、単項超フィルター $U_\lambda$ に対応する極大イデアル $\mathfrak{m}_\lambda$ の剰余体 $A/\mathfrak{m}_\lambda$ は $K_\lambda$ に同型である（$A/\mathfrak{m}_\lambda \cong K_\lambda$）。<br>
+        では、非単項超フィルター $U$ に対応する極大イデアル $\mathfrak{m}$ による剰余体 $A/\mathfrak{m}$ はどのような体になるか？
+    </div>
+
+    <p>まずは、主張前半の $A/\mathfrak{m}_\lambda \cong K_\lambda$ について証明を補足します。</p>
+
+    <div class="proof">
+        <strong>【補足証明：$A/\mathfrak{m}_\lambda \cong K_\lambda$】</strong><br>
+        射影写像 $\pi_\lambda: A \to K_\lambda$ を $\pi_\lambda(f) = f(\lambda)$ と定義する。<br>
+        各成分ごとの演算の定義から、$\pi_\lambda(f+g) = \pi_\lambda(f) + \pi_\lambda(g)$ および $\pi_\lambda(fg) = \pi_\lambda(f)\pi_\lambda(g)$ が成り立ち、単位元 $1_A$ は $1_{K_\lambda}$ に写るため、$\pi_\lambda$ は環準同型写像である。<br>
+        任意の $c \in K_\lambda$ に対して、$\lambda$ 成分のみ $c$ で他成分が $0$ であるような関数を考えれば、これは全射である。<br>
+        この準同型の核は $\ker(\pi_\lambda) = \{ f \in A \mid \pi_\lambda(f) = 0 \} = \{ f \in A \mid f(\lambda) = 0 \}$ であり、これはまさに極大イデアル $\mathfrak{m}_\lambda$ の定義そのものである。<br>
+        準同型定理（第一同型定理）により、$A/\ker(\pi_\lambda) \cong \text{Im}(\pi_\lambda)$ すなわち $A/\mathfrak{m}_\lambda \cong K_\lambda$ が成り立つ。
+    </div>
+
+    <p>次に、非単項超フィルター $U$ に対応する極大イデアル $\mathfrak{m}$ による剰余体の構造について、3つのケースに分けて解説します。</p>
+
+    <h3>(1) 一般の場合</h3>
+    <p>
+        剰余体 $A/\mathfrak{m}$ は、体族 $(K_\lambda)_{\lambda \in \Lambda}$ の超フィルター $U$ による<strong>超積 (ultraproduct)</strong> と呼ばれる体になります。記号では $\prod_U K_\lambda$ と表記されます。<br>
+        各元 $[f] \in A/\mathfrak{m}$ は、関数 $f, g \in A$ について「$f(\lambda) = g(\lambda)$ となるような $\lambda$ の集合が $U$ に属する」ときに同一視される同値類です。<br>
+        モデル理論の基本定理である「Łośの定理（Łoś's Theorem）」により、この超積 $\prod_U K_\lambda$ は、元の体 $K_\lambda$ たちが共通して持つ一階述語論理の性質をすべて引き継ぎます。
+    </p>
+
+    <h3>(2) すべての体 $K_\lambda$ ( $\lambda \in \Lambda$ ) が同一の体 $K$ の場合</h3>
+    <p>
+        剰余体 $A/\mathfrak{m}$ は、体 $K$ の $U$ による<strong>超冪 (ultrapower)</strong> と呼ばれる体になり、$K^\Lambda/U$ や $^*K$ などと表記されます。<br>
+        元の体 $K$ の各要素 $c$ を、「常に値 $c$ をとる定数関数 $f(\lambda) = c$ の同値類」に写すことで、$K$ は $A/\mathfrak{m}$ の部分体として自然に埋め込まれます。
+    </p>
+    <ul>
+        <li><strong>$K$ が無限体の場合:</strong> $U$ が非単項（すなわち有限集合を含まない）であるため、剰余体 $A/\mathfrak{m}$ は $K$ を真に包含する巨大な拡大体になります。最も有名な例として、$K = \mathbb{R}$ の場合、この剰余体 $A/\mathfrak{m}$ は無限小や無限大を含む<strong>超実数体 (hyperreal numbers, $^*\mathbb{R}$)</strong> となり、超準解析の舞台となります。</li>
+        <li><strong>$K$ が有限体の場合:</strong> 超冪を構成しても新しい元は生まれず、剰余体 $A/\mathfrak{m}$ は元の体 $K$ と同型になります。</li>
+    </ul>
+
+    <div class="proof">
+        <strong>【補足証明：$K$ が一般の有限体の場合の $A/\mathfrak{m} \cong K$】</strong><br>
+        $K$ を $q$ 個の元からなる有限体とし、その元を $\{c_1, c_2, \dots, c_q\}$ とする。<br>
+        $A = \prod_{\lambda \in \Lambda} K$ の任意の元 $f$ をとる。各成分 $f(\lambda)$ は $K$ のいずれかの元である。<br>
+        ここで、各 $c_i \in K$ に対して、$f$ が値 $c_i$ をとるような $\Lambda$ の添字の集合を $Z_i$ とする。<br>
+        $$Z_i = \{ \lambda \in \Lambda \mid f(\lambda) = c_i \} \quad (i = 1, 2, \dots, q)$$
+        任意の $\lambda \in \Lambda$ について、$f(\lambda)$ は必ず $K$ のいずれか一つの値をとるため、$\Lambda$ は $Z_1, Z_2, \dots, Z_q$ の直和（排反な和集合）として表される。<br>
+        $$\bigcup_{i=1}^q Z_i = \Lambda$$
+        全体集合 $\Lambda$ はフィルター $U$ に属するため、$\bigcup_{i=1}^q Z_i \in U$ である。<br>
+        ここで、第3章で証明した「超フィルターの素イデアル的性質（有限個の和集合が超フィルターに属するなら、そのうちの少なくとも一つは超フィルターに属する）」を適用すると、ある $k$ ($1 \le k \le q$) が存在して、<br>
+        $$Z_k \in U$$
+        が成り立つ。<br>
+        $A$ において、常に値 $c_k$ をとる定数関数を $c_k^*$ と書くことにすると、$f(\lambda) = c_k$ となる条件は $(f - c_k^*)(\lambda) = 0$ と同値であるため、$Z_k = Z(f - c_k^*)$ となる。<br>
+        したがって $Z(f - c_k^*) \in U$ であり、極大イデアル $\mathfrak{m} = \psi(U)$ の定義から $f - c_k^* \in \mathfrak{m}$ となる。<br>
+        これは剰余体 $A/\mathfrak{m}$ において同値類 $[f]$ が $[c_k^*]$ に等しいことを意味する。<br>
+        さらに、$\mathfrak{m}$ は固有のイデアル（$1 \notin \mathfrak{m}$）であるため、相異なる定数関数 $c, d \in K$ ($c \neq d$) が $A/\mathfrak{m}$ で等しくなることはない（$c-d$ は可逆元でありイデアルに含まれないため）。<br>
+        以上より、$A/\mathfrak{m}$ の任意の元 $[f]$ は、元の体 $K$ のいずれかの元に対応する定数関数の同値類 $[c_k^*]$ と一意に一致するため、$A/\mathfrak{m} \cong K$ が示された。
+    </div>
+
+    <h3>(3) すべての体 $K_\lambda$ ( $\lambda \in \Lambda$ ) が二元体 $\mathbb{F}_2$ の場合</h3>
+    <p>
+        剰余体 $A/\mathfrak{m}$ は、<strong>元の二元体 $\mathbb{F}_2$ に同型</strong>になります。すなわち $A/\mathfrak{m} \cong \mathbb{F}_2$ です。
+    </p>
+
+    <div class="proof">
+        <strong>【証明】</strong><br>
+        $A = \prod_{\lambda \in \Lambda} \mathbb{F}_2$ の任意の元 $f$ をとる。各成分 $f(\lambda)$ は $0$ または $1$ のいずれかである。<br>
+        ここで、$f$ の零点集合 $Z(f)$ と、関数 $1-f$ の零点集合 $Z(1-f)$ を考える。<br>
+        $$Z(f) = \{ \lambda \in \Lambda \mid f(\lambda) = 0 \}, \quad Z(1-f) = \{ \lambda \in \Lambda \mid f(\lambda) = 1 \}$$
+        任意の $\lambda \in \Lambda$ について、$f(\lambda)$ は $0$ か $1$ のいずれかなので、必ず $\lambda \in Z(f)$ または $\lambda \in Z(1-f)$ のどちらか一方に属する。すなわち、和集合をとると全体集合になる。<br>
+        $$Z(f) \cup Z(1-f) = \Lambda$$
+        全体集合 $\Lambda$ はフィルター $U$ に属するため、$Z(f) \cup Z(1-f) \in U$ である。<br>
+        ここで、「超フィルターの素イデアル的性質（和集合が超フィルターに属するなら、どちらか一方は超フィルターに属する）」を適用すると、以下のいずれか一方が必ず成り立つ。
+        <ol>
+            <li><strong>$Z(f) \in U$ の場合：</strong>極大イデアル $\mathfrak{m}$ の定義より $f \in \mathfrak{m}$ であり、剰余体における同値類は $[f] = [0]$ となる。</li>
+            <li><strong>$Z(1-f) \in U$ の場合：</strong>同様に $1-f \in \mathfrak{m}$ であり、剰余体における同値類は $[1-f] = [0]$、すなわち $[f] = [1]$ となる。</li>
+        </ol>
+        したがって、剰余体 $A/\mathfrak{m}$ の任意の元 $[f]$ は $[0]$ か $[1]$ のいずれかに必ず一致する。イデアル $\mathfrak{m}$ は $A$ 全体ではないため $[0] \neq [1]$ であり、$A/\mathfrak{m}$ はちょうど2つの元からなる体、すなわち $\mathbb{F}_2$ と同型であることが示された。
+    </div>
+
+</body>
+</html>

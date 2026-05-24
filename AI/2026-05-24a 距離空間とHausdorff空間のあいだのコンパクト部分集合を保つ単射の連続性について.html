@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>距離空間とHausdorff空間のあいだのコンパクト部分集合を保つ単射の連続性について</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            font-size: 1.5em;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 40px;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .proof-box {
+            background-color: #ffffff;
+            border-left: 4px solid #2ecc71;
+            padding: 15px 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition-box {
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ecf0f1;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>距離空間とHausdorff空間のあいだのコンパクト部分集合を保つ単射の連続性について</h1>
+
+    <h2>1. 距離空間からHausdorff空間に向けての単射の場合 (連続になる)</h2>
+    
+    <div class="definition-box">
+        <strong>【命題】</strong><br>
+        距離空間$X$、Hausdorff空間$Y$、およびコンパクト部分集合をコンパクト部分集合にうつす単射$f: X \to Y$が与えられたとき、$f$は連続である。
+    </div>
+
+    <p>距離空間$X$において、写像が連続であることは「点列連続性」と同値です。したがって、$X$内の任意の収束する点列$x_n \to x$に対して、$Y$において$f(x_n) \to f(x)$となることを示せば十分です。</p>
+
+    <div class="proof-box">
+        <strong>【証明】</strong>
+        <ol>
+            <li>$X$において$x_n \to x$となる点列をとります。このとき、点列とその極限からなる集合$K = \{x_n \mid n \in \mathbb{N}\} \cup \{x\}$は$X$のコンパクト部分集合です。</li>
+            <li>仮定より、$f$はコンパクト集合をコンパクト集合に写すため、像$f(K)$は$Y$のコンパクト部分集合となります。</li>
+            <li>ここで、結論である$f(x_n) \to f(x)$を背理法で示します。<br>
+            もし収束しないと仮定すると、$f(x)$のある開近傍$V$と、$(x_n)$の部分列が存在して、その部分列のすべての項が$V$の外に存在することになります。（表記を簡略化するため、この部分列を改めて$(x_n)$と置きます。つまり、すべての$n$で$f(x_n) \notin V$と仮定して話を進めます。）</li>
+            <li>集合$C = f(K) \setminus V$を考えます。$Y$はHausdorff空間なので、コンパクト集合$f(K)$は閉集合です。$V$は開集合なので、$C$は$f(K)$の閉部分集合となり、$C$自身もコンパクトになります。</li>
+            <li>前述の仮定により、点列$\{f(x_n)\}$はすべてコンパクト空間$C$に含まれます。コンパクト空間内の無限点列は少なくとも1つの集積点（極限点）を持つため、$\{f(x_n)\}$の集積点の1つを$y \in C$とします。</li>
+            <li>$y \in C$であり、$f(x) \notin C$なので$y \neq f(x)$です。$f$は単射であるため、ある自然数$m$が存在して$y = f(x_m)$となります。</li>
+            <li>ここで、元の集合から1点を除いた集合$K_m = K \setminus \{x_m\}$を考えます。$x_n \to x$である事実に変わりはないため、$K_m$は依然として$X$のコンパクト集合です。</li>
+            <li>仮定より$f(K_m)$は$Y$のコンパクト集合であり、$Y$がHausdorff空間であることから$f(K_m)$は$Y$における閉集合となります。</li>
+            <li>$y$は点列$\{f(x_n)\}$の集積点であり、除外した$f(x_m)$以外のすべての項は$f(K_m)$に含まれています。したがって、$y$は閉集合$f(K_m)$の閉包に含まれるため、$y \in f(K_m)$となります。</li>
+            <li>しかし、$y = f(x_m)$であり、$f$は単射であるため、$f(x_m) \notin f(K_m)$とならなければなりません。これは矛盾です。</li>
+            <li>したがって、背理法の仮定は誤りであり、$f(x_n) \to f(x)$が成り立つことが示されました。よって$f$は連続です。$\blacksquare$</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>2. Hausdorff空間から距離空間に向けての単射の場合 (反例あり)</h2>
+
+    <div class="definition-box">
+        <strong>【構成する反例の概要】</strong><br>
+        Hausdorff空間$X$から距離空間$Y$への単射で、コンパクト集合をコンパクト集合にうつすが、連続ではない写像$f$の例を構成します。<br>
+        具体的には、<strong>「コンパクト集合が有限集合のみとなるような、通常の位相より細かい位相を入れた実数空間」</strong>を$X$とし、通常の距離位相を入れた実数空間を$Y$として、特定の点（$x=0, 1$）でのみ値が入れ替わって不連続となる関数$f$を考えます。
+    </div>
+
+    <p>逆方向の$f: X \to Y$（$X$がHausdorff、$Y$が距離空間）では連続になりません。詳細な構成は以下の通りです。</p>
+
+    <div class="definition-box">
+        <strong>【空間と写像の構成】</strong>
+        <ul>
+            <li><strong>定義域$X$</strong>: 実数全体$\mathbb{R}$に対して、通常の位相より細かい以下の位相を与えた空間とします。<br>
+            ある部分集合$U$が$X$の開集合であるとは、通常の$\mathbb{R}$における開集合$O$と、ある可算集合$C$を用いて$U = O \setminus C$と表せることと定義します。</li>
+            <li><strong>終域$Y$</strong>: 通常の距離位相を入れた実数空間$\mathbb{R}$（距離空間）とします。</li>
+            <li><strong>写像$f: X \to Y$</strong>: $f(0) = 1$、$f(1) = 0$とし、それ以外の$x$については$f(x) = x$とする単射関数とします。</li>
+        </ul>
+    </div>
+
+    <h3>条件を満たすことの確認</h3>
+    <ol>
+        <li><strong>$X$はHausdorff空間である</strong><br>
+        $X$の位相は通常の$\mathbb{R}$の位相よりも細かい（開集合が多い）ため、通常の$\mathbb{R}$が持つHausdorff性をそのまま受け継ぎます。</li>
+        <li><strong>コンパクト部分集合をコンパクト部分集合にうつす</strong><br>
+        まず、$X$におけるコンパクト集合は<strong>有限集合のみ</strong>であることを示します。<br>
+        もし$X$に無限個の点を持つコンパクト集合$K$が存在したとすると、その中に可算無限部分集合$A = \{a_1, a_2, \ldots\}$がとれます。ここで、$X$の開被覆として$O_0 = X \setminus A$と$O_n = X \setminus (A \setminus \{a_n\})$を考えます（補集合が可算なので、これらは$X$においてすべて開集合です）。これらは$K$を完全に被覆しますが、どの有限部分被覆をとっても$A$の要素を有限個しか覆うことができず、$K$全体を覆うことができないため、コンパクト性に矛盾します。<br>
+        したがって、$X$のコンパクト集合は有限集合に限られます。$f$がどのような写像であれ、有限集合は有限集合に写されます。そして$Y$（通常の$\mathbb{R}$）において有限集合は常にコンパクトです。よってこの条件は満たされます。</li>
+        <li><strong>$f$は連続ではない</strong><br>
+        $x = 0$における連続性を確認します。$f(0) = 1$です。<br>
+        $Y$における$1$の開近傍として$V = (1/2, 3/2)$をとります。この$V$の$f$による逆像は$f^{-1}(V) = \{0\} \cup ((1/2, 3/2) \setminus \{1\})$となります。<br>
+        もし$f$が連続であれば、これは$X$の開集合になるはずです。開集合であると仮定すると、定義から通常の開集合$O$と可算集合$C$が存在して、$0 \in O \setminus C \subseteq f^{-1}(V)$となります。<br>
+        $0 \in O$なので、$O$は微小な区間$(-\epsilon, \epsilon)$を含みます。しかし、$\epsilon$を十分に小さく取ると$(-\epsilon, \epsilon)$は$(1/2, 3/2)$と一切交わりません。<br>
+        したがって、$(-\epsilon, \epsilon) \setminus C \subseteq \{0\}$とならざるを得ません。これは、非可算な要素を持つ区間$(-\epsilon, \epsilon)$が、高々可算な集合$C \cup \{0\}$に完全に含まれることを意味し、明確な矛盾です。<br>
+        よって逆像は$X$で開集合ではなく、$f$は連続ではありません。</li>
+    </ol>
+
+    <hr>
+
+    <h2>3. 定義した位相が実際に位相の公理を満たすことの証明</h2>
+    <p>反例で定義した「通常の開集合から可算集合を除いたもの」の全体が、実際に位相の公理を満たすことを確認します。新たに定義する部分集合の族を$\mathcal{O}$とおきます。</p>
+
+    <div class="definition-box">
+        <strong>定義:</strong><br>
+        $\mathcal{O} = \{ O \setminus C \mid O \text{ は } \mathbb{R} \text{ の通常の位相での開集合}, C \text{ は可算集合} \}$
+    </div>
+
+    <h3>公理1：全体集合と空集合が含まれること</h3>
+    <p>$\mathbb{R} \in \mathcal{O}$および$\emptyset \in \mathcal{O}$を示します。</p>
+    <ul>
+        <li>$\mathbb{R} = \mathbb{R} \setminus \emptyset$と表せます。$\mathbb{R}$は通常の開集合であり、空集合$\emptyset$は有限集合（可算集合の一種）なので、$\mathbb{R} \in \mathcal{O}$です。</li>
+        <li>$\emptyset = \emptyset \setminus \emptyset$と表せます。$\emptyset$は通常の開集合であり、空集合は可算なので、$\emptyset \in \mathcal{O}$です。</li>
+    </ul>
+
+    <h3>公理2：有限個の共通部分が含まれること</h3>
+    <p>$U_1, U_2 \in \mathcal{O}$ならば$U_1 \cap U_2 \in \mathcal{O}$を示します。</p>
+    <p>定義より、$U_1 = O_1 \setminus C_1$、$U_2 = O_2 \setminus C_2$と書けます（$O_1, O_2$は通常の開集合、$C_1, C_2$は可算集合）。このとき、共通部分は集合の演算により以下のように変形できます。</p>
+    $$U_1 \cap U_2 = (O_1 \setminus C_1) \cap (O_2 \setminus C_2) = (O_1 \cap O_2) \setminus (C_1 \cup C_2)$$
+    <ul>
+        <li>$O_1 \cap O_2$は通常の開集合の有限交叉なので、通常の開集合です。</li>
+        <li>$C_1 \cup C_2$は可算集合同士の有限和なので、可算集合です。</li>
+    </ul>
+    <p>したがって、$U_1 \cap U_2$も「通常の開集合$\setminus$可算集合」の形をしているため、$U_1 \cap U_2 \in \mathcal{O}$となります。数学的帰納法により、任意の有限個の共通部分についても成り立ちます。</p>
+
+    <h3>公理3：任意個の和集合が含まれること（最重要ポイント）</h3>
+    <p>$\mathcal{O}$の任意の元からなる族$\{U_\lambda\}_{\lambda \in \Lambda}$について、その和集合$U = \bigcup_{\lambda \in \Lambda} U_\lambda$が$\mathcal{O}$に含まれることを示します。</p>
+    <p>各$U_\lambda$は$U_\lambda = O_\lambda \setminus C_\lambda$と表せます。ここで、通常の開集合の和集合$O = \bigcup_{\lambda \in \Lambda} O_\lambda$を考えます。通常の位相の公理から、$O$は通常の開集合です。</p>
+    <p>$U \subseteq O$であるため、$C = O \setminus U$とおいたとき、<strong>$C$が可算集合になること</strong>を示せば、$U = O \setminus C$となり証明が完了します。</p>
+
+    <div class="proof-box">
+        <ol>
+            <li><strong>リンデレーフ性の適用</strong><br>
+            $\mathbb{R}$の通常の位相は第二可算公理を満たすため、リンデレーフ空間です。したがって、任意の開被覆から可算部分被覆を取り出すことができます。<br>
+            開集合$O$は$\{O_\lambda\}_{\lambda \in \Lambda}$の和集合ですが、リンデレーフ性により、その中から可算個の$\{O_{\lambda_n}\}_{n=1}^\infty$を選んで、$O = \bigcup_{n=1}^\infty O_{\lambda_n}$とすることができます。</li>
+            <li><strong>$C$が可算であることの証明</strong><br>
+            任意の要素$x \in C$をとります。$C = O \setminus U$なので、「$x \in O$」かつ「$x \notin U$」です。
+                <ul>
+                    <li>$x \in O$なので、先ほどの可算部分被覆のどれか、ある$k$について$x \in O_{\lambda_k}$となります。</li>
+                    <li>一方で$x \notin U$なので、すべての$\lambda$について$x \notin U_\lambda$です。当然$x \notin U_{\lambda_k}$です。</li>
+                    <li>$U_{\lambda_k} = O_{\lambda_k} \setminus C_{\lambda_k}$であり、$x \in O_{\lambda_k}$なのに$x \notin U_{\lambda_k}$であるということは、除外された集合の中に$x$があること、すなわち$x \in C_{\lambda_k}$を意味します。</li>
+                </ul>
+            </li>
+        </ol>
+        <p>以上より、$C$の任意の要素$x$は、可算個の$C_{\lambda_n}$のどれかに必ず含まれることになります。つまり、</p>
+        $$C \subseteq \bigcup_{n=1}^\infty C_{\lambda_n}$$
+        <p>となります。可算集合の可算和はまた可算集合であるため、右辺は可算集合です。その部分集合である$C$も可算集合となります。</p>
+        <p>よって、$U = O \setminus C$（$O$は通常の開集合、$C$は可算集合）と表せるため、$U \in \mathcal{O}$が示されました。</p>
+    </div>
+
+    <p>以上の3つの公理を満たすため、$\mathcal{O}$は確かに$\mathbb{R}$上の位相を定めていることが証明されました。</p>
+
+</body>
+</html>
