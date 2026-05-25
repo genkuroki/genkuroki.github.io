@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>無限次ガロア理論と有限体の絶対ガロア群</title>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        .definition, .theorem, .lemma, .proof {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .theorem {
+            border-left-color: #e74c3c;
+            background-color: #fdf5f5;
+        }
+        .proof {
+            border-left-color: #2ecc71;
+            background-color: #f4fdf8;
+        }
+        .lemma {
+            border-left-color: #f39c12;
+            background-color: #fdfbf5;
+        }
+        .title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>無限次ガロア理論と有限体の絶対ガロア群</h1>
+
+    <h2>1. 諸定義の準備</h2>
+
+    <div class="definition">
+        <span class="title">定義1：ガロア拡大</span>
+        体拡大 $L/K$ が代数拡大であり、かつ<strong>正規拡大</strong>（$K$ 係数の既約多項式が $L$ に根を持てば、$L$ 上で完全に一次式に分解される）かつ<strong>分離拡大</strong>（すべての元の最小多項式が重根を持たない）であるとき、$L/K$ をガロア拡大という。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義2：代数閉包 (Algebraic Closure)</span>
+        体 $K$ の代数拡大 $\bar{K}$ であり、$\bar{K}$ 上の任意の定数でない多項式が $\bar{K}$ 内に根を持つ（代数的に閉じている）とき、$\bar{K}$ を $K$ の代数閉包と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義3：射影極限（逆極限）とプロ有限群</span>
+        半順序集合 $I$ によって添字付けられた位相群の族 $\{G_i\}_{i \in I}$ と、$i \le j$ に対して連続な準同型（制限写像） $\phi_{ji}: G_j \to G_i$ が存在し、$\phi_{ii} = \mathrm{id}$ かつ $\phi_{ki} = \phi_{ji} \circ \phi_{kj}$ が成り立つとする（逆系）。このとき、直積空間 $\prod_{i \in I} G_i$ の部分群として射影極限を次のように定義する：
+        $$\varprojlim_{i \in I} G_i = \left\{ (g_i)_{i \in I} \in \prod_{i \in I} G_i \;\middle|\; \forall i \le j, \phi_{ji}(g_j) = g_i \right\}$$
+        各 $G_i$ が有限群（離散位相）であるとき、その射影極限として得られる位相群を<strong>プロ有限群 (Profinite group)</strong> と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義4：クルル位相 (Krull Topology)</span>
+        無限次ガロア拡大 $L/K$ のガロア群 $G = \text{Gal}(L/K)$ に対し、$L/K$ の有限次ガロア部分拡大 $N$ をすべて取る。写像 $G \to \prod \text{Gal}(N/K), \sigma \mapsto (\sigma|_N)$ による $G$ の像に、直積空間の相対位相を入れたものをクルル位相と呼ぶ。これにより $G$ はコンパクトかつ全不連結なハウスドルフ位相群（プロ有限群）となる。
+    </div>
+
+    <h2>2. 有限体の絶対ガロア群</h2>
+    <p>有限体 $k$（要素数 $q$）とその代数閉包 $\bar{k}$ について、絶対ガロア群 $\text{Gal}(\bar{k}/k)$ を決定する。</p>
+
+    <div class="theorem">
+        <span class="title">定理：有限体の絶対ガロア群</span>
+        $$\text{Gal}(\bar{k}/k) \cong \hat{\mathbb{Z}} = \varprojlim_{n} \mathbb{Z}/n\mathbb{Z}$$
+    </div>
+    
+    <div class="proof">
+        <span class="title">証明</span>
+        <p>1. $k$ の任意の有限次拡大は一意に定まり、その次数を $n$ とすると拡大体 $k_n \cong \mathbb{F}_{q^n}$ となる。この拡大はガロア拡大であり、ガロア群 $\text{Gal}(k_n/k)$ はフロベニウス自己同型 $\varphi_n: x \mapsto x^q$ によって生成される位数 $n$ の巡回群である。<br>
+        したがって、同型 $\text{Gal}(k_n/k) \cong \mathbb{Z}/n\mathbb{Z}$ が $\varphi_n \leftrightarrow 1 \pmod n$ によって定まる。</p>
+
+        <p>2. 無限次ガロア拡大の理論により、$\text{Gal}(\bar{k}/k) \cong \varprojlim_n \text{Gal}(k_n/k)$ である。極限は $n \mid m$ となる体の包含 $k_n \subset k_m$ に対する制限写像で与えられる。</p>
+
+        <p>3. 制限写像 $\text{Res}_{m,n} : \text{Gal}(k_m/k) \to \text{Gal}(k_n/k)$ について、$k_m$ 上のフロベニウス写像 $\varphi_m$ を $k_n$ に制限すると $k_n$ 上のフロベニウス写像 $\varphi_n$ に一致する。これは $\mathbb{Z}/m\mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}, a \pmod m \mapsto a \pmod n$ という自然な射影に完全に対応する。</p>
+
+        <p>4. したがって、プロ有限整数群 $\hat{\mathbb{Z}}$ の定義そのものにより、<br>
+        $$\text{Gal}(\bar{k}/k) \cong \varprojlim_{n} \mathbb{Z}/n\mathbb{Z} = \hat{\mathbb{Z}}$$
+        が成り立つ。（証明終）</p>
+    </div>
+
+    <h2>3. 補題の証明</h2>
+    <p>無限次ガロア理論の主定理を証明するために不可欠な2つの補題を示す。</p>
+
+    <div class="lemma">
+        <span class="title">補題A：自己同型の延長（ツォルンの補題の応用）</span>
+        $L/M$ を代数拡大とする。$\alpha, \beta \in L$ が $M$ 上で同じ最小多項式を持つとき、$M$ 上の同型写像 $\tau: M(\alpha) \to M(\beta)$ ($\tau(\alpha)=\beta$) は、$L$ から $L$ の中へのある埋め込み $\sigma: L \to \bar{L}$ に延長できる。特に $L/M$ が正規拡大であれば $\sigma$ 
+        は $L$ 上の自己同型 $\sigma \in \text{Gal}(L/M)$ となる。
+    </div>
+    
+    <div class="proof">
+        <span class="title">補題Aの証明</span>
+        集合 $S$ を、「$L$ の部分体 $E$ ($M(\alpha) \subset E \subset L$) と、$\tau$ の延長となる埋め込み $\sigma_E: E \to \bar{L}$ の組 $(E, \sigma_E)$ 全体」とする。$S$ に順序を「延長関係」で入れる。任意の全順序部分集合に対し、それらの和集合を取ることで上界が存在する。ツォルンの補題より $S$ には極大元 $(E_{max}, \sigma_{max})$ が存在する。<br>
+        もし $E_{max} \neq L$ ならば、$x \in L \setminus E_{max}$ が存在する。$L/M$ は代数拡大なので $x$ は $E_{max}$ 上代数的である。代数拡大の基本性質より $\sigma_{max}$ は $x$ を添加した体 $E_{max}(x)$ まで延長でき、極大性に矛盾する。よって $E_{max} = L$ である。$L/M$ が正規であれば埋め込みの像は $L$ 自身となり、自己同型となる。（証明終）
+    </div>
+
+    <div class="lemma">
+        <span class="title">補題B：正規部分群とガロア拡大</span>
+        $L/K$ をガロア拡大、$M$ を中間体とする。$M/K$ がガロア拡大であることと、$\text{Gal}(L/M)$ が $\text{Gal}(L/K)$ の正規部分群であることは同値である。
+    </div>
+
+    <div class="proof">
+        <span class="title">補題Bの証明</span>
+        任意の $\sigma \in \text{Gal}(L/K)$ と $\tau \in \text{Gal}(L/\sigma(M))$ に対して、$\sigma^{-1} \tau \sigma$ は $M$ の元を固定するため、$\sigma^{-1} \tau \sigma \in \text{Gal}(L/M)$ すなわち $\tau \in \sigma \text{Gal}(L/M) \sigma^{-1}$ となる。逆も同様に示せるため、<br>
+        $$\text{Gal}(L/\sigma(M)) = \sigma \text{Gal}(L/M) \sigma^{-1}$$
+        が成り立つ。<br>
+        $M/K$ が正規拡大（ガロア拡大）である必要十分条件は、任意の $\sigma \in \text{Gal}(L/K)$ に対して $\sigma(M) = M$ となることである。上の式より、これは $\text{Gal}(L/M) = \sigma \text{Gal}(L/M) \sigma^{-1}$、すなわち $\text{Gal}(L/M)$ が正規部分群であることと同値である。（証明終）
+    </div>
+
+    <h2>4. クルルのガロア理論（主定理）</h2>
+
+    <div class="theorem">
+        <span class="title">無限次ガロア拡大の主定理</span>
+        $L/K$ をガロア拡大とし、$G = \text{Gal}(L/K)$ にクルル位相を入れる。<br>
+        1. 中間体 $M$ 全体と、$G$ の<strong>閉部分群 $H$</strong> 全体の間に包含関係を反転させる全単射 $M \mapsto \text{Gal}(L/M), H \mapsto L^H$ が存在する。<br>
+        2. $M/K$ がガロア拡大 $\iff \text{Gal}(L/M)$ が $G$ の正規部分群。このとき位相同型 $\text{Gal}(M/K) \cong G/\text{Gal}(L/M)$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="title">主定理の証明</span>
+        <p><strong>ステップ1：$\text{Gal}(L/M)$ が閉部分群であること</strong><br>
+        $M$ を有限次部分拡大 $M_i$ の和集合 $\bigcup M_i$ とすると、$\text{Gal}(L/M) = \bigcap \text{Gal}(L/M_i)$ である。各 $M_i$ を含む有限次ガロア拡大 $N_i$ を取れば、$\text{Gal}(L/N_i)$ はクルル位相の基本開近傍（かつ閉群）である。$\text{Gal}(L/M_i)$ はその有限個の剰余類の和となるため閉群である。閉集合の共通部分は閉集合なので、$\text{Gal}(L/M)$ は閉部分群である。</p>
+
+        <p><strong>ステップ2：$L^{\text{Gal}(L/M)} = M$ であること</strong><br>
+        自明な包含 $M \subset L^{\text{Gal}(L/M)}$ の逆を示す。$\alpha \in L \setminus M$ とすると、最小多項式の次数は $2$ 以上。分離性より他の根 $\beta \neq \alpha$ が存在する。補題Aより、$M$ を固定し $\alpha$ を $\beta$ に移す $\tau$ を $L$ 全体の自己同型 $\sigma \in \text{Gal}(L/M)$ に延長できる。$\sigma(\alpha) = \beta \neq \alpha$ より $\alpha$ は固定されない。対偶より逆の包含が示され、両者は一致する。</p>
+
+        <p><strong>ステップ3：閉群 $H$ に対して $\text{Gal}(L/L^H) = H$ であること</strong><br>
+        一般の部分群に対して $\text{Gal}(L/L^H) = \bar{H}$ となることを示す。包含 $H \subset \text{Gal}(L/L^H)$ は自明であり、ステップ1より右辺は閉なので $\bar{H} \subset \text{Gal}(L/L^H)$。<br>
+        逆に $\sigma \in \text{Gal}(L/L^H)$ を取る。$\sigma$ の任意の基本開近傍 $U = \sigma \text{Gal}(L/N)$ を考える。$H|_N$ は有限次ガロア群 $\text{Gal}(N/K)$ の部分群であり、有限次ガロア理論より $\text{Gal}(N/N^{H|_N}) = H|_N$ である。不変体の定義から $N^{H|_N} = N \cap L^H$。$\sigma$ は $L^H$ を固定するので、$\sigma|_N$ は $N \cap L^H$ を固定する。つまり $\sigma|_N \in H|_N$。よって $\eta|_N = \sigma|_N$ となる $\eta \in H$ が存在し、これは $\eta \in U \cap H$ を意味する。したがって $\sigma \in \bar{H}$ であり、$\text{Gal}(L/L^H) \subset \bar{H}$。よって $H$ が閉群であれば $\text{Gal}(L/L^H) = H$ となる。</p>
+
+        <p><strong>ステップ4：正規性と同型</strong><br>
+        補題Bにより、$M/K$ の正規性と $\text{Gal}(L/M)$ の正規性は同値である。また制限写像 $G \to \text{Gal}(M/K)$ の核は $\text{Gal}(L/M)$ であり、第一同型定理より代数同型が得られる。クルル位相の性質（コンパクトからハウスドルフへの連続全射は開写像）により、これは位相同型となる。（証明終）</p>
+    </div>
+
+</body>
+</html>
