@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>位相空間論におけるUrysohnの補題とTietzeの拡張定理、およびその圏論的性質</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 10px; color: #2c3e50; }
+        h2 { border-bottom: 1px solid #bdc3c7; margin-top: 30px; color: #34495e; }
+        h3 { color: #2980b9; }
+        p { margin-bottom: 1em; }
+        .definition {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .theorem {
+            background-color: #f9f2ec;
+            border-left: 4px solid #d35400;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .proof {
+            background-color: #fcfcfc;
+            border-left: 4px solid #7f8c8d;
+            padding: 15px;
+            margin: 10px 0 20px 0;
+            font-style: normal;
+        }
+        .proof-title { font-weight: bold; margin-bottom: 10px; }
+        .qed { text-align: right; font-weight: bold; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .references { background-color: #f1f2f6; padding: 15px; margin-top: 40px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>位相空間論におけるUrysohnの補題とTietzeの拡張定理、およびその圏論的性質</h1>
+    <p>
+        本稿では、位相空間論における根幹をなす「Urysohnの補題」および「Tietzeの拡張定理」について、自己完結的 (self-contained) な形で詳細に解説します。さらに、これらの定理が圏論の視点からどのように解釈されるか、特に「コンパクトHausdorff空間の圏」や「正規空間の圏」における単射的対象 (injective object) の振る舞い、そして局所コンパクト (locally compact) な空間における正規性の問題や距離化可能性について丁寧に論じます。
+    </p>
+
+    <h2>1. 基礎概念の準備</h2>
+    <p>
+        定理の証明に入る前に、本稿で用いる位相空間論の重要な定義を確認します。
+    </p>
+    <div class="definition">
+        <strong>定義 1.1 (Hausdorff空間と正規空間)</strong><br>
+        <ul>
+            <li><strong>Hausdorff空間 (Hausdorff space):</strong> 空間内の任意の異なる2点 $x, y$ に対して、互いに素な開集合 $U, V$ が存在し、$x \in U$ かつ $y \in V$ となる位相空間。</li>
+            <li><strong>正則空間 (regular space):</strong> 任意の閉集合 $F$ と $F$ に属さない点 $x$ に対して、互いに素な開集合 $U, V$ が存在し、$F \subset U$ かつ $x \in V$ となる位相空間。</li>
+            <li><strong>正規空間 (normal space):</strong> 任意の互いに素な閉集合 $A, B$ に対して、互いに素な開集合 $U, V$ が存在し、$A \subset U$ かつ $B \subset V$ となる位相空間。通常、1点からなる集合が閉集合であること（$T_1$ 空間）も仮定します。</li>
+        </ul>
+    </div>
+    
+    <div class="definition">
+        <strong>定義 1.2 (局所コンパクトとコンパクト)</strong><br>
+        <ul>
+            <li><strong>コンパクト (compact):</strong> 空間の任意の開被覆が有限部分被覆を持つという性質。</li>
+            <li><strong>局所コンパクト (locally compact):</strong> 空間の任意の点が、コンパクト (compact) な近傍を持つ位相空間。</li>
+        </ul>
+    </div>
+
+    <h2>2. Urysohnの補題</h2>
+    <p>
+        正規空間 (normal space) において、互いに素な閉集合を「連続関数」によって分離できることを保証する極めて重要な定理です。
+    </p>
+    <div class="theorem">
+        <strong>定理 2.1 (Urysohnの補題 / Urysohn's lemma)</strong><br>
+        $X$ を正規空間 (normal space) とし、$A, B$ を $X$ の互いに素な閉集合とする。このとき、連続写像 (continuous map) $f: X \to [0, 1]$ が存在して、すべての $x \in A$ について $f(x) = 0$、すべての $x \in B$ について $f(x) = 1$ を満たす。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <p><strong>ステップ1: 二進有理数による開集合の族の構成</strong></p>
+        <p>
+            $X$ が正規空間 (normal space) であるため、「閉集合 $F$ が開集合 $V$ に含まれるとき、閉包が開集合に包まれるような開集合 $U$ をその間に挟める（$F \subset U \subset \overline{U} \subset V$）」という性質が成り立ちます。
+        </p>
+        <p>
+            区間 $[0,1]$ 内の二進有理数の集合を $D = \{ k/2^n \mid n \ge 0, 0 \le k \le 2^n \}$ とします。各 $r \in D$ に対して、条件「$p < q \implies \overline{U_p} \subset U_q$」を満たす開集合 $U_r$ を帰納的に構成します。
+        </p>
+        <ul>
+            <li><strong>初期設定:</strong> $U_1 = X \setminus B$ とします。$A \cap B = \emptyset$ より $A \subset U_1$ です。正規性より、$A \subset U_0 \subset \overline{U_0} \subset U_1$ となる開集合 $U_0$ を取ります。</li>
+            <li><strong>帰納的構成:</strong> ある $n$ について分母が $2^n$ の有理数に対して $U_r$ が構成されたとします。次に分母が $2^{n+1}$ の奇数分子の有理数 $r = (2m+1)/2^{n+1}$ を考えます。その両隣である $p = 2m/2^{n+1}$ と $q = (2m+2)/2^{n+1}$ は分母が $2^n$ の有理数（約分可能）なので、既に $U_p, U_q$ が構成されており $\overline{U_p} \subset U_q$ を満たします。正規性を用いて、$\overline{U_p} \subset U_r \subset \overline{U_r} \subset U_q$ となる開集合 $U_r$ を定めます。</li>
+        </ul>
+        <p>これを繰り返すことで、すべての $r \in D$ について $U_r$ が構成されます。便宜上、$r < 0$ のときは $U_r = \emptyset$、$r > 1$ のときは $U_r = X$ と定義します。</p>
+
+        <p><strong>ステップ2: 連続関数の定義</strong></p>
+        <p>関数 $f: X \to [0, 1]$ を次のように定義します：<br>
+        $$f(x) = \inf \{ r \in \mathbb{Q} \mid x \in U_r \}$$</p>
+        <p>
+            $x \in A$ のとき、すべての $r \ge 0$ で $x \in U_r$ なので $f(x) = 0$ です。また $x \in B$ のとき、$r \le 1$ について $x \notin U_r$ （$U_1 = X \setminus B$ ゆえ）なので、$f(x) = 1$ となります。
+        </p>
+        <p>
+            この $f$ が連続写像 (continuous map) であることを示します。任意の実数 $a$ に対して、逆像 $f^{-1}([0, a))$ と $f^{-1}((a, 1])$ が開集合であることを示せば十分です。
+        </p>
+        <ul>
+            <li>$f(x) < a \iff$ ある $r < a$ で $x \in U_r$。よって $f^{-1}([0, a)) = \bigcup_{r < a} U_r$ となり開集合。</li>
+            <li>$f(x) > a \iff$ ある $r > a$ で $x \notin \overline{U_r}$。よって $f^{-1}((a, 1]) = \bigcup_{r > a} (X \setminus \overline{U_r})$ となり、閉集合の補集合の和集合なので開集合。</li>
+        </ul>
+        <p>以上より、$f$ は所望の性質を満たす連続関数です。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <h2>3. Tietzeの拡張定理</h2>
+    <p>
+        Urysohnの補題を一般化し、閉部分集合上で定義された連続関数を空間全体に連続的に拡張できることを示します。
+    </p>
+    <div class="theorem">
+        <strong>定理 3.1 (Tietzeの拡張定理 / Tietze extension theorem)</strong><br>
+        $X$ を正規空間 (normal space)、$A \subset X$ を閉集合とする。連続写像 (continuous map) $f: A \to [-1, 1]$ が与えられたとき、連続写像 $F: X \to [-1, 1]$ が存在して、任意の $x \in A$ に対して $F(x) = f(x)$ を満たす。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <p><strong>ステップ1: 近似関数の構成</strong></p>
+        <p>$A$ 上の連続関数 $f: A \to [-1, 1]$ に対し、以下の閉集合を定義します。<br>
+        $$A_1 = \left\{ x \in A \mathrel{\Big|} f(x) \le -\frac{1}{3} \right\}, \quad B_1 = \left\{ x \in A \mathrel{\Big|} f(x) \ge \frac{1}{3} \right\}$$<br>
+        これらは $A$ の閉集合であり、$A$ が $X$ の閉集合であるため、$X$ の閉集合でもあります。また $A_1 \cap B_1 = \emptyset$ です。Urysohnの補題（値域をシフトしたもの）より、連続関数 $g_1: X \to \left[-\frac{1}{3}, \frac{1}{3}\right]$ で、$A_1$ 上で $-\frac{1}{3}$、$B_1$ 上で $\frac{1}{3}$ を取るものが存在します。このとき $A$ 上で $|f(x) - g_1(x)| \le \frac{2}{3}$ となります。</p>
+
+        <p><strong>ステップ2: 帰納的な関数の列の構成</strong></p>
+        <p>
+            $f_1 = f - g_1$ とおくと、$f_1: A \to \left[-\frac{2}{3}, \frac{2}{3}\right]$ です。同様の操作を繰り返すことで、連続関数の列 $g_n: X \to \mathbb{R}$ を得ます。これらは次を満たします。
+        </p>
+        <ul>
+            <li>$|g_n(x)| \le \frac{1}{3} \left(\frac{2}{3}\right)^{n-1} \quad (x \in X)$</li>
+            <li>$\left|f(x) - \sum_{i=1}^n g_i(x)\right| \le \left(\frac{2}{3}\right)^n \quad (x \in A)$</li>
+        </ul>
+
+        <p><strong>ステップ3: WeierstrassのM判定法による一様収束</strong></p>
+        <p>
+            級数 $F(x) = \sum_{n=1}^\infty g_n(x)$ を考えます。$|g_n(x)|$ は収束する等比級数 $\sum \frac{1}{3} \left(\frac{2}{3}\right)^{n-1} = 1$ の各項で抑えられます。WeierstrassのM判定法より、この関数項級数は $X$ 上で一様収束し、$F$ は連続関数になります。また、$A$ 上では誤差が $0$ に収束するため $F(x) = f(x)$ となり、値域も $[-1, 1]$ に収まります。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <h2>4. 圏論的視点：コンパクトHausdorff空間と単射的対象</h2>
+    <p>
+        ここでは、圏 (category) の言葉を用いて位相空間を分類します。
+    </p>
+    <div class="definition">
+        <strong>定義 4.1 (単射的対象 / injective object)</strong><br>
+        圏 $\mathcal{C}$ において、対象 $I$ が <strong>単射的対象 (injective object)</strong> であるとは、任意のモノ射 (monomorphism) $m: A \to X$ と射 $f: A \to I$ に対して、射 $F: X \to I$ が存在して $F \circ m = f$ を満たす（図式が可換になる）ことを言う。
+    </div>
+    
+    <h3>4.1 コンパクトHausdorff空間の圏 $\mathbf{CompHaus}$</h3>
+    <p>
+        対象をコンパクト (compact) かつHausdorffな位相空間、射を連続写像とする圏 $\mathbf{CompHaus}$ を考えます。この圏におけるモノ射 (monomorphism) は単射連続写像となります。
+    </p>
+    <div class="theorem">
+        <strong>定理 4.2</strong><br>
+        区間 $[0,1]$ は、圏 $\mathbf{CompHaus}$ における単射的対象 (injective object) である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <p>
+            $X, A \in \mathbf{CompHaus}$ とし、$m: A \to X$ を単射連続写像（モノ射）、$f: A \to [0,1]$ を連続写像とします。<br>
+            コンパクト空間からのHausdorff空間への連続写像は閉写像 (closed map) となります。したがって、$m$ は単射かつ閉写像であるため、像 $m(A)$ は $X$ の閉集合であり、$m$ は閉埋め込み (closed embedding) となります。<br>
+            コンパクト (compact) Hausdorff空間は常に正規空間 (normal space) です。したがって、$m(A)$ 上で定義された連続関数 $f \circ m^{-1}: m(A) \to [0,1]$ に対して Tietzeの拡張定理を適用すると、$X$ 全体に拡張する連続写像 $F: X \to [0,1]$ が存在し、$F \circ m = f$ を満たします。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <h3>4.2 十分に単射的対象を持つこと</h3>
+    <p>
+        圏が「十分に単射的対象を持つ (has enough injectives)」とは、任意の対象が何らかの単射的対象 (injective object) へのモノ射 (monomorphism) を持つことを意味します。
+    </p>
+    <div class="theorem">
+        <strong>定理 4.3</strong><br>
+        圏 $\mathbf{CompHaus}$ は十分に単射的対象を持つ。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <p>
+            任意の対象 $X \in \mathbf{CompHaus}$ を取ります。$X$ から $[0, 1]$ への連続関数全体の集合を $J = C(X, [0, 1])$ とします。単射的対象の直積も単射的対象となるため、Tychonoff立方体 $I = [0, 1]^J$ は単射的対象です。<br>
+            評価写像 $e: X \to I$ を $e(x) = (f(x))_{f \in J}$ で定義します。各成分が連続であるため $e$ も連続です。$X$ は正規空間なので Urysohnの補題より異なる2点を分離する連続関数が取れるため、$e$ は単射です。前述の通りコンパクトからHausdorffへの単射は閉埋め込み (closed embedding) となるため、$e$ はモノ射 (monomorphism) です。よって証明されました。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+    
+    <div class="definition">
+        <strong>参考：射影的対象 (projective object) と超不連結 (extremally disconnected) 空間</strong><br>
+        単射的対象 (injective object) の双対概念として、射影的対象 (projective object) が存在します。圏 $\mathbf{CompHaus}$ において射影的対象となる空間は、<strong>超不連結 (extremally disconnected)</strong> 空間と完全に一致することが知られています。超不連結空間とは、任意の開集合の閉包が開集合となる（すなわち clopen になる）空間のことです。
+    </div>
+
+    <h2>5. 正規空間の圏における反例</h2>
+    <p>
+        では、「正規空間と連続写像の圏」において $[0,1]$ は単射的対象 (injective object) になるでしょうか？答えは「否」です。
+    </p>
+    <p>
+        一般の正規空間 (normal space) の圏では、モノ射 (monomorphism) は「単射な連続写像」ですが、これが自動的に閉埋め込み (closed embedding) になるとは限りません。Tietzeの拡張定理は「閉集合」からの拡張のみを保証します。
+    </p>
+    <div class="theorem">
+        <strong>反例 (Counterexample)</strong><br>
+        空間 $X = [0, 1]$ と、その部分空間 $A = (0, 1]$ を考えます。これらは共に正規空間です。包含写像 $m: A \hookrightarrow X$ は単射連続写像なのでモノ射です。連続写像 $f: A \to [0, 1]$ を次で定義します：
+        $$f(x) = \frac{1}{2} \sin\left(\frac{1}{x}\right) + \frac{1}{2}$$
+        もし $[0,1]$ が単射的対象であれば、$F \circ m = f$ を満たす連続写像 $F: X \to [0, 1]$ が存在するはずです。しかし、$x \to 0$ のとき $\sin(1/x)$ は激しく振動して極限を持たないため、$F(0)$ をどのように定義しても $F$ を点 $0$ で連続にすることはできません。よって拡張は不可能であり、$[0,1]$ は単射的対象ではありません。
+    </div>
+
+    <h2>6. 局所コンパクトと正規性：除外Tychonoff板</h2>
+    <p>
+        「コンパクト (compact) Hausdorff空間は正規空間である」という事実は頻繁に利用されますが、条件を少し緩めて「局所コンパクト (locally compact) Hausdorff空間」とした場合はどうでしょうか。実は、局所コンパクトであっても正規空間 (normal space) にならない有名な反例が存在します。
+    </p>
+    <div class="theorem">
+        <strong>反例 (除外Tychonoff板 / deleted Tychonoff plank)</strong><br>
+        $\omega_1$ を最初の非可算順序数、$\omega$ を最初の可算順序数とします。順序位相を入れたコンパクトHausdorff空間の直積 $T = [0, \omega_1] \times [0, \omega]$ を Tychonoff板と呼びます。この $T$ から角の1点 $(\omega_1, \omega)$ を取り除いた空間 $X = T \setminus \{(\omega_1, \omega)\}$ を<strong>除外Tychonoff板</strong>と呼びます。
+    </div>
+    <p>
+        <strong>局所コンパクト性:</strong> $X$ はコンパクト空間 $T$ の開部分空間であるため、局所コンパクト (locally compact) Hausdorff空間です。<br>
+        <strong>非正規性:</strong> $X$ において、互いに素な閉集合 $A = \{\omega_1\} \times [0, \omega)$ と $B = [0, \omega_1) \times \{\omega\}$ を考えます。これらを開集合で分離しようとしても、$B$ を包む開集合は必ず上方に「はみ出し」、鳩の巣原理に基づく非可算性の議論から、$A$ の近傍と必ず交わってしまいます。したがって $X$ は正規空間 (normal space) ではありません。
+    </p>
+
+    <h2>7. Urysohnの距離化定理</h2>
+    <p>
+        最後に、$\mathbf{CompHaus}$ における埋め込みの議論と見事に符号する距離化定理を紹介します。第2可算公理 (second countability axiom)（可算個の開基を持つという性質）が加わることで、先ほどの Tychonoff立方体 $[0,1]^J$ への埋め込みが、可算次元のHilbert立方体 $[0,1]^\mathbb{N}$ への埋め込みへと洗練されます。
+    </p>
+    <div class="theorem">
+        <strong>定理 7.1 (Urysohnの距離化定理 / Urysohn's metrization theorem)</strong><br>
+        第2可算公理 (second countability axiom) を満たす正則空間 (regular space) は距離化可能 (metrizable) である。（※ 第2可算かつ正則であれば、自動的に正規空間になります）
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明の概略:</div>
+        <p>
+            第2可算公理より、可算な開基 (base) $\mathcal{B}$ が存在します。$\mathcal{B}$ の要素のペア $(U_n, V_n)$ で $\overline{U_n} \subset V_n$ を満たすものを可算個並べます。<br>
+            空間は正規空間 (normal space) なので、Urysohnの補題を各ペアに適用し、$\overline{U_n}$ で $0$、$X \setminus V_n$ で $1$ を取る連続関数 $f_n: X \to [0, 1]$ を構成します。<br>
+            これらを用いて、写像 $e: X \to [0, 1]^\mathbb{N}$ を $e(x) = (f_1(x), f_2(x), \dots)$ で定義します。この $e$ は、対象空間の正則性と可算開基の性質により、単射かつ開写像（相対位相として）になることが示され、$X$ は Hilbert立方体 $[0, 1]^\mathbb{N}$ の部分空間へ位相同型に埋め込まれます。<br>
+            Hilbert立方体は距離化可能 (metrizable)（例えば距離 $d(x, y) = \sum |x_n - y_n| / 2^n$）であるため、その部分空間である $X$ も距離化可能となります。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <div class="references">
+        <strong>参考文献・関連リンク:</strong>
+        <ul>
+            <li><a href="https://ncatlab.org/nlab/show/Urysohn%27s+lemma" target="_blank">nLab: Urysohn's lemma</a></li>
+            <li><a href="https://ncatlab.org/nlab/show/Tietze+extension+theorem" target="_blank">nLab: Tietze extension theorem</a></li>
+            <li><a href="https://ncatlab.org/nlab/show/injective+object" target="_blank">nLab: injective object</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Tychonoff_plank" target="_blank">Wikipedia (English): Tychonoff plank</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

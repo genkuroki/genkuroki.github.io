@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクト生成弱Hausdorff空間と凝縮数学の基礎</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 10px;
+            color: #2c3e50;
+        }
+        h2 {
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 5px;
+            margin-top: 40px;
+            color: #34495e;
+        }
+        h3 {
+            margin-top: 30px;
+            color: #2980b9;
+        }
+        p {
+            margin-bottom: 1.2em;
+        }
+        .definition, .theorem, .example, .note {
+            background-color: #f9f9f9;
+            border-left: 5px solid;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .definition { border-left-color: #3498db; }
+        .theorem { border-left-color: #e74c3c; }
+        .example { border-left-color: #f1c40f; }
+        .note { border-left-color: #2ecc71; }
+        .title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>コンパクト生成弱Hausdorff空間と凝縮数学の基礎</h1>
+
+    <p>
+        本稿では、代数的位相幾何学 (algebraic topology) の基盤となるコンパクト生成空間 (compactly generated space) およびコンパクト生成弱Hausdorff空間 (compactly generated weakly Hausdorff space) の圏 $\mathbf{CGWH}$ の厳密な構成、そしてそれらが抱える圏論的限界を克服するために提唱された現代の凝縮数学 (condensed mathematics) のパラダイムシフトについて、自己完結的 (self-contained) に解説します。
+    </p>
+
+    <h2>1. コンパクト生成化 ($k$-化) とは何か</h2>
+
+    <p>
+        位相空間の行儀を良くするための最も基礎的な操作がコンパクト生成化 (compactly generatedification) であり、通称「$k$-化」と呼ばれます。幾何学的な直感を保ったまま、空間の集合としての元はそのままに、「コンパクトな図形たちと矛盾しない範囲で、位相（開集合）を限界まで細かく（多く）作り直す」操作です。
+    </p>
+
+    <div class="definition">
+        <span class="title">定義 (コンパクト生成化 / compactly generatedification):</span>
+        位相空間 $X$ が与えられたとき、新しい位相空間 $k(X)$ を以下のように構成する。
+        <ul>
+            <li><strong>台集合:</strong> 集合としては元の $X$ と同一である。</li>
+            <li><strong>位相:</strong> 部分集合 $U \subseteq X$ が $k(X)$ の開集合 (open set) であるとは、任意のコンパクトHausdorff空間 (compact Hausdorff space) $K$ と、任意の連続写像 $f: K \to X$ に対して、その逆像 $f^{-1}(U)$ が $K$ の開集合になることである。</li>
+        </ul>
+        同様に、閉集合 (closed set) も外部からのテスト写像 (test map) の逆像が閉集合になるかで判定される。
+    </div>
+
+    <p>
+        元の空間 $X$ で開集合だったものは当然この条件を満たしますが、$k(X)$ ではこの条件さえクリアすれば新しい開集合として認められます。したがって、恒等写像 (identity map) $\mathrm{id}: k(X) \to X$ は連続になります。
+    </p>
+
+    <div class="note">
+        <span class="title">注意 (現代的定義と伝統的定義の違い):</span>
+        古い教科書では $k(X)$ の開集合を「任意のコンパクトな部分空間 (compact subspace) $K \subseteq X$ に対して $U \cap K$ が $K$ で開集合になること」と定義することがありました。しかし $X$ がHausdorffでない場合、$K$ 自体が非Hausdorffな病的空間になるリスクがあり、写像空間 $Y^X$ を用いたデカルト閉性 (cartesian closedness) が崩壊します。そのため、現代では必ず上記のように「コンパクトHausdorff空間 (compact Hausdorff space) からの連続写像」を用いて定義されます。
+    </div>
+
+    <p>
+        圏論的に見ると、$k$-化は位相空間の圏 $\mathbf{Top}$ からコンパクト生成空間の圏 $\mathbf{CG}$ へのコアレフレクション (coreflection) であり、包含関手 (inclusion functor) $I: \mathbf{CG} \hookrightarrow \mathbf{Top}$ に対する右随伴関手 (right adjoint) となります。すなわち、任意の $Y \in \mathbf{CG}$ に対して以下の普遍性質 (universal property) を満たします。
+        $$ \mathrm{Hom}_{\mathbf{Top}}(I(Y), X) \cong \mathrm{Hom}_{\mathbf{CG}}(Y, k(X)) $$
+    </p>
+
+    <h2>2. 弱Hausdorff化 ($w$-化) とHausdorff化 ($h$-化)</h2>
+
+    <p>
+        次に、空間の点を適切に同一視（潰す）して分離公理を満たさせる操作を考えます。代表的なレフレクション (reflection)、すなわち左随伴関手 (left adjoint) として、Hausdorff化 (Hausdorffification) $h(X)$ と弱Hausdorff化 (weak Hausdorffification) $w(X)$ があります。
+    </p>
+
+    <div class="definition">
+        <span class="title">定義 (弱Hausdorff空間 / weakly Hausdorff space):</span>
+        位相空間 $X$ が弱Hausdorff (weakly Hausdorff) であるとは、任意のコンパクトHausdorff空間 $K$ と連続写像 $f: K \to X$ に対して、その像 $f(K)$ が $X$ の閉集合 (closed set) になることである。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 (Hausdorff化 $h(X)$ と弱Hausdorff化 $w(X)$):</span>
+        <ul>
+            <li><strong>Hausdorff化 $h(X)$:</strong> 空間 $X$ に対し、「任意のHausdorff空間 $Y$ と連続写像 $f: X \to Y$ について $f(x)=f(y)$」となる点 $x, y$ を同値関係で結び、商位相 (quotient topology) を入れた空間。</li>
+            <li><strong>弱Hausdorff化 $w(X)$:</strong> 同様に、「任意の弱Hausdorff空間 $Y$ と連続写像 $f: X \to Y$ について $f(x)=f(y)$」で定義される同値関係で割った空間。</li>
+        </ul>
+    </div>
+
+    <p>
+        $h(X)$ が「開集合で分離できない点はすべて潰す」全体主義的な操作であるのに対し、$w(X)$ は「外からコンパクトな図形を持ち込んだときに区別できなくなる点だけを潰す」局所的な操作です。この違いは以下の例で明確になります。
+    </p>
+
+    <div class="example">
+        <span class="title">例 (潰れ方の違い):</span>
+        無限集合 $X$ に補有限位相 (cofinite topology) を入れた空間を考えます。この空間は $T_1$ 空間ですが、任意の非空開集合が交わる既約空間 (irreducible space) のためHausdorffではありません。<br>
+        補有限位相ではコンパクトHausdorff空間からの像は有限集合に限定され、有限集合は閉集合であるため、$X$ は最初から弱Hausdorffです。したがって $w(X) = X$ であり、1点も潰れません。<br>
+        一方、$X$ からHausdorff空間への連続写像は定値写像しか存在しないため、$h(X) = \{\star\}$ となり、空間全体が1点にクラッシュしてしまいます。
+    </div>
+
+    <h2>3. $\mathbf{CGWH}$ におけるプッシュアウトと McCord の定理</h2>
+
+    <p>
+        代数的位相幾何学では、空間の貼り合わせであるプッシュアウト (pushout) が頻繁に登場します。しかし、$\mathbf{Top}$ でのプッシュアウト（直和を同値関係で割った商空間）は、分離公理やコンパクト生成性を保ちません。圏 $\mathbf{CGWH}$ での正しいプッシュアウト $P_{\mathbf{CGWH}}$ は、以下の3ステップで厳密に定義されます。
+    </p>
+
+    <ol>
+        <li>$\mathbf{Top}$ で通常のプッシュアウト（商空間） $X \cup_A Y$ を作る。</li>
+        <li>それを $k$-化し、$\mathbf{CG}$ でのプッシュアウト $k(X \cup_A Y)$ を得る。</li>
+        <li>さらに $w$-化を施し、$\mathbf{CGWH}$ に押し込む。すなわち $P_{\mathbf{CGWH}} = w(k(X \cup_A Y))$。</li>
+    </ol>
+
+    <p>
+        一般にはステップ3の $w$-化で点が潰れるリスクがありますが、代数トポロジーの主役であるセル複体 (cell complex) の構成などにおいては、この「点の潰れ」が起きないという奇跡が知られています。
+    </p>
+
+    <div class="theorem">
+        <span class="title">定理 (McCordの定理, 1969):</span>
+        $A, X, Y \in \mathbf{CGWH}$ とし、包含写像 $i: A \hookrightarrow X$ が閉包含 (closed embedding) であるとする。このとき、任意の連続写像 $f: A \to Y$ による $\mathbf{CG}$ でのプッシュアウト $k(X \cup_A Y)$ は、最初から弱Hausdorff (weakly Hausdorff) である。すなわち、$w(k(X \cup_A Y)) = k(X \cup_A Y)$ となり、点が一切潰れない。
+    </div>
+
+    <p>
+        <strong>証明の概略:</strong> $A$ が $X$ の閉集合 (closed set) であるとする。商位相 (quotient topology) の性質により、商空間の閉集合は元の空間への逆像が閉集合になるかで決まる。閉包含 (closed embedding) であれば、貼り合わせ先の空間におけるコンパクトHausdorff空間の像が、商空間 $X \cup_A Y$ において適切に閉集合として引き戻されることが保証される。結果として、$k(X \cup_A Y)$ に外部からコンパクトHausdorff空間を連続に写しても、その像は閉集合となり、弱Hausdorff性の定義を自動的に満たす。
+    </p>
+
+    <h2>4. サブオブジェクト・クラシファイアの不在と代用物</h2>
+
+    <p>
+        $\mathbf{CGWH}$ はデカルト閉 (cartesian closed) であり非常に優秀ですが、トポス (topos) になるための致命的な欠陥を持っています。それは、厳密な部分対象分類子 (subobject classifier) $\Omega$ を持たないことです。
+    </p>
+    <p>
+        位相空間の圏では、任意の空間のあらゆる部分集合（開でも閉でもないものを含む）を特性写像 (characteristic map) $\chi_A: X \to \Omega$ の連続写像として引き戻せるような2点空間 $\Omega$ を構成することは不可能です。
+    </p>
+    
+    <h3>Sierpiński空間と開部分対象クラシファイア</h3>
+    <p>
+        完全な $\Omega$ はありませんが、$\mathbf{CG}$ においては「開集合だけを分類する代用物」が存在します。それが <strong>Sierpiński空間 (Sierpiński space)</strong> $S = \{0, 1\}$ （開集合は $\{\emptyset, \{1\}, \{0, 1\}\}$）です。<br>
+        任意の $X \in \mathbf{CG}$ に対し、$X$ の開集合全体 $\mathrm{Open}(X)$ と連続写像の集合の間に自然な全単射 $\mathrm{Hom}_{\mathbf{CG}}(X, S) \cong \mathrm{Open}(X)$ が成立し、開部分対象クラシファイア (open subobject classifier) として機能します。
+    </p>
+
+    <h3>分離公理による悲劇</h3>
+    <p>
+        しかし、$\mathbf{CGWH}$ や $\mathbf{CGHaus}$ では分離公理を課すため、$T_1$ 空間ですらない $S$ は圏から追放されてしまいます。これらの圏で許される2点空間は離散位相を持つ $D = \{0, 1\}$ のみであり、これでは開集合かつ閉集合 (clopen) である部分集合しか分類できません。これは幾何学を記述する上で大きな機能不全でした。
+    </p>
+
+    <h2>5. 凝縮数学 (Condensed Mathematics) へのパラダイムシフト</h2>
+
+    <p>
+        「部分対象分類子の不在」と「トポロジーに起因するホモロジー代数（ExtやTorの計算）の崩壊」という病理を根本から解決するために、P. Scholze と D. Clausen によって提唱されたのが <strong>凝縮数学 (condensed mathematics)</strong> です。
+    </p>
+
+    <div class="note">
+        <span class="title">※翻訳語に関する注意:</span>
+        英語の "condensed" は物理学の凝縮系物理学 (condensed matter physics) に倣い、日本の数学界では「凝集数学」ではなく「<strong>凝縮数学</strong>」と訳すのが標準的かつ圧倒的多数派です。
+    </div>
+
+    <h3>「点」から「層」への転換</h3>
+    <p>
+        彼らは、位相空間 $X$ を「点の集まり」として定義するのをやめ、「プロ有限集合 (profinite set) から $X$ への連続写像全体の集まり」という「影」の情報に注目しました。プロ有限集合とは、有限離散空間の逆極限として得られる、コンパクトかつ完全不連結 (totally disconnected) な空間です。
+    </p>
+
+    <div class="definition">
+        <span class="title">定義 (凝縮集合 / condensed set):</span>
+        プロ有限集合の圏 $\mathbf{Prof}$ に適切な被覆のルール（グロタンディーク位相）を入れたサイト上の <strong>層 (sheaf)</strong> のこと。すなわち、関手 $F: \mathbf{Prof}^{\mathrm{op}} \to \mathbf{Set}$ であって、層条件を満たすものを指す。
+    </div>
+
+    <p>
+        通常の位相空間 $X$ は、プロ有限空間 $S$ に対して $\mathrm{Hom}_{\mathbf{Top}}(S, X)$ を対応させることで、凝縮集合の圏 $\mathbf{Cond}(\mathbf{Set})$ の中に情報を失うことなくすっぽりと埋め込むことができます。
+    </p>
+
+    <h3>なぜこれで世界が変わるのか？</h3>
+    <p>
+        凝縮集合の圏は層 (sheaf) の圏であるため、<strong>自動的にトポス (topos) となり、厳密な部分対象分類子 $\Omega$ を持ちます。</strong><br>
+        さらに、凝縮集合の中でアーベル群の構造を考えた「凝縮アーベル群の圏」は、極めて性質の良いアーベル圏となります。通常の位相空間では余核 (cokernel) を取るとHausdorff性が勝手に壊れるなどの問題がありましたが、凝縮数学の世界では自由に完全列を作り、ホモロジー代数をトポロジーと完全に融合させたまま展開できます。
+    </p>
+
+    <p>
+        この理論をさらに強力にするため、プロ有限集合の代わりにコンパクトHausdorff空間の圏における射影対象 (projective object) を用いるアプローチ（Pyknotic set など）もあります。Gleasonの定理によれば、これはまさに <strong>超不連結 (extremally disconnected)</strong> な空間です。超不連結 (extremally disconnected) な空間とは、任意の開集合の閉包が再び開集合となる（すなわち clopen になる）空間のことであり、この豊富に存在する clopen 集合の恩恵により、代数的構造が位相的病理に邪魔されることなく展開できるのです。
+    </p>
+
+    <hr>
+
+    <h2>6. 参考文献および公式リンク集</h2>
+
+    <ul>
+        <li>
+            <strong>N. Strickland, "The category of CGWH spaces"</strong><br>
+            プッシュアウトの振る舞いやMcCordの定理、$k$-化と$w$-化の随伴性に関する厳密な決定版ノート。<br>
+            <a href="https://ncatlab.org/nlab/files/StricklandCGWH.pdf" target="_blank" rel="noopener noreferrer">PDFへのリンク (nLabアーカイブ)</a>
+        </li>
+        <li>
+            <strong>M. C. McCord, "Classifying Spaces and Infinite Symmetric Products"</strong><br>
+            McCordの定理の原論文 (Trans. Amer. Math. Soc., 1969)。<br>
+            <a href="https://www.jstor.org/stable/1995349" target="_blank" rel="noopener noreferrer">JSTOR リンク</a>
+        </li>
+        <li>
+            <strong>P. Scholze, "Lectures on Condensed Mathematics"</strong><br>
+            凝縮数学 (condensed mathematics) の提唱者本人による公式講義ノート。トポロジーの病理を克服する動機付けから詳細に解説されています。<br>
+            <a href="https://www.math.uni-bonn.de/people/scholze/Condensed.pdf" target="_blank" rel="noopener noreferrer">PDFへのリンク (ボン大学)</a>
+        </li>
+        <li>
+            <strong>三神 雄太郎, "(φ, Γ)-modules over relatively discrete algebras" (RIMS講究録 No.2332)</strong><br>
+            京都大学数理解析研究所 (RIMS) の2026年最新の報告集。第2節「Condensed mathematics」にて、位相の病理から凝縮集合、ソリッド加群 (solid module) までの動機が極めて明快な日本語でコンパクトに解説されています。<br>
+            <a href="https://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/2332-02.pdf" target="_blank" rel="noopener noreferrer">論文PDF (京都大学数理解析研究所)</a>
+        </li>
+        <li>
+            <strong>nLab (圏論的トポロジーの百科事典)</strong><br>
+            <a href="https://ncatlab.org/nlab/show/compactly+generated+weakly+Hausdorff+topological+space" target="_blank" rel="noopener noreferrer">CGWH space の解説ページ</a><br>
+            <a href="https://ncatlab.org/nlab/show/condensed+mathematics" target="_blank" rel="noopener noreferrer">Condensed mathematics の解説ページ</a>
+        </li>
+    </ul>
+
+</body>
+</html>
