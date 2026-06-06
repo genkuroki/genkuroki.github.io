@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>可換環のイデアルによる剰余環：普遍性による定義と剰余類による構成</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    }
+  };
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    body {
+        font-family: "Noto Serif JP", serif;
+        line-height: 1.6;
+        margin: 0 auto;
+        max-width: 900px;
+        padding: 2em;
+        color: #333;
+    }
+    h1 {
+        font-size: 1.8em;
+        border-bottom: 2px solid #333;
+        padding-bottom: 0.3em;
+        margin-bottom: 1em;
+    }
+    h2 {
+        font-size: 1.4em;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 0.2em;
+        margin-top: 1.5em;
+    }
+    h3 {
+        font-size: 1.2em;
+        margin-top: 1.2em;
+    }
+    p {
+        margin-bottom: 1em;
+    }
+    ul, ol {
+        margin-bottom: 1em;
+        padding-left: 2em;
+    }
+    li {
+        margin-bottom: 0.5em;
+    }
+    .definition, .example {
+        background-color: #f9f9f9;
+        border-left: 4px solid #4CAF50;
+        padding: 1em;
+        margin: 1.5em 0;
+    }
+    .example {
+        border-left-color: #2196F3;
+    }
+    .definition strong, .example strong {
+        margin-bottom: 0.5em;
+        color: #333;
+    }
+    a {
+        color: #1a0dab;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+
+<h1>可換環のイデアルによる剰余環：普遍性による定義と剰余類による構成</h1>
+
+<p>可換環 (commutative ring) のイデアル (ideal) による剰余環 (quotient ring) について、それが「どのような性質を満たすべきか」という外部との関係性に着目する<strong>普遍性 (universal property) による定義</strong>と、「どのように作られるか」という内部構造に着目する<strong>剰余類 (residue class) の集合による具体的な構成</strong>の双方から、詳細かつ自己完結的に解説します。</p>
+
+<h2>1. 基礎概念の準備 (はじめに)</h2>
+
+<p>本題に入る前に、議論の前提となる可換環、イデアル、および環準同型の定義を確認します。</p>
+
+<div class="definition">
+    <strong>可換環とイデアルの定義</strong>
+    <p>$R$ を<strong>可換環 (commutative ring)</strong> とします。すなわち、$R$ は加法と乗法の2つの二項演算を持ち、加法についてアーベル群 (abelian group) をなし、乗法について可換モノイド (commutative monoid) をなし、乗法が加法に対して分配法則を満たすものとします。</p>
+    <p>$R$ の<strong>イデアル (ideal)</strong> とは、$R$ の部分集合 $I$ であって、以下の2つの条件を満たすものを指します。</p>
+    <ol>
+        <li>$I$ は $R$ の加法に関する部分群である。したがって $0 \in I$ であり、$I \neq \varnothing$ である。</li>
+        <li>任意の $r \in R$ および $x \in I$ に対して、$rx \in I$ が成り立つ。</li>
+    </ol>
+</div>
+
+<div class="definition">
+    <strong>環準同型と核の定義</strong>
+    <p>2つの可換環 $R, S$ の間の<strong>環準同型 (ring homomorphism)</strong> とは、写像 $f: R \to S$ であって、任意の $x, y \in R$ に対して以下の3条件を満たすものを指します。</p>
+    <ul>
+        <li>$f(x+y) = f(x)+f(y)$</li>
+        <li>$f(xy) = f(x)f(y)$</li>
+        <li>$f(1_R) = 1_S$ （単位元の保存）</li>
+    </ul>
+    <p>このとき、$f$ の<strong>核 (kernel)</strong> を $\ker(f) = \{ x \in R \mid f(x) = 0 \}$ と定義します。$\ker(f)$ は $R$ のイデアルになることが容易に確認できます。</p>
+</div>
+
+<h2>2. 普遍性による定義</h2>
+
+<p>圏論的な視点から、剰余環は普遍性によって特徴付けられます。このアプローチでは、具体的な集合の構成に立ち入る前に、対象が満たすべき性質を要請します。</p>
+
+<p>$R$ を可換環、$I \subset R$ をイデアルとします。イデアル $I$ による $R$ の剰余環とは、可換環 $\bar{R}$ と環準同型 $\pi: R \to \bar{R}$ の組 $(\bar{R}, \pi)$ であって、以下の条件を満たすもののことを指します。</p>
+
+<ol>
+    <li><strong>核に関する条件</strong>: $\pi$ の核は $I$ を含む。すなわち、$I \subset \ker(\pi)$ であり、任意の $x \in I$ に対して $\pi(x) = 0$ が成り立つ。</li>
+    <li><strong>普遍性</strong>: 任意の可換環 $S$ と、環準同型 $f: R \to S$ で $I \subset \ker(f)$ を満たすものに対し、ただ一つの環準同型 $\bar{f}: \bar{R} \to S$ が存在して、$f = \bar{f} \circ \pi$ を満たす（すなわち、任意の $x \in R$ について $f(x) = \bar{f}(\pi(x))$ が成り立つ）。</li>
+</ol>
+
+<p></p>
+
+<p>この普遍性を満たす組 $(\bar{R}, \pi)$ が存在すれば、それは同型を除いて一意に定まります。実際、別の組 $(\bar{R}', \pi')$ も普遍性を満たすとすれば、互いにただ一つの準同型が存在してそれらの合成が恒等写像になることが圏論の標準的な議論から導かれます。この一意に定まる $\bar{R}$ を通常 <strong>$R/I$</strong> と表記します。</p>
+<p>この定義は、「$I$ の元をすべて $0$ とみなすような最も自然で無駄のない新しい環」という直観を厳密に定式化したものです。</p>
+
+<h2>3. 剰余類の集合による構成</h2>
+
+<p>前項の普遍性によって定義された剰余環が<strong>実際に存在すること</strong>を示すためには、具体的な構成を与える必要があります。これが同値関係 (equivalence relation) と剰余類を用いた構成です。</p>
+
+<h3>3.1. 同値関係の導入</h3>
+<p>まず、$R$ 上に次のような関係 $\sim$ を定めます。</p>
+$$x \sim y \iff x - y \in I$$
+<p>$I$ が加法部分群であることから、これが同値関係になることは以下のように容易にわかります。</p>
+<ul>
+    <li><strong>反射律</strong>: 任意の $x \in R$ に対して $x - x = 0 \in I$ なので $x \sim x$。</li>
+    <li><strong>対称律</strong>: $x \sim y$ ならば $x - y \in I$。$I$ は加法部分群なので $-(x - y) = y - x \in I$。よって $y \sim x$。</li>
+    <li><strong>推移律</strong>: $x \sim y$ かつ $y \sim z$ ならば $x - y \in I$ かつ $y - z \in I$。$I$ は加法について閉じているため $(x - y) + (y - z) = x - z \in I$。よって $x \sim z$。</li>
+</ul>
+
+<h3>3.2. 剰余類の集合</h3>
+<p>この同値関係による $x \in R$ の同値類 (equivalence class) を $[x]$ または $x + I$ と表記し、これを $I$ を法とする剰余類と呼びます。</p>
+$$[x] = x + I = \{ x + a \mid a \in I \}$$
+<p>同値類全体の集合（商集合）を $R/I$ とします。</p>
+$$R/I = \{ [x] \mid x \in R \}$$
+
+<h3>3.3. 演算の定義と well-defined 性</h3>
+<p>この集合 $R/I$ に、次のように加法と乗法を定義します。</p>
+$$[x] + [y] = [x + y]$$
+$$[x] \cdot [y] = [xy]$$
+<p>これらの演算が代表元の取り方に依存しない（well-defined である）ことは、剰余環の構成において最も重要な部分であり、以下のように証明されます。$x_1 \sim x_2$ かつ $y_1 \sim y_2$ とします（すなわち $x_1 - x_2 \in I$ かつ $y_1 - y_2 \in I$）。</p>
+
+<ul>
+    <li><strong>加法について</strong>:<br>
+    $(x_1 + y_1) - (x_2 + y_2) = (x_1 - x_2) + (y_1 - y_2)$ となります。仮定より $x_1 - x_2 \in I$ および $y_1 - y_2 \in I$ であり、$I$ は加法について閉じているため、それらの和も $I$ に属します。したがって $(x_1 + y_1) - (x_2 + y_2) \in I$ となり、$[x_1 + y_1] = [x_2 + y_2]$ が成り立ちます。</li>
+    <li><strong>乗法について</strong>:<br>
+    $x_1 y_1 - x_2 y_2 = x_1 y_1 - x_1 y_2 + x_1 y_2 - x_2 y_2 = x_1(y_1 - y_2) + (x_1 - x_2)y_2$ と変形できます。$I$ はイデアルなので、$R$ の元との積について閉じています。よって $x_1(y_1 - y_2) \in I$ および $(x_1 - x_2)y_2 \in I$ となります。さらに $I$ は加法で閉じているので、それらの和である $x_1 y_1 - x_2 y_2 \in I$ となり、$[x_1 y_1] = [x_2 y_2]$ が成り立ちます。</li>
+</ul>
+
+<p>この加法と乗法により、$R/I$ は可換環となります。零元は $[0] = I$ であり、単位元は $[1]$ です。</p>
+
+<h3>3.4. 普遍性の確認</h3>
+<p>自然な全射 (natural surjection) $\pi: R \to R/I$ を $\pi(x) = [x]$ と定義します。これは演算の定義から明らかに全射な環準同型であり、$\pi(x) = [0] \iff x \in I$ であることから $\ker(\pi) = I$ となります。</p>
+
+<p>この構成された組 $(R/I, \pi)$ に、任意の可換環 $S$ と $I \subset \ker(f)$ を満たす環準同型 $f: R \to S$ が与えられたとします。このとき写像 $\bar{f}: R/I \to S$ を、</p>
+$$\bar{f}([x]) = f(x)$$
+<p>と定義します。この定義が well-defined であることを確認します。$[x] = [y]$ とすると $x - y \in I$ です。仮定より $I \subset \ker(f)$ なので $f(x - y) = 0$ となります。$f$ は環準同型であるため $f(x) - f(y) = 0$、すなわち $f(x) = f(y)$ となり、$\bar{f}$ は代表元の選び方によらず定まります。</p>
+
+<p>$\bar{f}$ は明らかに環準同型となります。また、任意の $x \in R$ に対して $(\bar{f} \circ \pi)(x) = \bar{f}([x]) = f(x)$ となるため、構成から明らかに $f = \bar{f} \circ \pi$ を満たします。</p>
+
+<p>最後に $\bar{f}$ の一意性を示します。別の環準同型 $g: R/I \to S$ も $f = g \circ \pi$ を満たすと仮定します。このとき、任意の剰余類 $[x] \in R/I$ に対して、</p>
+$$g([x]) = g(\pi(x)) = (g \circ \pi)(x) = f(x) = \bar{f}([x])$$
+<p>となるため、$g = \bar{f}$ となり、このような $\bar{f}$ が一意であることも示されました。以上より、構成した $R/I$ は普遍性を満たすことが確認できます。</p>
+
+<h2>4. 具体例</h2>
+
+<p>抽象的な構成の理解を深めるため、2つの重要な具体例を挙げます。</p>
+
+<div class="example">
+    <strong>例1: 整数環とそのイデアル</strong>
+    <p>$R = \mathbb{Z}$ を整数環 (ring of integers) とし、$n$ を正の整数とします。イデアル $I = (n)$ を考えます。このときの剰余環 $\mathbb{Z}/(n)$ は、$n$ を法とする合同類 (congruence class) のなす環になります。</p>
+    <p>例えば $n=5$ のとき、$\mathbb{Z}/(5) = \{ [0], [1], [2], [3], [4] \}$ となります、$5$ は素数であるため、この剰余環は体 (field) となります。</p>
+</div>
+
+<div class="example">
+    <strong>例2: 多項式環による新しい数体系の構成</strong>
+    <p>$R = \mathbb{R}[x]$ を実数係数の1変数多項式環とし、$I = (x^2 + 1)$ を $x^2 + 1$ で生成されるイデアルとします。</p>
+    <p>この剰余環 $\mathbb{R}[x]/(x^2 + 1)$ においては、$[x^2 + 1] = [0]$ が成り立つため、$[x]^2 = [-1]$ となります。この剰余類 $[x]$ を虚数単位 $i$ と同一視することで、この剰余環は複素数体 $\mathbb{C}$ と同型になることがわかります。これは普遍性と剰余環を用いて新しい体系を厳密に構成する強力な応用例です。</p>
+</div>
+
+<h2>参考文献</h2>
+<ul>
+    <li>Atiyah, M. F., & Macdonald, I. G. (1969). <i>Introduction to Commutative Algebra</i>. Addison-Wesley Publishing Company. <a href="https://www.taylorfrancis.com/books/mono/10.1201/9780429493638/introduction-commutative-algebra-michael-atiyah-macdonald" target="_blank" rel="noopener noreferrer">[Link]</a></li>
+    <li>Lang, S. (2002). <i>Algebra</i> (Revised 3rd ed.). Springer. <a href="https://link.springer.com/book/10.1007/978-1-4613-0041-0" target="_blank" rel="noopener noreferrer">[Link]</a></li>
+</ul>
+
+</body>
+</html>

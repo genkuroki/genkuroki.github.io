@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>様々な圏における射の圏論的特徴付け（エピ射・モノ射の完全版）</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body { 
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; 
+    line-height: 1.6; 
+    max-width: 950px; 
+    margin: auto; 
+    padding: 20px; 
+    color: #333;
+  }
+  h1 { border-bottom: 2px solid #555; padding-bottom: 10px; }
+  h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 1.5em; color: #444; }
+  h3 { margin-top: 1.5em; color: #2c3e50; }
+  .table-container { overflow-x: auto; margin-bottom: 2em; margin-top: 1em; }
+  table { border-collapse: collapse; width: 100%; min-width: 800px; background-color: #fff; }
+  th, td { border: 1px solid #ccc; padding: 10px; text-align: left; font-size: 0.95em; }
+  th { background-color: #f4f4f4; font-weight: bold; }
+  .definition, .proposition, .proof, .example { 
+    margin-bottom: 1.5em; 
+    padding: 15px; 
+    border-radius: 5px; 
+  }
+  .definition { background-color: #e8f4f8; border-left: 5px solid #2980b9; }
+  .proposition { background-color: #fdf5e6; border-left: 5px solid #e67e22; }
+  .proof { background-color: #f9f9f9; border-left: 5px solid #7f8c8d; }
+  .example { background-color: #eef9ee; border-left: 5px solid #27ae60; }
+  .informal { 
+    background-color: #fff9f0; 
+    border: 1px dashed #d3bc8d; 
+    padding: 15px; 
+    margin: 2em 0; 
+    border-radius: 5px; 
+    color: #444; 
+  }
+  .informal h3 { margin-top: 0; }
+  .references { margin-top: 3em; font-size: 0.9em; }
+  .references ul { list-style-type: square; }
+  .references li { margin-bottom: 0.8em; }
+</style>
+</head>
+<body>
+
+<h1>様々な圏における射の圏論的特徴付け（エピ射とモノ射）</h1>
+
+<div class="informal">
+  <p>圏論において、「全射」や「単射」、「商空間」や「部分空間」に相当する概念は、それぞれエピ射 (epimorphism) やモノ射 (monomorphism)、およびそれらの正則 (regular) なバリエーションを用いて特徴付けられる。</p>
+  <p>本稿では、集合、群、Abel群、可換環、位相空間、Hausdorff空間、コンパクトHausdorff空間の7つの代表的な圏におけるエピ射と正則エピ射、さらに<strong>モノ射と正則モノ射</strong>の圏論的特徴付けについて、自己完結的な解説を行う。正則な射が一般の射に包含されることの証明、そして可換環の圏における非自明な振る舞いの詳細な解説もあわせてまとめた。</p>
+</div>
+
+<h2>圏論的な準備</h2>
+
+<h3>エピ射（全射的・商的性質の抽象化）</h3>
+
+<div class="definition">
+  <p><strong>定義 (エピ射)</strong></p>
+  <p>圏 $C$ における射 $f: X \to Y$ がエピ射 (epimorphism) であるとは、任意の対象 $Z$ と任意の射 $g, h: Y \to Z$ に対して、$g \circ f = h \circ f$ ならば $g = h$ が成り立つことである。これは写像の「全射性」を、右簡約法則 (right cancellation property) によって抽象化した概念である。</p>
+</div>
+
+<div class="definition">
+  <p><strong>定義 (正則エピ射)</strong></p>
+  <p>圏 $C$ における射 $e: X \to Y$ が正則エピ射 (regular epimorphism) であるとは、ある対象 $W$ と射の対 $u, v: W \to X$ が存在して、$e$ が $u$ と $v$ の余等化子 (coequalizer) になっていることである。</p>
+  <p>ここで、$e: X \to Y$ が $u, v$ の余等化子であるとは、$e \circ u = e \circ v$ を満たし、かつ同じ条件 $q \circ u = q \circ v$ を満たす任意の対象 $Z$ と射 $q: X \to Z$ に対して、一意な射 $k: Y \to Z$ が存在して $q = k \circ e$ と分解できることである。これは「同値関係による商 (quotient by an equivalence relation)」の普遍性を抽象化したものである。</p>
+</div>
+
+<div class="proposition">
+  <p><strong>命題 0.1 (正則エピ射はエピ射である)</strong></p>
+  <p>任意の圏において、正則エピ射は必ずエピ射となる。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>$f: X \to Y$ を射 $u, v: W \to X$ の余等化子とする。任意の射 $g, h: Y \to Z$ について、$g \circ f = h \circ f$ が成り立つと仮定し、この共通の射を $q: X \to Z$ とおく。</p>
+  <p>$f \circ u = f \circ v$ であるため、$q \circ u = g \circ f \circ u = g \circ f \circ v = q \circ v$ が成り立つ。余等化子の普遍性により、$q \circ u = q \circ v$ を満たす射 $q$ に対しては、$q = k \circ f$ を満たすような射 $k: Y \to Z$ が一意に存在する。仮定より $g$ も $h$ もこの条件を満たしているため、一意性により $g = h$ となる。よって $f$ はエピ射である。$\blacksquare$</p>
+</div>
+
+<h3>モノ射（単射的・部分空間的性質の抽象化）</h3>
+
+<div class="definition">
+  <p><strong>定義 (モノ射)</strong></p>
+  <p>圏 $C$ における射 $f: X \to Y$ がモノ射 (monomorphism) であるとは、任意の対象 $W$ と任意の射 $g, h: W \to X$ に対して、$f \circ g = f \circ h$ ならば $g = h$ が成り立つことである。これは写像の「単射性」を、左簡約法則 (left cancellation property) によって抽象化した概念である。</p>
+</div>
+
+<div class="definition">
+  <p><strong>定義 (正則モノ射)</strong></p>
+  <p>圏 $C$ における射 $m: X \to Y$ が正則モノ射 (regular monomorphism) であるとは、ある対象 $Z$ と射の対 $u, v: Y \to Z$ が存在して、$m$ が $u$ と $v$ の等化子 (equalizer) になっていることである。</p>
+  <p>ここで、$m: X \to Y$ が $u, v$ の等化子であるとは、$u \circ m = v \circ m$ を満たし、かつ同じ条件 $u \circ p = v \circ p$ を満たす任意の対象 $W$ と射 $p: W \to Y$ に対して、一意な射 $k: W \to X$ が存在して $p = m \circ k$ と分解できることである。これは「条件式で定義された部分空間や部分群」の普遍性を抽象化したものである。</p>
+</div>
+
+<div class="proposition">
+  <p><strong>命題 0.2 (正則モノ射はモノ射である)</strong></p>
+  <p>任意の圏において、正則モノ射は必ずモノ射となる。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>命題0.1の双対 (dual) である。$m: X \to Y$ を $u, v: Y \to Z$ の等化子とする。任意の射 $g, h: W \to X$ について、$m \circ g = m \circ h$ が成り立つと仮定し、この共通の射を $p: W \to Y$ とおく。</p>
+  <p>$u \circ p = u \circ m \circ g = v \circ m \circ g = v \circ p$ となるため、$p$ は等化子の条件を満たす。等化子の普遍性により、$p = m \circ k$ を満たす射 $k: W \to X$ は一意に定まる。仮定より $g$ も $h$ もこの条件を満たすため、$g = h$ となる。よって $m$ はモノ射である。$\blacksquare$</p>
+</div>
+
+<hr>
+
+<h2>1. 集合の圏 $\mathbf{Set}$</h2>
+
+<h3>エピ射と正則エピ射</h3>
+<p>$\mathbf{Set}$ におけるエピ射と正則エピ射はともに<strong>全射 (surjection)</strong> と完全に一致する。正則エピ射については、全射 $f: X \to Y$ が誘導する同値関係 $x \sim x' \iff f(x) = f(x')$ による商集合への射影と同一視できるためである。</p>
+
+<h3>モノ射と正則モノ射</h3>
+<div class="proposition">
+  <p><strong>命題 1.1</strong></p>
+  <p>$\mathbf{Set}$ において、射 $f: X \to Y$ がモノ射、および正則モノ射であるための必要十分条件は、$f$ が<strong>単射 (injection)</strong> となることである。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>$f$ が単射であれば、任意の写像 $g, h: W \to X$ について $f(g(w)) = f(h(w))$ ならば $g(w) = h(w)$ となるため、モノ射である。逆にモノ射であるとき、一点集合 $W = \{*\}$ からの写像（すなわち $X$ の要素の指定）を考えると、容易に単射性が導かれる。</p>
+  <p>さらに単射 $f: X \to Y$ が正則モノ射であること（等化子であること）を示す。集合 $Z = Y \cup \{*\}$ (ただし $*$ は $Y$ に属さない要素) をとる。2つの写像 $u, v: Y \to Z$ を、$u(y) = y$ (包含写像)、および $y \in f(X)$ のときは $v(y) = y$、$y \notin f(X)$ のときは $v(y) = *$ と定義する。このとき、$u(y) = v(y)$ となるのは $y \in f(X)$ のときに限られる。$f$ は単射であるため、定義域 $X$ は像 $f(X)$ と全単射であり、$f$ は $u, v$ の等化子の普遍性を満たす。$\blacksquare$</p>
+</div>
+
+<h2>2. 群の圏 $\mathbf{Grp}$</h2>
+
+<h3>エピ射と正則エピ射</h3>
+<p>前述の通り、$\mathbf{Grp}$ においてエピ射は<strong>全射</strong>と一致する。正則エピ射も<strong>全射</strong>と一致し、これは第一同型定理が示すように全射が核による商群への自然な射影となるからである。</p>
+
+<h3>モノ射と正則モノ射</h3>
+<div class="proposition">
+  <p><strong>命題 2.1</strong></p>
+  <p>$\mathbf{Grp}$ において、射 $f: G \to H$ がモノ射、および正則モノ射であるための必要十分条件は、$f$ が<strong>単射</strong>となることである。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>モノ射が単射であることは、$\mathbf{Set}$ と同様に自明な群 $\mathbb{Z}$ (自由群) などからの射を考えることで示される。逆に、単射が正則モノ射であることを示す。</p>
+  <p>$f: G \to H$ を単射とする。像 $K = f(G)$ は $H$ の部分群である。$H$ の2つのコピーを $K$ で貼り合わせた融合積 (amalgamated free product) $H *_K H$ を考え、2つの自然な包含準同型を $u, v: H \to H *_K H$ とする。融合積の性質により、$u(y) = v(y)$ となるのは $y \in K$ のときに限られる。$f$ は $G$ から $K$ への同型を与えるため、$f$ は $u$ と $v$ の等化子となる。したがって、単射は正則モノ射である。$\blacksquare$</p>
+</div>
+
+<h2>3. Abel群の圏 $\mathbf{Ab}$</h2>
+
+<h3>エピ射と正則エピ射</h3>
+<p>$\mathbf{Ab}$ では、エピ射および正則エピ射は<strong>全射</strong>に一致する。群の圏と異なり、商群の構成がすべての部分群（正規部分群）に対して可能なため、証明は平易である。</p>
+
+<h3>モノ射と正則モノ射</h3>
+<div class="proposition">
+  <p><strong>命題 3.1</strong></p>
+  <p>$\mathbf{Ab}$ において、射 $f: A \to B$ がモノ射、および正則モノ射であるための必要十分条件は、$f$ が<strong>単射</strong>となることである。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>単射が正則モノ射であることを示す。単射 $f: A \to B$ に対して、像 $K = f(A)$ による商群 $C = B/K$ をとる。自然な射影を $u: B \to C$、ゼロ準同型を $v: B \to C$ ($v(b) = 0$) とする。$u(b) = v(b)$ となるのは $b \in \ker(u) = K$ のときに限られるため、$f$ は $u, v$ の等化子となる。よって、すべての単射は正則モノ射である。$\blacksquare$</p>
+</div>
+
+<h2>4. 可換環の圏 $\mathbf{CRing}$</h2>
+
+<h3>エピ射と正則エピ射</h3>
+<p>$\mathbf{CRing}$ では、正則エピ射は<strong>全射</strong>な環準同型であるが、エピ射は必ずしも全射とは限らない。包含準同型 $i: \mathbb{Z} \to \mathbb{Q}$ は全射ではないが、局所化の性質によりエピ射となる。</p>
+
+<h3>モノ射と正則モノ射</h3>
+<div class="proposition">
+  <p><strong>命題 4.1</strong></p>
+  <p>$\mathbf{CRing}$ において、モノ射は<strong>単射</strong>な環準同型であるが、すべての単射が正則モノ射とは限らない。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>$f: R \to S$ がモノ射であるとする。$R$ の要素 $x \neq y$ が $f(x) = f(y)$ を満たすと仮定する。多項式環 $\mathbb{Z}[t]$ から $R$ への環準同型 $g, h: \mathbb{Z}[t] \to R$ を、$g(t) = x$、$h(t) = y$ となるように定義する。このとき $f \circ g = f \circ h$ であるが、$g \neq h$ となり、モノ射の定義に反する。よって $f$ は単射である。</p>
+</div>
+
+<h3>正則でないモノ射の詳細な特徴付け</h3>
+<p>なぜ $\mathbf{CRing}$ において単射であっても正則モノ射にならない例が生じるのかを理解するためには、任意の圏で成り立つ以下の強力な事実が鍵となる。</p>
+
+<div class="proposition">
+  <p><strong>命題 4.2 (エピ射と正則モノ射の衝突)</strong></p>
+  <p>任意の圏 $C$ において、射 $f: X \to Y$ がエピ射であり、かつ正則モノ射でもあるならば、$f$ は同型射 (isomorphism) となる。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>$f$ が正則モノ射であるため、ある対象 $Z$ と射の対 $u, v: Y \to Z$ の等化子になっている。等化子の定義から $u \circ f = v \circ f$ が成り立つ。</p>
+  <p>ここで $f$ がエピ射であるという仮定（右簡約法則）を用いると、直ちに $u = v$ が従う。</p>
+  <p>したがって、$f$ は「$u$ と $u$ の等化子」ということになる。自分自身と同一の射の等化子は、対象 $Y$ 自身（および恒等射 $\mathrm{id}_Y$）に他ならない。普遍性により $X$ と $Y$ は同型となり、$f$ は同型射であることが示された。$\blacksquare$</p>
+</div>
+
+<div class="example">
+  <p><strong>例 4.3：局所化による包含準同型</strong></p>
+  <p>有理整数環から有理数体への包含 $i: \mathbb{Z} \hookrightarrow \mathbb{Q}$ は単射であるためモノ射であり、局所化の性質からエピ射でもある。しかし同型射ではないため、正則モノ射ではない。</p>
+</div>
+
+<div class="proposition">
+  <p><strong>命題 4.4 (不変式環への包含は正則モノ射)</strong></p>
+  <p>群 $G$ が可換環 $B$ に自己同型として作用しているとする。このとき、不変式環 $B^G$ から $B$ への包含準同型 $i: B^G \hookrightarrow B$ は、$\mathbf{CRing}$ における正則モノ射である。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>$i: B^G \hookrightarrow B$ が等化子となるような環 $C$ と環準同型 $u, v: B \to C$ を構成する。</p>
+  <p>$C = \prod_{g \in G} B$ （すなわち $B$ の $|G|$ 個の直積）とする。射 $u, v: B \to C$ を以下のように定義する。</p>
+  <ul>
+    <li>$u(b) = (b)_{g \in G}$ （対角埋め込み）</li>
+    <li>$v(b) = (g \cdot b)_{g \in G}$ （群作用による埋め込み）</li>
+  </ul>
+  <p>群作用は環の自己同型であるため、$v$ もまた環準同型となる（要素ごとの和と積を保つ）。これらの等化子 $E$ は、定義により $u(b) = v(b)$ を満たす $b \in B$ の集合である。</p>
+  <p>$$ u(b) = v(b) \iff \text{任意の } g \in G \text{ について } b = g \cdot b $$</p>
+  <p>この条件を満たす $b$ の集合は、まさに不変式環 $B^G$ の定義そのものである。したがって、等化子は $B^G$ であり、包含準同型 $i: B^G \hookrightarrow B$ は正則モノ射である。$\blacksquare$</p>
+</div>
+
+<div class="informal">
+  <h3>幾何学的な直観：アフィンスキームの商空間（空間の折りたたみ）</h3>
+  <p>代数的な定義（等化子）だけではその振る舞いの本質が見えにくいが、これを双対圏であるアフィンスキームの圏 $\mathbf{Aff}$ （$\mathbf{CRing}^\mathrm{op} \simeq \mathbf{Aff}$）に翻訳すると、極めて明快な幾何学的意味が現れる。</p>
+  
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>代数: $\mathbf{CRing}$ の圏</th>
+          <th>幾何: $\mathbf{Aff}$ の圏</th>
+          <th>直観的な幾何学的意味</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>正則エピ射</strong> (全射 $A \to A/I$)</td>
+          <td><strong>正則モノ射</strong> (等化子)</td>
+          <td><strong>閉部分空間への埋め込み</strong> (方程式 $I=0$ で切り出される部分図形)</td>
+        </tr>
+        <tr>
+          <td><strong>正則モノ射</strong> (等化子 $A \hookrightarrow B$)</td>
+          <td><strong>正則エピ射</strong> (余等化子)</td>
+          <td><strong>商空間への射影</strong> (同値関係によって空間全体を折りたたむ操作)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <p>$\mathbf{CRing}$ における正則モノ射は、幾何学的には<strong>「空間 $\mathrm{Spec}(B)$ をある同値関係で割り当てて、商空間 $\mathrm{Spec}(A)$ を作る全射的な写像（商写像）」</strong>に対応する。つまり、正則モノ射のドメインである環 $A$ は、ただの部分環ではなく、「元の空間を綺麗に折りたたんでできた底空間（ベース）の座標環」として直観的に理解されるべきである。</p>
+  
+  <ul>
+    <li><strong>正則モノ射になる例（不変式環）：</strong> 命題 4.4で示した通り、群作用で不変な要素を集めた部分環 $B^G$ への包含写像 $B^G \hookrightarrow B$ は正則モノ射である。幾何学的には、これは射 $\mathrm{Spec}(B) \to \mathrm{Spec}(B^G)$ に対応し、空間の各点を群 $G$ の軌道で同一視して潰す<strong>「商空間への射影」</strong>そのものである。</li>
+    <li><strong>正則モノ射にならない例（局所化）：</strong> 局所化 $i: \mathbb{Z} \hookrightarrow \mathbb{Q}$ の双対である射 $\mathrm{Spec}(\mathbb{Q}) \to \mathrm{Spec}(\mathbb{Z})$ は、素数全体からなる空間の中から「生成点」を1点だけ抜き出してくる操作であり、空間全体を同値関係で折りたたむ<strong>「商写像」としての性質を全く持たない</strong>。したがって、その双対である局所化は等化子（正則モノ射）にはなり得ない。</li>
+  </ul>
+</div>
+
+<h2>5. 位相空間の圏 $\mathbf{Top}$</h2>
+
+<h3>エピ射と正則エピ射</h3>
+<p>$\mathbf{Top}$ におけるエピ射は<strong>全射な連続写像</strong>であり、正則エピ射は位相空間論における<strong>商写像 (quotient map)</strong> と完全に一致する。</p>
+
+<h3>モノ射と正則モノ射</h3>
+<div class="proposition">
+  <p><strong>命題 5.1</strong></p>
+  <p>$\mathbf{Top}$ において、モノ射は<strong>単射な連続写像</strong>である。一方、正則モノ射は<strong>相対位相をもつ部分空間への埋め込み (topological embedding)</strong> である。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>単射な連続写像がモノ射であることは一点空間を用いて容易に示せる。</p>
+  <p>正則モノ射 $f: X \to Y$ はある連続写像 $u, v: Y \to Z$ の等化子である。$\mathbf{Top}$ における等化子は、集合としての等化子 $E = \{y \in Y \mid u(y) = v(y)\}$ に $Y$ からの相対位相 (subspace topology) を入れたものとなる。したがって、$f$ は単なる単射な連続写像ではなく、像への同相写像、すなわち位相的な埋め込み (embedding) でなければならない。</p>
+  <p>逆に、埋め込み $f: X \to Y$ は正則モノ射である。像 $f(X)$ を $A$ とし、$Y$ の2つのコピーを $A$ で貼り合わせた空間 $Z = Y \cup_A Y$ に商位相を入れると、$Y$ から $Z$ への2つの自然な埋め込みの等化子はちょうど $A$ (すなわち $X$) となるためである。$\blacksquare$</p>
+</div>
+
+<h2>6. Hausdorff空間の圏 $\mathbf{Haus}$</h2>
+
+<h3>エピ射と正則エピ射</h3>
+<p>$\mathbf{Haus}$ におけるエピ射は<strong>像が稠密な連続写像</strong>であり、正則エピ射は<strong>終域がHausdorff空間となる商写像</strong>である。</p>
+
+<h3>モノ射と正則モノ射</h3>
+<div class="proposition">
+  <p><strong>命題 6.1</strong></p>
+  <p>$\mathbf{Haus}$ において、モノ射は<strong>単射な連続写像</strong>である。一方、正則モノ射は<strong>閉部分空間への埋め込み (closed embedding)</strong> である。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>正則モノ射 $f: X \to Y$ がある連続写像 $u, v: Y \to Z$ ( $Z$ はHausdorff) の等化子であるとする。Hausdorff空間への2つの連続写像が一致する点の集合 $E = \{y \in Y \mid u(y) = v(y)\}$ は、$Y$ の閉集合 (closed subset) である。したがって、$f$ は閉部分空間への位相的な埋め込みとなる。</p>
+  <p>逆に、閉部分空間への埋め込み $f: X \to Y$ を考える。像 $A = f(X)$ は閉集合である。$\mathbf{Top}$ の証明と同様に貼り合わせ空間 $Z = Y \cup_A Y$ を構成すると、$A$ が閉集合であるおかげで $Z$ もまたHausdorff空間となる。したがって $f$ は $\mathbf{Haus}$ における等化子（正則モノ射）となる。$\blacksquare$</p>
+</div>
+
+<h2>7. コンパクトHausdorff空間の圏 $\mathbf{CHaus}$</h2>
+
+<h3>エピ射と正則エピ射</h3>
+<p>$\mathbf{CHaus}$ では、エピ射および正則エピ射はともに<strong>全射な連続写像 (商写像に等しい)</strong> に一致する。</p>
+
+<h3>モノ射と正則モノ射</h3>
+<div class="proposition">
+  <p><strong>命題 7.1</strong></p>
+  <p>$\mathbf{CHaus}$ において、モノ射および正則モノ射はともに<strong>単射な連続写像</strong>である。</p>
+</div>
+
+<div class="proof">
+  <p><strong>証明</strong></p>
+  <p>モノ射が単射な連続写像であることは自明である。単射な連続写像 $f: X \to Y$ ($X, Y$ はコンパクトHausdorff) を考える。コンパクト空間からHausdorff空間への連続写像は閉写像 (closed map) であるため、$f$ の像 $f(X)$ は閉集合であり、$f$ は像の上への同相写像（位相的埋め込み）となる。すなわち、$f$ は自動的に閉部分空間への埋め込み (closed embedding) となる。$\mathbf{Haus}$ における結果により、閉部分空間への埋め込みは等化子（正則モノ射）であるため、$\mathbf{CHaus}$ ではすべての単射（モノ射）が正則モノ射となる。$\blacksquare$</p>
+</div>
+
+<hr>
+
+<h2>結果のまとめ</h2>
+<p>以上の各圏におけるエピ射、正則エピ射、モノ射、正則モノ射の圏論的特徴付けを以下の表にまとめる。</p>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>圏</th>
+        <th>対象</th>
+        <th>エピ射 (Epi)</th>
+        <th>正則エピ射 (Reg Epi)</th>
+        <th>モノ射 (Mono)</th>
+        <th>正則モノ射 (Reg Mono)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>$\mathbf{Set}$</td>
+        <td>集合</td>
+        <td>全射</td>
+        <td>全射</td>
+        <td>単射</td>
+        <td>単射</td>
+      </tr>
+      <tr>
+        <td>$\mathbf{Grp}$</td>
+        <td>群</td>
+        <td>全射</td>
+        <td>全射</td>
+        <td>単射</td>
+        <td>単射</td>
+      </tr>
+      <tr>
+        <td>$\mathbf{Ab}$</td>
+        <td>Abel群</td>
+        <td>全射</td>
+        <td>全射</td>
+        <td>単射</td>
+        <td>単射</td>
+      </tr>
+      <tr>
+        <td>$\mathbf{CRing}$</td>
+        <td>可換環</td>
+        <td>全射とは限らない<br>(例: $\mathbb{Z} \to \mathbb{Q}$)</td>
+        <td>全射な環準同型</td>
+        <td>単射</td>
+        <td>等化子として得られる部分環の埋め込み<br>(商空間の底の座標環に対応)</td>
+      </tr>
+      <tr>
+        <td>$\mathbf{Top}$</td>
+        <td>位相空間</td>
+        <td>全射</td>
+        <td>商写像</td>
+        <td>単射</td>
+        <td>部分空間への埋め込み (Embedding)</td>
+      </tr>
+      <tr>
+        <td>$\mathbf{Haus}$</td>
+        <td>Hausdorff空間</td>
+        <td>像が稠密な連続写像</td>
+        <td>終域がHausdorffな商写像</td>
+        <td>単射</td>
+        <td>閉部分空間への埋め込み (Closed Embedding)</td>
+      </tr>
+      <tr>
+        <td>$\mathbf{CHaus}$</td>
+        <td>コンパクト<br>Hausdorff空間</td>
+        <td>全射 (商写像に一致)</td>
+        <td>全射</td>
+        <td>単射</td>
+        <td>単射 (閉部分空間への埋め込みに一致)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="references">
+  <h3>参考文献</h3>
+  <ul>
+    <li>Mac Lane, S. (1998). <i>Categories for the Working Mathematician</i> (2nd ed.). Springer-Verlag. URL: <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8" target="_blank">https://link.springer.com/book/10.1007/978-1-4757-4721-8</a></li>
+    <li>Gleason, A. M. (1958). Projective topological spaces. <i>Illinois Journal of Mathematics</i>, 2(4), 482-489. URL: <a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank">https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full</a></li>
+    <li>Linderholm, C. E. (1970). A group epimorphism is surjective. <i>The American Mathematical Monthly</i>, 77(2), 176-177. URL: <a href="https://doi.org/10.1080/00029890.1970.11992448" target="_blank">https://doi.org/10.1080/00029890.1970.11992448</a></li>
+  </ul>
+</div>
+
+</body>
+</html>

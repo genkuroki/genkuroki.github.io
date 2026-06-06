@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>集合間の写像によるフィルターの直像の2つの定義の同値性の証明</title>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.3em;
+        }
+        p {
+            margin-bottom: 1em;
+        }
+        .definition, .theorem {
+            background-color: #f8f9fa;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .proof {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .example {
+            background-color: #eefaf6;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .proof-title, .example-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .reference-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .reference-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>集合間の写像によるフィルターの直像の2つの定義の同値性の証明</h1>
+
+    <h2>1. 導入</h2>
+    <p>
+        本稿では、集合間の写像 $f: X \to Y$ と集合 $X$ 上のフィルター (filter) $\mathcal{F}$ が与えられた際の、$\mathcal{F}$ の $f$ による直像 (direct image) の定義について解説する。直像 (direct image) には直感的な構成法と証明に扱いやすい構成法という2つの同値な定義法が存在する。本稿では、両定義の導入と、単純に元のフィルター (filter) の像を集めただけではフィルター (filter) の公理を満たさなくなることの反例を示した上で、これら2つの定義が同値であることの証明を自己完結的 (self-contained) にまとめる。
+    </p>
+
+    <h2>2. 予備知識：フィルターとその例</h2>
+    <p>
+        直像 (direct image) について議論する前に、基礎となるフィルター (filter) の定義と具体例を確認する。
+    </p>
+
+    <div class="definition">
+        <strong>定義（フィルター）</strong><br>
+        集合 $X$ の部分集合の族 $\mathcal{F}$ が $X$ 上のフィルター (filter) であるとは、以下の3条件を満たすことである：
+        <ol>
+            <li>$X \in \mathcal{F}$ である。</li>
+            <li>$A, B \in \mathcal{F}$ ならば、$A \cap B \in \mathcal{F}$ である（有限交叉性）。</li>
+            <li>$A \in \mathcal{F}$ かつ $A \subset A' \subset X$ ならば、$A' \in \mathcal{F}$ である（上方への閉包性）。</li>
+        </ol>
+    </div>
+    
+    <p>
+    固有フィルター (proper filter)ではさらに $\varnothing\not\in\mathcal{F}$ を仮定する。固有フィルターを単にフィルターと呼ぶことも多い。
+    </p>
+
+    <p>
+        フィルター (filter) の最も重要な応用例は、位相空間論における近傍系 (neighborhood system) である。
+        例えば、ある位相空間 $X$ において、点 $x$ を含むすべての近傍を集めた族は $X$ 上のフィルター (filter) となる。空間 $X$ が超不連結 (extremally disconnected) （すなわち、任意の開集合の閉包が開集合となり、結果的に clopen 集合となるような空間）や、相異なる点の近傍が分離できる Hausdorff 空間である場合など、空間が特殊な性質を持つ場合であっても、近傍系の成す集合族が上記のフィルター (filter) の公理を満たす事実に変わりはない。
+    </p>
+
+    <h2>3. フィルターの直像の2つの定義</h2>
+    <p>
+        集合 $X$ から $Y$ への写像 $f: X \to Y$ と、$X$ 上のフィルター (filter) $\mathcal{F}$ が与えられたとき、$\mathcal{F}$ の $f$ による直像 (direct image) は、$Y$ 上の新しいフィルター (filter) となる。一般に $f(\mathcal{F})$ や $f_* \mathcal{F}$ と表記される。この定義には、主に2つの同値なアプローチがある。
+    </p>
+
+    <div class="definition">
+        <strong>定義1：逆像 (inverse image) を用いた定義</strong><br>
+        $$f(\mathcal{F}) = \{ B \subset Y \mid f^{-1}(B) \in \mathcal{F} \}$$
+    </div>
+    <p>
+        つまり、$Y$ の部分集合 $B$ が直像 (direct image) フィルター (filter) に属するための必要十分条件は、「$B$ の $f$ による逆像 (inverse image) $f^{-1}(B)$ が、元のフィルター (filter) $\mathcal{F}$ に属していること」である。最も簡潔で、位相空間論などの証明において非常に扱いやすい標準的な定義である。
+    </p>
+
+    <div class="definition">
+        <strong>定義2：フィルター基 (filter base) を用いた定義</strong><br>
+        $$f(\mathcal{F}) = \{ B \subset Y \mid \text{ある } A \in \mathcal{F} \text{ が存在して } f(A) \subset B \}$$
+    </div>
+    <p>
+        元のフィルター (filter) $\mathcal{F}$ の各要素 $A$ の像を集めた集合族 $\{ f(A) \mid A \in \mathcal{F} \}$ を考えると、これは $Y$ 上のフィルター基 (filter base) となる。このフィルター基 (filter base) が生成するフィルター (filter) として直像 (direct image) を定義する、幾何学的・直感的な定義である。
+    </p>
+
+    <div class="note">
+        <strong>※ 注意点（よくある誤解）：</strong><br>
+        $\{ f(A) \mid A \in \mathcal{F} \}$ 自体は、一般にフィルター (filter) の公理の1つである「上方への閉包性（上位集合を含むこと）」を満たさないため、そのままではフィルター (filter) にはならない。したがって、「$f(A)$ を包含するような $Y$ の部分集合 $B$ 全て」を集める（生成する）必要がある点に注意を要する。
+    </div>
+
+    <h2>4. 補足：$\{ f(A) \mid A \in \mathcal{F} \}$ がフィルターとならない反例</h2>
+    <p>
+        前節の注意点で述べた通り、$\mathcal{F}$ の要素を単純に写像 $f$ で写しただけの集合族 $\{ f(A) \mid A \in \mathcal{F} \}$ は、一般には $Y$ 上のフィルター (filter) にはならない。このことを具体的な反例を用いて解説する。
+    </p>
+
+    <div class="example">
+        <div class="example-title">反例</div>
+        <p>
+            集合を $X = \{1, 2\}$、$Y = \{1, 2, 3\}$ とする。<br>
+            写像 $f: X \to Y$ を、$f(1) = 1$、$f(2) = 2$ となる自然な包含写像とする。<br>
+            また、$X$ 上のフィルター (filter) $\mathcal{F}$ として、$\{1\}$ が生成する単項フィルター (principal filter) を考える。すなわち、
+            $$\mathcal{F} = \{ \{1\}, \{1, 2\} \}$$
+            である。これは $X$ の部分集合のうち $\{1\}$ を包含するものすべてを集めた族であり、フィルター (filter) の3条件を満たしている。
+        </p>
+        <p>
+            ここで、$\mathcal{F}$ の各要素を $f$ で写した集合族を $\mathcal{B} = \{ f(A) \mid A \in \mathcal{F} \}$ とおくと、以下のようになる。
+            $$\mathcal{B} = \{ f(\{1\}), f(\{1, 2\}) \} = \{ \{1\}, \{1, 2\} \}$$
+        </p>
+        <p>
+            この $\mathcal{B}$ が $Y$ 上のフィルター (filter) になるかどうかを確認する。<br>
+            $\mathcal{B}$ が $Y$ 上のフィルター (filter) であるためには、「上方への閉包性（公理3）」を満たす必要がある。例えば、$\{1\} \in \mathcal{B}$ であり、かつ $\{1\} \subset \{1, 3\} \subset Y$ であることから、$\{1, 3\}$ も $\mathcal{B}$ に属さなければならない。さらには、$Y$ 自身（$= \{1, 2, 3\}$）も $\mathcal{B}$ に属さなければならない（公理1より $Y \in \mathcal{B}$）。<br>
+            しかし、実際に得られた $\mathcal{B} = \{ \{1\}, \{1, 2\} \}$ の中には $\{1, 3\}$ も $Y$ 自身も含まれていない。
+        </p>
+        <p>
+            したがって、$\mathcal{B}$ は「上方への閉包性」を満たさず、$Y$ 上のフィルター (filter) にはならない。
+        </p>
+    </div>
+
+    <p>
+        この反例から、直像 (direct image) フィルター (filter) を正しく定義するためには、フィルター基 (filter base) の要素を包含する上位集合をすべて補完する操作（前述の「定義2」における $f(A) \subset B$ となる $B$ を集める操作）が必要不可欠であることが分かる。
+    </p>
+
+    <h2>5. 定義の同値性の定理とその証明</h2>
+    <p>
+        2つの定義が全く同じ集合族を定めることを証明する。以下の定理では、フィルター (filter) のすべての公理を前提としなくても、公理の1つである「上方への閉包性」のみを仮定すれば等式が成立するという、より一般化された形で定式化している。
+    </p>
+
+    <div class="theorem">
+        <strong>定理</strong><br>
+        $\mathcal{F}$ は集合 $X$ の部分集合族で「$A \in \mathcal{F}$ かつ $A \subset A' \subset X$ ならば $A' \in \mathcal{F}$」を満たすものであるとし、$Y$ は集合で $f$ は $X$ から $Y$ への写像であるとする。このとき、以下の等式が成立する。<br>
+        $$ \{B \subset Y \mid f^{-1}(B) \in \mathcal{F}\} = \{B \subset Y \mid \text{ある } A \in \mathcal{F} \text{ が存在して } f(A) \subset B\} $$
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+            左辺の集合族を $\mathcal{S}_1$、右辺の集合族を $\mathcal{S}_2$ とおく。$\mathcal{S}_1 = \mathcal{S}_2$ であることを示す。
+        </p>
+
+        <p><strong>$\mathcal{S}_2 \subset \mathcal{S}_1$ の証明：</strong></p>
+        <p>
+            $B \subset Y$ でかつ、ある $A \in \mathcal{F}$ が存在して $f(A) \subset B$ を満たしていると仮定する（定義2の条件）。<br>
+            この $f(A) \subset B$ の両辺の逆像 (inverse image) をとると、集合と写像の基本的な性質から $A \subset f^{-1}(f(A)) \subset f^{-1}(B)$ となる。<br>
+            前提条件より $\mathcal{F}$ は「$A \in \mathcal{F}$ かつ $A \subset A' \subset X$ ならば $A' \in \mathcal{F}$」を満たす。$A \in \mathcal{F}$ であり、かつ $A \subset f^{-1}(B) \subset X$ であることから、$f^{-1}(B) \in \mathcal{F}$ を満たす（定義1の条件）。<br>
+            したがって、$B \in \mathcal{S}_1$ である。
+        </p>
+
+        <p><strong>$\mathcal{S}_1 \subset \mathcal{S}_2$ の証明：</strong></p>
+        <p>
+            $B \subset Y$ でかつ、$f^{-1}(B) \in \mathcal{F}$ を満たしていると仮定する（定義1の条件）。<br>
+            ここで $A = f^{-1}(B)$ とおくと、仮定より $A \in \mathcal{F}$ である。<br>
+            この $A$ を $f$ で写すと、集合と写像の基本的な性質から $f(A) = f(f^{-1}(B)) \subset B$ となる。<br>
+            したがって、ある $A \in \mathcal{F}$ が存在して $f(A) \subset B$ を満たしていることが示された（定義2の条件）。<br>
+            ゆえに、$B \in \mathcal{S}_2$ である。
+        </p>
+
+        <p>
+            以上より、$\mathcal{S}_1 = \mathcal{S}_2$ が示された。証明終。
+        </p>
+    </div>
+
+    <h2>6. 参考文献</h2>
+    <ul class="reference-list">
+        <li>
+            Bourbaki, N. (1966). <i>General Topology</i>, Elements of Mathematics. Springer-Verlag. 
+            [<a href="https://link.springer.com/book/10.1007/978-3-642-61701-0" target="_blank">Springer Link</a>]
+        </li>
+        <li>
+            Willard, S. (2004). <i>General Topology</i>. Dover Publications. 
+            [<a href="https://store.doverpublications.com/products/9780486434797" target="_blank">Dover</a>]
+        </li>
+        <li>
+            nLab authors. (2025). filter. <i>nLab</i>. 
+            [<a href="https://ncatlab.org/nlab/show/filter" target="_blank">https://ncatlab.org/nlab/show/filter</a>]
+        </li>
+        <li>
+            Wikipedia contributors. (2025). Filter on a set. <i>Wikipedia, The Free Encyclopedia</i>. 
+            [<a href="https://en.wikipedia.org/wiki/Filter_on_a_set" target="_blank">https://en.wikipedia.org/wiki/Filter_on_a_set</a>]
+        </li>
+    </ul>
+
+</body>
+</html>
