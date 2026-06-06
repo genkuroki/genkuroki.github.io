@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sober空間の位相的性質と順序位相におけるsober性</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.3em;
+            text-align: center;
+        }
+        h2 {
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 0.2em;
+        }
+        p {
+            margin-bottom: 1em;
+        }
+        .definition, .theorem, .proof, .example {
+            background-color: #fff;
+            border-left: 4px solid;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .definition { border-color: #27ae60; }
+        .theorem { border-color: #c0392b; }
+        .proof { border-color: #7f8c8d; background-color: #f9f9f9; }
+        .example { border-color: #f39c12; }
+        .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .definition .label { color: #27ae60; }
+        .theorem .label { color: #c0392b; }
+        .proof .label { color: #7f8c8d; }
+        .example .label { color: #f39c12; }
+        ul, ol {
+            margin-bottom: 1em;
+            padding-left: 2em;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #eee;
+            margin: 2em 0;
+        }
+        .bibliography {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>sober空間の位相的性質と順序位相におけるsober性</h1>
+
+<p>
+本稿では、位相空間論および代数幾何学（スキーム論など）で重要な役割を果たす <strong>sober空間 (sober space)</strong> について、その基本的な定義から出発し、部分空間、商空間、直積、直和といった位相的演算に対する振る舞いを詳細に解説します。また、半順序集合上の位相である <strong>Alexandroff位相 (Alexandroff topology)</strong> および <strong>Scott位相 (Scott topology)</strong> において、空間がsoberになるための必要十分条件や十分条件について、自己完結的 (self-contained) な証明とともに論じます。
+</p>
+
+<hr>
+
+<h2>1. 基礎概念の定義</h2>
+
+<p>議論を厳密にするため、まずは基本となる位相的・順序的定義を確認します。</p>
+
+<div class="definition">
+    <span class="label">定義 1.1: $T_0$ 空間 (Kolmogorov space)</span>
+    位相空間 $X$ が $T_0$ 空間であるとは、任意の相異なる2点 $x, y \in X$ に対し、一方が他方の開傍ら（開近傍）に含まれないこと、すなわち $x \notin \overline{\{y\}}$ または $y \notin \overline{\{x\}}$ が成り立つことをいう。
+</div>
+
+<div class="definition">
+    <span class="label">定義 1.2: 既約閉集合 (irreducible closed set) と生成点 (generic point)</span>
+    位相空間 $X$ の空でない閉集合 $C$ が既約 (irreducible) であるとは、$C = C_1 \cup C_2$ を満たす任意の閉集合 $C_1, C_2 \subseteq X$ に対し、$C = C_1$ または $C = C_2$ が成り立つことをいう。これは、「任意の開集合 $U, V$ が $C$ と交わるならば、$U \cap V$ も $C$ と交わる」ことと同値である。<br>
+    閉集合 $C$ に対し、ある点 $x \in C$ が存在して $C = \overline{\{x\}}$ となるとき、$x$ を $C$ の生成点 (generic point) と呼ぶ。
+</div>
+
+<div class="definition">
+    <span class="label">定義 1.3: sober空間 (sober space)</span>
+    位相空間 $X$ が sober空間 (sober space) であるとは、任意の空でない既約閉集合 $C$ が、<strong>唯一の生成点</strong>を持つこと、すなわち $C = \overline{\{x\}}$ を満たす $x \in X$ がただ1つ存在することをいう。
+    （生成点の一意性は、$X$ が $T_0$ 空間であることを含意する。）
+</div>
+
+<hr>
+
+<h2>2. sober空間の位相的演算</h2>
+
+<p>Sober空間の位相的な演算（部分空間、商空間、直積、直和）に関する振る舞いを解説します。</p>
+
+<h3>2.1 部分位相空間 (subspace)</h3>
+<p><strong>結論：一般には sober ではありません。</strong></p>
+
+<p>
+任意の $T_0$ 空間 $X$ は、ある sober空間の部分空間として稠密に埋め込むことができます。この構成を $X$ の <strong>sober化 (soberification)</strong> と呼びます。Sober化は、位相空間の圏から sober空間の圏への左随伴関手を与えます。したがって、「$T_0$ 空間であるが sober でない空間」は、常に sober空間の部分空間として実現できるため、部分空間が sober になるとは限りません。
+</p>
+
+<div class="example">
+    <span class="label">反例：sober空間の sober でない部分空間</span>
+    無限集合 $X$ に補有限位相 (cofinite topology) を入れた空間を考えます。この空間において、閉集合は有限集合と $X$ 全体のみです。<br>
+    この空間は $T_1$ 空間であるため当然 $T_0$ 空間ですが、$X$ 全体は既約閉集合であるにもかかわらず、どの単一点の閉包でもない（有限集合にならない）ため、生成点を持たず、sober ではありません。<br>
+    この $X$ の sober化 $\tilde{X}$ を考えると、$\tilde{X}$ は sober空間ですが、その部分空間として埋め込まれた $X$ は sober ではありません。
+</div>
+
+<p>
+<strong>例外（sober になる場合）：</strong> Sober空間の<strong>閉部分空間 (closed subspace)</strong> や<strong>開部分空間 (open subspace)</strong> は常に sober になります。より一般に、局所閉部分空間 (locally closed subspace)（開部分空間と閉部分空間の交わり）や、レトラクト (retract) も sober 性を保存します。
+</p>
+
+<h3>2.2 商位相空間 (quotient space)</h3>
+<p><strong>結論：一般には sober ではありません。</strong></p>
+
+<p>
+Sober空間からの連続写像による全射（商写像）による商空間は、一般に sober 性を保存しません。
+極端な例として、任意の位相空間は、ある sober空間（例えば、各点の閉包を直和で寄せ集めた <strong>超不連結 (extremally disconnected)</strong> な極端に分離された空間など）からの全射連続写像の像として表現できる場合があります。したがって、商空間が sober でない事態は容易に生じ得ます。
+</p>
+
+<h3>2.3 直積 (product)</h3>
+<p><strong>結論：常に sober になります。</strong></p>
+
+<div class="proof">
+    <span class="label">証明：</span>
+    Sober空間の族 $\{ X_i \}_{i \in I}$ を取り、その直積空間を $X = \prod_{i \in I} X_i$ とし、各成分への射影を $\pi_i: X \to X_i$ とします。<br>
+    まず、各 $X_i$ は sober なので $T_0$ 空間であり、$T_0$ 空間の直積である $X$ も $T_0$ 空間です。したがって生成点が存在すれば一意です。<br>
+    次に、$X$ における任意の既約閉集合 $C$ を取ります。射影 $\pi_i$ は連続であるため、像 $\pi_i(C)$ は既約であり、その閉包 $\overline{\pi_i(C)}$ も $X_i$ における既約閉集合となります。<br>
+    $X_i$ は sober空間であるため、$\overline{\pi_i(C)}$ は唯一の生成点 $x_i \in X_i$ を持ちます。これらを束ねた点 $x = (x_i)_{i \in I} \in X$ を考えます。<br>
+    連続写像による閉包の性質から、$C \subseteq \overline{\{x\}}$ と $\overline{\{x\}} \subseteq C$ の両方を示すことができ（直積位相の開基を用いて証明可能）、結果として $C = \overline{\{x\}}$ が成立します。よって $X$ は sober空間です。 $\blacksquare$
+</div>
+
+<h3>2.4 直和 (coproduct / disjoint union)</h3>
+<p><strong>結論：常に sober になります。</strong></p>
+
+<div class="proof">
+    <span class="label">証明：</span>
+    Sober空間の族 $\{ X_i \}_{i \in I}$ の直和空間を $X = \coprod_{i \in I} X_i$ とします。<br>
+    直和空間 $X$ において、各 $X_i$ は開かつ閉な部分空間、すなわち <strong>clopen</strong> な集合となります。<br>
+    $X$ における既約閉集合 $C$ を取ります。もし $C$ が相異なる2つの成分 $X_j, X_k$ と交わるとすると、$C \cap X_j$ と $C \setminus X_j$ はどちらも空でない閉集合であり、それらの和集合は $C$ となります。これは $C$ が既約であることに矛盾します。つまり、既約閉集合は複数の成分にまたがることはできません。<br>
+    したがって、ある単一の成分 $X_j$ が存在して $C \subseteq X_j$ となります。$X_j$ は clopen であるため、$X_j$ の相対位相における閉包と全体空間 $X$ における閉包は一致し、$C$ は $X_j$ における既約閉集合とみなせます。<br>
+    $X_j$ は sober空間であるため、生成点 $x \in X_j$ が唯一存在し、$C = \overline{\{x\}}$ となります。これがそのまま直和空間 $X$ 全体の生成点となります。よって $X$ は sober空間です。 $\blacksquare$
+</div>
+
+<hr>
+
+<h2>3. 商空間が sober になるための十分条件</h2>
+
+<p>
+商空間が一般には sober 性を失ってしまうという性質を踏まえ、商空間が sober 性を保つための最も一般的で強力な位相的十分条件を解説します。
+</p>
+
+<div class="theorem">
+    <span class="label">定理 3.1: 閉写像による商空間の sober 性</span>
+    $X$ を sober空間とし、$q: X \to Y$ を全射な連続写像（商写像）とする。以下の2つの条件を同時に満たすとき、商空間 $Y$ も必ず sober空間になる。<br>
+    1. $q$ が<strong>閉写像 (closed map)</strong> であること。<br>
+    2. 商空間 $Y$ が <strong>$T_0$ 空間</strong> であること。
+</div>
+
+<div class="proof">
+    <span class="label">証明：</span>
+    1. $Y$ の任意の既約閉集合を $C$ とします。<br>
+    2. $q$ が連続な「閉全射」である場合、位相幾何学の一般的な補題により、<strong>「$q(Z) = C$ を満たす $X$ の既約閉集合 $Z$ が必ず存在する」</strong>ことが知られています。<br>
+    3. $X$ は sober空間なので、この $Z$ には唯一の生成点 $x \in X$ が存在し、$Z = \overline{\{x\}}$ と書けます。<br>
+    4. したがって、$C = q(\overline{\{x\}})$ となります。<br>
+    5. ここで $q$ は連続なので、点の閉包の像は像の閉包に含まれます（$q(\overline{\{x\}}) \subseteq \overline{\{q(x)\}}$）。一方、$q$ は閉写像 (closed map) なので、$q(\overline{\{x\}})$ は $q(x)$ を含む「閉集合」です。閉包は最小の閉集合であるため、逆の包含関係 $\overline{\{q(x)\}} \subseteq q(\overline{\{x\}})$ も成り立ちます。<br>
+    6. 結果として $C = \overline{\{q(x)\}}$ が成立します。つまり、$Y$ の既約閉集合 $C$ は、少なくとも1つの生成点 $q(x)$ を持ちます（この状態を quasi-sober と呼びます）。<br>
+    7. 最後に、$Y$ が $T_0$ 空間であるという仮定から、生成点は必ず一意に定まります。これで $Y$ が sober であることが示されました。 $\blacksquare$
+</div>
+
+<p>
+<strong>代数幾何学における応用例：</strong><br>
+Sober空間が最も活躍する代数幾何学（スキーム論など）の文脈では、上記の「閉写像 (closed map)」という条件が自然に満たされる有名なケースがあります。<br>
+スキーム $X$ に有限群 $G$ が作用しているとします。このとき、軌道空間としての商空間 $X/G$ は、（アフィンであるなどの構成条件の下で）再びスキームとなります。スキームの有限群による商写像 $X \to X/G$ は<strong>整射 (integral morphism)</strong> と呼ばれる性質を持ち、整射は位相空間の写像として<strong>必ず閉写像になります</strong>。さらに商空間も $T_0$ になるため、先ほどの位相的十分条件にピタリと当てはまり、$X/G$ が sober空間となることが保証されます。
+</p>
+
+<hr>
+
+<h2>4. 順序位相における sober 性</h2>
+
+<p>
+半順序集合 (partially ordered set, poset) $X$ 上に定義される主要な2つの位相、<strong>Alexandroff位相</strong> と <strong>Scott位相</strong> の sober 性について解説し、それぞれの証明を行います。
+</p>
+
+<h3>4.1 Alexandroff位相 (Alexandroff topology)</h3>
+
+<div class="definition">
+    <span class="label">定義 4.1: Alexandroff位相</span>
+    半順序集合 $(X, \le)$ において、任意の $a \in X$ に対して $\downarrow a = \{ x \in X \mid x \le a \}$ （下方閉集合）を基本開集合（開基）とする位相を Alexandroff位相 という。この位相において、任意の開集合は<strong>下方閉集合 (downset)</strong> であり、任意の閉集合は<strong>上方閉集合 (upset)</strong> となる。
+</div>
+
+<div class="theorem">
+    <span class="label">定理 4.2</span>
+    半順序集合 $X$ の $\mathcal{B} = \{\{x \in X \mid a \ge x\} \mid a \in X\}$ を開基とするAlexandroff位相が sober空間であるための必要十分条件は、$X$ に無限に長い降鎖が存在しないこと、すなわち <strong>降鎖条件 (descending chain condition, DCC)</strong> を満たすことである。
+</div>
+
+<div class="proof">
+    <span class="label">証明：</span>
+    <strong>1. $T_0$ 性の確認と生成点の形状：</strong><br>
+    相異なる2点 $x \neq y$ に対し、順序の反対称性から $x \not\le y$ または $y \not\le x$ です。$x \not\le y$ とすると、開集合 $\downarrow y$ は $y$ を含みますが $x$ を含みません。よって $T_0$ です。<br>
+    ある点 $x \in X$ の閉包 $\overline{\{x\}}$ は、$x$ を含む最小の閉集合（上方閉集合）なので、$\overline{\{x\}} = \uparrow x = \{ y \in X \mid y \ge x \}$ となります。<br>
+    したがって空間が sober である条件は、「任意の空でない既約閉集合 $C$ が、ある $x \in X$ を用いて $C = \uparrow x$ と表せること」に帰着されます。<br><br>
+
+    <strong>2. 既約閉集合の言い換え：</strong><br>
+    閉集合（上方閉集合）$C$ が既約であるとは、任意の $a, b \in C$ に対し、ある $c \in C$ が存在して $c \le a$ かつ $c \le b$ となること、つまり $C$ が<strong>下方に有向 (directed downwards)</strong> な上方閉集合であることと同値です。<br><br>
+
+    <strong>3. 必要性（$\implies$）の証明：</strong><br>
+    空間が sober であると仮定します。$X$ に無限に長い降鎖 $x_1 > x_2 > x_3 > \dots$ が存在すると仮定して矛盾を導きます。<br>
+    集合 $C = \bigcup_{n=1}^\infty \uparrow x_n$ を考えます。$C$ は上方閉集合の和集合なので閉集合です。任意の $a, b \in C$ に対し、ある $n, m$ があって $a \ge x_n, b \ge x_m$ です。$k = \max(n, m)$ とおくと $x_k \le x_n \le a$ かつ $x_k \le x_m \le b$ であり $x_k \in C$ なので $C$ は下方に有向です。<br>
+    よって $C$ は既約閉集合であり、sober 性よりある $x \in X$ が存在して $C = \uparrow x$ となります。$x \in C$ より、ある $n$ が存在して $x \ge x_n$ です。一方、任意の $m$ について $x_m \in C = \uparrow x$ なので $x_m \ge x$ です。特に $m = n+1$ とすると $x_{n+1} \ge x \ge x_n$ となりますが、これは $x_n > x_{n+1}$ に矛盾します。<br><br>
+
+    <strong>4. 十分性（$\impliedby$）の証明：</strong><br>
+    $X$ が降鎖条件 (DCC) を満たすと仮定します。$C$ を任意の空でない既約閉集合（下方に有向な上方閉集合）とします。$C$ の極小元全体の集合を $M$ とします。DCC より、任意の $c \in C$ に対し、$c \ge m$ となる極小元 $m \in M$ が必ず存在するため、$C = \bigcup_{m \in M} \uparrow m$ と書けます。<br>
+    ここで、$C$ に相異なる2つの極小元 $m_1, m_2 \in M$ が存在したと仮定します。$C$ は下方に有向なので、ある $c \in C$ が存在して $c \le m_1$ かつ $c \le m_2$ となります。しかし、$m_1, m_2$ は $C$ の極小元であるため、$c = m_1 = m_2$ でなければならず、矛盾します。<br>
+    したがって極小元はただ一つしか存在しません。それを $x$ とおくと $C = \uparrow x = \overline{\{x\}}$ となります。よって空間は sober です。 $\blacksquare$
+</div>
+
+
+<h3>4.2 Scott位相 (Scott topology)</h3>
+
+<p>一般の有向完備半順序集合 (dcpo) において、Scott位相は必ずしも sober になるとは限りません。この事実は P. T. Johnstone による歴史的な反例 (1981) で示されました。しかし、空間に<strong>連続性 (continuity)</strong> という強い条件を課すことで、Scott位相は sober になります。</p>
+
+<div class="definition">
+    <span class="label">定義 4.3: 連続dcpo (continuous dcpo) と Scott位相</span>
+    <ul>
+        <li><strong>有向完備半順序集合 (dcpo)</strong>: 半順序集合 $X$ の任意の有向集合 (directed set) $D$ が上限 $\sup D \in X$ を持つこと。</li>
+        <li><strong>遠下関係 (way-below relation, $\ll$)</strong>: $x, y \in X$ に対し、$x \ll y$ とは、任意の有向集合 $D$ に対して $y \le \sup D \implies \exists d \in D, \, x \le d$ が成り立つこと。</li>
+        <li><strong>連続dcpo (continuous dcpo)</strong>: 任意の $x \in X$ に対し、集合 $\Downarrow x = \{ y \in X \mid y \ll x \}$ が有向集合であり、かつ $x = \sup \Downarrow x$ が成り立つこと。</li>
+        <li><strong>Scott位相</strong>: $U \subseteq X$ が開集合であるとは、$U$ が上方閉集合であり、かつ任意の有向集合 $D$ について $\sup D \in U \implies D \cap U \neq \emptyset$ となること。（双対的に、Scott閉集合は下方閉集合であり、有向部分集合の上限で閉じている集合である）。</li>
+    </ul>
+</div>
+
+<div class="theorem">
+    <span class="label">定理 4.4</span>
+    連続有向完備半順序集合 (continuous dcpo) の Scott位相は sober空間である。
+</div>
+
+<div class="proof">
+    <span class="label">証明：</span>
+    <strong>1. $T_0$ 性の確認：</strong><br>
+    相異なる2点 $x \neq y \in X$ を取り、$x \not\le y$ と仮定します。連続性より $x = \sup \Downarrow x$ です。もし $\Downarrow x \subseteq \downarrow y$ ならば $x \le y$ となり矛盾するため、ある $z \ll x$ が存在して $z \not\le y$ となります。<br>
+    $\Uparrow z = \{ w \in X \mid z \ll w \}$ は、連続dcpoの補間性質 ($z \ll w \implies \exists u, \, z \ll u \ll w$) により Scott開集合となります。$x \in \Uparrow z$ であり、もし $y \in \Uparrow z$ ならば $z \ll y \implies z \le y$ となり矛盾するため $y \notin \Uparrow z$ です。よって $T_0$ 空間です。<br><br>
+
+    <strong>2. 既約閉集合が生成点を持つこと：</strong><br>
+    $C \subseteq X$ を空でない任意の既約なScott閉集合とします。集合 $D = \{ z \in X \mid \exists c \in C, \, z \ll c \}$ を定義します。<br>
+    $z \ll c \implies z \le c$ であり、$C$ は下方閉集合なので $D \subseteq C$ です。<br>
+    【$D$ は有向集合である】: $z_1, z_2 \in D$ とすると、ある $c_1, c_2 \in C$ について $z_1 \ll c_1$, $z_2 \ll c_2$ です。これは $c_1 \in \Uparrow z_1$, $c_2 \in \Uparrow z_2$ を意味します。$\Uparrow z_1, \Uparrow z_2$ は開集合で $C$ と交わるため、$C$ の既約性より $(\Uparrow z_1 \cap \Uparrow z_2) \cap C \neq \emptyset$ です。この交わりの元を $c_3$ とすると $z_1 \ll c_3$, $z_2 \ll c_3$ です。$\Downarrow c_3$ は有向集合であり、$c_3 \in C$ より $\Downarrow c_3 \subseteq D$ なので、$z_1, z_2$ の共通の上界 $z_3 \in D$ が存在します。<br>
+    【$C = \downarrow (\sup D)$ である】: $D \subseteq C$ であり、$C$ はScott閉集合（有向集合の上限を含む）なので、$x = \sup D \in C$ です。$C$ は下方閉集合なので $\downarrow x \subseteq C$ です。逆に、任意の $c \in C$ に対し、$c = \sup \Downarrow c$ です。$z \ll c$ ならば $z \in D$ なので $\Downarrow c \subseteq D$ となり、$c = \sup \Downarrow c \le \sup D = x$ より $c \in \downarrow x$ となります。よって $C = \downarrow x$ です。<br>
+    以上より、任意の既約閉集合 $C$ は唯一の生成点 $x$ を持ち、空間は sober です。 $\blacksquare$
+</div>
+
+<hr>
+
+<h2>参考文献</h2>
+<div class="bibliography">
+    <ul>
+        <li>
+            Johnstone, P. T. (1981). <em>Scott is not always sober</em>. Continuous Lattices (Lecture Notes in Mathematics, vol 871). Springer, Berlin, Heidelberg.
+            <br><a href="https://ncatlab.org/nlab/show/Scott+topology" target="_blank">🔗 nLab: Scott topology (反例に関する言及を含む)</a>
+        </li>
+        <li>
+            Johnstone, P. T. (1982). <em>Stone Spaces</em>. Cambridge University Press. 
+            <br>（sober空間や sober化、超不連結空間に関する包括的な位相的議論）
+        </li>
+        <li>
+            Gierz, G., Hofmann, K. H., Keimel, K., Lawson, J. D., Mislove, M., & Scott, D. S. (2003). <em>Continuous Lattices and Domains</em>. Cambridge University Press.
+            <br>（ドメイン理論、連続dcpo、Scott位相の sober 性に関する標準的テキスト）
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

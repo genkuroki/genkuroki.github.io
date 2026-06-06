@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sober 空間の圏から frame の圏への自然な反変関手の充満忠実性</title>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    body {
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background-color: #fafafa;
+    }
+    h1 {
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+    h2 {
+        color: #2980b9;
+        margin-top: 40px;
+        border-bottom: 1px solid #bdc3c7;
+        padding-bottom: 5px;
+    }
+    h3 {
+        color: #34495e;
+    }
+    p {
+        margin-bottom: 1.5em;
+    }
+    .definition, .theorem, .proof, .remark {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .definition {
+        border-left: 5px solid #3498db;
+    }
+    .theorem {
+        border-left: 5px solid #e74c3c;
+    }
+    .proof {
+        border-left: 5px solid #2ecc71;
+        background-color: #f9fdfa;
+    }
+    .remark {
+        border-left: 5px solid #f1c40f;
+    }
+    .title {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        display: block;
+        color: #2c3e50;
+    }
+    a {
+        color: #3498db;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    .references {
+        margin-top: 50px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 5px solid #95a5a6;
+    }
+    .references ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .references li {
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+
+<h1>sober 空間の圏から frame の圏への自然な反変関手の充満忠実性</h1>
+
+<p>
+本稿では、位相幾何学および圏論において重要な関係である、sober 空間 (sober space) の圏から frame の圏への自然な反変関手 (contravariant functor) が充満忠実 (fully faithful) であることの証明を、基礎的な定義から自己完結的 (self-contained) に解説します。
+</p>
+
+<h2>1. 圏論と順序集合の基礎概念</h2>
+
+<p>
+まずは、議論の土台となる半順序集合 (partially ordered set) や圏 (category) に関する基本的な定義を確認します。
+</p>
+
+<div class="definition">
+    <span class="title">定義 1.1 (半順序集合)</span>
+    集合 \( P \) 上の二項関係 \( \le \) が、反射律、反対称律、推移律を満たすとき、\( (P, \le) \) を<strong>半順序集合 (partially ordered set)</strong> と呼びます。<br>
+    部分集合 \( S \subseteq P \) に対して、その<strong>上限 (supremum)</strong> または<strong>結び (join)</strong> を \( \bigvee S \) と表し、<strong>下限 (infimum)</strong> または<strong>交わり (meet)</strong> を \( \bigwedge S \) と表します。
+</div>
+
+<div class="definition">
+    <span class="title">定義 1.2 (圏と関手)</span>
+    <strong>圏 (category)</strong> \( \mathcal{C} \) は、対象 (objects) の集まりと、対象の間の射 (morphisms) の集まりから構成されます。<br>
+    圏 \( \mathcal{C} \) から圏 \( \mathcal{D} \) への<strong>反変関手 (contravariant functor)</strong> \( F: \mathcal{C}^{\mathrm{op}} \to \mathcal{D} \) とは、\( \mathcal{C} \) の対象 \( X \) に \( \mathcal{D} \) の対象 \( F(X) \) を対応させ、射 \( f: X \to Y \) に射 \( F(f): F(Y) \to F(X) \) を対応させるものであり、恒等射と射の合成を保存するものです。
+</div>
+
+<div class="definition">
+    <span class="title">定義 1.3 (充満忠実)</span>
+    反変関手 \( F: \mathcal{C}^{\mathrm{op}} \to \mathcal{D} \) が与えられたとき、各対象 \( X, Y \in \mathrm{Ob}(\mathcal{C}) \) に対して、写像
+    \[ F_{X,Y}: \mathrm{Hom}_{\mathcal{C}}(X, Y) \longrightarrow \mathrm{Hom}_{\mathcal{D}}(F(Y), F(X)) \]
+    が定まります。
+    <ul>
+        <li>任意の \( X, Y \) で \( F_{X,Y} \) が<strong>単射 (injective)</strong> であるとき、\( F \) は<strong>忠実 (faithful)</strong> であると言います。</li>
+        <li>任意の \( X, Y \) で \( F_{X,Y} \) が<strong>全射 (surjective)</strong> であるとき、\( F \) は<strong>充満 (full)</strong> であると言います。</li>
+    </ul>
+    両方を満たすとき、\( F \) は<strong>充満忠実 (fully faithful)</strong> であると言います。
+</div>
+
+<h2>2. frame の圏 \( \mathbf{Frm} \)</h2>
+
+<div class="definition">
+    <span class="title">定義 2.1 (frame)</span>
+    <strong>frame (frame)</strong> とは、次の条件を満たす半順序集合 \( (L, \le) \) のことです。
+    <ol>
+        <li>任意の有限個の交わり（下限 \( \wedge \)、および最大元 \( 1 \)）を持つ。</li>
+        <li>任意の大きさの結び（上限 \( \bigvee \)、および最小元 \( 0 \)）を持つ。</li>
+        <li>次の<strong>無限分配律 (infinite distributive law)</strong> を満たす。<br>
+            \[ x \wedge \left( \bigvee_{i \in I} y_i \right) = \bigvee_{i \in I} (x \wedge y_i) \quad (\forall x \in L, \{y_i\}_{i \in I} \subseteq L) \]
+        </li>
+    </ol>
+</div>
+
+<div class="definition">
+    <span class="title">定義 2.2 (frame 準同型)</span>
+    2つの frame \( L, M \) の間の写像 \( \phi: L \to M \) が<strong>frame 準同型 (frame homomorphism)</strong> であるとは、有限交わりと任意結びを保存すること、すなわち次を満たすことを言います。
+    <ul>
+        <li>\( \phi(1) = 1 \)</li>
+        <li>\( \phi(a \wedge b) = \phi(a) \wedge \phi(b) \quad (\forall a, b \in L) \)</li>
+        <li>\( \phi\left(\bigvee_{i \in I} a_i\right) = \bigvee_{i \in I} \phi(a_i) \quad (\forall \{a_i\}_{i \in I} \subseteq L) \)</li>
+    </ul>
+</div>
+
+<p>
+対象を frame とし、射を frame 準同型とする圏を <strong>frame の圏 (category of frames)</strong> と呼び、\( \mathbf{Frm} \) で表します。
+</p>
+
+<div class="remark">
+    <span class="title">例 2.3 (位相空間の開集合系)</span>
+    任意の位相空間 (topological space) \( X \) に対し、その開集合 (open set) 全体の成す族 \( \mathcal{O}(X) \) は、包含関係 \( \subseteq \) に関して半順序集合となります。任意和が開集合となり、有限共通部分が開集合となるという位相の公理により、\( \mathcal{O}(X) \) は frame になります。
+    また、clopen (clopen) な集合（開かつ閉集合）や、超不連結 (extremally disconnected) な空間の開集合系なども、特定の性質を持つ frame を構成します。
+</div>
+
+<h2>3. sober 空間と点の特徴付け</h2>
+
+<p>
+位相空間論において、空間の「点」と「閉集合」の関係性を圏論的に捉え直す上で重要なのが <strong>sober 空間 (sober space)</strong> です。
+</p>
+
+<div class="definition">
+    <span class="title">定義 3.1 (既約閉集合)</span>
+    位相空間 \( X \) の閉集合 (closed set) \( F \) が<strong>既約閉集合 (irreducible closed set)</strong> であるとは、\( F \neq \emptyset \) であり、かつ \( F = F_1 \cup F_2 \) （ただし \( F_1, F_2 \) は閉集合）ならば \( F = F_1 \) または \( F = F_2 \) が成り立つことを言います。
+</div>
+
+<div class="definition">
+    <span class="title">定義 3.2 (sober 空間)</span>
+    位相空間 \( X \) が <strong>sober 空間 (sober space)</strong> であるとは、任意の既約閉集合 \( F \) に対して、\( F = \overline{\{x\}} \) を満たす点 \( x \in X \) がただ一つ存在すること（一意な点の閉包 (closure) として表されること）を言います。
+</div>
+
+<p>
+圏論や frame の文脈では、sober 空間を frame を使って次のように特徴付けます。
+</p>
+
+<div class="theorem">
+    <span class="title">定理 3.3 (点の frame 論的特徴付け)</span>
+    2点からなる frame を \( \mathbf{2} = \{0, 1\} \) (ただし \( 0 < 1 \)) とします。frame \( L \) から \( \mathbf{2} \) への frame 準同型全体の集合を \( \mathrm{Pt}(L) \) と書き、これを \( L \) の<strong>点 (points)</strong> と呼びます。<br>
+    位相空間 \( X \) の点 \( x \in X \) に対し、写像 \( p_x: \mathcal{O}(X) \to \mathbf{2} \) を以下で定義します。
+    \[ p_x(U) = \begin{cases} 1 & (x \in U) \\ 0 & (x \notin U) \end{cases} \]
+    このとき、\( p_x \) は frame 準同型となります。さらに、位相空間 \( X \) が sober 空間であることの必要十分条件は、対応 \( \eta_X: X \to \mathrm{Pt}(\mathcal{O}(X)) \ (x \mapsto p_x) \) が<strong>全単射 (bijective)</strong> となることです。
+</div>
+
+<div class="proof">
+    <span class="title">定理 3.3 の証明の概略</span>
+    \( \eta_X \) の全単射性と定義 3.2 の同値性を示します。<br>
+    frame 準同型 \( \phi: \mathcal{O}(X) \to \mathbf{2} \) が与えられたとき、\( \mathcal{U} = \phi^{-1}(1) \) は \( \mathcal{O}(X) \) の完全素フィルター (completely prime filter) となり、その補集合 \( \mathcal{P} = \phi^{-1}(0) \) は \( \mathcal{O}(X) \) における主イデアルとなります。すなわち、\( \mathcal{P} \) の和集合を \( W = \bigcup \mathcal{P} \) とすると、\( \phi \) が任意和を保存するため \( \phi(W) = 0 \) となり、\( W \in \mathcal{P} \) が最大の開集合として存在します。<br>
+    このとき、\( F = X \setminus W \) とおくと、\( F \) は既約閉集合となります。逆に既約閉集合 \( F \) があれば、\( F \cap U = \emptyset \) となる開集合全体から frame 準同型が構成できます。この対応により、既約閉集合と \( \mathrm{Pt}(\mathcal{O}(X)) \) は 1 対 1 に対応します。<br>
+    したがって、「任意の既約閉集合が唯一の点 \( x \) の閉包になる」という sober 空間の条件は、「任意の frame 準同型 \( \phi \in \mathrm{Pt}(\mathcal{O}(X)) \) が唯一の \( p_x \) と一致する」という条件（すなわち \( \eta_X \) が全単射）と同値になります。
+</div>
+
+<h2>4. 反変関手 \( \mathcal{O}: \mathbf{Sob}^{\mathrm{op}} \to \mathbf{Frm} \) の定義</h2>
+
+<p>
+sober 空間を対象とし、連続写像 (continuous map) を射とする圏を \( \mathbf{Sob} \) とします。<br>
+位相空間の間の連続写像 \( f: X \to Y \) に対し、逆像写像 \( f^{-1}: \mathcal{O}(Y) \to \mathcal{O}(X) \) は、和集合と共通部分を保存するため frame 準同型になります。<br>
+これにより、自然な反変関手
+\[ \mathcal{O}: \mathbf{Sob}^{\mathrm{op}} \longrightarrow \mathbf{Frm} \]
+が定義されます。この関手が充満忠実であることを示すのが本稿の主眼です。すなわち、任意の sober 空間 \( X, Y \) に対して、次の写像が全単射であることを示します。
+\[ \mathcal{O}_{X,Y}: \mathrm{Hom}_{\mathbf{Sob}}(X, Y) \longrightarrow \mathrm{Hom}_{\mathbf{Frm}}(\mathcal{O}(Y), \mathcal{O}(X)) \quad (f \mapsto f^{-1}) \]
+</p>
+
+<h2>5. 充満忠実性の証明</h2>
+
+<div class="theorem">
+    <span class="title">定理 5.1</span>
+    反変関手 \( \mathcal{O}: \mathbf{Sob}^{\mathrm{op}} \to \mathbf{Frm} \) は充満忠実 (fully faithful) である。
+</div>
+
+<div class="proof">
+    <span class="title">証明</span>
+    写像 \( \mathcal{O}_{X,Y}: f \mapsto f^{-1} \) が「単射（忠実）」かつ「全射（充満）」であることを示します。
+
+    <h3>① 忠実性 (Faithfulness) の証明：単射性</h3>
+    \( f, g: X \to Y \) を sober 空間の間の連続写像とし、\( \mathcal{O}(f) = \mathcal{O}(g) \)、すなわちすべての開集合 \( V \in \mathcal{O}(Y) \) に対して \( f^{-1}(V) = g^{-1}(V) \) であると仮定します。<br>
+    任意の点 \( x \in X \) をとります。すべての \( Y \) の開集合 \( V \in \mathcal{O}(Y) \) に対して、次が成り立ちます。
+    \[ f(x) \in V \iff x \in f^{-1}(V) \iff x \in g^{-1}(V) \iff g(x) \in V \]
+    ここで、sober 空間は自動的に <strong>\( T_0 \) 空間 (\( T_0 \) space)</strong> （任意の異なる2点に対し、片方を含みもう片方を含まない開集合が存在する空間）となります（既約閉集合の閉包の一意性から、異なる点は異なる閉包を持つため）。<br>
+    もし \( f(x) \neq g(x) \) であれば、\( Y \) が \( T_0 \) 空間であることから、片方を含みもう片方を含まない開集合 \( V \) が存在しなければなりませんが、上の同値性からそれは不可能です。<br>
+    したがって、すべての \( x \in X \) で \( f(x) = g(x) \) となり、\( f = g \) が従います。よって \( \mathcal{O}_{X,Y} \) は<strong>単射 (injective)</strong> です。
+
+    <h3>② 充満性 (Fullness) の証明：全射性</h3>
+    任意の frame 準同型 \( \phi: \mathcal{O}(Y) \to \mathcal{O}(X) \) が与えられたとき、\( \phi = f^{-1} \) となる連続写像 \( f: X \to Y \) を構成します。<br>
+    各点 \( x \in X \) に対し、対応する frame 準同型 \( p_x: \mathcal{O}(X) \to \mathbf{2} \) を用いて、合成写像 \( p_x \circ \phi \) を考えます。
+    \[ \mathcal{O}(Y) \xrightarrow{\ \phi\ } \mathcal{O}(X) \xrightarrow{\ p_x\ } \mathbf{2} \]
+    frame 準同型の合成は再び frame 準同型なので、\( p_x \circ \phi \in \mathrm{Pt}(\mathcal{O}(Y)) \) です。<br>
+    ここで <strong>\( Y \) が sober 空間であること</strong>、すなわち定理 3.3 における \( \eta_Y: Y \to \mathrm{Pt}(\mathcal{O}(Y)) \) が全単射であることを用います。これにより、各 \( x \in X \) に対して次を満たす \( Y \) の点 \( y \) が<strong>一意に</strong>存在します。
+    \[ p_y = p_x \circ \phi \]
+    この一意に定まる \( y \) を \( f(x) \) と定義することで、写像 \( f: X \to Y \) が得られます。<br><br>
+    
+    この \( f \) が \( \phi = f^{-1} \) を満たすことを確認します。任意の開集合 \( V \in \mathcal{O}(Y) \) に対し、\( x \in X \) を任意にとると、
+    \[
+    \begin{aligned}
+    x \in f^{-1}(V) &\iff f(x) \in V \\
+    &\iff p_{f(x)}(V) = 1 \quad (p_y \text{ の定義より}) \\
+    &\iff (p_x \circ \phi)(V) = 1 \quad (f(x) \text{ の定義より } p_{f(x)} = p_x \circ \phi) \\
+    &\iff p_x(\phi(V)) = 1 \\
+    &\iff x \in \phi(V)
+    \end{aligned}
+    \]
+    これが任意の \( x \in X \) で成り立つため、部分集合として \( f^{-1}(V) = \phi(V) \) が成り立ちます。<br>
+    \( \phi(V) \) は \( \mathcal{O}(X) \) の元、すなわち \( X \) の開集合であるため、\( f^{-1}(V) \) も開集合となります。任意の開集合の逆像が開集合になることから、\( f \) は<strong>連続 (continuous)</strong> （すなわち \( \mathbf{Sob} \) の射）です。<br>
+    そして定義から \( \phi = f^{-1} = \mathcal{O}(f) \) となるため、\( \mathcal{O}_{X,Y} \) は<strong>全射 (surjective)</strong> です。<br><br>
+    以上より、\( \mathcal{O}_{X,Y} \) は全単射となり、反変関手 \( \mathcal{O} \) は充満忠実であることが証明されました。&nbsp;&nbsp;\(\blacksquare\)
+</div>
+
+<div class="references">
+    <span class="title">参考文献</span>
+    <ul>
+        <li>nLab, "Sober space", <a href="https://ncatlab.org/nlab/show/sober+space" target="_blank">https://ncatlab.org/nlab/show/sober+space</a></li>
+        <li>nLab, "Frame", <a href="https://ncatlab.org/nlab/show/frame" target="_blank">https://ncatlab.org/nlab/show/frame</a></li>
+        <li>Wikipedia (English), "Sober space", <a href="https://en.wikipedia.org/wiki/Sober_space" target="_blank">https://en.wikipedia.org/wiki/Sober_space</a></li>
+        <li>Johnstone, P. T. (1982). <i>Stone Spaces</i>. Cambridge University Press.</li>
+    </ul>
+</div>
+
+</body>
+</html>
