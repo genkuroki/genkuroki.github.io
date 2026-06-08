@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>自然数全体の集合の非単項超フィルターによる超冪の濃度について</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            font-size: 24pt;
+            color: #1a365d;
+            border-bottom: 2px solid #2b6cb0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 16pt;
+            color: #2c5282;
+            margin-top: 30px;
+            border-left: 5px solid #4299e1;
+            padding-left: 10px;
+        }
+        p {
+            margin: 1em 0;
+            text-align: justify;
+        }
+        .theorem, .definition, .example {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin: 1.5em 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .theorem-title, .definition-title, .example-title {
+            font-weight: bold;
+            color: #2b6cb0;
+            margin-bottom: 0.5em;
+        }
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 9pt;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <h1>自然数全体の集合の非単項超フィルターによる超冪の濃度について</h1>
+    
+    <p>本稿では、自然数の集合 $\mathbb{N}$ の非単項超フィルター (non-principal ultrafilter) $U$ による超冪 (ultrapower) ${}^*\mathbb{N} = \mathbb{N}^\mathbb{N}/U$ の濃度が、連続体濃度 (cardinality of the continuum) $2^{\aleph_0}$ に一致することを示します。この事実は、超準解析 (nonstandard analysis) やモデル理論 (model theory) において、無限小や無限大を含む超実数体の基盤となる重要な定理です。理解を深めるため、フィルターや超冪の基本定義から始め、具体的な例を交えながら、Cantor-Bernstein-Schröder の定理を用いた厳密な証明を展開します。</p>
+
+    <h2>1. 基本概念の定義</h2>
+    
+    <div class="definition">
+        <div class="definition-title">定義 1 (フィルター)</div>
+        集合 $X$ 上のフィルター (filter) とは、$X$ の部分集合の族 $F \subset \mathcal{P}(X)$ であり、以下の条件を満たすものである：
+        <ul>
+            <li>$X \in F$ かつ $\varnothing \notin F$。</li>
+            <li>$A, B \in F$ ならば $A \cap B \in F$。</li>
+            <li>$A \in F$ かつ $A \subset B \subset X$ ならば $B \in F$。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 2 (超フィルター)</div>
+        $X$ 上のフィルター $U$ が超フィルター (ultrafilter) であるとは、任意の $A \subset X$ に対して、$A \in U$ または $X \smallsetminus A \in U$ のいずれか一方が成り立つことである。これは、包含関係に関して極大なフィルターであることと同値である。
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 3 (単項超フィルターと非単項超フィルター)</div>
+        $X$ 上の超フィルター $U$ について、ある点 $x \in X$ が存在して $U = \{ A \subset X \mid x \in A \}$ と表せるとき、$U$ を単項超フィルター (principal ultrafilter) と呼ぶ。そうでないとき、$U$ を非単項超フィルター (non-principal ultrafilter) または自由超フィルター (free ultrafilter) と呼ぶ。
+    </div>
+
+    <p>非単項超フィルターは、すべての余有限集合（補集合が有限である集合）を要素として含むという重要な性質を持っています。具体的な例を以下に示します。</p>
+
+    <div class="example">
+        <div class="example-title">例 1 (余有限フィルターと非単項超フィルター)</div>
+        $X = \mathbb{N}$ とし、有限集合の補集合全体の族 $F_{\text{cf}} = \{ A \subset \mathbb{N} \mid \mathbb{N} \smallsetminus A \text{ は有限集合} \}$ を考えると、これはフィルターとなる。これを余有限フィルター (cofinite filter) または Fréchet フィルターと呼ぶ。Zorn の補題を用いることで、$F_{\text{cf}}$ を含む極大フィルター（すなわち超フィルター） $U$ の存在が示される。この $U$ は有限集合を一切含まないため、非単項超フィルターとなる。
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 4 (超冪の構成)</div>
+        $X$ を集合、$U$ を $\mathbb{N}$ 上の超フィルターとする。関数集合 $X^\mathbb{N}$ 上に、二つの関数 $f, g \in X^\mathbb{N}$ に対して、同値関係 $\equiv_U$ を以下のように定義する：
+        $$f \equiv_U g \iff \{ n \in \mathbb{N} \mid f(n) = g(n) \} \in U$$
+        この同値関係による商集合 $X^\mathbb{N}/U$ を、$X$ の $U$ による超冪 (ultrapower) と呼び、${}^*X$ と表記する。各 $f \in X^\mathbb{N}$ の同値類を $[f]_U$ と書く。
+    </div>
+
+    <p><strong>注意 (超不連結空間との関連):</strong> 超フィルター全体の空間、すなわち $\mathbb{N}$ の Stone-Čech コンパクト化 $\beta\mathbb{N}$ は、位相空間論において、任意の開集合の閉包が開かつ閉 (clopen) になる空間、すなわち超不連結 (extremally disconnected) な空間の代表例として知られています。</p>
+
+    <h2>2. 主定理とその証明</h2>
+
+    <div class="theorem">
+        <div class="theorem-title">定理</div>
+        $\mathbb{N}$ の非単項超フィルター $U$ による超冪 ${}^*\mathbb{N} = \mathbb{N}^\mathbb{N}/U$ の濃度は $2^{\aleph_0}$ である。
+    </div>
+
+    <p><strong>証明.</strong> Cantor-Bernstein-Schröder の定理を用いる。すなわち、$|{}^*\mathbb{N}| \le 2^{\aleph_0}$ （濃度の意味での不等式 $\le$）と $|{}^*\mathbb{N}| \ge 2^{\aleph_0}$ の両方を示す。</p>
+
+    <p><strong>(1) 上限 $|{}^*\mathbb{N}| \le 2^{\aleph_0}$ の証明：</strong><br>
+    超冪 ${}^*\mathbb{N}$ は、関数集合 $\mathbb{N}^\mathbb{N}$ の同値関係 $\equiv_U$ による商集合である。商集合の濃度は元の集合の濃度以下であるから、
+    $$|{}^*\mathbb{N}| \le |\mathbb{N}^\mathbb{N}|$$
+    が成り立つ。ここで、$\mathbb{N}$ の濃度は $\aleph_0$ であり、$\mathbb{N}^\mathbb{N}$ の濃度は次のように計算される：
+    $$|\mathbb{N}^\mathbb{N}| = \aleph_0^{\aleph_0}$$
+    集合論の基本関係より $\aleph_0 \le 2^{\aleph_0}$ であるから、
+    $$2^{\aleph_0} \le \aleph_0^{\aleph_0} \le (2^{\aleph_0})^{\aleph_0} = 2^{\aleph_0 \cdot \aleph_0} = 2^{\aleph_0}$$
+    となり、$|\mathbb{N}^\mathbb{N}| = 2^{\aleph_0}$ を得る。したがって、
+    $$|{}^*\mathbb{N}| \le 2^{\aleph_0}$$
+    が成立する。</p>
+
+    <p><strong>(2) 下限 $|{}^*\mathbb{N}| \ge 2^{\aleph_0}$ の証明：</strong><br>
+    ${}^*\mathbb{N}$ の濃度が少なくとも $2^{\aleph_0}$ であることを示すために、無限二進列の全体 $2^\mathbb{N}$ （濃度は $2^{\aleph_0}$）から ${}^*\mathbb{N}$ への単射を構成する。
+    
+    便宜上、超冪の添字集合を $\mathbb{N}$ と対等な可算無限集合 $D$ に置き換えて議論を進める。$D$ を以下のような有限二進列の直和として定義する：
+    $$D = \bigcup_{n=1}^\omega \{n\} \times \{0, 1\}^n$$
+    各 $n \in \mathbb{N}$ に対し、$\{0, 1\}^n$ は長さ $n$ の二進列全体の集合であり、その大きさは $2^n$ である。したがって $D$ は可算無限集合の可算和であり、$\mathbb{N}$ と対等である。$\mathbb{N}$ 上の非単項超フィルター $U$ は、$D$ 上の非単項超フィルター（有限集合を一切含まない超フィルター）と同型に対応させることができる。以下では、この $D$ 上の超フィルターを改めて $U$ とおく。
+    
+    各 $n \in \mathbb{N}$ について、$\{0, 1\}^n$ から $\mathbb{N}$ への単射 $\phi_n$ を任意に一つ固定する。例えば、二進表現に 1 を加えることで、値域を $\{1, 2, \dots, 2^n\} \subset \mathbb{N}$ とすることができる。
+    
+    ここで、任意の無限二進列 $\alpha \in 2^\mathbb{N}$ （すなわち $\alpha: \mathbb{N} \to \{0,1\}$）に対し、関数 $f_\alpha: D \to \mathbb{N}$ を以下のように定義する。
+    $\alpha \upharpoonright n \in \{0, 1\}^n$ を $\alpha$ の最初の $n$ ビットからなる有限列とする。$(n, s) \in D$ （ただし $s \in \{0, 1\}^n$）に対して、
+    $$f_\alpha(n, s) = \phi_n(s \oplus (\alpha \upharpoonright n))$$
+    と定める。ここで $\oplus$ は長さ $n$ のビット列同士の成分ごとの排他的論理和（$\pmod 2$ の加算）を表す。
+    
+    いま、相異なる二つの無限二進列 $\alpha, \beta \in 2^\mathbb{N}$ ($\alpha \ne \beta$) を任意に選ぶ。$\alpha \ne \beta$ であるから、ある最小の自然数 $N \in \mathbb{N}$ が存在して、$\alpha(N) \ne \beta(N)$ となる。これにより、任意の $n \ge N$ に対して、初期切断は不一致となる：
+    $$\alpha \upharpoonright n \ne \beta \upharpoonright n$$
+    排他的論理和の性質から、任意の $s \in \{0, 1\}^n$ に対して、
+    $$s \oplus (\alpha \upharpoonright n) = s \oplus (\beta \upharpoonright n) \iff \alpha \upharpoonright n = \beta \upharpoonright n$$
+    が成り立つ。いま $n \ge N$ において $\alpha \upharpoonright n \ne \beta \upharpoonright n$ であるため、すべての $s \in \{0, 1\}^n$ について、
+    $$s \oplus (\alpha \upharpoonright n) \ne s \oplus (\beta \upharpoonright n)$$
+    が成り立つ。$\phi_n$ は単射であるから、両辺を $\phi_n$ で移した値も異なる：
+    $$\phi_n(s \oplus (\alpha \upharpoonright n)) \ne \phi_n(s \oplus (\beta \upharpoonright n))$$
+    すなわち、任意の $n \ge N$ および任意の $s \in \{0, 1\}^n$ に対して、
+    $$f_\alpha(n, s) \ne f_\beta(n, s)$$
+    が成立する。
+    
+    二つの関数 $f_\alpha$ と $f_\beta$ が一致するようなドメイン $D$ の元の集合を $E$ とおくと、上の議論から、
+    $$E = \{ (n, s) \in D \mid f_\alpha(n, s) = f_\beta(n, s) \} \subset \bigcup_{n=1}^{N-1} \{n\} \times \{0, 1\}^n$$
+    となる。右辺は有限集合の有限個の和集合であるため、有限集合である。したがって、その部分集合である $E$ も有限集合である。
+    
+    $U$ は非単項超フィルターであるため、いかなる有限集合も要素として持たない。ゆえに、
+    $$E \smallsetminus \varnothing = E \notin U$$
+    である。超冪における同値関係 $\equiv_U$ の定義より、
+    $$f_\alpha \equiv_U f_\beta \iff E \in U$$
+    であるから、$E \notin U$ より $f_\alpha \not\equiv_U f_\beta$ を得る。
+    
+    これにより、対応 $\alpha \mapsto [f_\alpha]_U$ は、濃度 $2^{\aleph_0}$ の集合 $2^\mathbb{N}$ から超冪 ${}^*\mathbb{N}$ への単射となる。したがって、
+    $$|{}^*\mathbb{N}| \ge |2^\mathbb{N}| = 2^{\aleph_0}$$
+    が示された。</p>
+
+    <p>以上、(1) および (2) より、Cantor-Bernstein-Schröder の定理から、
+    $$|{}^*\mathbb{N}| = 2^{\aleph_0}$$
+    であることが証明された。 (証明終)</p>
+
+    <h2>3. 補足と応用</h2>
+    <p>ウルトラプロダクト (ultraproduct) やウルトラフィルターの理論において、可算な代数構造の非単項超フィルターによる超冪をとると、その濃度が連続体濃度へと「ジャンプ」することは極めて普遍的な性質です。例えば、実数体 $\mathbb{R}$ の超冪 ${}^*\mathbb{R} = \mathbb{R}^\mathbb{N}/U$ もまた濃度 $2^{\aleph_0}$ を持ちます。これは、超実数体 ${}^*\mathbb{R}$ が標準的な実数体 $\mathbb{R}$ よりも遥かに多くの元（無限大や無限小）を含むにもかかわらず、集合としての濃度自体は $\mathbb{R}$ と同じ連続体濃度にとどまることを意味しており、超準解析のモデルを構築・運用する上で決定的な役割を果たしています。</p>
+
+    <h2>参考文献</h2>
+    <ul style="list-style-type: none; padding-left: 0;">
+        <li style="margin-bottom: 1em;">[1] Chang, C. C., & Keisler, H. J. (1990). <a href="https://www.sciencedirect.com/book/9780444880543/model-theory" target="_blank"><i>Model Theory</i></a> (3rd ed.). Elsevier.</li>
+        <li style="margin-bottom: 1em;">[2] Jech, T. (2003). <a href="https://link.springer.com/book/10.1007/3-540-44761-X" target="_blank"><i>Set Theory</i></a> (The Third Millennium Edition). Springer.</li>
+        <li style="margin-bottom: 1em;">[3] Comfort, W. W., & Negrepontis, S. (1974). <a href="https://link.springer.com/book/10.1007/978-3-642-65780-1" target="_blank"><i>The Theory of Ultrafilters</i></a>. Springer-Verlag.</li>
+    </ul>
+
+    <div class="footer">
+        &copy; 2026 超準構造研究グループ. All rights reserved.
+    </div>
+
+</body>
+</html>

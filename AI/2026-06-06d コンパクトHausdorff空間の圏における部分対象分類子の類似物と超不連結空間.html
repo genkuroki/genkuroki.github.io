@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクトHausdorff空間の圏における部分対象分類子の類似物と超不連結空間</title>
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            packages: {'[+]': ['ams']}
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            margin-top: 30px;
+            padding-bottom: 5px;
+        }
+        .definition, .proposition, .theorem, .example, .proof {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #eef2f5;
+            border-left: 5px solid #3b82f6;
+        }
+        .proposition, .theorem {
+            background-color: #fdf6e3;
+            border-left: 5px solid #f59e0b;
+        }
+        .example {
+            background-color: #f0fdf4;
+            border-left: 5px solid #10b981;
+        }
+        .proof {
+            background-color: #f9fafb;
+            border-left: 5px solid #6b7280;
+        }
+        .proof-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .qedsymbol {
+            text-align: right;
+            font-weight: bold;
+        }
+        .informal-note {
+            background-color: #fffbeb;
+            padding: 15px;
+            border: 1px dashed #fcd34d;
+            margin: 20px 0;
+        }
+        .references {
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        .references li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>コンパクトHausdorff空間の圏における部分対象分類子の類似物と超不連結空間</h1>
+
+    <div class="informal-note">
+        <p>この記事では、コンパクトHausdorff空間の圏 $\mathbf{CompHaus}$ における部分対象分類子 (subobject classifier) に近い概念について解説します。</p>
+        <p>結論からお伝えすると、$\mathbf{CompHaus}$ はトポス (topos) ではないため、すべての部分対象を完全に分類する対象は存在しません。しかし、離散空間である $2 = \{0, 1\}$ が「clopen (開かつ閉) 部分集合の分類子」として機能し、これが部分対象分類子に最も近い役割を果たします。さらに、超不連結 (extremally disconnected) と呼ばれる特殊な空間のクラスを考えると、この空間 $2$ による分類が真の部分対象分類子に極めて近い振る舞いを見せるようになります。以下に厳密な定義と証明を交えて順を追って解説します。</p>
+    </div>
+
+    <h2>1. 基本概念と圏 $\mathbf{CompHaus}$</h2>
+
+    <div class="definition">
+        <strong>定義 1 (コンパクトHausdorff空間と圏 $\mathbf{CompHaus}$)</strong><br>
+        位相空間 $X$ がコンパクト (compact) であり、かつHausdorff空間 (Hausdorff space) であるとき、これをコンパクトHausdorff空間と呼ぶ。コンパクトHausdorff空間を対象 (object) とし、それらの間の連続写像を射 (morphism) とする圏 (category) を $\mathbf{CompHaus}$ と表記する。
+    </div>
+
+    <div class="definition">
+        <strong>定義 2 (部分対象)</strong><br>
+        圏 $\mathbf{CompHaus}$ における単射 (monomorphism) は単射連続写像である。コンパクト空間からHausdorff空間への連続写像は閉写像 (closed map) となるため、$\mathbf{CompHaus}$ における部分対象 (subobject) は、実質的に閉部分空間 (closed subspace) と同一視される。すなわち、$X \in \mathbf{CompHaus}$ の部分対象は $X$ の閉部分集合 $A \subset X$ で表される。
+    </div>
+
+    <div class="definition">
+        <strong>定義 3 (clopen集合)</strong><br>
+        位相空間 $X$ の部分集合 $A \subset X$ が開集合 (open set) であり、かつ閉集合 (closed set) でもあるとき、$A$ をclopen集合と呼ぶ。
+    </div>
+
+    <h2>2. clopen分類子としての空間 $2$</h2>
+
+    <p>集合 $2 = \{0, 1\}$ に離散位相 (discrete topology) を入れた空間を考える。この空間 $2$ は有限離散空間であるため、コンパクトHausdorff空間である。すなわち $2 \in \mathbf{CompHaus}$ である。</p>
+
+    <div class="proposition">
+        <strong>命題 1</strong><br>
+        任意の $X \in \mathbf{CompHaus}$ について、$X$ のclopen集合の全体 $\operatorname{Clopen}(X)$ と、連続写像の全体 $\operatorname{Hom}_{\mathbf{CompHaus}}(X, 2)$ の間には自然な一対一対応が存在する。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>$A \in \operatorname{Clopen}(X)$ に対して、特性関数 (characteristic function) $\chi_A : X \to 2$ を次のように定める。</p>
+        $$
+        \chi_A(x) = \begin{cases} 1 & (x \in A) \\ 0 & (x \in X \smallsetminus A) \end{cases}
+        $$
+        <p>$A$ および $X \smallsetminus A$ はともに開集合であるため、任意の開集合 $V \subset 2$ （空間 $2$ の開集合は $\varnothing, \{0\}, \{1\}, \{0, 1\}$ の4つである）の逆像 $\chi_A^{-1}(V)$ は $X$ の開集合となる。ゆえに $\chi_A$ は連続写像である。</p>
+        <p>逆に、連続写像 $f: X \to 2$ が与えられたとする。空間 $2$ において $\{1\}$ は開かつ閉であるから、その逆像 $f^{-1}(1) \subset X$ も開かつ閉、すなわちclopen集合である。</p>
+        <p>対応 $A \mapsto \chi_A$ と $f \mapsto f^{-1}(1)$ は互いに逆であり、求める一対一対応を与える。</p>
+        <div class="qedsymbol">$\blacksquare$</div>
+    </div>
+
+    <div class="informal-note">
+        <p>ここで、なぜ空間 $2$ が「完全な」部分対象分類子にならないのかを少し補足します。</p>
+        <p>一般的なトポスにおける真の部分対象分類子 $\Omega$ は、対象 $X$ の「すべての」部分対象と $\operatorname{Hom}(X, \Omega)$ を一対一に対応させます。しかし、$\mathbf{CompHaus}$ における部分対象は「閉集合」であるにもかかわらず、命題 1で示したように、空間 $2$ が分類できるのは閉集合の中でも <strong>clopen集合だけ</strong> です。</p>
+        <p>例えば、連結 (connected) なコンパクトHausdorff空間である閉区間 $X = [0, 1]$ を考えてみましょう。$X$ のclopen集合は $\varnothing$ と $X$ 自身しかありません。したがって、連続写像 $X \to 2$ は定数関数しか存在せず、$[0, 1/2]$ のような無数に存在する閉部分集合 (部分対象) を分類することは全くできません。これが $\mathbf{CompHaus}$ にサブオブジェクト分類子が存在しない根本的な理由です。</p>
+    </div>
+
+    <h2>3. 超不連結空間の導入</h2>
+
+    <p>空間 $2$ の分類能力を意味のある形で引き出すためには、空間 $X$ の側に豊富なclopen集合が存在する必要がある。そこで極めて重要な役割を果たすのが、超不連結 (extremally disconnected) という概念である。</p>
+
+    <div class="definition">
+        <strong>定義 4 (超不連結空間)</strong><br>
+        位相空間 $X$ において、任意の開集合 $U \subset X$ の閉包 (closure) $\overline{U}$ が再び開集合となるとき、$X$ を超不連結 (extremally disconnected) 空間と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <strong>定義 5 (正則閉集合)</strong><br>
+        位相空間 $X$ の部分集合 $A \subset X$ が、ある開集合 $U \subset X$ を用いて $A = \overline{U}$ と表されるとき、$A$ を正則閉集合 (regular closed set) と呼ぶ。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 2</strong><br>
+        $X$ が超不連結 (extremally disconnected) 空間であるとき、$X$ の任意の正則閉集合はclopen集合である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>$A \subset X$ を正則閉集合とする。定義より、ある開集合 $U \subset X$ が存在して $A = \overline{U}$ となる。閉包であるため $A$ は閉集合である。</p>
+        <p>一方で、$X$ は超不連結 (extremally disconnected) であるため、開集合 $U$ の閉包である $\overline{U} = A$ は開集合でもある。したがって、$A$ は開集合かつ閉集合、すなわちclopen集合である。</p>
+        <div class="qedsymbol">$\blacksquare$</div>
+    </div>
+
+    <h2>4. Stone双対性と完備Boole代数</h2>
+
+    <p>空間 $2$ の役割をより深く理解するためには、$\mathbf{CompHaus}$ の重要な部分圏である <strong>Stone空間 (Stone space)</strong> の圏と、Boole代数 (Boolean algebra) の関係を考える必要がある。</p>
+
+    <div class="definition">
+        <strong>定義 6 (完全不連結空間とStone空間)</strong><br>
+        位相空間 $X$ において、任意の相異なる2点 $x, y \in X$ に対して、$x \in U$ かつ $y \notin U$ となるようなclopen集合 $U \subset X$ が存在するとき、$X$ は完全不連結 (totally disconnected) であるという。完全不連結なコンパクトHausdorff空間をStone空間 (Stone space) と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <strong>定理 1 (Stone双対性)</strong><br>
+        Stone空間の圏 $\mathbf{Stone}$ は、Boole代数 (Boolean algebra) の圏 $\mathbf{Bool}$ の双対圏 (dual category) と圏同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">解説（証明の概略）</div>
+        <p>この対応関係は次のように構成される。</p>
+        <ol>
+            <li><strong>空間から代数へ</strong>: Stone空間 $X$ に対して、そのclopen集合の全体 $\operatorname{Clopen}(X)$ は、和 (和集合)、積 (共通部分)、補元 (補集合) の演算によりBoole代数となる。</li>
+            <li><strong>代数から空間へ</strong>: Boole代数 $B$ に対して、その超極大フィルタ (ultrafilter) 全体の集合 $S(B)$ に適切な位相 (Stone位相) を入れると、Stone空間となる。</li>
+        </ol>
+        <p>この双対性において、空間 $2 = \{0, 1\}$ は、要素数が2の最も単純なBoole代数 $\{0, 1\}$ に対応する。$\mathbf{CompHaus}$ において $2$ が「clopen分類子」として機能することは、代数側では「Boole代数 $B$ から $\{0, 1\}$ への準同型の全体が、元の代数 $B$ の超極大フィルタ（すなわち元の空間の点）、あるいは特定の元（すなわち元の空間のclopen集合）を特徴づける」という事実に翻訳される。</p>
+        <div class="qedsymbol">$\blacksquare$</div>
+    </div>
+
+    <p>超不連結 (extremally disconnected) 空間は、Stone双対性を通じて「完備 (complete)」なBoole代数と完璧に対応している。</p>
+
+    <div class="definition">
+        <strong>定義 7 (完備Boole代数)</strong><br>
+        Boole代数 $B$ において、任意の部分集合 $S \subset B$ が上限 (supremum) $\sup S$ を持つとき、$B$ を完備Boole代数 (complete Boolean algebra) と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <strong>定理 2</strong><br>
+        Boole代数 $B$ のStone空間 $X$ が超不連結 (extremally disconnected) であるための必要十分条件は、$B$ が完備Boole代数 (complete Boolean algebra) であることである。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明（十分性）</div>
+        <p>$B$ を完備Boole代数とし、そのStone空間を $X$ とする。$X$ が超不連結であることを示すには、$X$ の任意の開集合 $U \subset X$ の閉包 $\overline{U}$ が開集合（すなわちclopen集合）になることを示せばよい。</p>
+        <p>Stone空間の性質より、開集合 $U$ はあるclopen集合の族 $\{C_i\}_{i \in I}$ の和集合として $U = \bigcup_{i \in I} C_i$ と表される。各clopen集合 $C_i$ はBoole代数 $B$ のある元 $b_i \in B$ に対応する。</p>
+        <p>$B$ は完備であるから、部分集合 $\{b_i \mid i \in I\} \subset B$ は上限 $b = \sup_{i \in I} b_i$ を持つ。この上限 $b$ に対応する $X$ のclopen集合を $C$ とする。ここで、$C = \overline{U}$ となることを示す。</p>
+        <p>まず、任意の $i \in I$ について $b_i \le b$ であるため、対応する空間においては $C_i \subset C$ が成り立つ。したがって $U \subset C$ である。$C$ は閉集合であるため、閉包の最小性より $\overline{U} \subset C$ が成り立つ。</p>
+        <p>次に、$\overline{U} \subsetneq C$ と仮定して矛盾を導く。もしそうであれば、集合の差 $C \smallsetminus \overline{U}$ は空でない開集合を含むため、空でないclopen集合 $D \subset C \smallsetminus \overline{U}$ が存在する。この $D$ はある $0$ でない元 $d \in B$ に対応する。</p>
+        <p>$D$ は $U$ と交わらないため、任意の $i \in I$ について $C_i \cap D = \varnothing$ である。代数側では、これは $b_i \land d = 0$ を意味し、さらに $b_i \le b \land \neg d$ となる。しかし $b \land \neg d < b$ (厳密な不等号) であるため、これは $b$ が上限であることに矛盾する。</p>
+        <p>したがって $C = \overline{U}$ でなければならない。$C$ はclopen集合であるため、$\overline{U}$ も開集合となり、$X$ は超不連結である。</p>
+        <div class="qedsymbol">$\blacksquare$</div>
+    </div>
+
+    <h2>5. Gleasonの定理と射影的対象</h2>
+
+    <p>超不連結空間は、単なる位相的な性質にとどまらず、圏 $\mathbf{CompHaus}$ における「射影的対象」として圏論的に完全に特徴づけられる。これがGleasonの定理である。</p>
+
+    <div class="definition">
+        <strong>定義 8 (射影的対象)</strong><br>
+        圏 $\mathbf{CompHaus}$ において、対象 $P$ が射影的 (projective) であるとは、任意の全射連続写像 $p: X \to Y$ と連続写像 $f: P \to Y$ が与えられたとき、連続写像 $g: P \to X$ が存在して $p \circ g = f$ を満たすことである。
+    </div>
+
+    <div class="theorem">
+        <strong>定理 3 (Gleasonの定理)</strong><br>
+        コンパクトHausdorff空間 $P$ が圏 $\mathbf{CompHaus}$ において射影的 (projective) であるための必要十分条件は、$P$ が超不連結 (extremally disconnected) であることである。
+    </div>
+
+    <div class="example">
+        <strong>例 1 (Stone-Čechコンパクト化 $\beta\mathbb{N}$)</strong><br>
+        <p>自然数の集合 $\mathbb{N}$ に離散位相を入れた空間のStone-Čechコンパクト化 (Stone-Čech compactification) である $\beta\mathbb{N}$ を考える。</p>
+        <p>$\beta\mathbb{N}$ のclopen集合からなるBoole代数は、元の集合 $\mathbb{N}$ のべき集合 (power set) $\mathcal{P}(\mathbb{N})$ と同型になる。べき集合 $\mathcal{P}(\mathbb{N})$ は包含関係に関して完備Boole代数である。</p>
+        <p>したがって、定理 2およびGleasonの定理より、$\beta\mathbb{N}$ は超不連結 (extremally disconnected) であり、かつ $\mathbf{CompHaus}$ における射影的対象 (projective object) となる。このような空間においては、正則閉集合 (regular closed set) がすべてclopen集合となるため、空間 $2$ への射が極めて豊富に存在し、部分対象が非常に良く分類される。</p>
+    </div>
+
+    <div class="informal-note">
+        <p><strong>まとめ</strong></p>
+        <p>$\mathbf{CompHaus}$ 全体としては、空間 $2 = \{0, 1\}$ はclopen集合しか分類できないため、すべての閉部分空間を分類する完全な部分対象分類子にはなり得ません。しかし、空間を「超不連結 (extremally disconnected) なコンパクトHausdorff空間」に限定し、分類したい対象を単なる閉集合ではなく「正則閉集合 (内部の閉包として得られる良い閉集合)」に絞り込むと、状況は劇的に改善します。</p>
+        <p>単純に見える空間 $2$ による分類問題は、Stone双対性や完備Boole代数、さらにはGleasonの定理といった、位相空間論と圏論の深い結びつきへと繋がっていきます。</p>
+    </div>
+
+    <h2>参考文献</h2>
+    <ul class="references">
+        <li>Stone, M. H. (1936). "The Theory of Representations for Boolean Algebras". <em>Transactions of the American Mathematical Society</em>, 40(1), 37-111. <a href="https://doi.org/10.2307/1989664" target="_blank" rel="noopener noreferrer">https://doi.org/10.2307/1989664</a></li>
+        <li>Gleason, A. M. (1958). "Projective topological spaces". <em>Illinois Journal of Mathematics</em>, 2(4A), 482-489. <a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank" rel="noopener noreferrer">https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full</a></li>
+        <li>Johnstone, P. T. (1982). <em>Stone Spaces</em>. Cambridge Studies in Advanced Mathematics 3, Cambridge University Press. <a href="https://www.cambridge.org/jp/universitypress/subjects/mathematics/logic-categories-and-sets/stone-spaces" target="_blank" rel="noopener noreferrer">https://www.cambridge.org/jp/universitypress/subjects/mathematics/logic-categories-and-sets/stone-spaces</a></li>
+        <li>Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Universitext, Springer-Verlag. <a href="https://doi.org/10.1007/978-1-4612-0927-0" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/978-1-4612-0927-0</a></li>
+    </ul>
+
+</body>
+</html>

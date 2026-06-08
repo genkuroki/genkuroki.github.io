@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{0,1}の冪の連続像とならないコンパクト Hausdorff 空間の構成と Hewitt-Marczewski-Pondiczery の定理の証明の詳細</title>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2em;
+    color: #333;
+  }
+  h1, h2, h3 {
+    font-family: "Noto Sans JP", sans-serif;
+  }
+  h1 { font-size: 1.6em; border-bottom: 2px solid #333; padding-bottom: 0.3em; margin-bottom: 1.5em; }
+  h2 { font-size: 1.3em; border-bottom: 1px solid #ccc; margin-top: 2em; padding-bottom: 0.2em; }
+  h3 { font-size: 1.1em; margin-top: 1.5em; }
+  .definition, .theorem, .lemma, .example {
+    background-color: #f9f9f9;
+    padding: 1em;
+    margin: 1.5em 0;
+    border-left: 4px solid #555;
+  }
+  .proof {
+    margin: 1em 0 2em 0;
+    padding-left: 1em;
+  }
+  .proof::before { content: "証明. "; font-weight: bold; font-style: italic; }
+  .proof::after { content: " ∎"; float: right; font-size: 1.2em; }
+  .clearfix::after { content: ""; clear: both; display: table; }
+  a { color: #0066cc; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .references {
+    margin-top: 3em;
+    border-top: 2px solid #333;
+    padding-top: 1em;
+  }
+  .references li { margin-bottom: 0.8em; }
+</style>
+</head>
+<body>
+
+<h1>{0,1}の冪の連続像とならないコンパクト Hausdorff 空間の構成と Hewitt-Marczewski-Pondiczery の定理の証明の詳細</h1>
+
+<p>本稿では、どのような濃度（基数） \(m\) に対しても直積空間 \(\{0,1\}^m\) からの全射連続写像が存在しないようなコンパクト (compact) Hausdorff空間の代表的な例について、自己完結的 (self-contained) に解説します。特に、証明の根幹をなす Hewitt-Marczewski-Pondiczery の定理の証明の詳細について、組合せ論的な補題から丁寧に導出します。</p>
+
+<h2>1. 序論と基本概念</h2>
+<p>位相空間論において、ある基数 (cardinal) \(m\) に対して \(\{0,1\}^m\) の連続像となるようなコンパクト (compact) Hausdorff空間は<strong>ダイアディック空間 (dyadic space)</strong> と呼ばれます。本稿の目的は、ダイアディック空間 (dyadic space) ではないコンパクト (compact) Hausdorff空間の具体例を構成し、その性質を証明することです。</p>
+<p>以下の証明を読み解くために必要な基本的な定義を確認します。</p>
+
+<div class="definition">
+<strong>定義 1.1 (コンパクト (compact)).</strong><br>
+位相空間 \(X\) がコンパクト (compact) であるとは、\(X\) の任意の開被覆が有限部分被覆を持つことをいう。すなわち、\(X = \bigcup_{\lambda \in \Lambda} U_\lambda\)（各 \(U_\lambda\) は開集合）であるとき、ある有限部分集合 \(\Lambda_0 \subset \Lambda\) が存在して、\(X = \bigcup_{\lambda \in \Lambda_0} U_\lambda\) となることである。
+</div>
+
+<div class="definition">
+<strong>定義 1.2 (Hausdorff空間 (Hausdorff space)).</strong><br>
+位相空間 \(X\) がHausdorff空間 (Hausdorff space) であるとは、任意の相異なる 2 点 \(x, y \in X\) に対して、互いに素な開集合 \(U, V \subset X\) (\(U \cap V = \varnothing\)) が存在し、\(x \in U\) かつ \(y \in V\) となることである。
+</div>
+
+<div class="definition">
+<strong>定義 1.3 (可算連鎖条件 (countable chain condition)).</strong><br>
+位相空間 \(X\) が可算連鎖条件 (countable chain condition)、略して ccc を満たすとは、\(X\) 内の互いに素な空でない開集合からなる任意の族が高々可算であることをいう。
+</div>
+
+<div class="definition">
+<strong>定義 1.4 (可分 (separable)).</strong><br>
+位相空間 \(X\) が可分 (separable) であるとは、\(X\) の高々可算な稠密部分集合が存在することをいう。すなわち、ある高々可算な部分集合 \(A \subset X\) が存在して、その閉包 \(\overline{A}\) が \(X\) 全体と一致することをいう。
+</div>
+
+<h2>2. 空間の構成：一点コンパクト化 (one-point compactification)</h2>
+
+<p>非可算な濃度を持つ離散空間 (discrete space) の一点コンパクト化 (one-point compactification) が、目的の空間となることを示します。</p>
+
+<div class="example">
+<strong>構成.</strong><br>
+\(D\) を非可算な集合（例えば実数全体の集合 \(\mathbb{R}\)）とし、\(D\) に離散位相 (discrete topology) を与える。すなわち、\(D\) の任意の部分集合が開集合（かつ閉集合）であるとする。この空間 \(D\) に、\(D\) に属さない新しい 1 つの点 \(\infty\) を付け加えた集合を \(X = D \cup \{\infty\}\) とする。<br><br>
+\(X\) の位相を次のように定義する。\(X\) の部分集合 \(U \subset X\) が開集合であるとは、次のいずれかの条件を満たすことである：
+<ol>
+  <li>\(\infty \notin U\) であり、\(U \subset D\)（\(U\) は \(D\) の任意の部分集合）。</li>
+  <li>\(\infty \in U\) であり、\(X \smallsetminus U\) が \(D\) の有限部分集合である。</li>
+</ol>
+このとき、\(X\) に定義された位相空間を、\(D\) の<strong>一点コンパクト化 (one-point compactification)</strong> と呼ぶ。
+</div>
+
+<div class="theorem">
+<strong>定理 2.1.</strong><br>
+上記で構成した空間 \(X\) は、コンパクト (compact) Hausdorff空間である。
+</div>
+
+<div class="proof clearfix">
+まず、\(X\) がコンパクト (compact) であることを示す。<br>
+\(\mathcal{U} = \{U_\lambda\}_{\lambda \in \Lambda}\) を \(X\) の任意の開被覆とする。\(\infty \in X\) であるから、ある \(\lambda_0 \in \Lambda\) が存在して \(\infty \in U_{\lambda_0}\) となる。構成より、\(X \smallsetminus U_{\lambda_0}\) は \(D\) の有限部分集合である。これを \(\{d_1, d_2, \ldots, d_k\} \subset D\) とおく。<br>
+各 \(d_i\) に対して、\(d_i \in U_{\lambda_i}\) となる \(\lambda_i \in \Lambda\) を選ぶことができる。このとき、\(\{U_{\lambda_0}, U_{\lambda_1}, \ldots, U_{\lambda_k}\}\) は \(X\) の有限部分被覆となる。したがって、\(X\) はコンパクト (compact) である。<br>
+<br>
+次に、\(X\) がHausdorff空間 (Hausdorff space) であることを示す。<br>
+\(X\) の相異なる 2 点 \(x, y\) を任意にとる。<br>
+<strong>(ケース 1):</strong> \(x, y \in D\) の場合。<br>
+\(U = \{x\}\), \(V = \{y\}\) とおくと、\(D\) は離散空間 (discrete space) であるためこれらは \(X\) の開集合であり、\(x \in U\), \(y \in V\), \(U \cap V = \varnothing\) を満たす。<br>
+<strong>(ケース 2):</strong> 一方が \(\infty\) の場合。一般性を失わず \(x \in D\), \(y = \infty\) とする。<br>
+\(U = \{x\}\), \(V = X \smallsetminus \{x\}\) とおく。\(U\) は \(D\) の部分集合であるため開集合である。また、\(\infty \in V\) であり、\(X \smallsetminus V = \{x\}\) は有限集合であるから、\(V\) も開集合である。さらに \(x \in U\), \(\infty \in V\), \(U \cap V = \varnothing\) を満たす。<br>
+以上より、\(X\) はHausdorff空間 (Hausdorff space) である。
+</div>
+
+<h2>3. 可算連鎖条件 (countable chain condition) と定理の証明の詳細</h2>
+
+<p>この節では、\(X\) が \(\{0,1\}^m\) の連続像になり得ないことを示すために、Hewitt-Marczewski-Pondiczery の定理の核心部分である「可分空間の任意の直積空間が ccc を満たす」という事実を詳細に証明します。</p>
+
+<div class="theorem">
+<strong>補題 3.1.</strong><br>
+空間 \(X\) は可算連鎖条件 (countable chain condition) を満たさない。
+</div>
+
+<div class="proof clearfix">
+\(D\) の各点 \(d \in D\) に対して、一元集合 \(\{d\}\) は \(D\) の部分集合であるため、\(X\) において開集合である。<br>
+\(\mathcal{O} = \{\{d\} \mid d \in D\}\) という開集合の族を考える。\(\mathcal{O}\) は互いに素な空でない開集合の族である。しかし、\(D\) は非可算集合であるため、\(\mathcal{O}\) は非可算族となる。したがって、\(X\) は可算連鎖条件 (countable chain condition) を満たさない。
+</div>
+
+<p>空間 \(\{0,1\}^m\) が ccc を満たすことを証明するために、まず組合せ論における極めて強力な補題である <strong>\(\Delta\)システム補題 (\(\Delta\)-system lemma)</strong> を導入し、その証明を与えます。</p>
+
+<div class="theorem">
+<strong>補題 3.2 (\(\Delta\)システム補題 (\(\Delta\)-system lemma)).</strong><br>
+\(\mathcal{F}\) を有限集合からなる非可算な族とする。このとき、である有限集合 \(R\)（これを根 (root) と呼ぶ）と、非可算な部分族 \(\mathcal{F}' \subset \mathcal{F}\) が存在して、任意の相異なる \(A, B \in \mathcal{F}'\) に対して \(A \cap B = R\) が成り立つ。
+</div>
+
+<div class="proof clearfix">
+\(\mathcal{F}\) は非可算族であり、各要素は有限集合であるため、鳩の巣原理（ pigeonhole principle）により、ある整数 \(n \geq 0\) と非可算な部分族 \(\mathcal{F}_0 \subset \mathcal{F}\) が存在して、\(\mathcal{F}_0\) のすべての要素の濃度がちょうど \(n\) となる。この \(n\) に関する数学的帰納法により証明を行う。<br><br>
+\(n = 0\) のとき、\(\mathcal{F}_0\) の要素はすべて空集合 \(\varnothing\) である。したがって、\(R = \varnothing\) および \(\mathcal{F}' = \mathcal{F}_0\) とおけば、任意の相異なる \(A, B \in \mathcal{F}'\) に対して \(A \cap B = \varnothing = R\) となり、主張は成り立つ。<br><br>
+\(n-1\) 以下のときに主張が正しいと仮定し、要素数が \(n\) の場合の証明を行う。次の 2 つのケースに分けて考える。<br><br>
+<strong>(ケース 1):</strong> ある要素 \(x\) が存在して、\(x\) を含む集合が \(\mathcal{F}_0\) の中に非可算個存在する場合。<br>
+\(\mathcal{F}_1 = \{A \in \mathcal{F}_0 \mid x \in A\}\) とおくと、\(\mathcal{F}_1\) は非可算族である。ここで各集合から \(x\) を除いた族 \(\mathcal{F}_1' = \{A \smallsetminus \{x\} \mid A \in \mathcal{F}_1\}\) を考えると、これは要素数 \(n-1\) の有限集合からなる非可算族である。帰納法の仮定により、ある根 \(R'\) と非可算な部分族 \(\mathcal{F}_2' \subset \mathcal{F}_1'\) が存在して、任意の相異なる \(A', B' \in \mathcal{F}_2'\) に対し \(A' \cap B' = R'\) となる。このとき、\(\mathcal{F}' = \{A' \cup \{x\} \mid A' \in \mathcal{F}_2'\}\) とおけば、これは \(\mathcal{F}_1\) の非可算な部分族（したがって \(\mathcal{F}_0\) の部分族）であり、任意の相異なる \(A, B \in \mathcal{F}'\) に対して
+\[ A \cap B = (A' \cup \{x\}) \cap (B' \cup \{x\}) = (A' \cap B') \cup \{x\} = R' \cup \{x\} \]
+となる。したがって、\(R = R' \cup \{x\}\) とおくことで主張が満たされる。<br><br>
+<strong>(ケース 2):</strong> 任意の要素 \(x\) について、\(x\) を含む集合が \(\mathcal{F}_0\) の中に高々可算個しか存在しない場合。<br>
+この場合、互いに素な（すなわち \(R = \varnothing\) となる）非可算な部分族 \(\mathcal{F}'\) を選択公理（超限帰納法）を用いて構成できる。まず、任意の \(A_0 \in \mathcal{F}_0\) を選ぶ。集合 \(A_0\) は有限集合であり、その各要素を含む \(\mathcal{F}_0\) の元は高々可算個であるため、\(A_0\) と交わりを持つ \(\mathcal{F}_0\) の元全体は高々可算個の有限集合の和集合となり、可算集合である。いま \(\mathcal{F}_0\) は非可算族であるから、\(A_0\) と互いに素な \(A_1 \in \mathcal{F}_0\) を選ぶことができる。同様に、既に選ばれた可算個の部分族 \(\{A_\alpha \mid \alpha < \gamma\}\)（ただし \(\gamma\) は第一非可算順序数 \(\omega_1\) 未満の順序数）に対し、その和集合 \(\bigcup_{\alpha < \gamma} A_\alpha\) は可算集合である。その各要素を含む \(\mathcal{F}_0\) の元全体もやはり可算個であるため、\(\mathcal{F}_0\) からそれらを除いた非可算な残りから、これまでに選ばれたすべての集合と互いに素な \(A_\gamma \in \mathcal{F}_0\) を選ぶことができる。この手続きをすべての \(\gamma < \omega_1\) について続けることで、互いに素な非可算部分族 \(\mathcal{F}' = \{A_\gamma \mid \gamma < \omega_1\}\) が得られる。このとき \(R = \varnothing\) とすれば主張が成り立つ。<br><br>
+以上により、すべての \(n\) について \(\Delta\)システム補題が証明された。
+</div>
+
+<p>この \(\Delta\)システム補題を用いて、Hewitt-Marczewski-Pondiczery の定理の根幹である次の定理を証明します。</p>
+
+<div class="theorem">
+<strong>定理 3.3.</strong><br>
+\(\{X_\alpha\}_{\alpha \in A}\) を可分 (separable) な位相空間の任意の族（添字集合 \(A\) の濃度は任意）とする。このとき、その直積空間 \(X = \prod_{\alpha \in A} X_\alpha\) は可算連鎖条件 (countable chain condition) を満たす。
+</div>
+
+<div class="proof clearfix">
+直積空間 \(X\) において、互いに素な空でない開集合からなる非可算族 \(\mathcal{U}\) が存在すると仮定し、矛盾を導く。直積空間の準基の定義より、各開集合の中に基本開集合 (basic open set) をとることができるため、\(\mathcal{U}\) の各要素は最初から次の形の基本開集合であると仮定してよい：
+\[ U = \prod_{\alpha \in A} U_\alpha \]
+ここで、\(U_\alpha\) は \(X_\alpha\) の開集合であり、有限個の \(\alpha\) を除いて \(U_\alpha = X_\alpha\) である。各基本開集合 \(U \in \mathcal{U}\) に対し、\(U_\alpha \neq X_\alpha\) となる有限な添字集合を \(U\) の<strong>支持集合 (support)</strong> と呼び、\(S(U)\) で表す。すなわち、
+\[ S(U) = \{\alpha \in A \mid U_\alpha \neq X_\alpha\} \]
+である。各 \(S(U)\) は \(A\) の有限部分集合である。<br><br>
+いま、有限集合の族 \(\{S(U) \mid U \in \mathcal{U}\}\) を考える。もしこの族が可算個の異なる集合しか持たないとしても、\(\mathcal{U}\) が非可算族であることから、同じ支持集合 \(S_0\) を持つ基本開集合が非可算個存在することになる。あるいは、異なる支持集合が非可算個あるならば、補題 3.2 (\(\Delta\)システム補題) を適用することにより、いずれにせよ次を満たす \(\mathcal{U}\) の非可算な部分族 \(\mathcal{U}' \subset \mathcal{U}\) と、ある有限集合 \(R \subset A\)（根）が存在する：
+\[ \text{任意の相異なる } U, V \in \mathcal{U}' \text{ に対して } S(U) \cap S(V) = R \]
+有限個の可分空間の直積空間 \(\prod_{\alpha \in R} X_\alpha\) を考える。可分空間の有限直積は再び可分であり、可分空間は常に ccc を満たすため、\(\prod_{\alpha \in R} X_\alpha\) は ccc を満たす。<br><br>
+各 \(U \in \mathcal{U}'\) に対して、根 \(R\) への射影成分 \(U_R = \prod_{\alpha \in R} U_\alpha\) を考える。これは空間 \(\prod_{\alpha \in R} X_\alpha\) の空でない開集合である。\(\mathcal{U}'\) は非可算族であり、\(\prod_{\alpha \in R} X_\alpha\) は ccc を満たすため、すべての \(U_R\) (\(U \in \mathcal{U}'\)) が互いに素であることは不可能である。したがって、ある相異なる \(U, V \in \mathcal{U}'\) が存在して、
+\[ U_R \cap V_R \neq \varnothing \]
+となる。すなわち、任意の \(\alpha \in R\) について \(U_\alpha \cap V_\alpha \neq \varnothing\) である。<br><br>
+ここで、この \(U\) と \(V\) について、\(R\) 以外の任意の添字 \(\alpha \in A \smallsetminus R\) における成分の交わりを検証する。
+<ol>
+  <li>\(\alpha \in S(U) \smallsetminus R\) のとき：\(S(U) \cap S(V) = R\) であるから、\(\alpha \notin S(V)\) である。したがって定義より \(V_\alpha = X_\alpha\) となり、\(U_\alpha \cap V_\alpha = U_\alpha \cap X_\alpha = U_\alpha \neq \varnothing\) である。</li>
+  <li>\(\alpha \in S(V) \smallsetminus R\) のとき：同様に \(\alpha \notin S(U)\) であるから、\(U_\alpha = X_\alpha\) となり、\(U_\alpha \cap V_\alpha = X_\alpha \cap V_\alpha = V_\alpha \neq \varnothing\) である。</li>
+  <li>\(\alpha \notin S(U) \cup S(V)\) のとき：\(U_\alpha = X_\alpha\) かつ \(V_\alpha = X_\alpha\) であるから、\(U_\alpha \cap V_\alpha = X_\alpha \neq \varnothing\) である。</li>
+</ol>
+以上より、すべての \(\alpha \in A\) について \(U_\alpha \cap V_\alpha \neq \varnothing\) が成り立つ。これは直積空間の定義から、
+\[ U \cap V = \prod_{\alpha \in A} (U_\alpha \cap V_\alpha) \neq \varnothing \]
+であることを意味する。しかし、これは \(\mathcal{U}\) の要素が互いに素であるという仮定に矛盾する。したがって、直積空間 \(X\) は可算連鎖条件 (countable chain condition) を満たす。
+</div>
+
+<div class="theorem">
+<strong>系 3.4 (Hewitt-Marczewski-Pondiczery の定理の帰結).</strong><br>
+任意の濃度 \(m\) に対して、\(\{0,1\}^m\) は可算連鎖条件 (countable chain condition) を満たす。
+</div>
+
+<div class="proof clearfix">
+空間 \(\{0,1\}\) は 2 点からなる離散空間であり、それ自身が高々可算な稠密部分集合であるため可分 (separable) である。したがって、定理 3.3 より、その任意の直積空間 \(\{0,1\}^m\) は可算連鎖条件 (countable chain condition) を満たす。
+</div>
+
+<div class="theorem">
+<strong>補題 3.5.</strong><br>
+位相空間 \(A\) が可算連鎖条件 (countable chain condition) を満たし、\(f \colon A \to B\) が全射連続写像であるならば、\(B\) も可算連鎖条件 (countable chain condition) を満たす。
+</div>
+
+<div class="proof clearfix">
+\(B\) において互いに素な空でない開集合の族 \(\mathcal{V} = \{V_i\}_{i \in I}\) を任意にとる。<br>
+\(f\) は連続であるため、各 \(i \in I\) について引き戻し \(f^{-1}(V_i)\) は \(A\) の開集合である。<br>
+また、\(f\) は全射であり \(V_i\) は空でないため、\(f^{-1}(V_i)\) も空ではない。<br>
+\(i \neq j\) ならば \(V_i \cap V_j = \varnothing\) であるから、\(f^{-1}(V_i) \cap f^{-1}(V_j) = f^{-1}(V_i \cap V_j) = \varnothing\) となる。<br>
+したがって、\(\{f^{-1}(V_i)\}_{i \in I}\) は \(A\) における互いに素な空でない開集合の族となる。<br>
+\(A\) は可算連鎖条件 (countable chain condition) を満たすため、この族は高々可算である。すなわち添字集合 \(I\) は高々可算となる。よって \(B\) も可算連鎖条件 (countable chain condition) を満たす。
+</div>
+
+<div class="theorem">
+<strong>定理 3.6 (主定理).</strong><br>
+いかなる濃度 \(m\) に対しても、\(\{0,1\}^m\) から \(X\) への全射連続写像は存在しない。
+</div>
+
+<div class="proof clearfix">
+背理法で示す。ある濃度 \(m\) に対して全射連続写像 \(f \colon \{0,1\}^m \to X\) が存在したと仮定する。<br>
+系 3.4 より、\(\{0,1\}^m\) は可算連鎖条件 (countable chain condition) を満たす。補題 3.5 より、全射連続像である \(X\) も可算連鎖条件 (countable chain condition) を満たさなければならない。<br>
+しかし、補題 3.1 で示したように \(X\) は可算連鎖条件 (countable chain condition) を満たさない。これは矛盾である。<br>
+ゆえに、\(\{0,1\}^m\) から \(X\) への全射連続写像は存在しない。
+</div>
+
+<h2>4. 補足：その他の例</h2>
+
+<p>非可算離散空間の一点コンパクト化 (one-point compactification) 以外にも、ダイアディック空間 (dyadic space) とならないコンパクト (compact) Hausdorff空間が存在します。以下にいくつかの例を挙げます。</p>
+
+<h3>順序位相空間 \(\omega_1 + 1\)</h3>
+<p>第 1 非可算順序数 \(\omega_1\) に最大元を追加した \(\omega_1 + 1\) はコンパクト (compact) Hausdorff空間です。この空間も可算連鎖条件 (countable chain condition) を満たさないため、ダイアディック空間 (dyadic space) にはなりません。さらに、点 \(\omega_1\) において第 1 可算公理 (first countability axiom) を満たさないという特徴があります。</p>
+
+<h3>超不連結 (extremally disconnected) 空間</h3>
+<p>位相空間が超不連結 (extremally disconnected) であるとは、任意の開集合の閉包が再び開集合（すなわち、clopenな集合）となることです。\(\beta\mathbb{N} \smallsetminus \mathbb{N}\) （自然数 \(\mathbb{N}\) に離散位相 (discrete topology) を入れた空間の Stone-Čech コンパクト化 (Stone-Čech compactification) から \(\mathbb{N}\) を除いた空間）などの無限な超不連結 (extremally disconnected) なコンパクト (compact) Hausdorff空間は、決してダイアディック空間 (dyadic space) にならないことが知られています。</p>
+
+<div class="references">
+<h2>参考文献</h2>
+<ul>
+  <li>Engelking, R. (1989). <i>General Topology</i>. Heldermann Verlag. <a href="https://www.heldermann.de/SSPM/SSPM06/sspm06.htm" target="_blank">[URL]</a></li>
+  <li>Hewitt, E. (1946). A remark on density characters. <i>Bulletin of the American Mathematical Society</i>, 52(8), 641-643. <a href="https://projecteuclid.org/journals/bulletin-of-the-american-mathematical-society/volume-52/issue-8/A-remark-on-density-characters/bams/1183509569.pdf" target="_blank">[PDF]</a></li>
+  <li>Marczewski, E. (1947). Séparabilité et multiplication cartésienne des espaces topologiques. <i>Fundamenta Mathematicae</i>, 34, 127-143. <a href="https://www.semanticscholar.org/paper/S%C3%A9parabilit%C3%A9-et-multiplication-cart%C3%A9sienne-des-Marczewski/8c22d8eb6f3a2623295743427657cec796589090" target="_blank">[URL]</a></li>
+  <li>Pondiczery, E. S. (1944). Power problems in abstract spaces. <i>Duke Mathematical Journal</i>, 11(4), 835-837. <a href="https://projecteuclid.org/journals/duke-mathematical-journal/volume-11/issue-4/Power-problems-in-abstract-spaces/10.1215/S0012-7094-44-01171-3.short" target="_blank">[URL]</a></li>
+</ul>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>位相空間の圏におけるコンパクト性とHausdorff性の双対性とその特徴付け</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #1a365d;
+            border-bottom: 3px solid #2b6cb0;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.6rem;
+            color: #2c5282;
+            border-left: 5px solid #4299e1;
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            font-size: 1.25rem;
+            color: #2b6cb0;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 40px 0;
+        }
+        blockquote {
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            margin: 20px 0;
+            padding: 15px 20px;
+            border-radius: 0 4px 4px 0;
+        }
+        .definition, .theorem, .proof, .example {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .definition {
+            background-color: #f7fafc;
+            border-left: 4px solid #4a5568;
+        }
+        .theorem {
+            background-color: #fffaf0;
+            border-left: 4px solid #dd6b20;
+        }
+        .proof {
+            background-color: #fff;
+            border-left: 4px solid #48bb78;
+        }
+        .example {
+            background-color: #f7fafc;
+            border-left: 4px solid #805ad5;
+        }
+        .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .definition .label { color: #2d3748; }
+        .theorem .label { color: #c05621; }
+        .proof .label { color: #2f855a; }
+        .example .label { color: #6b46c1; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #edf2f7;
+            color: #2d3748;
+        }
+        tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            background-color: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .ref-list {
+            font-size: 0.9rem;
+            padding-left: 20px;
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+    <h1>位相空間の圏におけるコンパクト性とHausdorff性の双対性とその特徴付け</h1>
+
+    <p>位相空間論において、<b>コンパクト性 (compactness)</b> と <b>Hausdorff性 (Hausdorff property)</b> は一見すると全く異なるアプローチから定義される概念のように思われる。しかし、これらは位相空間の圏、あるいはより一般の写像の圏（相対化された設定）において、見事な「双対性（コインの裏表のような関係）」を成していることが知られている。本稿では、極限論、直積・写像の性質、位相の強弱、リフティング性質、そして代数幾何学的な相対化（固有射・分離射）という多角的な視点から、この二つの概念の双対的な特徴付けについて詳しく解説する。</p>
+
+    <hr>
+
+    <h2>1. 準備：基本概念の定義と例</h2>
+    <p>本論に入る前に、議論の土台となる基本的な定義を整理し、いくつかの重要な例を挙げる。本稿を通じて、集合の包含関係には $\subset$ を用い、空集合は $\varnothing$、差集合は $\smallsetminus$ で表すものとする。</p>
+
+    <div class="definition">
+        <span class="label">定義 1.1 (コンパクト性とHausdorff性)</span>
+        位相空間 $X$ について、以下の概念を定義する。
+        <ol>
+            <li>$X$ が<b>コンパクト (compact)</b> であるとは、$X$ の任意の開被覆 (open covering) $\mathcal{U}$（すなわち $X = \bigcup_{U \in \mathcal{U}} U$ を満たす開集合の族）に対して、ある有限部分族 $\{U_1, U_2, \dots, U_n\} \subset \mathcal{U}$ が存在して $X = \bigcup_{i=1}^n U_i$ とできることをいう。</li>
+            <li>$X$ が<b>Hausdorff</b> であるとは、相異なる任意の2点 $x, y \in X$ ($x \neq y$) に対し、互いに素な開集合 $V, W \subset X$ が存在して、$x \in V$ かつ $y \in W$（すなわち $V \cap W = \varnothing$）を満たすことをいう。</li>
+        </ol>
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 1.2 (フィルターと超フィルター)</span>
+        集合 $X$ の部分集合の空でない族 $\mathcal{F}$ が $X$ 上の<b>フィルター (filter)</b> であるとは、次の3条件を満たすことをいう。
+        <ol>
+            <li>$\varnothing \notin \mathcal{F}$</li>
+            <li>$A \in \mathcal{F}$ かつ $A \subset B \subset X$ ならば、$B \in \mathcal{F}$</li>
+            <li>$A, B \in \mathcal{F}$ ならば、$A \cap B \in \mathcal{F}$</li>
+        </ol>
+        さらに、包含関係に関して極大なフィルターを<b>超フィルター (ultrafilter)</b> と呼ぶ。これは、任意の $A \subset X$ に対して $A \in \mathcal{F}$ または $(X \smallsetminus A) \in \mathcal{F}$ のいずれか一方が成り立つことと同値である。
+        <br><br>
+        位相空間 $X$ 上のフィルター $\mathcal{F}$ が点 $x \in X$ に<b>収束する (converge)</b> とは、$x$ の任意の開近傍 $V$ に対して $V \in \mathcal{F}$ が成り立つことをいう。
+    </div>
+
+    <div class="example">
+        <span class="label">例 1.3 (コンパクト性とHausdorff性の分離・非分離例)</span>
+        <ul>
+            <li><b>コンパクトであるがHausdorffでない例：</b> 無限集合 $X$ に<b>補有限位相 (cofinite topology)</b>（開集合を $\varnothing$ および補集合が有限集合であるものとする位相）を与えた空間。この空間はコンパクトであるが、任意の2つの非空な開集合が必ず交わるため、Hausdorff空間ではない。</li>
+            <li><b>Hausdorffであるがコンパクトでない例：</b> 通常の実数直線 $\mathbb{R}$。任意の2点を通常の距離で分離できるためHausdorffであるが、開被覆 $\{(-n, n)\}_{n=1}^\infty$ は有限部分被覆を持たないためコンパクトではない。</li>
+            <li><b>超不連結 (extremally disconnected) 空間の例：</b> 離散空間 $\mathbb{N}$ の <b>Stone-Čech コンパクト化</b> $\beta \mathbb{N}$。この空間はコンパクトHausdorff空間であり、かつ任意の開集合の閉包が開集合（すなわち <b>clopen</b> 集合）となる性質を持つ。このような空間を<b>超不連結 (extremally disconnected)</b> 空間と呼ぶ。</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>2. 超フィルターの収束による双対性：存在と一意性</h2>
+    <p>点列（あるいはその一般化であるネットやフィルター）の収束という観点から見ると、コンパクト性とHausdorff性は「極限の存在」と「極限の一意性」という完璧な双対性を示す。</p>
+
+    <div class="theorem">
+        <span class="label">定理 2.1 (収束による特徴付け)</span>
+        位相空間 $X$ について、以下の同値関係が成り立つ。
+        <ol>
+            <li>$X$ がコンパクトであるための必要十分条件は、$X$ 上の任意の超フィルターが<b>少なくとも1つの極限を持つ</b>ことである。</li>
+            <li>$X$ がHausdorffであるための必要十分条件は、$X$ 上の任意の超フィルターが<b>高々1つの極限しか持たない</b>ことである。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <span class="label">定理 2.1 の丁寧な証明</span>
+        <b>1 (コンパクト性の特徴付け) の証明:</b><br>
+        <b>(必要性)</b> $X$ をコンパクト空間とし、$\mathcal{U}$ を $X$ 上の任意の超フィルターとする。$\mathcal{U}$ がいかなる点にも収束しないと仮定する。このとき、任意の $x \in X$ に対してある開近傍 $V_x$ が存在して $V_x \notin \mathcal{U}$ となる。超フィルターの極大性より、補集合 $(X \smallsetminus V_x) \in \mathcal{U}$ である。$\{V_x\}_{x \in X}$ は $X$ の開被覆であるため、コンパクト性より有限部分被覆 $\{V_{x_1}, V_{x_2}, \dots, V_{x_n}\}$ を持つ。このとき、各 $(X \smallsetminus V_{x_i})$ は $\mathcal{U}$ に属するため、その有限交わり $F = \bigcap_{i=1}^n (X \smallsetminus V_{x_i})$ も $\mathcal{U}$ に属する。しかし、$F = X \smallsetminus \bigcup_{i=1}^n V_{x_i} = X \smallsetminus X = \varnothing$ であり、$\varnothing \in \mathcal{U}$ となるが、これはフィルターの定義に矛盾する。よって $\mathcal{U}$ は少なくとも1つの極限を持つ。<br><br>
+        <b>(十分性)</b> 任意の超フィルターが少なくとも1つの極限を持つと仮定し、$X$ がコンパクトでないと仮定する。このとき、有限部分被覆を持たない開被覆 $\mathcal{V}$ が存在する。$\mathcal{V}$ の有限部分族の和集合の補集合からなる族 $\mathcal{F} = \{ X \smallsetminus \bigcup_{i=1}^n V_i \mid V_i \in \mathcal{V}, n \in \mathbb{N} \}$ を考える。有限部分被覆を持たないという仮定から、$\mathcal{F}$ の元の有限交わりは決して空にならない。したがって $\mathcal{F}$ はフィルター基底を成し、これを含む超フィルター $\mathcal{U}$ が存在する。仮定より $\mathcal{U}$ はある点 $x \in X$ に収束する。$\mathcal{V}$ は被覆であるため、ある $V_0 \in \mathcal{V}$ が存在して $x \in V_0$ となる。$V_0$ は $x$ の開近傍であるため、収束の定義より $V_0 \in \mathcal{U}$ である。一方で、構成から $(X \smallsetminus V_0) \in \mathcal{F} \subset \mathcal{U}$ でもある。フィルターは交わりについて閉じているため、$V_0 \cap (X \smallsetminus V_0) = \varnothing \in \mathcal{U}$ となり矛盾。よって $X$ はコンパクトである。<br><br>
+        <b>2 (Hausdorff性の特徴付け) の証明:</b><br>
+        <b>(必要性)</b> $X$ がHausdorffであるとし、超フィルター $\mathcal{U}$ が相異なる2点 $x, y \in X$ に収束すると仮定する。Hausdorff性より、$x \in V, y \in W, V \cap W = \varnothing$ を満たす開集合が存在する。収束の定義から $V \in \mathcal{U}$ かつ $W \in \mathcal{U}$ であり、フィルターの性質から $V \cap W = \varnothing \in \mathcal{U}$ となり矛盾する。<br>
+        <b>(十分性)</b> 任意の超フィルターの極限が高々1つであるとする。$X$ がHausdorffでないと仮定すると、ある相異なる2点 $x, y$ が存在して、それらの任意の開近傍 $V, W$ が必ず交わる。このとき族 $\mathcal{B} = \{V \cap W \mid V \text{ は } x \text{ の開近傍}, W \text{ は } y \text{ の開近傍}\}$ はフィルター基底を成し、これを含む超フィルターは $x$ と $y$ の両方に収束するため、一意性に矛盾する。 $\blacksquare$
+    </div>
+
+    <blockquote>
+        <b>インフォーマルな注意：</b><br>
+        この特徴付けから、コンパクト性は極限が空間の「外」に逃げ出さないという<b>存在性</b>を保証し、Hausdorff性は極限が1箇所に留まるという<b>一意性</b>を保証していることが分かります。
+    </blockquote>
+
+    <h3>2.1. 補足：超フィルターを「非単項」に限定してはいけない理由</h3>
+    <p>定理2.1において、対象とする超フィルターを無限点列から生じるような「非単項超フィルター」のみに限定してはならない。一見すると、自明な超フィルターは議論から除外してもよいように思われるが、コンパクト性とHausdorff性の完全な双対性を維持するためには、これらを含めることが不可欠である。</p>
+
+    <div class="definition">
+        <span class="label">定義 2.2 (単項超フィルターと非単項超フィルター)</span>
+        集合 $X$ の点 $x \in X$ に対して、$\mathcal{U}_x = \{A \subset X \mid x \in A\}$ は $X$ 上の超フィルターとなる。これを $x$ で生成される<b>単項超フィルター (principal ultrafilter)</b> と呼ぶ。単項超フィルターではない超フィルターを<b>非単項超フィルター (non-principal ultrafilter)</b> または自由超フィルター (free ultrafilter) と呼ぶ。
+    </div>
+
+    <p>収束の定義より、単項超フィルター $\mathcal{U}_x$ は位相の強弱に関わらず常に生成元 $x$ に収束する。この性質がコンパクト性とHausdorff性に与える影響は非対称的である。</p>
+
+    <ul>
+        <li><b>コンパクト性における影響（実質的な条件）：</b> 単項超フィルターは常に自力で極限（生成元）を持つため、コンパクト性の条件を自動的に満たす。したがって、極限が空間の外に逃げないかどうかが実質的に問われているのは非単項超フィルターのみである。コンパクト性に限って言えば「任意の非単項超フィルターが少なくとも1つの極限を持つ」と言い換えても同値となる。</li>
+        <li><b>Hausdorff性における影響（除外してはいけない理由）：</b> Hausdorff性の特徴付けにおいて非単項超フィルターに限定してしまうと、以下の2つの致命的な反例が生じ、定理が破綻する。
+            <ol>
+                <li><b>有限の非Hausdorff空間を排除できなくなる：</b> 有限集合上の超フィルターは必ず単項となるため、非単項超フィルターが存在しない。もし「任意の非単項超フィルターの極限が高々1つ」という条件を採用すると、前提を満たす対象が存在しないため命題が「空虚に真 (vacuously true)」となる。結果として、密着位相を入れた有限空間など、明らかにHausdorffではない空間がHausdorff空間であると誤判定されてしまう。</li>
+                <li><b>非 $T_1$ 空間における「複数極限」を見落とす：</b> 空間が $T_1$ 分離公理を満たしていない場合、単項超フィルター $\mathcal{U}_x$ が $x$ 以外の点 $y$ にも同時に収束することが起こり得る（これは $y$ の任意の開近傍が常に $x$ を含む状況に対応する）。単項超フィルターを除外すると、このような「特定の点に張り付いている超フィルターが、別の点にも収束してしまう」という位相的な非分離性を検知できなくなる。</li>
+            </ol>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>3. 直積空間と写像による特徴付け：Kuratowskiの定理の双対</h2>
+    <p>空間を外部との写像の関係性から捉える視点において、コンパクト性とHausdorff性は直積空間を介した「閉写像」の言葉で対称的に記述される。一般に、連続写像が<b>閉写像 (closed map)</b> であるとは、閉集合の像が常に閉集合になることをいう。</p>
+
+    <div class="theorem">
+        <span class="label">定理 3.1 (直積と閉写像による特徴付け)</span>
+        位相空間 $X$ について、以下の性質が成り立つ。
+        <ol>
+            <li><b>コンパクト性 (Kuratowskiの定理)：</b> $X$ がコンパクトであるための必要十分条件は、任意の位相空間 $Y$ への射影写像 $p_Y \colon X \times Y \to Y$ が閉写像となることである。</li>
+            <li><b>Hausdorff性 (グラフ写像による特徴付け)：</b> $X$ がHausdorffであるための必要十分条件は、任意の位相空間 $T$ および任意の連続写像 $f \colon T \to X$ に対し、グラフ写像 $(id_T, f) \colon T \to T \times X$ ($t \mapsto (t, f(t))$) が閉写像となることである。</li>
+        </ol>
+    </div>
+
+    <p>この2つの特徴付けを並べると、直積空間に対する<b>「出入力の双対性」</b>が極めて明瞭になる。コンパクト性は直積空間から外へ向かう射（射影）の性質であり、Hausdorff性は直積空間の中へ向かう射（グラフ埋め込み）の性質である。</p>
+
+    <div class="proof">
+        <span class="label">定理 3.1-1 (Kuratowskiの定理) の丁寧な証明</span>
+        <b>(必要性)</b> $X$ をコンパクト空間、$Y$ を任意の位相空間とする。射影 $p_Y \colon X \times Y \to Y$ が閉写像であることを示すため、$X \times Y$ の任意の閉集合 $C$ をとり、$p_Y(C)$ が $Y$ の閉集合であることを（すなわち $Y \smallsetminus p_Y(C)$ が開集合であることを）示す。
+        $y_0 \in Y \smallsetminus p_Y(C)$ を任意にとる。これは $p_Y^{-1}(y_0) = X \times \{y_0\} \subset (X \times Y) \smallsetminus C$ を意味する。$C$ は閉集合なので、任意の $x \in X$ に対して点 $(x, y_0)$ の開近傍 $U_x \times V_x \subset (X \times Y) \smallsetminus C$ が存在する。族 $\{U_x\}_{x \in X}$ はコンパクト空間 $X$ の開被覆となるため、有限部分被覆 $\{U_{x_1}, \dots, U_{x_n}\}$ を持つ。ここで $V = \bigcap_{i=1}^n V_{x_i}$ とおくと、$V$ は $y_0$ の開近傍であり、$X \times V \subset \bigcup_{i=1}^n (U_{x_i} \times V) \subset \bigcup_{i=1}^n (U_{x_i} \times V_{x_i}) \subset (X \times Y) \smallsetminus C$ となる。したがって $V \cap p_Y(C) = \varnothing$ であり、$y_0$ の開近傍 $V$ が $Y \smallsetminus p_Y(C)$ に含まれる。よって $p_Y(C)$ は閉集合である。<br><br>
+        <b>(十分性)</b> 任意の空間 $Y$ に対して $p_Y$ が閉写像であると仮定する。超フィルターの特徴付けを用いて $X$ がコンパクトであることを示す。任意の超フィルター $\mathcal{U}$ が極限を持たないと仮定し矛盾を導く。新しい空間 $Y = X \cup \{\infty\}$ を用意し、$X$ の点は離散（孤立点）とし、$\infty$ の基本近傍系を $\{A \cup \{\infty\} \mid A \in \mathcal{U}\}$ と定める。
+        $X \times Y$ の部分集合として対角集合 $\Delta_X = \{(x, x) \mid x \in X\}$ をとり、その閉包を $C = \overline{\Delta_X}$ とする。仮定より $p_Y(C)$ は $Y$ の閉集合である。定義から $X = p_Y(\Delta_X) \subset p_Y(C)$ である。
+        ここで $(x, \infty) \in C$ となる $x \in X$ が存在するか考える。もし存在すれば、$(x, \infty)$ の任意の開近傍 $U \times V$ は $\Delta_X$ と交わる。仮定より $\mathcal{U}$ は $x$ に収束しないため、ある $x$ の開近傍 $U$ が存在して $U \notin \mathcal{U}$、すなわち $(X \smallsetminus U) \in \mathcal{U}$ となる。このとき $V = (X \smallsetminus U) \cup \{\infty\}$ は $\infty$ の開近傍となるが、$(U \times V) \cap \Delta_X = \{(z, z) \mid z \in U \cap (X \smallsetminus U)\} = \varnothing$ となり交わらないため矛盾する。したがって、任意の $x \in X$ について $(x, \infty) \notin C$ であり、ゆえに $\infty \notin p_Y(C)$ となる。
+        以上より $p_Y(C) = X$ となるが、$X$ は $Y$ において閉集合ではない（$\infty$ の任意の近傍 $A \cup \{\infty\}$ は $A \neq \varnothing$ より必ず $X$ と交わるため、$\infty \in \overline{X}$ である）。これは $p_Y$ が閉写像であることに矛盾する。よって $X$ はコンパクトである。 $\blacksquare$
+    </div>
+
+    <div class="proof">
+        <span class="label">定理 3.1-2 (Hausdorff性の特徴付け) の丁寧な証明</span>
+        <b>(必要性)</b> $X$ をHausdorff空間、$f \colon T \to X$ を連続写像とする。$(id_T, f)$ が閉写像であることを示すため、任意の閉集合 $F \subset T$ をとり、その像 $G = \{(t, f(t)) \in T \times X \mid t \in F\}$ が $T \times X$ の閉集合であることを証明する。
+        <br>
+        $(t, x) \in (T \times X) \smallsetminus G$ とする。
+        <ul>
+            <li>ケース1：$t \notin F$ のとき。$F$ は閉集合なので $T \smallsetminus F$ は $t$ の開近傍である。したがって、$(T \smallsetminus F) \times X$ は $(t, x)$ の開近傍であり、これは明らかに $G$ と交わらない。</li>
+            <li>ケース2：$t \in F$ のとき。このとき $(t, x) \notin G$ より $x \neq f(t)$ である。$X$ のHausdorff性より、互いに素な開集合 $V, W \subset X$ が存在して $x \in V, f(t) \in W$ となる。$f$ の連続性から $U = f^{-1}(W)$ は $T$ における $t$ の開近傍である。このとき、開集合 $U \times V$ は $(t, x)$ の開近傍となる。もし、ある $(t', f(t')) \in (U \times V) \cap G$ が存在したとすると、$t' \in U \implies f(t') \in W$ となるが、同時に $f(t') \in V$ でもあるため $V \cap W \neq \varnothing$ となり矛盾する。よって $(U \times V) \cap G = \varnothing$ である。</li>
+        </ul>
+        以上より、$(T \times X) \smallsetminus G$ の各点に対して $G$ と交わらない開近傍が構成できたため、$G$ は閉集合であり、$(id_T, f)$ は閉写像である。
+        <br><br>
+        <b>(十分性)</b> 任意の $T$ と連続写像 $f$ について $(id_T, f)$ が閉写像であると仮定する。ここで $T = X$ とし、連続写像として恒等写像 $id_X \colon X \to X$ を選ぶ。このとき、対応する写像は<b>対角写像 (diagonal map)</b> $\Delta = (id_X, id_X) \colon X \to X \times X$ となる。仮定より $\Delta$ は閉写像であり、自明な閉集合 $X \subset X$ の像である<b>対角集合 (diagonal subset)</b> $\Delta(X) = \{(x, x) \mid x \in X\}$ は $X \times X$ の閉集合となる。対角集合が閉であることは $X$ がHausdorff空間であることの標準的な同値条件であるため、$X$ はHausdorffである。 $\blacksquare$
+    </div>
+
+    <hr>
+
+    <h2>4. 位相の強弱における双対性：極大と極小</h2>
+    <p>集合 $X$ を固定し、その上の開集合の多さ（位相の強弱・粗密）を変化させたときの挙動にも、両者の極値的な双対性が現れる。</p>
+    <ul>
+        <li><b>コンパクト性：</b> 位相を<b>強く（細かく）</b>すると、開集合が増えるため開被覆を構成しやすくなり、有限部分被覆が作れなくなってコンパクト性が<b>壊れやすくなる</b>。</li>
+        <li><b>Hausdorff性：</b> 位相を<b>弱く（粗く）</b>すると、開集合が減るため異なる2点を分離する開近傍が見つけにくくなり、Hausdorff性が<b>壊れやすくなる</b>。</li>
+    </ul>
+    <p>この2つの性質が最も美しく調和しているのが、<b>コンパクトHausdorff空間</b>である。集合 $X$ 上のコンパクトHausdorff位相 $\mathcal{O}$ は、次のような極値性によって特徴付けられる。</p>
+    <blockquote>
+        $\mathcal{O}$ は、 $X$ 上のHausdorff位相の中で<b>極小 (minimal Hausdorff)</b> であり、かつコンパクト位相の中で<b>極大 (maximal compact)</b> である。
+    </blockquote>
+    <p>すなわち、コンパクトHausdorff空間から少しでも開集合を減らすとHausdorff性が失われ、少しでも開集合を増やすとコンパクト性が失われる。両者は位相の強弱の数直線上で、完全に一点で釣り合っている。</p>
+
+    <hr>
+
+    <h2>5. リフティング性質による特徴付け：絶対的バージョン</h2>
+    <p>ホモトピー論や圏論において重要な役割を果たす<b>リフティング性質 (lifting property)</b> を用いることで、コンパクト性とHausdorff性の双対性を可換図式の性質として完全に定式化できる。</p>
+
+    <h3>テスト空間 $D_U$ の構成</h3>
+    <p>任意の離散集合 $D$ とその上の超フィルター $U$ に対し、新しい位相空間 $D_U = D \cup \{\infty\}$ を以下のように定義する。</p>
+    <ul>
+        <li>$D$ に属する各点は、それ自身が開集合である孤立点とする。</li>
+        <li>付加された無限遠点 $\infty$ の基本近傍系を、$\{A \cup \{\infty\} \mid A \in U\}$ とする。</li>
+    </ul>
+    <p>このとき、自然な包含写像 $i \colon D \hookrightarrow D_U$ が得られる。これは幾何学的には「収束していない点列に、超フィルターに沿った極限点を1点付け足す」操作に相当する。</p>
+
+    <h3>リフティング図式</h3>
+    <p>位相空間 $X$ から一点空間（圏論における終対象） $\{*\}$ への唯一の連続写像を $p \colon X \to \{*\}$ とする。任意の写像 $f \colon D \to X$ に対して、以下の可換四角形からなるリフティング問題を考える。</p>
+    
+    $$
+    \begin{array}{ccc}
+    D & \xrightarrow{f} & X \\
+    i \downarrow & \nearrow \tilde{f} & \downarrow p \\
+    D_U & \xrightarrow{} & \{*\}
+    \end{array}
+    $$
+
+    <p>この図式を満たす連続写像 $\tilde{f} \colon D_U \to X$ （すなわち $\tilde{f} \circ i = f$ を満たすもの）を<b>リフト (lift)</b> と呼ぶ。</p>
+
+    <div class="theorem">
+        <span class="label">定理 5.1 (リフティングによる特徴付け)</span>
+        位相空間 $X$ について、以下の同値関係が成り立つ。
+        <ol>
+            <li>$X$ がコンパクトである $\iff$ 任意の $D$ と超フィルター $U$ から作られる包含 $i \colon D \hookrightarrow D_U$ に対し、上記図式を満たすリフト $\tilde{f}$ が<b>少なくとも1つ存在する</b>。</li>
+            <li>$X$ がHausdorffである $\iff$ 任意の $D$ と超フィルター $U$ から作られる包含 $i \colon D \hookrightarrow D_U$ に対し、上記図式を満たすリフト $\tilde{f}$ が<b>高々1つしか存在しない</b>。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <span class="label">定理 5.1 の丁寧な証明</span>
+        <b>1 (コンパクト性) の証明:</b><br>
+        $(\implies)$ $X$ をコンパクト空間とする。連続写像 $f \colon D \to X$ に対し、$D$ 上の超フィルター $U$ の $f$ による順像（押し出し） $f_*(U) = \{B \subset X \mid f^{-1}(B) \in U\}$ は $X$ 上の超フィルターとなる。$X$ のコンパクト性（定理2.1）より、$f_*(U)$ はある点 $x \in X$ に収束する。ここで $\tilde{f} \colon D_U \to X$ を $t \in D$ に対して $\tilde{f}(t) = f(t)$、$\tilde{f}(\infty) = x$ と定義する。これが連続写像であることを示す。
+        $\infty$ 以外の点は孤立点であるため連続性は自明である。$\infty$ における連続性を示すため、$x = \tilde{f}(\infty)$ の任意の開近傍 $V \subset X$ をとる。$f_*(U)$ が $x$ に収束することから $V \in f_*(U)$ であり、定義より $A = f^{-1}(V) \in U$ となる。このとき $A \cup \{\infty\}$ は $D_U$ における $\infty$ の開近傍であり、$\tilde{f}(A \cup \{\infty\}) = f(A) \cup \{x\} \subset V$ が成り立つ。よって $\tilde{f}$ は連続であり、リフトが存在する。
+        <br>
+        $(\impliedby)$ 任意のリフトが存在すると仮定する。$X$ 上の任意の超フィルター $U$ をとる。$D = X$ とし、$f = id_X \colon X \to X$ とする。仮定より対応する連続なリフト $\tilde{f} \colon X_U \to X$ が存在する。$\tilde{f}(\infty) = x \in X$ とおく。$\tilde{f}$ の連続性より、$x$ の任意の開近傍 $V \subset X$ に対し、$\infty$ の開近傍 $A \cup \{\infty\}$ ($A \in U$) が存在して $\tilde{f}(A \cup \{\infty\}) \subset V$ となる。このとき $A = \tilde{f}(A) = f(A) \subset V$ であるため、フィルターの性質から $V \in U$ となる。これは超フィルター $U$ が $x$ に収束することを意味し、定理2.1より $X$ はコンパクトである。
+        <br><br>
+        <b>2 (Hausdorff性) の証明:</b><br>
+        $(\implies)$ $X$ をHausdorff空間とする。同一の図式に対して2つの連続なリフト $\tilde{f}_1, \tilde{f}_2 \colon D_U \to X$ が存在したとする。$D$ 上では $\tilde{f}_1(t) = f(t) = \tilde{f}_2(t)$ であるため、$\infty$ の行き先が一意であることを示せばよい。もし $x_1 = \tilde{f}_1(\infty) \neq \tilde{f}_2(\infty) = x_2$ と仮定すると、Hausdorff性より $x_1 \in V_1, x_2 \in V_2, V_1 \cap V_2 = \varnothing$ を満たす開集合が存在する。各々の連続性から、$\infty$ の開近傍 $A_1 \cup \{\infty\}, A_2 \cup \{\infty\}$ ($A_1, A_2 \in U$) が存在して $\tilde{f}_1(A_1 \cup \{\infty\}) \subset V_1$, $\tilde{f}_2(A_2 \cup \{\infty\}) \subset V_2$ となる。これより $A_1 \subset f^{-1}(V_1)$ かつ $A_2 \subset f^{-1}(V_2)$ となり、$f^{-1}(V_1), f^{-1}(V_2) \in U$ である。フィルターの交わりの条件から $f^{-1}(V_1 \cap V_2) = f^{-1}(\varnothing) = \varnothing \in U$ となり矛盾する。よって $x_1 = x_2$ であり、リフトは一意である。
+        <br>
+        $(\impliedby)$ 任意のリフトが一意であるとする。$X$ がHausdorffでないと仮定すると、ある超フィルター $U$ が相異なる2点 $x_1, x_2 \in X$ に同時に収束する。このとき $D=X, f=id_X$ とおくと、上記のコンパクト性の証明の構成を用いることで、$\tilde{f}_1(\infty) = x_1$ となる連続リフト $\tilde{f}_1$ と、$\tilde{f}_2(\infty) = x_2$ となる連続リフト $\tilde{f}_2$ を別々に作ることができ、一意性に矛盾する。よって $X$ はHausdorffである。 $\blacksquare$
+    </div>
+
+    <hr>
+
+    <h2>6. 写像への相対化：固有射への発展と代数幾何学</h2>
+    <p>ここまでの議論は空間 $X$ 単体の性質（すなわち、一点空間への写像 $X \to \{*\}$ の性質）であったが、現代数学、特にGrothendieckによって創始された代数幾何学（スキーム論）においては、これらを任意の底空間 $S$ への連続写像 $p \colon X \to S$ の性質（相対化）へと拡張する。</p>
+
+    <h3>相対的リフティング図式</h3>
+    <p>底空間 $S$ 上の連続写像 $p \colon X \to S$ に対し、テスト空間の包含 $i \colon D \hookrightarrow D_U$ を用いて以下の可換四角形を考える。</p>
+
+    $$
+    \begin{array}{ccc}
+    D & \xrightarrow{f} & X \\
+    i \downarrow & \nearrow \tilde{f} & \downarrow p \\
+    D_U & \xrightarrow{g} & S
+    \end{array}
+    $$
+
+    <p>この図式の幾何学的意味は、<b>「底空間 $S$ 上で極限 $g(\infty)$ へと収束している像に対して、上の空間 $X$ 上でも極限を綺麗に持ち上げられるか」</b>という問いに他ならない。このリフト $\tilde{f}$ の挙動によって、連続写像の性質が以下のように完全に双対定義される。</p>
+
+    <div class="definition">
+        <span class="label">定義 6.1 (相対化されたコンパクト性とHausdorff性)</span>
+        連続写像 $p \colon X \to S$ について、
+        <ol>
+            <li>任意の図式に対してリフト $\tilde{f}$が<b>少なくとも1つ存在</b>するとき、$p$ は<b>普遍閉 (universally closed)</b> であるという（相対コンパクトに対応）。これは、任意の $S$ 上の空間 $Y \to S$ からのファイバー積からの射影 $X \times_S Y \to Y$ が常に閉写像になることと同値である。</li>
+            <li>任意の図式に対してリフト $\tilde{f}$が<b>高々1つしか存在しない</b>とき、$p$ は<b>分離的 (separated)</b> であるという（相対Hausdorffに対応）。これは、相対的な対角写像 $\Delta_{X/S} \colon X \to X \times_S X$ が閉埋め込みとなることと同値である。</li>
+            <li>上記2つの条件を同時に満たす（すなわち、<b>常にただ1つのリフトが存在する</b>）とき、写像 $p$ は<b>固有 (proper)</b> であるという（コンパクトHausdorff空間の相対化）。</li>
+        </ol>
+    </div>
+
+    <table style="max-width: 100%;">
+        <thead>
+            <tr>
+                <th>写像 $p \colon X \to S$ の性質</th>
+                <th>リフティング図式における条件</th>
+                <th>直積・ファイバー積における条件</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>普遍閉</b>（相対コンパクト）</td>
+                <td>リフト $\tilde{f}$ が少なくとも1つ存在</td>
+                <td>任意の $Y \to S$ に対し $X \times_S Y \to Y$ が閉写像</td>
+            </tr>
+            <tr>
+                <td><b>分離的</b>（相対Hausdorff）</td>
+                <td>リフト $\tilde{f}$ が高々1つ存在</td>
+                <td>対角写像の像 $\Delta_{X/S}(X)$ が $X \times_S X$ の閉集合</td>
+            </tr>
+            <tr>
+                <td><b>固有</b>（コンパクトHausdorffの相対化）</td>
+                <td>リフト $\tilde{f}$ が<b>ただ1つ存在</b></td>
+                <td>上記の両方の性質を満たす</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>代数幾何学における付値判定法 (valuative criterion) との完全な対応</h3>
+    <p>位相空間論におけるリフティング性質による双対性の定式化は、代数幾何学において幾何学的対象（スキーム）を分類する最も重要な定理の一つである<b>付値判定法 (valuative criterion)</b> と完全に同一の形式を持っている。</p>
+    <p>スキーム論では、テスト写像として「超フィルター空間の包含 $D \hookrightarrow D_U$」の代わりに、付値環 (valuation ring) $R$ とその商体 (field of fractions) $K$ から定まるアフィンスキームの包含写像 $i \colon \text{Spec } K \hookrightarrow \text{Spec } R$ を用いる。</p>
+    <p>付値環 $R$ のスペクトル $\text{Spec } R$ は、位相幾何学的に見ると「一般点 (generic point) $\eta$」と「閉点 (closed point) $s$」という2つの特徴的な点を持つ（例えば離散付値環を考えた場合）。商体による $\text{Spec } K$ はこの一般点 $\eta$ のみに対応し、包含写像は「極限を含まない点列 $\eta$ に、極限点 $s$ を1点付け足す特化 (specialization)」の代数幾何学的な表現に他ならない。</p>
+    <p>スキームの射 $p \colon X \to S$ に対し、以下の可換図式を考える。</p>
+
+    $$
+    \begin{array}{ccc}
+    \text{Spec } K & \xrightarrow{f} & X \\
+    i \downarrow & \nearrow \tilde{f} & \downarrow p \\
+    \text{Spec } R & \xrightarrow{g} & S
+    \end{array}
+    $$
+
+    <p>この図式において、付値判定法は以下の同値性を主張する。</p>
+    <ul>
+        <li><b>分離性の付値判定法：</b> 射 $p$ が分離的である $\iff$ 任意の上記図式に対し、リフト $\tilde{f}$ が<b>高々1つしか存在しない</b>。</li>
+        <li><b>普遍閉性の付値判定法：</b> 射 $p$ が普遍閉である（局所的な有限性条件を仮定） $\iff$ 任意の上記図式に対し、リフト $\tilde{f}$ が<b>少なくとも1つ存在する</b>。</li>
+        <li><b>固有性の付値判定法：</b> 射 $p$ が固有である $\iff$ 任意の上記図式に対し、リフト $\tilde{f}$ が<b>ただ1つ存在する</b>。</li>
+    </ul>
+    <p>ここで、分離性はスキームにおけるHausdorff性の対応物であり、普遍閉性はKuratowskiの定理によって特徴付けられる相対コンパクト性の対応物である。位相空間論において超フィルターの極限の存在と一意性がコンパクト性とHausdorff性を決定づけたのと全く同じ構造が、代数幾何学という環のスペクトルがなす圏においても、固有性と分離性という形で洗練されて生き残り続けているのである。</p>
+
+    <hr>
+
+    <h2>7. 参考文献</h2>
+    <p>本稿の記述および証明にあたり、以下の文献を参照した。</p>
+    <ol class="ref-list">
+        <li>N. Bourbaki, <i>Elements of Mathematics: General Topology, Chapters 1–4</i>, Springer-Verlag, Berlin, 1998.</li>
+        <li>A. Grothendieck, Éléments de géométrie algébrique: II. Étude globale élémentaire de quelques classes de morphismes, <i>Publications Mathématiques de l'IHÉS</i>, <b>8</b> (1961), 5–222.</li>
+        <li>J. L. Kelley, <i>General Topology</i>, D. Van Nostrand Company, Toronto, 1955.</li>
+        <li>K. Kuratowski, <i>Topology, Volume I</i>, Academic Press, New York, 1966.</li>
+    </ol>
+
+</body>
+</html>

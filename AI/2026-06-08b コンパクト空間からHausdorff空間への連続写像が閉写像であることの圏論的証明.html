@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクト空間からHausdorff空間への連続写像が閉写像であることの圏論的証明</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            color: #333;
+        }
+        h1 {
+            font-size: 1.8em;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.4em;
+            border-bottom: 1px solid #ccc;
+            margin-top: 40px;
+            padding-bottom: 5px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 25px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .informal {
+            background-color: #f4f8fa;
+            border-left: 4px solid #5bc0de;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .definition {
+            background-color: #fdfaf4;
+            border-left: 4px solid #f0ad4e;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .proof {
+            background-color: #f9f9f9;
+            border-left: 4px solid #0275d8;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .theorem {
+            background-color: #f0f7f0;
+            border-left: 4px solid #5cb85c;
+            padding: 15px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 50px 0;
+        }
+        a {
+            color: #0275d8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            font-size: 0.9em;
+        }
+        .references li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>コンパクト空間からHausdorff空間への連続写像が閉写像であることの圏論的証明</h1>
+
+    <div class="informal">
+        <p>位相空間論において、「コンパクト空間からHausdorff空間への連続写像は閉写像である」という定理は非常に重要であり、様々な場面で強力なツールとして利用されます。通常、この定理は点列や開被覆といった空間の内部構造に直接立ち入って証明されます。</p>
+        <p>しかし、本稿では「射影の閉性（Kuratowskiの定理）」や「グラフの閉性」といった、写像の振る舞いに着目した圏論的な視点からの証明をご紹介します。このアプローチにより、位相空間の内部構造に依存しないエレガントな導出が可能になります。自己完結（self-contained）した親切な解説とするために、まずは前提となる基本概念の定義から丁寧に振り返っていきましょう。</p>
+    </div>
+
+    <h2>基本概念の定義</h2>
+    
+    <div class="definition">
+        <p>厳密な議論を行うため、本節以降の数学的な記述は「だである調」で統一する。</p>
+        <ul>
+            <li><strong>位相空間 (topological space)</strong>: 集合 $X$ と、その部分集合の族（開集合系）の組。有限個の開集合の共通部分、および任意個の開集合の和集合が再び開集合となる構造を持つ。</li>
+            <li><strong>閉集合 (closed set)</strong>: 位相空間において、補集合が開集合となる部分集合のこと。</li>
+            <li><strong>閉包 (closure)</strong>: 位相空間 $X$ の部分集合 $A$ に対して、$A$ を含む最小の閉集合のこと。$\overline{A}$ と表す。</li>
+            <li><strong>連続写像 (continuous map)</strong>: 位相空間 $X$ から $Y$ への写像 $f: X \to Y$ であり、任意の $Y$ の閉集合 $F \subset Y$ に対して、その逆像 $f^{-1}(F)$ が $X$ の閉集合になるもののこと（開集合を用いた定義と同値である）。</li>
+            <li><strong>閉写像 (closed map)</strong>: 位相空間 $X$ から $Y$ への写像 $f: X \to Y$ であり、任意の $X$ の閉集合 $A \subset X$ に対して、その像 $f(A)$ が常に $Y$ の閉集合になるもののこと。</li>
+            <li><strong>直積位相 (product topology)</strong>: 位相空間 $X, Y$ の直積集合 $X \times Y$ に入る位相。$U \subset X$ と $V \subset Y$ がそれぞれの開集合であるとき、$U \times V$ の形の集合を基底として生成される位相である。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <ul>
+            <li><strong>コンパクト (compact)</strong>: 位相空間 $X$ において、任意の開被覆が有限部分被覆を持つこと。すなわち、$X$ を開集合の族 $\mathcal{U} = \{U_\lambda\}_{\lambda \in \Lambda}$ で覆ったとき（$X = \bigcup_{\lambda \in \Lambda} U_\lambda$）、必ず有限個を選んで $X = U_{\lambda_1} \cup \dots \cup U_{\lambda_n}$ とできる性質。</li>
+            <li><strong>有限交差性 (finite intersection property)</strong>: 集合族から任意に有限個の集合を選んだとき、それらの共通部分が空集合 ($\varnothing$) にならない性質。位相空間がコンパクト (compact) であることは、「有限交差性 (finite intersection property) を持つ任意の閉集合の族に対し、その全体の共通部分も $\varnothing$ にならない」ことと同値である。</li>
+            <li><strong>Hausdorff空間 (Hausdorff space)</strong>: 位相空間 $Y$ において、相異なる任意の2点 $y_1, y_2 \in Y$ に対して、交わらない開近傍が存在する性質。すなわち、$y_1 \in V_1, y_2 \in V_2$ かつ $V_1 \cap V_2 = \varnothing$ を満たす開集合 $V_1, V_2$ がとれること。</li>
+            <li><strong>clopen集合 (clopen set)</strong>: 開集合であり、かつ閉集合でもある部分集合のこと。</li>
+        </ul>
+    </div>
+
+    <h2>補題1：コンパクト性と射影（Kuratowskiの定理）</h2>
+
+    <div class="theorem">
+        <p><strong>命題：</strong> 位相空間 $X$ がコンパクト (compact) であることは、任意の位相空間 $T$ に対して射影 $\pi_T: X \times T \to T, (x, t) \mapsto t$ が閉写像 (closed map) であることと同値である。</p>
+    </div>
+
+    <div class="proof">
+        <p><strong>証明：</strong></p>
+        <p>($\implies$ の証明)<br>
+        $X$ をコンパクト (compact) な空間とする。任意の空間 $T$ をとり、$X \times T$ の任意の閉集合 $C \subset X \times T$ に対して、像 $\pi_T(C)$ が $T$ の閉集合になることを示す。<br>
+        $t_0 \in T \smallsetminus \pi_T(C)$ を任意にとる。このとき、任意の $x \in X$ について $(x, t_0) \notin C$ である。$C$ は閉集合なので補集合は開集合であり、直積位相の定義から各 $x \in X$ に対し開集合 $U_x \subset X$ と $V_x \subset T$ が存在し、$(x, t_0) \in U_x \times V_x \subset (X \times T) \smallsetminus C$ となる。<br>
+        $\{U_x\}_{x \in X}$ は $X$ の開被覆となるが、$X$ はコンパクトなので有限部分被覆 $U_{x_1}, \dots, U_{x_n}$ が存在する。ここで $V = V_{x_1} \cap \dots \cap V_{x_n}$ とおくと、$V$ は有限個の開集合の共通部分なので $t_0$ を含む $T$ の開集合である。<br>
+        任意の $x \in X$ はある $U_{x_i}$ に含まれるため、$x \in U_{x_i}$ かつ $V \subset V_{x_i}$ より、$X \times V \subset \bigcup_{i=1}^n (U_{x_i} \times V_{x_i}) \subset (X \times T) \smallsetminus C$ となる。これは $(X \times V) \cap C = \varnothing$、すなわち $V \cap \pi_T(C) = \varnothing$ を意味する。よって $\pi_T(C)$ の補集合は開集合であり、$\pi_T(C)$ は閉集合である。</p>
+        <p>($\impliedby$ の証明)<br>
+        背理法で示す。$X$ がコンパクト (compact) でないと仮定する。このとき、有限交差性 (finite intersection property) を持つが、全体の共通部分が空集合 ($\bigcap_{\lambda \in \Lambda} F_\lambda = \varnothing$) となるような $X$ の閉集合族 $\mathcal{F} = \{F_\lambda\}_{\lambda \in \Lambda}$ が存在する。<br>
+        新しい位相空間 $T = X \cup \{\infty\}$ （$\infty \notin X$）を構成し、次のように開集合を定める：<br>
+        1. $X$ の任意の部分集合は $T$ でも開集合である（すなわち、$T$ において $X$ の各点は孤立点である）。<br>
+        2. $\infty$ を含む $T$ の部分集合 $V$ は、ある有限個の $F_{\lambda_1}, \dots, F_{\lambda_n} \in \mathcal{F}$ が存在して、$F_{\lambda_1} \cap \dots \cap F_{\lambda_n} \subset V$ が成り立つとき、かつそのときに限り開集合である。<br>
+        ここで、直積空間 $X \times T$ の部分集合 $C$ を次のように定義する：<br>
+        $$C = \{ (x, t) \in X \times X \mid x \in \overline{\{t\}}^X \}$$
+        （ただし $\overline{\{t\}}^X$ は位相空間 $X$ における部分集合 $\{t\}$ の閉包である）。<br>
+        まず、$C$ が $X \times T$ の閉集合であることを示す。$(x, t) \notin C$ を任意にとる。<br>
+        <strong>ケース1：</strong> $t \in X$ の場合。定義より $x \notin \overline{\{t\}}^X$ である。$U = X \smallsetminus \overline{\{t\}}^X$ とおくと、$U$ は $X$ の開集合であり、$x \in U$ かつ $t \notin U$ となる。$V = \{t\}$ とおくと、$V$ は $T$ の開集合である。$(U \times V)$ は $(x, t)$ の開近傍となる。任意の $(x', t') \in U \times V$ について、$t' = t$ かつ $x' \in U$ である。$U$ の定義より $U \cap \overline{\{t\}}^X = \varnothing$ であるから $x' \notin \overline{\{t\}}^X = \overline{\{t'\}}^X$ となり、$(x', t') \notin C$ がいえる。ゆえに $(U \times V) \cap C = \varnothing$ である。<br>
+        <strong>ケース2：</strong> $t = \infty$ の場合。定義から自明に $(x, \infty) \notin C$ である。$\bigcap \mathcal{F} = \varnothing$ より、$x \notin F_\alpha$ となる $F_\alpha \in \mathcal{F}$ が存在する。$U = X \smallsetminus F_\alpha$ とすると、$U$ は $X$ の開集合で $x \in U$。また $V = \{\infty\} \cup F_\alpha$ とおくと、$F_\alpha \subset V$ を満たすので $V$ は $T$ の開集合である。任意の $(x', t') \in U \times V$ を考える。$t' = \infty$ ならば $(x', t') \notin C$。$t' \in X$ ならば $t' \in F_\alpha$ となり、$F_\alpha$ は $X$ の閉集合なので $\overline{\{t'\}}^X \subset F_\alpha$。一方 $x' \in U$ より $x' \notin F_\alpha$ であるから $x' \notin \overline{\{t'\}}^X$ となり、$(x', t') \notin C$。ゆえに $(U \times V) \cap C = \varnothing$ である。<br>
+        以上より $C$ は閉集合である。しかし、任意の $t \in X$ に対して $(t, t) \in C$ であるため、その射影は $\pi_T(C) = X$ となる。<br>
+        $\pi_T$ が閉写像であるという仮定のもとでは、$X$ は $T$ において閉集合でなければならない。すなわち補集合 $\{\infty\}$ は開集合となる。$T$ の開集合の定義より、有限個の要素を用いて $F_{\lambda_1} \cap \dots \cap F_{\lambda_n} \subset \{\infty\}$ となるはずである。これら $F_{\lambda_i}$ は $X$ の部分集合なので、左辺は $X$ に含まれる。したがって $F_{\lambda_1} \cap \dots \cap F_{\lambda_n} = \varnothing$ となるが、これは $\mathcal{F}$ の有限交差性に矛盾する。<br>
+        よって射影は閉写像にはなり得ず、定理の逆が証明された。 $\blacksquare$
+        </p>
+    </div>
+
+    <h2>補題2：Hausdorff性とグラフ写像</h2>
+
+    <div class="theorem">
+        <p><strong>命題：</strong> 位相空間 $Y$ がHausdorff空間 (Hausdorff space) であることは、任意の位相空間 $T$ と連続写像 $f: T \to Y$ に対して、写像 $(id_T, f): T \to T \times Y, t \mapsto (t, f(t))$ が閉写像 (closed map) であることと同値である。</p>
+    </div>
+
+    <div class="proof">
+        <p><strong>証明：</strong></p>
+        <p>($\implies$ の証明)<br>
+        $Y$ をHausdorff空間 (Hausdorff space) とし、$T$ を任意の位相空間、$f: T \to Y$ を連続写像 (continuous map) とする。$T$ の任意の閉集合 $A \subset T$ に対し、像 $(id_T, f)(A) = \{ (t, f(t)) \mid t \in A \}$ が $T \times Y$ で閉集合であることを示す。<br>
+        $(t_0, y_0) \notin (id_T, f)(A)$ とする。<br>
+        <strong>ケース1：</strong> $t_0 \notin A$ の場合。<br>
+        $A$ は閉集合なので、$U = T \smallsetminus A$ は $t_0$ を含む開集合である。このとき、$U \times Y$ は $(t_0, y_0)$ の開近傍となる。任意の $(t, y) \in U \times Y$ について $t \notin A$ であるから、$(U \times Y) \cap (id_T, f)(A) = \varnothing$ となる。<br>
+        <strong>ケース2：</strong> $t_0 \in A$ の場合。<br>
+        条件より $y_0 \neq f(t_0)$ である。$Y$ はHausdorff空間なので、$f(t_0)$ の開近傍 $V_1$ と $y_0$ の開近傍 $V_2$ で $V_1 \cap V_2 = \varnothing$ となるものが存在する。<br>
+        $f$ は連続なので、$U = f^{-1}(V_1)$ は $t_0$ の開近傍となる。このとき $U \times V_2$ は $(t_0, y_0)$ の開近傍である。任意の $t \in U \cap A$ に対して $f(t) \in V_1$ であり、$V_1 \cap V_2 = \varnothing$ より $f(t) \notin V_2$ である。したがって $(U \times V_2) \cap (id_T, f)(A) = \varnothing$ となる。<br>
+        補集合の任意の点が交わらない開近傍を持つため、$(id_T, f)(A)$ は閉集合である。</p>
+        
+        <p>($\impliedby$ の証明)<br>
+        任意の $T$ と連続写像 $f$ に対し $(id_T, f)$ が閉写像であるとする。$T = Y$ とし、$f$ として恒等写像 $id_Y: Y \to Y$ をとる。<br>
+        仮定より、$(id_Y, id_Y): Y \to Y \times Y$ は閉写像である。$Y$ は自身の閉集合であるから、像である対角集合 $\Delta_Y = \{ (y, y) \mid y \in Y \}$ は $Y \times Y$ の閉集合となる。<br>
+        対角集合が閉集合であることと、空間がHausdorff空間であることは同値である。実際、相異なる任意の2点 $y_1, y_2 \in Y$ に対して $(y_1, y_2) \notin \Delta_Y$ であり、$\Delta_Y$ が閉集合であれば、$(y_1, y_2)$ の開近傍 $V_1 \times V_2$ で $\Delta_Y$ と交わらないものがとれる。これは $V_1 \cap V_2 = \varnothing$ を意味し、$y_1, y_2$ は開近傍で分離されるため、$Y$ はHausdorff空間である。 $\blacksquare$</p>
+    </div>
+
+    <h2>主定理の証明</h2>
+
+    <p>これら2つの補題を組み合わせることで、いとも簡単に目的の定理を証明することができる。</p>
+
+    <div class="theorem">
+        <p><strong>定理（主定理）：</strong> $X$ をコンパクト (compact) な位相空間、$Y$ をHausdorff空間 (Hausdorff space) とするとき、任意の連続写像 $g: X \to Y$ は閉写像 (closed map) である。</p>
+    </div>
+
+    <div class="proof">
+        <p><strong>証明：</strong><br>
+        $g: X \to Y$ を連続写像とし、$A \subset X$ を任意の閉集合とする。$g(A)$ が $Y$ において閉集合であることを示せばよい。<br>
+        まず、$Y$ がHausdorff空間であることから、補題2において $T = X$, $f = g$ と適用することで、写像
+        $$(id_X, g): X \to X \times Y$$
+        は閉写像となる。したがって、$X$ の閉集合 $A$ の像であるグラフの部分集合
+        $$\Gamma_A = (id_X, g)(A) = \{ (x, g(x)) \mid x \in A \}$$
+        は $X \times Y$ において閉集合となる。<br>
+        次に、$X \times Y$ から $Y$ への射影 $\pi_Y: X \times Y \to Y$ を考える。$X$ がコンパクトであることから、補題1において $T = Y$ と適用することで、$\pi_Y$ は閉写像となる。<br>
+        閉写像は閉集合を閉集合に写すため、
+        $$\pi_Y(\Gamma_A)$$
+        は $Y$ において閉集合である。<br>
+        ここで、この集合を計算すると、
+        $$\pi_Y(\Gamma_A) = \pi_Y( \{ (x, g(x)) \mid x \in A \} ) = \{ g(x) \mid x \in A \} = g(A)$$
+        となる。ゆえに $g(A)$ は $Y$ の閉集合である。これで $g$ が閉写像であることが証明された。 $\blacksquare$</p>
+    </div>
+
+    <h2>理解に役立つ例と応用</h2>
+
+    <div class="example">
+        <p><strong>例1：同相写像 (homeomorphism) の判定</strong><br>
+        $g: X \to Y$ が全単射な連続写像であり、$X$ がコンパクト、$Y$ がHausdorff空間であるとする。このとき上の定理より $g$ は閉写像である。全単射な閉写像は開写像 (open map) でもあるため、逆写像 $g^{-1}$ も連続となる。すなわち、「コンパクト空間からHausdorff空間への連続な全単射は、同相写像 (homeomorphism) である」という極めて有用な系が直ちに得られる。</p>
+        
+        <p><strong>例2：超不連結空間での振る舞い</strong><br>
+        位相空間が超不連結 (extremally disconnected) であるとは、任意の開集合の閉包が開集合になる（すなわち、開集合の閉包がclopen集合になる）空間のことである。例えば、コンパクトで超不連結 (extremally disconnected) なHausdorff空間 $X$ （Stone-Čechコンパクト化などで自然に現れる）から、一般的なHausdorff空間 $Y$ への連続写像 $g: X \to Y$ を考えた場合でも、定理の主張通り $g$ は必ず閉写像となる。</p>
+    </div>
+
+    <div class="informal">
+        <p>このように、点や被覆の具体的な構成を追うことなく、「射影が閉写像」「グラフが閉写像」という写像の持つ性質だけを合成することで、位相空間論の重要な定理が極めて自然に導かれます。位相幾何学や関数解析などでより抽象的な対象を扱う際にも、このような対象の内部構造に依存しない圏論的な見方は非常に強力なツールとなります。</p>
+    </div>
+
+    <hr>
+
+    <h2>参考文献</h2>
+    <ul class="references">
+        <li>Bourbaki, N. (1998). <i>General Topology: Chapters 1-4</i>. Springer. <a href="https://ja.wikipedia.org/wiki/%E4%BD%8D%E7%9B%B8%E7%A9%BA%E9%96%93%E8%AB%96" target="_blank" rel="noopener">（日本語版に関する情報：Wikipedia 位相空間論）</a></li>
+        <li>Engelking, R. (1989). <i>General Topology</i> (Revised and completed edition). Heldermann Verlag. <a href="https://en.wikipedia.org/wiki/Ryszard_Engelking" target="_blank" rel="noopener">（著者および書籍情報：Wikipedia Ryszard Engelking）</a></li>
+        <li>Munkres, J. R. (2000). <i>Topology</i> (2nd ed.). Prentice Hall. <a href="https://en.wikipedia.org/wiki/James_Munkres" target="_blank" rel="noopener">（著者および書籍情報：Wikipedia James Munkres）</a></li>
+    </ul>
+
+</body>
+</html>

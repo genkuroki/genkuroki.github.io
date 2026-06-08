@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolmogorov商写像のホモトピー同値性と選択公理</title>
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.5em;
+            color: #2c3e50;
+            border-left: 5px solid #3498db;
+            padding-left: 10px;
+            margin-top: 40px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #2980b9;
+        }
+        .definition, .theorem, .example, .proof, .remark {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+        }
+        .theorem {
+            background-color: #fdf2e9;
+            border-left: 4px solid #e67e22;
+        }
+        .example {
+            background-color: #f4f6f7;
+            border-left: 4px solid #7f8c8d;
+        }
+        .proof {
+            background-color: #f9f9f9;
+            border-left: 4px solid #34495e;
+        }
+        .remark {
+            background-color: #fef9e7;
+            border-left: 4px solid #f1c40f;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 40px 0;
+        }
+        .reference-list {
+            padding-left: 20px;
+        }
+        .reference-list li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kolmogorov商写像のホモトピー同値性と選択公理</h1>
+
+    <p>位相空間論における基礎的な構成の一つである Kolmogorov 商空間への商写像がホモトピー同値写像になるという性質は、実は Zermelo-Fraenkel 集合論 (ZF) のもとで選択公理 (Axiom of Choice, AC) と同値になります。本稿では、この興味深い事実について、必要な基本概念の定義や具体例から出発し、自己完結的 (self-contained) かつ丁寧に解説を行います。</p>
+
+    <hr>
+
+    <h2>1. 基本概念の準備</h2>
+    
+    <p>まずは証明に必要な位相空間論の基本用語を厳密に定義する。</p>
+
+    <div class="definition">
+        <h3>定義 1 (トポロジカルな識別不能関係)</h3>
+        位相空間 $X$ において、2点 $x, y \in X$ が<strong>識別不能 (topologically indistinguishable)</strong> であるとは、$X$ の任意の開集合 $U$ に対して以下が成り立つことである。
+        $$x \in U \iff y \in U$$
+        このとき $x \sim y$ と表記する。関係 $\sim$ は $X$ 上の同値関係 (equivalence relation) である。
+    </div>
+
+    <div class="definition">
+        <h3>定義 2 (Kolmogorov商空間)</h3>
+        位相空間 $X$ を上記の識別不能関係 $\sim$ で割った商空間 (quotient space) $X_0 = X / \sim$ を、元の空間の <strong>Kolmogorov商空間 (Kolmogorov quotient space)</strong>、または $T_0$ 化 (T0-reflection) と呼ぶ。
+        自然な射影 $q: X \to X_0$ ($x \mapsto [x]$) を商写像 (quotient map) という。
+    </div>
+
+    <div class="example">
+        <h3>例 1</h3>
+        <ul>
+            <li><strong>密着空間 (indiscrete space):</strong> 集合 $X$ に密着位相 $\tau = \{\varnothing, X\}$ を与えた場合、任意の2点は識別不能である。したがって、この空間の Kolmogorov 商空間 $X_0$ は1点空間となる。</li>
+            <li><strong>Sierpiński空間 (Sierpiński space):</strong> 2点集合 $X = \{0, 1\}$ に位相 $\tau = \{\varnothing, \{1\}, X\}$ を与えた空間。$0$ と $1$ は開集合 $\{1\}$ によって識別可能であるため、Kolmogorov 商空間は元の空間と同相になる。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <h3>定義 3 (ホモトピーと同値性)</h3>
+        2つの連続写像 $f, g: X \to Y$ が<strong>ホモトピック (homotopic)</strong> であるとは、連続写像 $H: X \times [0, 1] \to Y$ が存在して、任意の $x \in X$ について $H(x, 0) = f(x)$ かつ $H(x, 1) = g(x)$ が満たされることである。このとき $f \simeq g$ と書く。<br><br>
+        連続写像 $f: X \to Y$ が<strong>ホモトピー同値写像 (homotopy equivalence)</strong> であるとは、ある連続写像 $g: Y \to X$ が存在して、$g \circ f \simeq \mathrm{id}_X$ かつ $f \circ g \simeq \mathrm{id}_Y$ を満たすことである（$\mathrm{id}$ は恒等写像）。
+    </div>
+
+    <p>Kolmogorov商空間を考える上で、以下の性質が ZF 上（選択公理なし）で成立することは非常に重要である。</p>
+
+    <div class="theorem">
+        <h3>命題 1 (開写像性)</h3>
+        位相空間 $X$ とその Kolmogorov 商空間 $X_0$ への商写像 $q: X \to X_0$ について、$X$ の開集合 $U$ による像 $q(U)$ は $X_0$ の開集合となる。すなわち、$q$ は<strong>開写像 (open map)</strong> である。
+    </div>
+
+    <div class="proof">
+        <strong>証明:</strong><br>
+        開集合 $U \subset X$ を任意にとる。$\sim$ の定義から、$x \in U$ かつ $x \sim y$ ならば $y \in U$ が成り立つ。したがって、$U$ は同値関係 $\sim$ に関して飽和 (saturated) している。これにより、
+        $$q^{-1}(q(U)) = \{ x \in X \mid [x] \in q(U) \} = U$$
+        となる。商位相 (quotient topology) の定義によれば、$X_0$ の部分集合 $V$ が開集合であることと、$q^{-1}(V)$ が $X$ で開集合であることは同値である。$V = q(U)$ とおくと $q^{-1}(q(U)) = U$ であり、$U$ は開集合なので、$q(U)$ は $X_0$ の開集合となる。$\blacksquare$
+    </div>
+
+    <hr>
+
+    <h2>2. 主定理の証明</h2>
+
+    <p>ここから、Zermelo-Fraenkel 集合論をベースとして、選択公理 (Axiom of Choice, AC) と対象の命題が同値であることを証明する。</p>
+
+    <div class="theorem">
+        <h3>主定理</h3>
+        ZF 集合論上において、以下の2つの命題は同値である。
+        <ol>
+            <li>選択公理 (Axiom of Choice) が成立する。</li>
+            <li>任意の位相空間 $X$ に対し、その Kolmogorov 商空間 $X_0$ への商写像 $q: X \to X_0$ はホモトピー同値写像 (homotopy equivalence) である。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <h3>証明: 1 (AC) $\implies$ 2 (ホモトピー同値性)</h3>
+        
+        <p>選択公理 (Axiom of Choice) を仮定する。</p>
+
+        <p><strong>ステップ1: 選択関数 (choice function) の構成</strong><br>
+        $X_0$ の各元は $X$ 上の同値類 $[x]$ であり、これらは空ではない互いに素な $X$ の部分集合の族をなす。選択公理により、各同値類から代表元を1つずつ選ぶ写像（セクション） $f: X_0 \to X$ が存在する。この写像は任意の $[x] \in X_0$ に対して $f([x]) \in [x]$ を満たす。したがって、
+        $$q(f([x])) = [x]$$
+        であり、$q \circ f = \mathrm{id}_{X_0}$ が成立する。</p>
+
+        <p><strong>ステップ2: 写像 $f$ の連続性 (continuity)</strong><br>
+        $X$ の任意の開集合 $U \subset X$ をとる。$f$ の逆像は以下のようになる。
+        $$f^{-1}(U) = \{ [x] \in X_0 \mid f([x]) \in U \}$$
+        ここで、$f([x])$ と $x$ は同じ同値類に属するためトポロジカルに識別不能である。$U$ は開集合なので、$f([x]) \in U \iff x \in U \iff [x] \subset U$ が成り立つ。したがって、
+        $$f^{-1}(U) = \{ [x] \in X_0 \mid [x] \subset U \} = q(U)$$
+        命題1で示した通り、$q$ は開写像 (open map) なので、$q(U)$ は $X_0$ の開集合である。よって $f^{-1}(U)$ は開集合であり、$f$ は連続である。</p>
+
+        <p><strong>ステップ3: ホモトピー (homotopy) の構成</strong><br>
+        すでに $q \circ f = \mathrm{id}_{X_0}$ は示された（これは恒等ホモトピーで $\mathrm{id}_{X_0}$ とホモトピックである）。残るは $f \circ q: X \to X$ が $\mathrm{id}_X$ とホモトピックであることの証明である。<br>
+        写像 $H: X \times [0, 1] \to X$ を次のように定義する。
+        $$
+        H(x, t) = \begin{cases} 
+        x & (0 \le t < 1) \\
+        f(q(x)) & (t = 1)
+        \end{cases}
+        $$
+        この $H$ が連続であることを示す。$X$ の任意の開集合 $U$ をとる。積位相の定義に従い、$H^{-1}(U)$ の構造を調べる。
+        $$H^{-1}(U) = \{ (x, t) \in X \times [0, 1] \mid H(x, t) \in U \}$$
+        $0 \le t < 1$ のとき、$H(x, t) = x$ であるため、$H(x, t) \in U \iff x \in U$。<br>
+        $t = 1$ のとき、$H(x, 1) = f(q(x))$ である。ここで $f(q(x))$ と $x$ は同一の同値類に属するため識別不能であり、$U$ が開集合であることから $f(q(x)) \in U \iff x \in U$ である。<br>
+        したがって、すべての $t \in [0, 1]$ について $H(x, t) \in U \iff x \in U$ が成立し、
+        $$H^{-1}(U) = U \times [0, 1]$$
+        となる。$U \times [0, 1]$ は直積空間 $X \times [0, 1]$ の開集合である。よって $H$ は連続写像であり、$f \circ q \simeq \mathrm{id}_X$ を与えるホモトピー (homotopy) となる。以上により、$q$ はホモトピー同値写像である。</p>
+    </div>
+
+    <div class="proof">
+        <h3>証明: 2 (ホモトピー同値性) $\implies$ 1 (AC)</h3>
+
+        <p>任意の位相空間の Kolmogorov 商写像がホモトピー同値写像になるという命題を仮定し、選択公理を導出する。選択公理と同値な「任意の互いに素な非空集合の族から元を1つずつ選ぶ関数が存在する」ことを証明する。</p>
+
+        <p><strong>ステップ1: 特殊な位相空間の構成</strong><br>
+        互いに素な非空集合の族 $\{A_i\}_{i \in I}$ をとる。これらの和集合を $X = \bigcup_{i \in I} A_i$ とする。<br>
+        $X$ 上に、以下のような開集合系 $\tau$ によって位相を定義する。
+        $$\tau = \left\{ \bigcup_{i \in J} A_i \;\middle|\; J \subset I \right\}$$
+        （空集合は $J = \varnothing$ のとき $\varnothing \in \tau$ として含まれる）。<br>
+        この位相空間 $X$ では、各成分 $A_i$ は開集合であり、かつ開集合は $A_i$ の単位の和集合でしか構成されない。したがって、同じ $A_i$ に属する任意の2点 $x, y \in A_i$ はすべての開集合の所属が完全に一致し、$x \sim y$ となる。異なる $A_i, A_j$ ($i \neq j$) に属する点は、開集合 $A_i$ が一方を含み他方を含まないため区別される。
+        ゆえに、同値類は各 $A_i$ そのものであり、Kolmogorov 商空間 $X_0 = X / \sim$ は添字集合 $I$ と自然に全単射となる。</p>
+
+        <p><strong>ステップ2: 商空間 $X_0$ の位相的性質</strong><br>
+        $X_0 \cong I$ の位相を考える。$I$ の任意の部分集合 $J \subset I$ に対応する $X$ の集合 $\bigcup_{i \in J} A_i$ が $X$ の開集合であるため、商位相の定義から $X_0$ は<strong>離散空間 (discrete space)</strong> となる。</p>
+
+        <div class="remark">
+            <strong>（注）離散空間の位相的性質:</strong><br>
+            離散空間においては、すべての部分集合が開集合であると同時に閉集合でもある（このような集合を clopen と呼ぶ）。さらに、離散空間は「任意の開集合の閉包が開集合となる」という性質を満たすため、超不連結 (extremally disconnected) な空間の典型的な例である。この性質により、離散空間は極度に分離されており、連結なパスを持つことができない。
+        </div>
+
+        <p><strong>ステップ3: 選択関数 (choice function) の抽出</strong><br>
+        仮定より、商写像 $q: X \to X_0$ はホモトピー同値写像である。したがって、ある連続写像 $f: X_0 \to X$ が存在し、
+        $$q \circ f \simeq \mathrm{id}_{X_0}$$
+        が成り立つ。すなわち、連続なホモトピー写像 $K: X_0 \times [0, 1] \to X_0$ が存在して、$K(x_0, 0) = q(f(x_0))$ かつ $K(x_0, 1) = x_0$ を満たす。<br><br>
+        ここで、$X_0$ 上の各点 $i \in X_0$ を固定し、パス $t \mapsto K(i, t)$ を考える。この写像は連結空間 (connected space) $[0, 1]$ から離散空間 $X_0$ への連続写像である。連結空間の連続写像による像は連結でなければならないが、離散空間における連結な部分集合は1点のみである。したがって、このパスは定数写像 (constant map) にならざるを得ない。<br><br>
+        ゆえに、すべての $t \in [0, 1]$ について $K(i, t)$ は一定であり、両端点が一致する。
+        $$q(f(i)) = i$$
+        この等式 $q \circ f = \mathrm{id}_{X_0}$ は、$X_0$ の各元 $i$（元の集合族の添字）に対して、$f(i)$ が $X$ 内の同値類 $A_i$ の元に他ならないことを意味している。
+        $$f(i) \in A_i$$
+        よって、連続写像として保証された $f: I \to X$ は、族 $\{A_i\}_{i \in I}$ の各集合から元を1つずつ選び出す<strong>選択関数 (choice function)</strong> にほかならない。任意の族に対して選択関数が存在することが示されたため、選択公理 (Axiom of Choice) が証明された。$\blacksquare$</p>
+    </div>
+
+    <hr>
+
+    <h2>3. 解説と背景</h2>
+    <p>位相空間論における多くの自然な写像の存在定理や構成は、暗黙のうちに選択公理に依存していることがあります。この Kolmogorov 商写像のケースは、一見すると「ただ同一視を行って代表元を扱うだけ」のホモトピー同値に見えますが、その「代表元を選ぶ連続なセクションの存在」が直接的に選択公理そのものを要求しているという点で、集合論と位相空間論の深い結びつきを示す美しい例です。</p>
+
+    <hr>
+
+    <h2>参考文献</h2>
+    <ul class="reference-list">
+        <li>
+            Herrlich, H. (2006). <em>Axiom of Choice</em>. Springer.
+            <a href="https://link.springer.com/book/10.1007/11601562" target="_blank">[Springer Link]</a><br>
+            <small>※ 選択公理と様々な数学的分野（位相空間論を含む）の定理の同値性について網羅的にまとめた標準的な文献。</small>
+        </li>
+        <li>
+            nLab authors. <em>Kolmogorov quotient</em>. nLab. 
+            <a href="https://ncatlab.org/nlab/show/Kolmogorov+quotient" target="_blank">[nLab]</a><br>
+            <small>※ Kolmogorov 商空間の圏論的性質や、ホモトピー同値と選択公理の関係について端的に言及されている。</small>
+        </li>
+        <li>
+            Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic</em>. Springer.
+            <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">[Springer Link]</a><br>
+            <small>※ トポスにおける選択公理の振る舞いや、直観主義論理のもとでの位相的構成の差異に触れるための発展的な参考書。</small>
+        </li>
+    </ul>
+
+</body>
+</html>
