@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>特定の5次方程式のGalois群が交代群 A_5 となることの完全な証明</title>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 30px;
+            color: #333;
+            background-color: #fefefe;
+        }
+        h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 10px; color: #2c3e50; margin-bottom: 30px;}
+        h2 { border-bottom: 1px solid #ccc; margin-top: 40px; color: #34495e; padding-bottom: 5px;}
+        h3 { color: #2980b9; margin-top: 25px;}
+        p { margin-bottom: 15px; }
+        .target-polynomials { margin-bottom: 30px; padding: 20px; border: 2px solid #27ae60; background-color: #eafaf1; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .target-polynomials h3 { margin-top: 0; color: #27ae60; border-bottom: 1px solid #27ae60; padding-bottom: 10px;}
+        .target-polynomials ul { font-size: 1.1em; font-weight: bold; }
+        .definition { margin-bottom: 25px; padding: 15px 20px; border-left: 5px solid #8e44ad; background-color: #f4ecf7; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .proposition { margin-bottom: 25px; padding: 15px 20px; border-left: 5px solid #2980b9; background-color: #ebf5fb; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .proof { margin-bottom: 25px; padding: 15px 20px; border-left: 5px solid #7f8c8d; background-color: #f8f9f9; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .proof-title { font-weight: bold; margin-bottom: 10px; color: #555; }
+        .proof-end { text-align: right; margin-top: 10px; }
+        .example { margin-bottom: 25px; padding: 15px 20px; border-left: 5px solid #f39c12; background-color: #fef9e7; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        table { border-collapse: collapse; width: 100%; margin: 25px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #bdc3c7; padding: 12px 15px; text-align: left; }
+        th { background-color: #ecf0f1; color: #2c3e50; font-weight: bold; white-space: nowrap; }
+        .center { text-align: center; }
+    </style>
+</head>
+<body>
+
+    <h1>特定の5次方程式のGalois群が交代群 $A_5$ となることの完全な証明</h1>
+
+    <p>本稿では、特定の5次多項式が有理数体 $\mathbb{Q}$ 上で交代群 (alternating group) $A_5$ を Galois群として持つことの完全な証明を与えます。証明の核となる既約性の厳密な確認、完全平方となる判別式の系統的な構成法、$S_5$ の推移的部分群の分類、および Dedekind の定理を用いた有限体上での具体的な因数分解を詳細に記述します。</p>
+
+    <div class="target-polynomials">
+        <h3>対象となる4つの5次多項式</h3>
+        <p>本稿で証明の対象とする、判別式が平方数となる $x^5+ax+b$ 型の多項式は以下の4つです。</p>
+        <ul>
+            <li>最初の例： $f_1(x) = x^5 + 20x + 16$</li>
+            <li>具体例1： $f_2(x) = x^5 + 20x + 32$</li>
+            <li>具体例2： $f_3(x) = x^5 + 95x + 76$</li>
+            <li>具体例3： $f_4(x) = x^5 + 220x + 176$</li>
+        </ul>
+    </div>
+
+    <h2>1. 有理数体上の既約性の完全な証明</h2>
+
+    <p>これらの方程式の Galois群が5次対称群 $S_5$ の推移的部分群となるためには、多項式が有理数体 $\mathbb{Q}$ 上で既約であることが必須です。ここでは各多項式の既約性を証明します。</p>
+
+    <div class="proof">
+        <div class="proof-title">具体例2 ($x^5 + 95x + 76$) と 具体例3 ($x^5 + 220x + 176$) の既約性証明 (Eisensteinの判定法)</div>
+        <p>整数係数多項式 $x^n + a_{n-1}x^{n-1} + \dots + a_0$ について、ある素数 $p$ が存在して「すべての $a_i$ が $p$ の倍数」「最高次係数は $p$ の倍数でない」「定数項 $a_0$ は $p^2$ の倍数でない」を満たすとき、その多項式は $\mathbb{Q}$ 上既約である（アイゼンシュタインの判定法）。</p>
+        <ul>
+            <li><strong>具体例2 ($x^5 + 95x + 76$)：</strong><br>
+            $95 = 5 \times 19$、$76 = 4 \times 19$ である。素数 $p=19$ に注目すると、係数 $95$ と $76$ はともに $19$ で割り切れる。また、定数項 $76$ は $19^2 = 361$ では割り切れない。したがって、Eisensteinの判定法により $\mathbb{Q}$ 上で既約である。</li>
+            <li><strong>具体例3 ($x^5 + 220x + 176$)：</strong><br>
+            $220 = 20 \times 11$、$176 = 16 \times 11$ である。素数 $p=11$ に注目すると、係数 $220$ と $176$ はともに $11$ で割り切れる。また、定数項 $176$ は $11^2 = 121$ では割り切れない。したがって、Eisensteinの判定法により $\mathbb{Q}$ 上で既約である。</li>
+        </ul>
+        <div class="proof-end">□</div>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">最初の例 ($x^5 + 20x + 16$) と 具体例1 ($x^5 + 20x + 32$) の既約性証明 (有限体への還元)</div>
+        <p>これらの多項式には直接 Eisensteinの判定法を適用できる素数がないため、素数 $p=3$ を法とする有限体 $\mathbb{F}_3$ 上での既約性を確認する。</p>
+        <ul>
+            <li><strong>最初の例 ($x^5 + 20x + 16$)：</strong><br>
+            法 $3$ で還元すると $x^5 + 2x + 1$ となる。<br>
+            $x=0, 1, 2$ を代入すると、それぞれ $1, 4 \equiv 1, 32+4+1 \equiv 1 \pmod 3$ となり根を持たないため、1次の因数を持たない。<br>
+            2次の因数を持つか確認するため、$\mathbb{F}_3$ 上のすべての2次既約多項式 ($x^2+1, x^2+x+2, x^2+2x+2$) で割った余りを計算する。<br>
+            $(x^5+2x+1) = (x^2+1)(x^3-x) + 1$ (余り $1$)<br>
+            $(x^5+2x+1) = (x^2+x+2)(x^3-x^2+2x) + x + 1$ (余り $x+1 \not\equiv 0$)<br>
+            $(x^5+2x+1) = (x^2+2x+2)(x^3+x^2+2x) + x + 1$ (余り $x+1 \not\equiv 0$)<br>
+            いずれも割り切れないため2次因数も持たない。したがって $\mathbb{F}_3$ 上で既約であり、元の多項式も $\mathbb{Q}$ 上既約である。</li>
+            
+            <li><strong>具体例1 ($x^5 + 20x + 32$)：</strong><br>
+            法 $3$ で還元すると $x^5 + 2x + 2$ となる。<br>
+            $x=0, 1, 2$ を代入すると、それぞれ $2, 5 \equiv 2, 32+4+2 \equiv 2 \pmod 3$ となり根を持たないため、1次の因数を持たない。<br>
+            同様に2次既約多項式で割る。<br>
+            $(x^5+2x+2) = (x^2+1)(x^3-x) + 2$ (余り $2$)<br>
+            $(x^5+2x+2) = (x^2+x+2)(x^3+2x^2+2x) + x + 2$ (余り $x+2 \not\equiv 0$)<br>
+            $(x^5+2x+2) = (x^2+2x+2)(x^3+x^2+2x) + x + 2$ (余り $x+2 \not\equiv 0$)<br>
+            割り切れないため、これも $\mathbb{F}_3$ 上で既約であり、$\mathbb{Q}$ 上既約である。</li>
+        </ul>
+        <div class="proof-end">□</div>
+    </div>
+
+    <h2>2. 判別式の確認</h2>
+
+    <p>多項式 $f(x) = x^5 + ax + b$ の判別式 $\Delta$ は、公式 $\Delta = 256a^5 + 3125b^4$ で与えられる。4つの例について判別式を計算し、完全平方であることを確認する。</p>
+
+    <table>
+        <tr>
+            <th>多項式</th>
+            <th>$a$</th>
+            <th>$b$</th>
+            <th>判別式 $\Delta$ の素因数分解</th>
+            <th>完全平方か</th>
+        </tr>
+        <tr>
+            <td>$x^5 + 20x + 16$</td>
+            <td>20</td>
+            <td>16</td>
+            <td>$2^{16} \cdot 5^6 = (2^8 \cdot 5^3)^2$</td>
+            <td>はい</td>
+        </tr>
+        <tr>
+            <td>$x^5 + 20x + 32$</td>
+            <td>20</td>
+            <td>32</td>
+            <td>$2^{18} \cdot 5^6 = (2^9 \cdot 5^3)^2$</td>
+            <td>はい</td>
+        </tr>
+        <tr>
+            <td>$x^5 + 95x + 76$</td>
+            <td>95</td>
+            <td>76</td>
+            <td>$2^{10} \cdot 5^6 \cdot 19^4 = (2^5 \cdot 5^3 \cdot 19^2)^2$</td>
+            <td>はい</td>
+        </tr>
+        <tr>
+            <td>$x^5 + 220x + 176$</td>
+            <td>220</td>
+            <td>176</td>
+            <td>$2^{16} \cdot 3^2 \cdot 5^6 \cdot 11^4 = (2^8 \cdot 3 \cdot 5^3 \cdot 11^2)^2$</td>
+            <td>はい</td>
+        </tr>
+    </table>
+
+    <h2>3. 判別式が平方数となる $x^5+ax+b$ 型多項式の構成法</h2>
+
+    <p>ここで対象としている多項式群はランダムなものではなく、意図的に判別式が完全平方となるよう構成されています。ここではその生成メカニズムを示します。</p>
+
+    <div class="proposition">
+        <strong>命題 (平方判別式を持つ係数のパラメータ化)</strong><br>
+        任意の整数 $t$ に対して、係数 $a, b$ を次のように定める：
+        $$ a = 5(5t^2 - 1), \quad b = 4(5t^2 - 1) $$
+        このとき、多項式 $x^5+ax+b$ の判別式 $\Delta$ は常に有理数体上で完全平方となる。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">構成の導出と証明.</div>
+        $x^5+ax+b$ の判別式は $\Delta = 4^4 a^5 + 5^5 b^4$ である。<br>
+        ここで、$a$ と $b$ に共通のパラメータ $k$ を導入し、$a = 5k$、$b = 4k$ と置く。判別式に代入すると、
+        $$ \Delta = 4^4 (5k)^5 + 5^5 (4k)^4 = 4^4 \cdot 5^5 \cdot k^5 + 5^5 \cdot 4^4 \cdot k^4 $$
+        共通因数 $4^4 \cdot 5^5 \cdot k^4$ でくくり出すと、
+        $$ \Delta = 4^4 \cdot 5^5 \cdot k^4 (k + 1) = (16 \cdot 25 \cdot k^2)^2 \cdot 5(k+1) = (400k^2)^2 \cdot 5(k+1) $$
+        前半の $(400k^2)^2$ は平方数であるため、残りの部分 $5(k+1)$ が平方数になれば全体が完全平方となる。<br>
+        ある整数 $t$ を用いて $5(k+1) = 25t^2$ と置くと、
+        $$ k+1 = 5t^2 \implies k = 5t^2 - 1 $$
+        これを元の式に戻せば、目的のパラメータ化 $a = 5(5t^2 - 1), b = 4(5t^2 - 1)$ を得る。
+        <div class="proof-end">□</div>
+    </div>
+
+    <p>この構成法に $t$ を代入すると、検証中の具体例が生成されます。</p>
+    <ul>
+        <li><strong>$t=1$：</strong> $k = 4 \implies a=20, b=16$ (最初の例 $x^5 + 20x + 16$)</li>
+        <li><strong>$t=2$：</strong> $k = 19 \implies a=95, b=76$ (具体例2 $x^5 + 95x + 76$)</li>
+        <li><strong>$t=3$：</strong> $k = 44 \implies a=220, b=176$ (具体例3 $x^5 + 220x + 176$)</li>
+    </ul>
+
+    <h2>4. $S_5$ の推移的部分群の分類</h2>
+
+    <p>既約な5次多項式の Galois群は、根に対して推移的に作用するため、$S_5$ の推移的部分群となります。共役を除くと以下の5種類しか存在しません。</p>
+
+    <table>
+        <tr>
+            <th>群の名称</th>
+            <th>記号</th>
+            <th>位数</th>
+            <th class="center">$A_5$ に含まれるか<br>（偶置換のみか）</th>
+        </tr>
+        <tr>
+            <td>巡回群 (Cyclic group)</td>
+            <td>$Z_5$</td>
+            <td>5</td>
+            <td class="center"><strong>はい</strong></td>
+        </tr>
+        <tr>
+            <td>二面体群 (Dihedral group)</td>
+            <td>$D_5$</td>
+            <td>10</td>
+            <td class="center"><strong>はい</strong></td>
+        </tr>
+        <tr>
+            <td>フロベニウス群 (Frobenius group)</td>
+            <td>$F_{20}$</td>
+            <td>20</td>
+            <td class="center">いいえ</td>
+        </tr>
+        <tr>
+            <td>交代群 (Alternating group)</td>
+            <td>$A_5$</td>
+            <td>60</td>
+            <td class="center"><strong>はい</strong></td>
+        </tr>
+        <tr>
+            <td>対称群 (Symmetric group)</td>
+            <td>$S_5$</td>
+            <td>120</td>
+            <td class="center">いいえ</td>
+        </tr>
+    </table>
+
+    <p>判別式が完全平方である事実から、Galois群は表のうち <strong>$Z_5, D_5, A_5$</strong> のいずれかに絞り込まれます。</p>
+
+    <h2>5. Dedekindの定理と $(1,1,3)$ 型の素因数分解の明示</h2>
+
+    <div class="proposition">
+        <strong>命題 (Dedekind の定理)</strong><br>
+        $f(x) \in \mathbb{Z}[x]$ をモニック多項式とする。判別式を割り切らない素数 $p$ を法として $f(x)$ を有限体 $\mathbb{F}_p$ 上で因数分解したとき、その既約因子の次数が $(n_1, n_2, \ldots, n_k)$ であれば、$f(x)$ の Galois群はサイクル型が $(n_1, n_2, \ldots, n_k)$ である置換を含む。
+    </div>
+
+    <p>群を $A_5$ と特定させるためには、長さ3の巡回置換（位数3の元）の存在を示す必要があります。以下の通り、すべての例において、判別式を割り切らない適切な素数 $p$ を選ぶことで $\mathbb{F}_p$ 上で $(1,1,3)$ 型に分解されることを示します。</p>
+
+    <div class="example">
+        <strong>最初の例： $x^5 + 20x + 16$ (素数 $p=7$)</strong><br>
+        $p=7$ は $\Delta = 2^{16} \cdot 5^6$ を割り切らない。<br>
+        法 $7$ において $20 \equiv -1, 16 \equiv 2$ より、$x^5 - x + 2 \equiv 0 \pmod 7$。<br>
+        $x=4, x=5$ は根である（$4^5-4+2 \equiv 0, 5^5-5+2 \equiv 0 \pmod 7$）。<br>
+        $(x-4)(x-5) \equiv x^2 - 2x - 1 \pmod 7$ で割ると、
+        $$ x^5 - x + 2 \equiv (x - 4)(x - 5)(x^3 + 2x^2 + 5x + 5) \pmod 7 $$
+        3次式 $x^3 + 2x^2 + 5x + 5$ は $\mathbb{F}_7$ 上で根を持たないため既約。したがって分解型は $(1,1,3)$ である。
+    </div>
+
+    <div class="example">
+        <strong>具体例1： $x^5 + 20x + 32$ (素数 $p=67$)</strong><br>
+        $p=67$ は $\Delta = 2^{18} \cdot 5^6$ を割り切らない。<br>
+        $\mathbb{F}_{67}$ において、$x=3$ および $x=-4$ は根となる（$f_2(3) = 335 = 67 \times 5 \equiv 0$、$f_2(-4) = -1072 = 67 \times (-16) \equiv 0 \pmod{67}$）。<br>
+        $(x-3)(x+4) = x^2 + x - 12$ で元の多項式を多項式の除算で割ると、
+        $$ x^5 + 20x + 32 \equiv (x - 3)(x + 4)(x^3 - x^2 + 13x - 25) \pmod{67} $$
+        この3次式 $x^3 - x^2 + 13x - 25$ は $\mathbb{F}_{67}$ 上で根を持たず既約である。したがって分解型は $(1,1,3)$ である。
+    </div>
+
+    <div class="example">
+        <strong>具体例2： $x^5 + 95x + 76$ (素数 $p=31$)</strong><br>
+        $p=31$ は $\Delta = 2^{10} \cdot 5^6 \cdot 19^4$ を割り切らない。<br>
+        法 $31$ において、$95 \equiv 2$、$76 \equiv 14$ より $x^5 + 2x + 14 \pmod{31}$。<br>
+        $x=8$ および $x=-10 \equiv 21$ が根である。<br>
+        $(x-8)(x+10) = x^2 + 2x - 80 \equiv x^2 + 2x + 13 \pmod{31}$ で割ると、
+        $$ x^5 + 95x + 76 \equiv (x - 8)(x + 10)(x^3 - 2x^2 - 9x + 13) \pmod{31} $$
+        3次式 $x^3 - 2x^2 - 9x + 13$ は $\mathbb{F}_{31}$ 上で根を持たないため既約。したがって分解型は $(1,1,3)$ である。
+    </div>
+
+    <div class="example">
+        <strong>具体例3： $x^5 + 220x + 176$ (素数 $p=13$)</strong><br>
+        $p=13$ は $\Delta = 2^{16} \cdot 3^2 \cdot 5^6 \cdot 11^4$ を割り切らない。<br>
+        法 $13$ において、$220 \equiv 12$、$176 \equiv 7$ より $x^5 + 12x + 7 \pmod{13}$。<br>
+        $x=3$ と $x=4$ が根となる（$f_4(3) \equiv 243+36+7 = 286 = 13 \times 22 \equiv 0$ など）。<br>
+        $(x-3)(x-4) = x^2 - 7x + 12 \equiv x^2 + 6x - 1 \pmod{13}$ で割ると、
+        $$ x^5 + 220x + 176 \equiv (x - 3)(x - 4)(x^3 + 7x^2 + 11x + 6) \pmod{13} $$
+        3次式 $x^3 + 7x^2 + 11x + 6$ に $\mathbb{F}_{13}$ の元を代入しても $0$ にならないため既約。したがって分解型は $(1,1,3)$ である。
+    </div>
+
+    <h2>6. 結論</h2>
+
+    <p>以上のすべての数学的検証を統合します。</p>
+    <ol>
+        <li>対象となる4つの5次方程式はすべて有理数体上で既約です。これにより、その Galois群 $G$ は5次対称群 $S_5$ の推移的部分群となります。</li>
+        <li>すべての判別式が完全平方であるため、$G$ は交代群 $A_5$ の部分群でなければなりません。候補は $A_5$, $D_5$ (位数10), $Z_5$ (位数5) の3つに限定されます。</li>
+        <li>Dedekind の定理と、各多項式に対して具体的に提示した法 $p$ での $(1, 1, 3)$ 型の因数分解から、$G$ は必ず長さ3の巡回置換（位数3の元）を含みます。$D_5$ と $Z_5$ は位数が3の倍数ではないため、位数3の元を含み得ず棄却されます。</li>
+    </ol>
+    <p>ゆえに、提示された4つの例はすべて、その Galois群が交代群 $A_5$ と同型であることが完全に証明されました。</p>
+
+</body>
+</html>
