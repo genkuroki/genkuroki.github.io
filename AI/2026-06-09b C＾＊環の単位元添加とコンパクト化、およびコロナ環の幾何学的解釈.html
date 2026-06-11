@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C*-環の単位元添加とコンパクト化、およびコロナ環の幾何学的解釈</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #333;
+  }
+  h1 {
+    font-size: 1.8em;
+    border-bottom: 2px solid #555;
+    padding-bottom: 10px;
+  }
+  h2 {
+    font-size: 1.4em;
+    border-left: 5px solid #0056b3;
+    padding-left: 10px;
+    margin-top: 30px;
+  }
+  .definition, .theorem, .proposition, .example, .proof {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  .definition { background-color: #eef7ff; border: 1px solid #cce5ff; }
+  .theorem, .proposition { background-color: #fff3cd; border: 1px solid #ffeeba; }
+  .example { background-color: #f8f9fa; border: 1px solid #dae0e5; }
+  .proof { background-color: #ffffff; border: 1px dashed #6c757d; }
+  .note {
+    background-color: #e2e3e5;
+    border-left: 5px solid #6c757d;
+    padding: 10px 15px;
+    margin: 20px 0;
+  }
+  .title { font-weight: bold; margin-bottom: 5px; display: block; color: #0056b3; }
+  ul { list-style-type: square; }
+  a { color: #0056b3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>C*-環の単位元添加とコンパクト化、およびコロナ環の幾何学的解釈</h1>
+
+<p>本稿では、局所コンパクト (locally compact) Hausdorff空間上の関数環を通した、Gelfand-Naimark双対性の直観的な理解と、そこから自然に導かれるコンパクト化 (compactification) の理論、さらには現代作用素環論において極めて重要な非可換幾何学の対象であるコロナ環 (corona algebra) について解説します。本稿の内容は、抽象的な代数操作に終始せず、空間の無限遠での振る舞いや境界に着目するという、幾何学的な直観を重視したアプローチに基づいています。</p>
+
+<h2>1. 局所コンパクト空間の1点コンパクト化と単位元添加</h2>
+
+<div class="definition">
+  <span class="title">定義 1.1</span>
+  $X$ を非コンパクトな局所コンパクト (locally compact) Hausdorff空間とする。<br>
+  <ul>
+    <li>$C_b(X)$ を $X$ 上の有界な複素数値連続関数全体のなす $C^*$-環とする。</li>
+    <li>$C_0(X)$ を $X$ 上の無限遠で $0$ に収束する連続関数全体のなす $C^*$-環とする。すなわち、$f \in C_0(X)$ とは、任意の $\varepsilon > 0$ に対してコンパクト集合 $K \subset X$ が存在し、$x \notin K$ ならば $|f(x)| < \varepsilon$ となることである。</li>
+    <li>$C_{cst}(X)$ を $X$ 上の無限遠で一定の複素数値に収束する連続関数全体のなす $C^*$-環とする。すなわち、$f \in C_{cst}(X)$ とは、ある複素数 $\lambda \in \mathbb{C}$ が存在し、$f - \lambda \cdot 1 \in C_0(X)$ となることである。ここで $1$ は $X$ 上の定数関数を表す。</li>
+  </ul>
+</div>
+
+
+
+<div class="proposition">
+  <span class="title">命題 1.2</span>
+  $C_{cst}(X)$ と、非単位的 $C^*$-環 $C_0(X)$ に代数的に単位元を直和で添加した $C^*$-環 $C_0(X) \oplus \mathbb{C}$ は、$C^*$-環として等長同型である。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  写像 $\varphi : C_0(X) \oplus \mathbb{C} \to C_{cst}(X)$ を $\varphi(f, \lambda) = f + \lambda \cdot 1$ で定める。<br>
+  (1) $\varphi$ は定義から明らかに線形写像であり、また複素共役の演算（対合）を保存する。積についても、$\varphi((f, \lambda)(g, \mu)) = \varphi(fg + \lambda g + \mu f, \lambda \mu) = fg + \lambda g + \mu f + \lambda\mu \cdot 1 = (f + \lambda \cdot 1)(g + \mu \cdot 1) = \varphi(f, \lambda)\varphi(g, \mu)$ となり、乗法性を持つ。したがって $*$-準同型である。<br>
+  (2) 定義より $\varphi$ は全射である。単射性を示すために $\varphi(f, \lambda) = 0$ と仮定する。このとき $f = -\lambda \cdot 1$ であるが、$X$ は非コンパクトであるため、$C_0(X)$ に属する関数が定数関数となるのは恒等的に $0$ のときに限る。ゆえに $\lambda = 0$ かつ $f = 0$ となり、単射性が示された。<br>
+  (3) $C^*$-環の間の単射 $*$-準同型は常に等長写像である。以上より、$\varphi$ は $C^*$-環としての等長同型を与える。$\square$
+</div>
+
+<div class="note">
+  <strong>解説：なぜ標準的なテキストは直和を用いるのか</strong><br>
+  命題1.2が示すように、空間 $X$ の幾何学を知っている立場から見れば、不自然な直和を用いるより、最初から $C_{cst}(X)$ を考えた方が「無限遠で一定値に収束する関数」としてシンプルで直観的です。しかし、多くの作用素環論の教科書が直和構成を採用するのには明確な理由があります。Gelfand-Naimark双対性の本来の目的は「空間を知らない抽象的な非単位的 $C^*$-環 $A$ から、空間 $X$ という概念そのものを創り出す」ことだからです。代数的な単位元添加 $A \oplus \mathbb{C}$ を行うことで、結果として付加された $\mathbb{C}$ の成分が、空間側の「無限遠点」として立ち現れるという論理構造になっています。
+</div>
+
+<h2>2. コンパクト化の束 (lattice) と C*-部分環</h2>
+
+<div class="definition">
+  <span class="title">定義 2.1</span>
+  局所コンパクト (locally compact) Hausdorff空間 $X$ のコンパクト化 (compactification) とは、コンパクトHausdorff空間 $Y$ と、その中への稠密な埋め込み（位相同型）$\iota : X \to Y$ の組 $(Y, \iota)$ のことである。
+</div>
+
+<div class="theorem">
+  <span class="title">定理 2.2</span>
+  空間 $X$ のコンパクト化 (compactification) の同値類全体は、$C_b(X)$ の $C^*$-部分環であって、$C_0(X)$ と定数関数 $1$ を含むもの全体と一対一に対応する。代数的な包含関係は、幾何学的なコンパクト化 (compactification) の粗密の順序と逆転して対応する。
+</div>
+
+
+
+<div class="example">
+  <span class="title">例 2.3</span>
+  (1) <strong>最小のコンパクト化: 1点コンパクト化 (one-point compactification) $\alpha X$</strong><br>
+  代数側で $C_0(X)$ に $1$ だけを付け足した最小の環が $C_{cst}(X)$ である。幾何学的には、無限遠をたった1点に丸め込む最も粗いコンパクト化 (compactification) に対応する。<br><br>
+  (2) <strong>最大のコンパクト化: Stone-Čechコンパクト化 $\beta X$</strong><br>
+  代数側で $C_0(X)$ を含む最大の有界連続関数の環は $C_b(X)$ 自身である。幾何学的には、無限遠を丸め込まず、$X$ の有界関数が識別できるすべての方向を残した、最も細かく巨大なコンパクト化 (compactification) に対応する。
+</div>
+
+<div class="note">
+  <strong>解説：直観的な見通しの良さ</strong><br>
+  $C_0(X) \oplus \mathbb{C}$ という定義から出発すると、このような美しい階層構造（ラティス）は見えてきません。しかし「$C_b(X)$ という有界連続関数の母体のなかで、無限遠での関数の振る舞いを制限していく」という視点を持つことで、1点コンパクト化からStone-Čechコンパクト化へのつながりが自然に理解できます。
+</div>
+
+<h2>3. コロナ環の可換および非可換幾何学</h2>
+
+<div class="definition">
+  <span class="title">定義 3.1</span>
+  局所コンパクト (locally compact) Hausdorff空間 $X$ に対し、可換なコロナ環 (corona algebra) $\mathcal{C}(X)$ を商環 $\mathcal{C}(X) = C_b(X) / C_0(X)$ によって定義する。
+</div>
+
+
+
+<div class="theorem">
+  <span class="title">定理 3.2</span>
+  $\mathcal{C}(X)$ は、Stone-Čechコンパクト化の境界 $\beta X \smallsetminus X$ 上の連続関数環 $C(\beta X \smallsetminus X)$ と同型である。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  関数環の同型 $C_b(X) \cong C(\beta X)$ により、$C_0(X)$ は $\beta X$ 上の連続関数であって境界 $\beta X \smallsetminus X$ 上で $0$ となるイデアルと同一視される。したがって商環 $C_b(X)/C_0(X)$ を考えることは、$C(\beta X)$ の元を境界 $\beta X \smallsetminus X$ 上に制限することに他ならない。Tietzeの拡張定理により、境界上の任意の連続関数は $\beta X$ 全体に連続に拡張できるため、この制限写像は全射である。したがって第一同型定理より $\mathcal{C}(X) \cong C(\beta X \smallsetminus X)$ が成り立つ。$\square$
+</div>
+
+<div class="example">
+  <span class="title">例 3.3（離散空間のコロナ）</span>
+  $X = \mathbb{N}$（離散位相）とする。このとき有界列の空間 $\ell^\infty$ と $0$ に収束する列の空間 $c_0$ を用いて、コロナ環 (corona algebra) は $\ell^\infty / c_0$ と表される。この空間 $\beta \mathbb{N}$ は超不連結 (extremally disconnected) （任意の開集合の閉包がclopenになる）であるが、その境界 $\beta \mathbb{N} \smallsetminus \mathbb{N}$ は自由超フィルター (free ultrafilter) の空間に対応し、極めて巨大で非自明な位相を持つ。
+</div>
+
+<div class="definition">
+  <span class="title">定義 3.4 (非可換化)</span>
+  $A$ を非単位的 $C^*$-環とする。$A$ の乗法作用素環 (multiplier algebra) $M(A)$ とは、$A$ を本質的イデアルとして含む最大の単位的 $C^*$-環のことである。<br><br>
+  このとき、非単位的 $C^*$-環 $A$ のコロナ環 (corona algebra) $\mathcal{C}(A)$ を次で定義する。
+  $$ \mathcal{C}(A) = M(A)/A $$
+</div>
+
+<div class="note">
+  <strong>解説：非可換な無限遠の境界</strong><br>
+  $A = C_0(X)$ のとき、$M(A) = C_b(X)$ となるため、可換な場合と完全に一致します。つまり、コロナ環 (corona algebra) とは、抽象的な $C^*$-環を「非可換な局所コンパクト (locally compact) 空間」とみなした際に、その「無限遠の境界 (boundary)」だけを純粋に代数的に切り出した対象です。なお、英語圏の学術論文では、固有名詞ではないため「corona algebra」と小文字で表記するのが正しい慣習です。
+</div>
+
+<h2>4. Calkin環とFredholm作用素</h2>
+
+<div class="example">
+  <span class="title">例 4.1</span>
+  無限次元Hilbert空間 $H$ 上のコンパクト作用素 (compact operator) 全体のなす $C^*$-環 $A = K(H)$ を考える。このとき乗法作用素環 (multiplier algebra) は有界線形作用素全体 $M(A) = B(H)$ となる。<br>
+  この場合のコロナ環 (corona algebra) は
+  $$ \mathcal{C}(H) = B(H) / K(H) $$
+  となり、これを特にCalkin環 (Calkin algebra) と呼ぶ。
+</div>
+
+<div class="note">
+  <strong>解説：幾何学と解析学の架け橋</strong><br>
+  Calkin環 (Calkin algebra) のなかで元が可逆であるという条件を、もとの作用素 $B(H)$ に引き戻して解釈すると、それは解析学において微分方程式の解の理論の核となるFredholm作用素 (Fredholm operator) の定義そのものになります。この非可換な境界の理論は、指数定理やK理論など、現代数学の根幹をなす理論へとつながっています。
+</div>
+
+<hr>
+
+<h2>参考文献</h2>
+<ul>
+  <li>Arveson, W., <i>An Invitation to C*-Algebras</i>, Graduate Texts in Mathematics 39, Springer-Verlag, 1976. <a href="https://link.springer.com/book/10.1007/978-1-4612-6371-5" target="_blank" rel="noopener">[Link]</a></li>
+  <li>Murphy, G. J., <i>C*-Algebras and Operator Theory</i>, Academic Press, 1990. <a href="https://shop.elsevier.com/books/c-algebras-and-operator-theory/murphy/978-0-12-511360-1" target="_blank" rel="noopener">[Link]</a></li>
+  <li>梅垣寿春, 大矢雅則, 日合文雄, 『作用素代数入門』, 共立出版 (旧・共立講座 現代の数学), 1985. <a href="https://www.kinokuniya.co.jp/f/dsg-01-9784320017276" target="_blank" rel="noopener">[Link]</a></li>
+</ul>
+
+</body>
+</html>

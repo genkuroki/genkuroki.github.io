@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stone-Čech コンパクト化における無限遠点と Z超フィルターおよび極大イデアルの対応</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: #fafafa;
+  }
+  h1, h2, h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 0.3em;
+  }
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; margin-top: 1.5em; }
+  
+  .explanation {
+    background-color: #ffffff;
+    padding: 1em 1.5em;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 1.5em;
+  }
+
+  .math-block {
+    background-color: #ffffff;
+    border-left: 4px solid #3498db;
+    padding: 1em 1.5em;
+    margin: 1.5em 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .definition-title { color: #2980b9; font-weight: bold; margin-bottom: 0.5em; }
+  .theorem-title { color: #c0392b; font-weight: bold; margin-bottom: 0.5em; }
+  .proof-title { color: #27ae60; font-weight: bold; font-style: italic; margin-bottom: 0.5em; }
+  .example-title { color: #8e44ad; font-weight: bold; margin-bottom: 0.5em; }
+  
+  .table-container {
+    margin: 1.5em 0;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f4f6f7;
+    color: #2c3e50;
+  }
+  hr {
+    border: 0;
+    border-top: 1px dashed #bdc3c7;
+    margin: 1.5em 0;
+  }
+
+  .references {
+    background-color: #ecf0f1;
+    padding: 1.5em;
+    border-radius: 8px;
+    margin-top: 3em;
+  }
+  .references li { margin-bottom: 0.5em; }
+  a { color: #2980b9; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>Stone-Čech コンパクト化における無限遠点と Z超フィルターおよび極大イデアルの対応</h1>
+
+<div class="explanation">
+  <p>本稿では、一般の局所コンパクト (locally compact) Hausdorff 空間、あるいはより一般に完全正則 (completely regular) Hausdorff 空間（Tychonoff 空間）$X$ の Stone-Čech コンパクト化 $\beta X$ について解説します。特に、元の空間 $X$ に属さない「無限遠部分」$\beta X \smallsetminus X$ の点が、数学的にどのような対象と一対一に対応しているのかを詳細に掘り下げます。</p>
+  <p>離散空間の場合はすべての部分集合を独立して扱うことができますが、位相が入った一般の空間では「連続関数との整合性」を保つ必要があるため、単なる部分集合ではなく「ゼロ集合 (zero-set)」や「連続関数環の極大イデアル (maximal ideal)」を用いるのが本質的な違いです。これらの基本概念の定義から出発し、自己完結的（self-contained）に定理と証明を展開していきます。</p>
+</div>
+
+<h2>第1部：基礎概念の定義と例</h2>
+
+<div class="math-block definition">
+  <div class="definition-title">定義 1.1: 完全正則 Hausdorff 空間 (completely regular Hausdorff space)</div>
+  位相空間 $X$ が完全正則 (completely regular) であるとは、任意の閉集合 $F \subset X$ と、$F$ に属さない任意の点 $x \in X \smallsetminus F$ に対して、連続関数 $f: X \to [0, 1]$ が存在して、$f(x) = 0$ かつすべての $y \in F$ に対して $f(y) = 1$ を満たすことである。T1 分離公理を満たす完全正則空間を Tychonoff 空間と呼ぶ（このとき自動的に Hausdorff 空間となる）。
+</div>
+
+<div class="math-block example">
+  <div class="example-title">例 1.2: 局所コンパクト空間と離散空間</div>
+  局所コンパクト (locally compact) Hausdorff 空間（例えば $\mathbb{R}^n$ など）は、常に Tychonoff 空間である。また、離散空間 (discrete space) も Tychonoff 空間である。離散空間において任意の部分集合は開かつ閉、すなわち clopen である。
+</div>
+
+<div class="math-block definition">
+  <div class="definition-title">定義 1.3: 連続関数環 $C(X)$ と有界連続関数環 $C^*(X)$</div>
+  $X$ を位相空間とする。$X$ 上の実数値連続関数全体のなす可換環を $C(X)$ と表記し、その部分環であって有界な連続関数全体からなるものを $C^*(X)$ と表記する。
+</div>
+
+<div class="math-block definition">
+  <div class="definition-title">定義 1.4: ゼロ集合 (zero-set)</div>
+  関数 $f \in C(X)$ に対して、その零点集合を $Z(f) = \{x \in X \mid f(x) = 0\}$ と定義する。このような形をとる $X$ の部分集合をゼロ集合 (zero-set) と呼び、$X$ 上のゼロ集合の全体を $Z(X)$ と表記する。ゼロ集合の有限和や有限交叉は、連続関数の演算により再びゼロ集合となる（例：$Z(f) \cup Z(g) = Z(fg)$、$Z(f) \cap Z(g) = Z(f^2 + g^2)$）。
+</div>
+
+<div class="math-block definition">
+  <div class="definition-title">定義 1.5: Zフィルター (Z-filter) と Z超フィルター (Z-ultrafilter)</div>
+  $Z(X)$ の空でない部分族 $\mathcal{F} \subset Z(X)$ が以下の3条件を満たすとき、$\mathcal{F}$ を Zフィルター (Z-filter) と呼ぶ。
+  <ol>
+    <li>$\varnothing \notin \mathcal{F}$ である。</li>
+    <li>$Z_1, Z_2 \in \mathcal{F}$ ならば、$Z_1 \cap Z_2 \in \mathcal{F}$ である。</li>
+    <li>$Z_1 \in \mathcal{F}$ かつ $Z_2 \in Z(X)$ であり、$Z_1 \subset Z_2$ ならば、$Z_2 \in \mathcal{F}$ である。</li>
+  </ol>
+  包含関係に関して極大な Zフィルターを Z超フィルター (Z-ultrafilter) と呼ぶ。Zorn の補題により、任意の Zフィルターはある Z超フィルターに含まれる。
+</div>
+
+<div class="math-block definition">
+  <div class="definition-title">定義 1.6: 固定された (fixed) / 自由な (free) Z超フィルター</div>
+  Z超フィルター $\mathcal{F}$ について、それに属するすべてのゼロ集合の共通部分 $\bigcap \mathcal{F} = \bigcap_{Z \in \mathcal{F}} Z$ が空集合でない（$\bigcap \mathcal{F} \neq \varnothing$）とき、$\mathcal{F}$ は固定されている (fixed) という。逆に共通部分が空集合（$\bigcap \mathcal{F} = \varnothing$）であるとき、$\mathcal{F}$ は固定されていない、あるいは自由である (free) という。
+</div>
+
+<div class="explanation">
+  <p><strong>【重要な解説】単項超フィルターの一般化としての「固定された Z超フィルター」</strong></p>
+  <p>ここで、「固定されている (fixed)」および「固定されていない (free)」という条件が、それぞれ離散空間における「単項 (principal)」および「非単項 (non-principal)」という概念の自然な一般化になっていることを詳しく確認しておきます。</p>
+  
+  <p>離散空間 $X$ において、部分集合の族からなる通常の超フィルター $\mathcal{F}$ は次のように分類されます。</p>
+  <ul>
+    <li><strong>単項 (principal) な超フィルター：</strong> ある点 $x \in X$ が存在して、$\mathcal{F}$ が「$x$ を含むすべての部分集合」からなる場合です。このとき、一点集合 $\{x\}$ 自体が $\mathcal{F}$ の要素になります。当然、$\mathcal{F}$ のすべての要素の共通部分 $\bigcap \mathcal{F}$ は $\{x\}$ となり、空ではありません。</li>
+    <li><strong>非単項 (non-principal) な超フィルター：</strong> どのような有限集合も含まない超フィルターです。このとき、すべての要素の共通部分をとると空集合（$\bigcap \mathcal{F} = \varnothing$）になります。</li>
+  </ul>
+
+  <p>離散空間においては、任意の点 $x \in X$ に対し、一点集合 $\{x\}$ は必ずゼロ集合となります。なぜなら、点 $x$ で $0$、それ以外のすべての点で $1$ をとる連続関数 $f: X \to \mathbb{R}$ を考えれば、$Z(f) = \{x\}$ となるからです（離散空間では任意の関数が連続になります）。また、離散空間ではすべての部分集合がゼロ集合となります。</p>
+
+  <p>もし離散空間における Z超フィルター $\mathcal{F}$ が「固定されている（$\bigcap \mathcal{F} \neq \varnothing$）」ならば、ある点 $x$ がすべての要素に含まれます。すると、フィルターの性質と $\{x\}$ がゼロ集合であることから、$\{x\}$ 自身が $\mathcal{F}$ の要素にならざるを得ません。これはまさに<strong>単項超フィルター</strong>の定義そのものです。<br>
+  逆に、一般の空間では、一点集合 $\{x\}$ が必ずしもゼロ集合であるとは限りません。しかし、「フィルターのすべての要素が共通の点 $x$ を持つ」という性質に注目することで、「単項」という代数的な概念を「固定されている」という位相的・幾何学的な概念へ自然に拡張（一般化）できるのです。</p>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>離散空間の用語</th>
+          <th>一般の空間 (Z超フィルター) の用語</th>
+          <th>共通部分 $\bigcap \mathcal{F}$ の状態</th>
+          <th>$\beta X$ における位置</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>単項</strong> (principal)</td>
+          <td><strong>固定されている</strong> (fixed)</td>
+          <td>一点集合 $\{x\}$ になる</td>
+          <td>元の空間 $X$ の点</td>
+        </tr>
+        <tr>
+          <td><strong>非単項</strong> (non-principal)</td>
+          <td><strong>固定されていない</strong> (free)</td>
+          <td>空集合 $\varnothing$ になる</td>
+          <td>無限遠部分 $\beta X \smallsetminus X$ の点</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<h2>第2部：固定された Z超フィルターの性質</h2>
+
+<div class="math-block theorem">
+  <div class="theorem-title">定理 2.1: 固定された Z超フィルターの共通部分</div>
+  $X$ を Tychonoff 空間とする。$\mathcal{F}$ を $X$ 上の Z超フィルターとする。$\mathcal{F}$ が固定されている（すなわち $\bigcap \mathcal{F} \neq \varnothing$）ならば、ある $x \in X$ が一意に存在して $\bigcap \mathcal{F} = \{x\}$ となる。さらに、このとき $\mathcal{F}$ は $x$ を含むゼロ集合全体からなる族 $\mathcal{F}_x = \{Z \in Z(X) \mid x \in Z\}$ と一致する。
+</div>
+
+<div class="math-block proof">
+  <div class="proof-title">証明</div>
+  まず、任意の $x \in X$ に対して定義される族 $\mathcal{F}_x = \{Z \in Z(X) \mid x \in Z\}$ が Z超フィルターであることを示す。<br>
+  $\mathcal{F}_x$ が Zフィルターの条件を満たすことは定義より明らかである。極大性を示すために、$\mathcal{F}_x$ を真に含む Zフィルター $\mathcal{F}'$ が存在すると仮定する。このとき、ある $Z' \in \mathcal{F}'$ が存在して $x \notin Z'$ となる。<br>
+  空間 $X$ の完全正則性より、点 $x$ と閉集合 $Z'$ を分離する連続関数 $f: X \to [0, 1]$ が存在し、$f(x) = 0$ かつ $Z'$ 上で $f = 1$ とできる。このとき $Z(f)$ は $x$ を含むため $Z(f) \in \mathcal{F}_x \subset \mathcal{F}'$ である。<br>
+  しかし、$Z(f) \cap Z' = \varnothing$ であり、$\mathcal{F}'$ がフィルターであること（$\varnothing \notin \mathcal{F}'$）に矛盾する。したがって $\mathcal{F}_x$ は Z超フィルターである。<br><br>
+  
+  次に、$\mathcal{F}$ を固定された Z超フィルターとする。$\bigcap \mathcal{F} \neq \varnothing$ より、ある点 $x \in \bigcap \mathcal{F}$ が存在する。<br>
+  これは、すべての $Z \in \mathcal{F}$ について $x \in Z$ であることを意味するため、$\mathcal{F} \subset \mathcal{F}_x$ が成り立つ。<br>
+  $\mathcal{F}$ も $\mathcal{F}_x$ も Z超フィルター（包含関係で極大）であるため、極大性より $\mathcal{F} = \mathcal{F}_x$ でなければならない。<br><br>
+  
+  最後に、$\bigcap \mathcal{F}$ に $x$ 以外の点が含まれないことを示す。もし $y \in \bigcap \mathcal{F}$ ($y \neq x$) と仮定すると、Hausdorff 性と完全正則性により、$x$ と $y$ を分離する連続関数 $g: X \to [0, 1]$ が存在し、$g(x) = 0$ かつ $g(y) = 1$ とできる。<br>
+  このとき $Z(g) \in \mathcal{F}_x = \mathcal{F}$ であるが、$y \notin Z(g)$ となるため、$y \in \bigcap \mathcal{F}$ に矛盾する。よって $\bigcap \mathcal{F} = \{x\}$ である。$\blacksquare$
+</div>
+
+<h2>第3部：$\beta X$ の構成と無限遠点の対応</h2>
+
+<div class="math-block theorem">
+  <div class="theorem-title">定理 3.1: $\beta X$ の構成と自由 Z超フィルター</div>
+  Tychonoff 空間 $X$ の Stone-Čech コンパクト化 $\beta X$ において、$X$ は $\beta X$ の稠密な部分空間として埋め込まれ、無限遠部分 $\beta X \smallsetminus X$ の点は $X$ 上の自由な (free) Z超フィルターと一対一に対応する。
+</div>
+
+<div class="math-block proof">
+  <div class="proof-title">証明</div>
+  $\beta X$ を $X$ 上のすべての Z超フィルターの集合とする。すなわち $\beta X = \{ \mathcal{F} \mid \mathcal{F} \text{ は } X \text{ の Z超フィルター} \}$ とする。<br>
+  各 $Z \in Z(X)$ に対して、$\overline{Z} = \{ \mathcal{F} \in \beta X \mid Z \in \mathcal{F} \}$ と定義し、この族 $\{\overline{Z} \mid Z \in Z(X)\}$ を閉基 (base for closed sets) として $\beta X$ に位相を導入する。この位相により $\beta X$ はコンパクト Hausdorff 空間となる。<br><br>
+  
+  埋め込み写像 $e: X \to \beta X$ を、$e(x) = \mathcal{F}_x$ で定義する。定理 2.1 により $\mathcal{F}_x$ は Z超フィルターである。完全正則空間において異なる点は異なる $\mathcal{F}_x$ を生成するため、$e$ は単射である。この $e$ によって $X$ を $\beta X$ の部分空間と同一視する。<br><br>
+  
+  $\beta X$ の任意の点 $\mathcal{F}$ をとる。$\mathcal{F}$ が固定されていれば、定理 2.1 によりある $x \in X$ が存在して $\mathcal{F} = \mathcal{F}_x = e(x)$ となり、$\mathcal{F}$ は埋め込まれた $X$ に属する。<br>
+  逆に $\mathcal{F} \in \beta X \smallsetminus X$ であることは、$\mathcal{F}$ が $X$ のどの点 $x$ に対しても $\mathcal{F} \neq \mathcal{F}_x$ であること、すなわち固定されていない（自由な）Z超フィルターであることと同値である。したがって、無限遠部分の点は自由な Z超フィルターと一対一に対応する。$\blacksquare$
+</div>
+
+<div class="math-block example">
+  <div class="example-title">例 3.2: 超不連結 (extremally disconnected) 空間の構成</div>
+  離散空間 $X$ の Stone-Čech コンパクト化 $\beta X$ は、すべての開集合の閉包が開集合となる性質を持つ。このような空間を超不連結 (extremally disconnected) 空間と呼ぶ。$\beta X$ の構成は、超不連結空間の極めて重要な具体例を与える。
+</div>
+
+<h2>第4部：代数的な視点と極大イデアルの完全な対応</h2>
+
+<div class="explanation">
+  <p>これまでは「集合の族」である Z超フィルターという幾何学的な視点から $\beta X$ を構成しました。本節では、有界連続関数環 $C^*(X)$ の極大イデアルを用いた代数的な視点から、同じ無限遠点がどのように記述されるかを証明します。</p>
+  <p>ここで注意すべき非常に重要な点は、関数が有界である $C^*(X)$ のイデアルを考える場合、単に「零点集合 $Z(f)$ がフィルターに属するか」を考えるだけでは不十分であるということです。例えば、$X = (0, 1)$ における関数 $f(x) = x$ は零点を持ちませんが、境界 $0$（無限遠点の一つに対応）に向かっていくと極限が $0$ になります。このように「決して $0$ にはならないが、無限遠点に向かっていくといくらでも $0$ に近づく」関数を正確に捉えるため、極大イデアルを構成するには<strong>「Z超フィルターに沿った極限」</strong>を定義する必要があります。</p>
+</div>
+
+<div class="math-block definition">
+  <div class="definition-title">定義 4.1: Z超フィルターに沿った極限</div>
+  $f \in C^*(X)$ と Z超フィルター $\mathcal{F}$ に対して、ある実数 $r \in \mathbb{R}$ が存在して、任意の $\epsilon > 0$ に対してゼロ集合
+  $$Z_\epsilon(f, r) = \{ x \in X \mid |f(x) - r| \le \epsilon \}$$
+  が $\mathcal{F}$ に属するとき、$f$ は $\mathcal{F}$ に沿って $r$ に収束するという。この極限は一意に定まるため、$\lim_{\mathcal{F}} f = r$ と表記する。<br>
+  （※ $f$ の値域は有界であるためコンパクトな閉区間に含まれ、かつ $\mathcal{F}$ は極大なフィルターであるため、実数の完備性によりこの極限 $r$ は任意の $f \in C^*(X)$ と $\mathcal{F}$ に対して常に必ず存在する。）
+</div>
+
+<div class="math-block definition">
+  <div class="definition-title">定義 4.2: 固定された / 自由な極大イデアル</div>
+  $C^*(X)$ の極大イデアル $M$ について、ある点 $x \in X$ が存在して $M = M_x = \{ f \in C^*(X) \mid f(x) = 0 \}$ となるとき、$M$ は固定されている (fixed) という。逆に、どの $x \in X$ に対しても $M \neq M_x$ となるとき（すなわち、すべての関数が共通の零点を持たないとき）、$M$ は自由である (free) という。
+</div>
+
+<div class="math-block theorem">
+  <div class="theorem-title">定理 4.3: イデアルと無限遠点の対応</div>
+  無限遠部分 $\beta X \smallsetminus X$ の点は、$C^*(X)$ の自由な極大イデアルと一対一に対応する。
+</div>
+
+<div class="math-block proof">
+  <div class="proof-title">証明</div>
+  <strong>1. Z超フィルターから極大イデアルの構成：</strong><br>
+  $\mathcal{F}$ を $X$ の任意の Z超フィルターとする。部分集合 $M^{*\mathcal{F}} \subset C^*(X)$ を、
+  $$M^{*\mathcal{F}} = \{ f \in C^*(X) \mid \lim_{\mathcal{F}} f = 0 \}$$
+  と定義する。<br>
+  写像 $\varphi_{\mathcal{F}}: C^*(X) \to \mathbb{R}$ を $\varphi_{\mathcal{F}}(f) = \lim_{\mathcal{F}} f$ と定義する。極限の線形性と積の性質から、$\varphi_{\mathcal{F}}$ は環準同型写像である。また、定数関数を考えれば明らかに全射である。<br>
+  $M^{*\mathcal{F}}$ はこの $\varphi_{\mathcal{F}}$ の核 (kernel) である。第一同型定理より $C^*(X)/M^{*\mathcal{F}} \cong \mathbb{R}$ が成り立つ。剰余環 $\mathbb{R}$ は体であるから、$M^{*\mathcal{F}}$ は $C^*(X)$ の極大イデアルである。<br><br>
+
+  <strong>2. 全射性（任意の極大イデアルが $M^{*\mathcal{F}}$ の形で書けること）：</strong><br>
+  $M$ を $C^*(X)$ の任意の極大イデアルとする。<br>
+  Gelfand-Mazur の定理（あるいは有界連続関数環の基本定理）により、$C^*(X)/M \cong \mathbb{R}$ であることが知られている。したがって、各 $f \in C^*(X)$ に対して、同値類 $f + M$ はある一意な実数 $r_f \in \mathbb{R}$ に対応する。<br>
+  任意の $f \in M$（すなわち $r_f = 0$）と任意の $\epsilon > 0$ に対して、ゼロ集合 $Z_\epsilon(f) = \{ x \in X \mid |f(x)| \le \epsilon \}$ を考える。<br>
+  もしある $f_1, \dots, f_n \in M$ と $\epsilon_1, \dots, \epsilon_n > 0$ に対して $\bigcap_{i=1}^n Z_{\epsilon_i}(f_i) = \varnothing$ であったと仮定する。このとき、関数 $F = \sum_{i=1}^n f_i^2$ はイデアル $M$ の元であるが、仮定より $X$ 上のすべての点で $F(x) \ge \min(\epsilon_i^2) > 0$ を満たす。すると逆関数 $1/F$ が有界連続関数として $C^*(X)$ に存在することになり、$F \cdot (1/F) = 1 \in M$ となって $M$ が真のイデアルであることに矛盾する。<br>
+  したがって、族 $\mathcal{B} = \{ Z_\epsilon(f) \mid f \in M, \epsilon > 0 \}$ は有限交叉性を持つ Zフィルター基となる。<br>
+  Zorn の補題より、$\mathcal{B}$ を含む Z超フィルター $\mathcal{F}$ が存在する。この構成から、任意の $f \in M$ について $\lim_{\mathcal{F}} f = 0$ となるため、$M \subset M^{*\mathcal{F}}$ が得られる。$M$ は極大イデアルであるから、$M = M^{*\mathcal{F}}$ でなければならない。<br><br>
+
+  <strong>3. 単射性（異なる Z超フィルターは異なる極大イデアルを生むこと）：</strong><br>
+  $\mathcal{F}_1 \neq \mathcal{F}_2$ を異なる Z超フィルターとする。<br>
+  包含関係の極大性から、あるゼロ集合 $Z_1 \in \mathcal{F}_1$ と $Z_2 \in \mathcal{F}_2$ が存在して $Z_1 \cap Z_2 = \varnothing$ となる。<br>
+  $X$ の完全正則性より、$Z_1$ 上で $0$、$Z_2$ 上で $1$ をとる連続関数 $g \in C^*(X)$ が存在する。<br>
+  このとき、$Z_1 \subset Z_{1/3}(g, 0)$ より $\lim_{\mathcal{F}_1} g = 0$ となる一方、$Z_2 \subset Z_{1/3}(g, 1)$ より $\lim_{\mathcal{F}_2} g = 1$ となる。<br>
+  したがって $g \in M^{*\mathcal{F}_1}$ であるが $g \notin M^{*\mathcal{F}_2}$ となり、$M^{*\mathcal{F}_1} \neq M^{*\mathcal{F}_2}$ が示された。<br><br>
+
+  <strong>4. 固定と自由の対応：</strong><br>
+  最後に、極大イデアル $M^{*\mathcal{F}}$ が固定されている（ある $x \in X$ について $M^{*\mathcal{F}} = M_x$ となる）ことの同値条件を調べる。<br>
+  $M^{*\mathcal{F}} = M_x$<br>
+  $\iff$ 任意の $f \in C^*(X)$ について $\lim_{\mathcal{F}} f = f(x)$<br>
+  $\iff$ $\mathcal{F}$ は点 $x$ に収束する。<br>
+  $\mathcal{F}$ は Z超フィルターであるから、これが $x$ に収束することは $\mathcal{F} = \mathcal{F}_x$（すなわち $\mathcal{F}$ が $x$ に固定されている）ことと同値である。<br>
+  この対偶をとれば、「$M^{*\mathcal{F}}$ が自由極大イデアルである」ことと「$\mathcal{F}$ が自由 Z超フィルターである（定理 3.1 により $\beta X \smallsetminus X$ の点である）」ことは完全に同値となる。$\blacksquare$
+</div>
+
+<h2>第5部：Stone-Čech コンパクト化の他の構成法との対応</h2>
+
+<div class="explanation">
+  <p>Stone-Čech コンパクト化 $\beta X$ には、Z超フィルターを用いた構成法以外にも、いくつか有名な構成法が存在します。ここでは代表的な2つの構成法（チコノフ立方体への埋め込み、および可換 $C^*$-環のスペクトル）を挙げ、それらが本稿で解説したZ超フィルターや極大イデアルとどのように対応しているのかを概説します。</p>
+</div>
+
+<div class="math-block theorem">
+  <div class="theorem-title">構成法A：チコノフ立方体 (Tychonoff cube) への埋め込み</div>
+  <p>$\mathcal{C} = C(X, [0, 1])$ を $X$ 上の $[0, 1]$ に値をとる連続関数全体からなる集合とする。写像 $e: X \to [0, 1]^{\mathcal{C}}$ を、$e(x) = (f(x))_{f \in \mathcal{C}}$ によって定義する（評価写像）。この写像 $e$ によって、完全正則空間 $X$ はチコノフ立方体 $[0, 1]^{\mathcal{C}}$ の部分空間と同相になるよう埋め込まれる。この像の閉包 $\overline{e(X)}$ を $\beta X$ と定義する構成法である。</p>
+  <hr>
+  <p><strong>Z超フィルターとの対応：</strong><br>
+  チコノフ立方体の閉包 $\overline{e(X)}$ の点 $p = (p_f)_{f \in \mathcal{C}}$ は、各連続関数 $f \in \mathcal{C}$ に対して一つの実数値 $p_f \in [0, 1]$ を割り当てる役割を持ちます。これは第4部で定義した「Z超フィルター $\mathcal{F}$ に沿った極限」そのものです。<br>
+  すなわち、任意のZ超フィルター $\mathcal{F}$ に対して、$p_f = \lim_{\mathcal{F}} f$ とおくことで、$\overline{e(X)}$ の点が定まります。逆に $\overline{e(X)}$ の点 $p$ が与えられたとき、$p$ に収束する $X$ 上のフィルターを考えることで、対応する一意のZ超フィルターが復元できます。座標 $p_f$ は「無限遠点における関数 $f$ の極限値」を直接的に表していることになります。</p>
+</div>
+
+<div class="math-block theorem">
+  <div class="theorem-title">構成法B：可換 $C^*$-環の Gelfand 表現 (スペクトル)</div>
+  <p>有界連続関数環 $C^*(X)$ は、一様ノルム $\|f\| = \sup_{x \in X} |f(x)|$ に関して可換な Banach 環であり、さらに自然な対合によって可換 $C^*$-環となる。Gelfand 表現定理によれば、単位元を持つ可換 $C^*$-環 $A$ は、その極大イデアル空間（スペクトル）$\Sigma$ 上の連続関数環 $C(\Sigma)$ と等長同型になる。この $C^*(X)$ のスペクトル $\Sigma$ を $\beta X$ と定義する構成法である。</p>
+  <hr>
+  <p><strong>極大イデアルおよびZ超フィルターとの対応：</strong><br>
+  第4部で証明した通り、$C^*(X)$ の極大イデアルはZ超フィルターと一対一に対応しています。Gelfand 表現におけるスペクトル $\Sigma$ はまさに「$C^*(X)$ の極大イデアル全体の集合」に weak* 位相（汎弱位相）を入れた空間です。<br>
+  スペクトル $\Sigma$ における位相は、「各 $f \in C^*(X)$ に対して、極大イデアル $M$ を剰余体 $\mathbb{R}$ の値へと送る写像 $M \mapsto f \bmod M$ が連続になるような最弱の位相」として定義されます。これは、第3部で導入した「ゼロ集合の閉包 $\overline{Z}$ を閉基とする位相」と完全に一致します。代数的な極大イデアル空間を用いた $\beta X$ の構成は、幾何学的なZ超フィルター空間の構成を関数解析学の言葉で翻訳したものに他なりません。</p>
+</div>
+
+<div class="references">
+  <h2>引用文献</h2>
+  <ul>
+    <li>Gillman, L., & Jerison, M. (1960). <i>Rings of Continuous Functions</i>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4615-7819-2" target="_blank" rel="noopener noreferrer">Springer Link</a></li>
+    <li>Engelking, R. (1989). <i>General Topology</i> (Revised and completed ed.). Heldermann Verlag. <a href="https://www.heldermann.de/SSPM/SSPM06/sspm06.htm" target="_blank" rel="noopener noreferrer">Heldermann Verlag</a></li>
+  </ul>
+</div>
+
+</body>
+</html>
