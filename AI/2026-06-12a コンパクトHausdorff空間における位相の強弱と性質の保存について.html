@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクトHausdorff空間における位相の強弱と性質の保存について</title>
+    
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                packages: {'[+]': ['base', 'ams']}
+            },
+            chtml: {
+                matchFontHeight: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            color: #333;
+        }
+        h1, h2, h3 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        .definition, .lemma, .theorem, .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .proof {
+            margin-left: 15px;
+            margin-bottom: 20px;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+        }
+        .informal {
+            background-color: #eef7e5;
+            border-left: 4px solid #5c9e31;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            margin-top: 40px;
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>コンパクトHausdorff空間における位相の強弱と性質の保存について</h1>
+
+    <div class="informal">
+        <p>位相空間論における重要なテーマとして、「コンパクトHausdorff空間の位相を強めたり、弱めたりした場合に、その空間の性質がどのように変化するか」という問題があります。この記事では、この疑問に対して厳密かつ丁寧に解説します。</p>
+        <p>結論から申し上げますと、コンパクトHausdorff空間の位相は、Hausdorff性を保ったままこれ以上弱くできず、コンパクト性を保ったままこれ以上強くできないという「絶妙なバランス」の上に成り立っています。したがって、元の位相から真に強い位相を入れても、真に弱い位相を入れても、コンパクトHausdorff空間のままであることはあり得ません。</p>
+        <p>この事実を完全に理解できるよう、自己完結的な構成で基本概念の定義から出発し、証明と具体例を詳述します。</p>
+    </div>
+
+    <h2>1. 基本概念の定義</h2>
+    <p>数学的な議論を厳密に進めるため、まずは必要となる基本概念を定義する。</p>
+
+    <div class="definition">
+        <strong>定義 1.1 (位相と開集合・閉集合).</strong><br>
+        集合 $X$ 上の位相 (topology) とは、$X$ の部分集合の族 $\mathcal{O}$ であり、以下の公理を満たすものである。
+        <ul>
+            <li>$\varnothing \in \mathcal{O}$ かつ $X \in \mathcal{O}$ である。</li>
+            <li>$U_1, U_2 \in \mathcal{O}$ ならば $U_1 \cap U_2 \in \mathcal{O}$ である。</li>
+            <li>任意の添字集合 $\Lambda$ に対して、各 $\lambda \in \Lambda$ で $U_\lambda \in \mathcal{O}$ ならば $\bigcup_{\lambda \in \Lambda} U_\lambda \in \mathcal{O}$ である。</li>
+        </ul>
+        $\mathcal{O}$ の元を $X$ の開集合 (open set) と呼ぶ。また、$X$ の部分集合 $F$ が閉集合 (closed set) であるとは、その補集合 $X \smallsetminus F$ が開集合であることを言う。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.2 (位相の強弱).</strong><br>
+        集合 $X$ 上の2つの位相 $\mathcal{O}_1, \mathcal{O}_2$ に対して、$\mathcal{O}_1 \subset \mathcal{O}_2$ が成り立つとき、$\mathcal{O}_2$ は $\mathcal{O}_1$ より強い (finer)、あるいは $\mathcal{O}_1$ は $\mathcal{O}_2$ より弱い (coarser) と言う。さらに $\mathcal{O}_1 \neq \mathcal{O}_2$ であるとき、$\mathcal{O}_2$ は $\mathcal{O}_1$ より真に強い、$\mathcal{O}_1$ は $\mathcal{O}_2$ より真に弱いと言う。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.3 (Hausdorff空間).</strong><br>
+        位相空間 $X$ がHausdorff空間 (Hausdorff space) であるとは、任意の異なる2点 $x, y \in X$ ($x \neq y$) に対して、$x \in U$, $y \in V$, $U \cap V = \varnothing$ を満たす開集合 $U, V$ が存在することを言う。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.4 (コンパクト空間と相対位相).</strong><br>
+        位相空間 $X$ の開被覆 (open cover) とは、$X$ の開集合からなる族 $\mathcal{U}$ であり、$X = \bigcup \mathcal{U}$ を満たすものを言う。位相空間 $X$ がコンパクト (compact) であるとは、$X$ の任意の開被覆 $\mathcal{U}$ に対して、有限個の元 $U_1, \dots, U_n \in \mathcal{U}$ が存在して $X = \bigcup_{i=1}^n U_i$ とできることを言う。この有限個の開集合による被覆を有限部分被覆 (finite subcover) と呼ぶ。<br><br>
+        また、$X$ の部分集合 $A$ に対して、相対位相 (relative topology) を $\mathcal{O}_A = \{ U \cap A \mid U \in \mathcal{O} \}$ によって定める。部分集合 $A$ がコンパクトであるとは、$A$ に相対位相を入れた部分空間 (subspace) がコンパクト空間であることを言う。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.5 (連続写像と同相写像).</strong><br>
+        位相空間 $X$ から $Y$ への写像 $f: X \to Y$ が連続 (continuous) であるとは、$Y$ の任意の開集合 $V$ に対して、その逆像 $f^{-1}(V) = \{x \in X \mid f(x) \in V\}$ が $X$ の開集合になることを言う。<br>
+        また、$f$ が全単射であり、$f$ もその逆写像 $f^{-1}$ もともに連続であるとき、$f$ を同相写像 (homeomorphism) と言う。同相写像が存在するとき、二つの空間は位相的に同型であるとみなす。
+    </div>
+
+    <h2>2. 準備となる補題とその証明</h2>
+    <p>主定理を証明するための鍵となる「コンパクト空間からHausdorff空間への連続全単射は同相写像である」という基本定理を導くため、3つの標準的な補題を丁寧に証明する。</p>
+
+    <div class="lemma">
+        <strong>補題 A.</strong><br>
+        コンパクト空間の閉部分集合はコンパクトである。
+    </div>
+    <div class="proof">
+        <strong>証明：</strong><br>
+        $X$ をコンパクト空間、$F \subset X$ を閉集合とする。$F$ に相対位相を与えた空間がコンパクトであることを示すため、$F$ の任意の開被覆を $\mathcal{V}$ とする。<br>
+        相対位相の定義より、各 $V \in \mathcal{V}$ はある $X$ の開集合 $U_V$ を用いて $V = U_V \cap F$ と書ける。このとき、族 $\mathcal{U} = \{U_V \mid V \in \mathcal{V}\}$ は $F \subset \bigcup \mathcal{U}$ を満たす。<br>
+        $F$ は閉集合であるから、その補集合 $X \smallsetminus F$ は $X$ の開集合である。したがって、$\mathcal{U} \cup \{X \smallsetminus F\}$ は $X$ の開集合からなる族であり、全体として $X$ を被覆する開被覆となる。<br>
+        $X$ はコンパクトであるから、この開被覆は有限部分被覆を持つ。すなわち、有限個の $V_1, \dots, V_n \in \mathcal{V}$ が存在して、$X \subset U_{V_1} \cup \dots \cup U_{V_n} \cup (X \smallsetminus F)$ となる。<br>
+        この両辺と $F$ の共通部分をとると、$F \cap (X \smallsetminus F) = \varnothing$ であるため、$F \subset (U_{V_1} \cap F) \cup \dots \cup (U_{V_n} \cap F) = V_1 \cup \dots \cup V_n$ を得る。<br>
+        これは $\mathcal{V}$ の有限部分被覆であるため、$F$ はコンパクトである。<div class="qed">(Q.E.D.)</div>
+    </div>
+
+    <div class="lemma">
+        <strong>補題 B.</strong><br>
+        Hausdorff空間のコンパクト部分集合は閉集合である。
+    </div>
+    <div class="proof">
+        <strong>証明：</strong><br>
+        $X$ をHausdorff空間、$K \subset X$ をコンパクト部分集合とする。$K$ が閉集合であることを示すには、補集合 $X \smallsetminus K$ が開集合であること、すなわち任意の $x \in X \smallsetminus K$ に対して $x \in U \subset X \smallsetminus K$ を満たす開集合 $U$ が存在することを示せばよい。<br>
+        点 $x \in X \smallsetminus K$ を任意に固定する。各 $y \in K$ に対して $x \neq y$ である。$X$ はHausdorff空間であるから、$x \in U_y$、$y \in V_y$、$U_y \cap V_y = \varnothing$ を満たす開集合 $U_y, V_y$ が存在する。<br>
+        このとき、族 $\{V_y \cap K \mid y \in K\}$ は $K$ の相対位相における開被覆である。$K$ はコンパクトであるから、有限個の点 $y_1, \dots, y_m \in K$ が存在して、$K \subset V_{y_1} \cup \dots \cup V_{y_m}$ とできる。<br>
+        ここで、$U = U_{y_1} \cap \dots \cap U_{y_m}$ および $V = V_{y_1} \cup \dots \cup V_{y_m}$ と置く。$U$ は有限個の開集合の共通部分なので開集合であり、$V$ も開集合の和なので開集合である。<br>
+        各 $i$ について $x \in U_{y_i}$ であるから $x \in U$ である。また $K \subset V$ である。<br>
+        さらに、各 $i$ について $U_{y_i} \cap V_{y_i} = \varnothing$ であるため、$U \subset U_{y_i}$ より $U \cap V_{y_i} = \varnothing$ となる。したがって $U \cap V = \varnothing$ である。<br>
+        $K \subset V$ であることから $U \cap K = \varnothing$ であり、これは $U \subset X \smallsetminus K$ を意味する。<br>
+        よって、$X \smallsetminus K$ は開集合となり、$K$ は閉集合である。<div class="qed">(Q.E.D.)</div>
+    </div>
+
+    <div class="lemma">
+        <strong>補題 C.</strong><br>
+        連続写像によるコンパクト集合の像はコンパクトである。
+    </div>
+    <div class="proof">
+        <strong>証明：</strong><br>
+        $f: X \to Y$ を連続写像とし、$K \subset X$ をコンパクト部分集合とする。像 $f(K)$ が $Y$ の部分空間としてコンパクトであることを示す。<br>
+        $\mathcal{V}$ を $f(K)$ の相対位相における開被覆とする。各 $V \in \mathcal{V}$ は、$Y$ のある開集合 $W_V$ を用いて $V = W_V \cap f(K)$ と表せる。<br>
+        $f$ は連続であるから、各 $W_V$ の逆像 $f^{-1}(W_V)$ は $X$ の開集合である。したがって、族 $\{f^{-1}(W_V) \cap K \mid V \in \mathcal{V}\}$ は $K$ の相対位相における開被覆となる（任意の $x \in K$ に対し $f(x) \in f(K) \subset \bigcup_{V \in \mathcal{V}} W_V$ であるため）。<br>
+        $K$ はコンパクトであるから、有限個の $V_1, \dots, V_k \in \mathcal{V}$ が存在して、$K \subset f^{-1}(W_{V_1}) \cup \dots \cup f^{-1}(W_{V_k})$ と被覆できる。<br>
+        両辺の $f$ による像をとると、$f(K) \subset W_{V_1} \cup \dots \cup W_{V_k}$ となる。これと $f(K)$ の共通部分をとれば、$f(K) \subset V_1 \cup \dots \cup V_k$ が得られる。<br>
+        したがって、$f(K)$ はコンパクトである。<div class="qed">(Q.E.D.)</div>
+    </div>
+
+    <div class="lemma">
+        <strong>補題 D (コンパクトHausdorff空間に関する基本定理).</strong><br>
+        $X$ をコンパクト空間、$Y$ をHausdorff空間とする。このとき、連続全単射 $f: X \to Y$ は同相写像である。
+    </div>
+    <div class="proof">
+        <strong>証明：</strong><br>
+        $f$ が全単射であるから、逆写像 $f^{-1}: Y \to X$ が一意に存在する。$f$ が同相写像であることを示すには、$f^{-1}$ が連続であることを示せばよい。<br>
+        一般に、写像が連続であることは、「任意の閉集合の逆像が閉集合であること」と同値である。したがって、$X$ の任意の閉集合 $F$ に対して、$(f^{-1})^{-1}(F) = f(F)$ が $Y$ の閉集合であることを示せば十分である。<br>
+        $F$ を $X$ の任意の閉集合とする。補題 A より、$X$ がコンパクトであるため $F$ もコンパクトである。<br>
+        $f$ は連続写像であるから、補題 C より、その像 $f(F)$ は $Y$ のコンパクト部分集合となる。<br>
+        $Y$ はHausdorff空間であるから、補題 B より、$Y$ のコンパクト部分集合 $f(F)$ は閉集合である。<br>
+        以上より、$f^{-1}$ は閉集合を閉集合に引き戻すため連続であり、$f$ は同相写像である。<div class="qed">(Q.E.D.)</div>
+    </div>
+
+    <h2>3. 各問いへの解答と証明</h2>
+    <p>これまでに準備した補題 D を用いて、元の問いに対する厳密な解答を与える。</p>
+
+    <div class="theorem">
+        <strong>定理 1 (真に強い位相を入れた場合).</strong><br>
+        $X$ をコンパクトHausdorff空間とする。$X$ に元の位相よりも真に強い位相を入れてできる位相空間 $X_s$ は、コンパクトHausdorffのままであり得ない。
+    </div>
+    <div class="proof">
+        <strong>証明：</strong><br>
+        $X$ の元の位相を $\mathcal{O}$ とし、$X_s$ の位相を $\mathcal{O}_s$ とする。仮定より $\mathcal{O} \subset \mathcal{O}_s$ かつ $\mathcal{O} \neq \mathcal{O}_s$ である。<br>
+        もし、$X_s = (X, \mathcal{O}_s)$ がコンパクトHausdorff空間のままであり得ると仮定して矛盾を導く。<br>
+        恒等写像 $\text{id}: X_s \to X$ （すなわち $\text{id}(x) = x$）を考える。<br>
+        $\mathcal{O}$ の任意の開集合 $U$ に対して、その逆像は $\text{id}^{-1}(U) = U$ である。$\mathcal{O} \subset \mathcal{O}_s$ であるから $U \in \mathcal{O}_s$ となり、$\text{id}^{-1}(U)$ は $X_s$ の開集合である。よって $\text{id}: X_s \to X$ は連続写像である。また、明らかに全単射である。<br>
+        仮定より、始域 $X_s$ はコンパクト空間であり、終域 $X = (X, \mathcal{O})$ はHausdorff空間である。したがって、補題 D により、連続全単射 $\text{id}$ は同相写像となる。<br>
+        同相写像は開写像 (open map) でもあるため、始域の任意の開集合 $V \in \mathcal{O}_s$ の像 $\text{id}(V) = V$ は終域の開集合、すなわち $V \in \mathcal{O}$ となる。<br>
+        これは $\mathcal{O}_s \subset \mathcal{O}$ を意味する。すでに $\mathcal{O} \subset \mathcal{O}_s$ であるから $\mathcal{O} = \mathcal{O}_s$ が導かれるが、これは $\mathcal{O}_s$ が $\mathcal{O}$ より真に強い（$\mathcal{O} \neq \mathcal{O}_s$）という仮定に矛盾する。<br>
+        したがって、$X_s$ がコンパクトHausdorff空間であるという仮定は誤りであり、$X_s$ はコンパクトHausdorffのままであり得ない。<div class="qed">(Q.E.D.)</div>
+    </div>
+
+    <div class="theorem">
+        <strong>定理 2 (真に弱い位相を入れた場合).</strong><br>
+        $X$ をコンパクトHausdorff空間とする。$X$ に元の位相よりも真に弱い位相を入れてできる位相空間 $X_w$ は、コンパクトHausdorffのままであり得ない。
+    </div>
+    <div class="proof">
+        <strong>証明：</strong><br>
+        $X$ の元の位相を $\mathcal{O}$ とし、$X_w$ の位相を $\mathcal{O}_w$ とする。仮定より $\mathcal{O}_w \subset \mathcal{O}$ かつ $\mathcal{O}_w \neq \mathcal{O}$ である。<br>
+        もし、$X_w = (X, \mathcal{O}_w)$ がコンパクトHausdorff空間のままであり得ると仮定して矛盾を導く。<br>
+        恒等写像 $\text{id}: X \to X_w$ を考える。<br>
+        $\mathcal{O}_w$ の任意の開集合 $V$ に対して、$\text{id}^{-1}(V) = V$ である。$\mathcal{O}_w \subset \mathcal{O}$ であるから $V \in \mathcal{O}$ となり、$\text{id}^{-1}(V)$ は $X$ の開集合である。よって $\text{id}: X \to X_w$ は連続写像であり、明らかに全単射である。<br>
+        元の空間 $X = (X, \mathcal{O})$ はコンパクト空間であり、仮定より終域 $X_w$ はHausdorff空間である。したがって、補題 D により、連続全単射 $\text{id}$ は同相写像となる。<br>
+        同相写像であることから、逆写像 $\text{id}^{-1}: X_w \to X$ も連続である。すなわち、$\mathcal{O}$ の任意の開集合 $U$ の逆像 $(\text{id}^{-1})^{-1}(U) = U$ は $\mathcal{O}_w$ の開集合となる。<br>
+        これは $\mathcal{O} \subset \mathcal{O}_w$ を意味する。すでに $\mathcal{O}_w \subset \mathcal{O}$ であるから $\mathcal{O} = \mathcal{O}_w$ となるが、これは $\mathcal{O}_w$ が $\mathcal{O}$ より真に弱い（$\mathcal{O}_w \neq \mathcal{O}$）という仮定に矛盾する。<br>
+        したがって、$X_w$ はコンパクトHausdorffのままであり得ない。<div class="qed">(Q.E.D.)</div>
+    </div>
+
+    <h2>4. 理解を深めるための具体例</h2>
+    <p>位相を「強くする」「弱くする」ことで、コンパクトHausdorff空間の性質が具体的にどのように崩れるかを、実数の単位閉区間を例に確認する。</p>
+
+    <div class="example">
+        <strong>例 1 (真に強い位相を入れてコンパクト性が失われる例).</strong><br>
+        実数の単位閉区間 $I = [0, 1]$ に、通常の距離から定まる位相 $\mathcal{O}$ を入れる。空間 $(I, \mathcal{O})$ はハイネ・ボレルの定理よりコンパクトであり、またHausdorff空間である。<br>
+        ここで、$I$ に離散位相 (discrete topology) $\mathcal{O}_s$ を入れる。離散位相とは、$I$ の全ての部分集合が開集合となる位相である。通常の開集合も当然 $\mathcal{O}_s$ に含まれるため $\mathcal{O} \subset \mathcal{O}_s$ であり、単元集合 $\{0\}$ のように $\mathcal{O}$ には含まれないが $\mathcal{O}_s$ には含まれる集合が存在するため、$\mathcal{O}_s$ は $\mathcal{O}$ より真に強い。<br>
+        空間 $I_s = (I, \mathcal{O}_s)$ は、任意の異なる2点を単元集合という開集合で分離できるためHausdorff空間である。しかし、開被覆として単元集合の族 $\mathcal{U} = \{\{x\} \mid x \in I\}$ を考えると、$I$ は無限集合であるため、この $\mathcal{U}$ からどのように有限個の開集合を選んでも $I$ 全体を被覆することはできない。したがって、$I_s$ はコンパクト性を失っている。
+    </div>
+
+    <div class="example">
+        <strong>例 2 (真に弱い位相を入れてHausdorff性が失われる例).</strong><br>
+        同じく通常の単位閉区間 $(I, \mathcal{O})$ を考える。<br>
+        ここで、$I$ に密着位相 (indiscrete topology) $\mathcal{O}_w = \{\varnothing, I\}$ を入れる。明らかに $\mathcal{O}_w \subset \mathcal{O}$ かつ $\mathcal{O}_w \neq \mathcal{O}$ であるため、$\mathcal{O}_w$ は $\mathcal{O}$ より真に弱い。<br>
+        空間 $I_w = (I, \mathcal{O}_w)$ の開被覆は、事実上 $\{I\}$ しか存在せず、これはそれ自身が有限被覆であるため、$I_w$ はコンパクト空間である。しかし、$I_w$ はHausdorff空間ではない。なぜなら、異なる2点 $0, 1 \in I$ を分離するような空でない開集合は $I$ そのものしか存在せず、互いに交わらない開集合を取ることが不可能だからである。したがって、$I_w$ はHausdorff性を失っている。
+    </div>
+
+    <div class="informal">
+        <h2>5. インフォーマルな注意・解説</h2>
+        <p>証明と具体例から明らかなように、コンパクトHausdorff空間において、</p>
+        <ul>
+            <li>位相を真に<strong>強くする</strong>と、Hausdorff性は保たれやすいですが、<strong>コンパクト性が必ず崩壊します。</strong></li>
+            <li>位相を真に<strong>弱くする</strong>と、コンパクト性は保たれやすいですが、<strong>Hausdorff性が必ず崩壊します。</strong></li>
+        </ul>
+        <p>この事実から、コンパクトHausdorff空間における位相は、「Hausdorff性を保ったままこれ以上弱くできない極小の位相」であり、同時に「コンパクト性を保ったままこれ以上強くできない極大の位相」であるという、非常に強固で一意的なバランスを保っていることがわかります。</p>
+        
+        <h3>発展的な話題：clopen 集合と 超不連結 (extremally disconnected) 空間</h3>
+        <p>本題の証明では直接使用しませんでしたが、コンパクトHausdorff空間に関連する極めて興味深い概念に、<strong>超不連結 (extremally disconnected)</strong> な空間があります。</p>
+        <p>通常の位相空間において、開集合であり同時に閉集合でもあるような部分集合を <strong>clopen</strong> 集合（開閉集合）と呼びます。コンパクトHausdorff空間の中でも、<strong>「任意の開集合の閉包 (closure) が、再び clopen 集合になる」</strong>という極端に強い性質を持つ空間のことを、超不連結な空間と呼びます。</p>
+        <p>例えば、離散位相空間の <strong>Stone Čechコンパクト化</strong> は、超不連結なコンパクトHausdorff空間の代表例として知られています。このような空間は、関数解析やブール代数の表現論において中心的な役割を果たします。コンパクトHausdorff空間の剛性を理解した上で、このような極端な空間の振る舞いを学ぶと、位相空間論の奥深さをさらに味わうことができるでしょう。</p>
+    </div>
+
+    <div class="references">
+        <h2>引用文献</h2>
+        <p>本記事の定理や補題は、一般位相共空間論における標準的な結果に基づいています。以下の文献にてより深い議論を確認できます。</p>
+        <ul>
+            <li>Munkres, James R. <i>Topology</i> (2nd Edition). Prentice Hall, 2000. <br>
+            <a href="https://en.wikipedia.org/wiki/Topology_(book)" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Topology_(book)</a></li>
+            <li>Willard, Stephen. <i>General Topology</i>. Dover Publications, 2004.<br>
+            <a href="https://store.doverpublications.com/products/9780486434797" target="_blank" rel="noopener noreferrer">https://store.doverpublications.com/products/9780486434797</a></li>
+            <li>Gillman, Leonard, and Jerison, Meyer. <i>Rings of Continuous Functions</i>. Springer, 1976. (超不連結空間やStone Čechコンパクト化の詳述)<br>
+            <a href="https://link.springer.com/book/10.1007/978-1-4615-7819-2" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4615-7819-2</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>
