@@ -30,7 +30,7 @@
   h3 { margin-top: 30px; color: #34495e; font-size: 1.2em; border-left: 3px solid #7f8c8d; padding-left: 10px; }
   p { margin-bottom: 15px; text-align: justify; }
   ul, ol { margin-bottom: 20px; }
-  .definition, .theorem, .proposition, .lemma, .example {
+  .definition, .theorem, .proposition, .lemma, .example, .column {
     border-left: 5px solid #3498db;
     background-color: #f0f8ff;
     padding: 15px 20px;
@@ -38,11 +38,18 @@
     border-radius: 0 5px 5px 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   }
-  .definition-title, .theorem-title, .proposition-title, .lemma-title, .example-title {
+  .column {
+    border-left-color: #9b59b6;
+    background-color: #f9f0ff;
+  }
+  .definition-title, .theorem-title, .proposition-title, .lemma-title, .example-title, .column-title {
     font-weight: bold;
     color: #2980b9;
     margin-bottom: 10px;
     font-size: 1.1em;
+  }
+  .column-title {
+    color: #8e44ad;
   }
   .proof {
     border-left: 5px solid #2ecc71;
@@ -92,9 +99,74 @@
 <h1>関数環論と位相空間論：ゼロ集合から超実数の構成と、実・複素関数環の差異</h1>
 
 <p>本記事では、位相空間 $X$ 上の連続関数環から出発し、関数が決定する「ゼロ集合」を用いて位相空間を再構成する理論から、無限大を厳密に扱う「超実数 (hyperreal number)」が非標準解析 (nonstandard analysis) 的に誕生する極限の世界までを体系的かつ厳密に解説します。</p>
-<p>また、これまでの議論で不適切に省略されてしまっていた「関数の値域が実数である場合と複素数である場合の違い」について、記法を厳密に区別した上で詳細に論じます。特に、完全正則空間において正規性が欠如した場合に「Z超フィルター」と「閉超フィルター」の対応がどのように崩れるのかの証明や、実数値関数環から超実数体が構成される過程を、証明を省くことなく自己完結 (self-contained) に展開します。</p>
+<p>また、「関数の値域が実数である場合と複素数である場合の違い」について記法を厳密に区別した上で詳細に論じ、完全正則空間において正規性が欠如した場合に「Z超フィルター」と「閉超フィルター」の対応がどのように崩れるのかの証明や、実数値関数環から超実数体が構成される過程を、自己完結 (self-contained) に展開します。</p>
 
-<h2>1. ゼロ集合と位相空間の再構成</h2>
+<h2>1. 位相空間の分離公理：正則・完全正則・正規</h2>
+
+<p>関数環と位相空間の関係を論じる上で、位相空間が持つ「分離公理（点を閉集合や開集合でどれだけ分離できるか）」の強弱が決定的な役割を果たします。本論に入る前に、主要な分離公理の定義を明確にします。（以下、各空間は $T_1$ 公理、すなわち任意の1点が閉集合であることを満たすとします。したがって、本記事における完全正則空間は自動的に Hausdorff 空間となります。）</p>
+
+<div class="definition">
+<div class="definition-title">定義 (正則・完全正則・正規)</div>
+位相空間 $X$ における分離公理を以下のように定義する。
+<ul>
+    <li><strong>正則空間 (Regular space / $T_3$ 空間):</strong><br>
+    任意の閉集合 $F \subset X$ と、その外側にある任意の点 $x \notin F$ に対して、互いに素な開集合 $U, V$ が存在し、$x \in U$ かつ $F \subset V$ とできる空間。</li>
+    <li><strong>完全正則空間 (Completely regular space / Tychonoff 空間):</strong><br>
+    任意の閉集合 $F \subset X$ と、その外側にある任意の点 $x \notin F$ に対して、実数値連続関数 $f: X \to [0, 1]$ が存在し、$f(x) = 0$ かつ $f(F) \subset \{1\}$ と分離できる空間。</li>
+    <li><strong>正規空間 (Normal space / $T_4$ 空間):</strong><br>
+    交わりを持たない任意の2つの閉集合 $F_1, F_2 \subset X$ ($F_1 \cap F_2 = \varnothing$) に対して、互いに素な開集合 $U, V$ が存在し、$F_1 \subset U$ かつ $F_2 \subset V$ とできる空間。</li>
+</ul>
+</div>
+
+<p>これらの空間には <strong>「正規空間 $\implies$ 完全正則空間 $\implies$ 正則空間」</strong> という強弱の包含関係があります。このうち、「正規空間ならば完全正則空間になる」という事実は、次節で証明する Urysohn の補題から直接導かれます。</p>
+
+<h2>2. 正規空間における基本定理：Urysohn の補題と Tietze の拡張定理</h2>
+
+<p>正規空間上で連続関数が豊富に存在することを保証する、位相空間論における最も重要な2つの定理を証明します。</p>
+
+<div class="theorem">
+<div class="theorem-title">定理 (Urysohn の補題)</div>
+$X$ を正規空間とする。$X$ の交わりを持たない任意の閉集合 $A, B$ に対して、連続関数 $f: X \to [0, 1]$ が存在して、$f(A) \subset \{0\}$ かつ $f(B) \subset \{1\}$ を満たす。
+</div>
+<div class="proof">
+<div class="proof-title">証明</div>
+$D$ を区間 $[0, 1]$ 内の2進有理数全体の集合、すなわち $D = \{ \frac{k}{2^n} \mid n \ge 1, 0 \le k \le 2^n \}$ とする。<br>
+各 $r \in D$ に対して、以下の条件を満たす開集合 $U_r$ を帰納的に構成する：<br>
+条件：$r \lt s$ ならば $\overline{U_r} \subset U_s$。<br><br>
+まず、$r=1$ に対し $U_1 = X \smallsetminus B$ とおく。$A \cap B = \varnothing$ より $A \subset U_1$ である。正規性の定義（言い換えると、閉集合 $A$ とそれを含む開集合 $U_1$ があるとき、中間に閉包を挟む開集合をとれる性質）から、ある開集合 $U_0$ が存在して $A \subset U_0 \subset \overline{U_0} \subset U_1$ とできる。<br>
+次に $n$ に関する帰納法で $U_r$ を定める。$n=1$ のとき、$r = 1/2$ である。$\overline{U_0} \subset U_1$（$\overline{U_0}$ は閉集合、$U_1$ は開集合）より、正規性を用いて開集合 $U_{1/2}$ をとり、$\overline{U_0} \subset U_{1/2} \subset \overline{U_{1/2}} \subset U_1$ とできる。<br>
+一般に分母が $2^n$ までの $r$ に対して構成できたとし、分母が $2^{n+1}$ の $r$ を考える。この $r$ は $r = \frac{2k+1}{2^{n+1}}$ の形であり、前段階で構成済みの $s_1 = \frac{k}{2^n}$ と $s_2 = \frac{k+1}{2^n}$ のちょうど中間に位置する。帰納法の仮定より $\overline{U_{s_1}} \subset U_{s_2}$ だから、再び正規性を用いて開集合 $U_r$ をとり、$\overline{U_{s_1}} \subset U_r \subset \overline{U_r} \subset U_{s_2}$ とできる。<br>
+この操作により、すべての $r \in D$ に対して条件を満たす $U_r$ が構成された。さらに、$r \lt 0$ に対しては $U_r = \varnothing$、$r \gt 1$ に対しては $U_r = X$ と定めておく。<br><br>
+関数 $f: X \to [0, 1]$ を次のように定義する：
+$$f(x) = \inf \{ r \in \mathbb{Q} \mid x \in U_r \}$$
+$x \in A$ ならば $x \in U_0$ より $f(x) \le 0$、ゆえに $f(x) = 0$。$x \in B$ ならば $x \notin U_1$ だからすべての $r \le 1$ について $x \notin U_r$、ゆえに $f(x) = 1$ である。<br>
+最後に $f$ が連続であることを示す。<br>
+$f(x) \lt a$ となるのは、ある $r \lt a$ が存在して $x \in U_r$ となるとき、またそのときに限る。したがって $f^{-1}([0, a)) = \bigcup_{r \lt a} U_r$ であり、これは開集合の和集合であるから開集合である。<br>
+また、$f(x) \gt b$ となるのは、ある $s \gt b$ が存在して $x \notin U_s$ となるときである。このとき、条件 $r \lt s$ なる $r \in D$（$b \lt r \lt s$ を満たすもの）をとれば $x \notin \overline{U_r}$。逆に $x \notin \overline{U_r}$ ならば $f(x) \ge r \gt b$ となるため、$f^{-1}((b, 1]) = \bigcup_{r \gt b} (X \smallsetminus \overline{U_r})$ であり、これも開集合である。<br>
+以上より、$f$ は連続関数である。
+</div>
+
+<div class="theorem">
+<div class="theorem-title">定理 (Tietze の拡張定理)</div>
+$X$ を正規空間、$F \subset X$ を閉集合とする。連続関数 $f: F \to [-1, 1]$ が与えられたとき、$X$ 全体で定義された連続関数 $\tilde{f}: X \to [-1, 1]$ であって、すべての $x \in F$ において $\tilde{f}(x) = f(x)$ を満たすものが存在する。
+</div>
+<div class="proof">
+<div class="proof-title">証明</div>
+Urysohn の補題を用いて、関数列 $\{g_n\}_{n=1}^\infty$ を構成する。<br>
+まず、$A_1 = \{ x \in F \mid f(x) \le -1/3 \}$、$B_1 = \{ x \in F \mid f(x) \ge 1/3 \}$ とおく。これらは $F$ 内の閉集合であり、$F$ は $X$ の閉集合であるから、$A_1, B_1$ は $X$ の閉集合である。また $A_1 \cap B_1 = \varnothing$ である。<br>
+Urysohn の補題より、連続関数 $g_1: X \to [-1/3, 1/3]$ が存在し、$g_1(A_1) \subset \{-1/3\}$ かつ $g_1(B_1) \subset \{1/3\}$ とできる。<br>
+このとき、$F$ 上で $|f(x) - g_1(x)| \le 2/3$ が成り立つ。<br>
+（$x \in A_1$ のとき $-1 \le f(x) \le -1/3, g_1(x) = -1/3$。$x \in B_1$ のとき $1/3 \le f(x) \le 1, g_1(x) = 1/3$。それ以外のとき $-1/3 \lt f(x) \lt 1/3, -1/3 \le g_1(x) \le 1/3$ となり、いずれの場合も差の絶対値は $2/3$ 以下である。）<br><br>
+次に、関数 $f_1 = f - g_1|_F$ を考える。$f_1: F \to [-2/3, 2/3]$ である。これに対して同様に、$A_2 = \{ x \in F \mid f_1(x) \le -\frac{1}{3}(\frac{2}{3}) \}$、$B_2 = \{ x \in F \mid f_1(x) \ge \frac{1}{3}(\frac{2}{3}) \}$ とおくと、Urysohn の補題より連続関数 $g_2: X \to [-\frac{1}{3}(\frac{2}{3}), \frac{1}{3}(\frac{2}{3})]$ であって、$F$ 上で $|f(x) - g_1(x) - g_2(x)| = |f_1(x) - g_2(x)| \le (\frac{2}{3})^2$ となるものが構成できる。<br><br>
+これを帰納的に繰り返し、各 $n$ について連続関数 $g_n: X \to \left[-\frac{1}{3}\left(\frac{2}{3}\right)^{n-1}, \frac{1}{3}\left(\frac{2}{3}\right)^{n-1}\right]$ であって、
+$$ \left| f(x) - \sum_{k=1}^n g_k(x) \right| \le \left(\frac{2}{3}\right)^n \quad (x \in F) $$
+を満たすものを得る。<br>
+級数 $\tilde{f}(x) = \sum_{n=1}^\infty g_n(x)$ を考える。$|g_n(x)| \le \frac{1}{3}\left(\frac{2}{3}\right)^{n-1}$ であり、右辺の和は等比級数として $1$ に収束するため、Weierstrass の M判定法によりこの級数は $X$ 上で一様絶対収束する。<br>
+連続関数の列の一様収束極限であるから、$\tilde{f}$ は $X$ 上の連続関数である。また $|\tilde{f}(x)| \le \sum |g_n(x)| \le 1$ より、値域は $[-1, 1]$ に含まれる。<br>
+さらに $x \in F$ に対しては、上記の評価より $n \to \infty$ とすることで $\tilde{f}(x) = f(x)$ が得られる。これで拡張定理が示された。
+</div>
+
+<h2>3. ゼロ集合と位相空間の再構成</h2>
 
 <p>関数がある点で値 $0$ をとるという解析的な事実は、空間の位相的構造を規定する強力な道具となります。まず、関数環の記法を厳密に定めた上でゼロ集合を定義します。</p>
 
@@ -108,7 +180,7 @@ $$Z(f) = \{x \in X \mid f(x) = 0\}$$
 
 <p>ここで重要なのは、<strong>ゼロ集合族 $Z(X)$ を考える上では、実数値関数と複素数値関数のどちらを出発点としても結果は全く同じになる</strong>ということです。なぜなら、任意の複素数値関数 $f \in C(X)$ は実部と虚部を用いて $f = g + ih$ （$g, h \in C(X, \mathbb{R})$）と分解でき、さらに実数値連続関数 $k(x) = |f(x)| = \sqrt{g(x)^2 + h(x)^2} \in C(X, \mathbb{R})$ を考えれば、$Z(f) = Z(k)$ が成立するからです。</p>
 
-<p>ゼロ集合族 $Z(X)$ は有限和と可算交叉について閉じており、連続関数の逆像であるため常に閉集合です。空間 $X$ が完全正則 (completely regular) Hausdorff 空間であるとき、$Z(X)$ は閉集合の基底となります。さらに $X$ が正規 (normal) 空間であれば、ゼロ集合のクラスは特筆すべき性質を持ちます。</p>
+<p>ゼロ集合族 $Z(X)$ は有限和と可算交叉について閉じており、連続関数の逆像であるため常に閉集合です。</p>
 
 <div class="proposition">
 <div class="proposition-title">命題 (正規空間におけるゼロ集合と閉 $G_\delta$ 集合の一致)</div>
@@ -123,9 +195,137 @@ $$F = \bigcap_{n=1}^\infty \left\{ x \in X \;\middle|\; |f(x)| \lt \frac{1}{n} \
 ここで級数 $f(x) = \sum_{n=1}^\infty 2^{-n} f_n(x)$ を考える。Weierstrass の M判定法よりこの級数は一様収束し、各 $f_n$ が連続であるため極限関数 $f \in C(X, \mathbb{R}) \subset C(X)$ も連続となる。構成より $x \in F$ ならばすべての $n$ で $f_n(x) = 0$ ゆえ $f(x) = 0$。一方 $x \notin F$ ならばある $m$ について $x \notin U_m$ となる。このとき $f_m(x) = 1 \gt 0$ となるため $f(x) \ge 2^{-m} \gt 0$ となる。したがって $F = Z(f)$ となり、$F$ はゼロ集合である。
 </div>
 
-<h2>2. Zフィルターと極大イデアルの対応</h2>
+<div class="column">
+<div class="column-title">コラム：$G_\delta$ 集合と $F_\sigma$ 集合の用語の由来</div>
+<p>位相空間論や測度論で頻出する「$G_\delta$ 集合」や「$F_\sigma$ 集合」という記号は、19世紀末から20世紀初頭にかけてのフランスとドイツの数学者たちの記法に由来しています。</p>
+<ul>
+    <li><strong>$G_\delta$ 集合（可算個の開集合の共通部分）：</strong><br>
+    $G$ はドイツ語で開集合（または領域）を意味する <strong>Gebiet</strong> の頭文字です。$\delta$ はドイツ語で共通部分（交わり）を意味する <strong>Durchschnitt</strong> の頭文字である $D$ に対応するギリシャ文字の小文字です。</li>
+    <li><strong>$F_\sigma$ 集合（可算個の閉集合の和集合）：</strong><br>
+    $F$ はフランス語で閉集合を意味する <strong>Fermé</strong> の頭文字です。$\sigma$ はフランス語で和集合（和）を意味する <strong>Somme</strong>（またはドイツ語の <strong>Summe</strong>）の頭文字である $S$ に対応するギリシャ文字の小文字です。</li>
+</ul>
+<p>このように、$G_\delta$ や $F_\sigma$ といった独特な記法には、トポロジーや実解析の形成期において理論を発展させたフランス学派（ルネ・ベールやアンリ・ルベーグなど）とドイツ学派（フェリックス・ハウスドルフなど）の歴史的背景が入り混じって今日に定着しています。</p>
+</div>
 
-<p>空間に「無限遠点」を付け加えてコンパクト化を行うために、フィルターの概念を導入します。ここでは複素数値の可換環 $C(X)$ との対応を厳密に示します。</p>
+<h2>4. 【解答】有界複素関数環 $C_b(X)$ におけるゼロ集合族と閉集合系の関係</h2>
+
+<p>ここでは、ご提示いただいた問題である<strong>「有界複素数値連続関数のなす可換 $C^*$ 環 $C_b(X)$ から定まる $Z(X)$ と、閉集合系 $\mathrm{Closed}(X)$ の関係」</strong>について、空間の条件ごとに解説します。</p>
+
+<p>大前提として、任意の連続関数 $f \in C(X)$ に対して、$g(x) = \frac{f(x)}{1 + |f(x)|}$ を考えると、$g \in C_b(X)$ であり、かつ $Z(f) = Z(g)$ となります。したがって、<strong>「$C_b(X)$ から生成されるゼロ集合族」は「すべての連続関数 $C(X)$ から生成されるゼロ集合族」と全く同じクラスになります。</strong></p>
+
+<h3>(1) $X$ が任意の位相空間の場合</h3>
+<p>位相空間に特別な分離公理を仮定しない場合、空間上の連続関数は定数関数しか存在しない可能性があります。一般に言えるのは、<strong>「任意のゼロ集合は閉集合である」すなわち $Z(X) \subset \mathrm{Closed}(X)$</strong> という包含関係のみです。<br>
+また、$Z(X)$ は有限和と可算交叉について閉じており、$X$ 上に元の位相よりも弱い完全正則位相（Tychonoff topology）を定義するための閉基底となります。</p>
+
+<h3>(2) $X$ が完全正則空間の場合</h3>
+<p>完全正則空間の定義そのものから、「任意の閉集合 $F$ とその外の点 $x$ は、連続関数（しかも $[0,1]$ に値をとる有界関数）で分離できる」ことが保証されています。このことは、<strong>「$Z(X)$ は $\mathrm{Closed}(X)$ の閉基底 (base for closed sets) をなす」</strong>ことを意味します。<br>
+すなわち、$X$ の任意の閉集合 $F \in \mathrm{Closed}(X)$ は、あるゼロ集合の族 $\{Z_\alpha\}_{\alpha \in \Lambda}$ の交叉 $F = \bigcap_{\alpha} Z_\alpha$ として完全に表現できます。以下にその証明を与えます。</p>
+
+<div class="proof">
+<div class="proof-title">証明：完全正則空間において $Z(X)$ が $\mathrm{Closed}(X)$ の閉基底となること</div>
+$X$ を完全正則空間とし、$F \subset X$ を任意の閉集合とする。閉基底の定義から、$F$ があるゼロ集合の族の共通部分として表せることを示せばよい。<br><br>
+$x \in X \smallsetminus F$ を任意にとる。$X$ は完全正則空間であるから、定義より連続関数 $g_x: X \to [0, 1]$ であって、$g_x(x) = 1$ かつ $g_x(F) \subset \{0\}$ を満たすものが存在する。<br>
+この $g_x$ に対してゼロ集合 $Z(g_x)$ を考えると、$g_x(F) = \{0\}$ より $F \subset Z(g_x)$ である。一方で $g_x(x) = 1 \neq 0$ であるから、$x \notin Z(g_x)$ となる。<br><br>
+これをすべての $x \in X \smallsetminus F$ について構成し、それらから得られるゼロ集合の共通部分 $Z_{\text{all}} = \bigcap_{x \notin F} Z(g_x)$ を考える。<br>
+すべての $x \notin F$ に対して $F \subset Z(g_x)$ であるから、$F \subset Z_{\text{all}}$ が成り立つ。逆に、任意の $x \notin F$ は $Z(g_x)$ に含まれないため、全体の共通部分である $Z_{\text{all}}$ にも含まれない。すなわち $Z_{\text{all}} \subset F$ である。<br><br>
+以上より $F = \bigcap_{x \notin F} Z(g_x)$ となり、任意の閉集合 $F$ はゼロ集合の交叉として表せる。したがって $Z(X)$ は $\mathrm{Closed}(X)$ の閉基底である。
+</div>
+
+<p>ただし、一般の閉集合そのものが単一のゼロ集合になるとは限らない（$Z(X) \subsetneq \mathrm{Closed}(X)$ となるのが普通である）点には注意が必要です。</p>
+
+<div class="proposition">
+<div class="proposition-title">命題 (イデアルによる閉集合の完全な記述)</div>
+$X$ が完全正則空間であるとき、$X$ の任意の閉集合 $F$ は、関数環 $C(X)$ （または $C_b(X)$）のあるイデアル $I$ を用いて次のように表される。
+$$F = Z(I) := \{x \in X \mid \forall f \in I, f(x) = 0\}$$
+すなわち、イデアルに対するゼロ集合 $Z(I)$ の全体は、空間 $X$ の閉集合系 $\mathrm{Closed}(X)$ と完全に一致する。
+</div>
+<div class="proof">
+<div class="proof-title">証明</div>
+$F \in \mathrm{Closed}(X)$ を任意の閉集合とする。直前に示した通り、$Z(X)$ は $\mathrm{Closed}(X)$ の閉基底であるから、ある連続関数の族 $S \subset C(X)$ が存在して、$F = \bigcap_{g \in S} Z(g)$ と書ける。<br><br>
+ここで、$S$ が生成する $C(X)$ のイデアルを $I$ とする。すなわち、$I$ の元 $f$ は、有限個の $g_k \in S$ と $h_k \in C(X)$ を用いて $f = \sum_{k=1}^n h_k g_k$ という形で表される。<br><br>
+任意の $x \in F$ をとる。$F$ の表現からすべての $g \in S$ について $g(x) = 0$ である。したがって、任意の $f \in I$ について $f(x) = \sum h_k(x)g_k(x) = 0$ となる。よって $x \in Z(I)$ であり、$F \subset Z(I)$ が成り立つ。<br><br>
+逆に、$S \subset I$ であるため、$Z(I) = \bigcap_{f \in I} Z(f) \subset \bigcap_{g \in S} Z(g) = F$ である。<br>
+ゆえに $F = Z(I)$ が示された。<br>
+（なお、関数環として有界連続関数環 $C_b(X)$ を考える場合も、族 $S$ を $C_b(X)$ の元からとり、生成されるイデアルを $C_b(X)$ 内で考えれば全く同様の論法で証明できる。）
+</div>
+
+<div class="column">
+<div class="column-title">コラム：環のスペクトル $\mathrm{Spec}(A)$ のザリスキー位相との類似</div>
+<p>上記で証明した「関数環のイデアル $I$ が空間 $X$ のすべての閉集合 $Z(I)$ を一意的に定める」という事実は、代数幾何学における<strong>ザリスキー位相 (Zariski topology)</strong> の構成と極めて美しい対応関係を持っています。</p>
+<p>任意の可換環 $A$ に対して、その素イデアル全体の集合を $\mathrm{Spec}(A)$（$A$ のスペクトル）と呼びます。$\mathrm{Spec}(A)$ 上のザリスキー位相は、部分集合 $V(I) = \{\mathfrak{p} \in \mathrm{Spec}(A) \mid I \subset \mathfrak{p}\}$ （ただし $I$ は $A$ のイデアル）を閉集合として定義することで導入されます。</p>
+<p>いま、位相空間 $X$ の各点 $x \in X$ を、その点で消える関数のなす極大イデアル $\mathfrak{m}_x = \{f \in C(X) \mid f(x) = 0\}$ と同一視してみます（$X$ がコンパクト Hausdorff であれば、これは全単射になります）。すると、「点 $x$ がイデアル $I$ のゼロ集合 $Z(I)$ に属すること」は、代数的な包含関係として以下のように言い換えられます。</p>
+$$x \in Z(I) \iff \forall f \in I, f(x) = 0 \iff I \subset \mathfrak{m}_x$$
+<p>つまり、関数環論における $Z(I)$ は、代数幾何学における閉集合 $V(I)$ を極大イデアルの空間 $\mathrm{Max}(C(X))$ に制限したものに他なりません。完全正則空間 $X$ において「イデアルのゼロ集合が閉集合を尽くす」という定理は、$X$ が関数環 $C(X)$ の最大スペクトル $\mathrm{Max}(C(X))$ の部分空間として、代数幾何学的なザリスキー位相を自然に備えていることを意味しているのです。</p>
+</div>
+
+
+<h3>(3) $X$ が局所コンパクト Hausdorff 空間の場合</h3>
+<p>局所コンパクト Hausdorff 空間は必ず完全正則空間であるため、(2) と同様に <strong>$Z(X)$ は $\mathrm{Closed}(X)$ の閉基底をなします</strong>。ここでは、その前提となる「局所コンパクト Hausdorff ならば完全正則である」という基本的な事実の証明を、Urysohn の補題を用いて与えます。</p>
+
+<div class="proposition">
+<div class="proposition-title">命題 (局所コンパクト Hausdorff 空間の完全正則性)</div>
+局所コンパクト Hausdorff 空間 $X$ は、完全正則空間である。
+</div>
+<div class="proof">
+<div class="proof-title">証明</div>
+$X$ における任意の閉集合 $F$ と、その外側にある点 $x \in X \smallsetminus F$ をとる。<br>
+$X$ は局所コンパクトであるため、$x$ を含む開集合 $V$ であって、その閉包 $\overline{V}$ がコンパクトになるものが存在する。<br>
+$U = V \smallsetminus F$ とおくと、$U$ は $x$ を含む開集合であり、$\overline{U} \subset \overline{V}$ である。コンパクト空間の閉部分集合はコンパクトであるから、$\overline{U}$ はコンパクトである。さらに $X$ は Hausdorff であるから、その部分空間 $\overline{U}$ はコンパクト Hausdorff 空間となる。コンパクト Hausdorff 空間は正規空間であることが知られている。<br><br>
+部分空間 $\overline{U}$ の中において、一点からなる集合 $\{x\}$ と、境界部分 $K = \overline{U} \smallsetminus U$ を考える。$X$ は Hausdorff ゆえ一点 $\{x\}$ は閉集合であり、$K$ も $\overline{U}$ 内で閉集合である。また、構成より $\{x\} \cap K = \varnothing$ である。<br>
+$\overline{U}$ は正規空間であるため、Urysohn の補題を適用することができ、連続関数 $g: \overline{U} \to [0, 1]$ であって、$g(x) = 0$ かつ $g(K) \subset \{1\}$ を満たすものが存在する。<br><br>
+この関数 $g$ を用いて、関数 $f: X \to [0, 1]$ を次のように拡張定義する：
+$$
+f(y) = 
+\begin{cases} 
+g(y) & (y \in \overline{U} \text{ のとき}) \\
+1 & (y \in X \smallsetminus U \text{ のとき})
+\end{cases}
+$$
+$\overline{U}$ と $X \smallsetminus U$ はともに $X$ の閉集合であり、その共通部分 $\overline{U} \cap (X \smallsetminus U) = \overline{U} \smallsetminus U = K$ 上では、$g(y) = 1$ と定義されているため両者の値は一致する。<br>
+貼り合わせの補題（Pasting lemma）により、$f$ は $X$ 全体での連続関数となる。<br>
+この関数 $f$ について、$f(x) = g(x) = 0$ である。一方で $F \subset X \smallsetminus U$ である（なぜなら $U = V \smallsetminus F$ より $U \cap F = \varnothing$ だから）ため、任意の $y \in F$ について $f(y) = 1$、すなわち $f(F) \subset \{1\}$ が成り立つ。<br>
+以上より、$X$ は完全正則空間であることが示された。
+</div>
+
+<p>さらに局所コンパクト性から、一点コンパクト化による構成などを通じて、「コンパクト台を持つ関数（これは自明に $C_b(X)$ に属する）のゼロ集合」が大量に含まれ、無限遠点での振る舞いを精密に制御できるという特長が加わります。</p>
+
+<h3>(4) $X$ がコンパクト Hausdorff 空間の場合</h3>
+
+<p>コンパクト Hausdorff 空間は自動的に<strong>正規空間</strong>となります。そのことの厳密な証明を以下に与えます。</p>
+
+<div class="proposition">
+<div class="proposition-title">命題 (コンパクト Hausdorff 空間は正規空間である)</div>
+$X$ がコンパクト Hausdorff 空間ならば、$X$ は正規空間である。
+</div>
+<div class="proof">
+<div class="proof-title">証明</div>
+証明は2段階で行う。まず点と閉集合が分離できること（正則性）を示し、次にそれを用いて閉集合どうしが分離できること（正規性）を示す。<br><br>
+<strong>ステップ 1（正則性の証明）：</strong><br>
+$X$ の任意の閉集合 $F$ と、その外側の点 $x \notin F$ をとる。<br>
+$X$ は Hausdorff 空間であるから、任意の $y \in F$ に対して $x \neq y$ であり、互いに素な開集合 $U_y, V_y$ が存在して $x \in U_y$ かつ $y \in V_y$ とできる。<br>
+このとき、族 $\{V_y \mid y \in F\}$ は $F$ の開被覆となる。$X$ はコンパクトであり、その閉部分集合 $F$ もコンパクトであるから、この開被覆から有限部分被覆 $\{V_{y_1}, V_{y_2}, \dots, V_{y_n}\}$ を選ぶことができる。<br>
+ここで、
+$$V = \bigcup_{i=1}^n V_{y_i}, \quad U = \bigcap_{i=1}^n U_{y_i}$$
+とおく。各 $V_{y_i}$ は開集合ゆえ $V$ は開集合であり、$F \subset V$ となる。また、各 $U_{y_i}$ は $x$ を含む開集合であり、有限個の共通部分であるため $U$ も $x$ を含む開集合である。<br>
+さらに、各 $i$ について $U_{y_i} \cap V_{y_i} = \varnothing$ であるため、$U \subset U_{y_i}$ より $U \cap V_{y_i} = \varnothing$。したがって、和集合をとっても $U \cap V = \varnothing$ である。これで $x$ と $F$ は互いに素な開集合で分離され、$X$ が正則空間であることが示された。<br><br>
+<strong>ステップ 2（正規性の証明）：</strong><br>
+$X$ の交わりを持たない任意の2つの閉集合 $A, B$ をとる。<br>
+ステップ 1 の結果から、任意の $x \in A$ は $B$ に属さないため、互いに素な開集合 $U_x, V_x$ が存在して $x \in U_x$ かつ $B \subset V_x$ とできる。<br>
+族 $\{U_x \mid x \in A\}$ は $A$ の開被覆となる。ふたたび $X$ のコンパクト性から閉集合 $A$ もコンパクトであるため、有限部分被覆 $\{U_{x_1}, U_{x_2}, \dots, U_{x_m}\}$ を選ぶことができる。<br>
+今度は、
+$$U = \bigcup_{j=1}^m U_{x_j}, \quad V = \bigcap_{j=1}^m V_{x_j}$$
+とおく。ステップ 1 と同様の議論により、$U$ は $A$ を含む開集合、$V$ は $B$ を含む開集合（有限個の開集合の共通部分ゆえ開集合）となる。<br>
+また各 $j$ について $U_{x_j} \cap V_{x_j} = \varnothing$ であり、$V \subset V_{x_j}$ であることから $U_{x_j} \cap V = \varnothing$。したがって和集合をとっても $U \cap V = \varnothing$ である。<br>
+以上より、互いに素な閉集合 $A, B$ は互いに素な開集合 $U, V$ で分離できるため、$X$ は正規空間である。
+</div>
+
+<p>したがって、前節の命題により <strong>「$Z(X)$ は、$X$ におけるすべての閉 $G_\delta$ 集合のクラスと完全に一致する」</strong>という強力な結果が得られます。<br>
+もちろん、任意の閉集合が $G_\delta$ 集合になるわけではない（例：非可算なコンパクト空間の1点は閉集合だが、$G_\delta$ ではない場合がある）ため、依然として $Z(X) \subsetneq \mathrm{Closed}(X)$ である可能性はありますが、(2)(3) と同様に $Z(X)$ は $\mathrm{Closed}(X)$ の閉基底としての役割を完璧に果たします。</p>
+
+
+<h2>5. Z超フィルターと極大イデアルの全単射対応</h2>
+
+<p>空間に「無限遠点」を付け加えてコンパクト化を行うために、フィルターの概念を導入します。ここでは複素数値の可換環 $C(X)$ の極大イデアルと、Z超フィルターが完全に一対一に対応することの厳密な証明を与えます。</p>
 
 <div class="definition">
 <div class="definition-title">定義 (Zフィルターと閉フィルター)</div>
@@ -137,27 +337,41 @@ Zフィルターの中で包含関係について極大であるものを <stron
 同様に、$Z(X)$ の代わりに $X$ の任意の閉集合の族を用いて定義されるフィルターを <strong>閉フィルター (closed filter)</strong>、極大なものを <strong>閉超フィルター (closed ultrafilter)</strong> と呼ぶ。
 </div>
 
-<p>関数環 $C(X)$ のイデアル $\mathfrak{i}$ が与えられたとき、$Z[\mathfrak{i}] = \{Z(f) \mid f \in \mathfrak{i}\}$ はZフィルターをなします。逆にZフィルター $\mathcal{F}$ が与えられたとき、$I(\mathcal{F}) = \{f \in C(X) \mid Z(f) \in \mathcal{F}\}$ は $C(X)$ のイデアルとなります。複素関数環であっても、この対応は極大イデアルと完全に同値になります。</p>
-
-<div class="lemma">
-<div class="lemma-title">補題 (複素関数環におけるZ超フィルターと極大イデアルの対応)</div>
-$\mathcal{Z}$ がZ超フィルターであるとき、$I(\mathcal{Z}) = \{f \in C(X) \mid Z(f) \in \mathcal{Z}\}$ は複素関数環 $C(X)$ の極大イデアルである。
+<div class="theorem">
+<div class="theorem-title">定理 (複素関数環におけるZ超フィルターと極大イデアルの全単射対応)</div>
+位相空間 $X$ において、$Z(X)$ 上のZ超フィルター全体の集合と、複素関数環 $C(X)$ の極大イデアル全体の集合の間には、以下の写像により一対一の対応（全単射）が存在する。<br>
+1. Z超フィルター $\mathcal{Z}$ に対して、$I(\mathcal{Z}) = \{f \in C(X) \mid Z(f) \in \mathcal{Z}\}$ は極大イデアルとなる。<br>
+2. 極大イデアル $\mathfrak{m}$ に対して、$Z[\mathfrak{m}] = \{Z(f) \mid f \in \mathfrak{m}\}$ はZ超フィルターとなる。<br>
+さらに、これらは互いに逆の対応である。すなわち $Z[I(\mathcal{Z})] = \mathcal{Z}$ かつ $I(Z[\mathfrak{m}]) = \mathfrak{m}$ が成り立つ。
 </div>
 <div class="proof">
 <div class="proof-title">証明</div>
-$\mathfrak{m} = I(\mathcal{Z})$ とおく。これがイデアルになることは、$Z(f_1 + f_2) \supset Z(f_1) \cap Z(f_2)$ などの関係から容易に確かめられる。極大性を示すために、$\mathfrak{m}$ を真に含むイデアル $J \subset C(X)$ が存在したと仮定して矛盾を導く。<br>
+<strong>ステップ1：Z超フィルターから極大イデアルの構成</strong><br>
+$\mathcal{Z}$ をZ超フィルターとし、$\mathfrak{m} = I(\mathcal{Z})$ とおく。これがイデアルになることは、$Z(f_1 + f_2) \supset Z(f_1) \cap Z(f_2)$ などの関係から容易に確かめられる。極大性を示すために、$\mathfrak{m}$ を真に含むイデアル $J \subset C(X)$ が存在したと仮定して矛盾を導く。<br>
 $g \in J \smallsetminus \mathfrak{m}$ をとる。$g \notin \mathfrak{m}$ より $Z(g) \notin \mathcal{Z}$ である。$\mathcal{Z}$ はZ超フィルター（極大Zフィルター）であるため、$Z(g)$ を $\mathcal{Z}$ に添加すると有限交叉性を失う。すなわち、ある $Z_0 \in \mathcal{Z}$ が存在して $Z(g) \cap Z_0 = \varnothing$ となる。<br>
 $Z_0 = Z(f_0)$ となる $f_0 \in \mathfrak{m} \subset J$ をとる。$Z(g) \cap Z(f_0) = \varnothing$ であるから、複素共役を用いて関数 $h(x) = g(x)\overline{g(x)} + f_0(x)\overline{f_0(x)} = |g(x)|^2 + |f_0(x)|^2$ を考える。この $h(x)$ は $X$ 上で常に実数値かつ $h(x) \gt 0$ を満たす。<br>
-したがって、関数 $1/h$ は $X$ 上の連続関数となり $C(X)$ に属する。ところが $g, f_0 \in J$ であり、$J$ は $C(X)$ のイデアルであるから、$h = g\overline{g} + f_0\overline{f_0} \in J$ である。$h \in J$ かつ $1/h \in C(X)$ より $J$ は単位元 $1 = h \cdot (1/h)$ を含み、全体環 $C(X)$ と一致する。これは $J$ が真のイデアルであるという前提に矛盾する。ゆえに $\mathfrak{m}$ は $C(X)$ の極大イデアルである。
+したがって、関数 $1/h$ は $X$ 上の連続関数となり $C(X)$ に属する。ところが $g, f_0 \in J$ であり、$J$ は $C(X)$ のイデアルであるから、$h = g\overline{g} + f_0\overline{f_0} \in J$ である。$h \in J$ かつ $1/h \in C(X)$ より $J$ は単位元 $1 = h \cdot (1/h)$ を含み、全体環 $C(X)$ と一致する。これは $J$ が真のイデアルであるという前提に矛盾する。ゆえに $I(\mathcal{Z})$ は $C(X)$ の極大イデアルである。<br><br>
+
+<strong>ステップ2：極大イデアルからZ超フィルターの構成</strong><br>
+次に、$\mathfrak{m}$ を $C(X)$ の極大イデアルとし、$\mathcal{Z}' = Z[\mathfrak{m}] = \{Z(f) \mid f \in \mathfrak{m}\}$ がZ超フィルターとなることを示す。<br>
+(a) $\varnothing \notin \mathcal{Z}'$ である。もし $\varnothing \in \mathcal{Z}'$ ならば、ある $f \in \mathfrak{m}$ が存在して $Z(f) = \varnothing$ となる。このとき $f$ は $X$ 上で $0$ にならないため、逆数関数 $1/f \in C(X)$ が存在する。すると $\mathfrak{m}$ が単位元 $1 = f \cdot (1/f)$ を含むことになり、真のイデアルであることに矛盾する。<br>
+(b) $Z_1, Z_2 \in \mathcal{Z}'$ ならば、$Z_1 = Z(f_1), Z_2 = Z(f_2)$ となる $f_1, f_2 \in \mathfrak{m}$ が存在する。関数 $h = f_1\overline{f_1} + f_2\overline{f_2}$ を考えると、$\mathfrak{m}$ はイデアルであるため $h \in \mathfrak{m}$ である。ここで $Z(h) = Z(f_1) \cap Z(f_2) = Z_1 \cap Z_2$ であるから、$Z_1 \cap Z_2 \in \mathcal{Z}'$ である。<br>
+(c) $Z_1 \in \mathcal{Z}'$ とし、$Z_1 \subset Z_2$ を満たす任意のゼロ集合 $Z_2 \in Z(X)$ をとる。$Z_1 = Z(f_1)$ ($f_1 \in \mathfrak{m}$)、$Z_2 = Z(g)$ ($g \in C(X)$) と書ける。関数 $h = f_1 \cdot g \in \mathfrak{m}$ を考えると、$Z(h) = Z(f_1) \cup Z(g) = Z_1 \cup Z_2$ である。$Z_1 \subset Z_2$ より $Z_1 \cup Z_2 = Z_2$ であるため、$Z_2 = Z(h) \in \mathcal{Z}'$ となる。<br>
+以上より $\mathcal{Z}' = Z[\mathfrak{m}]$ はZフィルターである。さらに極大性を示す。あるZフィルター $\mathcal{F}$ が $Z[\mathfrak{m}] \subset \mathcal{F}$ を満たすとする。このときステップ1と同様にして構成されるイデアル $I(\mathcal{F})$ は $\mathfrak{m} \subset I(\mathcal{F})$ を満たす。$\mathcal{F}$ はZフィルターであるため $\varnothing \notin \mathcal{F}$、すなわち $I(\mathcal{F})$ は全体環 $C(X)$ ではない。$\mathfrak{m}$ の極大性から $\mathfrak{m} = I(\mathcal{F})$ となる。任意の $Z(k) \in \mathcal{F}$ に対して $k \in I(\mathcal{F}) = \mathfrak{m}$ となるため、$Z(k) \in Z[\mathfrak{m}]$。ゆえに $\mathcal{F} \subset Z[\mathfrak{m}]$ となり $\mathcal{F} = Z[\mathfrak{m}]$ が結論され、極大性が示された。<br><br>
+
+<strong>ステップ3：互いに逆写像であること</strong><br>
+・$Z[I(\mathcal{Z})] = \mathcal{Z}$ について：$Z \in Z[I(\mathcal{Z})]$ とすると、ある $f \in I(\mathcal{Z})$ が存在して $Z = Z(f)$。$I(\mathcal{Z})$ の定義より $Z(f) \in \mathcal{Z}$、すなわち $Z \in \mathcal{Z}$。逆に $Z \in \mathcal{Z}$ に対して、$Z = Z(g)$ となる $g \in C(X)$ をとれば、$g \in I(\mathcal{Z})$ より $Z(g) \in Z[I(\mathcal{Z})]$。よって両者は一致する。<br>
+・$I(Z[\mathfrak{m}]) = \mathfrak{m}$ について：任意の $f \in \mathfrak{m}$ に対して $Z(f) \in Z[\mathfrak{m}]$ であるから、$f \in I(Z[\mathfrak{m}])$。ゆえに $\mathfrak{m} \subset I(Z[\mathfrak{m}])$ である。$\mathfrak{m}$ は極大イデアルであり、かつ $I(Z[\mathfrak{m}])$ は全体環ではない（$Z[\mathfrak{m}]$ が $\varnothing$ を含まないため）から、極大性より両者は一致する。<br>
+以上により、Z超フィルターと極大イデアルの全単射対応が完全に証明された。
 </div>
 
-<h2>3. 非正規空間におけるZ超フィルターと閉超フィルターの乖離</h2>
+<h2>6. 非正規空間におけるZ超フィルターと閉超フィルターの乖離</h2>
 
 <p>任意の閉超フィルター $\mathcal{U}$ に対して、ゼロ集合に制限した $\mathcal{U}_Z = \mathcal{U} \cap Z(X)$ は常にユニークなZ超フィルターに拡張されます。$X$ が正規空間であれば、任意の互いに素な閉集合はゼロ集合で分離できるため、この対応は全単射となります。しかし、$X$ が完全正則であっても正規でない場合、この対応は<strong>単射性を失います</strong>。以下にその詳細な証明を省略せずに与えます。</p>
 
 <div class="theorem">
 <div class="theorem-title">定理 (非正規空間における対応の崩壊)</div>
-$X$ を完全正則 Hausdorff 空間とする。もし $X$ が正規空間でないならば、相異なる2つの閉超フィルター $\mathcal{U}_1, \mathcal{U}_2$ であって、同一のZ超フィルター $\mathcal{Z}$ を含む（すなわち $\mathcal{U}_1 \cap Z(X) \subset \mathcal{Z}$ かつ $\mathcal{U}_2 \cap Z(X) \subset \mathcal{Z}$ となる）ものが存在する。
+$X$ を完全正則空間とする。もし $X$ が正規空間でないならば、相異なる2つの閉超フィルター $\mathcal{U}_1, \mathcal{U}_2$ であって、同一のZ超フィルター $\mathcal{Z}$ を含む（すなわち $\mathcal{U}_1 \cap Z(X) \subset \mathcal{Z}$ かつ $\mathcal{U}_2 \cap Z(X) \subset \mathcal{Z}$ となる）ものが存在する。
 </div>
 <div class="proof">
 <div class="proof-title">証明</div>
@@ -178,7 +392,7 @@ $\mathcal{U}_1$ は $F_1$ を含み、$\mathcal{U}_2$ は $F_2$ を含む。$F_1
 以上により、異なる閉超フィルターが同一のZ超フィルターに対応することが示された。
 </div>
 
-<h2>4. 局所コンパクト Hausdorff 空間は正規か？</h2>
+<h2>7. 局所コンパクト Hausdorff 空間は正規か？</h2>
 
 <p>局所コンパクト (locally compact) Hausdorff 空間は完全正則空間の代表例ですが、必ずしも正規空間にはなりません。その古典的かつ見事な反例として「削除された Tychonoff の板」の構成と証明を与えます。</p>
 
@@ -202,23 +416,23 @@ $\alpha = \sup_{n \lt \omega_0} \alpha_n$ と置く。$\omega_0$ は可算であ
 ゆえに $X$ は正規空間ではない。
 </div>
 
-<h2>5. $\beta X$ の構成と超不連結空間</h2>
+<h2>8. $\beta X$ の構成と超不連結空間</h2>
 
-<p>完全正則 Hausdorff 空間 $X$ 上のすべてのZ超フィルターの集合 $\beta X$ に、$\bar{Z} = \{\mathcal{Z} \in \beta X \mid Z \in \mathcal{Z}\}$ を閉集合の基底とする位相を導入すると、コンパクト Hausdorff 空間となります。これが $X$ の <strong>Stone-Čech コンパクト化</strong> です。</p>
+<p>完全正則空間 $X$ 上のすべてのZ超フィルターの集合 $\beta X$ に、$\bar{Z} = \{\mathcal{Z} \in \beta X \mid Z \in \mathcal{Z}\}$ を閉集合の基底とする位相を導入すると、コンパクト Hausdorff 空間となります。これが $X$ の <strong>Stone-Čech コンパクト化</strong> です。</p>
 
 <p>特に離散空間 $D$ に対する $\beta D$ では、任意の開集合の閉包が必ず clopen（開かつ閉集合）となります。このような空間は <strong>超不連結 (extremally disconnected)</strong> と呼ばれ、関数解析やブール代数の表現論において重要な役割を果たします。</p>
 
-<h2>6. 実数値関数と複素数値関数の決定的な違い：超実数体の誕生</h2>
+<h2>9. 実数値関数と複素数値関数の決定的な違い：超実数体の誕生</h2>
 
-<p>ここからが本題である「実数値と複素数値の違い」です。位相空間の構成（$Z(X)$ を用いた議論）までは両者に差はありませんが、非標準解析の舞台となる<strong>代数的な極限（剰余体）</strong>を考えると、決定的な差異が表出します。</p>
+<p>位相空間の構成（$Z(X)$ を用いた議論）までは実数・複素数のどちらの関数環を出発点にしても本質的な差はありませんが、非標準解析の舞台となる<strong>代数的な極限（剰余体）</strong>を考えると、決定的な差異が表出します。</p>
 
-<h3>6.1. 実数値関数環 $C(X, \mathbb{R})$ の場合（順序と超実数 ${}^*\mathbb{R}$）</h3>
+<h3>9.1. 実数値関数環 $C(X, \mathbb{R})$ の場合（順序と超実数 ${}^*\mathbb{R}$）</h3>
 
 <p>実数値関数環 $C(X, \mathbb{R})$ には、関数ごとの自然な半順序 $f \ge 0 \iff \forall x \in X, f(x) \ge 0$ が存在します。これを自由な極大イデアルで割ると、<strong>非アルキメデス的順序体（超実数体）</strong>が得られます。</p>
 
 <div class="theorem">
 <div class="theorem-title">定理 (超実数体 ${}^*\mathbb{R}$ の代数的構成)</div>
-$X$ を非コンパクトな完全正則 Hausdorff 空間とする。自由なZ超フィルター $\mathcal{Z}$ に対応する実数値関数環 $C(X, \mathbb{R})$ の極大イデアルを $\mathfrak{m}_{\mathbb{R}} = \{f \in C(X, \mathbb{R}) \mid Z(f) \in \mathcal{Z}\}$ とする。<br>
+$X$ を非コンパクトな完全正則空間とする。自由なZ超フィルター $\mathcal{Z}$ に対応する実数値関数環 $C(X, \mathbb{R})$ の極大イデアルを $\mathfrak{m}_{\mathbb{R}} = \{f \in C(X, \mathbb{R}) \mid Z(f) \in \mathcal{Z}\}$ とする。<br>
 このとき、剰余体 $F = C(X, \mathbb{R})/\mathfrak{m}_{\mathbb{R}}$ はアルキメデスの公理を満たさない順序体、すなわち超実数体 ${}^*\mathbb{R}$ となる。
 </div>
 <div class="proof">
@@ -234,21 +448,21 @@ $$[g] \ge [n]$$
 これは、体 $F$ の中に、いかなる実数よりも大きな元 $[g]$ が存在することを意味する。すなわち $F$ は非アルキメデス的順序体である。$[g]$ は無限大の超実数であり、その逆数 $1/[g]$ は $0$ ではない「無限小」となる。
 </div>
 
-<h3>6.2. 複素数値関数環 $C(X)$ の場合（対合と超複素数 ${}^*\mathbb{C}$）</h3>
+<h3>9.2. 複素数値関数環 $C(X)$ の場合（対合と超複素数 ${}^*\mathbb{C}$）</h3>
 
 <p>一方、複素数値関数環 $C(X)$（これは可換 $C^*$ 環の非有界な拡大に相当する）を考えた場合、複素数体 $\mathbb{C}$ 自身に全順序が存在しないため、環としても全順序を導入することはできません。代わりに、複素共役 $f \mapsto \overline{f}$ という対合 (involution) を持ちます。</p>
 
 <p>自由な極大イデアル $\mathfrak{m}_{\mathbb{C}} = \{f \in C(X) \mid Z(f) \in \mathcal{Z}\}$ で割った剰余体 $K = C(X)/\mathfrak{m}_{\mathbb{C}}$ は、<strong>超複素数体 ${}^*\mathbb{C}$</strong> となります。</p>
 
 <ul>
-    <li><strong>順序の欠如：</strong> $K = {}^*\mathbb{C}$ には大小関係に基づく順序体としての構造はありません。したがって、「$[g] \ge [n]$」という形での無限大の定義は不可能です。</li>
+    <li><strong>順序の欠寄：</strong> $K = {}^*\mathbb{C}$ には大小関係に基づく順序体としての構造はありません。したがって、「$[g] \ge [n]$」という形での無限大の定義は不可能です。</li>
     <li><strong>絶対値を通じた無限大の評価：</strong> 複素関数 $f \in C(X)$ に対して、その絶対値 $|f|$ は実数値関数 $|f| \in C(X, \mathbb{R})$ です。超複素数 $[f] \in {}^*\mathbb{C}$ の大きさは、超実数体 ${}^*\mathbb{R}$ に値をとる絶対値 $|[f]| = [|f|]$ によって測られます。</li>
     <li><strong>発散の代数的記憶：</strong> $[f]$ が「無限大」であるとは、その絶対値が超実数体 ${}^*\mathbb{R}$ においてすべての実数より大きくなること（$\forall n \in \mathbb{N}, |[f]| \gt [n]$）として表現されます。</li>
 </ul>
 
 <p>さらに代数的には、超複素数体は超実数体に虚数単位を添加した代数閉体、すなわち ${}^*\mathbb{C} = {}^*\mathbb{R}(i)$ として厳密に構成されます。</p>
 
-<h3>6.3. 差異のまとめ</h3>
+<h3>9.3. 差異のまとめ</h3>
 
 <table>
     <tr>
@@ -278,14 +492,12 @@ $$[g] \ge [n]$$
     </tr>
 </table>
 
-<p>このように、空間の位相やコンパクト化（$\beta X$）を決定するフェーズでは実・複素のどちらを用いても本質的な違いはありませんが、関数の発散を「代数的な値」として厳密に評価する（非標準解析に踏み込む）フェーズに入ると、順序構造を持つ実数値 $C(X, \mathbb{R})$ の存在が不可欠になるのです。</p>
-
 <div class="references">
 <h2>参考文献</h2>
 <ul>
-    <li>Gillman, L., & Jerison, M. (1976). <i>Rings of Continuous Functions</i>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4615-7819-2" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4615-7819-2</a></li>
-    <li>Engelking, R. (1989). <i>General Topology</i>. Heldermann Verlag. <a href="https://www.heldermann.de/SSPM/SSPM06/sspm06.htm" target="_blank" rel="noopener noreferrer">https://www.heldermann.de/SSPM/SSPM06/sspm06.htm</a></li>
-    <li>Goldblatt, R. (1998). <i>Lectures on the Hyperreals: An Introduction to Nonstandard Analysis</i>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4612-0615-6" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4612-0615-6</a></li>
+    <li>Gillman, L., & Jerison, M. (1976). <i>Rings of Continuous Functions</i>. Springer-Verlag.</li>
+    <li>Engelking, R. (1989). <i>General Topology</i>. Heldermann Verlag.</li>
+    <li>Goldblatt, R. (1998). <i>Lectures on the Hyperreals: An Introduction to Nonstandard Analysis</i>. Springer-Verlag.</li>
 </ul>
 </div>
 
