@@ -1,0 +1,216 @@
+\documentclass[10pt, unicode]{beamer}
+\usepackage{luatexja} % LuaLaTeXで日本語を使用するためのパッケージ
+\usetheme{Madrid} % シンプルで学術的なテーマ
+\usefonttheme{professionalfonts}
+\usepackage{amsmath, amssymb, amsthm}
+
+% 定理環境の設定
+\theoremstyle{definition}
+\newtheorem{thm}{定理}
+\newtheorem{lem}[thm]{補題}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{defn}[thm]{定義}
+\newtheorem{exa}[thm]{例}
+
+\title{GrothendieckによるGaloisの基本定理の圏論的証明}
+\subtitle{Artinの定理アプローチとの比較：自己完結的詳細解説}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}
+    \tableofcontents
+\end{frame}
+
+\begin{frame}{はじめに}
+    本講義では、Alexander Grothendieckが確立した「被覆空間の分類とGalois理論の統合」という壮大な視点に立ち、古典的なGaloisの基本定理を圏論 (category theory) の枠組みを用いて完全に自己完結的 (self-contained) に証明します。
+    
+    さらに、有限次の分離的正規拡大という条件が証明のどこで本質的に機能しているかを紐解き、Emil Artinの定理を経由する構造的アプローチとの共通点・相違点を詳細に比較分析します。
+\end{frame}
+
+\section{準備：体論と圏論の基礎概念}
+
+\begin{frame}[allowframebreaks]{1. 準備：体論と圏論の基礎概念}
+    まず、証明の舞台となる体論 (field theory) と圏論の基本用語を厳密に定義しておき、理解を助ける具体的な数体での例を提示する。ここでの記述はすべて、後の定理を論理の飛躍なく証明するための確固たる土台となる。
+
+    \begin{defn}[Galois拡大とGalois群]
+        体 $L$ が体 $K$ を部分体として含むとき、$L/K$ を体拡大 (field extension) と呼ぶ。体拡大 $L/K$ が分離的 (separable) かつ正規 (normal) であるとき、これをGalois拡大 (Galois extension) と呼ぶ。\\
+        このとき、$K$ の各元を固定する（動かさない）$L$ 上の自己同型写像の全体は、写像の合成を演算として群をなす。これを $L/K$ のGalois群 (Galois group) と呼び、$G = \mathrm{Gal}(L/K)$ で表す。
+    \end{defn}
+
+    \begin{defn}[不変体]
+        $L$ を体とし、$G$ を $L$ の自己同型群の部分群とする。群 $G$ のすべての元 $\sigma$ に対して $\sigma(x) = x$ を満たす $L$ の元 $x$ 全体の集合を、部分群 $G$ による不変体 (fixed field) と呼び、$L^G$ で表す。
+    \end{defn}
+
+    \begin{exa}[$\mathbb{Q}(\sqrt{2}, \sqrt{3}) / \mathbb{Q}$ のGalois群と不変体]
+        有理数体 $\mathbb{Q}$ に $\sqrt{2}$ と $\sqrt{3}$ を添加した体 $L = \mathbb{Q}(\sqrt{2}, \sqrt{3})$ を考える。この拡大は $K = \mathbb{Q}$ 上の有限次Galois拡大であり、そのGalois群 $G$ は位数4のクラインの四元群 $V_4 \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$ となる。\\
+        群 $G$ は以下の4つの元からなる。
+        \begin{itemize}
+            \item $\mathrm{id}$ : 恒等写像
+            \item $\sigma_1$ : $\sqrt{2} \mapsto -\sqrt{2}$, $\sqrt{3} \mapsto \sqrt{3}$
+            \item $\sigma_2$ : $\sqrt{2} \mapsto \sqrt{2}$, $\sqrt{3} \mapsto -\sqrt{3}$
+            \item $\sigma_3$ : $\sqrt{2} \mapsto -\sqrt{2}$, $\sqrt{3} \mapsto -\sqrt{3}$
+        \end{itemize}
+        部分群 $H = \{ \mathrm{id}, \sigma_1 \}$ についての不変体 $L^H$ を計算すると、$\sqrt{3}$ は固定されるが $\sqrt{2}$ は符号が変わるため、不変体は $L^H = \mathbb{Q}(\sqrt{3})$ となる。このように、部分群と中間体 (intermediate field) は密接に結びついている。
+    \end{exa}
+\end{frame}
+
+\section{対象となる2つの「圏」の定義}
+
+\begin{frame}[allowframebreaks]{2. 対象となる2つの「圏」の定義}
+    証明の舞台として、代数的な圏と集合論的な圏の2つを厳密に定義する。
+
+    \begin{defn}[代数側の圏：$\mathcal{C}_{L/K}$]
+        固定された有限次Galois拡大 $L/K$ に対し、圏 $\mathcal{C}_{L/K}$ を以下のように定義する。
+        \begin{itemize}
+            \item \textbf{対象 (objects):} $L$ で分解する有限エタール $K$-代数 (finite étale $K$-algebras split by $L$)。具体的には、$L/K$ の中間体を $M_i$ ($K \subset M_i \subset L$) としたとき、有限個の中間体の直積 $A \cong M_1 \times M_2 \times \dots \times M_m$ に同型となる可換 $K$-代数 $A$ の全体を対象とする。
+            \item \textbf{射 (morphisms):} $K$-代数としての準同型写像 (homomorphisms of $K$-algebras)。
+        \end{itemize}
+    \end{defn}
+
+    \begin{defn}[集合側の圏：$G\text{-}\mathbf{finSet}$]
+        $G = \mathrm{Gal}(L/K)$ とおく。圏 $G\text{-}\mathbf{finSet}$ を以下のように定義する。
+        \begin{itemize}
+            \item \textbf{対象 (objects):} 有限 $G$-集合 (finite $G$-sets)。すなわち、有限集合 $X$ であり、群 $G$ の左からの作用（$\sigma \in G, x \in X \implies \sigma \cdot x \in X$）を持つもの。
+            \item \textbf{射 (morphisms):} $G$-同変写像 ($G$-equivariant maps)。すなわち、写像 $f: X \to Y$ であって、任意の $\sigma \in G$ と $x \in X$ に対して $f(\sigma \cdot x) = \sigma \cdot f(x)$ を満たすもの。
+        \end{itemize}
+    \end{defn}
+\end{frame}
+
+\section{関手 $F$ の構成とwell-defined性}
+
+\begin{frame}[allowframebreaks]{3. 関手 $F$ の構成}
+    代数（直積環）の世界から、幾何・集合（$G$-集合）の世界への架け橋となる関手を構築する。
+
+    \begin{prop}[関手 $F$ の構成]
+        対応 $F(A) = \mathrm{Hom}_{K\text{-alg}}(A, L)$ は、圏 $\mathcal{C}_{L/K}$ から圏 $G\text{-}\mathbf{finSet}$ への反変関手 (contravariant functor) を定める。
+    \end{prop}
+
+    \begin{proof}
+        任意の対象 $A \in \mathcal{C}_{L/K}$ に対して、$F(A)$ が本当に $G\text{-}\mathbf{finSet}$ の対象となることを確認する。\\
+        \textbf{1. $G$-作用の定義：} $\phi \in F(A)$ は $A$ から $L$ への $K$-代数準同型である。$\sigma \in G$ に対して、新しい写像 $\sigma \cdot \phi$ を
+        \[ (\sigma \cdot \phi)(a) = \sigma(\phi(a)) \quad (a \in A) \]
+        と定義する。合成 $\sigma \circ \phi$ は再び $K$-代数準同型となるため $\sigma \cdot \phi \in F(A)$ であり、$F(A)$ は $G$-作用を持つ。\\
+        \textbf{2. 反変性 (contravariance) の確認：} $\mathcal{C}_{L/K}$ における射 $\psi: A \to B$ が与えられたとする。これに対し写像 $F(\psi): F(B) \to F(A)$ を、任意の $f \in F(B)$ に対して $F(\psi)(f) = f \circ \psi$ と定義する。
+        元の射の向き $A \to B$ に対して、誘導された写像は $F(B) \to F(A)$ と向きが逆転するため、これは反変関手である。
+    \end{proof}
+\end{frame}
+
+\section{充満忠実性 (Fully Faithfulness) の証明}
+
+\begin{frame}[allowframebreaks]{4. 充満忠実性の証明}
+    関手 $F$ が「射の情報を一切欠落させずに伝達する」こと、すなわち充満忠実 (fully faithful) であることを証明する。
+
+    \begin{lem}[関手 $F$ の充満忠実性]
+        関手 $F$ は充満忠実である。すなわち、任意の対象 $A, B \in \mathcal{C}_{L/K}$ に対して、次で定義される写像 $\rho$ は全単射 (bijection) である。
+        \[ \rho: \mathrm{Hom}_{\mathcal{C}_{L/K}}(A, B) \xrightarrow{\sim} \mathrm{Hom}_{G\text{-}\mathbf{finSet}}(F(B), F(A)) \]
+    \end{lem}
+
+    \begin{proof}
+        \textbf{【ステップ1：対象を中間体に還元する】}
+        対象 $A, B$ は中間体の直積環であるため、Hom関手の普遍性から $A = L^H$, $B = L^{H'}$ の場合に $\rho$ が全単射であることを示せば十分である。\\
+        \textbf{【ステップ2：$F(L^H)$ の同型構造の決定】}
+        同型延長定理により、$L^H$ から $L$ への任意の埋め込みは、$L$ の自己同型 $\sigma \in G$ の制限 $\sigma|_{L^H}$ として完全に網羅される。
+        $\sigma_1, \sigma_2$ が $L^H$ 上で一致する条件は $\sigma_1^{-1}\sigma_2 \in H$、すなわち $\sigma_1 H = \sigma_2 H$ である。したがって自然な同型 $F(L^H) \cong G/H$ が成り立つ。\\
+        \textbf{【ステップ3：代数側の射（左辺）の条件計算】}
+        $L^H \to L^{H'}$ の準同型を延長した $\sigma \in G$ について考える。$\sigma(L^H) \subset L^{H'}$ となる条件は、任意の $x \in L^H$ と $h' \in H'$ に対して $h'(\sigma(x)) = \sigma(x)$ となること、つまり $(\sigma^{-1} h' \sigma)(x) = x$ である。これは $\sigma^{-1} H' \sigma \subset H$ に完全に支配される。\\
+        \textbf{【ステップ4：集合側の射（右辺）の条件計算と一致】}
+        $G/H' \to G/H$ の同変写像 $\gamma$ は $\gamma(1 \cdot H') = \sigma H$ で定まる。well-definedである条件は $h' \cdot \sigma H = \sigma H$、すなわち $\sigma^{-1}h'\sigma \in H$ であり、包含関係 $\sigma^{-1} H' \sigma \subset H$ と完全に一致する。よって $\rho$ は全単射である。
+    \end{proof}
+\end{frame}
+
+\section{本質的全射性 (Essential Surjectivity) の証明}
+
+\begin{frame}[allowframebreaks]{5. 本質的全射性の証明}
+    \begin{lem}[関手 $F$ の本質的全射性]
+        関手 $F$ は本質的全射 (essentially surjective) である。すなわち、任意の有限 $G$-集合 $X \in G\text{-}\mathbf{finSet}$ に対して、ある代数側の対象 $A \in \mathcal{C}_{L/K}$ が存在して、$F(A) \cong X$ と同型になる。
+    \end{lem}
+
+    \begin{proof}
+        \textbf{【ステップ1：$G$-集合の軌道分解】}
+        任意の有限 $G$-集合 $X$ は推移的な部分集合に直和分解される。$X = \coprod_{i=1}^m X_i$。各 $X_i$ は安定化群 $H_i \subset G$ を用いて剰余類空間 $G/H_i$ と同型になる。\\
+        \textbf{【ステップ2：逆像となる代数 $A$ の構成】}
+        部分群 $H_i$ に対応する不変体 $L^{H_i}$ を用いて、直積環 $A = \prod_{i=1}^m L^{H_i}$ を構成する。$A$ は $\mathcal{C}_{L/K}$ の対象である。\\
+        \textbf{【ステップ3：$F(A)$ の計算と一致の確認】}
+        $L$ は零因子を持たない整域であるため、直積環からの準同型は成分の直和に分解される。
+        \[ F(A) = \mathrm{Hom}_{K\text{-alg}}\left(\prod_{i=1}^m L^{H_i}, L\right) \cong \coprod_{i=1}^m \mathrm{Hom}_{K\text{-alg}}(L^{H_i}, L) \]
+        充満忠実性の証明で確認した通り各成分は $G/H_i$ と同型であるため、$F(A) \cong \coprod_{i=1}^m G/H_i \cong X$ となり、証明された。
+    \end{proof}
+\end{frame}
+
+\section{Galoisの基本定理の完全なる回収}
+
+\begin{frame}[allowframebreaks]{6. Galoisの基本定理の完全なる回収}
+    \begin{thm}[Galoisの基本定理の導出]
+        Galois拡大 $L/K$ の中間体の全体と、Galois群 $G = \mathrm{Gal}(L/K)$ の部分群の全体の間には、包含関係を反転させる一対一の全単射が存在する。
+    \end{thm}
+
+    \begin{proof}
+        関手 $F$ は充満忠実かつ本質的全射であるため、これら2つの圏は反変同値 (contravariant equivalence) である。\\
+        \textbf{1. 対象の対応：} 代数側の圏において「直積環に分解できない対象」は単一の中間体 $M$ である。関手 $F$ により、これは集合側の「直和に分解できない $G$-集合」、すなわち推移的 $G$-集合 $G/H$ に一対一に対応する。よって「中間体 $M$」と「部分群 $H$」は一対一に結びつく。\\
+        \textbf{2. 包含関係の反転：} 包含関係 $M_1 \subset M_2$ は自然な単射 $M_1 \hookrightarrow M_2$ が存在することを意味する。関手 $F$ は反変であるため、これは集合側における全射な $G$-同変写像 $G/H_2 \twoheadrightarrow G/H_1$ の存在と同値になる。この全射が存在する条件は部分群の包含関係 $H_2 \subset H_1$ である。\\
+        以上により、$M_1 \subset M_2 \iff H_2 \subset H_1$ が成立し、包含関係を反転させるGalois対応の存在が完全に導出された。
+    \end{proof}
+\end{frame}
+
+\section{有限次分離的正規拡大の条件の本質的役割}
+
+\begin{frame}[allowframebreaks]{7. 有限次分離的正規拡大の条件の本質的役割}
+    有限次Galois拡大という強い前提条件は、証明の根幹を支える各ステップにおいて本質的に機能している。
+
+    \textbf{7.1 有限次 (finite) の役割}
+    \begin{itemize}
+        \item 集合側の圏を $G\text{-}\mathbf{finSet}$ に限定するためには、$G$ 自体が有限群であることが不可欠である。
+        \item 像 $F(A)$ が有限集合になるため、および本質的全射性における軌道分解が有限個の直和に収まるために、代数の有限次元性が要求される。
+    \end{itemize}
+
+    \textbf{7.2 分離的 (separable) の役割}
+    \begin{itemize}
+        \item 分離性は、代数側の次元と集合側の元の個数（準同型の個数）を一致させるために本質的である。
+        \item $[M:K]_s = [M:K]$ となるからこそ、これが剰余類の個数 $|G/H|$ と一致し、射の全単射性が成立する。
+    \end{itemize}
+
+    \textbf{7.3 正規 (normal) の役割}
+    \begin{itemize}
+        \item 正規性は、準同型写像の閉じ込め（像が $L$ の内部に収まること）と同型延長可能性を保証する。
+        \item これにより $\phi: M \to L$ を $L$ 全体の自己同型の制限として表すことができ、$F(L^H) \cong G/H$ が成立する。非正規拡大では像が $L$ に収まらず、$G$ の作用が定義できない。
+    \end{itemize}
+\end{frame}
+
+\section{Artinの定理を経由する証明との比較分析}
+
+\begin{frame}[allowframebreaks]{8. Artinの定理を経由する証明との比較分析}
+    Emil Artinの定理を経由する構造的アプローチと、本圏論的証明の比較。
+
+    \textbf{8.1 共通点：代数的随伴構造の抽出}
+    \begin{itemize}
+        \item \textbf{準同型の重視：} どちらの証明も、中間体から全体の体への「$K$-代数準同型全体の自由度」を推進力としている。ArtinにおけるDedekindの補題（キャラクタの線形独立性）は、圏論における剰余類空間の自由な振る舞いの裏付けである。
+        \item \textbf{直積分解による構造解析：} Artinの証明で用いる接合環の同型 $L \otimes_K L \cong \prod_{\sigma \in G} L$ は、圏論的証明で $\prod M_i$ を準同型関手で送り $\coprod G/H_i$ に分解する操作と双対的な関係にある。
+    \end{itemize}
+
+    \textbf{8.2 本質的な相違点：定量的次元計算か、定性的構造同値か}
+    \begin{itemize}
+        \item \textbf{証明の駆動力：} Artinのアプローチは具体的な「次元の等式」$[L:L^H] = |H|$ を武器とするのに対し、Grothendieckのアプローチは直積の普遍性や関手の充満忠実性といった「定性的な関係性」のみで進行し、構造の等価性から自動的に随伴させる。
+        \item \textbf{世界の広げ方：} Artinは「中間体」という範疇に留まるが、Grothendieckは「有限エタール代数全体」へと視野を広げ、圏論の反変同値の一部として普遍幾何学（被覆空間の分類）の形態へとGalois理論を昇華させている。
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{参考文献}
+    \begin{thebibliography}{9}
+        \bibitem{Artin}
+        Artin, E. (1944). \emph{Galois Theory}. Notre Dame Mathematical Lectures, No. 2. University of Notre Dame Press.
+        
+        \bibitem{Bourbaki}
+        Bourbaki, N. (2003). \emph{Algebra II: Chapters 4–7}. Elements of Mathematics. Springer-Verlag.
+        
+        \bibitem{Grothendieck}
+        Grothendieck, A. (1971). \emph{Revêtements étales et groupe fondamental (SGA 1)}. Lecture Notes in Mathematics, Vol. 224. Springer-Verlag.
+    \end{thebibliography}
+\end{frame}
+
+\end{document}

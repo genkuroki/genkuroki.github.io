@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artinの定理を経由するGaloisの基本定理の証明</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .definition, .lemma, .theorem, .proof, .example, .remark {
+            background-color: #fff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .theorem, .lemma { border-left-color: #e74c3c; }
+        .proof { border-left-color: #2ecc71; background-color: #fdfdfd; }
+        .example { border-left-color: #f39c12; }
+        .remark { border-left-color: #9b59b6; background-color: #faf8fc; }
+        .label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .theorem .label, .lemma .label { color: #c0392b; }
+        .proof .label { color: #27ae60; font-style: italic; }
+        .remark .label { color: #8e44ad; }
+        .cite { font-size: 0.8em; color: #7f8c8d; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .references {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #bdc3c7;
+        }
+        .references ul { list-style-type: none; padding-left: 0; }
+        .references li { margin-bottom: 10px; }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <h1>Artinの定理を経由するGaloisの基本定理の証明</h1>
+
+    <p>体のGalois拡大とGaloisの基本定理について、Artinの定理を経由するアプローチで詳細に解説します。Galois理論の目的は、体の拡大という代数的な対象を、Galois群という群論的な対象に翻訳して調べることです。この対応関係を確立するGaloisの基本定理を、Artinの定理を用いて鮮やかに証明してみましょう。そのための準備として、関連する基本概念の定義と、Dedekindの補題から始めます。</p>
+
+    <h2>1. 基本概念の定義と例</h2>
+
+    <div class="definition">
+        <span class="label">定義 1.1 (体の拡大と自己同型群)</span><br>
+        体 (field) $L$ が体 $K$ を部分体として含むとき、$L$ を $K$ の拡大体 (extension field) といい、$L/K$ と表す。このとき $L$ は自然に $K$ 上のベクトル空間となる。その次元を拡大次数 (degree of extension) と呼び、$[L:K]$ で表す。$[L:K]$ が有限のとき有限次拡大 (finite extension) と呼ぶ。<br><br>
+        体 $L$ の自己同型 (automorphism) 全体のなす群を $\mathrm{Aut}(L)$ と書く。部分体 $K$ の元を全て固定する自己同型のなす部分群を $\mathrm{Aut}(L/K)$ または $\mathrm{Gal}(L/K)$ と書き、$L/K$ のGalois群 (Galois group) と呼ぶ。<br><br>
+        有限群 $G \subset \mathrm{Aut}(L)$ に対して、$G$ の全ての元で固定される $L$ の元の集合を $L^G$ と書き、$G$ の不変体 (fixed field) と呼ぶ。
+    </div>
+
+    <p>次に、Galois拡大を定義するために必要不可欠な「分離性」と「正規性」について定義します。</p>
+
+    <div class="definition">
+        <span class="label">定義 1.2 (分離性と正規性、およびGalois拡大)</span><br>
+        体 $K$ 上の代数的な元 $\alpha$ に対して、$\alpha$ を根に持つ $K$ 係数のモニック多項式のうち次数が最小のものを $\alpha$ の $K$ 上の最小多項式 (minimal polynomial) と呼ぶ。<br><br>
+        <ul>
+            <li><strong>分離的 (separable):</strong> 元 $\alpha$ の $K$ 上の最小多項式が、代数閉包において重根を持たないとき、$\alpha$ は $K$ 上分離的であるという。代数拡大 $L/K$ のすべての元が $K$ 上分離的であるとき、$L/K$ を分離拡大 (separable extension) と呼ぶ。</li>
+            <li><strong>正規 (normal):</strong> 代数拡大 $L/K$ について、$K$ 上の任意の既約多項式が $L$ に根を持つならば、その多項式が $L$ 上で一次式の積に完全に分解されるとき、$L/K$ を正規拡大 (normal extension) と呼ぶ。</li>
+            <li><strong>Galois拡大 (Galois extension):</strong> 有限次拡大 $L/K$ が分離拡大かつ正規拡大であるとき、これを有限次Galois拡大と呼ぶ。</li>
+        </ul>
+    </div>
+
+    <div class="lemma">
+        <span class="label">命題 1.3 (Galois群の共役元への推移的作用)</span><br>
+        $L/K$ が有限次Galois拡大であるとする。任意の $\alpha \in L$ と、$\alpha$ の $K$ 上での任意の共役元 $\beta \in L$（すなわち $\alpha$ の $K$ 上の最小多項式の根）に対して、ある $\sigma \in \mathrm{Gal}(L/K)$ が存在して $\sigma(\alpha) = \beta$ となる。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明.</span><br>
+        $L/K$ は有限次分離拡大であるから、原始元定理により $L = K(\theta)$ となる元 $\theta \in L$ が存在する。<br>
+        $\alpha$ と $\beta$ は $K$ 上共役であるため同じ最小多項式 $p(x) \in K[x]$ を持ち、$\alpha \mapsto \beta$ と写し $K$ の元を固定する同型写像 $\phi: K(\alpha) \xrightarrow{\sim} K(\beta)$ が存在する。<br>
+        ここで、$\theta$ の $K(\alpha)$ 上の最小多項式を $h_1(x) \in K(\alpha)[x]$ とする。同型写像 $\phi$ によって $h_1(x)$ の各係数を $K(\beta)$ の元に写して得られる多項式を $h_2(x) \in K(\beta)[x]$ とおく。<br>
+        $\theta$ の $K$ 上の最小多項式 $F(x) \in K[x]$ を考えると、$F(\theta)=0$ であるため、$h_1(x)$ は $K(\alpha)[x]$ において $F(x)$ の約数である（$F(x) = h_1(x)q_1(x)$）。
+        $F(x)$ の係数は $K$ に属するため $\phi$ によって不変であり、したがって $h_2(x)$ も $K(\beta)[x]$ において $F(x)$ の約数となる。<br>
+        さて、$L/K$ は正規拡大であるため、$K$ 上の多項式 $F(x)$ は $L$ 内で一次式に完全に分解する。よってその約数である $h_2(x)$ も $L$ 内に根を持つ。その根の一つを $\theta' \in L$ とする。<br>
+        多項式環の剰余環としての単拡大の構成定理より、以下の自然な同型の連鎖が得られる。
+        $$ L = K(\alpha)(\theta) \cong K(\alpha)[x]/(h_1(x)) \xrightarrow{\tilde{\phi}} K(\beta)[x]/(h_2(x)) \cong K(\beta)(\theta') $$
+        ここで $\tilde{\phi}$ は $\phi$ から自然に誘導された同型写像である。<br>
+        $\theta' \in L$ ゆえ $K(\beta)(\theta') \subseteq L$ であり、上の同型によって $[K(\beta)(\theta') : K] = [L : K]$ であるから、$K(\beta)(\theta') = L$ となる。<br>
+        この連鎖を合成して得られる同型写像 $\sigma: L \xrightarrow{\sim} L$ は、$K$ の元を固定し、$\theta$ を $\theta'$ に、そして $\alpha$ を $\phi(\alpha) = \beta$ に写す。
+        したがって、$\sigma$ は $L$ の $K$-自己同型（すなわち $\sigma \in \mathrm{Gal}(L/K)$）であり、$\sigma(\alpha) = \beta$ を満たす。（証明終）
+    </div>
+
+    <div class="example">
+        <span class="label">例 1.4 (複素数体と実数体の拡大)</span><br>
+        複素数体 $\mathbb{C}$ と実数体 $\mathbb{R}$ の拡大 $\mathbb{C}/\mathbb{R}$ を考える。$\mathbb{C}$ の任意の元 $a+bi$ の $\mathbb{R}$ 上の最小多項式は高々2次であり、虚数部がゼロでなければ $(x - (a+bi))(x - (a-bi)) = x^2 - 2ax + a^2 + b^2$ となる。これは重根を持たず（分離的）、かつ $\mathbb{C}$ 上で完全に一次式に分解される（正規）。したがって $\mathbb{C}/\mathbb{R}$ はGalois拡大である。<br>
+        $\mathbb{C}$ 上の自己同型で $\mathbb{R}$ を固定するものは、恒等写像 $\mathrm{id}$ と複素共役 $\sigma(a+bi) = a-bi$ のみである。したがって $\mathrm{Gal}(\mathbb{C}/\mathbb{R}) = \{\mathrm{id}, \sigma\}$ であり、不変体 $\mathbb{C}^{\{\mathrm{id}, \sigma\}}$ は $\mathbb{R}$ に一致する。
+    </div>
+
+    <h2>2. Dedekindの補題と準備の補題</h2>
+
+    <div class="lemma">
+        <span class="label">補題 2.1</span><br>
+        体 $\Omega$ 上のベクトル空間 $V$ の $v_1, \dots, v_n \in V$ で張られる部分空間を $W$ と書く。$i \neq j$ に対して $W$ の一次変換 $T_{ij}$ が与えられており、各 $v_k$ は非ゼロベクトルであり、固有値 $\lambda^{ij}_k$ を持つ $T_{ij}$ の固有ベクトルであって、$\lambda^{ij}_i \neq \lambda^{ij}_j$ を満たしているとする。このとき以下が成立している。<br>
+        (1) $i=1,\dots,n$ に対して $W$ の一次変換 $L_i$ を
+        $$L_i = \prod_{j \in \{1,\dots,n\} \smallsetminus \{i\}} \frac{T_{ij} - \lambda^{ij}_j \mathrm{id}_W}{\lambda^{ij}_i - \lambda^{ij}_j}$$
+        と定めると、$L_i v_j = \delta_{ij} v_i \quad (i,j=1,\dots,n)$ である。ここで $\delta_{ij}$ はKroneckerのデルタである。<br>
+        (2) $v_1, \dots, v_n$ は $\Omega$ 上一次独立 (linearly independent) である。
+    </div>
+
+    <div class="proof">
+        <span class="label">補題 2.1 の証明.</span><br>
+        (1) 任意の $k \in \{1,\dots,n\}$ に対して $L_i v_k$ を計算する。$T_{ij} v_k = \lambda^{ij}_k v_k$ より、$(T_{ij} - \lambda^{ij}_j \mathrm{id}_W) v_k = (\lambda^{ij}_k - \lambda^{ij}_j) v_k$ である。
+        もし $k \neq i$ ならば、積 $L_i$ の因子の中に $j=k$ となる項 $\frac{T_{ik} - \lambda^{ik}_k \mathrm{id}_W}{\lambda^{ik}_i - \lambda^{ik}_k}$ が存在する。この因子を $v_k$ に作用させると、分子が $(\lambda^{ik}_k - \lambda^{ik}_k) v_k = 0$ となるため、$L_i v_k = 0$ である。
+        一方 $k = i$ の場合、すべての $j \neq i$ に対して分子は $(\lambda^{ij}_i - \lambda^{ij}_j) v_i$ となり、分母と完全に相殺される。したがって $L_i v_i = v_i$ である。
+        以上より $L_i v_j = \delta_{ij} v_i \quad (i,j=1,\dots,n)$ が示された。<br><br>
+        (2) $\Omega$ の元 $c_1, \dots, c_n$ を用いて $\sum_{j=1}^n c_j v_j = 0$ と表されているとする。この両辺に (1) で構成した $L_i$ を作用させると、
+        $$L_i \left( \sum_{j=1}^n c_j v_j \right) = \sum_{j=1}^n c_j L_i v_j = c_i v_i = 0$$
+        となる。仮定より $v_i \neq 0$ であるから、$c_i = 0$ を得る。これが任意の $i=1,\dots,n$ で成り立つため、$v_1, \dots, v_n$ は $\Omega$ 上一次独立である。（証明終）
+    </div>
+
+    <div class="theorem">
+        <span class="label">定理 2.2 (Dedekindの補題)</span><br>
+        半群 (semigroup) $H$ から体 $\Omega$ への相異なる半群準同型 $\sigma_1, \dots, \sigma_n : H \to \Omega^\times$ は、$H$ 上の $\Omega$ に値を持つ関数達として一次独立である。ただし $\Omega^\times = \Omega \smallsetminus \{0\}$ は乗法群である。
+    </div>
+
+    <div class="proof">
+        <span class="label">Dedekindの補題の証明.</span><br>
+        $V$ を $H$ から $\Omega$ への写像全体のなす $\Omega$ 上のベクトル空間とし、$v_k = \sigma_k \in V$ とおく。これらはゼロ写像ではないので非ゼロベクトルである。$W$ を $v_1, \dots, v_n$ で張られる部分空間とする。
+        $\sigma_1, \dots, \sigma_n$ は相異なるので、任意の $i \neq j$ に対して、ある $h_{ij} \in H$ が存在して $\sigma_i(h_{ij}) \neq \sigma_j(h_{ij})$ を満たす。
+        $W$ 上の一次変換 $T_{ij}$ を、$(T_{ij} f)(x) = f(h_{ij} x)$ によって定義する。$H$ は半群であるため $h_{ij} x \in H$ となり、この一次変換は well-defined である。
+        $v_k = \sigma_k$ に対して $T_{ij}$ を作用させると、準同型の性質から
+        $$(T_{ij} \sigma_k)(x) = \sigma_k(h_{ij} x) = \sigma_k(h_{ij}) \sigma_k(x)$$
+        となる。すなわち $T_{ij} v_k = \sigma_k(h_{ij}) v_k$ であり、$v_k$ は固有値 $\lambda^{ij}_k = \sigma_k(h_{ij})$ を持つ固有ベクトルである。
+        $h_{ij}$ の選び方から $\lambda^{ij}_i = \sigma_i(h_{ij}) \neq \sigma_j(h_{ij}) = \lambda^{ij}_j$ が成り立つ。
+        したがって先の補題 2.1 の条件がすべて満たされるため、(2) より $v_1, \dots, v_n$ すなわち $\sigma_1, \dots, \sigma_n$ は $\Omega$ 上一次独立である。（証明終）
+    </div>
+
+    <div class="remark">
+        <span class="label">注意 (体の準同型とDedekindの補題)</span><br>
+        体 $L$ から体 $\Omega$ への体の準同型は、積の構造を保つため、$L$ の乗法群 $H = L^\times$ から $\Omega$ の乗法群 $\Omega^\times$ への半群準同型を与えます（もちろん群準同型でもあります）。したがって、体 $L$ から体 $\Omega$ への相異なる体の準同型たちは、Dedekindの補題によって、直ちに関数達として $\Omega$ 上一次独立であることが従います。
+    </div>
+
+    <h2>3. トレース写像の非退化性</h2>
+
+    <div class="lemma">
+        <span class="label">命題 3.1</span><br>
+        体 $L$ とその自己同型の有限群 $G = \{\sigma_1, \dots, \sigma_n\}$、および不変体 $K = L^G$ を考える。トレース写像 $\mathrm{Tr}_{L/K} : L \to K$ を $\mathrm{Tr}_{L/K}(x) = \sum_{i=1}^n \sigma_i(x)$ で定義する。この写像が $K$ 上の線形写像（$K$-linear map）であることは、各 $\sigma_i$ が体同型であり $K$ の元を固定することから従う。このとき、すべての $y \in L$ について $\mathrm{Tr}_{L/K}(xy) = 0$ となる $x \in L$ は $x=0$ しかない。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明.</span><br>
+        ある $x \in L$ が存在して、すべての $y \in L$ に対して $\mathrm{Tr}_{L/K}(xy) = 0$ が成り立つと仮定する。このとき、自己同型の性質より
+        $$\mathrm{Tr}_{L/K}(xy) = \sum_{i=1}^n \sigma_i(xy) = \sum_{i=1}^n \sigma_i(x)\sigma_i(y) = 0$$
+        が任意の $y \in L$ について成り立つ。これは $L$ の自己同型写像 $\sigma_1, \dots, \sigma_n$ を乗法群 $H = L^\times$ 上の関数とみなしたとき、関数としての一次関係式 $\sum_{i=1}^n \sigma_i(x) \sigma_i = 0$ が成り立つことを意味する。
+        Dedekindの補題より、$\sigma_1, \dots, \sigma_n$ は $L^\times$ 上の $L$ に値を持つ関数達として一次独立である。したがって、すべての係数がゼロでなければならないため、各 $i$ に対して $\sigma_i(x) = 0$ となる。
+        $\sigma_i$ は同型写像であるから、これを満たすのは $x = 0$ のみである。したがって、条件を満たす $x$ は $0$ に限られる。（証明終）
+    </div>
+
+    <h2>4. Artinの定理の証明</h2>
+
+    <div class="theorem">
+        <span class="label">定理 4.1 (Artinの定理)</span><br>
+        体 $L$ とその自己同型の位数 $n$ の有限群 $G$、および不変体 $K = L^G$ を考える。このとき $[L:K] = n$ であり、$L/K$ はGalois拡大である。さらに $G = \mathrm{Gal}(L/K)$ となる。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明.</span><br>
+        (1) まず $\dim_L \mathrm{End}_K(L) = [L:K]$ を示す。
+        $\mathrm{End}_K(L)$ は、$K$ 上のベクトル空間 $L$ の自己準同型全体のなす環であり、$K$ だけでなく $L$ 上のベクトル空間としても自然にみなせる（$L$ の元を左から掛ける作用により）。
+        もし $[L:K] = m < \infty$ ならば、$\mathrm{End}_K(L)$ は $K$ 上の $m \times m$ 行列環と同型であり、その $K$ 上の次元は $m^2$ である。$L$ の $K$ 上の次元が $m$ であるため、$\mathrm{End}_K(L)$ の $L$ 上の次元は $m^2 / m = m = [L:K]$ となる。
+        もし $[L:K] = \infty$ ならば、$\dim_L \mathrm{End}_K(L) = \infty$ となり、等式は成立する。<br><br>
+
+        (2) 自然な写像 $\Phi: L[G] \to \mathrm{End}_K(L)$ が同型になることを示す。
+        $G$ を基底とする $L$ 上のベクトル空間を考え、その元 $\sum_{\sigma \in G} a_\sigma \sigma$ ($a_\sigma \in L$) に対して積を
+        $$(a\sigma)(b\tau) = a\sigma(b)\sigma\tau \quad (a,b \in L, \sigma,\tau \in G)$$
+        で定義する。これにより得られる単位元 $1$ を持つ結合代数（接合環 (crossed product) と呼ばれる）を $L[G]$ と書く。
+        写像 $\Phi: L[G] \to \mathrm{End}_K(L)$ を、$\Phi(\sum_{\sigma \in G} a_\sigma \sigma)(x) = \sum_{\sigma \in G} a_\sigma \sigma(x)$ によって定義する。
+
+        <ul>
+            <li>
+                <strong>$\Phi$ が1を持つ結合代数の準同型であること：</strong><br>
+                任意の $x \in L$ に対して、$\Phi((a\sigma)(b\tau))(x) = \Phi(a\sigma(b)\sigma\tau)(x) = a\sigma(b)\sigma(\tau(x))$ となる。
+                一方、$\Phi(a\sigma)(\Phi(b\tau)(x)) = \Phi(a\sigma)(b\tau(x)) = a\sigma(b\tau(x)) = a\sigma(b)\sigma(\tau(x))$ となる。
+                したがって $\Phi((a\sigma)(b\tau)) = \Phi(a\sigma) \circ \Phi(b\tau)$ が成り立つ。単位元が保たれることも明らかであるため、$\Phi$ は準同型である。
+            </li>
+            <li>
+                <strong>$\Phi$ が単射であること：</strong><br>
+                $\Phi(\sum_{\sigma \in G} a_\sigma \sigma) = 0$ と仮定する。これは任意の $x \in L$ に対して $\sum_{\sigma \in G} a_\sigma \sigma(x) = 0$ を意味する。
+                Dedekindの補題より、相異なる自己同型 $\sigma \in G$ たちは $L$ 上一次独立である。したがって全ての $\sigma \in G$ について $a_\sigma = 0$ となり、$\Phi$ は単射である。
+            </li>
+            <li>
+                <strong>$\Phi$ が全射であることをGalois降下 (Galois descent) で示す：</strong><br>
+                写像 $\Psi: L \otimes_K L \to \mathrm{End}_K(L)$ を、$\Psi(a \otimes b)(x) = a \mathrm{Tr}_{L/K}(bx)$ によって定義する。
+                任意の $b \in L$ に対して $\mathrm{Tr}_{L/K}(bx) = \sum_{\sigma \in G} \sigma(bx) = \sum_{\sigma \in G} \sigma(b) \sigma(x)$ であるから、
+                $$\Psi(a \otimes b) = a \sum_{\sigma \in G} \sigma(b) \sigma \in \Phi(L[G])$$
+                となる。したがって $\mathrm{Im}(\Psi) \subset \mathrm{Im}(\Phi)$ である。<br>
+                次に $\Psi$ が単射であることを示す。$\sum_{i=1}^r a_i \otimes b_i \in \ker(\Psi)$ とし、$\{a_1, \dots, a_r\}$ を $K$ 上一次独立な $L$ の元の集合として選ぶ。
+                任意の $x \in L$ に対して $\Psi(\sum_{i=1}^r a_i \otimes b_i)(x) = \sum_{i=1}^r a_i \mathrm{Tr}_{L/K}(b_i x) = 0$ となる。
+                $\mathrm{Tr}_{L/K}(b_i x) \in K$ であり、$a_i$ は $K$ 上一次独立であるから、各 $i$ に対して $\mathrm{Tr}_{L/K}(b_i x) = 0$ である。<br>
+                これが任意の $x \in L$ で成り立つため、トレース写像の非退化性より $b_i = 0$ である。よって $\Psi$ は単射である。<br>
+                $\Psi$ は左 $L$ ベクトル空間としての単射準同型である。$L \otimes_K L$ の $L$ 上の次元は $\dim_K L = [L:K]$ であり、(1) より $\mathrm{End}_K(L)$ の $L$ 上の次元も $[L:K]$ である。次元が一致するため $\Psi$ は全射（同型）である。
+                結果として、$\mathrm{End}_K(L) = \mathrm{Im}(\Psi) \subset \mathrm{Im}(\Phi) \subset \mathrm{End}_K(L)$ となり、$\Phi$ は全射であることが示された。
+            </li>
+        </ul>
+        以上より $\Phi: L[G] \to \mathrm{End}_K(L)$ は同型写像である。<br>
+        $L[G]$ の $L$ 上の次元は基底 $G$ の元の個数 $|G| = n$ である。一方 $\mathrm{End}_K(L)$ の $L$ 上の次元は $[L:K]$ である。同型写像で次元が保たれるため、$[L:K] = n$ を得る。<br><br>
+
+        (3) 最後に、$L/K$ が分離的かつ正規拡大であることを示す。<br>
+        任意の $\alpha \in L$ をとる。$G$ の元によって $\alpha$ が移る先の要素の集合（軌道）を $\{\alpha_1, \dots, \alpha_r\}$ とし（ただし $\alpha_1 = \alpha$ とする）、これらは互いに相異なるとする。
+        多項式 $f(x) = \prod_{i=1}^r (x - \alpha_i)$ を考える。$G$ の任意の元 $\sigma$ は根 $\{\alpha_1, \dots, \alpha_r\}$ を並べ替えるだけなので、多項式 $f(x)$ の係数は $G$ によってすべて固定される。
+        $K = L^G$ であるから、$f(x)$ の係数は $K$ に属する。すなわち、$f(x) \in K[x]$ である。
+        $\alpha$ は $f(x)$ の根であるため、$\alpha$ の $K$ 上の最小多項式 $p(x)$ は $f(x)$ を割り切る。
+        $f(x)$ の根は構成上すべて相異なり、かつすべて $L$ に属している。したがってその約数である $p(x)$ も重根を持たず（分離的）、$L$ において一次式の積に完全に分解される（正規）。
+        $\alpha$ は $L$ の任意の元であったため、$L/K$ は分離的かつ正規拡大であり、すなわち定義よりGalois拡大である。
+        $G \subset \mathrm{Gal}(L/K)$ は明らかであり、位数の比較から $[L:K] = n = |G| \le |\mathrm{Gal}(L/K)| \le [L:K]$ となるため、$G = \mathrm{Gal}(L/K)$ も成立する。（証明終）
+    </div>
+
+    <h2>5. Galoisの基本定理の証明</h2>
+
+    <p>ここで、Galois対応の美しさを視覚的に捉えるために、基本定理の構造を思い浮かべてみましょう。体拡大の中間体は上にいくほど大きく、対応するGalois群の部分群は下にいくほど大きくなります。この反変的な対応関係が、一対一に結びつくのです。</p>
+
+    <div class="theorem">
+        <span class="label">定理 5.1 (Galoisの基本定理)</span><br>
+        $L/K$ を有限次Galois拡大とし、$G = \mathrm{Gal}(L/K)$ とする。このとき、$L/K$ の中間体 $M$ ($K \subset M \subset L$) 全体の集合と、$G$ の部分群 $H$ 全体の集合との間に、全単射（Galois対応 (Galois correspondence)）が存在する。対応は以下で与えられる。
+        $$\alpha(M) = \mathrm{Gal}(L/M)$$
+        $$\beta(H) = L^H$$
+    </div>
+
+    <div class="proof">
+        <span class="label">証明.</span><br>
+        まず、定義から容易に導かれる包含関係の片側を示す。
+        <ol>
+            <li>
+                <strong>$M \subset \beta(\alpha(M))$ の証明：</strong><br>
+                $\alpha(M) = \mathrm{Gal}(L/M)$ は、定義により $M$ の元を全て固定する $L$ の自己同型のなす群である。したがって、任意の $x \in M$ は $\mathrm{Gal}(L/M)$ の全ての元によって固定される。これは $x \in L^{\mathrm{Gal}(L/M)} = \beta(\alpha(M))$ を意味する。よって $M \subset \beta(\alpha(M))$ である。
+            </li>
+            <li>
+                <strong>$H \subset \alpha(\beta(H))$ の証明：</strong><br>
+                $\beta(H) = L^H$ は、$H$ の全ての元によって固定される $L$ の元の集合である。したがって、$H$ の任意の元 $\sigma$ は $L^H$ の全ての元を固定するため、$\sigma$ は $\mathrm{Gal}(L/L^H)$ に属する。すなわち $\sigma \in \alpha(\beta(H))$ であり、$H \subset \alpha(\beta(H))$ を得る。
+            </li>
+        </ol>
+
+        次に、Artinの定理を用いて逆向きの包含関係（等号）を証明する。
+
+        <ul>
+            <li>
+                <strong>$H = \alpha(\beta(H))$ の証明：</strong><br>
+                $H$ を $G$ の任意の部分群とし、不変体 $M' = \beta(H) = L^H$ を考える。
+                Artinの定理を体 $L$ と自己同型の部分群 $H$ に対して適用すると、$L$ の $L^H$ 上の拡大次数は $[L : L^H] = |H|$ であり、$L/L^H$ は分離的かつ正規拡大、すなわちGalois拡大となる。
+                Artinの定理の帰結より $\mathrm{Gal}(L/L^H) = H$ が成り立つ。すなわち $\alpha(\beta(H)) = H$ である。
+            </li>
+            <li>
+                <strong>$M = \beta(\alpha(M))$ の証明：</strong><br>
+                $M' = \beta(\alpha(M))$ とおく。定義より $M \subset M'$ は明らかである。<br>
+                すでに証明した $H = \alpha(\beta(H))$ において、$H = \alpha(M)$ を代入すると、$\alpha(\beta(\alpha(M))) = \alpha(M)$ となる。すなわち $\alpha(M') = \alpha(M)$ であり、$M$ を固定する自己同型群と $M'$ を固定する自己同型群は完全に一致する。<br>
+                ここで、もし $M \subsetneq M'$ ならば、ある元 $\gamma \in M' \smallsetminus M$ が存在する。
+                $L/K$ は分離的かつ正規拡大であるため、その中間体 $M$ 上の拡大 $L/M$ もまた有限次Galois拡大（分離的正規拡大）である。
+                したがって、$\gamma$ の $M$ 上の最小多項式 $p(x)$ は分離的であり、$L$ 内にすべての根を持つ。$\gamma \notin M$ より $\deg p \ge 2$ であるから、$p(x)$ は $\gamma$ と異なる共役元 $\gamma' \in L$ を持つ。
+                ここで、<strong>命題 1.3</strong> を $M$ 上のGalois拡大 $L/M$ に適用すると、根 $\gamma$ を共役元 $\gamma'$ に移す $L$ の $M$-自己同型 $\sigma \in \mathrm{Gal}(L/M) = \alpha(M)$ が存在する。
+                しかし $\alpha(M) = \alpha(M')$ であるため、$\sigma$ は $M'$ の元である $\gamma$ を必ず固定しなければならず、$\sigma(\gamma) = \gamma$ となる。
+                これは $\sigma(\gamma) = \gamma' \neq \gamma$ に矛盾する。
+                したがって $M = M' = \beta(\alpha(M))$ である。
+            </li>
+        </ul>
+
+        以上により、$\alpha$ と $\beta$ は互いに逆写像であり、一対一の対応を与える。（証明終）
+    </div>
+
+    <p>このように、Dedekindの補題から出発し、トレース写像の非退化性を利用したGalois降下で接合環の同型（Artinの定理）を導くことで、不変体に対する体の拡大が分離的かつ正規なGalois拡大になることが鮮やかに示されます。そしてそのArtinの定理から得られる $H = \alpha(\beta(H))$ という関係を巧みに適用し、分離的正規拡大の基本的な性質を用いることで、Galoisの基本定理における逆向きの包含関係が拡大次数の計算なしに自然に証明されるのです。代数学の構築美を感じられる素晴らしい証明ですね。</p>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ul>
+            <li>
+                Artin, E. (1971). <i>Galois Theory: Lectures Delivered at the University of Notre Dame</i> (Notre Dame Mathematical Lectures, Number 2). Project Euclid. 
+                <a href="https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197041" target="_blank">https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197041</a>
+            </li>
+            <li>
+                Lang, S. (2002). <i>Algebra</i> (Revised 3rd ed.). Springer. 
+                <a href="https://link.springer.com/book/10.1007/978-1-4613-0041-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4613-0041-0</a>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
