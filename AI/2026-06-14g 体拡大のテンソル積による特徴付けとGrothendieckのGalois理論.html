@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>体拡大のテンソル積による特徴付けとGrothendieckのGalois理論</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']],
+      processEscapes: true
+    },
+    chtml: {
+      matchFontHeight: false
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    color: #2c3e50;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fdfdfd;
+  }
+  h1 {
+    font-size: 1.8rem;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-family: sans-serif;
+  }
+  h2 {
+    font-size: 1.4rem;
+    border-bottom: 1px solid #bdc3c7;
+    margin-top: 2.5rem;
+    padding-bottom: 0.3rem;
+    font-family: sans-serif;
+  }
+  h3 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    color: #34495e;
+    font-family: sans-serif;
+  }
+  .note {
+    background-color: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #6c757d;
+    margin-bottom: 2rem;
+    font-family: sans-serif;
+  }
+  .definition, .theorem, .proof, .example {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .definition { border-left: 4px solid #2980b9; }
+  .theorem { border-left: 4px solid #d35400; background-color: #fcf9f2; }
+  .proof { border-left: 4px solid #7f8c8d; background-color: #fdfdfd; }
+  .example { border-left: 4px solid #27ae60; background-color: #f4fdf8; }
+  .title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  ul, ol { margin-left: 1.5rem; }
+  a { color: #2980b9; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .references { margin-top: 1rem; font-size: 0.95rem; }
+  .references li { margin-bottom: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>体拡大のテンソル積による特徴付けとGrothendieckのGalois理論</h1>
+
+<div class="note">
+<p>本稿では、体の代数拡大（有限次拡大、分離拡大、正規拡大、Galois拡大）といった基本的な概念を、<strong>「体のテンソル積 (tensor product)」</strong>の視点から特徴付ける手法について解説します。</p>
+<p>通常のGalois理論の基本定理の証明では、ArtinやDedekindによる線形代数的な「拡大次数の不等式評価」が鍵となります。しかし、テンソル積による特徴付けを用いると、この複雑な評価を回避し、「環のイデアルによる剰余」や「冪等元による直積分解」といった純粋に可換環論的・幾何学的な操作のみで、Galois対応を鮮やかに証明することができます。これは、代数幾何学におけるエタール基本群などへと繋がる <strong>GrothendieckのGalois理論</strong> の最も基礎的なアイデアです。</p>
+<p>数学的な命題や証明は厳密さを期すため「だ・である調」で記述し、合間の解説は親しみやすいように「です・ます調」で記述しています。</p>
+</div>
+
+<h2>1. 基礎概念の準備</h2>
+
+<p>まずは、本稿で用いる体論と環論の基本概念を整理しておきましょう。</p>
+
+<div class="definition">
+  <span class="title">定義 1.1 (体の拡大に関する諸概念)</span>
+  $K$ を体とし、$L$ をその拡大体とする。
+  <ul>
+    <li><strong>有限次拡大 (finite extension):</strong> $L$ が $K$-ベクトル空間として有限次元であること。その次元を $[L:K]$ で表す。</li>
+    <li><strong>代数拡大 (algebraic extension):</strong> $L$ の任意の元 $\alpha$ が、$K$ 係数の非零な多項式の根になること。$\alpha$ を根に持つモニックで次数最小の多項式を<strong>最小多項式 (minimal polynomial)</strong>と呼ぶ。</li>
+    <li><strong>分離拡大 (separable extension):</strong> 代数拡大であって、任意の元の最小多項式が重根を持たない (分離多項式である) こと。</li>
+    <li><strong>正規拡大 (normal extension):</strong> 代数拡大であって、$K$ 上の既約多項式が $L$ に1つでも根を持てば、$L$ 上で一次式に完全に分解すること。</li>
+    <li><strong>Galois拡大 (Galois extension):</strong> 分離的かつ正規な代数拡大であること。</li>
+  </ul>
+</div>
+
+<div class="definition">
+  <span class="title">定義 1.2 (テンソル積)</span>
+  $K$ を体、$L, M$ を $K$ を部分体として含む可換環とする。$L$ と $M$ の $K$ 上の<strong>テンソル積 (tensor product)</strong> $L \otimes_K M$ とは、$K$-ベクトル空間としてのテンソル積に、自然な積 $(x \otimes y)(x' \otimes y') = (xx') \otimes (yy')$ を与えて可換環としたものである。
+</div>
+
+<div class="definition">
+  <span class="title">定義 1.3 (環論の諸概念)</span>
+  <ul>
+    <li><strong>被約環 (reduced ring):</strong> $x^n = 0$ となるような非零元 (すなわち冪零元) を持たない可換環。</li>
+    <li><strong>Artin環 (Artinian ring):</strong> イデアルの降鎖条件を満たす環。<strong>局所Artin環 (local Artinian ring)</strong> とは、極大イデアルをただ1つ持つArtin環である。</li>
+  </ul>
+</div>
+
+<p>体のテンソル積は一般には体にならず、直積環や被約でない環になることがあります。この「体から環への拡張」こそが、テンソル積が体拡大の構造を映し出す鏡となる理由です。</p>
+
+<div class="example">
+  <span class="title">例 1.4</span>
+  $K = \mathbb{R}$, $L = \mathbb{C}$ の場合を考える。$\mathbb{C} \cong \mathbb{R}[X]/(X^2+1)$ であるから、
+  $$ \mathbb{C} \otimes_{\mathbb{R}} \mathbb{C} \cong \mathbb{C} \otimes_{\mathbb{R}} \mathbb{R}[X]/(X^2+1) \cong \mathbb{C}[X]/(X^2+1) $$
+  と計算できる。複素数体 $\mathbb{C}$ 上では $X^2+1 = (X-i)(X+i)$ と分解されるため、中国剰余定理より
+  $$ \mathbb{C}[X]/((X-i)(X+i)) \cong \mathbb{C}[X]/(X-i) \times \mathbb{C}[X]/(X+i) \cong \mathbb{C} \times \mathbb{C} $$
+  となる。すなわち、$\mathbb{C} \otimes_{\mathbb{R}} \mathbb{C} \cong \mathbb{C} \times \mathbb{C}$ であり、体のテンソル積が2つの体の直積環となることがわかる。
+</div>
+
+<h2>2. 体拡大のテンソル積による特徴付け</h2>
+
+<p>以下、$L$ を体 $K$ の拡大体とし、$A = L \otimes_K L$ とおきます。$A$ を $L$-ベクトル空間 (および $L$-代数) と見なすときは、第一成分の積 $x \cdot (a \otimes b) = (xa) \otimes b$ によって構造を定めます。</p>
+
+<div class="theorem">
+  <span class="title">定理 2.1 (体拡大の特徴付け)</span>
+  以下の条件について、それぞれ両方向の同値性が成り立つ。
+  <ol>
+    <li>$L$ は $K$ の有限次拡大である $\iff$ $A$ は $L$-ベクトル空間として有限次元である。</li>
+    <li>$L$ は $K$ の分離拡大である $\iff$ $A$ は被約環である。</li>
+    <li>$L$ は $K$ の正規拡大である $\iff$ $L/K$ は代数拡大であり、任意の素イデアル $\mathfrak{p} \subset A$ に対し $\mathrm{Frac}(A/\mathfrak{p}) \cong L$ である。</li>
+    <li>$L$ は $K$ の有限次分離拡大である $\iff$ $A$ は有限個の体の直積に同型である。</li>
+    <li>$L$ は $K$ の有限次正規拡大である $\iff$ $A$ は有限個の局所Artin環の直積 $\prod_{i=1}^r A_i$ に同型で、各剰余体 $A_i/\mathfrak{m}_i \cong L$ である。</li>
+    <li>$L$ は $K$ の有限次Galois拡大である $\iff$ $A$ は $[L:K]$ 個の体 $L$ の直積に同型である。</li>
+  </ol>
+</div>
+
+<p>これらの証明を順に追っていきましょう。</p>
+
+<div class="proof">
+  <span class="title">証明 (1): 有限次拡大 $\iff$ $L$-有限次元</span>
+  <strong>($\implies$)</strong> $[L:K] = n < \infty$ とする。$L$ の $K$-基底を $\{e_1, \dots, e_n\}$ とすると、$L = \bigoplus_{i=1}^n K e_i$ である。テンソル積の分配律より、
+  $$ A = L \otimes_K \left( \bigoplus_{i=1}^n K e_i \right) \cong \bigoplus_{i=1}^n (L \otimes_K K) e_i \cong \bigoplus_{i=1}^n L (1 \otimes e_i) $$
+  したがって、$A$ は $\{1 \otimes e_1, \dots, 1 \otimes e_n\}$ を基底とする $n$ 次元の $L$-ベクトル空間である。<br><br>
+  <strong>($\impliedby$)</strong> $\dim_L(A) = n < \infty$ とする。$A$ を $K$-ベクトル空間として見ると、$\dim_K(A) = \dim_K(L) \dim_L(A) = n \dim_K(L)$ となる。一方、テンソル積の定義より $\dim_K(A) = (\dim_K(L))^2$ である。したがって $\dim_K(L) = n < \infty$ となり、$L/K$ は有限次拡大である。
+</div>
+
+<div class="proof">
+  <span class="title">証明 (2): 分離拡大 $\iff$ 被約環</span>
+  <strong>($\implies$)</strong> $L/K$ が分離拡大であるとする。任意の有限生成部分拡大 $L_i/K$ は原始元定理より $L_i = K(\alpha_i)$ と書ける。$\alpha_i$ の最小多項式 $f_i(X) \in K[X]$ は分離多項式であるため、$L_i \otimes_K L_i \cong L_i[X]/(f_i(X))$ は重根を持たず、有限個の体の直積となり被約環である。$L/K$ は有限次分離拡大の直極限 $L = \varinjlim L_i$ と書け、テンソル積は直極限と可換であるため $A = \varinjlim (L_i \otimes_K L_i)$ となる。被約環の直極限も被約環であるため、$A$ は被約環である。<br><br>
+  <strong>($\impliedby$)</strong> 対偶を示す。$L/K$ が分離拡大でないとする。このとき $\mathrm{char}(K) = p > 0$ であり、非分離的な元 $\alpha \in L \smallsetminus K$ とある整数 $e \ge 1$ が存在し、$\alpha^{p^e} = a \in K$ となる。
+  $A$ において $u = \alpha \otimes 1 - 1 \otimes \alpha$ とおく。$1$ と $\alpha$ は $K$ 上一次独立なので $u \neq 0$ である。しかし、
+  $$ u^{p^e} = (\alpha \otimes 1 - 1 \otimes \alpha)^{p^e} = \alpha^{p^e} \otimes 1 - 1 \otimes \alpha^{p^e} = a \otimes 1 - 1 \otimes a = 0 $$
+  となり、$u$ は非零の冪零元である。したがって $A$ は被約環ではない。
+</div>
+
+<div class="proof">
+  <span class="title">証明 (3): 正規拡大 $\iff$ 剰余体が $L$ に同型</span>
+  <strong>($\implies$)</strong> $L/K$ が正規拡大であるとする。任意の素イデアル $\mathfrak{p} \subset A$ を取り、$E = \mathrm{Frac}(A/\mathfrak{p})$ とおく。$L/K$ は代数拡大なので、$A$ は $L$ 上代数的な環である。したがって整域 $A/\mathfrak{p}$ も $L$ 上代数的であり、体となる。すなわち $E = A/\mathfrak{p}$ である。<br>
+  自然な準同型写像 $\phi_1(x) = x \otimes 1 \bmod \mathfrak{p}$ と $\phi_2(x) = 1 \otimes x \bmod \mathfrak{p}$ を考える。<strong>$L$ は体なので、これらは零環ではない $E$ への単射である。</strong> 任意の $\alpha \in L$ の $K$ 上の最小多項式を $f(X) \in K[X]$ とすると、$f(\phi_2(\alpha)) = f(1 \otimes \alpha) \bmod \mathfrak{p} = 1 \otimes f(\alpha) \bmod \mathfrak{p} = 0$ となる。$L/K$ は正規拡大なので、$f(X)$ は $L$ 上で一次式に完全に分解する。よって、その根である $\phi_2(\alpha)$ は $\phi_1(L)$ に含まれなければならない。対称性から $\phi_1(L) = \phi_2(L)$ であり、$E$ はこれらで生成されるため $E = \phi_1(L) \cong L$ となる。<br><br>
+  <strong>($\impliedby$)</strong> 任意の素イデアルによる剰余体が $L$ に同型であるとする。$\alpha \in L$ を任意に取り、その $K$ 上の最小多項式を $f(X)$ とする。$f(X)$ のある根 $\beta$ を含む $L$ の拡大体 $\Omega$ を取る。$\alpha \mapsto \beta$ とする $K$ 上の同型は、環準同型 $\Phi: L \otimes_K L \to \Omega$ を $\Phi(x \otimes y) = x \cdot y'$ ($y'$ は $y$ を同型で写した像) によって誘導する。<br>
+  $\ker(\Phi) = \mathfrak{p}$ は素イデアルであり、$A/\mathfrak{p}$ は $\Omega$ の部分体と同型になる。仮定より $\mathrm{Frac}(A/\mathfrak{p}) \cong L$ であるため、第二成分の像 (特に $\beta$) も第一成分の像 (すなわち $L$ 自身のコピー) に含まれなければならない。よって $\beta \in L$ となり、$f(X)$ のすべての根は $L$ に属するため正規拡大である。
+</div>
+
+<div class="proof">
+  <span class="title">証明 (4): 有限次分離拡大 $\iff$ 有限個の体の直積</span>
+  <strong>($\implies$)</strong> (2)の証明で示したように、有限次分離拡大ならば原始元定理より $L = K(\alpha)$ と書け、$A \cong L[X]/(f(X))$ となる。$f(X)$ は重根を持たないため、中国剰余定理により $A \cong \prod_{i=1}^r L[X]/(f_i(X))$ となり、各 $f_i$ が既約であることから有限個の体の直積となる。<br><br>
+  <strong>($\impliedby$)</strong> $A \cong \prod_{i=1}^r F_i$ (各 $F_i$ は体) であるとする。$A$ は有限個の体の直積なので被約環であり、(2)より分離拡大である。また、各 $F_i$ は $L$ を含むため $L$-ベクトル空間として少なくとも1次元以上であり、$A$ 全体としても有限次元である。したがって(1)より有限次拡大である。
+</div>
+
+<div class="proof">
+  <span class="title">証明 (5): 有限次正規拡大 $\iff$ 剰余体が $L$ である局所Artin環の直積</span>
+  <strong>($\implies$)</strong> (1)より有限次なので、$A$ は $L$ 上有限次元、すなわちArtin環である。Artin環の構造定理より $A \cong \prod_{i=1}^r A_i$ (各 $A_i$ は極大イデアル $\mathfrak{m}_i$ をもつ局所Artin環) と一意に分解される。$A$ の素イデアルは $\mathfrak{m}_i$ に対応し、剰余環 $A/\mathfrak{m}_i$ は $A_i/\mathfrak{m}_i$ に同型である。さらに(3)より正規拡大であることから剰余体は $L$ に同型である。よって $A_i/\mathfrak{m}_i \cong L$ である。<br><br>
+  <strong>($\impliedby$)</strong> $A \cong \prod_{i=1}^r A_i$ であるとする。$A$ はArtin環なので $L$ 上有限次元であり、(1)より有限次拡大である。また、各 $A_i$ の剰余体が $L$ に同型であることは、$A$ の任意の素イデアルによる剰余体が $L$ に同型であることを意味する。したがって(3)より正規拡大である。
+</div>
+
+<h3>特徴付け (6) の自己完結した直接証明</h3>
+
+<p>ここで、Galois理論の要となる (6) の同値性について、他の (1)〜(5) を一切経由せず、同型写像を直接構成することで証明します。</p>
+
+<div class="proof">
+  <span class="title">証明 (6): 有限次Galois拡大 $\iff$ $[L:K]$ 個の体 $L$ の直積</span>
+  <strong>($\implies$)</strong>
+  $L/K$ を $n$ 次の有限次Galois拡大とし、そのGalois群を $G = \mathrm{Gal}(L/K) = \{\sigma_1, \dots, \sigma_n\}$ とする。
+  写像 $\Phi: L \otimes_K L \to \prod_{\sigma \in G} L$ を以下のように定義する。
+  $$ \Phi(x \otimes y) = (x \sigma(y))_{\sigma \in G} $$
+  この $\Phi$ は、第一成分の積に対して $\Phi((x_1x_2) \otimes y) = (x_1 x_2 \sigma(y))_{\sigma \in G} = x_1 \Phi(x_2 \otimes y)$ となるため、$L$-代数としての準同型写像である。<br>
+  両辺の $L$-ベクトル空間としての次元を比較すると、$\dim_L(L \otimes_K L) = \dim_K(L) = n$ であり、右辺の直積も $n$ 個の $L$ の直積であるため次元は $n$ である。有限次元ベクトル空間の間の線形写像であるため、$\Phi$ が単射であることを示せば同型であることが言える。<br>
+  $\Phi$ が単射でないと仮定する。このとき、非零の元 $u = \sum_{j=1}^m x_j \otimes y_j \in \ker(\Phi)$ が存在する。テンソル積の性質から、$y_1, \dots, y_m$ は $K$ 上一次独立であるとしてよい。$u \in \ker(\Phi)$ であるため、すべての $\sigma \in G$ について以下の等式が成り立つ。
+  $$ \sum_{j=1}^m x_j \sigma(y_j) = 0 $$
+  これは、$L$ から $L$ への自己同型写像 $\{\sigma_1, \dots, \sigma_n\}$ が $L$ 上で一次従属であることを意味している。しかし、Dedekindの補題 (指標の一次独立性) により、相異なる体自己同型は線形独立でなければならないため、これは矛盾である。したがって $\ker(\Phi) = 0$ となり、$\Phi$ は同型写像である。<br><br>
+  <strong>($\impliedby$)</strong>
+  $L$-代数としての同型写像 $\Phi: L \otimes_K L \xrightarrow{\sim} \prod_{i=1}^n L$ が存在すると仮定する。
+  $L$-ベクトル空間としての次元を比較すると、$\dim_L(L \otimes_K L) = \dim_K(L)$ であり、右辺の次元は $n$ である。したがって $[L:K] = n$ となり、$L/K$ は有限次拡大である。<br>
+  右辺の直積環には、各成分への射影写像 $p_i: \prod_{j=1}^n L \to L$ が $n$ 個存在する。これらと $\Phi$ を合成することで、$A$ から $L$ への $n$ 個の相異なる $L$-代数準同型 $\psi_i = p_i \circ \Phi$ を得る。ここで、各 $\psi_i$ を用いて写像 $\sigma_i: L \to L$ を次のように定義する。
+  $$ \sigma_i(y) = \psi_i(1 \otimes y) $$
+  $\psi_i$ は環準同型であるため、$\sigma_i$ も環準同型 ($K$ 上の体の埋め込み) となる。$L/K$ は有限次拡大であるため、$L$ から $L$ への $K$-線形な単射は必ず全射となり、$\sigma_i$ は $K$-自己同型写像 (すなわち $\mathrm{Gal}(L/K)$ の元) である。<br>
+  もし $\sigma_i = \sigma_j$ となる $i \neq j$ が存在したとすると、任意の $x, y \in L$ について
+  $$ \psi_i(x \otimes y) = \psi_i(x \otimes 1)\psi_i(1 \otimes y) = x \sigma_i(y) = x \sigma_j(y) = \psi_j(x \otimes y) $$
+  となり、$\psi_i = \psi_j$ となってしまうが、これは $\psi_i$ が $n$ 個の相異なる写像であることに矛盾する。
+  したがって、$\{\sigma_1, \dots, \sigma_n\}$ はすべて相異なる $n$ 個の $L$ の $K$-自己同型である。拡大次数 $[L:K] = n$ に対して自己同型群の位数が $n$ に等しいため、定義により $L/K$ は有限次Galois拡大である。
+</div>
+
+<h2>3. GrothendieckのGalois理論への応用</h2>
+
+<p>ここまでで証明した $L \otimes_K L \cong \prod_{\sigma \in G} L$ という関係式が、Galois対応の証明にどのように威力を発揮するのかを見ていきましょう。このアプローチでは、「環の直積分解」を制御する <strong>冪等元 (idempotent, $e^2=e$ を満たす元)</strong> と、群作用の組み合わせが主役になります。</p>
+
+
+
+<p>先ほどの例 ($\mathbb{C}/\mathbb{R}$) で、この同型が具体的にどうなっているかを観察してみます。</p>
+
+<div class="example">
+  <span class="title">例 3.1 ($\mathbb{C} \otimes_{\mathbb{R}} \mathbb{C}$ における冪等元の構造)</span>
+  $L = \mathbb{C}, K = \mathbb{R}$ とする。Galois群は $G = \{\mathrm{id}, \sigma\}$ (ここで $\sigma$ は複素共役) である。
+  同型 $\Phi: \mathbb{C} \otimes_{\mathbb{R}} \mathbb{C} \xrightarrow{\sim} \mathbb{C} \times \mathbb{C}$ は $\Phi(x \otimes y) = (xy, x\overline{y})$ で与えられる。<br>
+  直積環 $\mathbb{C} \times \mathbb{C}$ には、明らかな冪等元 $f_1 = (1, 0)$ と $f_2 = (0, 1)$ が存在する。これらに対応するテンソル積側の元 $e_1 = \Phi^{-1}(f_1)$, $e_2 = \Phi^{-1}(f_2)$ を探す。<br>
+  $f_1 + f_2 = (1, 1) = \Phi(1 \otimes 1)$<br>
+  $f_1 - f_2 = (1, -1) = \Phi(-i \otimes i)$ (なぜなら $\Phi(-i \otimes i) = (-i^2, -i(\overline{i})) = (1, -i(-i)) = (1, -1)$)<br>
+  これを解くと、
+  $$ e_1 = \frac{1 \otimes 1 - i \otimes i}{2}, \quad e_2 = \frac{1 \otimes 1 + i \otimes i}{2} $$
+  が得られる。実際に $e_1^2 = \frac{1 \otimes 1 - 2i \otimes i + i^2 \otimes i^2}{4} = \frac{1 \otimes 1 - 2i \otimes i + 1 \otimes 1}{4} = e_1$ となり、確かに冪等元をなしている。このように、テンソル積の内部には「成分を切り出す」ための幾何学的な射影演算子が潜んでいる。
+</div>
+
+<p>それでは、この同型を用いたGalois対応の証明を行います。Artinの不等式評価は一切登場しません。</p>
+
+<div class="theorem">
+  <span class="title">定理 3.2 (Galois対応の基本定理)</span>
+  $L/K$ を有限次Galois拡大、そのGalois群を $G$ とする。
+  中間体 $M$ と、部分群 $H \subset G$ は、対応 $H \mapsto L^H$ (不変体) および $M \mapsto \mathrm{Gal}(L/M)$ によって1対1に対応する。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  同型 $\Phi: L \otimes_K L \xrightarrow{\sim} \prod_{\sigma \in G} L$ において、Galois群 $G$ の元 $\tau$ は、テンソル積の右側の成分に対して $\tau \cdot (x \otimes y) = x \otimes \tau(y)$ として作用する。この作用は右辺の直積成分のインデックスを $(\tau \cdot \mathbf{c})_\sigma = c_{\sigma\tau}$ のようにシフトさせる。<br><br>
+
+  <strong>ステップ1：部分群 $H$ から出発し、$\mathrm{Gal}(L/L^H) = H$ を示す</strong><br>
+  任意の部分群 $H \le G$ を取り、対応する中間体を $M = L^H$ とする。$L \otimes_K L$ と $\prod_{\sigma \in G} L$ の双方において、$H$ の作用で不変な部分環 ($H$-不変部分) を考える。
+  <ul>
+    <li>左辺の $H$-不変部分は $(L \otimes_K L)^H = L \otimes_K (L^H) = L \otimes_K M$ であり、その $L$-ベクトル空間としての次元は $\dim_K(M) = [M:K]$ である。</li>
+    <li>右辺の直積環の元 $\mathbf{c}$ が $H$-不変であるとは、任意の $h \in H$ と $\sigma \in G$ について $c_\sigma = c_{\sigma h}$ となること。すなわち左剰余類 $\sigma H$ の上で定数になることである。左剰余類は $[G:H] = |G|/|H|$ 個存在するため、不変部分の $L$-次元は $[G:H]$ である。</li>
+  </ul>
+  したがって $[M:K] = [G:H]$ を得る。$[L:K] = |G| = [L:M][M:K]$ より、直ちに $[L:M] = |H|$ となる。明らかに $H \subset \mathrm{Gal}(L/M)$ であり、(後述のステップ2により) $\mathrm{Gal}(L/M)$ の位数は $[L:M]$ に等しいため、包含関係と位数が一致し $H = \mathrm{Gal}(L/M)$ が従う。<br><br>
+
+  <strong>ステップ2：中間体 $M$ から出発し、$L^{\mathrm{Gal}(L/M)} = M$ を示す</strong><br>
+  任意の中間体 $K \subset M \subset L$ を取り、$H_M = \mathrm{Gal}(L/M)$ とする。
+  自然な全射環準同型 $\pi: L \otimes_K L \twoheadrightarrow L \otimes_M L$ を考える。この全射の核 $I_M$ は、集合 $\{ 1 \otimes m - m \otimes 1 \mid m \in M \}$ で生成されるイデアルである。すなわち $(L \otimes_K L) / I_M \cong L \otimes_M L$ となる。<br>
+  同型 $\Phi$ を通じて、この生成元の像を計算すると、
+  $$ \Phi(1 \otimes m - m \otimes 1) = (\sigma(m) - m)_{\sigma \in G} $$
+  となる。イデアル $\Phi(I_M)$ は、「すべての $m \in M$ に対して $\sigma(m) = m$ となる成分」、すなわち $\sigma \in H_M$ に対応する成分においてのみ値が $0$ となる元の集合によって生成される。したがって、このイデアルで右辺の直積環を割ると、$H_M$ に対応する成分だけが生き残り、
+  $$ \prod_{\sigma \in G} L \Big/ \Phi(I_M) \cong \prod_{\sigma \in H_M} L $$
+  という同型が得られる。この同型は左辺の剰余環 $L \otimes_M L$ と結ばれるため、$L \otimes_M L \cong \prod_{\sigma \in H_M} L$ となる。<br>
+  両辺の $L$-ベクトル空間としての次元を比較する。左辺の次元は $[L:M]$ であり、右辺の次元は直積の成分数 $|H_M|$ である。したがって $[L:M] = |H_M|$ を得る。<br>
+  ステップ1の次元計算を $H = H_M$ に対して適用すると $[L:L^{H_M}] = |H_M|$ となる。$M \subset L^{H_M}$ でありながら、$L$ までの拡大次数が互いに $|H_M|$ で完全に一致するため、$M = L^{H_M}$ でなければならない。これでGalois対応の全単射性が完全に証明された。
+</div>
+
+<p>このように、可換環のテンソル積は体の枠組みを越えてGalois理論を展開するための強力な言語を提供してくれます。これはトポロジーにおける被覆空間 (covering space) の理論と完全にパラレルな関係にあり、現代数学の豊かさを感じさせる美しい理論です。</p>
+
+<h2>4. 参考文献</h2>
+<ol class="references">
+  <li>N. Bourbaki, <i>Algebra II, Chapters 4 - 7</i>, Springer-Verlag, 1990. <a href="https://link.springer.com/book/10.1007/978-3-642-61698-3" target="_blank">[Link]</a></li>
+  <li>A. Grothendieck, <i>Séminaire de Géométrie Algébrique du Bois Marie - 1960-61 - Revêtements étales et groupe fondamental - (SGA 1)</i>, Lecture Notes in Mathematics 224, Springer, 1971. (Available at arXiv:math/0206203) <a href="https://arxiv.org/abs/math/0206203" target="_blank">[Link]</a></li>
+</ol>
+
+</body>
+</html>
