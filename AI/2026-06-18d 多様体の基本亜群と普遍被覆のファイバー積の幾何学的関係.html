@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多様体の基本亜群と普遍被覆のファイバー積の幾何学的関係</title>
+    
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            packages: {'[+]': ['base', 'ams']}
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        .proof, .definition, .example, .proposition {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .proof { border-left-color: #2ecc71; }
+        .example { border-left-color: #f1c40f; }
+        .proposition { border-left-color: #e74c3c; font-weight: bold; }
+        .informal-note {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        blockquote {
+            border-left: 4px solid #ccc;
+            margin: 1.5em 10px;
+            padding: 0.5em 10px;
+            color: #666;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>多様体の基本亜群と普遍被覆のファイバー積の幾何学的関係</h1>
+
+    <div class="informal-note">
+        <strong>はじめに</strong><br>
+        本稿では、多様体上の基本亜群がどのような幾何学的・微分幾何学的構造を持つか、そしてそれが普遍被覆空間のファイバー積とどのような関係にあるのかについて解説します。本稿は自己完結的 (self-contained) となるように、基本概念の定義を振り返りながら証明を省略することなく丁寧に議論を進めます。<br><br>
+        位相的な前提として、本稿では滑らかで連結な多様体を扱います。したがって、一般位相空間論で現れるような 超不連結 (extremally disconnected) な空間や、Z超フィルター (Z-ultrafilter) が関わるような病的な対象を考慮する必要はありません。位相空間における開かつ閉な部分集合 (clopen な集合) は、連結成分の和集合として完全に理解できます。たとえば部分集合 $A \subset X$ を考えたとき、$A \neq \varnothing$ かつ $A$ が clopen であり、さらに全体空間 $X$ が連結であれば、$A = X$ となります。
+    </div>
+
+    <h2>1. 基礎概念の定義</h2>
+
+    <div class="definition">
+        <strong>定義 1 (亜群 / groupoid)</strong><br>
+        対象の集合 $X$ と射の集合 $G$、および以下の構造写像からなる圏を亜群 (groupoid) と呼ぶ。
+        <ul>
+            <li>始点写像 (source map) $s: G \to X$ と終点写像 (target map) $t: G \to X$</li>
+            <li>単位射を割り当てる対象包含写像 $u: X \to G$</li>
+            <li>逆射を与える写像 $i: G \to G$</li>
+            <li>射の合成 $m: G \times_X G \to G$ (ここで $G \times_X G = \{ (g, h) \in G \times G \mid s(g) = t(h) \}$)</li>
+        </ul>
+        すべての射が可逆であるという性質を持つ。
+    </div>
+
+    <div class="definition">
+        <strong>定義 2 (Lie亜群 / Lie groupoid)</strong><br>
+        亜群 $G$ と対象の空間 $X$ がともに滑らかな多様体であり、すべての構造写像 $s, t, u, i, m$ が滑らかな写像 (smooth map) となっているものを Lie亜群 (Lie groupoid) と呼ぶ。さらに、始点写像 $s$ は沈め込み (submersion) であることが要求される。
+    </div>
+
+    <div class="definition">
+        <strong>定義 3 (基本亜群 / fundamental groupoid)</strong><br>
+        位相空間 $X$ を対象の空間とし、$X$ 上の2点を結ぶ道のホモトピー類全体を射の空間とする亜群を基本亜群 (fundamental groupoid) と呼び、$\Pi_1(X)$ と表す。
+    </div>
+
+    <div class="example">
+        <strong>例 (単連結空間の基本亜群)</strong><br>
+        $X$ が単連結 (simply connected) な位相空間であるとする。このとき、$X$ 内の任意の2点 $x, y \in X$ を結ぶ道は、ホモトピー同値を除いてただ1つ存在する。したがって、この場合の基本亜群 $\Pi_1(X)$ は、$X \times X$ を射の空間とするペアの亜群 (pair groupoid) と自然に同型となる。
+    </div>
+
+    <h2>2. 基本亜群の多様体構造とLie亜群への昇格</h2>
+
+    <div class="proposition">
+        命題 1. $X$ が $n$ 次元の連結な可微分多様体であるとき、その基本亜群 $\Pi_1(X)$ は $2n$ 次元のLie亜群となる。
+    </div>
+
+    <div class="proof">
+        <strong>証明.</strong><br>
+        $X$ は連結な多様体であるため、局所単連結かつ半局所単連結である。したがって、普遍被覆空間 (universal covering space) を持ち、それを $p: \tilde{X} \to X$ とする。$\tilde{X}$ は単連結な $n$ 次元多様体である。<br><br>
+        ここで、直積空間 $\tilde{X} \times \tilde{X}$ を考える。これは $\tilde{X}$ が $n$ 次元であることから、$2n$ 次元の滑らかな多様体である。<br><br>
+        基本群 $\pi_1(X)$ は被覆変換群として $\tilde{X}$ に自由に (freely) かつ固有不連続 (properly discontinuously) に作用する。この作用を用いて、$\pi_1(X)$ を直積空間 $\tilde{X} \times \tilde{X}$ に対して対角的に作用させる。すなわち、$\gamma \in \pi_1(X)$ と $(\tilde{x}, \tilde{y}) \in \tilde{X} \times \tilde{X}$ に対して、
+        $$ \gamma \cdot (\tilde{x}, \tilde{y}) = (\gamma \cdot \tilde{x}, \gamma \cdot \tilde{y}) $$
+        と定める。<br><br>
+        この対角作用もまた自由かつ固有不連続な滑らかな作用であるため、その商空間
+        $$ G = (\tilde{X} \times \tilde{X}) / \pi_1(X) $$
+        は自然に $2n$ 次元の滑らかな多様体となる。<br><br>
+        次に、写像 $\Phi: (\tilde{X} \times \tilde{X}) / \pi_1(X) \to \Pi_1(X)$ を構成する。ペア $(\tilde{x}, \tilde{y}) \in \tilde{X} \times \tilde{X}$ を取る。$\tilde{X}$ は単連結であるため、$\tilde{x}$ から $\tilde{y}$ へ向かう道のホモトピー類 $\tilde{\alpha}$ が一意に存在する。この道 $\tilde{\alpha}$ を射影写像 $p$ で下へ落とした $X$ 上の道 $p \circ \tilde{\alpha}$ を考える。この道のホモトピー類 $[p \circ \tilde{\alpha}]$ は、始点 $p(\tilde{x})$ から終点 $p(\tilde{y})$ への $\Pi_1(X)$ の射を定める。<br><br>
+        この対応 $(\tilde{x}, \tilde{y}) \mapsto [p \circ \tilde{\alpha}]$ が基本群の作用に関して不変であるかを確認する。任意の $\gamma \in \pi_1(X)$ による変換 $\gamma \cdot \tilde{x}$ から $\gamma \cdot \tilde{y}$ への道は、$\gamma \circ \tilde{\alpha}$ となるが、これを $p$ で射影すると $p \circ (\gamma \circ \tilde{\alpha}) = p \circ \tilde{\alpha}$ となる (被覆変換の定義より)。ゆえに、写像 $\Phi$ は well-defined である。<br><br>
+        また、任意の $X$ 上の道のホモトピー類 $[\alpha] \in \Pi_1(X)$ について、$\tilde{X}$ への道の持ち上げ定理 (path lifting theorem) を適用することで、その持ち上げ $\tilde{\alpha}$ が存在し、対応する終点と始点のペアが $\tilde{X} \times \tilde{X}$ 内に見つかるため、$\Phi$ は全射である。普遍被覆の性質により単射性も保証されるため、$\Phi$ は全単射である。<br><br>
+        この全単射 $\Phi$ を通じて、$\Pi_1(X)$ に $2n$ 次元多様体 $G$ の滑らかな構造を導入できる。対象の空間 $X$ ($n$ 次元) に対して、始点写像 $s: \Pi_1(X) \to X$ や終点写像 $t: \Pi_1(X) \to X$、道の結合による合成写像などは、すべて滑らかな写像となり、$s$ は沈め込みの条件を満たす。したがって、$\Pi_1(X)$ は Lie亜群である。<br>
+        (証明終)
+    </div>
+
+    <h2>3. 普遍被覆のファイバー積と基本亜群の関係</h2>
+
+    <div class="informal-note">
+        <strong>直観的な注意</strong><br>
+        基本亜群 $G = \Pi_1(X)$ と、普遍被覆によるファイバー積 $\tilde{X} \times_X \tilde{X}$ は、一見すると Morita同値 (Morita equivalent) であるかのように誤解されることがあります。しかし、これらは頂点群 (各対象から自身への射の成す群) が異なるため、Morita同値にはなりません。ファイバー積は、幾何学的には基本亜群のループ（閉道）からなる部分空間を普遍被覆上に引き戻したものとして現れます。以下にその厳密な関係を証明します。
+    </div>
+
+    <div class="definition">
+        <strong>定義 4 (等方亜群 / isotropy groupoid)</strong><br>
+        亜群 $G \rightrightarrows X$ に対して、始点と終点が等しい射全体からなる部分空間
+        $$ I(G) = \{ g \in G \mid s(g) = t(g) \} $$
+        を等方亜群 (isotropy groupoid) と呼ぶ。$G = \Pi_1(X)$ の場合、$I(G)$ は各点 $x \in X$ における基本群 $\pi_1(X, x)$ の非交和 (disjoint union) $\coprod_{x \in X} \pi_1(X, x)$ となる。
+    </div>
+
+    <div class="proposition">
+        命題 2. 普遍被覆 $p: \tilde{X} \to X$ によるファイバー積 $\tilde{X} \times_X \tilde{X}$ は、商写像 $\pi: \tilde{X} \times \tilde{X} \to \Pi_1(X)$ による等方亜群 $I(\Pi_1(X))$ の逆像 $\pi^{-1}(I(\Pi_1(X)))$ に一致する。さらに、同型
+        $$ (\tilde{X} \times_X \tilde{X}) / \pi_1(X) \cong I(\Pi_1(X)) $$
+        が成り立つ。
+    </div>
+
+    <div class="proof">
+        <strong>証明.</strong><br>
+        命題 1 の証明で構成した同型により、基本亜群は商空間の形 $\Pi_1(X) = (\tilde{X} \times \tilde{X}) / \pi_1(X)$ で与えられる。ここでの商写像を $\pi: \tilde{X} \times \tilde{X} \to \Pi_1(X)$ とする。<br><br>
+        直積空間内の任意の要素 $(\tilde{x}, \tilde{y}) \in \tilde{X} \times \tilde{X}$ について、その $\pi$ による像 $\pi(\tilde{x}, \tilde{y}) \in \Pi_1(X)$ の始点と終点はそれぞれ以下のように計算される。
+        $$ s(\pi(\tilde{x}, \tilde{y})) = p(\tilde{x}) $$
+        $$ t(\pi(\tilde{x}, \tilde{y})) = p(\tilde{y}) $$
+        さて、像 $\pi(\tilde{x}, \tilde{y})$ が等方亜群 $I(\Pi_1(X))$ に属するための必要十分条件は、その始点と終点が一致することである。すなわち、
+        $$ \pi(\tilde{x}, \tilde{y}) \in I(\Pi_1(X)) \iff p(\tilde{x}) = p(\tilde{y}) $$
+        が成り立つ。<br><br>
+        ここで、右辺の条件 $p(\tilde{x}) = p(\tilde{y})$ を満たす $(\tilde{x}, \tilde{y})$ の集合とは、まさに写像 $p$ に対するファイバー積の定義そのものである。
+        $$ \tilde{X} \times_X \tilde{X} = \{ (\tilde{x}, \tilde{y}) \in \tilde{X} \times \tilde{X} \mid p(\tilde{x}) = p(\tilde{y}) \} $$
+        したがって、等方亜群の逆像はファイバー積に完全に一致する。
+        $$ \pi^{-1}(I(\Pi_1(X))) = \tilde{X} \times_X \tilde{X} $$
+        次に、基本群 $\pi_1(X)$ の対角作用を考える。ファイバー積 $\tilde{X} \times_X \tilde{X}$ は直積空間 $\tilde{X} \times \tilde{X}$ の $\pi_1(X)$-不変な部分空間である。なぜなら、任意の $\gamma \in \pi_1(X)$ について $p(\gamma \cdot \tilde{x}) = p(\tilde{x})$ であり、等式 $p(\tilde{x}) = p(\tilde{y})$ は作用の下でも保たれるからである。<br><br>
+        したがって、商写像 $\pi$ の定義域を部分空間 $\tilde{X} \times_X \tilde{X}$ に制限して得られる誘導写像は全射となる。作用で割ることで、以下の自然な同相および代数的な同型が得られる。
+        $$ (\tilde{X} \times_X \tilde{X}) / \pi_1(X) \cong I(\Pi_1(X)) $$
+        なお、$I(\Pi_1(X)) = \coprod_{x \in X} \pi_1(X, x)$ であったため、ファイバー積の商空間は、まさに多様体 $X$ の各点における基本群をすべて束ねたバンドル (群束) に他ならない。<br>
+        (証明終)
+    </div>
+
+    <h2>4. 参考文献</h2>
+    <ul>
+        <li>
+            Mackenzie, K. C. H. (2005). <em>General Theory of Lie Groupoids and Lie Algebroids</em>. Cambridge University Press. 
+            <a href="https://doi.org/10.1017/CBO9781107325883" target="_blank" rel="noopener noreferrer">https://doi.org/10.1017/CBO9781107325883</a>
+        </li>
+        <li>
+            Moerdijk, I., &amp; Mrčun, J. (2003). <em>Introduction to Foliations and Lie Groupoids</em>. Cambridge Studies in Advanced Mathematics. Cambridge University Press. 
+            <a href="https://doi.org/10.1017/CBO9780511615450" target="_blank" rel="noopener noreferrer">https://doi.org/10.1017/CBO9780511615450</a>
+        </li>
+        <li>
+            Brown, R. (2006). <em>Topology and Groupoids</em>. BookSurge LLC. 
+            <a href="http://groupoids.org.uk/topgpds.html" target="_blank" rel="noopener noreferrer">http://groupoids.org.uk/topgpds.html</a>
+        </li>
+    </ul>
+
+</body>
+</html>
