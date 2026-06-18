@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Lie groupoid, Lie algebroidと共形場理論の代数幾何学的定式化</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 1000px;
+            padding: 2em;
+            color: #333;
+        }
+        h1 { font-size: 2em; border-bottom: 2px solid #555; padding-bottom: 0.3em; }
+        h2 { font-size: 1.5em; border-bottom: 1px solid #ccc; padding-bottom: 0.2em; margin-top: 1.5em; }
+        h3 { font-size: 1.2em; margin-top: 1.2em; }
+        .definition {
+            background-color: #f4f8fc;
+            border-left: 5px solid #0056b3;
+            padding: 1em;
+            margin: 1em 0;
+            border-radius: 3px;
+        }
+        .theorem {
+            background-color: #f9f9ff;
+            border-left: 5px solid #6f42c1;
+            padding: 1em;
+            margin: 1em 0;
+            border-radius: 3px;
+        }
+        .proof {
+            background-color: #fff;
+            border-left: 5px solid #28a745;
+            padding: 1em;
+            margin: 1em 0;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .example {
+            background-color: #fffbf0;
+            border-left: 5px solid #ffc107;
+            padding: 1em;
+            margin: 1em 0;
+            border-radius: 3px;
+        }
+        .remark {
+            background-color: #fdfdfd;
+            border-left: 5px solid #6c757d;
+            padding: 1em;
+            margin: 1em 0;
+            font-size: 0.95em;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        ul.references {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul.references li {
+            margin-bottom: 1em;
+            padding-left: 2em;
+            text-indent: -2em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Lie groupoid, Lie algebroidと共形場理論の代数幾何学的定式化</h1>
+
+<p>本稿では、微分幾何学において「群の局所的な作用」や「同値関係」を一般化した概念であるLie groupoidおよびLie algebroidの基礎から出発し、それらが共形場理論 (Conformal Field Theory; CFT) の代数幾何学的な定式化（Beilinson-Schechtman理論や黒木玄の構成的手法）においていかに決定的な役割を果たすかを、チャットでの議論を統合して詳細に解説します。</p>
+
+<h2>1. Lie groupoidとLie algebroidの基礎</h2>
+
+<p>まずは、幾何学の基礎となるLie groupoidとLie algebroidの定義から始めます。これらはLie群とそのLie代数の関係を、ベースとなる多様体上のファイバー束に拡張したものです。</p>
+
+<div class="definition">
+    <strong>定義 (全射な沈め込み):</strong><br>
+    滑らかな多様体間の写像 $f: X \to Y$ が全射な沈め込み (surjective submersion) であるとは、$f$ が全射であり、かつ任意の点 $x \in X$ における微分写像 $df_x: T_x X \to T_{f(x)} Y$ が全射となることである。
+</div>
+
+<div class="definition">
+    <strong>定義 (Lie groupoid):</strong><br>
+    $G$ と $M$ を滑らかな多様体とし、$G$ を射の空間、$M$ を対象の空間（底空間）とする。以下の構造写像の組 $G \rightrightarrows M$ がすべて滑らか (smooth) であるとき、これをLie groupoid (Lie groupoid) と呼ぶ。
+    <ul>
+        <li><strong>ソース・ターゲット写像:</strong> $s, t: G \to M$。これらは全射な沈め込み (surjective submersion) であるとする。これにより、引き戻し $G {}_{s}\times_{t} G = \{ (g, h) \in G \times G \mid s(g) = t(h) \}$ は滑らかな多様体としてwell-definedになる。</li>
+        <li><strong>対象の埋め込み (恒等射):</strong> $\epsilon: M \to G$。任意の $x \in M$ に対して $s(\epsilon(x)) = x$ かつ $t(\epsilon(x)) = x$ を満たす。</li>
+        <li><strong>積 (合成):</strong> $m: G {}_{s}\times_{t} G \to G, \quad (g, h) \mapsto gh$。</li>
+        <li><strong>逆元:</strong> $i: G \to G, \quad g \mapsto g^{-1}$。$s(g^{-1}) = t(g)$, $t(g^{-1}) = s(g)$ を満たす。</li>
+    </ul>
+    これらは通常の亜群の公理（結合法則、単位元の性質、逆元の性質）を満たさなければならない。
+</div>
+
+<div class="remark">
+    <strong>位相的な注意:</strong> 一般の位相空間上の亜群を考える際、底空間 $M$ が特異な位相的性質（例えば、超不連結 (extremally disconnected) である空間や、clopenな部分集合の無限和に分解されるような空間）を持つ場合も抽象的には考察可能ですが、本稿で扱うLie groupoidは、滑らかな多様体と滑らかな写像のみから構成される微分幾何学の対象です。
+</div>
+
+<p>Lie groupoidを単位元の周りで「微分」することで、ベクトル束を用いた代数的構造であるLie algebroidが自然に得られます。</p>
+
+<div class="definition">
+    <strong>定義 (Lie algebroid):</strong><br>
+    滑らかな多様体 $M$ 上のベクトル束 $E \to M$ がLie algebroid (Lie algebroid) であるとは、以下の構造を持つことである。
+    <ol>
+        <li><strong>Lieブラケット:</strong> $E$ の滑らかな切断の空間 $\Gamma(E)$ 上の $\mathbb{R}$双線形なLie代数構造 $[\cdot, \cdot] : \Gamma(E) \times \Gamma(E) \to \Gamma(E)$。</li>
+        <li><strong>アンカー写像:</strong> ベクトル束の間の準同型 $\rho : E \to TM$ （$TM$ は $M$ の接束）。</li>
+    </ol>
+    これらは、任意の切断 $\alpha, \beta \in \Gamma(E)$ と滑らかな関数 $f \in C^\infty(M)$ に対して、以下のライプニッツ則 (Leibniz rule) を満たさなければならない。
+    $$[\alpha, f\beta] = f[\alpha, \beta] + (\rho(\alpha)f)\beta$$
+    ここで $\rho(\alpha)f$ はベクトル場 $\rho(\alpha)$ による関数 $f$ の方向微分である。
+</div>
+
+<h2>2. 具体例と自然に現れる数学的状況</h2>
+
+<p>Lie groupoidとLie algebroidの組み合わせについて、代表的な具体例と、それらが登場する状況を挙げます。</p>
+
+<div class="example">
+    <strong>例 1 (Lie群とLie代数):</strong><br>
+    底空間 $M$ が1点 $\{*\}$ である場合、Lie groupoidはLie群 $G$ そのものとなる。対応するLie algebroidは1点上のベクトル束としてのLie代数 $\mathfrak{g}$ であり、アンカー写像は自明な零写像 $\rho = 0$ である。
+</div>
+
+<div class="example">
+    <strong>例 2 (Pair groupoidと接束):</strong><br>
+    底空間 $M$ に対し、$G = M \times M$ とする。ソース $s(x, y) = y$、ターゲット $t(x, y) = x$ とすると、任意の2点間にただ1つの射が存在するpair groupoidとなる。これに対応するLie algebroidは接束 $TM \to M$ であり、アンカー写像は恒等写像 $\rho = \mathrm{id}_{TM}$ となる。
+</div>
+
+<div class="example">
+    <strong>例 3 (作用 groupoid):</strong><br>
+    Lie群 $G$ が多様体 $M$ に滑らかに作用しているとする。射の空間を $G \times M$ とし、作用の軌道を表現する作用 groupoid $G \ltimes M \rightrightarrows M$ が得られる。対応するLie algebroidは自明なベクトル束 $M \times \mathfrak{g} \to M$ であり、アンカー写像はLie代数の元が誘導する基本ベクトル場を与える。
+</div>
+
+<div class="example">
+    <strong>例 4 (Gauge groupoidとAtiyah algebroid):</strong><br>
+    主 $G$束 $\pi: P \to M$ のファイバー間の $G$同変な同型写像を集めたものがgauge groupoid $(P \times P)/G \rightrightarrows M$ である。対応するLie algebroidは $TP/G \to M$ であり、Atiyah algebroidと呼ばれる。アンカーは自然な射影 $d\pi: TP/G \to TM$ である。
+</div>
+
+<div class="example">
+    <strong>例 5 (葉層のholonomy groupoid):</strong><br>
+    多様体 $M$ 上の葉層構造 $\mathcal{F}$ の各葉に沿った曲線をholonomy同値関係で割ってできるholonomy groupoid $Hol(\mathcal{F}) \rightrightarrows M$。Lie algebroidは葉に接する部分ベクトル束 $T\mathcal{F} \to M$ である。
+</div>
+
+<p>これらの構造は、以下のような高度な数学的状況で不可欠な言語となります。</p>
+<ul>
+    <li><strong>Poisson幾何学と量子化:</strong> Poisson多様体の余接束 $T^*M$ にはLie algebroidの構造が入り、それを積分したsymplectic groupoidは変形量子化の幾何学的モデル化に用いられます。</li>
+    <li><strong>非可換幾何学:</strong> Alain Connesらによる非可換幾何学では、特異な商空間を位相空間として扱う代わりに、Lie groupoidの$C^*$環を考えることでAtiyah-Singerの指数定理などを拡張します。</li>
+    <li><strong>接続の理論:</strong> ゲージ理論における「接続」は、Atiyah algebroidのアンカー写像 $\rho: TP/G \to TM$ に対するベクトル束の切断 $\sigma: TM \to TP/G$ を指定することと同値です。</li>
+</ul>
+
+<h2>3. Beilinson-Schechtmanによる層を用いたAtiyah algebroidの定式化</h2>
+
+<p>A. BeilinsonとV. Schechtmanは、上述のAtiyah algebroidを複素多様体や代数多様体上の「微分作用素の層」を用いてエレガントに定式化しました。</p>
+
+<div class="definition">
+    <strong>定義 (代数幾何学におけるAtiyah algebroid):</strong><br>
+    $X$ を滑らかな代数多様体、$\mathcal{O}_X$ をその構造層、$\mathcal{T}_X$ を接層とする。$\mathcal{E}$ を $X$ 上の局所自由な $\mathcal{O}_X$加群（ベクトル束）とする。<br>
+    $\mathcal{E}$ 上の $\mathbb{C}$線形な自己準同型のうち、1階以下の微分作用素の全体を $\mathcal{D}iff^{\le 1}(\mathcal{E}, \mathcal{E})$ とかく。1階の微分作用素 $D$ の主表象 (principal symbol) $\sigma(D)$ は、テンソル積 $\mathcal{T}_X \otimes_{\mathcal{O}_X} \mathcal{E}nd_{\mathcal{O}_X}(\mathcal{E})$ の元を定める。<br>
+    Atiyah algebroid $\mathcal{A}t(\mathcal{E})$ は、この主表象が $\mathcal{E}$ 上のスカラー倍として働くような微分作用素の層として定義される。すなわち、
+    $$\mathcal{A}t(\mathcal{E}) = \{ D \in \mathcal{D}iff^{\le 1}(\mathcal{E}, \mathcal{E}) \mid \sigma(D) = v \otimes \mathrm{id}_{\mathcal{E}} \quad (\exists v \in \mathcal{T}_X) \}$$
+    である。
+</div>
+
+<p>これにより、自然な短完全列（Atiyah exact sequence）が得られます。</p>
+$$0 \to \mathcal{E}nd_{\mathcal{O}_X}(\mathcal{E}) \to \mathcal{A}t(\mathcal{E}) \xrightarrow{\sigma} \mathcal{T}_X \to 0$$
+<p>この層の完全列が分裂するための障害類がAtiyah類であり、分裂の選択がまさにベクトル束上の「接続」に対応します。さらに、$\mathcal{A}t(\mathcal{E})$ が実際にLie algebroidになることを厳密に証明しましょう。</p>
+
+<div class="theorem">
+    <strong>命題:</strong><br>
+    Atiyah algebroid $\mathcal{A}t(\mathcal{E})$ はLie algebroidの構造を持つ。
+</div>
+
+<div class="proof">
+    <strong>証明:</strong><br>
+    $\mathcal{A}t(\mathcal{E})$ にLie algebroidの構造が入ることを示すためには、交換子によるLieブラケットが $\mathcal{A}t(\mathcal{E})$ 内で閉じていることと、ライプニッツ則が成立することを示せばよい。アンカー写像は主表象をとる写像 $\sigma: \mathcal{A}t(\mathcal{E}) \to \mathcal{T}_X$ である。<br><br>
+    
+    1. <strong>Lieブラケットの閉包性:</strong><br>
+    $D_1, D_2 \in \mathcal{A}t(\mathcal{E})$ とする。それぞれの主表象を $\sigma(D_i) = v_i \otimes \mathrm{id}$ とする。微分作用素の合成の交換子 $[D_1, D_2] = D_1 \circ D_2 - D_2 \circ D_1$ を考える。一般に1階の微分作用素の交換子は再び1階の微分作用素となり、その主表象はベクトル場のLieブラケットとなる。すなわち、$\sigma([D_1, D_2]) = [v_1, v_2] \otimes \mathrm{id}$ である。したがって、$[D_1, D_2] \in \mathcal{A}t(\mathcal{E})$ であり、well-definedなLieブラケットが定まる。<br><br>
+
+    2. <strong>ライプニッツ則:</strong><br>
+    $f \in \mathcal{O}_X$ に対して $fD_2$ は $(fD_2)(e) = f(D_2(e))$ を満たす作用素であり、その主表象は $fv_2 \otimes \mathrm{id}$ となる。任意の局所切断 $e \in \mathcal{E}$ に対し、$[D_1, fD_2]e$ を計算する。<br>
+    定義より、$[D_1, fD_2]e = D_1(f(D_2 e)) - fD_2(D_1 e)$ である。<br>
+    $D_1$ は1階の微分作用素であり、スカラー乗法に対してライプニッツ則 $D_1(g s) = g D_1(s) + v_1(g)s$ （ただし $g \in \mathcal{O}_X, s \in \mathcal{E}$）を満たす。ここで $g = f$ および $s = D_2 e$ とおくと、
+    $$D_1(f(D_2 e)) = f D_1(D_2 e) + v_1(f) D_2 e$$
+    が得られる。これを元の式に代入すると、
+    $$[D_1, fD_2]e = f D_1(D_2 e) + v_1(f) D_2 e - f D_2(D_1 e) = f(D_1 D_2 - D_2 D_1)e + v_1(f) D_2 e$$
+    $$= f[D_1, D_2]e + \sigma(D_1)(f) D_2 e$$
+    となる。これは作用素としての等式 $[D_1, fD_2] = f[D_1, D_2] + \sigma(D_1)(f)D_2$ を意味しており、Lie algebroidのライプニッツ則に完全に一致する。<br>
+    以上により、$\mathcal{A}t(\mathcal{E})$ はLie algebroidであることが証明された。
+</div>
+
+<h3>Picard algebroidとVirasoro代数</h3>
+<p>BeilinsonとSchechtmanは、ベクトル束が特に直線束 (line bundle) $\mathcal{L}$ である場合に注目しました。直線束の場合 $\mathcal{E}nd_{\mathcal{O}_X}(\mathcal{L}) \cong \mathcal{O}_X$ となるため、完全列は以下のようになります。</p>
+$$0 \to \mathcal{O}_X \to \mathcal{A}t(\mathcal{L}) \xrightarrow{\sigma} \mathcal{T}_X \to 0$$
+<p>接層 $\mathcal{T}_X$ を構造層 $\mathcal{O}_X$ で中心拡大したこの構造を <strong>Picard algebroid</strong> と呼びます。CFTにおいて局所的な共形対称性を記述するVirasoro代数（円周上のベクトル場のLie代数の中心拡大）の大域的・幾何学的な実体が、まさにこのPicard algebroidです。中心電荷 (central charge) $c$ は、この拡大を特徴付ける障害類（Atiyah類）の係数として直観的に理解されます。</p>
+<p>彼らはまた、Picard algebroidを介して、局所的なVirasoro代数の作用がKodaira-Spencer写像 $T_{[X]}\mathcal{M}_g \to H^1(X, \mathcal{T}_X)$ （モジュライ空間上の変形）とどのように代数的に対応するかを明らかにしました。</p>
+
+<h2>4. 黒木玄による大域的定式化と構成的手法 (1995)</h2>
+
+<p>前述のBeilinson-SchechtmanによるD加群やAtiyah algebroidの理論は極めて抽象的でした。これに対し、<strong>黒木玄</strong>は1995年のRIMS講究録論文において、これらを「dg Lie algebroid（微分次数付きLie algebroid）」と「$\check{\mathrm{C}}$ech 被覆」を用いて具体的かつ計算可能な形で完全に構成するアルゴリズムを与えました。</p>
+
+<p>彼の仕事は、局所的な物理のデータ（Virasoro代数やKac-Moody代数）がモジュライ空間上の微分方程式へと翻訳される過程を、幾何学的なfamilyの枠組みで書き下したものです。</p>
+
+<div class="definition">
+    <strong>定義 (相対Atiyah algebroidとAtiyah $\pi$-algebroid):</strong><br>
+    $\pi: X \to S$ をコンパクトRiemann面の族 (family) とし、$S$ を底空間とする。各ファイバー上に擬放物型 (quasi parabolic) $G$束 $E$ が与えられているとする。<br>
+    ファイバーの垂直方向の微分作用素のみからなるAtiyah algebroidを相対Atiyah algebroid $\mathcal{A}_{E/S}$ と呼ぶ。<br>
+    底空間 $S$ の変形方向への持ち上げも考慮した微分作用素の層をAtiyah $\pi$-algebroid $\mathcal{A}_{E,\pi}$ と呼ぶ。これらは以下の短完全列をなす。
+    $$0 \to \mathcal{A}_{E/S} \to \mathcal{A}_{E,\pi} \to \pi^* \mathcal{T}_S \to 0$$
+</div>
+
+<p>黒木氏の定式化の特筆すべき点は以下の構成的手順です。</p>
+
+<ol>
+    <li><strong>Trace $\omega$-extension:</strong><br>
+    局所的なVirasoro代数の中心電荷 $c$ やKac-Moody代数のレベル $k$ に対応する中心拡大を層の枠組みで実現するため、「trace $\omega$-extension」という代数的な操作を導入しました。これにより、局所的な線型常微分作用素の核関数表示や留数を用いた計算が、幾何学的なアノマリーの項としてシミュレートされます。</li>
+    
+    <li><strong>$\check{\mathrm{C}}$ech複体とdg Lie algebroidの利用:</strong><br>
+    底空間 $S$ 上のPicard algebroidを大域的に貼り合わせるために、開被覆 (open cover) $\mathcal{U} = \{U_i\}$ に対する $\check{\mathrm{C}}$ech 被覆の技術を用いました。開集合の交わり $U_{ij} = U_i \cap U_j$ が空集合 $\varnothing$ である場合は自明となりますが、そうでない部分で局所的なdg Lie代数 $\mathcal{V}\mathcal{A}^{\bullet}_{c,k}$ を定義します。特異点集合 $Z$ を除いた $X \smallsetminus Z$ 上での座標を用いた具体的な局所表現を計算し、全微分 (total differential) の核をとることで、底空間 $S$ 上のPicard algebroid $\mathcal{A}_{c,k,\chi}$ を明示的に構成しました。</li>
+</ol>
+
+<p>この仕事により、Beilinson-Schechtmanの「存在」の定理が、実際に局所座標の計算に落とし込める「具体的な層の大域的構成」へと昇華されました。</p>
+
+<hr>
+
+<h2>参考文献</h2>
+<ul class="references">
+    <li>[1] A. Beilinson and V. Schechtman, "Determinant bundles and Virasoro algebras", <i>Communications in Mathematical Physics</i>, 118, 651-701 (1988).<br>URL: <a href="https://projecteuclid.org/journals/communications-in-mathematical-physics/volume-118/issue-4/Determinant-bundles-and-Virasoro-algebras/cmp/1104162170.pdf" target="_blank">PDF</a></li>
+    <li>[2] 黒木玄, "共形場理論の定式化について", <i>数理解析研究所講究録</i>, 929, 70-136 (1995).<br>URL: <a href="https://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/0929-7.pdf" target="_blank">https://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/0929-7.pdf</a>, <a href="https://genkuroki.github.io/documents/cft.pdf" target="_blank">https://genkuroki.github.io/documents/cft.pdf</a></li>
+</ul>
+
+</body>
+</html>

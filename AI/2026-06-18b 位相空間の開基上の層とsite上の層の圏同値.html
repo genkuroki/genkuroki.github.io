@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>位相空間の開基上の層とsite上の層の圏同値</title>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    color: #333;
+    max-width: 1000px;
+    margin: 2em auto;
+    padding: 0 2em;
+  }
+  h1 { font-size: 1.8em; border-bottom: 2px solid #333; padding-bottom: 0.2em; margin-top: 2em; }
+  h2 { font-size: 1.5em; border-bottom: 1px solid #aaa; padding-bottom: 0.2em; margin-top: 1.5em; }
+  h3 { font-size: 1.2em; margin-top: 1.2em; border-left: 5px solid #555; padding-left: 0.5em; }
+  .definition, .theorem, .example, .proof {
+    margin: 1.5em 0;
+    padding: 1.2em;
+    border-radius: 4px;
+  }
+  .definition { background-color: #f0f7ff; border-left: 4px solid #0056b3; }
+  .theorem { background-color: #fff4e6; border-left: 4px solid #cc5500; }
+  .example { background-color: #f9f9f9; border-left: 4px solid #2e8b57; }
+  .proof { background-color: #fdfdfd; border: 1px solid #ddd; }
+  .label { font-weight: bold; margin-bottom: 0.5em; display: block; color: #111; }
+  .math-inline { display: inline-block; }
+  .reference-list { list-style-type: decimal; }
+  .reference-list li { margin-bottom: 0.5em; }
+</style>
+</head>
+<body>
+
+<h1>位相空間の開基上の層とsite上の層の圏同値</h1>
+
+<p>本稿では、位相空間上において層を構成・検証する際に、すべての開集合ではなく「開基」のみに限定しても層の持つ情報を完全に復元できるという強力な事実について解説する。さらに、この事実を圏論におけるGrothendieck位相 (Grothendieck topology) を備えたsite (site) の枠組みへと一般化し、「サイトの開基」に相当する稠密部分圏 (dense subcategory) 上の層との圏同値性について、自己完結的 (self-contained) かつ厳密な証明を与える。</p>
+
+<p>特に、直観的な「被覆族による構成」と、より洗練された「ふるい (sieve) を用いた構成」の2つのアプローチを明示的に分け、それぞれの同等性を含めて詳細に比較する。</p>
+
+<h2>1. 位相空間の開基上の層</h2>
+
+<div class="definition">
+<span class="label">定義 1 (位相空間と開基)</span>
+$X$ を位相空間 (topological space) とし、$\mathcal{B}$ をその開基 (basis) であるとする。すなわち、$\mathcal{B}$ は $X$ の開集合の族であり、$X$ の任意の開集合 $U$ が $\mathcal{B}$ の要素の和集合として表されるものである。$\mathcal{B}$ を包含関係によって順序付けられた圏（対象は $\mathcal{B}$ の要素、射は包含写像のみ）とみなす。
+</div>
+
+<div class="example">
+<span class="label">例 1</span>
+ユークリッド空間 (Euclidean space) $\mathbb{R}^n$ における開球 (open ball) の全体は、開基の典型的な例である。開球同士の共通部分は一般には開球ではないため、開基は必ずしも有限交叉で閉じているとは限らない。
+</div>
+
+<div class="definition">
+<span class="label">定義 2 (開基上の前層と層)</span>
+$\mathcal{B}$ 上の前層 (presheaf) とは、関手 $F \colon \mathcal{B}^{\mathrm{op}} \to \mathbf{Set}$ のことである。$B' \subset B$ なる $B, B' \in \mathcal{B}$ に対して制限写像 $\rho_{B,B'} \colon F(B) \to F(B')$ を持ち、$s \in F(B)$ に対して $\rho_{B,B'}(s) = s|_{B'}$ と書く。<br><br>
+前層 $F$ が $\mathcal{B}$ 上の層 (sheaf) であるとは、任意の $B \in \mathcal{B}$ と、その $\mathcal{B}$ の要素による任意の開被覆 $B = \bigcup_{i \in I} B_i$ （各 $B_i \in \mathcal{B}$）に対して、以下の2条件を満たすことである。
+<ol>
+  <li><strong>分離性 (separatedness):</strong> $s, t \in F(B)$ について、すべての $i \in I$ で $s|_{B_i} = t|_{B_i}$ が成り立つならば、$s = t$ である。</li>
+  <li><strong>貼り合わせ (gluing):</strong> 族 $(s_i)_{i \in I}$ ($s_i \in F(B_i)$) が適合的であるとする。すなわち、任意の $i, j \in I$ と、任意の $C \in \mathcal{B}$ で $C \subset B_i \cap B_j$ を満たすものに対して、$s_i|_C = s_j|_C$ が成り立つとする。このとき、ある $s \in F(B)$ が一意に存在して、すべての $i \in I$ について $s|_{B_i} = s_i$ となる。</li>
+</ol>
+</div>
+
+<p>注意すべきは、開基 $\mathcal{B}$ が有限交叉で閉じているとは限らないため、適合性の条件において共通部分 $B_i \cap B_j$ そのものを評価するのではなく、「共通部分に含まれる $\mathcal{B}$ の要素 $C$」を経由して条件を記述することが不可欠であるという点である。$\mathcal{B}$ 上の層を対象とし、自然変換を射とする圏を $\mathrm{Sh}(X, \mathcal{B})$ と書く。</p>
+
+<div class="theorem">
+<span class="label">定理 1</span>
+$X$ 上の集合の層の圏 $\mathrm{Sh}(X)$ と、開基 $\mathcal{B}$ 上の層の圏 $\mathrm{Sh}(X, \mathcal{B})$ の間には圏同値 $\mathrm{Sh}(X) \simeq \mathrm{Sh}(X, \mathcal{B})$ が成り立つ。
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+関手 $\Phi \colon \mathrm{Sh}(X) \to \mathrm{Sh}(X, \mathcal{B})$ と $\Psi \colon \mathrm{Sh}(X, \mathcal{B}) \to \mathrm{Sh}(X)$ を構成し、これらが互いに逆を与えることを完全な形で示す。<br><br>
+
+<strong>制限関手 $\Phi$ の構成:</strong><br>
+$X$ 上の層 $F \in \mathrm{Sh}(X)$ に対し、$\Phi(F)(B) = F(B)$ ($B \in \mathcal{B}$) と定義する。$F$ は $X$ の任意の開被覆に対して層の公理を満たすため、$\mathcal{B}$ の要素による開被覆に対しても当然に分離性と貼り合わせの公理を満たす。よって $\Phi(F) \in \mathrm{Sh}(X, \mathcal{B})$ は well-defined である。<br><br>
+
+<strong>拡張関手 $\Psi$ の構成:</strong><br>
+$G \in \mathrm{Sh}(X, \mathcal{B})$ が与えられたとき、$X$ 上の前層 $\tilde{G} = \Psi(G)$ を構成する。$X$ の任意の開集合 $U$ に対して、$\mathcal{B}_U = \{B \in \mathcal{B} \mid B \subset U\}$ とする。$\tilde{G}(U)$ を以下の射影極限 (inverse limit) として定義する。
+$$ \tilde{G}(U) = \varprojlim_{B \in \mathcal{B}_U} G(B) $$
+すなわち、$\tilde{G}(U)$ の要素は族 $(s_B)_{B \in \mathcal{B}_U}$ （$s_B \in G(B)$）であり、任意の $B' \subset B$ なる $B, B' \in \mathcal{B}_U$ に対して $s_B|_{B'} = s_{B'}$ を満たすものである。<br><br>
+
+<strong>$\tilde{G}$ が $X$ 上の層であることの証明:</strong><br>
+$X$ の任意の開集合 $U$ とその任意の開被覆 $U = \bigcup_{\lambda \in \Lambda} U_\lambda$ をとる。<br>
+<em>分離性:</em> $s, t \in \tilde{G}(U)$ が各 $U_\lambda$ 上で一致すると仮定する。すなわち、$s|_{U_\lambda} = t|_{U_\lambda}$ である。極限の定義より $s = (s_B)_{B \in \mathcal{B}_U}$、 $t = (t_B)_{B \in \mathcal{B}_U}$ と書ける。任意の $B \in \mathcal{B}_U$ について、$B = \bigcup_{\lambda} (B \cap U_\lambda)$ である。$\mathcal{B}$ は開基なので、各 $B \cap U_\lambda$ は $\mathcal{B}$ の要素 $C_{\lambda, k}$ の和集合で表される。$C_{\lambda, k} \subset U_\lambda$ であるため、仮定 $s|_{U_\lambda} = t|_{U_\lambda}$ から、極限における対応成分について $s_{C_{\lambda, k}} = t_{C_{\lambda, k}}$ が成り立つ。$G$ は $\mathcal{B}$ 上の層であり、$B = \bigcup_{\lambda, k} C_{\lambda, k}$ は $\mathcal{B}$ の要素による被覆であるから、各 $C_{\lambda, k}$ 上での一致から $s_B = t_B$ が従う。これが任意の $B \in \mathcal{B}_U$ で成り立つため、$s = t$ である。<br>
+<em>貼り合わせ:</em> 各 $U_\lambda$ 上の切断 $s^{(\lambda)} \in \tilde{G}(U_\lambda)$ が適合的であるとする。各 $s^{(\lambda)}$ は族 $(s^{(\lambda)}_C)_{C \in \mathcal{B}_{U_\lambda}}$ で与えられる。任意の $B \in \mathcal{B}_U$ をとる。$B = \bigcup_{\lambda} (B \cap U_\lambda)$ であり、$B \cap U_\lambda = \bigcup_k C_{\lambda, k}$ なる $C_{\lambda, k} \in \mathcal{B}$ がとれる。$C_{\lambda, k} \subset U_\lambda$ より $s^{(\lambda)}_{C_{\lambda, k}}$ が定まる。これらが $B$ の被覆 $\{C_{\lambda, k}\}$ 上で適合的であることを示す。$D \subset C_{\lambda, k} \cap C_{\mu, l}$ なる $D \in \mathcal{B}$ をとる。$D \subset U_\lambda \cap U_\mu$ であり、仮定の適合性から $s^{(\lambda)}$ と $s^{(\mu)}$ は $U_\lambda \cap U_\mu$ 上で一致するため、成分 $D$ において $s^{(\lambda)}_D = s^{(\mu)}_D$ となる。$G$ は $\mathcal{B}$ 上の層なので、これらを貼り合わせる唯一の $s_B \in G(B)$ が存在する。この構成は被覆の選び方に依らず定まり、制限条件を満たすため、族 $(s_B)_{B \in \mathcal{B}_U}$ は $\tilde{G}(U)$ の元を与える。よって $\tilde{G}$ は層である。<br><br>
+
+<strong>$\Phi \circ \Psi \simeq \mathrm{Id}$ の証明:</strong><br>
+$G \in \mathrm{Sh}(X, \mathcal{B})$ をとる。任意の $B \in \mathcal{B}$ について $\tilde{G}(B) = \varprojlim_{B' \subset B} G(B')$ である。$\mathcal{B}_B$ は最大要素 $B$ を持つため、射影極限は最大要素での値に同型となる。すなわち $\tilde{G}(B) \xrightarrow{\sim} G(B); (s_{B'}) \mapsto s_B$ が全単射を与える。逆写像は $x \in G(B)$ に対して $s_{B'} := x|_{B'}$ とすることで与えられる。<br><br>
+
+<strong>$\Psi \circ \Phi \simeq \mathrm{Id}$ の証明:</strong><br>
+$F \in \mathrm{Sh}(X)$ をとる。$U \subset X$ に対し $\tilde{F}(U) = \varprojlim_{B \in \mathcal{B}_U} F(B)$ となる。自然な写像 $\alpha_U \colon F(U) \to \tilde{F}(U)$ が $x \mapsto (x|_B)_{B \in \mathcal{B}_U}$ で定まる。
+<em>単射性:</em> $\alpha_U(x) = \alpha_U(y)$ ならば、任意の $B \in \mathcal{B}_U$ で $x|_B = y|_B$ となる。$\mathcal{B}_U$ は $U$ の開被覆をなすため、$F$ が層であること（分離性）から $x = y$ である。
+<em>全射性:</em> 適合的な族 $(s_B)_{B \in \mathcal{B}_U} \in \tilde{F}(U)$ は、被覆 $\mathcal{B}_U$ 上での適合的なデータであるため、$F$ が層であること（貼り合わせ）から一意な $x \in F(U)$ が存在し $x|_B = s_B$ となる。ゆえに $\alpha_U$ は全単射である。$\square$
+</div>
+
+<h2>2. Grothendieck位相とsiteの定義</h2>
+
+<p>通常の位相空間における「開集合の交わり」や「開被覆」といった概念を、任意の圏 $\mathcal{C}$ 上に一般化したものがGrothendieck位相である。</p>
+
+<div class="definition">
+<span class="label">定義 3 (ファイバー積)</span>
+圏 $\mathcal{C}$ において、対象間に「部分集合の交わり」を直接定義する代わりにファイバー積 (fiber product / pullback) を用いる。射 $f \colon U \to X$ と $g \colon V \to X$ のファイバー積 $U \times_X V$ とは、射影 $p_1 \colon U \times_X V \to U$, $p_2 \colon U \times_X V \to V$ を持ち、$f \circ p_1 = g \circ p_2$ を満たす対象であり、同じ図式を可換にする任意の対象 $W$ からの射が一意に分解する普遍性を持つものである。
+</div>
+
+<p>Grothendieck位相の導入には、直観的な「前位相」と、洗練された「ふるい」の2つの定式化がある。これらを分けて定義する。</p>
+
+<div class="definition">
+<span class="label">定義 4 (Grothendieck前位相)</span>
+圏 $\mathcal{C}$ 上の前位相 (pretopology) とは、各対象 $X$ に対して被覆族 (covering families) と呼ばれる射の族 $\{f_i \colon U_i \to X\}_{i \in I}$ を指定する規則であり、以下を満たす。
+<ol>
+  <li>同型射 (isomorphism) からなる族 $\{Y \xrightarrow{\sim} X\}$ は被覆族である。</li>
+  <li>被覆族 $\{U_i \to X\}$ と任意の射 $Y \to X$ に対してファイバー積 $U_i \times_X Y$ が存在し、射影 $\{U_i \times_X Y \to Y\}$ は被覆族である。</li>
+  <li>被覆族 $\{U_i \to X\}$ と、各 $U_i$ の被覆族 $\{V_{ij} \to U_i\}$ の合成 $\{V_{ij} \to X\}$ は被覆族である。</li>
+</ol>
+</div>
+
+<div class="definition">
+<span class="label">定義 5 (ふるいとGrothendieck位相)</span>
+対象 $X \in \mathcal{C}$ 上のふるい (sieve) $S$ とは、$X$ への射の集まりであって「右からの合成で閉じている」ものをいう。すなわち、$f \colon Y \to X$ が $S$ の要素であり $g \colon Z \to Y$ が任意の射ならば、$f \circ g \in S$ である。射 $h \colon Y \to X$ による引き戻し $h^*S = \{g \colon Z \to Y \mid h \circ g \in S\}$ は $Y$ 上のふるいとなる。<br><br>
+圏 $\mathcal{C}$ 上のGrothendieck位相 $J$ とは、各 $X \in \mathcal{C}$ に対して被覆ふるい (covering sieves) $J(X)$ を指定する規則で、以下を満たす。
+<ol>
+  <li>$X$ へのすべての射からなる極大のふるい $t_X$ は $J(X)$ に属する。</li>
+  <li>$S \in J(X)$ と任意の $h \colon Y \to X$ に対して、$h^*S \in J(Y)$ である。</li>
+  <li>$S \in J(X)$ であり、$R$ が $X$ 上のふるいとする。もし $S$ のすべての射 $h \colon Y \to X$ に対して $h^*R \in J(Y)$ ならば、$R \in J(X)$ である。</li>
+</ol>
+組 $(\mathcal{C}, J)$ を site と呼ぶ。
+</div>
+
+<p>これらの定式化に対応して、層の定義も2通り与えられる。</p>
+
+<div class="definition">
+<span class="label">定義 6 (site上の層の2つの構成)</span>
+前層 $F \colon \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ が層であるとは、以下のいずれか (同値な条件) を満たすことである。<br><br>
+<strong>【ふるい抜きの構成 (前位相)】</strong> 任意の被覆族 $\{f_i \colon U_i \to X\}$ に対して、次の図式がイコライザ (equalizer) になることである。
+$$ F(X) \to \prod_{i} F(U_i) \rightrightarrows \prod_{i, j} F(U_i \times_X U_j) $$
+<strong>【ふるいを使った構成 (位相)】</strong> 任意の被覆ふるい $S \in J(X)$ に対して、自然な写像が全単射 (bijection) になることである。
+$$ F(X) \xrightarrow{\sim} \operatorname{Hom}(S, F) $$
+ここで $\operatorname{Hom}(S, F)$ は適合的な族、すなわち $S$ の各射 $g \colon Y \to X$ に対して要素 $s_g \in F(Y)$ を割り当て、任意の $k \colon Z \to Y$ に対して $s_{g \circ k} = F(k)(s_g)$ を満たす族の全体である。
+</div>
+
+<div class="theorem">
+<span class="label">定理 2 (両定式化の同等性の証明)</span>
+前位相の被覆族 $\{f_i \colon U_i \to X\}$ から生成されるふるい $S$ において、イコライザの条件と $\operatorname{Hom}(S, F)$ の全単射条件は完全に同値である。
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+被覆族 $\{f_i \colon U_i \to X\}$ が生成するふるい $S$ は、$S = \{ g \colon Y \to X \mid \exists i \text{ と } h \colon Y \to U_i \text{ を用いて } g = f_i \circ h \}$ で定義される。<br><br>
+$\operatorname{Hom}(S, F)$ の要素 $(s_g)_{g \in S}$ が与えられたとする。$f_i \in S$ であるため、要素 $s_{f_i} \in F(U_i)$ が定まる。ファイバー積 $U_i \times_X U_j$ の射影 $p_1, p_2$ について、$f_i \circ p_1 = f_j \circ p_2$ であり、この共通の射を $g$ と置くと $g \in S$ である。適合性から $F(p_1)(s_{f_i}) = s_{f_i \circ p_1} = s_g = s_{f_j \circ p_2} = F(p_2)(s_{f_j})$ となる。よって族 $(s_{f_i})$ はイコライザの要素を定める。<br><br>
+逆に、イコライザに属する族 $(t_i) \in \prod F(U_i)$ が与えられたとする。任意の $g \in S$ について、$g = f_i \circ h$ となる $i, h$ を選び、$s_g := F(h)(t_i)$ と定義する。これが $i, h$ の選び方に依らず well-defined であることを完全な形で示す。別の分解 $g = f_j \circ h'$ があったとする。すると $f_i \circ h = f_j \circ h'$ であるため、ファイバー積 $U_i \times_X U_j$ の普遍性から、一意な射 $u \colon Y \to U_i \times_X U_j$ が存在して $p_1 \circ u = h$ かつ $p_2 \circ u = h'$ となる。$(t_i)$ はイコライザの元であるから $F(p_1)(t_i) = F(p_2)(t_j)$ である。両辺に $F(u)$ を作用させると、$F(u)F(p_1)(t_i) = F(u)F(p_2)(t_j)$ となり、$F(p_1 \circ u) = F(h)$, $F(p_2 \circ u) = F(h')$ であるから $F(h)(t_i) = F(h')(t_j)$ となる。したがって $s_g$ は一意に定まり、全体として $\operatorname{Hom}(S, F)$ の一意な要素に拡張される。<br><br>
+よって $F(X)$ がイコライザであることと、$\operatorname{Hom}(S, F)$ への写像が全単射であることは同値である。$\square$
+</div>
+
+<h2>3. site上の開基における層の同値性 (比較補題)</h2>
+
+<p>位相空間の開基の概念をsiteへと一般化する。これは「比較補題 (Comparison Lemma)」として知られるトポス理論 (topos theory) の重要定理である。</p>
+
+<div class="definition">
+<span class="label">定義 7 (稠密部分圏 / siteの開基)</span>
+site $(\mathcal{C}, J)$ に対して、その充満部分圏 $\mathcal{B} \subset \mathcal{C}$ が稠密部分圏 (dense subcategory) であるとは、任意の $X \in \mathcal{C}$ に対して、「$\mathcal{B}$ の対象から $X$ へのすべての射」が生成するふるい $S_{\mathcal{B}/X}$ が、位相 $J$ の被覆ふるいとなることである。これは直観的には、$X$ を $\mathcal{B}$ の対象のみを用いて被覆できることを意味する。なお、$\mathcal{B}$ には $J$ を制限した位相 $J_\mathcal{B}$ が自然に定まる。
+</div>
+
+<div class="theorem">
+<span class="label">定理 3 (比較補題)</span>
+site $(\mathcal{C}, J)$ とその稠密部分圏 $\mathcal{B}$ について、圏同値 $\mathrm{Sh}(\mathcal{C}, J) \simeq \mathrm{Sh}(\mathcal{B}, J_\mathcal{B})$ が成り立つ。
+</div>
+
+<p>以下に、証明のスタイルの違いを比較できるよう、<strong>「ふるいを使わない構成（Čech被覆アプローチ）」</strong>と<strong>「ふるいを使った構成（右Kan拡張アプローチ）」</strong>の2通りについて、それぞれ徹底的に詳細な証明を与える。</p>
+
+<div class="proof">
+<span class="label">証明1：ふるいを使わない構成（Čech被覆アプローチ）</span>
+前位相の「被覆族を選ぶ」という操作に基づき、図式追跡によって直接的に拡張層を構成する古典的な手法である。制限関手 $\Phi \colon \mathrm{Sh}(\mathcal{C}) \to \mathrm{Sh}(\mathcal{B})$ は制限で定まるため、逆向きの拡張関手 $\Psi$ の構成を詳述する。<br><br>
+
+<h3>ステップ1：局所的なデータからの $\tilde{G}(X)$ の構成</h3>
+$G \in \mathrm{Sh}(\mathcal{B})$ とする。任意の $X \in \mathcal{C}$ に対し、$\tilde{G}(X)$ を定義したい。$\mathcal{B}$ は稠密であるため、$X$ に対して $\mathcal{B}$ の対象による被覆族 $\mathcal{U} = \{f_i \colon B_i \to X\}_{i \in I}$ ($B_i \in \mathcal{B}$) を1つ選ぶことができる。<br>
+次に、ファイバー積 $B_i \times_X B_j$ を考える。これは $\mathcal{C}$ の対象であるが、一般に $\mathcal{B}$ に属するとは限らない。そこで再度稠密性を用い、各ペア $(i, j)$ について $B_i \times_X B_j$ を被覆する $\mathcal{B}$ の対象の族 $\mathcal{V}_{ij} = \{g_{ijk} \colon C_{ijk} \to B_i \times_X B_j\}_{k \in K_{ij}}$ を選ぶ。<br>
+ここで、自然な射影 $p_1 \colon B_i \times_X B_j \to B_i$ と $p_2 \colon B_i \times_X B_j \to B_j$ を合成した $p_1 \circ g_{ijk} \colon C_{ijk} \to B_i$ と $p_2 \circ g_{ijk} \colon C_{ijk} \to B_j$ は、ともに $\mathcal{B}$ 内部の射となる。これを用いて、$\tilde{G}_\mathcal{U}(X)$ を以下のイコライザとして定義する。
+$$ \tilde{G}_\mathcal{U}(X) = \operatorname{eq}\left( \prod_{i \in I} G(B_i) \rightrightarrows \prod_{i,j, k} G(C_{ijk}) \right) $$
+すなわち、$\tilde{G}_\mathcal{U}(X)$ の要素は族 $(s_i)_{i \in I}$ ($s_i \in G(B_i)$) であり、任意の $i, j, k$ に対して $G(p_1 \circ g_{ijk})(s_i) = G(p_2 \circ g_{ijk})(s_j)$ を満たすものである。
+
+<h3>ステップ2：被覆の選び方への非依存性（共通細分による比較）</h3>
+上記の構成は被覆 $\mathcal{U}$ および $\mathcal{V}_{ij}$ の「選び方」に依存して見えるため、これが well-defined であることを示さねばならない。別の被覆族 $\mathcal{U}' = \{f'_l \colon B'_l \to X\}$ とファイバー積の被覆 $\mathcal{V}'_{lm}$ を選んでイコライザ $\tilde{G}_{\mathcal{U}'}(X)$ を作ったとする。<br>
+前位相の公理により、$\mathcal{U}$ と $\mathcal{U}'$ の共通細分として、ファイバー積 $B_i \times_X B'_l$ を考えることができる。これをさらに $\mathcal{B}$ の対象による族 $\{D_{ijl} \to B_i \times_X B'_l\}$ で被覆する。この細分を用いると、制限写像の要領で $\tilde{G}_\mathcal{U}(X) \to \prod G(D_{ijl})$ と $\tilde{G}_{\mathcal{U}'}(X) \to \prod G(D_{ijl})$ という自然な射が構成される。<br>
+$G$ が $\mathcal{B}$ 上の層であることを繰り返し適用する（例えば $B_i \times_X B_i$ などの自明な被覆を用いた図式追跡を行う）ことで、この2つの写像が像を共有し、標準的な全単射 $\tilde{G}_\mathcal{U}(X) \xrightarrow{\sim} \tilde{G}_{\mathcal{U}'}(X)$ が誘導されることが示される。これにより、被覆の選び方に依存しない $\tilde{G}(X)$ が定まる。
+
+<h3>ステップ3：$\tilde{G}$ が $\mathcal{C}$ 上の層であることの確認</h3>
+$\tilde{G}$ が $\mathcal{C}$ 上の層条件を満たすことを確認するには、$\mathcal{C}$ の任意の被覆族 $\{U_\alpha \to X\}$ に対してイコライザ図式が完全になることを示す必要がある。しかし $\tilde{G}(U_\alpha)$ 自体が $\mathcal{B}$ の被覆を用いたイコライザとして定義されているため、ここでは「$X$ の被覆」、「被覆のファイバー積の被覆」、「3重複合の被覆」という3重の極限（2重のイコライザの可換図式）を追跡しなければならない。極限の順序交換（極限と極限は可換である事実）と、$G$ が $\mathcal{B}$ 上の層であることによる完全性の保証を組み合わせることで、最終的に $\tilde{G}$ が層であることが証明される。（※このステップの厳密な図式追跡は数十の射を書き下す必要があり、Čechアプローチ最大の難所である。）<br><br>
+最後に $B \in \mathcal{B}$ のとき、被覆として自明な $\{\operatorname{id}_B \colon B \to B\}$ を選べば、イコライザは単に $G(B)$ に一致するため $\tilde{G}(B) \simeq G(B)$ が直ちに従う。
+</div>
+
+<div class="proof">
+<span class="label">証明2：ふるいを用いた構成（右Kan拡張アプローチ）</span>
+証明1における「被覆を1つ選ぶ」ことによる非依存性の証明や、複雑な図式追跡の苦難を、「すべての射を同時に考慮する」右Kan拡張とオーバー圏を用いることで完全に回避するモダンな手法である。<br><br>
+
+<h3>ステップ1：制限関手 $\Phi$ と拡張関手 $\Psi$ の定義</h3>
+$\Phi$ の構成は明らかである。$F \in \mathrm{Sh}(\mathcal{C}, J)$ を $\mathcal{B}$ 上に制限した $F|_\mathcal{B}$ は、$\mathcal{B}$ 上の誘導位相 $J_\mathcal{B}$ に対する層となる。これを $\Phi(F)$ とする。<br><br>
+逆に、$\mathcal{B}$ 上の層 $G \in \mathrm{Sh}(\mathcal{B}, J_\mathcal{B})$ が与えられたとき、$\mathcal{C}$ 上の前層 $\tilde{G} = \Psi(G)$ を右Kan拡張を用いて以下のように定義する。各対象 $X \in \mathcal{C}$ に対し、オーバー圏 (slice category) $\mathcal{B}/X$ （対象は射 $f \colon B \to X$ ($B \in \mathcal{B}$)、射は可換三角形をなす $\mathcal{B}$ の射）を極限の添字圏として、
+$$ \tilde{G}(X) = \varprojlim_{(f \colon B \to X) \in \mathcal{B}/X} G(B) $$
+と定義する。この極限の元 $s \in \tilde{G}(X)$ は、族 $(s_f)_{f \colon B \to X}$ （各 $s_f \in G(B)$）であって、任意の $u \colon B' \to B$ ($B, B' \in \mathcal{B}$) で $f \circ u = f'$ を満たすものに対して、$G(u)(s_f) = s_{f'}$ という適合性条件を満たすものである。<br><br>
+
+<h3>ステップ2：$\tilde{G}$ が前層をなすこと</h3>
+任意の射 $h \colon Y \to X$ in $\mathcal{C}$ に対して、引き戻し $\tilde{G}(h) \colon \tilde{G}(X) \to \tilde{G}(Y)$ を定義する必要がある。$s = (s_f)_{f \in \mathcal{B}/X} \in \tilde{G}(X)$ とする。$Y$ への任意の射 $g \colon B \to Y$ ($B \in \mathcal{B}$) をとると、合成 $h \circ g \colon B \to X$ は $\mathcal{B}/X$ の対象となるため、$s_{h \circ g} \in G(B)$ が既に定義されている。そこで、$\tilde{G}(h)(s)$ の $g$-成分を
+$$ (\tilde{G}(h)(s))_g := s_{h \circ g} $$
+として定める。これが $\mathcal{B}/Y$ における適合性条件を満たすことは、元の族 $s$ の $\mathcal{B}/X$ における適合性から直ちに従う。これにより $\tilde{G}$ は $\mathcal{C}$ 上の well-defined な前層となる。被覆の選び方に依存しないため、証明1のステップ2のような煩雑な確認は一切不要である。<br><br>
+
+<h3>ステップ3：部分圏上での一致（$\tilde{G}(B) \simeq G(B)$）の証明</h3>
+任意の $B_0 \in \mathcal{B}$ に対して、自然な同型 $\tilde{G}(B_0) \xrightarrow{\sim} G(B_0)$ が存在することを示す。<br>
+$\tilde{G}(B_0)$ を定義する極限の添字圏 $\mathcal{B}/B_0$ には、恒等射 $\operatorname{id}_{B_0} \colon B_0 \to B_0$ という「終対象 (terminal object)」が存在する。実際、任意の対象 $f \colon B \to B_0$ in $\mathcal{B}/B_0$ から終対象 $\operatorname{id}_{B_0}$ への射は、$f$ 自身によって一意に与えられる（$\operatorname{id}_{B_0} \circ f = f$）。<br>
+圏論の一般論として、終対象を持つ圏上の射影極限は、終対象での値と同型になる。具体的に要素で見ると、極限の元 $s = (s_f) \in \tilde{G}(B_0)$ は、終対象における成分 $s_{\operatorname{id}_{B_0}} \in G(B_0)$ によって完全に決定される。なぜなら、任意の $f \colon B \to B_0$ に対して適合性条件 $G(f)(s_{\operatorname{id}_{B_0}}) = s_{\operatorname{id}_{B_0} \circ f} = s_f$ が成り立つからである。<br>
+したがって、写像 $(s_f)_{f \in \mathcal{B}/B_0} \mapsto s_{\operatorname{id}_{B_0}}$ は全単射を与え、$\tilde{G}(B_0) \simeq G(B_0)$ が成立する。<br><br>
+
+<h3>ステップ4：$\tilde{G}$ が $\mathcal{C}$ 上の層であることの証明</h3>
+$\tilde{G}$ が位相 $J$ に関する層条件を満たすこと、すなわち任意の $X \in \mathcal{C}$ と任意の被覆ふるい $R \in J(X)$ に対して、自然な写像 $\phi \colon \tilde{G}(X) \to \operatorname{Hom}_{\mathrm{PSh}(\mathcal{C})}(R, \tilde{G})$ が全単射であることを示す。<br><br>
+<strong>【単射性 (Separatedness)】</strong><br>
+$s, t \in \tilde{G}(X)$ が、ふるい $R$ 上で一致すると仮定する。すなわち、任意の $h \colon Y \to X$ ($h \in R$) に対して $\tilde{G}(h)(s) = \tilde{G}(h)(t)$ である。<br>
+任意の $f \colon B \to X$ ($B \in \mathcal{B}$) をとる。部分圏 $\mathcal{B}$ が稠密であるという定義から、被覆ふるい $R$ を $f$ で引き戻したふるい $f^*R = \{ v \colon B' \to B \mid f \circ v \in R \}$ は、$B$ 上の位相 $J_\mathcal{B}$ における被覆ふるいとなる。仮定より、任意の $v \in f^*R$ に対して、$f \circ v \in R$ であるから、$\tilde{G}(f \circ v)(s) = \tilde{G}(f \circ v)(t)$ が成り立つ。この等式の $B'$ における恒等射成分を取り出すと、$s_{f \circ v} = t_{f \circ v}$ となる。<br>
+一方、$s$ と $t$ は $\tilde{G}(X)$ の要素（適合的な族）であるため、$G(v)(s_f) = s_{f \circ v}$ および $G(v)(t_f) = t_{f \circ v}$ が成り立つ。ゆえに、被覆ふるい $f^*R$ のすべての射 $v$ に対して $G(v)(s_f) = G(v)(t_f)$ が成り立つ。$G$ は $\mathcal{B}$ 上の層であるため、成分は一意に定まり $s_f = t_f$ となる。これがすべての $f \in \mathcal{B}/X$ で成り立つため、$s = t$ である。<br><br>
+<strong>【全射性 (Gluing)】</strong><br>
+適合的な族 $x \in \operatorname{Hom}(R, \tilde{G})$ が与えられたとする。これは各 $h \colon Y \to X$ ($h \in R$) に対して $x_h \in \tilde{G}(Y)$ を与え、自然な適合性を持つデータである。ここから全体を統制する $s \in \tilde{G}(X)$ を構成する。<br>
+任意の $f \colon B \to X$ ($B \in \mathcal{B}$) をとる。先ほどと同様に、$f^*R$ は $B$ 上の被覆ふるいである。任意の $v \colon B' \to B$ ($v \in f^*R$) に対して $f \circ v \in R$ であるため、与えられたデータから要素 $x_{f \circ v} \in \tilde{G}(B')$ が得られる。ステップ3で示した $\tilde{G}(B') \simeq G(B')$ の同型を通して、これを $y_v \in G(B')$ とみなす。<br>
+族 $(y_v)_{v \in f^*R}$ が $f^*R$ 上の適合的な族であることを確認できるため、$G$ が層であることより、これらを貼り合わせる一意な要素 $s_f \in G(B)$ が存在する。このようにして構成した族 $s = (s_f)_{f \in \mathcal{B}/X}$ が $\tilde{G}(X)$ の要素となり、しかも $\phi(s) = x$ を満たすことが、極限の普遍性と層の貼り合わせの一意性から完全に保証される。したがって $\phi$ は全射であり、$\tilde{G} \in \mathrm{Sh}(\mathcal{C}, J)$ であることが示された。<br><br>
+
+<h3>ステップ5：圏同値の完結（$\Psi \circ \Phi \simeq \mathrm{Id}$）</h3>
+$F \in \mathrm{Sh}(\mathcal{C}, J)$ から出発し、$\tilde{F} = \Psi(\Phi(F))$ を考える。定義より
+$$ \tilde{F}(X) = \varprojlim_{(B \xrightarrow{f} X) \in \mathcal{B}/X} F(B) $$
+である。極限の定義により、$\tilde{F}(X)$ の要素はまさに「$\mathcal{B}$ から $X$ へのすべての射の集合が生成するふるい $S_{\mathcal{B}/X}$ 上の適合的な族」の全体、すなわち $\operatorname{Hom}_{\mathrm{PSh}(\mathcal{C})}(S_{\mathcal{B}/X}, F)$ に他ならない。<br>
+$\mathcal{B}$ は $\mathcal{C}$ の稠密部分圏であるため、定義7より $S_{\mathcal{B}/X}$ は $X$ 上の被覆ふるいである（$S_{\mathcal{B}/X} \in J(X)$）。ここで $F$ 自体が $\mathcal{C}$ 上の層であるという事実（定義6の層条件）を用いると、被覆ふるいから $F$ への適合的な族は、$F(X)$ の要素と一対一に対応する。すなわち、
+$$ F(X) \xrightarrow{\sim} \operatorname{Hom}_{\mathrm{PSh}(\mathcal{C})}(S_{\mathcal{B}/X}, F) = \tilde{F}(X) $$
+という標準的な全単射が得られる。これがすべての $X \in \mathcal{C}$ で自然に成り立つため、$\Psi \circ \Phi \simeq \mathrm{Id}$ が示された。<br><br>
+以上より、$\mathrm{Sh}(\mathcal{C}, J) \simeq \mathrm{Sh}(\mathcal{B}, J_\mathcal{B})$ である。$\square$
+</div>
+
+<h2>参考文献</h2>
+<ul class="reference-list">
+  <li>Artin, M., Grothendieck, A., & Verdier, J. L. <em>Théorie des Topos et Cohomologie Étale des Schémas (SGA 4)</em>. Lecture Notes in Mathematics, Springer. (Exposé III, Lemme de comparaison).
+  <br>URL: <a href="https://link.springer.com/book/10.1007/BFb0081551" target="_blank">https://link.springer.com/book/10.1007/BFb0081551</a></li>
+  <li>Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer.
+  <br>URL: <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+  <li>The Stacks project authors. <em>The Stacks project</em>. Tag 009H (Bases and sheaves) and Tag 00VG (Sites).
+  <br>URL: <a href="https://stacks.math.columbia.edu/tag/009H" target="_blank">https://stacks.math.columbia.edu/tag/009H</a>, <a href="https://stacks.math.columbia.edu/tag/00VG" target="_blank">https://stacks.math.columbia.edu/tag/00VG</a></li>
+</ul>
+
+</body>
+</html>

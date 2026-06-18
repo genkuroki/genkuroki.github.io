@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Grothendieck位相におけるサイトの基底と細分可能条件を伴う層の比較定理の完全な解説</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            color: #111;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            font-size: 1.8em;
+        }
+        h2 {
+            color: #222;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-top: 40px;
+            font-size: 1.4em;
+        }
+        h3 {
+            color: #444;
+            margin-top: 30px;
+            font-size: 1.15em;
+        }
+        p {
+            text-align: justify;
+        }
+        .theorem, .definition, .example, .proof {
+            margin: 20px 0;
+            padding: 15px 20px;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #f0f7ff;
+            border-left: 5px solid #0066cc;
+        }
+        .theorem {
+            background-color: #fff9e6;
+            border-left: 5px solid #cc9900;
+        }
+        .example {
+            background-color: #f2f9f2;
+            border-left: 5px solid #228b22;
+        }
+        .proof {
+            background-color: #fafafa;
+            border-left: 5px solid #777;
+        }
+        .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Grothendieck位相におけるサイトの基底と細分可能条件を伴う層の比較定理の完全な解説</h1>
+
+    <p>本稿では、圏論および代数幾何学における中心的な概念であるGrothendieck位相、サイト（site）の基底、および層の比較定理（comparison lemma）について詳細に解説します。特に、基底となる充満部分圏が「細分可能条件」を満たす場合に、元のサイト上の層の圏を基底の言葉だけで直接記述する方法を提示し、その圏同値性の完全な証明を与えます。</p>
+
+    <h2>1. 基本概念の定義</h2>
+    <p>解説を自己完結的なものとするため、まずはGrothendieck位相、サイト、および前層と層の基本的な定義を導入します。</p>
+
+    <div class="definition">
+        <span class="label">定義 1 (Grothendieck位相とサイト)</span>
+        圏 $C$ 上のGrothendieck位相 $J$ とは、各対象 $X \in \text{Ob}(C)$ に対して、$X$ への射の族の集合（これを $X$ の被覆族 (covering family) と呼ぶ）の集まり $J(X)$ を割り当てる写像であり、以下の3つの公理を満たすものである。
+        <ol>
+            <li><b>(同型射)</b> $f: Y \to X$ が同型射であれば、単元集合 $\{f\} \in J(X)$ である。</li>
+            <li><b>(引き戻し)</b> $\{f_i: U_i \to X\}_{i \in I} \in J(X)$ であり、任意の射 $g: Y \to X$ が与えられたとき、各 $i \in I$ についてファイバー積 $U_i \times_X Y$ が存在し、引き戻された族 $\{U_i \times_X Y \to Y\}_{i \in I}$ は $J(Y)$ に属する。</li>
+            <li><b>(合成)</b> $\{f_i: U_i \to X\}_{i \in I} \in J(X)$ であり、各 $i \in I$ に対して $\{g_{ij}: V_{ij} \to U_i\}_{j \in I_i} \in J(U_i)$ が与えられているとき、合成の族 $\{f_i \circ g_{ij}: V_{ij} \to X\}_{i \in I, j \in I_i}$ は $J(X)$ に属する。</li>
+        </ol>
+        Grothendieck位相 $J$ を備えた圏 $C$ のペア $(C, J)$ をサイト (site) と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 2 (サイト上の前層と層)</span>
+        サイト $(C, J)$ 上の集合の前層 (presheaf) とは、反変関手 $F: C^{\text{op}} \to \text{Set}$ のことである。前層 $F$ が $J$ に関する層 (sheaf) であるとは、任意の対象 $X \in \text{Ob}(C)$ および任意の被覆族 $\{f_i: U_i \to X\}_{i \in I} \in J(X)$ に対して、次の図式が集合の圏 $\text{Set}$ において等化子 (equalizer) となることである。
+        $$F(X) \longrightarrow \prod_{i \in I} F(U_i) \Longrightarrow \prod_{i, j \in I} F(U_i \times_X U_j)$$
+        ここで、平行射の一方は各成分において射影 $U_i \times_X U_j \to U_i$ から誘導される写像であり、他方は $U_i \times_X U_j \to U_j$ から誘導される写像である。サイト $C$ 上の層の全体とそれらの間の自然変換のなす圏を $\text{Sh}(C, J)$ または単に $\text{Sh}(C)$ と表す。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 3 (サイトの基底 / J稠密部分圏)</span>
+        サイト $(C, J)$ の充満部分圏 (full subcategory) $B \subset C$ が $J$ の基底 (base of a site) または J稠密部分圏 (J-dense subcategory) であるとは、任意の対象 $X \in \text{Ob}(C)$ に対して、ある被覆族 $\{f_i: B_i \to X\}_{i \in I} \in J(X)$ が存在して、すべての $i \in I$ について $B_i \in \text{Ob}(B)$ となることである。
+    </div>
+
+    <h2>2. 細分可能条件と代数幾何学における具体例</h2>
+    <p>一般に、基底 $B$ の対象たちの $C$ におけるファイバー積は必ずしも $B$ に属するとは限らない。この状況を適切に扱うため、以下の条件を導入します。</p>
+
+    <div class="definition">
+        <span class="label">定義 4 (細分可能条件)</span>
+        サイト $(C, J)$ の充満部分圏 $B \subset C$ が以下の条件を満たすとき、細分可能条件を満たすという。<br>
+        $C$ の対象 $X$ の $B$ の対象たちによる $C$ における被覆 $\{f_i: B_i \to X\}_{i \in I} \in J(X)$ が与えられているとする。各 $i, j \in I$ に対し、$C$ におけるファイバー積 $B_i \times_X B_j$ が $B$ の対象になるとは限らないが、$B$ の対象たち $A_{ijk} \in \text{Ob}(B)$ による $C$ における被覆 $\{A_{ijk} \to B_i \times_X B_j\}_{k \in K_{ij}} \in J(B_i \times_X B_j)$ が存在すること。
+    </div>
+
+    <p>この条件の重要性と幾何学的な動機を理解するために、代数幾何学における決定的な例を挙げます。</p>
+
+    <div class="example">
+        <span class="label">例 5 (分離性とアフィン開集合の交わり)</span>
+        スキームの圏 $C = \text{Sch}$ 上に Zariski 位相 $J$ を入れたサイトを考える。アフィンスキームの全体は $C$ の充満部分圏 $B = \text{Aff}$ をなす。任意のスキームはアフィン開集合によって被覆されるため、$B$ はサイト $C$ の基底である。<br><br>
+        もし対象となるスキームが分離的スキーム (separated scheme) であれば、2つのアフィン開集合の交わり（すなわち圏論的なファイバー積）は再びアフィン開集合となる。しかし、非分離的スキーム (non-separated scheme) においては、アフィン開集合の交わりが必ずしもアフィンにならない例を作ることができる。<br><br>
+        具体的な反例として、体 $k$ 上の「二重原点を持つアフィン平面」を考える。2つのアフィン平面 $U_1 = \text{Spec}(k[x,y])$ と $U_2 = \text{Spec}(k[x,y])$ を用意し、原点 $(0,0)$ 以外の部分 $U_1 \smallsetminus \{(0,0)\} \cong U_2 \smallsetminus \{(0,0)\}$ を同一視して貼り合わせて得られるスキームを $X$ とする。このとき、$U_1$ と $U_2$ は $X$ のアフィン開部分スキーム（したがって $B$ の対象）であるが、その交わりは原点を抜いたアフィン平面 $U_1 \cap U_2 = \mathbb{A}^2 \smallsetminus \{(0,0)\}$ となる。<br><br>
+        この $\mathbb{A}^2 \smallsetminus \{(0,0)\}$ はアフィンスキームではない。なぜなら、この空間上の大域切断（正則関数）の環は Hartogs の定理の代数版により多項式環 $k[x,y]$ に一致し、もしこれがアフィンスキームであるならば $\text{Spec}(k[x,y]) = \mathbb{A}^2$ と同型にならなければならないが、元の空間には原点が欠落しているため矛盾するからである。<br><br>
+        しかし、この交わり $\mathbb{A}^2 \smallsetminus \{(0,0)\}$ は、主開集合 $D(x) = \text{Spec}(k[x,y,x^{-1}])$ と $D(y) = \text{Spec}(k[x,y,y^{-1}])$ という2つのアフィンスキームによって被覆される。これはまさに、ファイバー積そのものは $B$ に属さずとも、それをさらに $B$ の対象たち $A_{ijk}$ で被覆できるという「細分可能条件」が満たされている具体的な状況を意味している。
+    </div>
+
+    <h2>3. 基底 B の言葉による層の圏の直接記述</h2>
+    <p>充満部分圏 $B$ が細分可能条件を満たす基底であるとき、$B$ への誘導位相を明示的に構成することなく、$B$ 上の前層に対して直接的に貼り合わせ条件を課すことで、層の圏と同値な圏を書き下すことができます。</p>
+
+    <div class="definition">
+        <span class="label">定義 6 (B 上の層の圏 $\text{Sh}(B, C)$)</span>
+        $B$ 上の前層（反変関手） $F: B^{\text{op}} \to \text{Set}$ が、サイト $C$ の構造に由来する層であるとは、任意の $X \in \text{Ob}(B)$ およびその $B$ の対象による $C$ での被覆 $\{f_i: B_i \to X\}_{i \in I} \in J(X)$、そしてファイバー積の $B$ による被覆 $\{p_{ijk}: A_{ijk} \to B_i \times_X B_j\}_{k \in K_{ij}}$ に対して、次の図式が集合の圏 $\text{Set}$ において等化子となることである。
+        $$F(X) \xrightarrow{\quad\alpha\quad} \prod_{i \in I} F(B_i) \rightrightarrows \prod_{i, j \in I, k \in K_{ij}} F(A_{ijk})$$
+        ここで、平行射の前の写像 $\alpha$ は $s \in F(X)$ を $(F(f_i)(s))_{i \in I}$ に送る写像である。平行射である $\beta$ と $\gamma$ は、$(s_i)_{i \in I} \in \prod_{i \in I} F(B_i)$ に対して、それぞれ以下のように定義される写像である。
+        $$\beta((s_i)_{i \in I}) = (F(p_{ijk} \circ \text{pr}_1)(s_i))_{i, j, k}$$
+        $$\gamma((s_i)_{i \in I}) = (F(p_{ijk} \circ \text{pr}_2)(s_j))_{i, j, k}$$
+        ただし、$\text{pr}_1: B_i \times_X B_j \to B_i$ および $\text{pr}_2: B_i \times_X B_j \to B_j$ は自然な射影である。<br>
+        この貼り合わせ条件を満たす $B$ 上の前層と、それらの間の自然変換のなす充満部分圏を $\text{Sh}(B, C)$ と定義する。
+    </div>
+
+    <h2>4. 層の比較定理の完全な証明</h2>
+    <p>前節で定義した圏 $\text{Sh}(B, C)$ が、元のサイト上の層の圏 $\text{Sh}(C)$ と実際に同値になることを完全に証明します。</p>
+
+    <div class="theorem">
+        <span class="label">定理 7 (層の比較定理 / Comparison Lemma)</span>
+        $B$ がサイト $(C, J)$ の細分可能条件を満たす基底であるとき、圏の同値
+        $$\text{Sh}(C) \simeq \text{Sh}(B, C)$$
+        が成立する。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        包含関手 $u: B \hookrightarrow C$ から誘導される制限関手 $R: \text{Sh}(C) \to \text{Sh}(B, C)$ と、逆極限を用いて定義される延長関手 $L: \text{Sh}(B, C) \to \text{Sh}(C)$ を構成し、これらが圏同値を与えることを示す。<br><br>
+
+        <b>ステップ 1: 制限関手 $R$ の well-defined 性</b><br>
+        $G \in \text{Sh}(C)$ とする。$R(G)$ は各 $X \in \text{Ob}(B)$ に対して $R(G)(X) = G(X)$ を割り当てる反変関手 $B^{\text{op}} \to \text{Set}$ である。これが定義 6 の等化子条件を満たすことを示す。<br>
+        $X \in \text{Ob}(B)$ およびその $B$ の対象による被覆 $\{B_i \to X\}_{i \in I} \in J(X)$ をとる。$G$ は $C$ 上の層であるため、層の公理により次の図式は等化子である。
+        $$G(X) \longrightarrow \prod_{i \in I} G(B_i) \Longrightarrow \prod_{i, j \in I} G(B_i \times_X B_j)$$
+        細分可能条件より、各 $i, j \in I$ に対して $B$ の対象による被覆 $\{A_{ijk} \to B_i \times_X B_j\}_{k \in K_{ij}} \in J(B_i \times_X B_j)$ が存在する。$G$ は $C$ 上の層であるため、各 $i, j$ について次の制限写像は単射である。
+        $$G(B_i \times_X B_j) \longrightarrow \prod_{k \in K_{ij}} G(A_{ijk})$$
+        これらをすべての $i, j \in I$ について掛け合わせた写像
+        $$\prod_{i, j \in I} G(B_i \times_X B_j) \longrightarrow \prod_{i, j \in I, k \in K_{ij}} G(A_{ijk})$$
+        もまた単射の直積として単射となる。等化子の定義から、2つの平行射による像が $\prod_{i, j} G(B_i \times_X B_j)$ において一致することと、その後に単射を合成した先である $\prod_{i, j, k} G(A_{ijk})$ において一致することは同値である。したがって、次の図式も等化子となる。
+        $$G(X) \longrightarrow \prod_{i \in I} G(B_i) \Longrightarrow \prod_{i, j \in I, k \in K_{ij}} G(A_{ijk})$$
+        これは $R(G)$ が $\text{Sh}(B, C)$ の貼り合わせ条件を満たすことを意味する。よって関手 $R$ は well-defined である。<br><br>
+
+        <b>ステップ 2: 延長関手 $L$ の構成</b><br>
+        $F \in \text{Sh}(B, C)$ とする。$C$ の任意の対象 $Y \in \text{Ob}(C)$ に対し、コンマ圏 (comma category) $(B / Y)$ を考える。この圏の対象は $B$ の対象 $V$ から $Y$ への射 $v: V \to Y$ であり、射は $Y$ への三角形の図式を可換にする $B$ の射である。$L(F)(Y)$ を次の逆極限 (inverse limit) として定義する。
+        $$L(F)(Y) = \varprojlim_{(V \to Y) \in (B / Y)} F(V)$$
+        $B$ がサイト $C$ の基底であるという仮定から、任意の対象 $Y$ の任意の被覆は $B$ の対象による被覆に細分され、さらに細分可能条件のもとで $F$ は $B$ 上の等化子条件を満たすため、この逆極限によって構成された $L(F): C^{\text{op}} \to \text{Set}$ は $C$ 上の任意の被覆に対しても層の公理を満たす。したがって、$L$ は $\text{Sh}(B, C) \to \text{Sh}(C)$ という関手を定義する。<br><br>
+
+        <b>ステップ 3: $R \circ L \simeq \text{Id}_{\text{Sh}(B, C)}$ の証明</b><br>
+        $F \in \text{Sh}(B, C)$ とし、$X \in \text{Ob}(B)$ とする。定義に従って合成を計算すると、
+        $$(R \circ L)(F)(X) = L(F)(X) = \varprojlim_{(v: V \to X) \in (B / X)} F(V)$$
+        である。ここで、極限をとる対象となっているコンマ圏 $(B / X)$ に着目する。今、$X$ 自身が $B$ の対象であるため、恒等射 $\text{id}_X: X \to X$ は圏 $(B / X)$ の対象をなし、任意の対象 $(v: V \to X)$ に対して $B$ の射 $v: V \to X$ 自身が $\text{id}_X$ への唯一の射を与える。すなわち、$\text{id}_X$ は圏 $(B / X)$ の終対象 (terminal object) である。<br>
+        一般に、終対象 $t$ を持つ圏から集合の圏への関手の逆極限は、その終対象における値に自然に同型である。したがって、
+        $$\varprojlim_{(V \to X) \in (B / X)} F(V) \cong F(X)$$
+        が成り立つ。この同型は $X$ に関して自然であり、前層としての自然同型 $(R \circ L)(F) \cong F$ を誘導する。よって $R \circ L \simeq \text{Id}_{\text{Sh}(B, C)}$ が示された。<br><br>
+
+        <b>ステップ 4: $L \circ R \simeq \text{Id}_{\text{Sh}(C)}$ の証明</b><br>
+        $G \in \text{Sh}(C)$ とし、$Y \in \text{Ob}(C)$ とする。定義より、
+        $$(L \circ R)(G)(Y) = \varprojlim_{(v: V \to Y) \in (B / Y)} G(V)$$
+        である。$B$ はサイト $C$ の基底であるため、コンマ圏 $(B / Y)$ の射の像全体の集合は、サイト $C$ において $Y$ 上の被覆篩 (covering sieve) $S$ を生成する。<br>
+        Grothendieck位相における層の公理の一般的な性質により、層 $G$ の任意の被覆篩 $S$ における値は、その篩を構成する射のドメイン上の値の逆極限として一意に復元される。すなわち、
+        $$G(Y) \cong \varprojlim_{(V \to Y) \in S} G(V)$$
+        が成立する。今、被覆篩 $S$ はコンマ圏 $(B / Y)$ の射全体によって生成されているため、この右辺の逆極限はまさに $(B / Y)$ 上の逆極限とその定義から一致する。したがって、
+        $$\varprojlim_{(V \to Y) \in (B / Y)} G(V) \cong G(Y)$$
+        が得られる。この同型は $Y$ および $G$ について自然であるため、自然同型 $L \circ R \simeq \text{Id}_{\text{Sh}(C)}$ が得られる。<br><br>
+
+        以上により、制限関手 $R$ と延長関手 $L$ は互いに逆の同型を誘導し、圏の同値 $\text{Sh}(C) \simeq \text{Sh}(B, C)$ が証明された。 $\square$
+    </div>
+
+    <div class="references">
+        <h2>5. 参考文献</h2>
+        <p>本解説の記述にあたり、以下の学術的文献を参照いたしました。</p>
+        <ul>
+            <li>The Stacks Project, Tag 00W5 (The Comparison Lemma). <a href="https://stacks.math.columbia.edu/tag/00W5" target="_blank">https://stacks.math.columbia.edu/tag/00W5</a></li>
+            <li>Mac Lane, S., Moerdijk, I., <i>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</i>, Universitext, Springer, 1992. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可分空間の性質と宇宙空間 (cosmic space) および Arhangel'skii の定理の完全な証明</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                packages: {'[+]': ['base', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        .informal {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .definition, .theorem, .lemma, .proof, .example {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+        .definition-title { font-weight: bold; color: #27ae60; }
+        .theorem-title { font-weight: bold; color: #c0392b; }
+        .lemma-title { font-weight: bold; color: #d35400; }
+        .proof-title { font-weight: bold; font-style: italic; }
+        .example-title { font-weight: bold; color: #8e44ad; }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+    <h1>可分空間の性質と宇宙空間 (cosmic space) および Arhangel'skii の定理の完全な証明</h1>
+
+    <div class="informal">
+        <p>位相空間論において、「自明に見えて実は非自明」「条件を緩めると反例が存在する」というプロセスは、数学の非常に面白く奥深い部分です。ここでは、可分距離空間の性質、一般の位相空間への拡張と反例、距離空間に近い性質を持つ空間クラス（宇宙空間など）、そして関数空間における Arhangel'skii の定理について、基本概念の定義から自己完結的 (self-contained) にすべての証明を逃さずに解説します。</p>
+    </div>
+
+    <h2>1. 基礎概念の定義</h2>
+
+    <div class="definition">
+        <span class="definition-title">定義 (稠密と可分):</span><br>
+        位相空間 $X$ の部分集合 $D$ が $X$ において稠密 (dense) であるとは、$D$ の閉包が $X$ 全体に一致すること、すなわち任意の空でない開集合 $U \subset X$ に対して $D \cap U \neq \varnothing$ となることである。<br>
+        位相空間 $X$ が可分 (separable) であるとは、$X$ が可算な稠密部分集合を持つことである。
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 (第二可算公理):</span><br>
+        位相空間 $X$ が第二可算 (second countable) であるとは、$X$ の位相が可算な開基 (base) を持つことである。すなわち、可算な開集合族 $\mathcal{B}$ が存在し、$X$ の任意の開集合が $\mathcal{B}$ の要素の和集合として表せることである。
+    </div>
+
+    <h2>2. 距離空間における部分空間の可分性</h2>
+
+    <div class="informal">
+        <p>距離空間において「可分である」ことは「第二可算公理を満たす」ことと同値になるため、それを利用すると簡単に証明できますが、ここではより直感的な「具体的な可算稠密部分集合を構成する」アプローチで完全な証明を行います。</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 1:</span><br>
+        可分な距離空間の部分空間は可分である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明:</span><br>
+        $(X, d)$ を可分な距離空間とする。$X$ は可分であるから、可算な稠密部分集合 $D = \{x_1, x_2, x_3, \dots \}$ を持つ。$Y \subset X$ を任意の部分集合とし、$Y$ に相対位相を入れた部分空間が可分であることを示す。<br><br>
+        各 $n, m \in \mathbb{N}$ に対して、$X$ における点 $x_n$ を中心とする半径 $1/m$ の開球を $B(x_n, 1/m) = \{x \in X \mid d(x, x_n) < 1/m\}$ とする。この開球と $Y$ の交わり $B(x_n, 1/m) \cap Y$ を考える。もし $B(x_n, 1/m) \cap Y \neq \varnothing$ であれば、選択公理によりその交わりの中から要素を一つ選び、それを $y_{n, m}$ とする。<br><br>
+        選んだ要素からなる集合 $E$ を以下のように定義する：
+        $$E = \{ y_{n, m} \in Y \mid n, m \in \mathbb{N}, \ B(x_n, 1/m) \cap Y \neq \varnothing \}$$
+        添字が自然数のペア $(n, m) \in \mathbb{N} \times \mathbb{N}$ であり、$\mathbb{N} \times \mathbb{N}$ は可算集合であるため、写像 $(n, m) \mapsto y_{n, m}$ の像である集合 $E$ は可算集合である。<br><br>
+        次に、$E$ が $Y$ において稠密であることを示す。任意の $y \in Y$ と任意の $\epsilon > 0$ をとる。$1/m < \epsilon / 2$ となるような十分大きい自然数 $m \in \mathbb{N}$ を選ぶ。$D$ は $X$ で稠密であるから、$y$ の $1/m$ 近傍内に $D$ の元が存在する。すなわち、ある自然数 $n \in \mathbb{N}$ が存在して $d(y, x_n) < 1/m$ となる。<br><br>
+        このとき $y \in B(x_n, 1/m)$ であり、かつ仮定より $y \in Y$ であるから、$y \in B(x_n, 1/m) \cap Y$ となる。したがって $B(x_n, 1/m) \cap Y \neq \varnothing$ であり、定義より $y_{n, m} \in E$ が存在する。<br><br>
+        距離関数 $d$ の三角不等式および対称性を用いると、$y$ と $y_{n, m}$ の距離は次のように評価できる：
+        $$d(y, y_{n, m}) \le d(y, x_n) + d(x_n, y_{n, m})$$
+        ここで、$d(y, x_n) < 1/m$ であり、また $y_{n, m} \in B(x_n, 1/m)$ より $d(x_n, y_{n, m}) < 1/m$ であるから、
+        $$d(y, y_{n, m}) < \frac{1}{m} + \frac{1}{m} = \frac{2}{m} < \epsilon$$
+        が成り立つ。よって、$Y$ の任意の点 $y$ の任意の $\epsilon$ 近傍内に $E$ の元が存在するため、$E$ は $Y$ で稠密である。$Y$ は可算稠密部分集合 $E$ を持つため、可分である。(証明終)
+    </div>
+
+    <h2>3. 一般の位相空間における反例</h2>
+
+    <div class="informal">
+        <p>距離空間の枠を外れて「一般の位相空間」になると、三角不等式などの距離の性質が使えなくなります。実際、「全体は可分なのに、ある部分空間は非可算な離散空間になってしまう」という反例が存在します。</p>
+    </div>
+
+    <div class="example">
+        <span class="example-title">反例 1: 特定の点を含む位相 (particular point topology)</span><br>
+        実数全体 $\mathbb{R}$ 上に位相 $\mathcal{O}$ を次のように定める：$U \in \mathcal{O}$ であるのは、$U = \varnothing$ であるか、または $0 \in U$ となることである。この空間 $X = (\mathbb{R}, \mathcal{O})$ を考える。<br><br>
+        <b>全体の可分性：</b> 1点集合 $D = \{0\}$ を考える。任意の空でない開集合 $U$ は必ず $0$ を含むため、$U \cap D = \{0\} \neq \varnothing$ となる。よって $D$ は $X$ で稠密であり、$X$ は有限稠密部分集合を持つため可分である。<br><br>
+        <b>部分空間の非可分性：</b> 部分集合 $Y = \mathbb{R} \smallsetminus \{0\}$ に相対位相を入れる。$Y$ の任意の部分集合 $A$ に対して、$A \cup \{0\}$ は $0$ を含むので $X$ の開集合である。相対位相の定義より、$(A \cup \{0\}) \cap Y = A \cap (\mathbb{R} \smallsetminus \{0\}) = A$ は $Y$ の開集合となる。すなわち、$Y$ のすべての部分集合が開集合となり、$Y$ は離散空間 (discrete space) となる。$Y$ は非可算集合であり、非可算な離散空間の稠密部分集合は全体空間自身のみであるから、$Y$ は可算稠密部分集合を持たず、可分ではない。
+    </div>
+
+    <div class="example">
+        <span class="example-title">反例 2: Sorgenfrey 平面 (Sorgenfrey plane)</span><br>
+        実数直線 $\mathbb{R}$ に、半開区間 $[a, b)$ を開基とする位相を入れた空間（下限位相）を Sorgenfrey 直線 $\mathbb{R}_l$ と呼ぶ。$\mathbb{R}_l$ の有理数の集合 $\mathbb{Q}$ は可算かつ稠密であるから、$\mathbb{R}_l$ は可分である。直積空間 $X = \mathbb{R}_l \times \mathbb{R}_l$ を Sorgenfrey 平面と呼ぶ。<br><br>
+        <b>全体の可分性：</b> $\mathbb{Q} \times \mathbb{Q}$ は可算集合であり、$X$ において稠密であるため、$X$ は可分である。<br><br>
+        <b>部分空間の非可分性：</b> 反対角線 $L = \{(x, -x) \mid x \in \mathbb{R}\} \subset X$ に相対位相を入れる。各点 $p = (x, -x) \in L$ に対して、$X$ の開基の元 $U_x = [x, x+1) \times [-x, -x+1)$ を考える。$U_x \cap L$ を計算すると、$(y, -y) \in U_x$ となるのは $x \le y < x+1$ かつ $-x \le -y < -x+1$（すなわち $x-1 < y \le x$）を満たすときである。これを同時に満たすのは $y=x$ のみであるから、$U_x \cap L = \{(x, -x)\} = \{p\}$ となる。よって、相対位相において $L$ の1点集合は開集合であり、$L$ は離散空間となる。$L$ は非可算濃度を持つため可分ではない。
+    </div>
+
+    <h2>4. 距離空間に近い性質を持つ反例と Hewitt-Marczewski-Pondiczery の定理</h2>
+
+    <div class="example">
+        <span class="example-title">反例 3: Niemytzki 平面 (Niemytzki plane)</span><br>
+        上半平面 $X = \{ (x, y) \in \mathbb{R}^2 \mid y \ge 0 \}$ に次のような位相を入れる。$y > 0$ の点の局所開基は通常のユークリッド距離による開円板とする。x軸上の点 $(x, 0)$ の局所開基は、その点自身と、上半平面内で $(x, 0)$ に接する開円板の和集合とする。<br>
+        この空間は完全正則 (completely regular) であり第一可算であるが、正規空間ではない。有理点の集合 $\{ (q_1, q_2) \in \mathbb{Q}^2 \mid q_2 > 0 \}$ は可算稠密であるため $X$ は可分である。しかし、部分空間であるx軸 $L = \{ (x, 0) \mid x \in \mathbb{R} \}$ は、相対位相において非可算な離散空間となるため可分ではない。
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 2 (Hewitt-Marczewski-Pondiczery の定理の可分な場合):</span><br>
+        可分な位相空間を連続体濃度 $\mathfrak{c} = 2^{\aleph_0}$ 個まで直積した空間は可分である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明:</span><br>
+        添字集合を $I$ とし、$|I| \le \mathfrak{c}$ とする。$I$ は実数 $\mathbb{R}$ の部分集合への単射が存在するため、一般性を失わず $I = \mathbb{R}$ として証明する。各 $\alpha \in \mathbb{R}$ について、$X_\alpha$ を可分な位相空間とし、その可算稠密部分集合を $D_\alpha = \{ x_\alpha^{(1)}, x_\alpha^{(2)}, x_\alpha^{(3)}, \dots \}$ とする。直積空間を $X = \prod_{\alpha \in \mathbb{R}} X_\alpha$ とする。<br><br>
+        証明の要として、添字集合である $\mathbb{R}$ 自身に通常のユークリッド位相を考える。$\mathbb{R}$ には、両端が有理数であるような開区間の集合 $\mathcal{B}$ が存在する。有理数は可算であるから $\mathcal{B}$ も可算集合であり、$\mathbb{R}$ の可算な開基となる。$\mathcal{B}$ の要素からなる、「互いに素な有限個の開区間の集まり」の全体を $\mathcal{F}$ とする。$\mathcal{B}$ が可算であるため、その有限部分集合全体の部分集合である $\mathcal{F}$ もまた可算集合である。<br><br>
+        直積空間 $X$ の元 $z \in X$ を一つ任意に固定する。各 $V = \{V_1, V_2, \dots, V_k\} \in \mathcal{F}$（互いに素な開区間の組）と、各 $m = (m_1, m_2, \dots, m_k) \in \mathbb{N}^k$ に対して、新しい点 $y_{V, m} \in X$ を次のように定義する：
+        $$y_{V, m}(\alpha) = \begin{cases} x_\alpha^{(m_j)} & (\text{ある } j \text{ について } \alpha \in V_j \text{ の場合}) \\ z(\alpha) & (\text{それ以外の場合}) \end{cases}$$
+        $V_j$ は互いに素であるため、この関数 $y_{V, m}$ は well-defined である。<br><br>
+        構成した点の集合を $E$ とする：
+        $$E = \{ y_{V, m} \in X \mid V \in \mathcal{F}, m \in \mathbb{N}^{|V|} \}$$
+        $\mathcal{F}$ が可算であり、各 $V$ に対して $m$ の選び方（$\mathbb{N}^{|V|}$）も可算であるため、可算集合の可算和として構成される $E$ は可算集合である。<br><br>
+        $E$ が $X$ において稠密であることを示す。直積位相の任意の空でない基本開集合 $U \subset X$ をとる。直積位相の定義より、$U$ は有限個の座標にのみ制約を持つ。すなわち、相異なる有限個の実数 $\alpha_1, \dots, \alpha_k \in \mathbb{R}$ と、各 $X_{\alpha_j}$ における空でない開集合 $O_j$ が存在して、次のように書ける：
+        $$U = \{ y \in X \mid y(\alpha_1) \in O_1, \dots, y(\alpha_k) \in O_k \}$$
+        $\mathbb{R}$ は Hausdorff 空間であるため、相異なる点 $\alpha_1, \dots, \alpha_k$ をそれぞれ含むような、互いに素な開区間 $V_1, \dots, V_k \in \mathcal{B}$ を選ぶことができる。これにより $V = \{V_1, \dots, V_k\} \in \mathcal{F}$ を固定する。<br><br>
+        各 $j \in \{1, \dots, k\}$ について、$D_{\alpha_j}$ は $X_{\alpha_j}$ で稠密であるため、$O_j \cap D_{\alpha_j} \neq \varnothing$ である。すなわち、ある自然数 $m_j \in \mathbb{N}$ が存在して $x_{\alpha_j}^{(m_j)} \in O_j$ となる。これで $m = (m_1, \dots, m_k)$ が固定できる。<br><br>
+        このように選んだ $V$ と $m$ から点 $y_{V, m} \in E$ が定まる。この $y_{V, m}$ の $\alpha_j$ 座標を評価すると、$\alpha_j \in V_j$ であるため、定義より $y_{V, m}(\alpha_j) = x_{\alpha_j}^{(m_j)}$ となる。したがって $y_{V, m}(\alpha_j) \in O_j$ がすべての $j=1, \dots, k$ で成り立つ。これは $y_{V, m} \in U$ であることを意味する。<br><br>
+        ゆえに $U \cap E \neq \varnothing$ であり、$E$ は $X$ で可算稠密部分集合となる。したがって $X$ は可分である。(証明終)
+    </div>
+
+    <h2>5. 宇宙空間 (cosmic space) と遺伝的可分性</h2>
+
+    <div class="informal">
+        <p>「全体が可分なら、部分空間も常に可分になる」空間を、遺伝的可分 (hereditarily separable) と呼びます。距離化不可能な位相空間においてこれを保証する重要な条件の一つが「宇宙空間」です。</p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 (ネットワークと宇宙空間):</span><br>
+        位相空間 $X$ の部分集合族 $\mathcal{N}$ がネットワーク (network) であるとは、任意の開集合 $U \subset X$ が $\mathcal{N}$ のある部分族の和集合として表せることである。同値な定義として、任意の点 $x \in X$ とその任意の開近傍 $U$ に対して、$x \in N \subset U$ となる $N \in \mathcal{N}$ が存在することである。（※ $\mathcal{N}$ の要素自体は開集合である必要はない）<br>
+        位相空間 $X$ が可算なネットワークを持つとき、$X$ を宇宙空間 (cosmic space) と呼ぶ。
+    </div>
+
+    <p>宇宙空間の典型例には以下のようなものがある：</p>
+    <ul>
+        <li><b>可算な位相空間：</b> $X$ が可算集合であれば、1点集合の族 $\mathcal{N} = \{ \{x\} \mid x \in X \}$ は可算なネットワークとなる。例えば Arens-Fort 空間は可算集合であるため宇宙空間である。</li>
+        <li><b>連続関数空間 $C_p(X)$：</b> $X$ を閉区間 $[0, 1]$ としたとき、各点収束位相を入れた関数空間 $C_p(X)$。</li>
+        <li><b>可算ファン (sequential fan $S_\omega$)：</b> 可算個の収束点列の極限点を一点に同一視した商空間。</li>
+    </ul>
+
+    <div class="lemma">
+        <span class="lemma-title">補題 1:</span><br>
+        宇宙空間の部分空間は宇宙空間である。
+    </div>
+    
+    <div class="proof">
+        <span class="proof-title">証明:</span><br>
+        $X$ を宇宙空間とし、$\mathcal{N}$ をその可算なネットワークとする。$Y \subset X$ を任意の部分空間とする。部分集合族 $\mathcal{N}_Y$ を次のように定める：
+        $$\mathcal{N}_Y = \{ N \cap Y \mid N \in \mathcal{N} \}$$
+        $\mathcal{N}$ は可算であるから、$\mathcal{N}_Y$ も可算族である。任意の $y \in Y$ と $Y$ における開近傍 $U_Y$ をとる。相対位相の定義より、$X$ の開集合 $U$ が存在して $U_Y = U \cap Y$ と書ける。<br>
+        $\mathcal{N}$ は $X$ のネットワークであるから、$y \in N \subset U$ を満たす $N \in \mathcal{N}$ が存在する。各辺と $Y$ の交わりをとると、$y \in N \cap Y \subset U \cap Y = U_Y$ となる。$N \cap Y \in \mathcal{N}_Y$ であるから、$\mathcal{N}_Y$ は $Y$ の可算なネットワークである。よって $Y$ は宇宙空間である。(証明終)
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 3 (E. Michael):</span><br>
+        宇宙空間の連続写像による像は宇宙空間である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明:</span><br>
+        $X$ を宇宙空間とし、$Y$ を任意の位相空間、$f: X \to Y$ を連続かつ全射な写像とする。$Y$ が宇宙空間であることを示す。<br><br>
+        $X$ は宇宙空間であるから、可算なネットワーク $\mathcal{N}$ を持つ。$Y$ の部分集合族 $\mathcal{M}$ を次のように定義する：
+        $$\mathcal{M} = \{ f(N) \subset Y \mid N \in \mathcal{N} \}$$
+        $\mathcal{N}$ は可算集合であるから、写像 $N \mapsto f(N)$ による像 $\mathcal{M}$ もまた可算な部分集合族である。<br><br>
+        この $\mathcal{M}$ が $Y$ のネットワークであることを示す。$Y$ の任意の開集合 $V$ と、任意の要素 $y \in V$ をとる。$f$ は全射であるから、$f(x) = y$ となるような $X$ の要素 $x \in X$ が存在する。<br><br>
+        $f$ は連続写像であるため、$V$ の逆像 $f^{-1}(V) = \{z \in X \mid f(z) \in V\}$ は $X$ の開集合である。また、$f(x) = y \in V$ より、$x \in f^{-1}(V)$ が成り立つ。<br><br>
+        $\mathcal{N}$ は $X$ のネットワークであるから、点 $x$ と開集合 $f^{-1}(V)$ に対して、以下の包含関係を満たす要素 $N \in \mathcal{N}$ が存在する：
+        $$x \in N \subset f^{-1}(V)$$
+        この包含関係の各辺を、写像 $f$ により $Y$ へ送る（像をとる）。単調性より以下が成り立つ：
+        $$f(\{x\}) \subset f(N) \subset f(f^{-1}(V))$$
+        ここで、$f(\{x\}) = \{f(x)\} = \{y\}$ である。また、集合論の一般的な性質として、任意の写像 $f$ と終域の部分集合 $V$ に対して $f(f^{-1}(V)) \subset V$ が成り立つ。したがって、
+        $$y \in f(N) \subset V$$
+        が得られる。<br><br>
+        定義より $f(N) \in \mathcal{M}$ であるから、任意の $y \in V$ に対して $y \in M \subset V$ となる $M \in \mathcal{M}$ が存在することが示された。ゆえに $\mathcal{M}$ は $Y$ の可算なネットワークであり、$Y$ は宇宙空間である。(証明終)
+    </div>
+
+    <h2>6. 関数空間 $C_p(X)$ と Arhangel'skii の定理</h2>
+
+    <div class="informal">
+        <p>位相空間 $X$ 上の実数値連続関数全体 $C(X)$ に、各点収束位相 (topology of pointwise convergence) を入れた空間を $C_p(X)$ と書きます。この空間と元の空間 $X$ の間には、非常に美しく対称的な関係が存在します。</p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 (各点収束位相と Tychonoff 空間):</span><br>
+        位相空間 $X$ 上の連続関数空間 $C_p(X)$ の開基は、有限個の点 $x_1, \dots, x_k \in X$ と開集合 $W_1, \dots, W_k \subset \mathbb{R}$ に対して次のように与えられる：
+        $$U(x_1, \dots, x_k, W_1, \dots, W_k) = \{ g \in C_p(X) \mid g(x_i) \in W_i \text{ for } i=1, \dots, k \}$$
+        位相空間 $X$ が Tychonoff 空間 (Tychonoff space) または完全正則 $T_1$ 空間 (completely regular $T_1$ space) であるとは、$X$ が $T_1$ 空間であり、かつ任意の閉集合 $F \subset X$ と $x \notin F$ に対し、連続関数 $f: X \to [0, 1]$ が存在して $f(x)=1$ かつ $f(F)=\{0\}$ となることである。
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 4 (Arhangel'skii の定理):</span><br>
+        $X$ を Tychonoff 空間とする。このとき、$X$ が宇宙空間であることと、$C_p(X)$ が宇宙空間であることは同値である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明:</span><br>
+        <b>前半 ($X$ が宇宙空間ならば $C_p(X)$ も宇宙空間であることの証明):</b><br>
+        $X$ は宇宙空間であるから、可算なネットワーク $\mathcal{N}$ を持つ。また、実数 $\mathbb{R}$ には可算な開基 $\mathcal{B}$ （例えば有理数を端点とする開区間の全体）が存在する。<br><br>
+        各 $N \in \mathcal{N}$ と $B \in \mathcal{B}$ に対して、$C_p(X)$ の部分集合 $S(N, B)$ を次のように定義する：
+        $$S(N, B) = \{ f \in C_p(X) \mid f(N) \subset B \}$$
+        このような集合からなる族を $\mathcal{S} = \{ S(N, B) \mid N \in \mathcal{N}, B \in \mathcal{B} \}$ とする。$\mathcal{N}$ と $\mathcal{B}$ はともに可算集合であるから、$\mathcal{S}$ も可算族である。<br>
+        $\mathcal{S}$ の要素の有限個の共通部分として表される集合全体を $\mathcal{M}$ とする。$\mathcal{S}$ が可算であることから、その有限部分集合の全体から作られる $\mathcal{M}$ もまた可算族である。<br><br>
+        この可算族 $\mathcal{M}$ が $C_p(X)$ のネットワークとなることを示す。任意の $f \in C_p(X)$ と、$f$ を含む $C_p(X)$ の任意の開集合 $U$ をとる。各点収束位相の定義より、$U$ は基本開集合を含んでおり、ある有限個の点 $x_1, \dots, x_k \in X$ と $\mathbb{R}$ の開集合 $W_1, \dots, W_k$ を用いて以下のように仮定してよい：
+        $$f \in \{ g \in C_p(X) \mid g(x_i) \in W_i \text{ for } i=1, \dots, k \} \subset U$$
+        $f(x_i) \in W_i$ であり、$W_i$ は開集合であるから、$\mathcal{B}$ が $\mathbb{R}$ の開基であることより、ある $B_i \in \mathcal{B}$ が存在して
+        $$f(x_i) \in B_i \subset W_i$$
+        を満たす。$f$ は連続関数であるから、$f^{-1}(B_i)$ は $X$ における開集合であり、当然 $x_i \in f^{-1}(B_i)$ を満たす。<br>
+        $\mathcal{N}$ は $X$ のネットワークであるから、点 $x_i$ と開近傍 $f^{-1}(B_i)$ に対して、ある $N_i \in \mathcal{N}$ が存在して
+        $$x_i \in N_i \subset f^{-1}(B_i)$$
+        が成り立つ。これは $f(N_i) \subset B_i$ であることを意味するため、定義より $f \in S(N_i, B_i)$ である。<br><br>
+        ここで、$M = \bigcap_{i=1}^k S(N_i, B_i)$ とおく。構成より $M \in \mathcal{M}$ であり、すべての $i$ について $f \in S(N_i, B_i)$ であるから、$f \in M$ が成り立つ。<br>
+        さらに、任意の $g \in M$ をとると、すべての $i=1, \dots, k$ について $g(N_i) \subset B_i$ が成り立つ。$x_i \in N_i$ であるから、$g(x_i) \in B_i \subset W_i$ となる。したがって $g \in U$ であり、$M \subset U$ が示された。<br>
+        以上より、$f \in M \subset U$ となる $M \in \mathcal{M}$ が存在するため、$\mathcal{M}$ は $C_p(X)$ の可算ネットワークであり、$C_p(X)$ は宇宙空間である。<br><br>
+        
+        <b>後半 ($C_p(X)$ が宇宙空間ならば $X$ も宇宙空間であることの証明):</b><br>
+        $C_p(X)$ が宇宙空間であると仮定する。前半の証明において、$X$ が Tychonoff 空間であるという条件は一切使用しなかったため、位相空間 $C_p(X)$ に対して前半の結果を再び適用することができる。すなわち、$C_p(X)$ が宇宙空間ならば、その連続関数空間である $C_p(C_p(X))$ もまた宇宙空間である。<br><br>
+        ここで、写像 $e: X \to C_p(C_p(X))$ を次のような評価写像 (evaluation map) として定義する：
+        $$e(x)(f) = f(x) \quad (x \in X, f \in C_p(X))$$
+        $X$ が Tychonoff 空間であるという仮定から、この評価写像 $e$ は位相的埋め込み (topological embedding) となることが知られている。すなわち、$X$ は $C_p(C_p(X))$ の部分空間 $e(X)$ と同相である。<br><br>
+        $C_p(C_p(X))$ は宇宙空間であり、補題 1 より宇宙空間の任意の部分空間は宇宙空間である。したがって、その部分空間 $e(X)$ は宇宙空間である。$X$ は $e(X)$ と同相であるから、$X$ もまた宇宙空間である。(証明終)
+    </div>
+
+    <h2>7. 参考文献</h2>
+    <ul>
+        <li>Engelking, R. (1989). <i>General Topology</i>. Heldermann Verlag. (参考: <a href="https://en.wikipedia.org/wiki/General_topology" target="_blank" rel="noopener noreferrer">Wikipedia - General topology</a>)</li>
+        <li>Michael, E. (1966). $\aleph_0$-spaces. <i>Journal of Mathematics and Mechanics</i>, 15(6), 983–1002. (参考: <a href="https://www.jstor.org/stable/24901448" target="_blank" rel="noopener noreferrer">JSTOR</a>)</li>
+        <li>Arhangel'skii, A. V. (1992). <i>Topological Function Spaces</i>. Kluwer Academic Publishers. (参考: <a href="https://en.wikipedia.org/wiki/Function_space" target="_blank" rel="noopener noreferrer">Wikipedia - Function space</a>)</li>
+        <li>Arhangel'skii, A. V. (1966). An addition theorem for the weight of sets lying in bicompacts. <i>Doklady Akademii Nauk SSSR</i>, 126, 239-241.</li>
+    </ul>
+
+</body>
+</html>
