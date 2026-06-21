@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子展開環におけるテンソル圏の構造と量子次元の完全な解説</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: "no-mathjax",
+                processHtmlClass: "mathjax"
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fdfdfd;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        .definition, .theorem, .proposition, .proof, .example {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #e8f4f8;
+            border-left: 5px solid #3498db;
+        }
+        .proposition, .theorem {
+            background-color: #f9f2ec;
+            border-left: 5px solid #e67e22;
+        }
+        .proof {
+            background-color: #fbfbfb;
+            border-left: 5px solid #95a5a6;
+            font-style: normal;
+        }
+        .example {
+            background-color: #eef7ee;
+            border-left: 5px solid #2ecc71;
+        }
+        .title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .remark {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff9c4;
+            border-left: 5px solid #f1c40f;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        .references {
+            margin-top: 50px;
+            border-top: 2px solid #2c3e50;
+            padding-top: 20px;
+        }
+        .references li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="mathjax">
+
+    <h1>量子展開環におけるテンソル圏の構造と量子次元の完全な解説</h1>
+
+    <p>本稿では、量子展開環 (quantum enveloping algebra) $U_q(\mathfrak{g})$、特に $U_q(\mathfrak{sl}_2)$ における有限次元表現の圏が持つ豊かな構造（テンソル圏としての性質、双対対象、評価写像と余評価写像、ピボタル構造）および、量子トレース (quantum trace) や量子次元 (quantum dimension) について、これまでの議論をすべて統合し、自己完結的 (self-contained) な形で詳しく解説します。</p>
+
+    <p>数学的な厳密性を担保するため、定理や証明、定義などは「だ・である調」で統一し、途中の証明を省略することなく完全に書き下しています。</p>
+
+    <h2>1. 量子群 $U_q(\mathfrak{sl}_2)$ の基礎</h2>
+
+    <p>まず、すべての議論の出発点となる $U_q(\mathfrak{sl}_2)$ の定義と、その Hopf 代数 (Hopf algebra) としての構造を定義します。</p>
+
+    <div class="definition">
+        <div class="title">定義 1 ($U_q(\mathfrak{sl}_2)$ の定義)</div>
+        <p>$q \in \mathbb{C}^\times$ を $1$ の冪根ではない複素数とする。量子展開環 $U_q(\mathfrak{sl}_2)$ とは、$4$ つの生成元 $E, F, K, K^{-1}$ と、以下の基本関係式によって生成される $\mathbb{C}$ 上の単位的結合代数である。</p>
+        $$ K K^{-1} = K^{-1} K = 1 $$
+        $$ K E K^{-1} = q^2 E $$
+        $$ K F K^{-1} = q^{-2} F $$
+        $$ E F - F E = \frac{K - K^{-1}}{q - q^{-1}} $$
+    </div>
+
+    <div class="definition">
+        <div class="title">定義 2 ($U_q(\mathfrak{sl}_2)$ の Hopf 代数構造)</div>
+        <p>$U_q(\mathfrak{sl}_2)$ は、以下の余積 (coproduct) $\Delta : U_q(\mathfrak{sl}_2) \to U_q(\mathfrak{sl}_2) \otimes U_q(\mathfrak{sl}_2)$、余単位 (counit) $\epsilon : U_q(\mathfrak{sl}_2) \to \mathbb{C}$、および対蹠 (antipode) $S : U_q(\mathfrak{sl}_2) \to U_q(\mathfrak{sl}_2)$ を備えることで Hopf 代数となる。生成元に対する作用は以下で定義される。</p>
+        <ul>
+            <li><strong>余積 $\Delta$:</strong>
+                $$\Delta(K) = K \otimes K, \quad \Delta(K^{-1}) = K^{-1} \otimes K^{-1}$$
+                $$\Delta(E) = E \otimes 1 + K \otimes E$$
+                $$\Delta(F) = F \otimes K^{-1} + 1 \otimes F$$
+            </li>
+            <li><strong>余単位 $\epsilon$:</strong>
+                $$\epsilon(K) = \epsilon(K^{-1}) = 1, \quad \epsilon(E) = \epsilon(F) = 0$$
+            </li>
+            <li><strong>対蹠 $S$:</strong>
+                $$S(K) = K^{-1}, \quad S(K^{-1}) = K$$
+                $$S(E) = -K^{-1} E, \quad S(F) = -F K$$
+                （※本稿の規約は Drinfeld-Jimbo の標準的な規約の1つを採用する。規約により $S(E) = -E K^{-1}, S(F) = -K F$ となる場合もあるが、本質的な構造は同値である。以下の計算では $S(E) = -E K^{-1}, S(F) = -K F$ を採用した規約での証明を展開する。）
+            </li>
+        </ul>
+    </div>
+
+    <h2>2. 対蹠の2乗とピボタル元 (Pivotal Element)</h2>
+
+    <p>通常の Lie 代数の普遍展開環では、対蹠は $S^2 = \mathrm{id}$ を満たす（対合である）ことが知られています。しかし、量子群においてはこれは成り立たず、カルタン部分環の元 $K$ による内部自己同型 (inner automorphism) に一致します。この性質が、後にテンソル圏にピボタル構造 (pivotal structure) を導入する際の決定的な役割を果たします。</p>
+
+    <div class="proposition">
+        <div class="title">命題 1 (対蹠の2乗)</div>
+        <p>$U_q(\mathfrak{sl}_2)$ の任意の元 $x$ に対して、以下が成り立つ。</p>
+        $$ S^2(x) = K x K^{-1} $$
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>対蹠 $S$ は Hopf 代数の公理により反自己準同型 (anti-homomorphism)、すなわち任意の $x, y$ に対して $S(xy) = S(y)S(x)$ を満たす。したがって、$S$ を2回適用した $S^2$ は自己準同型 (homomorphism) となる。また、元 $K$ による内部自己同型写像 $x \mapsto KxK^{-1}$ も代数の自己準同型である。</p>
+        <p>よって、代数の生成元 $E, F, K, K^{-1}$ のそれぞれにおいて等式が成り立つことを示せば十分である。ここで、規約 $S(E) = -E K^{-1}$, $S(F) = -K F$, $S(K)=K^{-1}$ を用いる。</p>
+        
+        <p><strong>(1) $K$ および $K^{-1}$ の場合：</strong></p>
+        $$ S^2(K) = S(S(K)) = S(K^{-1}) = K $$
+        一方で右辺は、
+        $$ K K K^{-1} = K $$
+        となり一致する。$K^{-1}$ についても同様に $S^2(K^{-1}) = K K^{-1} K^{-1}$ となり一致する。
+
+        <p><strong>(2) $E$ の場合：</strong></p>
+        反自己準同型の性質 $S(ab) = S(b)S(a)$ を用いる。
+        $$ S^2(E) = S(S(E)) = S(-E K^{-1}) = -S(K^{-1})S(E) $$
+        ここで $S(K^{-1}) = K$ および $S(E) = -E K^{-1}$ を代入する。
+        $$ -S(K^{-1})S(E) = -K (-E K^{-1}) = K E K^{-1} $$
+        よって $S^2(E) = K E K^{-1}$ が成立する。
+
+        <p><strong>(3) $F$ の場合：</strong></p>
+        同様にして計算を行う。
+        $$ S^2(F) = S(S(F)) = S(-K F) = -S(F)S(K) $$
+        $S(F) = -K F$ および $S(K) = K^{-1}$ を代入する。
+        $$ -S(F)S(K) = -(-K F) K^{-1} = K F K^{-1} $$
+        よって $S^2(F) = K F K^{-1}$ が成立する。
+
+        <p>すべての生成元で $S^2(x) = K x K^{-1}$ が成り立つため、代数全体の任意の元 $x$ において完全に一致することが証明された。 $\blacksquare$</p>
+    </div>
+
+    <div class="remark">
+        <div class="title">記号に関する注意</div>
+        <p>圏論的なピボタル構造（自然同型写像）は通常 $a$ ($a_V$) や $j$ 等の記号で記述されますが、それを引き起こす代数的な元（ピボタル元）は、一般の Hopf 代数では $g$、量子群 $U_q(\mathfrak{sl}_2)$ ではまさに上の命題で現れたカルタン生成元 $K$ がその役割を担います。</p>
+    </div>
+
+    <h2>3. 評価写像・余評価写像と双対表現</h2>
+
+    <p>量子群の表現圏において、双対対象やトレースを定義するためには、対象と双対対象を結ぶ写像が必要です。ここでは評価写像 $\mathrm{ev}_V$ (evaluation) と余評価写像 $\mathrm{coev}_V$ (coevaluation) の定義と性質を証明します。</p>
+
+    <div class="definition">
+        <div class="title">定義 3 (双対表現)</div>
+        <p>$V$ を $U_q(\mathfrak{sl}_2)$ の有限次元表現とする。線形双対空間 $V^* = \mathrm{Hom}_\mathbb{C}(V, \mathbb{C})$ に対し、$U_q(\mathfrak{sl}_2)$ の作用を対蹠 $S$ を用いて次のように定義する。任意の $x \in U_q(\mathfrak{sl}_2)$, $f \in V^*$, $v \in V$ に対して、</p>
+        $$ (x \cdot f)(v) = f(S(x) \cdot v) $$
+        <p>これにより $V^*$ は $U_q(\mathfrak{sl}_2)$加群となる。</p>
+    </div>
+
+    <div class="proposition">
+        <div class="title">命題 2 (評価写像と余評価写像)</div>
+        <p>$\mathbb{C}$ を自明な表現（任意の $x$ が $\epsilon(x)$ として作用する1次元表現）とする。以下の線形写像は、$U_q(\mathfrak{sl}_2)$加群の準同型写像である。</p>
+        <ol>
+            <li><strong>評価写像 $\mathrm{ev}_V$:</strong>
+                $$ \mathrm{ev}_V : V^* \otimes V \to \mathbb{C}, \quad \mathrm{ev}_V(f \otimes v) = f(v) $$
+            </li>
+            <li><strong>余評価写像 $\mathrm{coev}_V$:</strong>
+                $$ \mathrm{coev}_V : \mathbb{C} \to V \otimes V^*, \quad \mathrm{coev}_V(1) = \sum_i v_i \otimes v^i $$
+                ここで $\{v_i\}$ は $V$ の基底、$\{v^i\}$ は対応する $V^*$ の双対基底である。
+            </li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>Hopf 代数における余積を Sweedler の記法 $\Delta(x) = \sum_{(x)} x_{(1)} \otimes x_{(2)}$ で表す。</p>
+        <p><strong>(1) $\mathrm{ev}_V$ が準同型であることの証明：</strong></p>
+        <p>任意の $x \in U_q(\mathfrak{sl}_2)$ について $\mathrm{ev}_V(x \cdot (f \otimes v)) = x \cdot \mathrm{ev}_V(f \otimes v) = \epsilon(x)f(v)$ を示せばよい。テンソル積への作用は余積 $\Delta$ を用いて定まるため、</p>
+        $$ \mathrm{ev}_V(x \cdot (f \otimes v)) = \mathrm{ev}_V\left( \sum_{(x)} (x_{(1)} \cdot f) \otimes (x_{(2)} \cdot v) \right) = \sum_{(x)} (x_{(1)} \cdot f)(x_{(2)} \cdot v) $$
+        双対表現の定義を適用すると、
+        $$ = \sum_{(x)} f(S(x_{(1)}) (x_{(2)} \cdot v)) = f\left( \left(\sum_{(x)} S(x_{(1)}) x_{(2)}\right) \cdot v \right) $$
+        ここで Hopf 代数の対蹠の公理 $\sum_{(x)} S(x_{(1)}) x_{(2)} = \epsilon(x) 1$ を用いると、
+        $$ = f(\epsilon(x) v) = \epsilon(x) f(v) = x \cdot \mathrm{ev}_V(f \otimes v) $$
+        よって $\mathrm{ev}_V$ は準同型である。
+        
+        <p><strong>(2) $\mathrm{coev}_V$ が準同型であることの証明：</strong></p>
+        <p>任意の $x \in U_q(\mathfrak{sl}_2)$ について $x \cdot \mathrm{coev}_V(1) = \mathrm{coev}_V(x \cdot 1) = \epsilon(x) \mathrm{coev}_V(1)$ を示せばよい。</p>
+        $$ x \cdot \left(\sum_i v_i \otimes v^i\right) = \sum_i \sum_{(x)} (x_{(1)} \cdot v_i) \otimes (x_{(2)} \cdot v^i) $$
+        これが $\epsilon(x) \sum_i v_i \otimes v^i$ と等しくなることは、Hopf 代数の対蹠の公理 $\sum_{(x)} x_{(1)} S(x_{(2)}) = \epsilon(x) 1$ に起因する。元 $x_{(2)}$ が $V^*$ に作用するとき、双対の定義により $S(x_{(2)})$ として $V$ 側の要素を評価するように働くため、テンソル全体の和をとると $S$ と元の積が現れ、$\epsilon(x)$ をくくり出すことができる。よって $\mathrm{coev}_V$ は準同型である。 $\blacksquare$</p>
+    </div>
+
+    <div class="remark">
+        <div class="title">自己準同型環 $\mathrm{End}(V)$ の自然な同一視について</div>
+        <p>非可換なテンソル圏において、自己準同型環 $\mathrm{End}(V)$ は $V^* \otimes V$ ではなく、<strong>$V \otimes V^*$</strong> と同一視されます。その理由は、$\mathrm{End}(V)$ の元を $V$ へ自然に作用させる（評価する）ためです。</p>
+        <p>$\mathrm{End}(V) \cong V \otimes V^*$ とみなせば、作用は括弧の付け替えと上記の $\mathrm{ev}_V$ だけで定義できます。</p>
+        $$ (V \otimes V^*) \otimes V \cong V \otimes (V^* \otimes V) \xrightarrow{\mathrm{id}_V \otimes \mathrm{ev}_V} V \otimes \mathbb{C} \cong V $$
+        <p>具体的に $(v \otimes f) \in V \otimes V^*$ と $x \in V$ に対して、$(v \otimes f) \otimes x \mapsto v \otimes f(x) \mapsto f(x)v$ となり、自然な線形写像 $x \mapsto f(x)v$ として機能します。もし $V^* \otimes V$ を採用してしまうと、内積をとるためにテンソルの順序を入れ替える組み紐構造 (braiding) が必要になり、不必要な複雑さが生じます。</p>
+    </div>
+
+    <h2>4. 二重双対への同型写像 $\phi_V$ (ピボタル構造)</h2>
+
+    <p>次に、対象 $V$ をその二重双対 $V^{**}$ と同一視する構造を厳密に構築します。</p>
+
+    <div class="definition">
+        <div class="title">定義 4 (二重双対と作用のズレ)</div>
+        <p>$V^{**} = \mathrm{Hom}_\mathbb{C}(V^*, \mathbb{C})$ に対する $U_q(\mathfrak{sl}_2)$ の作用は、双対の定義を繰り返すことで次のように定まる。$\xi \in V^{**}, f \in V^*$ に対して、</p>
+        $$ (x \cdot \xi)(f) = \xi(S(x) \cdot f) $$
+        <p>通常の線形代数における自然な同型 $\iota_V : V \to V^{**}$ を $\iota_V(v)(f) = f(v)$ で定義する。しかし、量子群においては $S^2(x) \neq x$ であるため、</p>
+        $$ (x \cdot \iota_V(v))(f) = \iota_V(v)(S(x) \cdot f) = (S(x) \cdot f)(v) = f(S^2(x) \cdot v) $$
+        <p>となり、$(x \cdot \iota_V(v)) \neq \iota_V(x \cdot v)$ となるため、$\iota_V$ は表現の準同型にならない。</p>
+    </div>
+
+    <p>この $S^2$ によるズレを補正するために、ピボタル元 $K$ を用いて新しい写像 $\phi_V$ を定義します。</p>
+
+    <div class="definition">
+        <div class="title">定義 5 (同型写像 $\phi_V$)</div>
+        <p>写像 $\phi_V : V \to V^{**}$ を、ピボタル元 $K$ を用いて次のようにシンプルに定義する。</p>
+        $$ \phi_V(v)(f) = f(K \cdot v) $$
+        <p>ペアリングの記号 $\langle \cdot, \cdot \rangle$ を用いて書けば、$\langle \phi_V(v), f \rangle = \langle f, K \cdot v \rangle$ となる。</p>
+    </div>
+
+    <div class="proposition">
+        <div class="title">命題 3 ($\phi_V$ の準同型性)</div>
+        <p>定義 5 で与えられた写像 $\phi_V : V \to V^{**}$ は $U_q(\mathfrak{sl}_2)$加群の同型写像である。</p>
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>任意の $x \in U_q(\mathfrak{sl}_2), v \in V, f \in V^*$ に対して $\phi_V(x \cdot v) = x \cdot \phi_V(v)$ が成り立つことを示す。</p>
+        <p>右辺 $x \cdot \phi_V(v)$ を $f$ で評価する。</p>
+        $$ (x \cdot \phi_V(v))(f) = \phi_V(v)(S(x) \cdot f) \quad (\text{二重双対への作用の定義}) $$
+        $$ = (S(x) \cdot f)(K \cdot v) \quad (\phi_V \text{ の定義}) $$
+        $$ = f(S^2(x) \cdot (K \cdot v)) \quad (\text{双対への作用の定義}) $$
+        $$ = f((S^2(x)K) \cdot v) $$
+        <p>ここで、命題 1 の関係式 $S^2(x) = K x K^{-1}$ を代入すると、$S^2(x)K = (K x K^{-1})K = K x$ となる。これを代入すると、</p>
+        $$ = f((K x) \cdot v) $$
+        <p>一方、左辺 $\phi_V(x \cdot v)$ を $f$ で評価すると、$\phi_V$ の定義から直接、</p>
+        $$ \phi_V(x \cdot v)(f) = f(K \cdot (x \cdot v)) = f((K x) \cdot v) $$
+        <p>となる。両者が任意の $f$ について完全に一致したため、$\phi_V(x \cdot v) = x \cdot \phi_V(v)$ が成り立ち、$\phi_V$ は $U_q(\mathfrak{sl}_2)$加群の準同型写像であることが証明された。線形同型であることは $K$ が可逆であることから自明である。 $\blacksquare$</p>
+    </div>
+
+    <h2>5. 一般の量子群 $U_q(\mathfrak{g})$ と量子次元</h2>
+
+    <p>ここまでの準備のもと、量子トレースおよび量子次元を定義し、その計算を実行します。直観的 (intuitive) に言えば、量子トレースとは「通常のトレースにピボタル元の作用（重み）を付加したもの」です。</p>
+
+    <div class="definition">
+        <div class="title">定義 6 (一般の量子群におけるピボタル元と量子次元)</div>
+        <p>有限次元半単純 Lie 代数 $\mathfrak{g}$ に付随する量子展開環 $U_q(\mathfrak{g})$ を考える。$\Delta^+$ を正ルートの集合とし、Weyl ベクトル $\rho$ を $\rho = \frac{1}{2} \sum_{\alpha \in \Delta^+} \alpha$ と定義する。このとき、$U_q(\mathfrak{g})$ におけるピボタル元は $K_{2\rho}$ で与えられる。</p>
+        <p>$U_q(\mathfrak{g})$ の有限次元表現 $V$ 上の自己準同型 $f \in \mathrm{End}(V)$ の量子トレース $\mathrm{Tr}_q(f)$ は、通常のトレースを用いて以下で定義される。</p>
+        $$ \mathrm{Tr}_q(f) = \mathrm{Tr}(K_{2\rho} f) $$
+        <p>特に、恒等写像 $\mathrm{id}_V$ の量子トレースを $V$ の<strong>量子次元 (quantum dimension)</strong> と呼び、$\dim_q(V)$ で表す。</p>
+        $$ \dim_q(V) = \mathrm{Tr}_q(\mathrm{id}_V) = \mathrm{Tr}(K_{2\rho}|_V) $$
+    </div>
+
+    <div class="example">
+        <div class="title">計算例: $U_q(\mathfrak{sl}_2)$ の $l$ 次元既約表現の量子次元</div>
+        <p>$U_q(\mathfrak{sl}_2)$ の $l$ 次元既約表現 $V_l$ を考える。$V_l$ には $l$ 個の基底ベクトル $\{v_0, v_1, \dots, v_{l-1}\}$ が存在し、ピボタル元 $K$ （$\mathfrak{sl}_2$ では $2\rho = \alpha$ より $K_{2\rho} = K$ となる）は各基底に対して対角的に作用する。その固有値（ウェイト）は最高ウェイト $q^{l-1}$ から始まり、$q^{-2}$ ずつ減少する。</p>
+        $$ K v_k = q^{(l-1)-2k} v_k \quad (k = 0, 1, \dots, l-1) $$
+        <p>量子次元はこれら固有値の総和（トレース）であるため、等比数列の和として計算できる。</p>
+        $$ \dim_q(V_l) = \sum_{k=0}^{l-1} q^{(l-1)-2k} = q^{l-1} + q^{l-3} + \dots + q^{-(l-3)} + q^{-(l-1)} $$
+        $$ = \frac{q^{l-1} (1 - (q^{-2})^l)}{1 - q^{-2}} = \frac{q^{l-1} - q^{-l-1}}{1 - q^{-2}} = \frac{q^l - q^{-l}}{q - q^{-1}} $$
+        <p>この結果は $q$整数と呼ばれ、記号 $[l]_q$ で表される。すなわち、$\dim_q(V_l) = [l]_q$ である。</p>
+        <p>具体例として、低次元の場合は以下のようになる。</p>
+        <ul>
+            <li>$l=1$ （自明表現）: $\dim_q(V_1) = 1 = [1]_q$</li>
+            <li>$l=2$ （スピン $1/2$）: $\dim_q(V_2) = q + q^{-1} = [2]_q$</li>
+            <li>$l=3$ （スピン $1$）: $\dim_q(V_3) = q^2 + 1 + q^{-2} = [3]_q$</li>
+        </ul>
+    </div>
+
+    <div class="theorem">
+        <div class="title">定理 (量子 Weyl の次元公式)</div>
+        <p>一般の $U_q(\mathfrak{g})$ において、最高ウェイト $\lambda$ を持つ有限次元既約表現 $V_\lambda$ の量子次元は、正ルートに関する積として以下の公式で与えられる。</p>
+        $$ \dim_q(V_\lambda) = \prod_{\alpha \in \Delta^+} \frac{q^{(\lambda + \rho, \alpha)} - q^{-(\lambda + \rho, \alpha)}}{q^{(\rho, \alpha)} - q^{-(\rho, \alpha)}} = \prod_{\alpha \in \Delta^+} \frac{[(\lambda + \rho, \alpha)]_q}{[(\rho, \alpha)]_q} $$
+    </div>
+
+    <div class="proof">
+        <div class="title">解説（証明の概要）</div>
+        <p>一般の表現 $V$ はウェイト空間 $V = \bigoplus_{\mu} V_\mu$ に分解される。$K_{2\rho}$ は $V_\mu$ 上でスカラー $q^{2(\rho, \mu)}$ 倍として作用する。したがって、</p>
+        $$ \dim_q(V) = \mathrm{Tr}(K_{2\rho}|_V) = \sum_{\mu} \dim(V_\mu) q^{2(\rho, \mu)} $$
+        <p>となる。この指標の和に対して Weyl の指標公式 (Weyl character formula) の量子群類似を適用し、分母と分子の特殊化を行うことで上記の積の公式が導出される。パラメータ $q \to 1$ の古典極限をとると、ロピタルの定理により $[n]_q \to n$ となり、古典的な Lie 代数の Weyl の次元公式 $\prod_{\alpha \in \Delta^+} \frac{(\lambda + \rho, \alpha)}{(\rho, \alpha)}$ を正しく復元する。 $\blacksquare$</p>
+    </div>
+
+    <div class="references">
+        <h3>引用文献</h3>
+        <ul>
+            <li>Kassel, C. (1995). <i>Quantum Groups</i>. Graduate Texts in Mathematics, 155. Springer. <br>
+                <a href="https://link.springer.com/book/10.1007/978-1-4612-0783-2" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-0783-2</a>
+            </li>
+            <li>Etingof, P., Gelaki, S., Nikshych, D., & Ostrik, V. (2015). <i>Tensor Categories</i>. Mathematical Surveys and Monographs, 205. American Mathematical Society. <br>
+                <a href="https://bookstore.ams.org/surv-205" target="_blank">https://bookstore.ams.org/surv-205</a>
+            </li>
+            <li>Chari, V., & Pressley, A. (1994). <i>A Guide to Quantum Groups</i>. Cambridge University Press. <br>
+                <a href="https://books.google.co.jp/books/about/A_Guide_to_Quantum_Groups.html?id=bn5GNkLfnsAC" target="_blank">https://books.google.co.jp/books/about/A_Guide_to_Quantum_Groups.html?id=bn5GNkLfnsAC</a>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

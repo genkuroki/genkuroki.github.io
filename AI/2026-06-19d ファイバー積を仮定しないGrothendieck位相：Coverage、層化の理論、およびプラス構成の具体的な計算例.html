@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ファイバー積を仮定しないGrothendieck位相：Coverage、層化の理論、およびプラス構成の具体的な計算例</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #0056b3;
+            margin-top: 25px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .informal {
+            background-color: #fcfcfc;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            color: #495057;
+            font-size: 0.95em;
+        }
+        .definition, .theorem, .example {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .theorem {
+            border-left-color: #28a745;
+            background-color: #f1fcf4;
+        }
+        .example {
+            border-left-color: #ffc107;
+            background-color: #fffdf5;
+        }
+        .proof {
+            border-left: 4px solid #6c757d;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #fdfdfd;
+        }
+        .title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .references {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #ccc;
+            font-size: 0.9em;
+        }
+        .references ol {
+            padding-left: 20px;
+        }
+        .references li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ファイバー積を仮定しないGrothendieck位相：Coverage、層化の理論、およびプラス構成の具体的な計算例</h1>
+
+    <div class="informal">
+        <p>本稿では、圏上の層 (sheaf) の理論において、基礎となる圏にファイバー積 (fiber product / pullback) の存在を仮定しないアプローチについて解説します。特に、P. T. Johnstone らによって定式化された <strong>coverage (coverage)</strong> の概念と、それを用いた層化 (sheafification) のプロセスについて、伝統的なsieve (sieve) を用いたGrothendieck位相 (Grothendieck topology) と比較しながら詳細に探求します。</p>
+        <p>層化は「プラス構成 (plus construction)」と呼ばれる極限操作によって実現されます。今回は、読者の皆様がプラス構成の挙動を完全に把握できるよう、基本概念の定義に加えて、<strong>「分離前層であるが層でない例」</strong>および<strong>「分離前層ですらない例が2回のプラス構成を経て層化される具体的な計算例」</strong>を大幅に拡充しました。理論的なフル証明と合わせて、この構成が持つ美しさを解き明かします。</p>
+    </div>
+
+    <h2>1. 基礎概念の準備：前層とSieve</h2>
+
+    <p>位相空間における開集合系の構造を任意の圏へ一般化するために、まずはデータの入れ物である「前層 (presheaf)」と、被覆の概念を一般化するための「sieve (sieve)」を定義する。</p>
+
+    <div class="definition">
+        <span class="title">定義 1. 前層 (presheaf)</span>
+        <p>小さい圏 (category) $\mathcal{C}$ に対し、$\mathcal{C}$ 上の<strong>前層 (presheaf)</strong> とは、反変関手 $F: \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ のことである。前層の圏を $\widehat{\mathcal{C}}$ と表す。</p>
+        <p>各対象 $U \in \mathcal{C}$ に対する集合 $F(U)$ の元を <strong>切断 (section)</strong> と呼び、射 $f: V \to U$ に対する写像 $F(f): F(U) \to F(V)$ を <strong>制限写像 (restriction map)</strong> と呼ぶ。切断 $s \in F(U)$ の $f$ による制限をしばしば $s|_f$ と略記する。</p>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 2. Sieve (sieve)</span>
+        <p>圏 $\mathcal{C}$ の対象 $U$ 上の <strong>sieve (sieve)</strong> とは、終域を $U$ とする射の集まり $S$ であり、以下の「右イデアル的な性質（合成による安定性）」を満たすものである。</p>
+        <ul>
+            <li>任意の射 $f: V \to U \in S$ と、任意の射 $g: W \to V$ に対して、合成射 $f \circ g: W \to U$ も $S$ に属する。</li>
+        </ul>
+        <p>これは、Yoneda埋め込みによって表現可能関手 $yU = \mathrm{Hom}(-, U)$ を考えたとき、$S$ が $yU$ の部分関手 (subfunctor) であることと同値である。</p>
+        <p>また、射 $g: V \to U$ と $U$ 上のsieve $S$ が与えられたとき、$S$ の $g$ による<strong>引き戻し (pullback sieve)</strong> $g^*S$ を次のように定義する：</p>
+        $$ g^*S = \{ h: W \to V \mid g \circ h \in S \} $$
+        <p>これは自然に $V$ 上のsieveとなる。</p>
+    </div>
+
+    <div class="example">
+        <span class="title">例 1. 位相空間におけるsieveの直観</span>
+        <p>位相空間 $X$ の開集合全体が包含関係を射としてなす圏 $\mathcal{O}(X)$ を考える。開集合 $U$ 上の通常の開被覆 $\{U_i\}_{i \in I}$ が与えられたとする。この被覆から生成されるsieve $S$ とは、「ある $U_i$ に含まれるような $U$ のすべての開部分集合」の集まりである。すなわち、細分 (refinement) の構造を包含関係としてすべて取り込んだものがsieveである。</p>
+    </div>
+
+    <h2>2. CoverageとGrothendieck位相</h2>
+
+    <div class="informal">
+        <p>Grothendieckが最初に導入した位相（前位相）の定義では、被覆族同士の共通部分を扱うためにファイバー積（引き戻し）の存在を仮定していました。しかし、論理学や計算機科学などに現れる一般の圏では、ファイバー積が存在しないことが多々あります。そこで、ファイバー積を一切仮定せずに「層」を定義できる最小限の枠組みとして <strong>coverage (coverage)</strong> が考案されました。</p>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 3. Coverage (coverage)</span>
+        <p>圏 $\mathcal{C}$ 上の <strong>coverage (coverage)</strong> $K$ とは、各対象 $U \in \mathcal{C}$ に対して、$U$ を終域とする射の族 $\{f_i: U_i \to U\}_{i \in I}$ の集まり $K(U)$（これを被覆族と呼ぶ）を割り当てる対応であり、以下の公理を満たすものである。</p>
+        <ul>
+            <li>任意の被覆族 $\{f_i: U_i \to U\}_{i \in I} \in K(U)$ と、任意の射 $g: V \to U$ に対して、ある被覆族 $\{h_j: V_j \to V\}_{j \in J} \in K(V)$ が存在し、各 $j \in J$ に対してある $i \in I$ と射 $k: V_j \to U_i$ が存在して、$g \circ h_j = f_i \circ k$ が成り立つ（すなわち、合成射が被覆族のいずれかの射を経由して分解される）。</li>
+        </ul>
+    </div>
+
+    <p>これに対し、sieveを用いた伝統的なGrothendieck位相 (Grothendieck topology) は以下のように定義される。</p>
+
+    <div class="definition">
+        <span class="title">定義 4. Grothendieck位相 (Grothendieck topology)</span>
+        <p>圏 $\mathcal{C}$ 上の <strong>Grothendieck位相 (Grothendieck topology)</strong> $J$ とは、各対象 $U \in \mathcal{C}$ に対して被覆sieveの集まり $J(U)$ を割り当てる対応であり、以下の3つの公理を満たすものである。</p>
+        <ol>
+            <li><strong>極大性 (Maximality):</strong> $U$ 上の最大のsieve $\{f \mid \text{codom}(f) = U\}$（すなわち表現可能関手 $yU$ 自身）は $J(U)$ に属する。</li>
+            <li><strong>安定性 (Stability):</strong> $S \in J(U)$ ならば、任意の射 $g: V \to U$ について、引き戻しsieve $g^*S$ は $J(V)$ に属する。</li>
+            <li><strong>推移性 (Transitivity):</strong> $S \in J(U)$ であり、$U$ 上の任意のsieve $R$ が「すべての $f: V \to U \in S$ について $f^*R \in J(V)$」を満たすならば、$R \in J(U)$ である。</li>
+        </ol>
+    </div>
+
+    <p>Coverage $K$ が与えられたとき、「$K(U)$ の被覆族を含むすべてのsieve」の集まりとして定義される位相を、<strong>$K$ が生成するGrothendieck位相</strong> と呼び、$\overline{K}$ で表す。これにより、最小限の構造から完全な位相を導くことができる。</p>
+
+
+    <h2>3. 適合族と層の定義</h2>
+
+    <p>前層が「層 (sheaf)」になるためには、局所的なデータが「分離性 (separation)」と「貼り合わせ (gluing)」という2つの条件を満たす必要がある。そのために「適合族 (matching family)」を定義する。</p>
+
+    <div class="definition">
+        <span class="title">定義 5. 適合族と層 (Sheaf)</span>
+        <p>前層 $F$、対象 $U$、および被覆族 $R = \{f_i: U_i \to U\} \in K(U)$（またはsieve $S \in J(U)$）が与えられたとする。</p>
+        <p><strong>適合族 (matching family):</strong> 局所的な切断の族 $\{s_i \in F(U_i)\}$ であり、任意の射 $u: W \to U_i$ および $v: W \to U_j$ が $f_i \circ u = f_j \circ v$ を満たすとき、常に $s_i|_u = s_j|_v$ が成り立つものをいう。Sieve $S$ の場合、適合族は前層の射 $\alpha: S \to F$ と自然に同一視できる（$\mathrm{Hom}_{\widehat{\mathcal{C}}}(S, F)$）。</p>
+        <p>前層 $F$ が <strong>分離前層 (separated presheaf)</strong> であるとは、任意の対象 $U$、任意の被覆 $R$ 上の適合族に対して、それを制限として大域的に与えるような大域切断 $s \in F(U)$ が<strong>高々1つ</strong>しか存在しないことをいう。</p>
+        <p>前層 $F$ が <strong>層 (sheaf)</strong> であるとは、分離前層であり、かつ任意の適合族に対して、それを与えるような大域切断 $s \in F(U)$ が<strong>必ず（一意に）存在する</strong>ことをいう。</p>
+    </div>
+
+    <div class="informal">
+        <p>直観的に言えば、層とは以下の2つの欠陥がない状態点です：</p>
+        <ol>
+            <li><strong>分離性の欠如:</strong> 大域的なデータ $x, y$ が異なるのに、局所的に見ると全く同じになってしまう（見分けがつかない）。</li>
+            <li><strong>貼り合わせの欠如:</strong> 局所的なデータたちが重なり部分で矛盾していない（適合している）のに、それを統合する大域データが存在しない。</li>
+        </ol>
+    </div>
+
+
+    <h2>4. Sieveによる位相の層化：プラス構成</h2>
+
+    <p>前層を層に変換する「層化 (sheafification)」関手は、Grothendieck位相 (Grothendieck topology) 上では <strong>プラス構成 (plus construction)</strong> と呼ばれる明示的な操作によって構築される。</p>
+
+    <div class="definition">
+        <span class="title">定義 6. プラス構成 (plus construction)</span>
+        <p>Grothendieck位相 $J$ 上の前層 $F \in \widehat{\mathcal{C}}$ に対して、新しい前層 $F^+$ を次のような帰納極限 (inductive limit / colimit) として定義する。</p>
+        $$F^+(U) = \varinjlim_{S \in J(U)} \mathrm{Hom}_{\widehat{\mathcal{C}}}(S, F)$$
+        <p>ここで、$J(U)$ は逆包含関係（$S \subset S'$ のとき、制限による射 $\mathrm{Hom}(S', F) \to \mathrm{Hom}(S, F)$ が存在する）によって有向集合 (directed set) とみなせる（任意の被覆sieveの共通部分はまた被覆sieveとなるため有向性が保証される）。</p>
+        <p><strong>元の具体的な記述：</strong> $F^+(U)$ の元は、被覆sieve $S \in J(U)$ と適合族 $\alpha: S \to F$ の組 $(S, \alpha)$ の同値類 $[S, \alpha]$ として表される。$[S, \alpha] = [T, \beta]$ であるとは、共通の細分被覆 $W \subset S \cap T \in J(U)$ が存在し、$W$ 上で $\alpha|_W = \beta|_W$ が成り立つことと同値である。</p>
+        <p><strong>制限写像：</strong> 射 $g: V \to U$ に対する制限写像は、$[S, \alpha]|_g = [g^*S, \alpha \cdot g]$ で定義される。ただし $\alpha \cdot g: g^*S \to F$ は $(\alpha \cdot g)(h) = \alpha(g \circ h)$ である。</p>
+    </div>
+
+
+    <h2>5. プラス構成の具体的な計算例</h2>
+
+    <div class="informal">
+        <p>プラス構成が具体的に前層にどのような変形を加えるのか、2つの典型的な例を通して計算ステップを追ってみましょう。1つ目は「すでに分離的ではあるが貼り合わせが足りない例」、2つ目は「分離的ですらないため、1回目で分離化され、2回目で初めて層になる例」です。</p>
+    </div>
+
+    <div class="example">
+        <span class="title">例 2. 分離前層であるが層ではない例（有界連続関数の前層）とそのプラス構成</span>
+        <p>位相空間 $X = \mathbf{R}$（通常の位相）を考える。各開集合 $U \subset \mathbf{R}$ に対して、次のように前層 $F$ を定義する。</p>
+        $$ F(U) = \{ f: U \to \mathbf{R} \mid f \text{ は連続かつ有界} \} $$
+        <p>制限写像は関数の通常の制限とする。このとき、$F$ は前層の構造を持つ。この $F$ について以下の性質が成り立つ。</p>
+        
+        <p><strong>1. 分離性の確認：</strong><br>
+        $f, g \in F(U)$ が、ある被覆 $U = \bigcup_{i \in I} U_i$ に対してすべての $i \in I$ で $f|_{U_i} = g|_{U_i}$ を満たすとする。関数の相等性は各点での値の一致として定義される。任意の $x \in U$ に対し、ある $i \in I$ が存在して $x \in U_i$ となる。このとき $f(x) = f|_{U_i}(x) = g|_{U_i}(x) = g(x)$ が成り立つため、大域的に $f = g$ である。したがって、$F$ は分離前層 (separated presheaf) である。</p>
+        
+        <p><strong>2. 層ではないことの確認：</strong><br>
+        $U = \mathbf{R}$ とし、開被覆として $U_n = (-n, n)$ （$n = 1, 2, \dots$）を考える。各 $U_n$ 上で有界連続関数 $f_n: U_n \to \mathbf{R}$ を $f_n(x) = x$ と定義する（$U_n$ 上で $|x| < n$ であるため有界性を満たす）。共通部分 $U_n \cap U_m$ 上で $f_n$ と $f_m$ は一致するため、これは適合族 (matching family) をなす。しかし、これらを $\mathbf{R}$ 全体に貼り合わせた大域的な関数は $f(x) = x$ であり、これは $\mathbf{R}$ 上で有界ではない。よって $f \notin F(\mathbf{R})$ であり、貼り合わせの元が欠落しているため、$F$ は層ではない。</p>
+        
+        <p><strong>3. プラス構成 $F^+$ の計算：</strong><br>
+        この前層 $F$ にプラス構成を適用する。$F^+(U) = \varinjlim_{S \in J(U)} \mathrm{Hom}(S, F)$ において、被覆sieve $S$ 上の適合族 $\alpha: S \to F$ とは、$U$ の局所的な開集合上で定義された有界連続関数たちの互いに矛盾しない集まりのことである。これらは $U$ 全体で定義された通常の連続関数 $f: U \to \mathbf{R}$ を一意に定める（大域的には有界である必要はない）。<br>
+        逆に、任意の連続関数 $f: U \to \mathbf{R}$ に対し、開被覆 $U_n = \{ x \in U \mid |f(x)| < n \}$ を考えると、$f|_{U_n}$ は有界連続関数となる。この被覆から生成されるsieve $S_f$ 上で $\alpha(V) = f|_V$ と定めることで適合族が得られる。<br>
+        したがって、有向極限における同値類 $[S, \alpha]$ は $U$ 上の通常の（有界とは限らない）連続関数と1対1に対応する。すなわち、
+        $$ F^+(U) \cong C(U) \quad (U \text{ 上の連続関数全体の集合}) $$
+        となる。$F$ はあらかじめ分離前層であったため、後述の定理2より $F^+$ は自動的に層となる。実際に、連続関数のなす前層 $C$ は通常の意味で層である。</p>
+    </div>
+
+    <div class="example">
+        <span class="title">例 3. 分離前層ですらない例（1回目で分離化され、2回目で層になる例）とそのプラス構成</span>
+        <p>位相空間 $X = \mathbf{R}$（通常の位相）を考える。前層 $F$ を次のように定義する。</p>
+        $$ F(U) = \begin{cases} \mathbf{R} \times \mathbf{R} & (U = \mathbf{R}) \\ \mathbf{R} & (U \neq \mathbf{R} \text{ かつ } U \neq \varnothing) \\ \{*\} & (U = \varnothing) \end{cases} $$
+        <p>制限写像 $F(U) \to F(V)$ （ただし $V \subset U$）を以下のように定める：</p>
+        <ul>
+            <li>$U = \mathbf{R}$ かつ $V \subset \mathbf{R}$ かつ $V \neq \mathbf{R}$ （$V \neq \varnothing$）のとき、第1成分への射影 $p_1: \mathbf{R} \times \mathbf{R} \to \mathbf{R}, \ (a, b) \mapsto a$。</li>
+            <li>それ以外の $V \subset U$ （$V \neq \varnothing$）のとき、恒等写像 $\mathrm{id}: \mathbf{R} \to \mathbf{R}$。</li>
+            <li>$V = \varnothing$ のとき、一点集合 $\{*\}$ への唯一の写像。</li>
+        </ul>
+        <p>この前層 $F$ について、プラス構成の各ステップを追うことで「2回で足りる」のプロセスを具体的に確認できる。</p>
+        
+        <p><strong>1. 分離前層でないことの確認：</strong><br>
+        $U = \mathbf{R}$ とし、その開被覆として $V_1 = (-\infty, 1)$ と $V_2 = (0, \infty)$ を考える。$F(\mathbf{R}) = \mathbf{R} \times \mathbf{R}$ の2つの異なる元 $s = (a, b)$ と $t = (a, d)$ （ただし $b \neq d$）を、被覆の各元へ制限する。$V_1, V_2 \neq \mathbf{R}$ であるため、制限写像 $p_1$ により、
+        $$ s|_{V_1} = a = t|_{V_1}, \quad s|_{V_2} = a = t|_{V_2} $$
+        となる。局所的に完全に一致するにもかかわらず、大域的な元としては $s \neq t$ である。したがって、$F$ は分離前層ではない。</p>
+        
+        <p><strong>2. 1回目のプラス構成 $F^+(U)$ の計算：</strong><br>
+        $U = \mathbf{R}$ の場合を計算する。$\mathbf{R}$ 上の任意の被覆sieve $S$ に対し、$\mathbf{R}$ 自身を含まない（すなわちすべての元が $\mathbf{R}$ の真部分開集合であるような）細分被覆sieve $S'$ を取ることができる（例えば上記の $V_1, V_2$ から生成されるsieve）。<br>
+        $S' \in J(\mathbf{R})$ 上での適合族 $\alpha: S' \to F$ を考えると、任意の $V \in S'$ ($V \neq \varnothing$) に対して $F(V) = \mathbf{R}$ であり、それらの間の制限写像はすべて恒等写像である。したがって、$\alpha(V)$ はすべての $V$ で共通の単一の実数 $a \in \mathbf{R}$ でなければならない。ゆえに $\mathrm{Hom}(S', F) \cong \mathbf{R}$ である。<br>
+        最大のsieve $S_{\mathrm{max}}$ （$\mathbf{R}$ 自身を含む）からの制限写像 $\mathrm{Hom}(S_{\mathrm{max}}, F) \to \mathrm{Hom}(S', F)$ は、$(a, b) \mapsto a$ という第1成分への射影になる。有向極限 $F^+(\mathbf{R}) = \varinjlim \mathrm{Hom}(S, F)$ をとると、第2成分 $b$ の違いはすべて同一視されて消滅するため、
+        $$ F^+(\mathbf{R}) \cong \mathbf{R} $$
+        となる。また、$U \neq \mathbf{R}$ かつ $U \neq \varnothing$ の場合、被覆sieve $S$ の元 $V \in S$ はすべて $\mathbf{R}$ の真部分集合なので $F(V) = \mathbf{R}$ であり、制限写像は恒等写像である。したがって $\mathrm{Hom}(S, F) \cong \mathbf{R}$ であり、有向極限をとっても $F^+(U) \cong \mathbf{R}$ となる。$U = \varnothing$ の場合は、空被覆に対する適合族は1つだけなので $F^+(\varnothing) = \{*\}$ である。以上をまとめると、1回目のプラス構成の結果は次のようになる：
+        $$ F^+(U) = \begin{cases} \mathbf{R} & (U \neq \varnothing) \\ \{*\} & (U = \varnothing) \end{cases} $$
+        ここで、制限写像 $F^+(U) \to F^+(V)$ （$V \subset U \neq \varnothing$）はすべて恒等写像 $\mathrm{id}: \mathbf{R} \to \mathbf{R}$ となる。後述の定理1が示す通り、この $F^+$ は<strong>分離前層</strong>である。局所的に一致していた $(a, b)$ と $(a, d)$ が、極限の同一視によって同じ元 $a$ に潰されたことで、分離性が回復している。</p>
+        
+        <p><strong>3. $F^+$ がまだ層ではないことの確認：</strong><br>
+        分離前層となった $F^+$ が層であるかを検証するため、交わらない2つの開集合の和集合 $U = (0, 1) \cup (2, 3)$ を考える。$V_1 = (0, 1)$ と $V_2 = (2, 3)$ は $U$ の開被覆をなす。<br>
+        $F^+(V_1) = \mathbf{R}$, $F^+(V_2) = \mathbf{R}$ である。ここで適合族として $s_1 = 5 \in F^+(V_1)$、$s_2 = 10 \in F^+(V_2)$ を選ぶ。$V_1 \cap V_2 = \varnothing$ であるため、重なり部分での条件は空集合上での一致（$\{*\} = \{*\}$）となり、自動的に満たされる。したがって、$\{s_1, s_2\}$ は適合族をなす。<br>
+        もし $F^+$ が層ならば、これらを大域的に貼り合わせた元 $s \in F^+(U)$ が存在するはずである。しかし $F^+(U) = \mathbf{R}$ であり、制限写像はすべて恒等写像であるため、大域切断 $s \in \mathbf{R}$ に対する制限は $s|_{V_1} = s$ かつ $s|_{V_2} = s$ となる。$s_1 = 5 \neq 10 = s_2$ であるため、$s = 5$ かつ $s = 10$ を同時に満たす $s \in \mathbf{R}$ は存在しない。すなわち、貼り合わせの元が足りないため、$F^+$ は層ではない。</p>
+        
+        <p><strong>4. 2回目のプラス構成 $F^{++}(U)$ の計算：</strong><br>
+        さらにプラス構成を適用して $F^{++}(U) = \varinjlim \mathrm{Hom}(S, F^+)$ を計算する。先ほどの $U = (0, 1) \cup (2, 3)$ に対し、被覆として $S_0 = \{V_1, V_2\}$ から生成されるsieveを考えると、
+        $$ \mathrm{Hom}(S_0, F^+) \cong F^+(V_1) \times F^+(V_2) = \mathbf{R} \times \mathbf{R} $$
+        となる。この被覆をさらに細分してもこれ以上バラバラの成分は現れないため、有向極限をとることで $F^{++}((0, 1) \cup (2, 3)) \cong \mathbf{R} \times \mathbf{R}$ が確定する。これにより、先ほど貼り合わせられなかった $(5, 10)$ という適合族が、大域切断の元として回収される。<br>
+        一般に、任意の開集合 $U$ に対して、その連結成分ごとに独立に実数を選ぶことができるようになるため、$F^{++}(U)$ は $U$ から $\mathbf{R}$ （離散位相）への局所定数関数 (locally constant function) 全体の集合 $\mathrm{LC}(U, \mathbf{R})$ と同型になる。これは実数係数の定数層 (constant sheaf) であり、層の条件を完全に満たす。このように、非分離前層は1回目で分離化され、2回目で貼り合わせが補完されて層になる。</p>
+    </div>
+
+
+    <h2>6. プラス構成の基本性質とその完全な証明</h2>
+
+    <p>プラス構成の核となる性質は以下の2つの定理である。これらにより、上の例3で見たように「プラス構成を2回適用する」だけで任意の層化が完了することが数学的に保証される。</p>
+
+    <div class="theorem">
+        <span class="title">定理 1. 任意の前層 $F$ に対して、$F^+$ は分離前層 (separated presheaf) である。</span>
+    </div>
+    <div class="proof">
+        <span class="title">証明：</span>
+        <p>$U \in \mathrm{Ob}(\mathcal{C})$ とし、$R \in J(U)$ を被覆sieveとする。$s, t \in F^+(U)$ が、任意の $f: V \to U \in R$ に対して $s|_f = t|_f$ を満たすと仮定する。$s = t$ を示せば十分である。</p>
+        <p>$F^+(U)$ の定義より、$s = [S, \alpha]$装置、$t = [T, \beta]$ と表現できる（$S, T \in J(U)$、$\alpha, \beta$ は適合族）。制限写像の定義から、$s|_f = [f^*S, \alpha \cdot f]$、$t|_f = [f^*T, \beta \cdot f]$ である。</p>
+        <p>仮定 $s|_f = t|_f$ により、帰納極限の定義から、各 $f \in R$ に対してある $W_f \in J(V)$ が存在し、以下を満たす：</p>
+        <ol>
+            <li>$W_f \subset f^*S \cap f^*T$</li>
+            <li>$W_f$ 上で $\alpha \cdot f = \beta \cdot f$ が成り立つ。</li>
+        </ol>
+        <p>ここで、$U$ 上の新しいsieve $K$ を次のように構成する：</p>
+        $$K = \{ h: X \to U \mid \text{ある } f \in R, \text{ および } k \in W_f \text{ が存在し、} h = f \circ k \}$$
+        <p>任意の $f \in R$ について $f^*K \supset W_f$ であり、$W_f \in J(V)$ かつ位相の公理により $f^*K \in J(V)$ となる。$R \in J(U)$ であるから、推移性 (transitivity) の公理より $K \in J(U)$ である。</p>
+        <p>構成より $K \subset S \cap T$ である。任意の $h = f \circ k \in K$ について評価する：</p>
+        $$ \alpha(h) = \alpha(f \circ k) = (\alpha \cdot f)(k) = (\beta \cdot f)(k) = \beta(f \circ k) = \beta(h) $$
+        <p>（3つ目の等号は、$k \in W_f$ 上で $\alpha \cdot f$ と $\beta \cdot f$ が一致することから従う）。</p>
+        <p>したがって、$K$ 上で $\alpha|_K = \beta|_K$ が成り立つ。$K \in J(U)$ かつ $K \subset S \cap T$ であるため、帰納極限の同値関係より $[S, \alpha] = [T, \beta]$、すなわち $s = t$ である。よって $F^+$ は分離前層である。</p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 2. $F$ が分離前層 (separated presheaf) であるとき、$F^+$ は層 (sheaf) である。</span>
+    </div>
+    <div class="proof">
+        <span class="title">証明：</span>
+        <p>まず分離前層の性質を特記しておく。$F$ が分離前層であるということは、適合族の制限写像 $\mathrm{Hom}(S, F) \to \mathrm{Hom}(W, F)$（ただし $W \subset S$）が<strong>単射</strong>であることを意味する。したがって、ある部分sieve上で一致する2つの適合族は、定義域の共通部分全体で既に一致している。</p>
+        <p>$U \in \mathrm{Ob}(\mathcal{C})$、$R \in J(U)$ とし、$R$ 上の $F^+$ の適合族 $\{s_f\}_{f \in R}$ が与えられたとする（$s_f \in F^+(\text{dom}(f))$ であり、適合条件を満たす）。これが一意な大域切断 $s \in F^+(U)$ に拡張されることを示す（唯一性は定理1より保証されているため、存在性のみを示す）。</p>
+        <p>各 $s_f$ は同値類 $[S_f, \alpha_f]$ として表現できる（$S_f \in J(\text{dom}(f))$、$\alpha_f: S_f \to F$）。定理1と同様に、$U$ 上のsieve $K$ を次のように構成する：</p>
+        $$K = \{ h = f \circ k \mid f \in R, \ k \in S_f \}$$
+        <p>同様の推移性の議論により $K \in J(U)$ となる。写像 $\alpha: K \to F$ を $\alpha(f \circ k) = \alpha_f(k)$ によって定義する。これがwell-definedであることを確認する。</p>
+        <p>$h = f \circ k = f' \circ k'$ （$f, f' \in R, k \in S_f, k' \in S_{f'}$）と2通りに表されたとする。適合族の条件より $s_f|_k = s_{f'}|_{k'}$ であり、制限写像の定義から $F^+$ において以下が成り立つ：</p>
+        $$[k^*S_f, \alpha_f \cdot k] = [k'^*S_{f'}, \alpha_{f'} \cdot k']$$
+        <p>ここで $F$ が分離前層であるという事実を用いる。同値類が等しいということはある共通被覆上で写像が一致することを意味するが、単射性により、それらの写像は定義域の共通部分 $(k^*S_f) \cap (k'^*S_{f'})$ 全体で一致する。恒等射 $\mathrm{id}$ は明らかにこの共通部分に属するため、関数として $\mathrm{id}$ を代入することで：</p>
+        $$ (\alpha_f \cdot k)(\mathrm{id}) = (\alpha_{f'} \cdot k')(\mathrm{id}) \implies \alpha_f(k) = \alpha_{f'}(k') $$
+        <p>が得られる。これにより $\alpha$ はwell-definedな前層の射である。</p>
+        <p>最後に、大域切断 $s = [K, \alpha] \in F^+(U)$ が各 $s_f$ に制限されることを確認する。$s|_f = [f^*K, \alpha \cdot f]$ であるが、構成より $S_f \subset f^*K$ である。任意の $k \in S_f$ に対して、</p>
+        $$(\alpha \cdot f)(k) = \alpha(f \circ k) = \alpha_f(k)$$
+        <p>となるため、$\alpha \cdot f$ と $\alpha_f$ は $S_f$ 上で完全に一致する。ふたたび $F$ の分離性により、これは帰納極限における等号を意味する。したがって $[f^*K, \alpha \cdot f] = [S_f, \alpha_f] = s_f$ となり、貼り合わせが存在することが証明された。</p>
+        <div class="qed">証明終</div>
+    </div>
+    
+    <p>これらの定理から、任意の前層 $F$ に対して、<strong>$aF = F^{++}$</strong> と定義することで層化が完了することが従う。これを「2回で足りる (Twice suffices)」と呼ぶ。</p>
+
+
+    <h2>7. Coverageにおける層化の困難と標準的解決策</h2>
+
+    <p>前述のプラス構成はSieveの位相（Grothendieck topology）の有向性（directedness）に強く依存している。Coverage $K$ を用いて層化を行おうとすると、数学的な困難が生じる。</p>
+    
+    <p>Coverageの被覆族 $K(U)$ は、必ずしも共通細分を持つとは限らないため、綺麗な帰納極限 $\varinjlim$ を $K(U)$ 上で直接計算することが難しい。もしCoverageのみを用いて強引にプラス構成のような関手を作ろうとした場合、CoverageはGrothendieck topologyの推移性に相当する強い公理を持たないため、2回の反復では層になりきらない。局所データの「貼り合わせ」が新たな「分離性の崩れ」を生み出すイタチごっこが発生し、層に到達するまで<strong>超限帰納法 (transfinite induction)</strong> を用いて無限回構成を繰り返さなければならない場合がある。</p>
+    
+    <p>この複雑さを回避するため、Coverage上の層化は以下の標準的アプローチをとる：</p>
+    <ol>
+        <li>与えられたCoverage $K$ から、生成されるGrothendieck topology $\overline{K}$ を構成する。</li>
+        <li>$\overline{K}$ はSieveの位相なので、そこに対して先ほどの $F^{++}$ （2ステップのプラス構成）を適用する。</li>
+        <li>「$K$ 上の層」と「$\overline{K}$ 上の層」は全く同値であるため、得られた $F^{++}$ が求めるCoverage $K$ の層化となる。</li>
+    </ol>
+
+
+    <h2>8. プラス構成の歴史的背景</h2>
+
+    <div class="informal">
+        <p>層化を実現する「プラス構成 (plus construction)」がどのようにして発見されたか。その歴史は、代数幾何学のパラダイムシフトである「グロタンディークのトポス論 (Grothendieck's topos theory)」の誕生と直結しています。</p>
+
+        <p><strong>前史：ルレイと「芽（Stalk）」</strong><br>
+        層の理論は、ジャン・ルレイ (Jean Leray) によって考案され、アンリ・カルタンやジャン＝ピエール・セールらによって洗練されました。古典的な層化の標準的手法は、空間の「点」をベースにしていました。各点での「茎 (stalk / 芽)」を計算し、それらを集めて「展開空間 (espace étalé / 芽の空間)」という巨大な位相空間を作り、その連続切断をとることで層を得ていました。</p>
+
+        <p><strong>グロタンディークの挑戦：「点」の喪失</strong><br>
+        1960年代、アレクサンダー・グロタンディーク (Alexander Grothendieck) はヴェイユ予想解決のために、エタール・サイト (étale site) などの新しい位相を構築しました。しかし、そこで致命的な問題が発生します。新しく作られたサイトには、古典的な意味での「点」が十分に存在しなかったのです。点がなければ、stalkを計算することも、展開空間を作ることも不可能です。</p>
+        <p>ここでグロタンディークは、「空間とは点の集合ではなく、開集合のつながり（被覆構造）そのものが本質である。点がないなら、被覆のデータだけで直接層を製造しなければならない」という直観を得ました。</p>
+
+        <p><strong>プラス構成の誕生と「2回で足りる」の発見</strong><br>
+        グロタンディークとミシェル・アルティン (Michael Artin)、ジャン＝ルイ・ヴェルディエ (Jean-Louis Verdier) ら（SGA 4の著者たち）は、ありとあらゆる被覆上の適合族を、有向極限 $\varinjlim$ を使って強引にかき集めるという力技の数式を考案しました。これが $F^+$ です。<br>
+        当初、一度極限をとるだけでは「分離性の悪さ」と「貼り合わせの欠落」を同時に直せないという障害にぶつかり、「無限回繰り返さなければならないのか？」と懸念されました。しかし彼らは注意深い計算の末、「1回目で分離性が完璧になり、2回目で貼り合わせが完全に補完される。つまり2回で足りる (Twice suffices)」という結果を証明しました。このブレイクスルーは1963〜1964年のセミナー記録である『SGA 4』に結晶化され、点を持たない一般の圏上における層の理論を完全なものにしたのです。</p>
+    </div>
+
+    <div class="references">
+        <h3>参考文献</h3>
+        <ol>
+            <li>Johnstone, P. T. <em>Sketches of an Elephant: A Topos Theory Compendium</em>. Oxford Logic Guides. Oxford University Press, 2002. <br><a href="https://global.oup.com/academic/product/sketches-of-an-elephant-9780198524960" target="_blank">https://global.oup.com/academic/product/sketches-of-an-elephant-9780198524960</a></li>
+            <li>Mac Lane, S., and Moerdijk, I. <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Universitext. Springer-Verlag, 1992. <br><a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+            <li>Artin, M., Grothendieck, A., and Verdier, J.-L. <em>Théorie des topos et cohomologie étale des schémas. Tome 1: Théorie des topos</em> (SGA 4). Lecture Notes in Mathematics, Vol. 269. Springer-Verlag, 1972. <br><a href="https://link.springer.com/book/10.1007/BFb0081551" target="_blank">https://link.springer.com/book/10.1007/BFb0081551</a></li>
+        </ol>
+    </div>
+
+</body>
+</html>

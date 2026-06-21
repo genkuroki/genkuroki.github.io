@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grothendieck トポロジーと層の基礎：sieve、プラス構成、層化の普遍性、茎、およびエタール空間の構成</title>
+<style>
+    body {
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fcfcfc;
+    }
+    h1 { font-size: 2em; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; color: #2c3e50; }
+    h2 { font-size: 1.5em; border-bottom: 1px solid #bdc3c7; margin-top: 40px; padding-bottom: 5px; color: #34495e; }
+    h3 { font-size: 1.2em; color: #2980b9; margin-top: 30px; }
+    p { margin-bottom: 15px; }
+    .definition, .theorem, .lemma, .proposition {
+        background-color: #fdfdfd;
+        border-left: 5px solid #2980b9;
+        padding: 15px;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .definition-title, .theorem-title, .lemma-title, .proposition-title {
+        font-weight: bold;
+        color: #2980b9;
+        margin-bottom: 10px;
+        display: block;
+    }
+    .proof {
+        background-color: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+    .proof-title {
+        font-style: italic;
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
+    .example {
+        background-color: #f4fdf8;
+        border-left: 5px solid #27ae60;
+        padding: 15px;
+        margin: 20px 0;
+    }
+    .example-title {
+        font-weight: bold;
+        color: #27ae60;
+        margin-bottom: 10px;
+        display: block;
+    }
+    .remark {
+        background-color: #fff9e6;
+        border-left: 5px solid #f39c12;
+        padding: 15px;
+        margin: 20px 0;
+    }
+    code {
+        background-color: #f1f1f1;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: monospace;
+    }
+    ul, ol { margin-bottom: 15px; }
+    li { margin-bottom: 5px; }
+    .qed { float: right; font-weight: bold; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+</style>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    macros: {
+      Hom: '\\mathrm{Hom}',
+      PSh: '\\mathbf{PSh}',
+      Sh: '\\mathbf{Sh}',
+      Set: '\\mathbf{Set}',
+      Ob: '\\mathrm{Ob}',
+      dom: '\\mathrm{dom}',
+      cod: '\\mathrm{cod}',
+      id: '\\mathrm{id}',
+      varinjlim: '\\mathop{\\underrightarrow{\\lim}}',
+      varprojlim: '\\mathop{\\underleftarrow{\\lim}}'
+    }
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>Grothendieck トポロジーと層の基礎</h1>
+
+<p>本記事では、圏論における Grothendieck トポロジー (Grothendieck topology) の基礎となる sieve の概念から出発し、site 上の層の定義、層化のためのプラス構成 (plus construction)、その普遍性（左随伴性）、および site における点 (point) と茎 (stalk) の構成について詳細な解説を行う。さらに、各 site における層のエタール空間 (espace étalé) がどのように構成されるか（あるいはなぜ古典的な構成が破綻するか）についても論じる。</p>
+
+<div class="remark">
+<strong>インフォーマルな注意：</strong> ここで扱う内容は、代数幾何学やトポス理論 (topos theory) において空間の概念を一般化する際に極めて重要になるものです。通常の位相空間における「開集合の被覆」という概念を、圏の対象と射の言葉を用いて定式化し直すことが主眼となります。
+</div>
+
+<hr>
+
+<h2>1. 圏における Sieve の2つの定義とその同値性</h2>
+
+<p>圏 $\mathcal{C}$ を局所小さな圏 (locally small category) とし、$X \in \Ob(\mathcal{C})$ をその対象とする。対象 $X$ における「被覆」の概念を考えるための基本的な構成要素が sieve である。</p>
+
+<p>Sieve の定義には、関手を用いたものと、射の集まりを用いたものの2種類が存在する。これらは完全に同値である。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 1.1 (関手による定義：部分関手)</span>
+    対象 $X$ 上の sieve $S$ とは、表現可能関手 (representable functor) $h_X = \Hom_{\mathcal{C}}(-, X) : \mathcal{C}^{\mathrm{op}} \to \Set$ の<strong>部分関手 (subfunctor)</strong> のことである。<br>
+    すなわち、$S \subset h_X$ であり、各対象 $Y \in \mathcal{C}$ に対して $S(Y) \subset \Hom_{\mathcal{C}}(Y, X)$ となるような反変関手 $S: \mathcal{C}^{\mathrm{op}} \to \Set$ である。
+</div>
+
+<div class="definition">
+    <span class="definition-title">定義 1.2 (射の集まりによる定義：右イデアル)</span>
+    対象 $X$ 上の sieve $S$ とは、<strong>余域 (codomain) が $X$ であるような射の集まり</strong>であって、以下の「合成に関する閉包性（右イデアル性）」を満たすもののことである。<br>
+    任意の射 $f: Y \to X \in S$ および、任意の射 $g: Z \to Y \in \mathcal{C}$ に対して、その合成 $f \circ g: Z \to X$ も $S$ に属する。
+</div>
+
+<div class="proposition">
+    <span class="proposition-title">命題 1.3</span>
+    定義 1.1 と 定義 1.2 は同値である。
+</div>
+
+<div class="proof clearfix">
+    <span class="proof-title">証明</span>
+    <p><strong>【定義 1.1 $\implies$ 定義 1.2】</strong><br>
+    $S$ を $h_X$ の部分関手とする。</p>
+    <ol>
+        <li>各対象 $Y \in \mathcal{C}$ に対して、集合 $S(Y)$ は $\Hom_{\mathcal{C}}(Y, X)$ の部分集合である。これらすべての $Y$ についての $S(Y)$ を寄せ集めたものを新しい射の集まり $\tilde{S}$ とする。すなわち、$\tilde{S} = \bigcup_{Y \in \Ob(\mathcal{C})} S(Y)$ である。これにより、$\tilde{S}$ は余域が $X$ である射の集まりとなる。</li>
+        <li>合成について閉じていることを確認する。$f \in \tilde{S}$（すなわち、ある $Y$ について $f: Y \to X \in S(Y)$）とし、任意の射 $g: Z \to Y$ をとる。<br>
+        $S$ は $h_X$ の部分関手であるため、射 $g$ に対する反変関手 $S$ の作用 $S(g): S(Y) \to S(Z)$ は、表現可能関手 $h_X(g)$ の制限、すなわち「$g$ を右から合成する操作（引き戻し）」である。<br>
+        したがって、$S(g)(f) = f \circ g$ となる。関手の定義により $S(g)(f) \in S(Z)$ でなければならないため、$f \circ g \in S(Z) \subset \tilde{S}$ が成り立つ。よって、右イデアル性が示された。</li>
+    </ol>
+
+    <p><strong>【定義 1.2 $\implies$ 定義 1.1】</strong><br>
+    $S$ を、合成について閉じているような、余域が $X$ である射の集まりとする。</p>
+    <ol>
+        <li>各対象 $Y \in \mathcal{C}$ に対して、集合 $S(Y)$ を以下のように定義する。
+        $$S(Y) = S \cap \Hom_{\mathcal{C}}(Y, X)$$
+        これにより、各対象 $Y$ に対して表現可能関手の値 $h_X(Y) = \Hom_{\mathcal{C}}(Y, X)$ の部分集合が自然に定まる。</li>
+        <li>これが前層 (presheaf) として正しく機能することを示す。任意の射 $g: Z \to Y$ に対して、写像 $S(g): S(Y) \to S(Z)$ を $f \mapsto f \circ g$ で定義する。<br>
+        右イデアル性の仮定から、$f \in S(Y)$（つまり $f \in S$ かつ $\dom(f) = Y$）ならば、$f \circ g \in S$ である。<br>
+        また、合成の定義から明らかに $f \circ g \in \Hom_{\mathcal{C}}(Z, X)$ である。したがって、以下が成り立つ。
+        $$f \circ g \in S \cap \Hom_{\mathcal{C}}(Z, X) = S(Z)$$
+        ゆえにこの写像は well-defined であり、合成則や恒等射の保存も自明に満たすため、$S$ は $h_X$ の部分関手となる。</li>
+    </ol>
+    <div class="qed">$\blacksquare$</div>
+</div>
+
+<hr>
+
+<h2>2. Site 上の層の2通りの定義の同等性</h2>
+
+<p>Grothendieck トポロジー $J$ が与えられた圏 $\mathcal{C}$ を site (site) と呼ぶ。ここでは位相 $J$ が対象ごとに被覆 sieve (covering sieve) の集まり $J(X)$ を指定することで与えられているとする。</p>
+
+<p>前層 $F: \mathcal{C}^{\mathrm{op}} \to \Set$ が層 (sheaf) であることの定義にも、要素の族を用いたものと、関手や自然変換を用いたものの2つが存在し、これらも同値である。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 2.1 (適合族と貼り合わせによる定義)</span>
+    $F$ が層であるとは、任意の対象 $X$ と被覆 sieve $S \in J(X)$ に対して、以下の条件を満たすことである。
+    <ul>
+        <li><strong>適合族 (matching family):</strong> sieve $S$ に属する各射 $f \in S \cap \Hom_{\mathcal{C}}(Y, X)$ に対して、元 $s_f \in F(Y)$ が与えられており、任意の射 $g: Z \to Y$ に対して
+        $$F(g)(s_f) = s_{f \circ g}$$
+        を満たすとする。このような族 $(s_f)_{f \in S}$ を $S$ に対する適合族という。</li>
+        <li><strong>一意的な貼り合わせ:</strong> 任意の適合族 $(s_f)_{f \in S}$ に対して、ある一意的な元 $s \in F(X)$ が存在して、すべての $f \in S$ について
+        $$F(f)(s) = s_f$$
+        が成り立つ。</li>
+    </ul>
+</div>
+
+<div class="definition">
+    <span class="definition-title">定義 2.2 (関手と自然変換による定義)</span>
+    $F$ が層であるとは、任意の対象 $X$ と被覆 sieve $S \subset h_X \in J(X)$ に対して、包含自然変換 $i: S \hookrightarrow h_X$ が引き起こす以下の写像が全単射 (bijection) になることである。
+    $$\Hom_{\PSh(\mathcal{C})}(h_X, F) \xrightarrow{\sim} \Hom_{\PSh(\mathcal{C})}(S, F)$$
+    ここで、写像は自然変換 $\alpha \mapsto \alpha \circ i$ で与えられる。
+</div>
+
+<div class="proposition">
+    <span class="proposition-title">命題 2.3</span>
+    定義 2.1 と 定義 2.2 は同値である。
+</div>
+
+<div class="proof clearfix">
+    <span class="proof-title">証明</span>
+    <p>定義 2.2 の写像が、定義 2.1 の条件を表現していることを確かめる。</p>
+    
+    <p><strong>ステップ 1: 右辺 $\Hom_{\PSh(\mathcal{C})}(S, F)$ と適合族の対応</strong><br>
+    自然変換 $\alpha: S \to F$ が与えられたとする。これは、各対象 $Y$ に対して写像 $\alpha_Y: S(Y) \to F(Y)$ が存在し、自然性を満たすということである。<br>
+    ここで $S(Y) = S \cap \Hom_{\mathcal{C}}(Y, X)$ である。各 $f \in S(Y)$ に対して、$s_f = \alpha_Y(f) \in F(Y)$ と定める。<br>
+    自然変換の自然性より、任意の射 $g: Z \to Y$ に対して以下の図式が可換となる。
+    $$ \alpha_Z \circ S(g) = F(g) \circ \alpha_Y $$
+    $f \in S(Y)$ に両辺を適用する。左辺は $f$ を $S(g)$ で引き戻した $f \circ g \in S(Z)$ を $\alpha_Z$ で送るため、$\alpha_Z(f \circ g) = s_{f \circ g}$ となる。<br>
+    右辺は $f$ を $\alpha_Y$ で送った $\alpha_Y(f) = s_f$ を $F(g)$ で引き戻すため、$F(g)(s_f)$ となる。<br>
+    したがって、$F(g)(s_f) = s_{f \circ g}$ が成り立つ。すなわち、自然変換 $\alpha: S \to F$ を与えることは、適合族 $(s_f)_{f \in S}$ を与えることと一対一に対応する。</p>
+
+    <p><strong>ステップ 2: 左辺 $\Hom_{\PSh(\mathcal{C})}(h_X, F)$ と $F(X)$ の対応</strong><br>
+    米田の補題 (Yoneda lemma) により、以下の自然な全単射が存在する。
+    $$\Hom_{\PSh(\mathcal{C})}(h_X, F) \cong F(X)$$
+    自然変換 $\tilde{\alpha}: h_X \to F$ は、大域的な元 $s = \tilde{\alpha}_X(\id_X) \in F(X)$ と一対一に対応し、任意の $f \in \Hom_{\mathcal{C}}(Y, X)$ に対して $\tilde{\alpha}_Y(f) = F(f)(s)$ となる。</p>
+
+    <p><strong>ステップ 3: 写像の全単射性と貼り合わせの対応</strong><br>
+    包含射 $i: S \hookrightarrow h_X$ による引き戻し写像
+    $$i^* : \Hom_{\PSh(\mathcal{C})}(h_X, F) \to \Hom_{\PSh(\mathcal{C})}(S, F)$$
+    は、ステップ1とステップ2の同型を通して、以下の写像と同一視される。
+    $$ F(X) \to \{ S \text{ に対する適合族全体の集合} \} $$
+    $$ s \mapsto (F(f)(s))_{f \in S} $$
+    この写像が全射 (surjective) であることは、任意の適合族に対して、それを $(F(f)(s))_{f \in S}$ の形で与えるような元 $s \in F(X)$ が存在すること（貼り合わせの存在）と同値である。<br>
+    この写像が単射 (injective) であることは、そのような元 $s \in F(X)$ がただ一つしか存在しないこと（貼り合わせの一意性）と同値である。<br>
+    したがって、写像が全単射であることは、定義 2.1 の条件を完全に満たすことと同値である。</p>
+    <div class="qed">$\blacksquare$</div>
+</div>
+
+<hr>
+
+<h2>3. プラス構成とその基本性質</h2>
+
+<p>任意の前層 $F$ から層を作り出す操作（層化, sheafification）は、通常、<strong>プラス構成 (plus construction)</strong> と呼ばれる操作を2回適用する ($F \mapsto F^+ \mapsto F^{++}$) ことで行われる。この構成において、被覆を（単なる射の族ではなく）sieve として定式化しておくことが極限計算において決定的に重要である。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 3.1 (プラス構成 $F^+$)</span>
+    $(\mathcal{C}, J)$ を site とし、$F$ を $\mathcal{C}$ 上の前層とする。対象 $X \in \mathcal{C}$ における $F^+$ の値を、以下の<strong>有向余極限 (filtered colimit)</strong> として定義する。
+    $$F^+(X) = \varinjlim_{S \in J(X)^{\mathrm{op}}} \Hom_{\PSh(\mathcal{C})}(S, F)$$
+    ここで $J(X)$ は $X$ 上の被覆 sieve 全体の集合であり、包含関係 $\subset$ の逆（$S \subset T$ ならば $S \to T$）を射とする圏と見なす。
+</div>
+
+<p>$F^+(X)$ の元は同値類 $[S, \alpha]$ として表される。ここで $S \in J(X)$ は被覆 sieve、$\alpha: S \to F$ は自然変換（すなわち適合族）である。2つの元 $[S, \alpha]$ と $[T, \beta]$ が等しいとは、あるより小さな被覆 sieve $R \in J(X)$ で $R \subset S \cap T$ となるものが存在し、$\alpha|_R = \beta|_R$ が成り立つことである。</p>
+
+<div class="lemma">
+    <span class="lemma-title">補題 3.2</span>
+    任意の前層 $F$ について、$F^+$ は分離的前層 (separated presheaf) である。すなわち、$F^+$ の2つの大域的な元が被覆上で一致するならば、それらは等しい。
+</div>
+
+<div class="proof clearfix">
+    <span class="proof-title">証明</span>
+    <p>対象 $X$ において、ある被覆 sieve $R \in J(X)$ 上で $F^+$ の2つの元 $u, v \in F^+(X)$ が一致すると仮定する。大域的にも $u = v$ であることを示す。</p>
+    <p>$u = [S, \alpha]$、$v = [T, \beta]$ とおく（$S, T \in J(X)$）。仮定より、任意の $f: Y \to X \in R$ に対して $F^+(f)(u) = F^+(f)(v)$ が成り立つ。<br>
+    これは $F^+(Y)$ における等式であるから、有向余極限の定義により、各 $f \in R$ に対してある被覆 sieve $W_f \in J(Y)$ が存在し、$W_f \subset f^*S \cap f^*T$ かつ $\alpha$ と $\beta$ の $W_f$ への引き戻しが一致する（ここで $f^*S$ は $S$ の $f$ による引き戻し sieve を表す）。</p>
+    <p>ここで、新たな sieve $K$ を以下のように定義する。
+    $$K = \{ f \circ g \mid f \in R, g \in W_f \}$$
+    Grothendieck 位相の公理（推移性 / transitivity）により、$R \in J(X)$ かつ各 $f \in R$ について $W_f \in J(Y)$ であるため、$K \in J(X)$ となる。<br>
+    $g \in W_f \subset f^*S$ であるから、$f \circ g \in S$ であり、同様に $f \circ g \in T$ である。よって $K \subset S \cap T \cap R$ である。<br>
+    さらに、任意の $k = f \circ g \in K$ について、$\alpha|_K$ と $\beta|_K$ を評価すると、$\alpha$ と $\beta$ は $W_f$ に引き戻したときに一致するため、$\alpha(k) = \beta(k)$ が成り立つ。<br>
+    すなわち、共通の被覆 sieve $K \in J(X)$ 上で $\alpha|_K = \beta|_K$ となる。有向余極限における同値関係の定義から、$[S, \alpha] = [T, \beta]$、すなわち $u = v$ である。よって $F^+$ は分離的である。</p>
+    <div class="qed">$\blacksquare$</div>
+</div>
+
+<div class="theorem">
+    <span class="theorem-title">定理 3.3</span>
+    $F$ が分離的前層ならば、$F^+$ は層である。したがって、任意の前層 $F$ に対して $F^{++}$ は層となる。
+</div>
+
+<div class="proof clearfix">
+    <span class="proof-title">証明</span>
+    <p>$F$ を分離的前層とする。任意の $R \in J(X)$ と $F^+$ の適合族 $(u_f)_{f \in R}$（ここで $f: Y \to X \in R$、 $u_f \in F^+(Y)$）が与えられたとき、それを一意に貼り合わせる元 $u \in F^+(X)$ が存在することを示す。<br>
+    一意性については、補題 3.2 により $F^+$ 自身が分離的であることから保証される。よって存在を示せばよい。</p>
+    <p>各 $f \in R$ に対して、$u_f \in F^+(Y)$ はある同値類 $[S_f, \alpha_f]$ によって代表される。ここで $S_f \in J(Y)$ であり、$\alpha_f: S_f \to F$ である。<br>
+    新たな sieve $W$ を以下のように定義する。
+    $$W = \{ f \circ g \mid f \in R, g \in S_f \}$$
+    前述と同様に位相の推移性から $W \in J(X)$ である。<br>
+    射 $h = f \circ g \in W$ に対して、自然変換 $\alpha: W \to F$ を $\alpha(h) = \alpha_f(g)$ として定義したい。これが well-defined であることを確認する。<br>
+    $h = f_1 \circ g_1 = f_2 \circ g_2$ と二通りに表されたとする。適合族の条件から、$F^+(g_1)(u_{f_1}) = u_h = F^+(g_2)(u_{f_2})$ が $F^+(\dom(h))$ で成り立つ。<br>
+    $u_{f_1}$ と $u_{f_2}$ は $\alpha_{f_1}$ と $\alpha_{f_2}$ によって表現されているため、$F^+$ で一致するということは、$\dom(h)$ 上のある被覆 sieve $V \in J(\dom(h))$ が存在して、$\alpha_{f_1}(g_1 \circ k) = \alpha_{f_2}(g_2 \circ k)$ がすべての $k \in V$ に対して成り立つことを意味する。<br>
+    ここで $F$ が<strong>分離的である</strong>という仮定を用いる。局所的な被覆 $V$ 上で $F$ の値が一致するならば、大域的（この場合は $\dom(h)$ 上）でも一致しなければならない。すなわち $\alpha_{f_1}(g_1) = \alpha_{f_2}(g_2)$ である。よって $\alpha$ は well-defined な自然変換である。</p>
+    <p>これにより $[W, \alpha] \in F^+(X)$ が定まる。構成から明らかに、任意の $f \in R$ について $F^+(f)([W, \alpha]) = u_f$ となり、求める貼り合わせが得られた。したがって $F^+$ は層である。</p>
+    <div class="qed">$\blacksquare$</div>
+</div>
+
+<h3>有向余極限と有限極限の可換性</h3>
+<p>プラス構成において、被覆を sieve として定義することの最大の利点は、被覆の集合 $J(X)^{\mathrm{op}}$ が<strong>有向圏 (filtered category)</strong> になることである。位相の公理により、被覆 sieve $S, T \in J(X)$ に対して、その共通部分 $S \cap T$ もまた $J(X)$ に属するため、任意の2つの対象 $S, T$ に対して共通の対象 $S \cap T$ への射が存在すること（有向性）が保証される。</p>
+<p>層の適合条件は「等化子 (equalizer)」という有限極限で表現されるため、$F^+$ を有向余極限で定義することで、層の条件との交換が極めて見通しよく進む。この根拠となるのが、以下の $\Set$ における代数的事実である。</p>
+
+<div class="theorem">
+    <span class="theorem-title">定理 3.4</span>
+    集合の圏 $\Set$ において、有向余極限 (filtered colimits) は有限極限 (finite limits) と可換である。
+</div>
+
+<div class="proof clearfix">
+    <span class="proof-title">証明</span>
+    <p>有限極限は有限直積と等化子 (equalizer) から構成されるため、有向余極限がこれら2つと可換であることを示せば十分である。$\mathcal{I}$ を有向圏とする。</p>
+    
+    <p><strong>(1) 有限直積との可換性</strong><br>
+    関手 $X, Y: \mathcal{I} \to \Set$ に対して、自然な写像 $\Phi: \varinjlim_{i \in \mathcal{I}} (X_i \times Y_i) \to (\varinjlim_{i \in \mathcal{I}} X_i) \times (\varinjlim_{i \in \mathcal{I}} Y_i)$ が全単射であることを示す。</p>
+    <ul>
+        <li><strong>全射性:</strong> 右辺の任意の元は $([x], [y])$（$x \in X_i, y \in Y_j$）と表せる。$\mathcal{I}$ が有向圏であるため、ある対象 $k$ と射 $i \to k$、$j \to k$ が存在する。$x, y$ の $X_k, Y_k$ における像を $x', y'$ とすると、$([x], [y]) = ([x'], [y']) = \Phi([(x', y')])$ となる。よって $\Phi$ は全射である。</li>
+        <li><strong>単射性:</strong> $\Phi([(x_1, y_1)]) = \Phi([(x_2, y_2)])$ とする。ここで $(x_1, y_1) \in X_i \times Y_i$、$(x_2, y_2) \in X_j \times Y_j$ である。$[x_1] = [x_2]$ より、ある $k_1$ が存在し $x_1$ と $x_2$ は $X_{k_1}$ で一致する。同様に $[y_1] = [y_2]$ より、ある $k_2$ が存在し $Y_{k_2}$ で一致する。$\mathcal{I}$ は有向圏なので、$k_1$ と $k_2$ からの射を持つ対象 $k$ が存在する。対象 $k$ において、$x_1, x_2$ の像も、$y_1, y_2$ の像も一致する。したがって、$(x_1, y_1)$ と $(x_2, y_2)$ は $X_k \times Y_k$ において等しく、$\varinjlim (X_i \times Y_i)$ において等しい。よって単射である。</li>
+    </ul>
+
+    <p><strong>(2) 等化子との可換性</strong><br>
+    関手 $X, Y: \mathcal{I} \to \Set$ と2つの自然変換 $f, g: X \to Y$ を考える。各 $i \in \mathcal{I}$ について $E_i \to X_i \rightrightarrows Y_i$ を等化子とする（すなわち $E_i = \{x \in X_i \mid f_i(x) = g_i(x)\}$）。このとき、$\varinjlim_{i \in \mathcal{I}} E_i$ が $\varinjlim X_i \rightrightarrows \varinjlim Y_i$ の等化子になることを示す。</p>
+    <ul>
+        <li>自然な写像 $\Psi: \varinjlim E_i \to \varinjlim X_i$ を考える。$[e_1] = [e_2]$ が $\varinjlim X_i$ で成り立つとする（$e_1 \in E_i, e_2 \in E_j$）。ある $k$ で $e_1, e_2$ は $X_k$ において一致する。$e_1, e_2$ の像は $X_k$ で等しいため、当然 $E_k \subset X_k$ においても等しい。したがって $\varinjlim E_i$ で $[e_1] = [e_2]$ となり、$\Psi$ は単射である。</li>
+        <li>$\varinjlim X_i$ において等化子の条件を満たす元 $[x]$（$x \in X_i$）をとる。すなわち $\varinjlim Y_i$ において $[f_i(x)] = [g_i(x)]$ である。有向性より、ある $k$（$i \to k$）が存在し、$Y_k$ において $f_k(x_k) = g_k(x_k)$ となる。これは $x_k \in E_k$ を意味する。したがって $[x] = [x_k]$ は $\varinjlim E_i$ の像に含まれる。</li>
+    </ul>
+    <p>以上より、有向余極限は有限極限と可換である。</p>
+    <div class="qed">$\blacksquare$</div>
+</div>
+
+<hr>
+
+<h2>4. 層化関手の普遍性（左随伴性）</h2>
+
+<p>前層の圏 $\PSh(\mathcal{C})$ から層の圏 $\Sh(\mathcal{C}, J)$ への層化は、プラス構成を2回適用する関手 $a: F \mapsto F^{++}$ によって与えられる。この関手 $a$ は、強力な普遍性を持っている。圏論の言葉で言えば、層化関手 $a$ は包含関手の<strong>左随伴 (left adjoint)</strong> である。</p>
+
+<div class="theorem">
+    <span class="theorem-title">定理 4.1 (層化関手の普遍性)</span>
+    層化関手 $a: \PSh(\mathcal{C}) \to \Sh(\mathcal{C}, J)$ は、包含関手 $i: \Sh(\mathcal{C}, J) \to \PSh(\mathcal{C})$ の左随伴 (left adjoint) である。すなわち、任意の前層 $F$ と任意の層 $G$ に対して、以下の自然な全単射が存在する。
+    $$ \Hom_{\Sh(\mathcal{C}, J)}(F^{++}, G) \cong \Hom_{\PSh(\mathcal{C})}(F, i(G)) $$
+    これは、前層から層への任意の射 $\phi: F \to G$ が、自然な射 $\eta: F \to F^{++}$ を経由して一意に分解されることを意味する。
+</div>
+
+<div class="proof clearfix">
+    <span class="proof-title">証明</span>
+    <p>1回のプラス構成に対して、任意の分離的前層 $G$ への射が $\Hom_{\PSh(\mathcal{C})}(F^+, G) \cong \Hom_{\PSh(\mathcal{C})}(F, G)$ を満たすことを示せば十分である。なぜなら、$G$ が層であれば当然分離的であり、この同型を2回適用することで $\Hom(F^{++}, G) \cong \Hom(F^+, G) \cong \Hom(F, G)$ が得られるからである。</p>
+    
+    <p>前層の射 $\phi: F \to G$ が与えられたとき、これを $\phi^+: F^+ \to G$ に拡張する構成を行う。<br>
+    対象 $X \in \mathcal{C}$ に対し、$x \in F^+(X)$ を同値類 $[S, \alpha]$ とする。ここで $S \in J(X)$ は被覆 sieve、$\alpha: S \to F$ は自然変換である。<br>
+    $\alpha$ と $\phi$ を合成することで、自然変換 $\phi \circ \alpha: S \to G$ が得られる。$G$ は分離的前層であると同時に、仮定（ここでは最終的に $G$ を層とするため、層の性質を用いる）として $G$ は層である。<br>
+    層の定義（定義 2.2）より、包含 $i_S: S \hookrightarrow h_X$ は全単射 $\Hom_{\PSh(\mathcal{C})}(h_X, G) \xrightarrow{\sim} \Hom_{\PSh(\mathcal{C})}(S, G)$ を引き起こす。<br>
+    したがって、自然変換 $\phi \circ \alpha$ は $h_X \to G$ に一意に拡張され、これは米田の補題によりただ一つの元 $g \in G(X)$ に対応する。この $g$ を $\phi^+_X(x)$ と定義する。</p>
+
+    <p><strong>well-defined であることの確認:</strong><br>
+    $[S, \alpha] = [T, \beta]$ であるとする。定義より、ある被覆 sieve $R \subset S \cap T$ が存在し、$\alpha|_R = \beta|_R$ となる。<br>
+    これらを $\phi$ で送った $\phi \circ \alpha|_R$ と $\phi \circ \beta|_R$ も当然一致する。<br>
+    $G$ への拡張は層の貼り合わせの一意性（$G$ が分離的であること）から、より小さな被覆 $R$ 上で一致する大域的な元は $X$ 全体でも一致しなければならない。したがって $\phi^+_X(x)$ の値は代表元の取り方によらず well-defined である。</p>
+
+    <p><strong>拡張の一意性:</strong><br>
+    別の拡張 $\psi: F^+ \to G$ が存在したとする。任意の $x = [S, \alpha] \in F^+(X)$ に対して、被覆 $S$ に属する任意の射 $f: Y \to X$ で $x$ を引き戻すと、$F^+(f)(x)$ は $F(Y)$ から来る元になる。<br>
+    $\psi$ は $F$ 上では $\phi$ と一致しなければならないため、被覆 $S$ 上で $\psi$ と $\phi^+$ は一致する。<br>
+    $G$ が分離的であるため、被覆上で一致する射は大域的にも一致する。よって $\psi = \phi^+$ である。</p>
+
+    <p>以上より、前層の射 $\phi: F \to G$ は一意に $\phi^+: F^+ \to G$ に拡張される。これを繰り返すことで、$\phi$ は一意に $F^{++} \to G$ に拡張される。したがって、$a \dashv i$ が示された。</p>
+    <div class="qed">$\blacksquare$</div>
+</div>
+
+<hr>
+
+<h2>5. Site の点 (Point)、茎 (Stalk)、およびエタール空間 (Espace Étalé)</h2>
+
+<p>一般の site 上の層には、位相空間論のように自明な「点」が存在するわけではない。しかし、site 上にある特定の条件を満たす関手が存在するとき、それを点とみなし、その点における「茎 (stalk)」を定義することができる。</p>
+<p>また、古典的な位相空間における層 $F$ は、各点での茎 $F_x$ の非交和 $\coprod F_x$ に局所同相写像 (local homeomorphism) となる位相を入れた<strong>エタール空間 (espace étalé)</strong> によって完全に特徴付けられる。しかし、一般の site では、この「茎の非交和」という単純な位相的構成が破綻することが多い。圏論的には、層 $F$ のエタール空間の一般化は、層の圏における<strong>スライストポス (slice topos) $\Sh(\mathcal{C}, J)/F$</strong> や、局所同相の一般化として捉えられる。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 5.1 (Site の点)</span>
+    Site $(\mathcal{C}, J)$ に対し、共変関手 $u: \mathcal{C} \to \Set$ が<strong>点 (point)</strong> であるとは、以下の2条件を満たすことである。
+    <ol>
+        <li><strong>平坦性 (flatness):</strong> 関手 $u$ が有限極限を保存する。これは、要素の圏 (category of elements) $\int u$ が有向圏になることと同値である。</li>
+        <li><strong>連続性 (continuity):</strong> 任意の対象 $X \in \mathcal{C}$ と被覆 sieve $S \in J(X)$ に対して、$u$ は $S$ を被覆に送る。すなわち、包含 $S \subset h_X$ から誘導される写像 $\varinjlim_{(Y \to X) \in S} u(Y) \to u(X)$ が全射になる。</li>
+    </ol>
+</div>
+
+<p>点 $u$ が与えられたとき、前層 $F$ の $u$ における<strong>茎 (stalk)</strong> $F_u$ は以下の有向余極限で定義される。
+$$F_u = \varinjlim_{(C, c) \in (\int u)^{\mathrm{op}}} F(C)$$</p>
+
+<div class="theorem">
+    <span class="theorem-title">定理 5.2</span>
+    点 $u$ が定義する茎をとる関手 $(-)_u: \Sh(\mathcal{C}, J) \to \Set$ は完全関手 (exact functor) である。すなわち、有限極限および任意の余極限を保存する。
+</div>
+
+<div class="proof clearfix">
+    <span class="proof-title">証明</span>
+    <p>まず前層の圏 $\PSh(\mathcal{C})$ において考える。茎 $F_u$ はテンソル積 $u \otimes_{\mathcal{C}} F$ であり、要素の圏 $\int u$ を用いた余極限として計算される。平坦性（条件1）により $\int u$ は有向圏である。<br>
+    定理 3.4 で示した通り、$\Set$ において有向余極限は有限極限と可換であるため、関手 $F \mapsto F_u$ は $\PSh(\mathcal{C})$ において有限極限を保存する。また、余極限は余極限と可換であるため、任意の余極限も保存する。</p>
+    <p>次に、層の圏 $\Sh(\mathcal{C}, J)$ においてこれが正しく振る舞うためには、前層 $F$ とその層化 $F^+$ が同型な茎を持つこと、すなわち射 $F_u \to (F^+)_u$ が全単射であることを示せば十分である。<br>
+    任意の $x \in (F^+)_u$ は、ある対象 $C \in \mathcal{C}$、要素 $a \in u(C)$、および $\xi \in F^+(C)$ によって代表される。$\xi$ は、被覆 sieve $S \in J(C)$ と自然変換 $\alpha: S \to F$ の組 $[S, \alpha]$ である。<br>
+    連続性（条件2）により、被覆 $S \subset h_C$ に対して $u(S) \to u(C)$ は全射である。したがって、元 $a \in u(C)$ は、ある射 $f: B \to C \in S$ と元 $b \in u(B)$ に持ち上げられる ($u(f)(b) = a$)。<br>
+    このとき、$\xi$ を $f$ で引き戻した $\xi|_f$ は $F(B)$ の元 $\alpha(f)$ に対応する。組 $(B, b) \in \int u$ と元 $\alpha(f) \in F(B)$ は、$F_u$ における元を定める。有向余極限の性質により、これが $x \in (F^+)_u$ の原像となるため、全射性が示される。<br>
+    単射性についても、被覆上での一致を連続性を用いて同様に持ち上げることで示される。<br>
+    したがって、茎をとる操作は層化と可換であり、$\Sh(\mathcal{C}, J)$ 上の完全関手となる。</p>
+    <div class="qed">$\blacksquare$</div>
+</div>
+
+<h3>茎が定義される Site の例とエタール空間の構成</h3>
+
+<div class="example">
+    <span class="example-title">例 5.3 (位相空間)</span>
+    <p>位相空間 $X$ の開集合全体 $O(X)$ を site としたもの。空間の通常の点 $x \in X$ は、$x \in U$ なら単元集合、そうでないなら $\varnothing$ を返す関手 $u_x$ を定める。これにより得られる茎は、古典的な位相空間上の層の茎と一致する。</p>
+    <p><strong>エタール空間の構成:</strong> 各点 $x \in X$ における茎 $F_x$ の非交和 $E = \coprod_{x \in X} F_x$ を考える。開集合 $U \subset X$ 上の切断 $s \in F(U)$ は自然な写像 $\tilde{s}: U \to E$ を定める。これらの $\tilde{s}(U)$ を開基として $E$ に位相を入れると、自然な射影 $p: E \to X$ は局所同相写像となる。これが古典的な意味でのエタール空間であり、層 $F$ はこの空間の連続切断として完全に復元される。</p>
+</div>
+
+<div class="example">
+    <span class="example-title">例 5.4 (Zariski site)</span>
+    <p>スキーム $X$ の開部分スキームを対象とする site。位相空間としての点（素イデアル）$x \in X$ が site の点を与える。構造層 $\mathcal{O}_X$ の $x$ における茎は、局所環 (local ring) $\mathcal{O}_{X, x}$ となる。</p>
+    <p><strong>エタール空間の構成:</strong> Zariski 位相は（sober な）位相空間に基づく site であるため、例 5.3 と完全に同様にして、点集合 $\coprod F_x$ 上に局所同相な位相空間としてエタール空間を構成できる。</p>
+</div>
+
+<div class="example">
+    <span class="example-title">例 5.5 (Étale site)</span>
+    <p>スキーム $X$ 上のエタール射 $U \to X$ 全体を対象とし、全射エタール射の族を被覆とする site。Zariski 位相の点では連続性を満たさないため、代数的閉体 $K$ を用いた<strong>幾何学的点 (geometric point)</strong> $\bar{x}: \mathrm{Spec}(K) \to X$ を考える必要がある。ここでの茎は、局所環の<strong>厳密ヘンゼル化 (strict henselization)</strong> $\mathcal{O}_{X, \bar{x}}^{\mathrm{sh}}$ となる。</p>
+    <p><strong>エタール空間の構成（古典論の破綻）:</strong> 幾何学的点に対する茎の非交和 $\coprod F_{\bar{x}}$ を用いて位相空間を作ろうとしても、層を正しく復元できない。なぜなら、幾何学的点には基礎体の自己同型群（ガロア群）が非自明に作用しており、層の貼り合わせにはこの作用（降下データ, descent data）が不可欠だからである。層 $F$ があるエタールスキーム $Y \to X$ によって表現可能である場合、そのスキーム $Y$ 自体がエタール空間に対応する。一般の層の場合は、スライストポス $\Sh(X_{\mathrm{et}})/F$ がエタール空間の正しい圏論的代用品となる。</p>
+</div>
+
+<div class="example">
+    <span class="example-title">例 5.6 (Nisnevich site)</span>
+    <p>Étale 位相よりも少し厳しい被覆条件（剰余体の同型を要求する）を課した site。点としては通常の点 $x \in X$ を用いることができるが、茎をとると単なる局所環ではなく、その<strong>ヘンゼル化 (henselization)</strong> $\mathcal{O}_{X,x}^h$ が得られる。</p>
+    <p><strong>エタール空間の構成:</strong> Étale site と同様に、各点のヘンゼル局所環上の情報だけを集めた位相空間 $\coprod F_x$ では層を復元できない。層理論的なエタール空間は、層の圏のスライス $\Sh(X_{\mathrm{Nis}})/F$ によって理解されるべきである。</p>
+</div>
+
+<div class="example">
+    <span class="example-title">例 5.7 ($G$-集合)</span>
+    <p>離散群 $G$ の推移的な $G$-集合を対象とし、同変写像の全射族を被覆とする site。この site 上の層は $G$-集合全体の圏と同値になる。「点」をとる操作は、群作用を忘れて基礎集合 (underlying set) を取り出す<strong>忘却関手 (forgetful functor)</strong> に対応する。</p>
+    <p><strong>エタール空間の構成:</strong> トポスとしての基空間は、自明な $G$ 作用を持つ単元集合 $*$ である。層（すなわち $G$-集合 $X$）の「エタール空間」とは、写像 $X \to *$ に他ならない。茎は基礎集合 $X$ そのものである。すなわち、点の非交和上に位相を入れるのではなく、集合 $X$ に群 $G$ の作用という「貼り合わせ情報」が直接備わっている状態が、この site におけるエタール空間の姿である。</p>
+</div>
+
+<div class="example">
+    <span class="example-title">例 5.8 (ロケール / Locale)</span>
+    <p>点のない位相空間 (pointless topology) と呼ばれるアプローチ。完備ハイティング代数 (complete Heyting algebra) の反対圏の要素を対象とし、上限によって被覆を定義する。ここでの点は<strong>完全素フィルター (completely prime filter)</strong> と呼ばれる代数・論理的な対象と一対一に対応する。</p>
+    <p><strong>エタール空間の構成:</strong> ロケール上の層 $F$ に対応するエタール空間は、ロケールの間の局所同相写像 $p: E \to L$ として完全に代数的に構成される。もしロケール $L$ が十分な点を持たない（完全素フィルターが存在しない）場合、点における茎の非交和 $\coprod F_p$ は空集合になることすらあり、空間的 (spatial) な構成は完全に破綻する。エタール空間 $E$ は「点と茎」ではなく「束の代数的操作」のみを通じて構成されなければならない。</p>
+</div>
+
+<hr>
+
+<h2>参考文献</h2>
+<ul>
+    <li>Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+    <li>Artin, M., Grothendieck, A., & Verdier, J. L. (1972). <em>Théorie des Topos et Cohomologie Étale des Schémas (SGA 4)</em>. Lecture Notes in Mathematics, Springer. <a href="https://link.springer.com/book/10.1007/BFb0081551" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/BFb0081551</a></li>
+    <li>The Stacks project authors. <em>The Stacks project</em> (Chapter 7: Sites and Sheaves). <a href="https://stacks.math.columbia.edu/tag/00VG" target="_blank" rel="noopener noreferrer">https://stacks.math.columbia.edu/tag/00VG</a></li>
+</ul>
+
+</body>
+</html>
