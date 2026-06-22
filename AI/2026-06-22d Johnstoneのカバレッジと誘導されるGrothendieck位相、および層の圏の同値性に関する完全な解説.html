@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Johnstoneのカバレッジと誘導されるGrothendieck位相、および層の圏の同値性に関する完全な解説</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #2d3748;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f7fafc;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        h1 {
+            font-size: 2em;
+            color: #1a202c;
+            border-bottom: 3px solid #2b6cb0;
+            padding-bottom: 12px;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+        h2 {
+            font-size: 1.5em;
+            color: #2b6cb0;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #4a5568;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        p {
+            margin-bottom: 1.5em;
+            text-align: justify;
+        }
+        .informal {
+            background-color: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .definition {
+            background-color: #f7fafc;
+            border-left: 4px solid #4a5568;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .definition::before {
+            content: "【定義】";
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+        .proposition {
+            background-color: #fffaf0;
+            border-left: 4px solid #dd6b20;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .proposition::before {
+            content: "【命題】";
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #dd6b20;
+        }
+        .example {
+            background-color: #f0fff4;
+            border-left: 4px solid #38a169;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .example::before {
+            content: "【例】";
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #38a169;
+        }
+        .proof {
+            background-color: #f8fafc;
+            border-left: 4px solid #718096;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .proof::before {
+            content: "【証明】";
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+        .proof::after {
+            content: "■";
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            color: #718096;
+        }
+        ul, ol {
+            margin-bottom: 1.5em;
+            padding-left: 24px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+        .references h2 {
+            color: #4a5568;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Johnstoneのカバレッジと誘導されるGrothendieck位相、および層の圏の同値性に関する完全な解説</h1>
+
+    <div class="informal">
+        <p>こんにちは。本稿では、圏論およびトポス理論において極めて重要な役割を果たす、Peter Johnstoneによって導入された「カバレッジ (coverage)」の概念と、それから誘導されるGrothendieck位相について詳細に解説します。</p>
+        <p>古典的なGrothendieck前位相（あるいは単に前位相）は、背景となる圏にすべてのファイバー積（引き戻し）が存在することを前提として定義されていました。しかし、代数的トポロジーや一般の空間の圏を扱う際、ファイバー積を必ずしも持たない圏の上で層の理論を展開したいという要請が自然に生じます。Johnstoneはこの問題を解決するため、ファイバー積の存在を仮定しない「分解条件」に基づくカバレッジの概念を定式化しました。</p>
+        <p>本稿では、このカバレッジからどのようにしてGrothendieck位相が帰納的に構成されるのか、そしてそれが実際にGrothendieck位相の公理を満たすことの完全な証明を自己完結的 (self-contained) に与えます。さらに、具体的な応用として重要となる「超不連結コンパクトHausdorff空間の圏」の例を詳しく論じ、最後にカバレッジに関する層の圏と誘導されたGrothendieck位相に関する層の圏が圏同値（実際には圏同型）になることの厳密な証明を書き下します。</p>
+    </div>
+
+    <h2>1. 基本概念の準備と定義</h2>
+    <p>以下、$\mathcal{C}$ を任意の圏とする。まず、Grothendieck位相を定義するための基礎となるsieve（ふるい）の概念を定義する。</p>
+
+    <div class="definition">
+        圏 $\mathcal{C}$ の対象 $U$ 上の <strong>sieve（ふるい）</strong> $S$ とは、余域 (codomain) が $U$ であるような射のクラスであって、次の右イデアル的な性質を満たすもののことである：
+        $$ f \in S \implies \text{任意の合成可能な射 } g \text{ に対して } f \circ g \in S $$
+        対象 $U$ を余域とするすべての射の集合を $t_U$ と書き、これを $U$ 上の<strong>最大sieve</strong>と呼ぶ。
+    </div>
+
+    <div class="definition">
+        $U$ 上の sieve $S$ と、任意の射 $g: V \to U$ に対し、 $S$ の $g$ に沿った<strong>引き戻しsieve (pullback sieve)</strong> $g^*S$ を次のように定義する：
+        $$ g^*S = \{ h \mid \operatorname{cod}(h) = V \text{ かつ } g \circ h \in S \} $$
+    </div>
+
+    <p>この $g^*S$ が実際に $V$ 上の sieve になることを確認することは容易である。なぜなら、$h \in g^*S$ かつ $k$ が $h$ と合成可能（すなわち $\operatorname{cod}(k) = \operatorname{dom}(h)$）であるとき、 $g \circ (h \circ k) = (g \circ h) \circ k$ であり、 $g \circ h \in S$ かつ $S$ が sieve であることから $(g \circ h) \circ k \in S$ となり、したがって $h \circ k \in g^*S$ となるからである。</p>
+
+    <div class="definition">
+        圏 $\mathcal{C}$ 上の <strong>Johnstoneのカバレッジ (coverage)</strong> $T$ とは、各対象 $U \in \mathcal{C}$ に対し、 $U$ を余域とする射の族の集合 $T(U)$（ $T(U)$ の元を被覆族と呼ぶ）を割り当てる規則であり、次の<strong>分解条件 (coverageの公理)</strong>を満たすものである：
+        <p>任意の被覆族 $\{f_i: U_i \to U\}_{i \in I} \in T(U)$ と、任意の射 $g: V \to U$ が与えられたとき、ある被覆族 $\{h_j: V_j \to V\}_{j \in J} \in T(V)$ が存在して、各 $j \in J$ に対して、ある $i \in I$ と射 $k: V_j \to U_i$ が存在し、次の図式を可換にする：</p>
+        $$ g \circ h_j = f_i \circ k $$
+    </div>
+
+    <div class="informal">
+        <p>この分解条件は、圏にファイバー積が存在する場合には、「被覆族のファイバー積による引き戻しが再び被覆族を包含する」という条件に弱化されるため、古典的な前位相の極めて自然な一般化になっていることが分かります。次に、このカバレッジからGrothendieck位相を誘導する規則を定式化します。一階の被覆族からsieveへの拡張を達成するため、帰納的な定義を採用します。</p>
+    </div>
+
+    <div class="definition">
+        圏 $\mathcal{C}$ 上のカバレッジ $T$ から<strong>誘導されるGrothendieck位相</strong> $J$ とは、各対象 $U \in \mathcal{C}$ に対し、 $U$ 上の sieve の集合 $J(U)$ を、次の2つの生成規則を満たす<strong>最小の集合の族</strong>として定義したものである：
+        <ul>
+            <li><strong>(生成規則 A)</strong> 最大sieve $t_U$ は $J(U)$ に属する。</li>
+            <li><strong>(生成規則 B)</strong> ある被覆族 $\{f_i: U_i \to U\}_{i \in I} \in T(U)$ が存在し、 $U$ 上の sieve $S$ が、すべての $i \in I$ について $f_i^*S \in J(U_i)$ を満たすならば、 $S \in J(U)$ である。</li>
+        </ul>
+    </div>
+
+    <h2>2. Grothendieck位相の公理の完全な証明</h2>
+    <p>このように定義された $J$ が、実際にGrothendieck位相の3つの公理（最大性、引き戻し安定性、推移律）を満たすことを、一切の省略なしに完全に証明する。 $J(U)$ が「生成規則AおよびBを満たす最小の集合」であるため、 $S \in J(U)$ に関する構造的帰納法（生成に関する帰納法）が適用できる。</p>
+
+    <div class="proposition">
+        上記のように定義された $J$ は、次のGrothendieck位相の公理を満たす：
+        <ol>
+            <li><strong>最大性 (Maximality):</strong> 任意の対象 $U \in \mathcal{C}$ に対し、 $t_U \in J(U)$ である。</li>
+            <li><strong>引き戻し安定性 (Stability):</strong> $S \in J(U)$ ならば、任意の射 $g: V \to U$ に対し、 $g^*S \in J(V)$ である。</li>
+            <li><strong>推移律 (Transitivity):</strong> $S \in J(U)$ であり、 $R$ が $U$ 上の sieve とする。任意の $f \in S$ に対して $f^*R \in J(\operatorname{dom}(f))$ が成り立つならば、 $R \in J(U)$ である。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <strong>(1) 最大性 (Maximality) の証明:</strong><br>
+        生成規則Aの定義そのものにより、任意の対象 $U$ について $t_U \in J(U)$ であることが直接従う。
+        <br><br>
+        <strong>(2) 引き戻し安定性 (Stability) の証明:</strong><br>
+        $S \in J(U)$ に関する構造的帰納法によって証明する。示すべき主張を $P(S) \iff \lceil \text{任意の射 } g: V \to U \text{ に対して } g^*S \in J(V) \rfloor$ とおく。
+        <br>
+        (Case 1) $S$ が生成規則Aによって生成された場合、すなわち $S = t_U$ のとき：<br>
+        任意の $g: V \to U$ をとる。このとき $g^*t_U = t_V$ となる。なぜなら、 $h \in g^*t_U \iff g \circ h \in t_U$ であり、 $\operatorname{cod}(h) = V$ である任意の射 $h$ について $g \circ h$ の余域は $U$ となるため、 $g \circ h \in t_U$ は常に真だからである。生成規則Aより $t_V \in J(V)$ なので、 $g^*t_U \in J(V)$ となり、 $P(t_U)$ は真である。
+        <br>
+        (Case 2) $S$ が生成規則Bによって生成された場合：<br>
+        ある被覆族 $\{f_i: U_i \to U\}_{i \in I} \in T(U)$ が存在して、すべての $i \in I$ について $f_i^*S \in J(U_i)$ が成り立っている。帰納法の仮定より、各 $i \in I$ について $P(f_i^*S)$ は真である。すなわち、任意の射による $f_i^*S$ の引き戻しは再び $J$ に属する。
+        <br>
+        ここで、任意の射 $g: V \to U$ をとる。カバレッジ $T$ の分解条件により、被覆族 $\{f_i\}_{i \in I}$ と射 $g$ に対し、ある被覆族 $\{h_j: V_j \to V\}_{j \in J} \in T(V)$ が存在して、各 $j \in J$ に対し、ある $i(j) \in I$ と射 $k_j: V_j \to U_{i(j)}$ が存在し、 $g \circ h_j = f_{i(j)} \circ k_j$ を満たす。
+        <br>
+        各 $j \in J$ について、sieve $h_j^*(g^*S)$ を考える。引き戻しsieveの定義から、任意の射 $l$ に対し、
+        $$ l \in h_j^*(g^*S) \iff h_j \circ l \in g^*S \iff g \circ h_j \circ l \in S $$
+        $$ \iff f_{i(j)} \circ k_j \circ l \in S \iff k_j \circ l \in f_{i(j)}^*S \iff l \in k_j^*(f_{i(j)}^*S) $$
+        が成り立つ。したがって、集合として $h_j^*(g^*S) = k_j^*(f_{i(j)}^*S)$ である。
+        帰納法の仮定 $P(f_{i(j)}^*S)$ より、射 $k_j$ による引き戻し $k_j^*(f_{i(j)}^*S)$ は $J(V_j)$ に属する。ゆえに、すべての $j \in J$ について $h_j^*(g^*S) \in J(V_j)$ が成り立つ。
+        ここで、 $\{h_j\}_{j \in J} \in T(V)$ は被覆族であるから、sieve $g^*S$ に対する生成規則Bの前提条件が満たされ、 $g^*S \in J(V)$ が従う。
+        したがって $P(S)$ は真である。構造的帰納法により、すべての $S \in J(U)$ について引き戻し安定性が示された。
+        <br><br>
+        <strong>(3) 推移律 (Transitivity) の証明:</strong><br>
+        $S \in J(U)$ に関する構造的帰納法によって証明する。示すべき主張を $Q(S) \iff \lceil \text{任意のsieve } R \text{ on } U \text{ に対し、}(\forall f \in S, f^*R \in J(\operatorname{dom}(f))) \implies R \in J(U) \rfloor$ とおく。
+        <br>
+        (Case 1) $S$ が生成規則Aによって生成された場合、すなわち $S = t_U$ のとき：<br>
+        $R$ を $U$ 上の任意の sieve とし、任意の $f \in t_U$ に対して $f^*R \in J(\operatorname{dom}(f))$ であると仮定する。恒等射 $\operatorname{id}_U$ は余域が $U$ であるため $t_U$ に属する。したがって仮定より $\operatorname{id}_U^*R \in J(U)$ である。ここで $\operatorname{id}_U^*R$ の定義を確認すると、
+        $$ \operatorname{id}_U^*R = \{ h \mid \operatorname{cod}(h) = U \text{ かつ } \operatorname{id}_U \circ h \in R \} = \{ h \mid \operatorname{cod}(h) = U \text{ かつ } h \in R \} = R $$
+        となる。ゆえに $R \in J(U)$ が成り立ち、 $Q(t_U)$ は真である。
+        <br>
+        (Case 2) $S$ が生成規則Bによって生成された場合：<br>
+        ある被覆族 $\{f_i: U_i \to U\}_{i \in I} \in T(U)$ が存在して、すべての $i \in I$ について $f_i^*S \in J(U_i)$ が成り立っている。帰納法の仮定より、各 $i \in I$ について $Q(f_i^*S)$ は真である。
+        <br>
+        $R$ を $U$ 上の任意の sieve とし、任意の $f \in S$ に対して $f^*R \in J(\operatorname{dom}(f))$ が満たされていると仮定する。このとき $R \in J(U)$ を導くために、各 $i \in I$ に対する sieve $f_i^*R$ を考える。
+        <br>
+        $f_i^*S$ の任意の元 $k: W \to U_i$ をとる。引き戻しsieveの定義より、 $f_i \circ k \in S$ である。大元の仮定（ $S$ の任意の元に対する引き戻しが $J$ に属する）を射 $f_i \circ k$ に対して適用すると、 $(f_i \circ k)^*R \in J(W)$ が得られる。
+        引き戻し安定性の証明中で示した引き戻しの結合性を用いると、 $(f_i \circ k)^*R = k^*(f_i^*R)$ であるため、 $k^*(f_i^*R) \in J(W) = J(\operatorname{dom}(k))$ となる。
+        これは、「 $f_i^*S$ の任意の元 $k$ に対して、 $k^*(f_i^*R) \in J(\operatorname{dom}(k))$」が成り立つことを意味している。
+        ここで帰納法の仮定 $Q(f_i^*S)$ を sieve $f_i^*R$ に対して適用すると、 $f_i^*R \in J(U_i)$ が得られる。
+        これが<strong>すべての $i \in I$</strong> について成立するため、被覆族 $\{f_i\}_{i \in I} \in T(U)$ と sieve $R$ に対して生成規則Bを適用することができ、 $R \in J(U)$ が導かれる。
+        したがって $Q(S)$ は真である。構造的帰納法により、すべての $S \in J(U)$ について推移律が示された。
+    </div>
+
+    <h2>3. 具体例：超不連結コンパクトHausdorff空間の圏</h2>
+    <div class="informal">
+        <p>Johnstoneがファイバー積を仮定しないカバレッジを導入した強力な動機を理解するために、トポロジーにおける重要な具体例を挙げます。位相空間論において、通常のコンパクトHausdorff空間の圏 $\text{CompHaus}$ にはファイバー積が存在しますが、これから定義する「超不連結空間」の充満部分圏を考えると、ファイバー積が存在しなくなります。それゆえ、古典的な意味での前位相が定義できず、Johnstoneのカバレッジの枠組みが不可避となります。</p>
+    </div>
+
+    <div class="definition">
+        位相空間 $X$ が<strong>超不連結 (extremally disconnected)</strong> であるとは、 $X$ の任意の開集合の閉包が再び開集合（したがってクロープン (clopen) ）になることをいう。
+        超不連結コンパクトHausdorff空間と連続マップからなる圏を $\text{Extr}$ と表記する。
+    </div>
+
+    <p>ここで、 $\text{Extr}$ には一般にファイバー積が存在しない。例えば、 $\text{CompHaus}$ においてファイバー積を構成した際、その位相的引き戻し空間は必ずしも超不連結にはならない。超不連結空間の極めて強力な性質として、次のGleasonの定理が知られている。</p>
+
+    <div class="proposition">
+        <strong>(Gleasonの定理)</strong><br>
+        コンパクトHausdorff空間の圏 $\text{CompHaus}$ において、射影的 (projective) な対象は超不連結コンパクトHausdorff空間に他ならない。さらに、任意のコンパクトHausdorff空間 $X$ に対し、ある超不連結コンパクトHausdorff空間 $E(X)$ と連続全射 $\pi: E(X) \to X$ が存在し、これを $X$ のGleason被覆 (Gleason cover) と呼ぶ。
+    </div>
+
+    <p>この $\text{Extr}$ 上に、次のような規則 $T$ を導入する。</p>
+
+    <div class="example">
+        $S \in \text{Extr}$ に対し、 $T(S)$ を「 $S$ を余域とする有限個の射の族であって、結合的に全射 (jointly surjective) なもの（有限結合全射族）」の全体とする。すなわち、
+        $$ \{f_i: U_i \to S\}_{i=1}^n \in T(S) \iff \bigcup_{i=1}^n f_i(U_i) = S $$
+        この規則 $T$ は $\text{Extr}$ におけるJohnstoneのカバレッジの公理を満たす。
+    </div>
+
+    <div class="proof">
+        任意の対象 $S \in \text{Extr}$ 上の被覆族 $\{f_i: U_i \to S\}_{i=1}^n \in T(S)$ と、任意の射 $g: V \to S$ をとる。
+        圏 $\text{Extr}$ 内には直接のファイバー積が存在しない可能性があるため、一度包含圏 $\text{CompHaus}$ の中で各 $i=1, \dots, n$ に対するファイバー積（引き戻し空間）を構成する：
+        $$ W_i = V \times_S U_i = \{ (v, u) \in V \times U_i \mid g(v) = f_i(u) \} $$
+        $W_i$ はコンパクトHausdorff空間 $V \times U_i$ の閉部分空間であるため、再びコンパクトHausdorff空間である。自然な射影を $p_i: W_i \to V$ および $q_i: W_i \to U_i$ とすると、定義から $g \circ p_i = f_i \circ q_i$ が成り立つ。
+        元の族 $\{f_i\}_{i=1}^n$ が結合的に全射であるため、任意の $v \in V$ に対して $g(v) \in S$ であり、ある $i$ と $u \in U_i$ が存在して $g(v) = f_i(u)$ となる。このとき $(v, u) \in W_i$ であり $p_i(v, u) = v$ となる。したがって、族 $\{p_i: W_i \to V\}_{i=1}^n$ も $\text{CompHaus}$ において結合的に全射である。
+        <br>
+        しかし、 各 $W_i$ は必ずしも超不連結とは限らないため、 $\text{Extr}$ の対象ではない。ここでGleasonの定理を適用し、各 $W_i$ に対するGleason被覆 $\pi_i: E(W_i) \to W_i$ をとる。ここで $E(W_i) \in \text{Extr}$ であり、 $\pi_i$ は連続全射である。
+        <br>
+        新たに $\text{Extr}$ の射として、合成写像 $h_i = p_i \circ \pi_i : E(W_i) \to V$ および $k_i = q_i \circ \pi_i : E(W_i) \to U_i$ を定義する。
+        これらは $\text{Extr}$ の対象の間の連続写像であるため、 $\text{Extr}$ の射である。可換性について計算すると、
+        $$ g \circ h_i = g \circ p_i \circ \pi_i = f_i \circ q_i \circ \pi_i = f_i \circ k_i $$
+        となり、必要な可換図式を満たす。
+        最後に、族 $\{h_i: E(W_i) \to V\}_{i=1}^n$ が結合的に全射であることを示す。任意の $v \in V$ に対し、 $\{p_i\}_{i=1}^n$ の結合全射性から、ある $i$ と $w \in W_i$ が存在して $p_i(w) = v$ となる。さらに $\pi_i$ が全射であることから、ある $e \in E(W_i)$ が存在して $\pi_i(e) = w$ となる。このとき、
+        $$ h_i(e) = (p_i \circ \pi_i)(e) = p_i(w) = v $$
+        となる。ゆえに、族 $\{h_i\}_{i=1}^n$ は $V$ 上の有限結合全射族であり、 $\{h_i\}_{i=1}^n \in T(V)$ である。以上から、分解条件が満たされることが証明された。
+    </div>
+
+    <div class="informal">
+        <p>次に、このカバレッジ $T$ から誘導されるGrothendieck位相 $J(S)$ が、直観的な有限被覆の包含関係をどのように反映したシンプルな形に落ち着くかについて、その具体的な特徴付けを与えます。</p>
+    </div>
+
+    <div class="proposition">
+        $\text{Extr}$ 上のカバレッジ $T$ から誘導されたGrothendieck位相 $J(S)$ は、次のように特徴付けられる：
+        $$ R \in J(S) \iff \text{sieve } R \text{ が、ある有限結合全射族 } \{f_i: U_i \to S\}_{i=1}^n \in T(S) \text{ を部分集合として含む} $$
+    </div>
+
+    <div class="proof">
+        右辺の条件を満たす sieve の集合を $\tilde{J}(S)$ とする。 $\tilde{J}$ が生成規則AおよびBを満たす最小の集合の族であることを示せば、最小性から $J = \tilde{J}$ が従う。
+        <br>
+        (Step 1) 生成規則Aの確認：<br>
+        恒等射のみからなる単元族 $\{\operatorname{id}_S: S \to S\}$ は有限結合全射族であるため $T(S)$ に属する。また、最大sieve $t_S$ は $S$ を余域とするすべての射を含むため、当然 $\{\operatorname{id}_S\} \subset t_S$ である。したがって、 $t_S \in \tilde{J}(S)$ であり、規則Aを満たす。
+        <br>
+        (Step 2) 生成規則Bの確認：<br>
+        ある有限結合全射族 $\{f_i: U_i \to S\}_{i=1}^n \in T(S)$ が存在し、 $S$ 上の sieve $R$ が、すべての $i=1, \dots, n$ について $f_i^*R \in \tilde{J}(U_i)$ を満たしていると仮定する。
+        各 $i$ について $f_i^*R \in \tilde{J}(U_i)$ であることから、定義よりある有限結合全射族 $\{g_{ij}: W_{ij} \to U_i\}_{j=1}^{m_i} \in T(U_i)$ が存在して、 $\{g_{ij}\}_{j=1}^{m_i} \subset f_i^*R$ を満たす。
+        引き戻しsieveの定義から、これは任意の $j=1, \dots, m_i$ に対して $f_i \circ g_{ij} \in R$ であることを意味する。
+        <br>
+        ここで、射の有限族 $K = \{f_i \circ g_{ij} \mid i=1, \dots, n, \, j=1, \dots, m_i\}$ を考える。 $R$ が sieve であることから、各 $f_i \circ g_{ij} \in R$ より、 $K \subset R$ が成り立つ。
+        この族 $K$ の各元のドメインは $W_{ij} \in \text{Extr}$ であり、コドメインは $S$ である。 $K$ が $S$ 上の結合全射族であることを示す。任意の $s \in S$ をとる。 $\{f_i\}_{i=1}^n$ の結合全射性から、ある $i$ と $u \in U_i$ が存在して $f_i(u) = s$ となる。さらに、その $i$ に対する $\{g_{ij}\}_{j=1}^{m_i}$ の結合全射性から、ある $j$ と $w \in W_{ij}$ が存在して $g_{ij}(w) = u$ となる。このとき、
+        $$ (f_i \circ g_{ij})(w) = f_i(g_{ij}(w)) = f_i(u) = s $$
+        となる。したがって、有限族 $K$ は $S$ 上の有限結合全射族であり、 $K \in T(S)$ を満たす。 $K \subset R$ かつ $K \in T(S)$ であるため、定義より $R \in \tilde{J}(S)$ となり、生成規則Bが満たされる。
+        最小性から $J(S) \subset \tilde{J}(S)$ である。
+        <br>
+        (Step 3) 逆向きの包含関係 $\tilde{J}(S) \subset J(S)$ の確認：<br>
+        $R \in \tilde{J}(S)$ とすると、ある $\{f_i: U_i \to S\}_{i=1}^n \in T(S)$ が存在して $\{f_i\}_{i=1}^n \subset R$ となる。各 $i=1, \dots, n$ について引き戻しsieve $f_i^*R$ を考えると、 $f_i \in R$ であることから、恒等射 $\operatorname{id}_{U_i}$ は $f_i^*R$ に属する。 sieve の右イデアル性から、恒等射を含む sieve は最大sieveに一致するため、 $f_i^*R = t_{U_i}$ である。
+        生成規則Aより $t_{U_i} \in J(U_i)$ であるから、すべての $i$ について $f_i^*R \in J(U_i)$ となる。したがって、 $\{f_i\}_{i=1}^n \in T(S)$ に対して生成規則Bを適用することができ、 $R \in J(S)$ が得られる。
+        以上より、 $J(S) = \tilde{J}(S)$ が完全に示された。
+    </div>
+
+    <h2>4. 層の圏の定式化と定義</h2>
+    <div class="informal">
+        <p>ファイバー積を持たない一般の圏上で層を定義するために、貼り合わせの整合性を記述する「整合族」の概念を、ファイバー積の射を使わずに可換図式（元の一致）のみを用いて定式化します。</p>
+    </div>
+
+    <p>以下、 $P: \mathcal{C}^{\text{op}} \to \mathbf{Set}$ を圏 $\mathcal{C}$ 上の任意の反変関手（前層）とする。</p>
+
+    <div class="definition">
+        <ul>
+            <li><strong>被覆族上の整合族 (compatible family)：</strong><br>
+            $\{f_i: U_i \to U\}_{i \in I}$ を $\mathcal{C}$ の射の族とする。この族上の $P$ の整合族とは、要素の族 $(x_i)_{i \in I}$（ただし各 $x_i \in P(U_i)$）であって、任意の対象 $V$ と、 $f_i \circ g = f_j \circ h$ を満たす任意の射 $g: V \to U_i$ および $h: V \to U_j$ に対し、常に次の条件を満たすものである：
+            $$ P(g)(x_i) = P(h)(x_j) \in P(V) $$
+            </li>
+            <li><strong>Sieve上の整合族：</strong><br>
+            $S$ を $U$ 上の sieve とする。 $S$ 上の $P$ の整合族とは、要素の族 $(x_f)_{f \in S}$（ただし各 $x_f \in P(\operatorname{dom}(f))$）であって、任意の $f \in S$ と、合成可能な任意の射 $g: W \to \operatorname{dom}(f)$ に対し、常に次の条件を満たすものである：
+            $$ P(g)(x_f) = x_{f \circ g} \in P(W) $$
+            （なお、 sieve の定義から $f \circ g \in S$ である。）
+            </li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <strong>Johnstoneのカバレッジに関する層の圏 $\text{Sh}(\mathcal{C}, T)$</strong><br>
+        前層 $P$ がカバレッジ $T$ に関する層（ $T$層）であるとは、任意の対象 $U$ と、任意の被覆族 $\{f_i: U_i \to U\}_{i \in I} \in T(U)$ 、およびその上の任意の整合族 $(x_i)_{i \in I}$ に対し、ただ1つの要素 $x \in P(U)$ が存在して、すべての $i \in I$ について $P(f_i)(x) = x_i$ が成り立つことをいう。
+        $T$層とそれらの間の自然変換からなる充満部分圏を $\text{Sh}(\mathcal{C}, T)$ と定義する。
+    </div>
+
+    <div class="definition">
+        <strong>Grothendieck位相に関する層の圏 $\text{Sh}(\mathcal{C}, J)$</strong><br>
+        前層 $P$ がGrothendieck位相 $J$ に関する層（ $J$層）であるとは、任意の対象 $U$ と、任意の被覆sieve $S \in J(U)$ 、およびその上の任意の整合族 $(x_f)_{f \in S}$ に対し、ただ1つの要素 $x \in P(U)$ が存在して、すべての $f \in S$ について $P(f)(x) = x_f$ が成り立つことをいう。
+        $J$層とそれらの間の自然変換からなる充満部分圏を $\text{Sh}(\mathcal{C}, J)$ と定義する。
+    </div>
+
+    <h2>5. 層の圏の同値性に関する厳密な証明</h2>
+    <p>両者の層の圏が前層の圏 $\mathbf{PSh}(\mathcal{C})$ の充満部分圏として定義されているため、圏同値（実際には圏同型）であることを示すには、任意の固定された前層 $P$ に対し、 「 $P$ が $T$層である $\iff$ $P$ が $J$層である」を証明すれば十分である。この証明を完全に書き下す。</p>
+
+    <div class="proposition">
+        Grothendieck位相 $J$ がカバレッジ $T$ から誘導されたものであるとき、任意の $P \in \mathbf{PSh}(\mathcal{C})$ に対し、
+        $$ P \in \text{Sh}(\mathcal{C}, T) \iff P \in \text{Sh}(\mathcal{C}, J) $$
+        が成立し、したがって層の圏の間に圏同値 $\text{Sh}(\mathcal{C}, T) \simeq \text{Sh}(\mathcal{C}, J)$ が誘導される。
+    </div>
+
+    <div class="proof">
+        <strong>(I) $P \in \text{Sh}(\mathcal{C}, J) \implies P \in \text{Sh}(\mathcal{C}, T)$ の証明：</strong><br>
+        $P$ を $J$層とする。任意の対象 $U$ と、任意の被覆族 $\{f_i: U_i \to U\}_{i \in I} \in T(U)$ 、およびその上の任意の整合族 $(x_i)_{i \in I}$ をとる。
+        この被覆族が生成する sieve $S$ を次のように構成する：
+        $$ S = \{ f_i \circ g \mid i \in I, \, \operatorname{cod}(g) = U_i \} $$
+        この $S$ に対し、各 $i \in I$ について引き戻しsieve $f_i^*S$ を考えると、 $\operatorname{id}_{U_i} \in f_i^*S$ となるため、 $f_i^*S = t_{U_i}$ である。生成規則Aより $t_{U_i} \in J(U_i)$ であるから、すべての $i$ について $f_i^*S \in J(U_i)$ となり、生成規則Bより $S \in J(U)$ が成り立つ。
+        <br>
+        次に、 sieve $S$ 上の族 $(y_k)_{k \in S}$ を以下のように定義する： $k \in S$ に対し、 $k = f_i \circ g$ と表されるとき、
+        $$ y_k = P(g)(x_i) \in P(\operatorname{dom}(g)) $$
+        とする。これが well-defined であることを示す。もし $k$ が $k = f_i \circ g = f_j \circ h$ と2通りに表されたとする。 $(x_i)_{i \in I}$ は被覆族上の整合族であるため、整合族の定義から $P(g)(x_i) = P(h)(x_j)$ が成立する。したがって、 $y_k$ の値は表現の選び方に依存せず well-defined である。
+        <br>
+        さらに、 $(y_k)_{k \in S}$ が sieve $S$ 上の整合族であることを示す。任意の $k \in S$ と、合成可能な射 $h: W \to \operatorname{dom}(k)$ をとる。 $k = f_i \circ g$ と表すと、 $k \circ h = f_i \circ (g \circ h)$ である。定義から（および $P$ が反変関手であることから）、
+        $$ y_{k \circ h} = P(g \circ h)(x_i) = P(h)(P(g)(x_i)) = P(h)(y_k) $$
+        が成り立ち、確かに sieve 上の整合族の条件を満たす。
+        <br>
+        $P$ は $J$層であり、 $S \in J(U)$ であるから、 sieve 上の整合族 $(y_k)_{k \in S}$ を貼り合わせるただ1つの要素 $x \in P(U)$ が存在し、すべての $k \in S$ について $P(k)(x) = y_k$ を満たす。各 $i \in I$ に対し、 $f_i = f_i \circ \operatorname{id}_{U_i} \in S$ であるから、
+        $$ P(f_i)(x) = y_{f_i} = P(\operatorname{id}_{U_i})(x_i) = x_i $$
+        が成り立つ。
+        <br>
+        一意性を示すため、別の $x' \in P(U)$ もすべての $i \in I$ に対して $P(f_i)(x') = x_i$ を満たすと仮定する。このとき、任意の $k \in S$ （ $k = f_i \circ g$ ）に対し、前層の関手性から、
+        $$ P(k)(x') = P(g)(P(f_i)(x')) = P(g)(x_i) = y_k $$
+        となる。 $S$ 上の整合族に対する貼り合わせの一意性から $x' = x$ が従う。よって、 $P$ は $T$層である。
+        <br><br>
+        <strong>(II) $P \in \text{Sh}(\mathcal{C}, T) \implies P \in \text{Sh}(\mathcal{C}, J)$ の証明：</strong><br>
+        $P$ を $T$層とする。証明を「分離性」と「貼り合わせの存在」の2段階に分けて行う。
+        <br><br>
+        <strong>ステップ1：分離性 (separatedness) の証明</strong><br>
+        まず、任意の対象 $U \in \mathcal{C}$ と $S \in J(U)$ に対して、$P$ が $S$ に関して分離的であることを示す。すなわち、次の命題 $Sep(S)$ が真であることを $S$ に関する構造的帰納法で証明する。
+        $$ Sep(S) \iff \lceil \text{任意の } x, y \in P(U) \text{ に対し、}(\forall k \in S, P(k)(x) = P(k)(y)) \implies x = y \rfloor $$
+        <br>
+        (Case 1) $S$ が生成規則Aによって生成された場合（ $S = t_U$ ）：<br>
+        $\operatorname{id}_U \in t_U$ であるから、 $P(\operatorname{id}_U)(x) = P(\operatorname{id}_U)(y)$ となり、 $x = y$ である。よって $Sep(t_U)$ は真である。
+        <br>
+        (Case 2) $S$ が生成規則Bによって生成された場合：<br>
+        ある被覆族 $\{f_i: U_i \to U\}_{i \in I} \in T(U)$ が存在し、すべての $i \in I$ について $f_i^*S \in J(U_i)$ であり、帰納法の仮定として各 $i \in I$ で $Sep(f_i^*S)$ が成り立つとする。
+        任意の $x, y \in P(U)$ をとり、すべての $k \in S$ に対して $P(k)(x) = P(k)(y)$ が成り立つと仮定する。
+        各 $i \in I$ を固定し、任意の $h \in f_i^*S$ をとる。引き戻しの定義より $f_i \circ h \in S$ であるから、仮定より
+        $$ P(f_i \circ h)(x) = P(f_i \circ h)(y) $$
+        が成り立つ。関手性からこれは $P(h)(P(f_i)(x)) = P(h)(P(f_i)(y))$ を意味する。
+        これが任意の $h \in f_i^*S$ で成立するため、帰納法の仮定 $Sep(f_i^*S)$ を $P(f_i)(x)$ と $P(f_i)(y)$ に適用することで、
+        $$ P(f_i)(x) = P(f_i)(y) $$
+        が得られる。これがすべての $i \in I$ について成り立つ。
+        ここで $\{f_i\}_{i \in I} \in T(U)$ はカバレッジの被覆族であり、$P$ は $T$層であるため、$T$層の分離性（一意性）から $x = y$ が従う。
+        以上により、すべての $S \in J(U)$ に対して $P$ は分離的である。
+        <br><br>
+        <strong>ステップ2：貼り合わせの存在 (gluing) の証明</strong><br>
+        次に、 $S \in J(U)$ 上の任意の整合族に対して、一意な貼り合わせが存在すること（命題 $W(S)$）を構造的帰納法で示す。
+        $$ W(S) \iff \lceil S \text{ 上の任意の整合族 } (x_k)_{k \in S} \text{ に対し、一意な } x \in P(U) \text{ が存在して } \forall k \in S, P(k)(x) = x_k \rfloor $$
+        <br>
+        (Case 1) $S$ が生成規則Aによって生成された場合（ $S = t_U$ ）：<br>
+        $t_U$ 上の任意の整合族 $(x_k)_{k \in t_U}$ をとる。 $\operatorname{id}_U \in t_U$ であるから、 $x = x_{\operatorname{id}_U} \in P(U)$ とおく。任意の $k \in t_U$ に対し、 $\operatorname{id}_U \circ k = k$ である。 sieve 上の整合族の性質から、
+        $$ P(k)(x) = P(k)(x_{\operatorname{id}_U}) = x_{\operatorname{id}_U \circ k} = x_k $$
+        が成り立ち、 $x$ は貼り合わせの条件を満たす。
+        一意性についてはステップ1の分離性より従う。よって $W(t_U)$ は真である。
+        <br>
+        (Case 2) $S$ が生成規則Bによって生成された場合：<br>
+        被覆族 $\{f_i\}_{i \in I} \in T(U)$ が存在し、すべての $i \in I$ について $W(f_i^*S)$ が成り立っていると仮定する。
+        $S$ 上の整合族 $(x_k)_{k \in S}$ をとる。各 $i \in I$ に対し、引き戻しsieve $f_i^*S$ 上の要素の族 $(y_{i, h})_{h \in f_i^*S}$ を $y_{i, h} = x_{f_i \circ h}$ で定義する。これが $f_i^*S$ 上の整合族であることは前述の証明と同様に確認できる。
+        帰納法の仮定 $W(f_i^*S)$ より、各 $i \in I$ に対して一意な $z_i \in P(U_i)$ が存在し、すべての $h \in f_i^*S$ に対して $P(h)(z_i) = y_{i, h} = x_{f_i \circ h}$ を満たす。
+        <br>
+        次に、この得られた族 $(z_i)_{i \in I}$ が被覆族 $\{f_i\}_{i \in I}$ 上の整合族であることを示す。 $f_i \circ g = f_j \circ w =: v : V \to U$ となる任意の $g: V \to U_i$ および $w: V \to U_j$ をとる。 $P(g)(z_i) = P(w)(z_j)$ を示したい。
+        引き戻しsieveの性質から、 $v^*S = g^*(f_i^*S) = w^*(f_j^*S)$ である。すでにGrothendieck位相の公理として引き戻し安定性を証明しているため、 $f_i^*S \in J(U_i) \implies g^*(f_i^*S) \in J(V)$、すなわち $v^*S \in J(V)$ である。
+        $v^*S$ の任意の元 $h: W' \to V$ をとる。 sieve の性質から $v \circ h \in S$ である。よって $g \circ h \in f_i^*S$ であり、 $z_i$ の定義から、
+        $$ P(h)(P(g)(z_i)) = P(g \circ h)(z_i) = x_{f_i \circ g \circ h} = x_{v \circ h} $$
+        が成り立つ。全く同様に、 $w \circ h \in f_j^*S$ であるから、
+        $$ P(h)(P(w)(z_j)) = P(w \circ h)(z_j) = x_{f_j \circ w \circ h} = x_{v \circ h} $$
+        が成り立つ。ゆえに、任意の $h \in v^*S$ に対し、
+        $$ P(h)(P(g)(z_i)) = P(h)(P(w)(z_j)) $$
+        が成立する。
+        ここで、<strong>ステップ1で証明した「すべての $J$被覆sieve に対する分離性」を $v^*S \in J(V)$ に対して適用する</strong>。これにより、 $v^*S$ 上ですべての引き戻しが一致する2つの要素は等しいことが厳密に保証されるため、
+        $$ P(g)(z_i) = P(w)(z_j) $$
+        が導かれる。したがって、 $(z_i)_{i \in I}$ は被覆族 $\{f_i\}_{i \in I} \in T(U)$ 上の整合族である。
+        <br>
+        $P$ は $T$層であるから、整合族 $(z_i)_{i \in I}$ に対し、一意な貼り合わせ $x \in P(U)$ が存在し、すべての $i \in I$ について $P(f_i)(x) = z_i$ を満たす。
+        <br>
+        最後に、この $x$ が元の整合族 $(x_k)_{k \in S}$ の $S$ 上での貼り合わせになっていることを示す。任意の $k \in S$ （ $k: W \to U$ ）をとる。 $P(k)(x) = x_k$ を示したい。
+        被覆族 $\{f_i\}_{i \in I} \in T(U)$ と射 $k: W \to U$ に対し、カバレッジ $T$ の分解条件を適用すると、ある被覆族 $\{m_j: W_j \to W\}_{j \in J} \in T(W)$ が存在して、各 $j \in J$ に対し、ある $i(j) \in I$ と射 $l_j: W_j \to U_{i(j)}$ が存在し、 $k \circ m_j = f_{i(j)} \circ l_j$ を満たす。
+        $k \in S$ であり、 $S$ は sieve であるから、右イデアル性より $k \circ m_j \in S$ である。したがって、 $f_{i(j)} \circ l_j \in S$ となり、引き戻しの定義から $l_j \in f_{i(j)}^*S$ が成り立つ。
+        各 $j \in J$ について、 $P(m_j)(P(k)(x))$ を計算する：
+        $$ P(m_j)(P(k)(x)) = P(k \circ m_j)(x) = P(f_{i(j)} \circ l_j)(x) = P(l_j)(P(f_{i(j)})(x)) = P(l_j)(z_{i(j)}) $$
+        （ここで最初の等号は $P$ が反変関手であることによる。）
+        ここで $l_j \in f_{i(j)}^*S$ であるから、 $z_{i(j)}$ の定義より $P(l_j)(z_{i(j)}) = x_{f_{i(j)} \circ l_j}$ である。 $(x_k)_{k \in S}$ は sieve 上の整合族であるから、
+        $$ x_{f_{i(j)} \circ l_j} = x_{k \circ m_j} = P(m_j)(x_k) $$
+        が成り立つ。したがって、すべての $j \in J$ について、
+        $$ P(m_j)(P(k)(x)) = P(m_j)(x_k) $$
+        が成立する。 $\{m_j\}_{j \in J} \in T(W)$ はカバレッジの被覆族であり、 $P$ は $T$層であるため、被覆族による分離性（一意性）から、 $P(k)(x) = x_k$ が得られる。
+        <br>
+        この $x$ の一意性については、ステップ1の分離性より直ちに従う（すべての $k \in S$ について引き戻しが $x_k$ となる要素は一意である）。
+        よって $W(S)$ が示され、構造的帰納法によりすべての $S \in J(U)$ について層条件を満たす、すなわち $P \in \text{Sh}(\mathcal{C}, J)$ であることが完全に証明された。
+    </div>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ol>
+            <li>A. M. Gleason, "Projective topological spaces", <em>Illinois J. Math.</em>, 2 (1958), pp. 482–489. <a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank">Link to Project Euclid</a></li>
+            <li>P. T. Johnstone, <em>Sketches of an Elephant: A Topos Theory Compendium</em>, Volume 1, Oxford Logic Guides, Oxford University Press, 2002. <a href="https://global.oup.com/academic/product/sketches-of-an-elephant-9780198515982" target="_blank">Link to Oxford University Press</a></li>
+        </ol>
+    </div>
+</div>
+</body>
+</html>
