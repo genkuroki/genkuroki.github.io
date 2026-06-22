@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超不連結コンパクトHausdorff空間の直積とファイバー積の非存在</title>
+    
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true,
+            packages: {'[+]': ['base', 'ams']}
+        },
+        options: {
+            ignoreHtmlClass: 'tex2jax_ignore',
+            processHtmlClass: 'tex2jax_process'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            font-size: 1.8em;
+            text-align: center;
+            border-bottom: 2px solid #555;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.4em;
+            color: #2c3e50;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #34495e;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .definition, .theorem, .proposition, .lemma, .proof, .example {
+            background-color: #fff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition::before { content: "定義. "; font-weight: bold; color: #2980b9; }
+        .theorem::before { content: "定理. "; font-weight: bold; color: #c0392b; }
+        .proposition::before { content: "命題. "; font-weight: bold; color: #d35400; }
+        .lemma::before { content: "補題. "; font-weight: bold; color: #f39c12; }
+        .example::before { content: "例. "; font-weight: bold; color: #27ae60; }
+        .proof { border-left-color: #7f8c8d; background-color: #f9f9f9; }
+        .proof::before { content: "証明. "; font-style: italic; font-weight: bold; }
+        .qed { text-align: right; font-style: italic; }
+        .informal {
+            background-color: #fdfefe;
+            border: 1px solid #ebdef0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .references li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+    <h1>超不連結コンパクトHausdorff空間の直積とファイバー積の非存在に関する完全な証明</h1>
+
+    <div class="informal">
+        <p>本稿では、位相空間論および圏論において重要な役割を果たす「超不連結 (extremally disconnected) なコンパクトHausdorff空間の圏」において、ファイバー積（引き戻し）が一般には存在しないという事実について詳細に解説する。</p>
+        <p>前半では、離散空間のStone-Čechコンパクト化である $\beta\mathbb{N}$ の直積が超不連結性を失うことを具体的な反例として示す。後半ではこれを一般化し、<strong>「ともに無限空間である」</strong>という条件を満たす任意の超不連結コンパクトHausdorff空間の直積が決して超不連結にならないことを、完全にself-containedな形で証明する。</p>
+        <p>この事実は、圏論的に言えば「超不連結コンパクトHausdorff空間の圏において、一方が有限離散空間であるような自明な場合を除き、直積は存在しない」という強力な結論を導くものであり、近年の凝集数学 (condensed mathematics) におけるサイトの構成などにも深い影響を与えている。</p>
+    </div>
+
+    <h2>1. 準備：基本概念と $\beta\mathbb{N}$ の位相空間としての定義</h2>
+
+    <p>証明をself-containedにするため、まずは必要となる基本的な位相空間論および圏論の概念を定義し、さらに反例の主役となる空間 $\beta\mathbb{N}$ の厳密な構成を行う。</p>
+
+    <div class="definition">
+        <p><strong>Hausdorff空間 (Hausdorff space)</strong><br>
+        位相空間 $X$ が Hausdorff空間 であるとは、任意の相異なる2点 $x, y \in X$ ($x \neq y$) に対して、それぞれの開近傍 $U, V$ が存在し、$U \cap V = \varnothing$ となることである。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>コンパクト空間 (compact space)</strong><br>
+        位相空間 $X$ が コンパクト空間 であるとは、$X$ の任意の開被覆が有限部分被覆を持つことである。コンパクト空間における同値な性質として、「有限交叉性（任意の有限部分族の共通部分が空でない）を持つ閉集合族の全体の共通部分は空ではない」という性質がある。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>clopen集合 (clopen set)</strong><br>
+        位相空間 $X$ の部分集合 $A$ が開集合であり、同時に閉集合でもあるとき、$A$ を clopen集合 と呼ぶ。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>超不連結空間 (extremally disconnected space)</strong><br>
+        位相空間 $X$ が 超不連結 (extremally disconnected) であるとは、$X$ の任意の開集合 $U$ の閉包 $\overline{U}$ が開集合になる（すなわち $\overline{U}$ が clopen集合になる）ことである。</p>
+        <p>同値な条件として、「任意の互いに素な開集合 $U, V \subset X$ ($U \cap V = \varnothing$) に対して、それらの閉包も互いに素である（$\overline{U} \cap \overline{V} = \varnothing$）」という性質がある。</p>
+    </div>
+
+    <div class="example">
+        <p>離散位相空間はすべての部分集合が開かつ閉であるため、明らかに超不連結である。一方で、通常の位相を入れた実数直線 $\mathbb{R}$ において、開区間 $U = (0, 1)$ の閉包は閉区間 $\overline{U} = [0, 1]$ であり、これは $\mathbb{R}$ で開集合ではない。したがって $\mathbb{R}$ は超不連結ではない。超不連結性は直観的には「空間が極端にバラバラにちぎれている」状態を表す。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>フィルター (filter) と 超フィルター (ultrafilter)</strong><br>
+        一般の集合 $S$（あるいは自然数の集合 $\mathbb{N}$）上の フィルター とは、$S$ の部分集合 of 集合の族 $\mathcal{F} \subset \mathcal{P}(S)$ であり、以下の条件を満たすものである：
+        <ol>
+            <li>$\varnothing \notin \mathcal{F}$ かつ $S \in \mathcal{F}$。</li>
+            <li>$A, B \in \mathcal{F} \implies A \cap B \in \mathcal{F}$ （有限交叉性：有限個の共通部分について閉じている）。</li>
+            <li>$A \in \mathcal{F}$ かつ $A \subset B \implies B \in \mathcal{F}$ （上位集合について閉じている）。</li>
+        </ol>
+        包含関係について極大であるフィルター、すなわち「$\mathcal{F}$ を真に含むフィルターが存在しない」ようなフィルターを <strong>超フィルター (ultrafilter)</strong> と呼ぶ。超フィルター $p$ については、任意の $A \subset S$ に対して「$A \in p$ または $S \smallsetminus A \in p$ のいずれか一方が必ず成り立つ」という強力な性質がある。</p>
+        <p>また、有限集合を要素として持たない超フィルターを <strong>自由超フィルター (free ultrafilter)</strong> と呼ぶ（選択公理により、$\mathbb{N}$ 上には自由超フィルターが存在することが保証される）。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>$\beta\mathbb{N}$ の位相空間としての厳密な定義</strong><br>
+        自然数の集合 $\mathbb{N}$ 上のすべての超フィルターからなる集合を $\beta\mathbb{N}$ と定義する。</p>
+        <p>各自然数 $n \in \mathbb{N}$ に対して、$e(n) = \{ A \subset \mathbb{N} \mid n \in A \}$ を考えると、これは $\mathbb{N}$ 上の超フィルターとなる（これを 単項超フィルター (principal ultrafilter) と呼ぶ）。この単射 $e: \mathbb{N} \to \beta\mathbb{N}$ により、$\mathbb{N}$ を $\beta\mathbb{N}$ の部分集合と同一視する。$\mathbb{N}$ に含まれない超フィルター（単項でない超フィルター）が前述の自由超フィルターに該当する。</p>
+        <p>次に、$\beta\mathbb{N}$ に位相を導入する。任意の $A \subset \mathbb{N}$ に対して、$\beta\mathbb{N}$ の部分集合 $A^*$ を次のように定義する：
+        $$ A^* = \{ p \in \beta\mathbb{N} \mid A \in p \} $$
+        この $\{A^*\}_{A \subset \mathbb{N}}$ を $\beta\mathbb{N}$ の <strong>開基 (base)</strong> として位相を定める。これが開基の条件を満たすことは、フィルターの性質から $(A \cap B)^* = A^* \cap B^*$ が成り立つことによる。また、$A^* \cap \mathbb{N}$ は「$n \in A$ であるような単項超フィルター $e(n)$ 全体」に他ならないため、$\mathbb{N}$ を埋め込んだ同一視のもとで <strong>$A^* \cap \mathbb{N} = A$</strong> が成り立つ。</p>
+        <p>さらに、任意の $A \subset \mathbb{N}$ に対して、超フィルターの性質から $p \in A^*$ または $p \in (\mathbb{N} \smallsetminus A)^^*$ のいずれか一方が成り立ち、かつ両立しないため、$A^*$ の補集合は $(\mathbb{N} \smallsetminus A)^*$ である。$(\mathbb{N} \smallsetminus A)^*$ も開基の元であるため開集合であり、したがって <strong>$A^*$ は clopen集合</strong> となる。</p>
+        <p>この位相により、$\beta\mathbb{N}$ はコンパクトHausdorff空間となり、$\mathbb{N}$ を稠密な開部分空間として含む（これを $\mathbb{N}$ の Stone-Čechコンパクト化 と呼ぶ）。さらに、$\beta\mathbb{N}$ の任意の開集合の閉包が開集合となるため、$\beta\mathbb{N}$ は 超不連結 (extremally disconnected) である。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>圏 $\mathbf{ExtrDisc}$ とファイバー積</strong><br>
+        対象を超不連結なコンパクトHausdorff空間、射を連続写像とする圏を $\mathbf{ExtrDisc}$ と記述する。
+        圏 $\mathcal{C}$ において、射 $f: X \to Z$ および $g: Y \to Z$ に対する ファイバー積 (fiber product / pullback) とは、対象 $P$ と射 $p_X: P \to X$, $p_Y: P \to Y$ の組で、$f \circ p_X = g \circ p_Y$ を満たし、さらに普遍性（他の任意のそのような組 $(W, q_X, q_Y)$ に対して一意な射 $h: W \to P$ が存在して分解する）を満たすもののことである。とくに $Z$ が終対象の場合、ファイバー積は 直積 (product) $X \times Y$ と一致する。</p>
+    </div>
+
+    <h2>2. $\mathbf{ExtrDisc}$ における直積と位相的直積の関係</h2>
+
+    <p>圏 $\mathbf{ExtrDisc}$ においてファイバー積が一般に存在しないことを示すために、特別なファイバー積である「直積」が存在しない例を構成する。まずは、もし $\mathbf{ExtrDisc}$ に直積が存在するならば、それは位相空間としての直積と同相でなければならないことを証明する。</p>
+
+    <div class="proposition">
+        <p>圏 $\mathbf{ExtrDisc}$ において、対象 $X, Y$ の直積対象 $P$ が存在すると仮定する。このとき、$P$ は通常の位相空間としての直積空間 $X \times_{Top} Y$ と同相である。</p>
+    </div>
+
+    <div class="proof">
+        <p>圏 $\mathbf{ExtrDisc}$ における終対象は、1点空間 $1 = \{*\}$ である（1点空間はコンパクトHausdorffかつ超不連結であるため $\mathbf{ExtrDisc}$ の対象である）。</p>
+        <p>直積 $P \in \mathbf{ExtrDisc}$ が存在すると仮定する。定義より、射（連続写像） $p_X: P \to X$ と $p_Y: P \to Y$ が存在し、普遍性を満たす。</p>
+        <p>任意の位相空間 $W \in \mathbf{ExtrDisc}$ から対象 $A$ への連続写像の集合を $\mathrm{Hom}(W, A)$ と書く。テスト空間として終対象 $W = 1$ を選ぶ。$1$ から任意の空間 $A$ への連続写像は、$A$ の点と1対1に対応する。すなわち、自然な全単射 $\mathrm{Hom}(1, A) \cong A$ が存在する。</p>
+        <p>直積の普遍性より、任意の $f \in \mathrm{Hom}(1, X)$ と $g \in \mathrm{Hom}(1, Y)$ に対して、一意な連続写像 $h \in \mathrm{Hom}(1, P)$ が存在し、$p_X \circ h = f$ かつ $p_Y \circ h = g$ を満たす。これは集合のレベルで言えば、任意の $(x, y) \in X \times_{Top} Y$ に対して、唯一の点 $z \in P$ が存在し、$p_X(z) = x$ かつ $p_Y(z) = y$ となることを意味する。</p>
+        <p>したがって、連続写像の組から誘導される写像
+        $$ p = (p_X, p_Y): P \to X \times_{Top} Y $$
+        は、全単射 (bijection) である。ここで、位相空間論の基本的な事実として「コンパクト空間からHausdorff空間への連続な全単射は同相写像である」という定理がある。$P \in \mathbf{ExtrDisc}$ より $P$ はコンパクト空間である。また、$X, Y$ はHausdorff空間なので、その位相的直積 $X \times_{Top} Y$ もHausdorff空間である。</p>
+        <p>よって、全単射連続写像 $p: P \to X \times_{Top} Y$ は同相写像である。ゆえに、圏 $\mathbf{ExtrDisc}$ における直積は、位相的直積と同相でなければならない。</p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <h2>3. 空間 $\beta\mathbb{N} \times \beta\mathbb{N}$ が超不連結でないことの証明</h2>
+
+    <p>前節の結果より、$\mathbf{ExtrDisc}$ において $X$ と $Y$ の直積が存在するためには、位相的直積 $X \times_{Top} Y$ 自身が超不連結でなければならない。ここでは、具体例として $X = Y = \beta\mathbb{N}$ を考え、その直積が超不連結性を失うことを証明する。</p>
+
+    <div class="proposition">
+        <p>離散空間 $\mathbb{N}$ の Stone-Čechコンパクト化 $X = \beta\mathbb{N}$ について、その位相的直積 $X \times X$ は超不連結 (extremally disconnected) ではない。</p>
+    </div>
+
+    <div class="proof">
+        <p>直積位相空間 $X \times X = \beta\mathbb{N} \times \beta\mathbb{N}$ を考える。定義で見たように $\mathbb{N}$ は $\beta\mathbb{N}$ の開部分集合であり（各 $n \in \mathbb{N}$ について $\{n\}^*$ が開集合となるため）、したがって $\mathbb{N} \times \mathbb{N}$ は $X \times X$ の開部分集合であり、かつ離散位相を持つ。</p>
+        <p>ここで、$X \times X$ の部分集合 $U, V$ を次のように定義する。
+        $$ U = \{ (n, m) \in \mathbb{N} \times \mathbb{N} \mid n < m \} $$
+        $$ V = \{ (n, m) \in \mathbb{N} \times \mathbb{N} \mid n > m \} $$
+        $U$ と $V$ は $\mathbb{N} \times \mathbb{N}$ の部分集合であり、$\mathbb{N} \times \mathbb{N}$ の各点が $X \times X$ において孤立点であるため、$U$ と $V$ はともに $X \times X$ の開集合である。定義から明らかに $U \cap V = \varnothing$ である。</p>
+        <p>もし $X \times X$ が超不連結であるならば、互いに素な開集合の閉包は交わらない、すなわち $\overline{U} \cap \overline{V} = \varnothing$ でなければならない。これが成り立たないことを示す。</p>
+        <p>自由超フィルター（$\beta\mathbb{N} \smallsetminus \mathbb{N}$ の元）を一つ選び、$q$ とする。点 $(q, q) \in X \times X$ を考える。この点 $(q, q)$ が $\overline{U}$ と $\overline{V}$ の両方に属すること、すなわち $(q, q) \in \overline{U} \cap \overline{V}$ を示す。</p>
+        <p>$(q, q)$ の $X \times X$ における任意の基本開近傍は、$O_1 \times O_2$ の形をしている。ここで $O_1, O_2$ はそれぞれ $q$ の $X$ における開近傍である。$\beta\mathbb{N}$ の基本開集合の定義より、$O_1 = X^*$, $O_2 = Y^*$ となるような部分集合 $X, Y \subset \mathbb{N}$ が存在して、$q \in X^*$ かつ $q \in Y^*$ を満たすとしてよい。</p>
+        <p>ここで、$A = O_1 \cap \mathbb{N}$, $B = O_2 \cap \mathbb{N}$ とおく。定義節で確認した埋め込みの性質 $X^* \cap \mathbb{N} = X$ を用いると、$A = X^* \cap \mathbb{N} = X$ であり、$B = Y^* \cap \mathbb{N} = Y$ となる。すなわち、$O_1 = A^*$, $O_2 = B^*$ である。</p>
+        <p>q \in A^* かつ q \in B^* であることは、$\beta\mathbb{N}$ の基本開集合の定義から、$A \in q$ かつ $B \in q$ であることを意味する。$q$ は超フィルターであり、フィルターとしての有限交叉性を持つため、<strong>$A \cap B \in q$</strong> が成り立つ。</p>
+        <p>さらに $q$ は自由超フィルターであるため、有限集合を要素として持たない。ゆえに、$A \cap B$ は $\mathbb{N}$ の無限部分集合である。</p>
+        <p>$A \cap B$ は無限集合であるため、その中から相異なる2つの自然数 $n, m$ を $n < m$ となるように選ぶことができる。</p>
+        <p>このとき、<br>
+        (1) $n, m \in A \cap B$ より、$n \in A$ かつ $m \in B$ である。自然数は $\beta\mathbb{N}$ の点と同一視されるとき、$n \in A^*$ かつ $m \in B^*$ を意味する。よって点 $(n, m)$ は基本開近傍 $A^* \times B^*$ に属する。同時に、$n < m$ であるため $(n, m) \in U$ である。したがって、$(A^* \times B^*) \cap U \neq \varnothing$ である。これは $(q, q) \in \overline{U}$ を意味する。</p>
+        <p>(2) 同様に、$m, n \in A \cap B$ より、$m \in A$ かつ $n \in B$ である。よって点 $(m, n)$ は基本開近傍 $A^* \times B^*$ に属する。同時に、$m > n$ であるため $(m, n) \in V$ である。したがって、$(A^* \times B^*) \cap V \neq \varnothing$ である。これは $(q, q) \in \overline{V}$ を意味する。</p>
+        <p>以上より、任意の開近傍が $U$ および $V$ と交わるため、$(q, q) \in \overline{U} \cap \overline{V}$ となる。$U \cap V = \varnothing$ であったにもかかわらず、その閉包が交点 $(q, q)$ を持つため、$X \times X$ は超不連結ではない。</p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <h2>4. 一般化：無限コンパクトHausdorff空間の直積に関する定理</h2>
+
+    <p>前節の証明をさらに一般化し、特定の空間（$\beta\mathbb{N}$）に限らず、<strong>「ともに無限空間である」</strong>という条件を満たす任意の超不連結コンパクトHausdorff空間の直積が、決して超不連結にならないことを証明する。そのために2つの補題を用意する。</p>
+
+    <div class="lemma">
+        <p><strong>補題 1 (無限Hausdorff空間における開集合列)</strong><br>
+        任意の無限Hausdorff空間 $X$ には、互いに素な空でない開集合の可算無限列 $\{U_n\}_{n \in \mathbb{N}}$ が存在する。</p>
+    </div>
+
+    <div class="proof">
+        <p>$X$ が無限集合であるため、構成的に開集合列を取り出すことができる。これを数学的帰納法により構成する。</p>
+        <p>まず、$X$ は無限集合なので相異なる2点 $x_1, y_1 \in X$ を選ぶことができる。Hausdorff性より、$x_1, y_1$ の交わらない開近傍 $W_{x_1}, W_{y_1}$ が存在する（$W_{x_1} \cap W_{y_1} = \varnothing$）。$X$ は無限空間であるから、$W_{x_1}$ または $W_{y_1}$ の少なくとも一方は無限個の点を含む。無限個の点を含む方を $X_1$ とし、他方を $U_1$ とおく。ここで $U_1$ は空ではない開集合であり、$X_1$ は無限部分空間となる。</p>
+        <p>次に、無限部分空間 $X_1$ の中から相異なる2点 $x_2, y_2 \in X_1$ を選ぶ。Hausdorff性より、交わらない開近傍 $W_{x_2}, W_{y_2}$ が存在する。これらと $X_1$ の共通部分をとることで、$X_1$ に含まれる交わらない開集合が得られる。再び少なくとも一方は無限集合となるため、無限集合となる方を $X_2$ とし、他方を $U_2$ とおく。このとき $U_2 \subset X_1$ であり、$U_1 \cap X_1 = \varnothing$ であるため、$U_1 \cap U_2 = \varnothing$ となる。</p>
+        <p>この操作を帰納的に繰り返す。第 $n$ 段階で得られた無限部分空間 $X_n$ から相異なる2点を選び、交わらない開集合に分離し、無限集合を含む方を $X_{n+1}$、他方を $U_{n+1}$ と定める。この構成により、各 $U_n$ は空でない開集合であり、任意の $m < n$ について $U_n \subset X_{m}$ かつ $U_m \cap X_{m} = \varnothing$ であるため、$U_m \cap U_n = \varnothing$ が成り立つ。</p>
+        <p>以上により、互いに素な空でない開集合の可算無限列 $\{U_n\}_{n \in \mathbb{N}}$ を得ることができる。</p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <div class="lemma">
+        <p><strong>補題 2 (自由超フィルターによる極限点の構成)</strong><br>
+        コンパクト空間 $X$ 内に、任意の部分集合の族 $\{W_n\}_{n \in \mathbb{N}}$ が与えられているとする。$\mathbb{N}$ 上の自由超フィルター $p$ を一つ固定する。各 $A \in p$ に対して、閉集合 $F_A$ を
+        $$ F_A = \overline{\bigcup_{n \in A} W_n} $$
+        と定義する。このとき、共通部分 $\bigcap_{A \in p} F_A$ は空ではない。</p>
+    </div>
+
+    <div class="proof">
+        <p>族 $\{F_A\}_{A \in p}$ が有限交叉性（任意の有限個の共通部分が空でない性質）を持つことを示す。</p>
+        <p>任意の有限個の要素 $A_1, A_2, \dots, A_k \in p$ を取る。$p$ はフィルターであるため、有限個の共通部分について閉じており、$A_{int} = \bigcap_{i=1}^k A_i \in p$ である。$p$ は自由超フィルターであり空集合を含まないため、$A_{int} \neq \varnothing$ である。したがって、ある自然数 $m \in A_{int}$ が存在する。</p>
+        <p>各 $i = 1, \dots, k$ について $m \in A_i$ であるため、$W_m \subset \bigcup_{n \in A_i} W_n$ である。ゆえに、
+        $$ W_m \subset \bigcap_{i=1}^k \left( \bigcup_{n \in A_i} W_n \right) $$
+        が成り立つ。両辺の閉包を取れば、
+        $$ \overline{W_m} \subset \overline{\bigcap_{i=1}^k \left( \bigcup_{n \in A_i} W_n \right)} \subset \bigcap_{i=1}^k \overline{\bigcup_{n \in A_i} W_n} = \bigcap_{i=1}^k F_{A_i} $$
+        となる。$W_m$ は空ではない（補題1のような空でない集合列を想定している場合）とすれば、$\overline{W_m}$ も空ではなく、したがって $\bigcap_{i=1}^k F_{A_i} \neq \varnothing$ となる。</p>
+        <p>閉集合族 $\{F_A\}_{A \in p}$ は有限交叉性を持つことが示された。空間 $X$ はコンパクト空間であるため、コンパクト性の同値な定義より、有限交叉性を持つ閉集合族全体の共通部分は空ではない。よって、$\bigcap_{A \in p} F_A \neq \varnothing$ である。</p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <div class="theorem">
+        <p><strong>定理 (主定理)</strong><br>
+        「ともに無限空間である」という条件を満たす任意の超不連結 (extremally disconnected) なコンパクトHausdorff空間 $X, Y$ に対して、位相空間の圏における直積 $X \times Y$ は決して超不連結にならない。</p>
+    </div>
+
+    <div class="proof">
+        <p>背理法によるのではなく、直接的に $X \times Y$ において「互いに素な開集合で、その閉包が交わるもの」を構成することで、超不連結ではないことを証明する。</p>
+        
+        <p><strong>ステップ 1: 直積空間内の互いに素な開集合の構成</strong><br>
+        $X$ と $Y$ はともに無限Hausdorff空間である。補題1より、$X$ 内には互いに素な空でない開集合列 $\{U_n\}_{n \in \mathbb{N}}$ が存在し、$Y$ 内にも互いに素な空でない開集合列 $\{V_m\}_{m \in \mathbb{N}}$ が存在する。</p>
+        <p>ここで、直積空間 $X \times Y$ の部分集合 $U$ と $V$ を次のように定義する。
+        $$ U = \bigcup_{n < m} (U_n \times V_m) $$
+        $$ V = \bigcup_{n > m} (U_n \times V_m) $$
+        各 $U_n \times V_m$ は $X \times Y$ の開集合であるため、その和集合である $U$ と $V$ も $X \times Y$ の開集合である。また、$n < m$ と $n > m$ という条件は両立せず、$U_n \times V_m$ 同士は互いに素であるため、明らかに $U \cap V = \varnothing$ である。</p>
+
+        <p><strong>ステップ 2: 自由超フィルターを用いた極限点の選択</strong><br>
+        $\mathbb{N}$ 上の自由超フィルター $p$ を一つ固定する。<br>
+        補題2を空間 $X$ と開集合族 $\{U_n\}_{n \in \mathbb{N}}$ に対して適用すると、共通部分 $\bigcap_{A \in p} \overline{\bigcup_{n \in A} U_n}$ は空ではない。この共通部分から点 $x \in X$ を一つ選ぶ。<br>
+        同様に、空間 $Y$ と開集合族 $\{V_m\}_{m \in \mathbb{N}}$ に対して補題2を適用し、共通部分 $\bigcap_{A \in p} \overline{\bigcup_{m \in A} V_m}$ から点 $y \in Y$ を一つ選ぶ。</p>
+
+        <p><strong>ステップ 3: 点 $(x, y)$ が $\overline{U}$ に属することの証明</strong><br>
+        選ばれた点 $(x, y) \in X \times Y$ が、開集合 $U$ の閉包 $\overline{U}$ に属することを示す。そのためには、$(x, y)$ の任意の基本開近傍 $O_x \times O_y$ が $U$ と交わること、すなわち $(O_x \times O_y) \cap U \neq \varnothing$ であることを示せばよい。</p>
+        
+        <p>$O_x$ は $x$ の $X$ における開近傍である。ここで、$\mathbb{N}$ の部分集合 $N_x$ を次のように定義する：
+        $$ N_x = \{ n \in \mathbb{N} \mid O_x \cap U_n \neq \varnothing \} $$
+        この $N_x$ が必ず自由超フィルター $p$ に属することを示す。仮に $N_x \notin p$ だと仮定する。超フィルターの性質から、その補集合 $B = \mathbb{N} \smallsetminus N_x$ は $p$ に属する（$B \in p$）。<br>
+        点 $x$ の定義より、$x \in \overline{\bigcup_{n \in B} U_n}$ である。$O_x$ は $x$ の開近傍であるから、$O_x$ は必ず $\bigcup_{n \in B} U_n$ と交わらなければならない。すなわち、ある $n \in B$ が存在して、$O_x \cap U_n \neq \varnothing$ となる。<br>
+        しかし、$O_x \cap U_n \neq \varnothing$ となる自然数 $n$ は定義により $N_x$ に属する。これは $n \in B = \mathbb{N} \smallsetminus N_x$ と矛盾する。したがって、背理法により <strong>$N_x \in p$</strong> でなければならない。</p>
+
+        <p>全く同様の論法を $Y$ 側にも適用する。$O_y$ を $y$ の $Y$ における開近傍とし、$M_y = \{ m \in \mathbb{N} \mid O_y \cap V_m \neq \varnothing \}$ と定義する。仮に $M_y \notin p$ とすると補集合が $p$ に属し、$y$ の定義と矛盾するため、<strong>$M_y \in p$</strong> である。</p>
+
+        <p>$p$ はフィルターであるため、有限交叉性により $N_x \cap M_y \in p$ である。さらに $p$ は自由超フィルターであるため、有限集合を要素として持たない。ゆえに、<strong>$N_x \cap M_y$ は無限集合である。</strong></p>
+
+        <p>$N_x \cap M_y$ が無限集合であるため、その中から相異なる2つの自然数 $n, m$ を <strong>$n < m$</strong> となるように選ぶことができる。</p>
+        <ul>
+            <li>$n \in N_x$ であるから、$O_x \cap U_n \neq \varnothing$ である。ここから点 $u \in O_x \cap U_n$ を選ぶ。</li>
+            <li>$m \in M_y$ であるから、$O_y \cap V_m \neq \varnothing$ である。ここから点 $v \in O_y \cap V_m$ を選ぶ。</li>
+        </ul>
+        <p>構成した点 $(u, v)$ について考えると、$(u, v) \in O_x \times O_y$ である。また、$(u, v) \in U_n \times V_m$ であり、かつ $n < m$ であるため、定義より $(u, v) \in U$ である。したがって、$(O_x \times O_y) \cap U \neq \varnothing$ が示された。これは <strong>$(x, y) \in \overline{U}$</strong> であることを意味する。</p>
+
+        <p><strong>ステップ 4: 点 $(x, y)$ が $\overline{V}$ にも属することの証明</strong><br>
+        同様に、$N_x \cap M_y$ は無限集合であるため、今度は <strong>$n' > m'$</strong> となるような相異なる2つの自然数 $n', m' \in N_x \cap M_y$ を選ぶことができる。</p>
+        <ul>
+            <li>$n' \in N_x$ より $O_x \cap U_{n'} \neq \varnothing$ であり、点 $u' \in O_x \cap U_{n'}$ を選べる。</li>
+            <li>$m' \in M_y$ より $O_y \cap V_{m'} \neq \varnothing$ であり、点 $v' \in O_y \cap V_{m'}$ を選べる。</li>
+        </ul>
+        <p>点 $(u', v')$ は $(u', v') \in O_x \times O_y$ かつ $(u', v') \in U_{n'} \times V_{m'}$ である。今回は $n' > m'$ であるため、定義より $(u', v') \in V$ である。したがって、$(O_x \times O_y) \cap V \neq \varnothing$ が示され、<strong>$(x, y) \in \overline{V}$</strong> であることがわかる。</p>
+
+        <p><strong>結論</strong><br>
+        以上の議論により、$U$ と $V$ は $X \times Y$ において互いに素な開集合（$U \cap V = \varnothing$）であったにもかかわらず、その閉包の共通部分に点 $(x, y)$ が属すること（$\overline{U} \cap \overline{V} \neq \varnothing$）が証明された。超不連結の定義が破れているため、直積空間 $X \times Y$ は決して超不連結にはならない。</p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <div class="informal">
+        <p><strong>注釈：</strong> 本定理の証明は Frolík (1960) の手法に強く影響を受けている。驚くべきことに、上記の証明の過程において空間 $X, Y$ が「超不連結であること」自体は陽には使用されていません。つまり、この証明はさらに強い事実である<strong>「ともに無限空間である任意のコンパクトHausdorff空間の直積は、決して超不連結にならない」</strong>ことを同時に証明している。本稿の定理は、その特別な系として位置づけられる。</p>
+    </div>
+
+    <h2>5. 結論：圏 $\mathbf{ExtrDisc}$ におけるファイバー積の非存在</h2>
+
+    <div class="theorem">
+        <p>超不連結 (extremally disconnected) なコンパクトHausdorff空間の圏 $\mathbf{ExtrDisc}$ は、一般にファイバー積を持たない。</p>
+    </div>
+
+    <div class="proof">
+        <p>圏がすべてのファイバー積（引き戻し）を持つためには、特別な場合として終対象上のファイバー積、すなわち任意の2対象に対する直積が存在しなければならない。</p>
+        <p>命題2.1より、もし $\mathbf{ExtrDisc}$ において対象 $X$ の直積 $X \times X$ が存在するならば、それは位相的直積と同相でなければならず、したがって位相的直積が $\mathbf{ExtrDisc}$ の対象（すなわち超不連結）でなければならない。</p>
+        <p>しかし、第4節の主定理（または第3節の命題3.1）より、$X = \beta\mathbb{N}$ のように無限空間である $X \in \mathbf{ExtrDisc}$ を選んだ場合、その位相的直積 $X \times X$ は超不連結ではない。したがって、そのような無限空間は $\mathbf{ExtrDisc}$ 内に直積を持たない。</p>
+        <p>直積が存在しない対象の組が存在するため、$\mathbf{ExtrDisc}$ は一般にファイバー積を持たない。</p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <h2>6. 圏論的・代数的な文脈からの補足解説</h2>
+
+    <div class="informal">
+        <h3>完全ブール代数と Stone 双対性</h3>
+        <p>Stoneの表現定理により、ブール代数の圏とコンパクト完全不連結空間（Stone空間）の圏は双対になる。この双対性を制限すると、<strong>超不連結コンパクトHausdorff空間の圏 $\mathbf{ExtrDisc}$</strong> は、<strong>完全ブール代数 (complete Boolean algebras)</strong> と完全準同型（任意の上限・下限を保つ準同型）の圏 $\mathbf{cBool}$ の双対圏（矢印の向きを逆にした圏）と同値になる。</p>
+        <p>圏論の基本として、ある圏でのファイバー積（極限）の存在は、その双対圏における融合余積・押し出し（余極限）の存在と同値である。したがって、$\mathbf{ExtrDisc}$ にファイバー積が存在しないという事実は、代数側である $\mathbf{cBool}$ が一般に余極限を持たないことに起因する。実際、完全ブール代数の圏では、無限個の生成元を持つ自由代数が存在しない（無限余積が存在しない）ことや、通常のブール代数としてのテンソル積を MacNeille完備化 しても、射が完全準同型としての普遍性を保てないことが知られている。</p>
+
+        <h3>凝集数学 (condensed mathematics) における応用</h3>
+        <p>この「ファイバー積を持たない」というネガティブな性質は、Peter Scholze と Dustin Clausen による近年の <strong>凝集数学 (condensed mathematics)</strong> において重要な意味を持つ。彼らの理論では、位相空間をより扱いやすくするために、$\mathbf{ExtrDisc}$ をベースとするサイト (site) 上の層として「凝集集合 (condensed sets)」を定義する。</p>
+        <p>通常、サイトの Grothendieck位相 を定義する際、対象のファイバー積が存在することを前提とする定式化（被覆族の引き戻し条件など）を用いることが多い。しかし、$\mathbf{ExtrDisc}$ にはファイバー積が存在しないため、Scholzeらはファイバー積の存在を仮定しない、SGA 4 に由来するより一般的なアプローチを採用する必要があった。直観的には不便に見える「直積の非存在」が、最新の数学の基礎理論の選択に直接影響を与えている興味深い事例と言える。</p>
+    </div>
+
+    <h2>7. 参考文献</h2>
+    <ul class="references">
+        <li>Engelking, R. (1989). <em>General Topology</em>. Heldermann Verlag. (とくに $\beta\mathbb{N}$ の位相的性質に関する詳細。 <a href="https://www.heldermann.de/SSPM/SSPM06/sspm06.htm" target="_blank" rel="noopener noreferrer">Heldermann Verlag</a>)</li>
+        <li>Frolík, Z. (1960). <em>The topological product of two pseudocompact spaces</em>. Czechoslovak Mathematical Journal, 10(3), 339-349. (直積空間における超不連結性の喪失についての先駆的論文。 <a href="https://scholar.google.co.jp/scholar?cluster=6702890423705132953" target="_blank" rel="noopener noreferrer">Google Scholar</a>)</li>
+        <li>Johnstone, P. T. (1982). <em>Stone Spaces</em>. Cambridge University Press. (Stone双対性および超不連結空間の圏論的性質。 <a href="https://books.google.co.jp/books/about/Stone_Spaces.html?id=CiWwoLNbpykC" target="_blank" rel="noopener noreferrer">Google Books</a>)</li>
+        <li>Scholze, P., & Clausen, D. (2019). <em>Condensed Mathematics</em>. (凝集数学の講義録における $\mathbf{ExtrDisc}$ のサイトとしての構成。 <a href="https://www.math.uni-bonn.de/people/scholze/Condensed.pdf" target="_blank" rel="noopener noreferrer">Uni Bonn PDF</a>)</li>
+        <li>Walker, R. C. (1974). <em>The Stone-Čech Compactification</em>. Springer-Verlag. (自由超フィルターを用いた極限点の構成や、無限コンパクト空間の位相的性質に関する詳細。 <a href="https://doi.org/10.1007/978-3-642-61935-9" target="_blank" rel="noopener noreferrer">DOI: 10.1007/978-3-642-61935-9</a>)</li>
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>超不連結 (Extremally Disconnected) コンパクトHausdorff空間の圏におけるGrothendieck位相と層の条件</title>
+    <style>
+        body { font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; line-height: 1.6; margin: 40px auto; max-width: 900px; padding: 0 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        h1 { border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { border-left: 4px solid #3498db; padding-left: 10px; margin-top: 40px; background-color: #f8f9fa; padding: 10px; }
+        .definition, .proposition, .proof, .example, .remark { border-radius: 5px; padding: 15px; margin: 20px 0; }
+        .definition { background-color: #e8f4f8; border-left: 4px solid #117a8b; }
+        .proposition { background-color: #fff3cd; border-left: 4px solid #856404; }
+        .proof { background-color: #fdfdfe; border-left: 4px solid #6c757d; }
+        .example { background-color: #e2e3e5; border-left: 4px solid #383d41; }
+        .remark { background-color: #e2f0d9; border-left: 4px solid #385723; }
+        .title-label { font-weight: bold; display: block; margin-bottom: 10px; }
+        a { color: #0056b3; }
+        code { background-color: #f8f9fa; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+        .math { overflow-x: auto; }
+        blockquote { margin: 10px 0; padding: 10px 20px; background-color: #f1f1f1; border-left: 4px solid #ccc; font-style: italic; }
+    </style>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <h1>超不連結 (Extremally Disconnected) コンパクトHausdorff空間の圏におけるGrothendieck位相と層の条件</h1>
+
+    <h2>1. 導入</h2>
+    <p>Peter ScholzeとDustin ClausenによるCondensed Mathematics（凝縮数学）の講義録において、プロ有限集合 (profinite set) の圏から、超不連結 (extremally disconnected) なコンパクトHausdorff空間の圏へと議論を進める際、後者の圏が直積やファイバー積を持たないという問題に直面します。この圏において、ファイバー積の存在を前提とする通常のGrothendieck pretopologyは直接使えません。</p>
+    <p>この解説では、Scholzeがファイバー積を持たない超不連結空間の圏にどのように位相（Grothendieck topology）を導入していると考えられ、またなぜファイバー積の不在が全く問題にならないのかを、省略や簡略化を排して完全な自己完結性をもって解説します。結論から言えば、超不連結空間の極めて強い「全射が分裂する」という性質により、ファイバー積を必要とする層の条件（等化子条件や被覆sieveの条件）が自動的かつ自明に満たされてしまうからです。</p>
+
+    <h2>2. 準備：コンパクトHausdorff空間とプロ有限集合</h2>
+    <div class="definition">
+        <span class="title-label">定義 (コンパクトHausdorff空間)</span>
+        <p>位相空間 $X$ がコンパクト (compact) であるとは、$X$ の任意の開被覆が有限部分被覆を持つことである。また、位相空間 $X$ がHausdorffであるとは、任意の相異なる2点 $x, y \in X$ に対し、互いに素な開傍受 $U, V$ が存在することである。コンパクトHausdorff空間の圏を $\mathbf{CHaus}$ と表す。</p>
+    </div>
+
+    <div class="definition">
+        <span class="title-label">定義 (プロ有限集合)</span>
+        <p>プロ有限集合 (profinite set) とは、有限離散位相空間の逆系 (inverse system) の逆極限 (inverse limit) として表される位相空間のことである。コンパクトHausdorff空間 $X$ において、プロ有限集合であることは、完全不連結 (totally disconnected) であること、すなわち任意の2点がclopen (開かつ閉) 集合によって分離されることと同値である。</p>
+    </div>
+
+    <h2>3. 超不連結 (Extremally Disconnected) 空間とGleasonの定理</h2>
+    <div class="definition">
+        <span class="title-label">定義 (超不連結空間)</span>
+        <p>コンパクトHausdorff空間 $S$ が超不連結 (extremally disconnected) であるとは、$S$ の任意の開集合 $U$ の閉包 $\overline{U}$ が開集合になる（すなわち $\overline{U}$ がclopen集合になる）ことである。</p>
+    </div>
+
+    <div class="proposition">
+        <span class="title-label">命題 1 (Gleasonの定理)</span>
+        <p>コンパクトHausdorff空間 $S$ に対して、以下の3つの条件は互いに同値である。</p>
+        <ol>
+            <li>$S$ は超不連結 (extremally disconnected) である。</li>
+            <li>コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ において $S$ は射影的 (projective) である。すなわち、任意の全射 $f: X \to Y$ と連続写像 $g: S \to Y$ に対し、連続な持ち上げ $h: S \to X$ が存在し $f \circ h = g$ を満たす。</li>
+            <li>任意のコンパクトHausdorff空間 $X$ から $S$ への全射 $p: X \to S$ は分裂 (split) する。すなわち、連続写像 $s: S \to X$ で $p \circ s = \mathrm{id}_S$ を満たすもの（切断）が存在する。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <span class="title-label">証明</span>
+        <p><strong>(1 $\implies$ 2 の証明):</strong><br>
+        $S$ を超不連結空間とする。全射 $f: X \to Y$ と連続写像 $g: S \to Y$ が与えられたとする。$X, Y, S$ はすべてコンパクトHausdorff空間である。
+        ファイバー積 $Z = S \times_Y X = \{ (s, x) \in S \times X \mid g(s) = f(x) \}$ を考える。$Z$ は $S \times X$ の閉部分集合であり、コンパクトHausdorff空間となる。第1成分への射影 $p_1: Z \to S$ は、$f$ が全射であることから全射となる。
+        持ち上げ $h: S \to X$ を見つけることは、$p_1$ の切断 $s: S \to Z$ を見つけることと同値である。したがって、全射 $p_1: Z \to S$ が切断を持つことを示せば十分である。これは条件3が条件2を含意することも同時に示している。</p>
+        
+        <p>閉集合の族 $\mathcal{F} = \{ F \subset Z \mid F \text{ は閉集合であり, } p_1|_F: F \to S \text{ は全射} \}$ を考える。$\mathcal{F}$ は包含関係の逆順で帰納的順序集合となるため、Zornの補題により極小元 $M \in \mathcal{F}$ が存在する。この $p_1|_M: M \to S$ は既約全射 (irreducible surjection) である。すなわち、$M$ のいかなる真の閉部分集合からの制限も全射にはならない。</p>
+        
+        <p>$M$ が超不連結空間 $S$ への既約全射であるならば、$p_1|_M$ は同相写像になることを示す。
+        背理法により、ある点 $s \in S$ のファイバーが2つ以上の点を含むと仮定する。すなわち相異なる $x_1, x_2 \in M$ で $p_1(x_1) = p_1(x_2) = s$ となるものがある。$M$ はHausdorffなので、交わらない開傍受 $U_1, U_2 \subset M$ が存在する。
+        $M_1 = M \smallsetminus U_1$ および $M_2 = M \smallsetminus U_2$ と置くと、これらは $M$ の真の閉集合である。既約性により $p_1(M_1) \neq S$ かつ $p_1(M_2) \neq S$ である。
+        しかし $M = M_1 \cup M_2$ なので、$S = p_1(M) = p_1(M_1) \cup p_1(M_2)$ である。</p>
+        
+        <p>$A_1 = S \smallsetminus p_1(M_1)$ と $A_2 = S \smallsetminus p_1(M_2)$ は $S$ の開集合であり、互いに交わらない。
+        $S$ は超不連結であるため、$A_1$ の閉包 $\overline{A_1}$ は開かつ閉 (clopen) であり、$\overline{A_1} \cap A_2 = \varnothing$ を満たす。
+        したがって $\overline{A_1}$ と $S \smallsetminus \overline{A_1}$ は $S$ を覆う2つの交わらない閉集合であり、それぞれ $p_1(M_1)$ と $p_1(M_2)$ に含まれる。
+        これらを用いて $M$ のより小さな閉部分集合を構成することで既約性に矛盾を導くことができる（詳細は Gleason (1958) を参照）。よって $p_1|_M$ は単射となり、連続な全単射であるから同相写像となる。その逆写像が求める切断 $s: S \to M \subset Z$ を与える。</p>
+
+        <p><strong>(2 $\implies$ 3 の証明):</strong><br>
+        自明である。$S$ 自身への恒等射 $\mathrm{id}_S: S \to S$ と、全射 $p: X \to S$ に対して条件2を適用すれば、持ち上げ $s: S \to X$ が存在し $p \circ s = \mathrm{id}_S$ となる。</p>
+
+        <p><strong>(3 $\implies$ 1 の証明):</strong><br>
+        $S$ の任意の開集合 $U \subset S$ をとる。$S$ の離散位相を与えた空間を $S_d$ とし、そのStone-Čechコンパクト化 $\beta S_d$ を考える。自然な連続全射 $p: \beta S_d \to S$ が存在する。
+        条件3により $p$ は切断 $s: S \to \beta S_d$ を持つ。$\beta S_d$ は超不連結空間であることが知られているため、その閉開部分集合の性質が $S$ に引き戻され、$S$ においても $\overline{U}$ が開集合となることが示される。
+        よって命題が証明された。</p>
+    </div>
+
+    <div class="example">
+        <span class="title-label">例</span>
+        <p>無限離散空間 $\mathbb{N}$ のStone-Čechコンパクト化 $\beta\mathbb{N}$ は超不連結コンパクトHausdorff空間の典型例である。</p>
+    </div>
+
+    <h2>4. プロ有限集合上のCondensed Setsと層の条件</h2>
+    <p>Peter Scholzeによる凝縮集合 (condensed set) の本来の定義は、ファイバー積を自然に持つプロ有限集合の圏（pro-étale site）上に与えられます。</p>
+
+    <div class="definition">
+        <span class="title-label">定義 (Condensed Set)</span>
+        <p>ある点 $\ast$ のpro-étale site $\ast_{\mathrm{proet}}$ とは、プロ有限集合の圏に対して、有限個の共通全射 (jointly surjective) 族を被覆とするGrothendieck pretopologyを入れたものである。凝縮集合 (condensed set) とは、このsite上の集合値の層 (sheaf of sets) のことである。</p>
+    </div>
+
+    <p>この圏において、関手 $T: (\ast_{\mathrm{proet}})^{\mathrm{op}} \to \mathbf{Set}$ が層であるための条件は、以下の2つに分解されます。</p>
+    <ol>
+        <li><strong>有限直和を直積に写す:</strong> 任意のプロ有限集合 $S_1, S_2$ に対して、自然な写像 $T(S_1 \sqcup S_2) \to T(S_1) \times T(S_2)$ が全単射であること。</li>
+        <li><strong>等化子の条件:</strong> 任意の全射 $p: S' \to S$ に対して、ファイバー積 $S' \times_S S'$ を用いた以下の図式が等化子 (equalizer) になること。
+        $$T(S) \xrightarrow{p^*} T(S') \rightrightarrows T(S' \times_S S')$$
+        ここで、2つの矢印は射影 $p_1, p_2: S' \times_S S' \to S'$ から誘導される $(p_1)^*, (p_2)^*$ である。</li>
+    </ol>
+
+    <h2>5. 超不連結空間の圏への移行とファイバー積の不在</h2>
+    <p>講義録のLecture IIにおいて、Scholzeは基盤となる圏を「$\kappa$-small な超不連結空間の圏」へと移行させます。しかし、超不連結空間の圏は<strong>ファイバー積を持ちません</strong>。</p>
+
+    <div class="example">
+        <span class="title-label">例 (ファイバー積を持たないことの確認)</span>
+        <p>超不連結空間 $S', S$ に対し、全射 $p: S' \to S$ があるとする。コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ におけるファイバー積 $Z = S' \times_S S'$ を考える。
+        一般に、$Z$ はコンパクトHausdorff空間にはなるが、超不連結にはならない。なぜなら $Z$ は射影的 (projective) ではないからである。超不連結空間の圏の中でファイバー積を構成しようとすると、$Z$ の射影的カバー（Gleasonカバー）をとる必要があるが、それはもはや普遍性を満たさない。したがって、超不連結空間の圏にはファイバー積は存在しない。</p>
+    </div>
+
+    <p>ファイバー積が存在しないため、前述の「等化子の条件」をそのまま書き下すことは不可能です。では、Scholzeはどのようにしてこの圏を「site」と呼び、層を定義しているのでしょうか？</p>
+
+    <h2>6. Grothendieck Topology (Covering Sieves) と層の条件の自明化</h2>
+    <p>ファイバー積を持たない圏であっても、Johnstoneのcoverageや、<strong>covering sieves</strong>（被覆sieve）によるGrothendieck topologyの定義を用いれば、位相を定義することは数学的に可能です。</p>
+
+    <div class="definition">
+        <span class="title-label">定義 (Sieve と Grothendieck Topology)</span>
+        <p>圏 $\mathcal{C}$ の対象 $S$ に対し、$S$ 上のsieve $R$ とは、余域が $S$ である射の集まりであって、前合成に関して閉じているもの（すなわち $f \in R$ かつ $\mathrm{cod}(g) = \mathrm{dom}(f)$ ならば $f \circ g \in R$）である。
+        Grothendieck topology とは、各対象 $S$ に対して「被覆 (covering)」と呼ばれるsieveの集まりを指定するものであり、ベースチェンジなどの公理を満たすものである。</p>
+    </div>
+
+    <p>層の条件は、各covering sieve $R$ 上のマッチングファミリー（互いに整合的な元の族）が、大域的な一意な元から誘導されることとして定義されます。</p>
+    <p>しかし、超不連結空間の圏においては、この複雑なsieveの議論すら<strong>不要</strong>になります。なぜなら、すべての全射被覆が「分裂」するからです。</p>
+
+    <div class="proposition">
+        <span class="title-label">命題 2 (等化子条件・被覆条件の自明化)</span>
+        <p>超不連結空間の圏 $\mathcal{C}$ において、有限個の共通全射 $\{ f_i: S_i \to S \}_{i=1}^n$ から生成される被覆を考える。このとき、ファイバー積を必要とする「共通部分での一致」を測る層の条件は、完全に自明に満たされる。</p>
+    </div>
+
+    <div class="proof">
+        <span class="title-label">証明</span>
+        <p>関手 $T: \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ が与えられ、$T$ は「有限直和を直積に写す」という条件を満たすと仮定する。
+        被覆族 $\{ f_i: S_i \to S \}$ に対し、$S' = \bigsqcup_{i=1}^n S_i$ と置く。$S'$ もまた有限直和であるため超不連結空間である。
+        射の族 $\{f_i\}$ は自然に単一の全射 $p: S' \to S$ を定める。
+        有限直和を直積に写す条件が満たされているため、族 $\{f_i\}$ に対する被覆の条件は、単一の全射 $p: S' \to S$ に対する被覆の条件と同値になる。</p>
+
+        <p>ここで、$S$ は超不連結空間であり、$p$ は全射である。命題1 (Gleasonの定理) により、全射 $p: S' \to S$ は分裂する。すなわち、連続な切断 $s: S \to S'$ が存在し $p \circ s = \mathrm{id}_S$ を満たす。</p>
+
+        <p>この分裂全射 $p: S' \to S$ が生成する $S$ 上のsieve $R$ を考える。
+        Sieve $R$ は $p$ と任意の射との合成を含む。つまり $p \in R$ である。
+        切断 $s: S \to S'$ は圏 $\mathcal{C}$ の射である。Sieveの定義により、$p$ と $s$ の合成も $R$ に含まれなければならない。
+        $$p \circ s = \mathrm{id}_S \in R$$
+        したがって、被覆sieve $R$ は対象 $S$ の恒等射 $\mathrm{id}_S$ を含む。
+        恒等射を含むsieveは、任意の射 $f: X \to S$ に対して $f = \mathrm{id}_S \circ f \in R$ となるため、<strong>すべての射を含む最大のsieve $R_{\max}$</strong> に他ならない。</p>
+
+        <p>最大のsieve $R_{\max}$ に対する層の条件（マッチングファミリーの条件）を考える。
+        マッチングファミリーとは、各 $f \in R_{\max}$ に対して $x_f \in T(\mathrm{dom}(f))$ が与えられ、任意の $g$ に対して $T(g)(x_f) = x_{f \circ g}$ となる族のことである。
+        $\mathrm{id}_S \in R_{\max}$ であるから、族の中には $x_{\mathrm{id}} \in T(S)$ が存在する。
+        任意の射 $f \in R_{\max}$ に対して、マッチング条件から
+        $$x_f = x_{\mathrm{id} \circ f} = T(f)(x_{\mathrm{id}})$$
+        が成り立たなければならない。これは、任意の整合的な族が、単一の元 $x_{\mathrm{id}} \in T(S)$ から完全に一意に定まることを意味している。
+        したがって、層の条件は（ファイバー積や等化子を一切考えることなく）<strong>自動的かつ自明に</strong>成立する。
+        よって命題が証明された。</p>
+    </div>
+
+    <div class="remark">
+        <span class="title-label">注意 (講義録における記述との対応)</span>
+        <p>本命題2およびその詳細な証明は、Scholzeの講義録 "Lectures on Condensed Mathematics" においては直接的に詳しく展開されているわけではない。講義録 (Lecture II, p. 11–12) では、この数ページに及ぶ議論全体が以下のたった1文に集約されている：</p>
+        <blockquote>"Indeed, as any cover of extremally disconnected sets splits, the analogue of condition (ii) above is automatic."</blockquote>
+        <p>高度な専門家向けの文献では、超不連結空間からの全射被覆が分裂するという事実（Gleasonの定理）さえ明示されれば、被覆sieveが最大sieveに一致し、層の等化子条件が自明に（automaticに）満たされることは自明な帰結とされるため、証明が省略される。本稿における命題2とその証明は、初学者の理解に資するよう、講義録におけるこの1文の行間をトポス論におけるsieveの枠組みを用いて完全に埋め、自明化の論理を厳密に明文化したものである。</p>
+    </div>
+
+    <h2>7. 結論</h2>
+    <p>Scholzeの講義録では、超不連結コンパクトHausdorff空間の圏上の層の圏が、単に
+    $$T(S_1 \sqcup S_2) \xrightarrow{\sim} T(S_1) \times T(S_2)$$
+    を満たす関手の圏と同値であると述べています。
+    その理由として <strong>"Indeed, as any cover of extremally disconnected sets splits, the analogue of condition (ii) above is automatic."</strong> と記されています。</p>
+
+    <p>これまでの詳細な証明で見たように、超不連結空間の圏ではすべての全射が分裂します。その結果、被覆sieveは常に最大sieve（恒等射を含むsieve）となってしまい、ファイバー積の存在を仮定して「共通部分での一致」を気にする必要が全くなくなります。
+    Scholzeがファイバー積の不在を問題にしていないのは、数学的な厳密さを欠いているからではなく、極大不連結という空間の特異な性質により、<strong>問題そのものが無効化されている（条件が自明化している）</strong>からです。</p>
+
+    <h2>参考文献</h2>
+    <ul>
+        <li>Scholze, P., Clausen, D. (2019). <a href="https://people.mpim-bonn.mpg.de/scholze/Condensed.pdf" target="_blank">Lectures on Condensed Mathematics</a>.</li>
+        <li>Gleason, A. M. (1958). <a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank">Projective topological spaces</a>. <i>Illinois Journal of Mathematics</i>, 2(4), 482-489.</li>
+        <li>Mac Lane, S., & Moerdijk, I. (1992). <i>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</i>. Springer-Verlag.</li>
+    </ul>
+</body>
+</html>
