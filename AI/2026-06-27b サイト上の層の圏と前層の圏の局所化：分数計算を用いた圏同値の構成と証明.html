@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サイト上の層の圏と前層の圏の局所化：分数計算を用いた圏同値の構成と証明</title>
+    <style>
+        body {
+            font-family: "Noto Sans JP", sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 8px;
+            margin-top: 2em;
+        }
+        p {
+            margin-bottom: 1.2em;
+        }
+        .definition {
+            background-color: #e8f4f8;
+            border-left: 5px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .theorem {
+            background-color: #f8f9fa;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .proof {
+            background-color: #ffffff;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            font-style: normal;
+        }
+        .example {
+            background-color: #fcf8e3;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .remark {
+            background-color: #fdfdfe;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        ul, ol {
+            margin-bottom: 1.2em;
+            padding-left: 2em;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <h1>サイト上の層の圏と前層の圏の局所化：分数計算を用いた圏同値の構成と証明</h1>
+
+    <div class="remark">
+        <p><strong>導入:</strong> 本稿では、サイト (site) 上の層の圏を前層の圏の局所化として捉える方法について詳細に解説する。層化 (sheafification) という操作は、局所同型 (local isomorphism) と呼ばれる特定の射のクラスを形式的に同型射に裏返す普遍的な構成、すなわち「圏の局所化」として理解することができる。さらに後半では、局所化の構成が飛躍的に容易になる「分数計算 (calculus of fractions)」の条件について解説し、前層の圏の局所化がこの条件を満たすことで、層の圏との圏同値が極めて自然かつ幾何学的に構成できることを完全な証明とともに示す。</p>
+    </div>
+
+    <h2>1. 圏の局所化：定義・構成・証明</h2>
+    <p>まず、任意の圏 $\mathcal{C}$ において、特定の射の部分クラス $W$ を形式的に同型射 (isomorphism) にする「局所化」の一般論を準備する。</p>
+
+    <div class="definition">
+        <strong>定義 1.1 (圏の局所化).</strong><br>
+        圏 $\mathcal{C}$ と、その射の部分クラス $W$ を考える。組 $(\mathcal{C}[W^{-1}], Q)$ が <strong>$W$ による $\mathcal{C}$ の局所化 (localization)</strong> であるとは、関手 $Q: \mathcal{C} \to \mathcal{C}[W^{-1}]$ が以下の普遍性を満たすことである。
+        <ol>
+            <li><strong>$W$ の反転:</strong> 任意の $w \in W$ に対して、$Q(w)$ は $\mathcal{C}[W^{-1}]$ において同型射である。</li>
+            <li><strong>普遍性:</strong> 任意の圏 $\mathcal{D}$ と関手 $F: \mathcal{C} \to \mathcal{D}$ が「任意の $w \in W$ に対して $F(w)$ が同型射になる」という条件を満たすならば、関手 $\bar{F}: \mathcal{C}[W^{-1}] \to \mathcal{D}$ がただ一つ存在して、$F = \bar{F} \circ Q$ となる（ここで「ただ一つ」とは、自然同型の違いを除いて一意という意味である）。</li>
+        </ol>
+    </div>
+
+    <p>この局所化 $\mathcal{C}[W^{-1}]$ は、形式的な「ジグザグの道」を用いて具体的に構成できる。</p>
+
+    <div class="theorem">
+        <strong>構成 1.2 (局所化の構成).</strong><br>
+        局所化 $\mathcal{C}[W^{-1}]$ を以下のように構成する。
+        <ul>
+            <li><strong>対象:</strong> $\mathcal{C}[W^{-1}]$ の対象は $\mathcal{C}$ の対象と全く同じとする。$\mathrm{Ob}(\mathcal{C}[W^{-1}]) = \mathrm{Ob}(\mathcal{C})$。</li>
+            <li><strong>射:</strong> 対象 $X$ から $Y$ への射は、$X$ から $Y$ への「ジグザグのパス」の同値類とする。ジグザグのパスとは、以下のような $\mathcal{C}$ の射の有限列である。
+                $$ X = X_0 \leftrightarrow X_1 \leftrightarrow X_2 \leftrightarrow \cdots \leftrightarrow X_n = Y $$
+                ここで、各矢印 $\leftrightarrow$ は、通常の射 $f: X_i \to X_{i+1}$ または $W$ に属する射の逆向き $w: X_{i+1} \to X_i$ (ただし $w \in W$) のいずれかである。逆向きの射を形式的に $w^{-1}$ と書く。
+            </li>
+            <li><strong>同値関係:</strong> これらのパスに対して、以下の操作で移り合えるものを同値とみなす。
+                <ol>
+                    <li>恒等射 $\mathrm{id}$ を挿入、または削除する。</li>
+                    <li>隣り合う順方向の射 $f, g$ を合成 $g \circ f$ に置き換える（逆方向 $w^{-1}, v^{-1}$ も同様に $(v \circ w)^{-1}$ とする）。</li>
+                    <li>$w$ と $w^{-1}$ が隣り合っている場合、それらを打ち消して消去する（すなわち $w \circ w^{-1} \sim \mathrm{id}$ および $w^{-1} \circ w \sim \mathrm{id}$）。</li>
+                </ol>
+            </li>
+        </ul>
+        関手 $Q: \mathcal{C} \to \mathcal{C}[W^{-1}]$ は、対象を自身へ写し、射 $f$ を長さ1のパス $f$ へ写すものとして定義される。
+    </div>
+
+    <div class="proof">
+        <strong>普遍性の証明.</strong><br>
+        構成した $\mathcal{C}[W^{-1}]$ と関手 $Q$ が普遍性を満たすことを証明する。
+        関手 $F: \mathcal{C} \to \mathcal{D}$ が任意の $w \in W$ を同型射に送ると仮定する。関手 $\bar{F}: \mathcal{C}[W^{-1}] \to \mathcal{D}$ を一意に構成する。<br><br>
+        
+        <strong>対象に対する作用:</strong> $\bar{F}(X) = F(X)$ と定義する。<br>
+        <strong>射に対する作用:</strong> $\mathcal{C}[W^{-1}]$ の射はジグザグのパスの同値類である。パスが $f_1, w_1^{-1}, f_2, \dots$ で構成されている場合、
+        $$ \bar{F}([f_1, w_1^{-1}, f_2, \dots]) = \dots \circ F(f_2) \circ F(w_1)^{-1} \circ F(f_1) $$
+        と定義する。仮定より $F(w)$ は $\mathcal{D}$ において同型射であるため、逆射 $F(w)^{-1}$ が実在し、この合成は $\mathcal{D}$ において意味を持つ。<br><br>
+
+        <strong>well-defined性の確認:</strong> この定義がパスの代表元の取り方によらないことを示す。同値関係の生成元について $\bar{F}$ の値が変わらないことを確認すればよい。
+        <ol>
+            <li>恒等射の挿入・削除: $F(\mathrm{id}) = \mathrm{id}_{\mathcal{D}}$ であるため、合成の結果に影響を与えない。</li>
+            <li>連続する射の合成: $F(g \circ f) = F(g) \circ F(f)$ であるため値は不変である。逆方向の射の合成 $(v \circ w)^{-1}$ に対しては、$F(v \circ w)^{-1} = (F(v) \circ F(w))^{-1} = F(w)^{-1} \circ F(v)^{-1}$ であり、これも不変である。</li>
+            <li>相殺: $F(w) \circ F(w)^{-1} = \mathrm{id}$ および $F(w)^{-1} \circ F(w) = \mathrm{id}$ は $\mathcal{D}$ における同型射の定義そのものであるため、合成に影響を与えない。</li>
+        </ol>
+        したがって、$\bar{F}$ はパスの同値類に対して well-defined な関手である。<br><br>
+
+        <strong>一意性:</strong> 構成から明らかに $F = \bar{F} \circ Q$ である。また、$\mathcal{C}[W^{-1}]$ の任意の射は $Q(f)$ と $Q(w)^{-1}$ の有限回の合成で書けるため、任意の関手 $G$ が $F = G \circ Q$ を満たすならば、各パス上の値は一意に決定される。これにより普遍性が完全に証明された。
+    </div>
+
+    <h2>2. 前層と局所同型 (Local Isomorphisms)</h2>
+    <p>次に、サイト (site) の概念を導入し、前層の射に対する「局所同型」というクラス $W$ を定義する。層化関手を用いた簡便な定義と、トポロジー的な被覆を用いた純粋な定義の2つを与える。</p>
+
+    <div class="definition">
+        <strong>定義 2.1 (サイトと前層).</strong><br>
+        Grothendieck位相 (Grothendieck topology) $J$ を備えた圏 $\mathcal{C}$ を<strong>サイト (site)</strong> と呼ぶ。対象 $X \in \mathrm{Ob}(\mathcal{C})$ に対する被覆を、射の族 (family of morphisms) $\{u_i: U_i \to X\}_{i \in I}$ として表す。<br>
+        $\mathcal{C}$ 上の<strong>前層 (presheaf)</strong> とは、$\mathcal{C}$ から集合の圏 $\mathrm{Set}$ への反変関手 (contravariant functor) のことである。$\mathcal{C}$ 上の前層全体がなす圏を $\mathrm{PSh}(\mathcal{C})$ とする。
+    </div>
+
+    <p>前層の射 $f: F \to G$ が「局所同型」であるとは、大域的には同型でなくとも、各対象を被覆で細かく分割して局所的に見れば、単射かつ全射として振る舞うことを意味する。</p>
+
+    <div class="definition">
+        <strong>定義 2.2 (局所単射と局所全射).</strong><br>
+        前層の射 $f: F \to G$ に対して、以下の2つの性質を定義する。<br>
+        <ul>
+            <li><strong>局所単射 (local monomorphism):</strong> 任意の対象 $X \in \mathrm{Ob}(\mathcal{C})$ と、任意の2つの切断 $s, t \in F(X)$ について、$f_X(s) = f_X(t) \in G(X)$ が成り立つならば、ある $X$ の被覆 $\{u_i: U_i \to X\}_{i \in I}$ が存在して、すべての $i$ について制限が一致する、すなわち $s|_{U_i} = t|_{U_i}$ となること。</li>
+            <li><strong>局所全射 (local epimorphism):</strong> 任意の対象 $X \in \mathrm{Ob}(\mathcal{C})$ と、任意の切断 $s \in G(X)$ について、ある $X$ の被覆 $\{u_i: U_i \to X\}_{i \in I}$ が存在して、各 $i$ に対してある $t_i \in F(U_i)$ が存在し、$f_{U_i}(t_i) = s|_{U_i}$ となること。これは、被覆上で結合的に全射 (jointly surjective) になるような局所的な持ち上げ条件である。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <strong>定義 2.3 (局所同型).</strong><br>
+        前層の圏 $\mathrm{PSh}(\mathcal{C})$ において、局所単射かつ局所全射であるような射 $f: F \to G$ を<strong>局所同型 (local isomorphism)</strong> と呼ぶ。局所同型全体のクラスを $W$ と定義する。
+    </div>
+
+    <div class="example">
+        <p><strong>例 2.4 (位相空間上の前層と局所同型).</strong><br>
+        Hausdorff空間などの位相空間 $X$ を考える。$X$ の開集合全体は包含関係により圏をなす。これを $\mathrm{Op}(X)$ とする。$\mathrm{Op}(X)$ 上の開被覆 $\{U_i \subset U\}_{i \in I}$ がサイトの被覆を与える。<br>
+        例えば、$U \subset X$ 上の定数関数の前層 $F$ と、局所定数関数の層 $G$ を考える。前層の射 $f: F \to G$ は包含によって自然に定まる。$X$ が非連結であるとき、例えば2つの互いに素な開集合 $U_1, U_2$ の和集合 $U = U_1 \cup U_2$ 上で、$G(U)$ には「$U_1$ 上で $1$、$U_2$ 上で $0$ を取る」ような切断が存在する。これは定数関数ではないため $F(U)$ からは来ない。しかし、局所的に（すなわち $U_1, U_2$ に制限して）見れば、局所全射の条件を満たしている。このような射が局所同型の典型例である。もし $X$ が超不連結 (extremally disconnected) でクロープン (clopen) な集合を多く持つ場合でも、位相空間の基底を成す開集合の族に対して局所的な持ち上げが満たされればよい。</p>
+    </div>
+
+    <div class="remark">
+        <p><strong>注意:</strong> 層化関手 (sheafification functor) $a: \mathrm{PSh}(\mathcal{C}) \to \mathrm{Sh}(\mathcal{C})$ を用いると、$W$ は単に「$a(f)$ が $\mathrm{Sh}(\mathcal{C})$ における同型射となるような射 $f$」としても定義できる。しかし、層化関手の存在を前提とせずに上記のようにサイトの位相のみを用いて $W$ を直接構成しておくことで、層化関手というブラックボックスに頼らず、純粋に圏の局所化という操作を通じて層の圏そのものを構築できるという直観的 (intuitive) に美しい見方が可能になる。</p>
+    </div>
+
+
+    <h2>3. 前層の圏の局所化と層の圏の同値</h2>
+
+    <p>前層の圏を先ほどのクラス $W$ で局所化すると、それが層の圏と同値になるという主定理を証明する。</p>
+
+    <div class="theorem">
+        <strong>定理 3.1.</strong><br>
+        前層の圏 $\mathrm{PSh}(\mathcal{C})$ の局所同型 $W$ による局所化 $\mathrm{PSh}(\mathcal{C})[W^{-1}]$ は、層の圏 $\mathrm{Sh}(\mathcal{C})$ と圏同値 (categorically equivalent) である。すなわち、
+        $$ \mathrm{PSh}(\mathcal{C})[W^{-1}] \simeq \mathrm{Sh}(\mathcal{C}) $$
+        が成り立つ。
+    </div>
+
+    <div class="proof">
+        <strong>定理 3.1 の証明.</strong><br>
+        包含関手を $i: \mathrm{Sh}(\mathcal{C}) \hookrightarrow \mathrm{PSh}(\mathcal{C})$ とし、層化関手を $a: \mathrm{PSh}(\mathcal{C}) \to \mathrm{Sh}(\mathcal{C})$ とする。随伴 (adjunction) $a \dashv i$ が存在し、単位元 (unit) を $\eta: \mathrm{Id}_{\mathrm{PSh}(\mathcal{C})} \to i \circ a$、余単位元 (counit) を $\epsilon: a \circ i \to \mathrm{Id}_{\mathrm{Sh}(\mathcal{C})}$ とする。<br><br>
+
+        <strong>Step 1: 互いに逆となる関手の構成</strong><br>
+        層化関手 $a$ は、局所同型のクラス $W$ に属するすべての射を $\mathrm{Sh}(\mathcal{C})$ における同型射に写す。したがって、局所化の普遍性（定義1.1）により、関手
+        $$ \bar{a}: \mathrm{PSh}(\mathcal{C})[W^{-1}] \to \mathrm{Sh}(\mathcal{C}) $$
+        が一意に誘導され、$a = \bar{a} \circ Q$ を満たす。<br>
+        逆向きの関手は、単に包含関手 $i$ と局所化関手 $Q$ の合成として定義する。
+        $$ \bar{i} = Q \circ i: \mathrm{Sh}(\mathcal{C}) \to \mathrm{PSh}(\mathcal{C})[W^{-1}] $$
+
+        <br>
+        <strong>Step 2: $\bar{a} \circ \bar{i} \simeq \mathrm{Id}_{\mathrm{Sh}(\mathcal{C})}$ の証明</strong><br>
+        定義より、$\bar{a} \circ \bar{i} = \bar{a} \circ (Q \circ i) = (\bar{a} \circ Q) \circ i = a \circ i$ である。
+        層の圏 $\mathrm{Sh}(\mathcal{C})$ は前層の圏 $\mathrm{PSh}(\mathcal{C})$ の反射的充満部分圏 (reflective full subcategory) であるため、包含関手 $i$ は充満忠実 (fully faithful) である。随伴関手の一般論から、右随伴 $i$ が充満忠実であることと、余単位元 $\epsilon_F: a(i(F)) \to F$ がすべての層 $F \in \mathrm{Sh}(\mathcal{C})$ に対して同型射であることは同値である。
+        したがって、$\epsilon$ は自然同型 $\epsilon: \bar{a} \circ \bar{i} \xrightarrow{\sim} \mathrm{Id}_{\mathrm{Sh}(\mathcal{C})}$ を与える。<br><br>
+
+        <strong>Step 3: $\bar{i} \circ \bar{a} \simeq \mathrm{Id}_{\mathrm{PSh}(\mathcal{C})[W^{-1}]}$ の証明</strong><br>
+        $\mathrm{PSh}(\mathcal{C})[W^{-1}]$ における任意の対象は $Q(X)$ ($X \in \mathrm{PSh}(\mathcal{C})$) の形をしている。前層の圏における随伴 $a \dashv i$ に付随する単位元
+        $$ \eta_X: X \to i(a(X)) $$
+        を考える。これに層化関手 $a$ を施すと、$a(\eta_X): a(X) \to a(i(a(X)))$ となる。随伴の三角恒等式 (triangle identity) により、以下の合成は $\mathrm{Sh}(\mathcal{C})$ における恒等射 $\mathrm{id}_{a(X)}$ に等しい。
+        $$ a(X) \xrightarrow{a(\eta_X)} a(i(a(X))) \xrightarrow{\epsilon_{a(X)}} a(X) $$
+        Step 2 で確認したように $\epsilon_{a(X)}$ は同型射であるため、この合成が恒等射であることから、$a(\eta_X)$ も同型射でなければならない。
+        $a(\eta_X)$ が同型射であるということは、定義により $\eta_X$ 自身が局所同型であること、すなわち $\eta_X \in W$ であることを意味する。<br>
+        局所化関手 $Q$ は $W$ の元を同型射に送るため、$Q(\eta_X)$ は $\mathrm{PSh}(\mathcal{C})[W^{-1}]$ における同型射となる。
+        ここで、$\bar{i}(\bar{a}(Q(X))) = Q(i(a(X)))$ であるため、$Q(\eta_X)$ は $Q(X)$ から $\bar{i}(\bar{a}(Q(X)))$ への射を与えている。
+        $\eta$ の自然性から、これは対象 $Q(X)$ について自然な同型を与える。ゆえに、自然同型
+        $$ Q(\eta): \mathrm{Id}_{\mathrm{PSh}(\mathcal{C})[W^{-1}]} \xrightarrow{\sim} \bar{i} \circ \bar{a} $$
+        が成立する。<br><br>
+        以上の構成と証明により、前層の圏において局所同型をすべて「強制的に同型射にする」という局所化を行うと、層の圏に帰着することが完全に証明された。
+    </div>
+
+    <h2>4. 局所化を容易にする条件：分数計算 (Calculus of Fractions)</h2>
+
+    <div class="remark">
+        <p><strong>注意:</strong> 構成 1.2 で見たように、一般の圏の局所化 $\mathcal{C}[W^{-1}]$ における射は「任意の長さを持つジグザグのパス」の同値類であり、その具体的な計算や取り扱いは極めて困難である。しかし、射のクラス $W$ が「分数計算」と呼ばれる特別な公理を満たす場合、すべてのジグザグのパスは $f \circ w^{-1}$ という長さ2の単純な形（すなわち「分数」）に還元可能となり、局所化の構造が劇的に見通し良くなる。</p>
+    </div>
+
+    <div class="definition">
+        <strong>定義 4.1 (右分数計算の条件).</strong><br>
+        圏 $\mathcal{C}$ の射のクラス $W$ が<strong>右分数計算 (right calculus of fractions)</strong> を許容するとは、以下の3つの条件を満たすことである。
+        <ol>
+            <li><strong>閉包性:</strong> $W$ はすべての恒等射を含み、射の合成について閉じている。</li>
+            <li><strong>右Ore条件 (Right Ore condition):</strong> 任意の射 $f: X \to Y$ と $w: Z \to Y$ (ただし $w \in W$) の組に対して、ある対象 $W'$ と射 $g: W' \to Z$ および $v: W' \to X$ (ただし $v \in W$) が存在して、$f \circ v = w \circ g$ を満たす。<br>
+            すなわち、以下の図式を可換にする $v \in W$ が取れる：
+            $$ X \xleftarrow{v} W' \xrightarrow{g} Z $$
+            </li>
+            <li><strong>右相殺条件 (Right cancellability):</strong> 2つの射 $f, g: X \to Y$ と、ある射 $w: Y \to Z \in W$ が $w \circ f = w \circ g$ を満たすならば、ある射 $v: W' \to X \in W$ が存在して、$f \circ v = g \circ v$ を満たす。</li>
+        </ol>
+    </div>
+
+    <div class="theorem">
+        <strong>定理 4.2 (屋根による射の表現).</strong><br>
+        $W$ が右分数計算の条件を満たすとき、局所化された圏 $\mathcal{C}[W^{-1}]$ における任意の対象 $X$ から $Y$ への射は、ある対象 $W'$ を経由する以下の形の「屋根 (roof)」によって完全に表現される。
+        $$ X \xleftarrow{v} W' \xrightarrow{f} Y \quad (v \in W) $$
+        これは形式的な合成 $f \circ v^{-1}$ に対応する。さらに、2つの屋根 $(v_1, f_1)$ と $(v_2, f_2)$ が $\mathcal{C}[W^{-1}]$ において同一の射を定めるための必要十分条件は、ある対象 $W''$ と射 $u_1: W'' \to W'_1$, $u_2: W'' \to W'_2$ が存在して、$v_1 \circ u_1 = v_2 \circ u_2 \in W$ かつ $f_1 \circ u_1 = f_2 \circ u_2$ が成り立つことである。
+    </div>
+
+    <h2>5. 前層の圏における局所同型と分数計算の関係</h2>
+
+    <p>実は、前層の圏 $\mathrm{PSh}(\mathcal{C})$ における局所同型のクラス $W$ は、この右分数計算の条件を完璧に満たす。これにより、層の圏の局所化を通じた表現が直観的かつ具体的なものとなる。</p>
+
+    <div class="theorem">
+        <strong>定理 5.1.</strong><br>
+        前層の圏 $\mathrm{PSh}(\mathcal{C})$ における局所同型のクラス $W$ は、右分数計算を許容する。
+    </div>
+
+    <div class="proof">
+        <strong>定理 5.1 の証明.</strong><br>
+        層化関手 $a: \mathrm{PSh}(\mathcal{C}) \to \mathrm{Sh}(\mathcal{C})$ を用いると、$W$ は「$a$ によって同型射に送られる射の集合」と特徴づけられる。また、層化関手 $a$ は有限極限 (finite limits) を保存する（完全関手である）という極めて重要な性質を持つ。これを用いて各条件を証明する。<br><br>
+        
+        <strong>1. 閉包性:</strong>
+        関手 $a$ は恒等射を恒等射（同型射）に送り、同型射の合成は同型射であるため、$W$ は恒等射を含み合成について閉じている。<br><br>
+        
+        <strong>2. 右Ore条件の証明:</strong>
+        前層の射 $f: F \to H$ と $w: G \to H$ (ただし $w \in W$) を考える。前層の圏 $\mathrm{PSh}(\mathcal{C})$ は引き戻し (pullback) を持つため、引き戻し $F \times_H G$ を構成し、射影を $v: F \times_H G \to F$ および $g: F \times_H G \to G$ とする。引き戻しの普遍性により $f \circ v = w \circ g$ は可換図式をなす。
+        ここで、$v$ が $W$ に属することを示せばよい。層化関手 $a$ は有限極限を保存するため、引き戻しを引き戻しに写す。すなわち、
+        $$ a(F \times_H G) \simeq a(F) \times_{a(H)} a(G) $$
+        が成り立つ。仮定より $a(w): a(G) \to a(H)$ は $\mathrm{Sh}(\mathcal{C})$ における同型射である。任意の圏において、同型射の引き戻しは同型射であるため、射影 $a(v): a(F \times_H G) \to a(F)$ も同型射となる。これはすなわち $v \in W$ を意味する。よって右Ore条件が示された。<br><br>
+
+        <strong>3. 右相殺条件の証明:</strong>
+        前層の射 $f, g: F \to G$ と、$w: G \to H \in W$ があり、$w \circ f = w \circ g$ を満たすとする。
+        前層の圏において $f$ と $g$ の等化子 (equalizer) $E \xrightarrow{v} F$ をとる。層化関手 $a$ は等化子を保存するため、$a(E) \xrightarrow{a(v)} a(F)$ は $\mathrm{Sh}(\mathcal{C})$ における $a(f)$ と $a(g)$ の等化子である。
+        しかし、$a(w) \circ a(f) = a(w) \circ a(g)$ であり、かつ $a(w)$ は同型射（したがってモノ射）であるため、直ちに $a(f) = a(g)$ が従う。
+        2つの等しい射 $a(f)$ と $a(g)$ の等化子は定義域 $a(F)$ 自身（すなわち恒等射）と同型になる。したがって、$a(v)$ は同型射であり、定義より $v \in W$ である。等化子の性質から $f \circ v = g \circ v$ であり、右相殺条件が完全に示された。
+    </div>
+
+    <div class="remark">
+        <strong>層の圏の表現への応用:</strong><br>
+        定理 5.1 により、局所化された圏 $\mathrm{PSh}(\mathcal{C})[W^{-1}]$ における前層 $F$ から $G$ への射は、屋根 $F \xleftarrow{v} F' \xrightarrow{f} G$ ($v \in W$) の同値類として単純に記述される。
+        ここで、$G$ が<strong>層 (sheaf)</strong> である場合を考える。層は局所同型に対して直交性 (orthogonality) を持つ。すなわち、局所同型 $v: F' \to F$ に対して、任意の $f: F' \to G$ は一意的な拡張 $\bar{f}: F \to G$ を持ち、$\bar{f} \circ v = f$ を満たす。
+        これは、分数 $f \circ v^{-1}$ が常に「分母を払った」形 $\bar{f} \circ \mathrm{id}^{-1} = \bar{f}$ と同値になることを意味している。
+        ゆえに、層 $G$ への射全体の集合 $\mathrm{PSh}(\mathcal{C})[W^{-1}](F, G)$ は、通常のHom集合 $\mathrm{PSh}(\mathcal{C})(F, G)$ と自然に全単射となる。この分数計算を通じた見方は、$F$ から層 $G$ への射が、「局所的に同型な部分前層 $F'$ の上で定義されていれば十分である」という幾何学的な直観（例えば、稠密な開集合上で定義された関数が一意に拡張される現象の一般化）を明快に裏付けるものである。
+    </div>
+
+    <h2>参考文献</h2>
+    <ul>
+        <li>Borceux, F. (1994). <i>Handbook of Categorical Algebra: Volume 1, Basic Category Theory</i> (Encyclopedia of Mathematics and its Applications). Cambridge University Press. <br><a href="https://www.cambridge.org/core/books/handbook-of-categorical-algebra/A0B8285BBA900AFE85EED8C971E0DE14" target="_blank" rel="noopener noreferrer">https://www.cambridge.org/core/books/handbook-of-categorical-algebra/A0B8285BBA900AFE85EED8C971E0DE14</a></li>
+        <li>Gabriel, P., & Zisman, M. (1967). <i>Calculus of Fractions and Homotopy Theory</i> (Ergebnisse der Mathematik und ihrer Grenzgebiete). Springer. <br><a href="https://link.springer.com/book/10.1007/978-3-642-85844-4" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-3-642-85844-4</a></li>
+        <li>Kashiwara, M., & Schapira, P. (2006). <i>Categories and Sheaves</i> (Grundlehren der mathematischen Wissenschaften 332). Springer. <br><a href="https://link.springer.com/book/10.1007/3-540-27950-4" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/3-540-27950-4</a></li>
+        <li>Mac Lane, S., & Moerdijk, I. (1992). <i>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</i> (Universitext). Springer. <br><a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+    </ul>
+
+</body>
+</html>

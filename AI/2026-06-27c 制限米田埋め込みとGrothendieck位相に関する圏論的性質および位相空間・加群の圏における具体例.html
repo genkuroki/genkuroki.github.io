@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>制限米田埋め込みとGrothendieck位相に関する圏論的性質および位相空間・加群の圏における具体例</title>
+    
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true,
+            packages: {'[+]': ['ams']}
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        h1 { font-size: 1.8em; }
+        h2 { font-size: 1.5em; margin-top: 1.5em; }
+        h3 { font-size: 1.2em; }
+        .definition, .theorem, .lemma, .example {
+            background-color: #fff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .theorem { border-left-color: #e74c3c; }
+        .example { border-left-color: #27ae60; }
+        .proof {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        .proof-end {
+            text-align: right;
+            font-style: italic;
+        }
+        .note {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>制限米田埋め込みとGrothendieck位相に関する圏論的性質および位相空間・加群の圏における具体例</h1>
+
+    <div class="note">
+        <p>本稿では、圏論における制限米田埋め込み（restricted Yoneda embedding）、制限米田の補題、密な部分圏（dense subcategory）、Grothendieck位相（Grothendieck topology）、および層（sheaf）に関する一連の議論を詳細な証明とともにまとめます。幾何学的・代数的な具体例として、「特異単体集合」、「コンパクト生成空間」、「加群の圏における自由加群 $R$ の密性」、そして「収束列のプロトタイプ $\hat{\mathbb{N}}$ が生み出す点列空間」を網羅しています。</p>
+    </div>
+
+    <h2>1. 導入と基本概念の定義</h2>
+
+    <p>圏 $\mathcal{C}$ と、その充満部分圏 (full subcategory) $\mathcal{B}$ を考える。$\mathcal{C}$ の対象 $X$ に対して、$\mathcal{B}$ 上の反変関手 $I(X): \mathcal{B}^{\text{op}} \to \mathbf{Set}$ を次のように定義する。</p>
+    <p>$$I(X) = \text{Hom}_{\mathcal{C}}(-, X)|_{\mathcal{B}}$$</p>
+    <p>すなわち、任意の $S \in \text{Ob}(\mathcal{B})$ に対して $I(X)(S) = \text{Hom}_{\mathcal{C}}(S, X)$ となる前層 (presheaf) である。関手 $I: \mathcal{C} \to \mathbf{Set}^{\mathcal{B}^{\text{op}}}$ を<strong>制限米田関手 (restricted Yoneda functor)</strong> と呼ぶ。これは圏 $\mathcal{C}$ から前層の圏への普遍的なアプローチを与える。</p>
+
+    <div class="definition">
+        <strong>定義 1.1 (コンマ圏)</strong><br>
+        対象 $X \in \text{Ob}(\mathcal{C})$ に対し、コンマ圏 (comma category) $\mathcal{B} \downarrow X$ を以下のように定義する。
+        <ul>
+            <li><strong>対象:</strong> 組 $(S, s)$。ここで $S \in \text{Ob}(\mathcal{B})$ であり、$s: S \to X$ は $\mathcal{C}$ の射。</li>
+            <li><strong>射:</strong> $(S, s)$ から $(T, t)$ への射は、$\mathcal{B}$ の射 $u: S \to T$ であって、$t \circ u = s$ を満たすもの。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.2 (余錐と余極限)</strong><br>
+        インデックス圏 $\mathcal{J}$ から圏 $\mathcal{C}$ への関手（図式） $D: \mathcal{J} \to \mathcal{C}$ について、<strong>余錐 (cocone)</strong> とは、対象 $Y \in \text{Ob}(\mathcal{C})$ と射の族 $\{c_j: D(j) \to Y\}_{j \in \text{Ob}(\mathcal{J})}$ の組であり、任意の射 $u: i \to j$ in $\mathcal{J}$ に対して $c_j \circ D(u) = c_i$ を満たすものをいう。<br>
+        <strong>余極限 (colimit)</strong> とは、すべての余錐の中で普遍性 (universal property) を満たすもの、すなわち任意の余錐 $(Z, \{z_j\})$ に対して、ある一意な射 $f: Y \to Z$ が存在して $z_j = f \circ c_j$ を満たす対象 $Y$ （および余錐）のことである。
+    </div>
+
+    <p>ここでの図式として自然な忘却関手 $D: \mathcal{B} \downarrow X \to \mathcal{C}$ （$(S, s) \mapsto S$）を考えるとき、元の射の族 $\{s: S \to X\}$ 自身が図式 $D$ に対する余錐をなす。</p>
+
+    <div class="definition">
+        <strong>定義 1.3 (密な部分圏)</strong><br>
+        充満部分圏 $\mathcal{B}$ が圏 $\mathcal{C}$ において<strong>密 (dense)</strong> であるとは、任意の $X \in \text{Ob}(\mathcal{C})$ に対して、上記の余錐 $\{s: S \to X\}$ が図式 $\mathcal{B} \downarrow X$ の余極限を与えることである。
+    </div>
+
+    <h2>2. 制限米田の補題（Restricted Yoneda Lemma）の定式化と証明</h2>
+
+    <p>通常の米田の補題は、$\mathcal{B}$ 上の表現可能関手 $h_S = \text{Hom}_{\mathcal{B}}(-, S)$ について $\text{Nat}(h_S, F) \cong F(S)$ を主張する。これを、大きな圏 $\mathcal{C}$ の対象 $X$ を用いた制限米田関手 $I(X)$ に一般化したものが「制限米田の補題」である。</p>
+
+    <div class="theorem">
+        <strong>定理 2.1 (制限米田の補題)</strong><br>
+        $X \in \text{Ob}(\mathcal{C})$ とし、$F: \mathcal{B}^{\text{op}} \to \mathbf{Set}$ を任意の前層とする。このとき、コンマ圏を通じた以下の自然な全単射が存在する。
+        $$ \text{Nat}_{\mathcal{B}^{\text{op}}}(I(X), F) \cong \varprojlim_{(S, s) \in (\mathcal{B} \downarrow X)^{\text{op}}} F(S) $$
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>自然変換 $\alpha: I(X) \to F$ を任意にとる。$\alpha$ は各 $S \in \text{Ob}(\mathcal{B})$ において成分 $\alpha_S: \text{Hom}_{\mathcal{C}}(S, X) \to F(S)$ を持つ。</p>
+        <p>図式 $\mathcal{B} \downarrow X$ の各対象 $s: S \to X$ に対して、要素 $\alpha_S(s) \in F(S)$ が定まる。$\alpha$ が自然変換であるという条件は、$\mathcal{B}$ の任意の射 $u: S' \to S$ に対して、$F(u): F(S) \to F(S')$ と $I(X)(u): \text{Hom}_{\mathcal{C}}(S, X) \to \text{Hom}_{\mathcal{C}}(S', X)$ について図式が可換になること、すなわち
+        $$ F(u)(\alpha_S(s)) = \alpha_{S'}(s \circ u) $$
+        が成り立つことである。</p>
+        <p>ここで $s' = s \circ u$ と置くと、射 $u$ はコンマ圏 $\mathcal{B} \downarrow X$ における射 $u: (S', s') \to (S, s)$ であり、$F$ をこのコンマ圏上の図式とみなしたときの制限写像が上の等式である。したがって、自然変換を与えることは、すべての $s: S \to X$ について両立する元の族 $\{\alpha_S(s)\} \in \prod F(S)$ を一つ指定することと全く同じであり、これは逆極限（射影極限）$\varprojlim_{(S, s)} F(S)$ の定義に他ならない。</p>
+        <div class="proof-end">証明終</div>
+    </div>
+
+    <div class="example">
+        <strong>理解に役立つ具体例：特異単体集合（位相空間と単体）</strong><br>
+        $\mathcal{C} = \mathbf{Top}$（位相空間の圏）、$\mathcal{B} = \mathbf{\Delta}_{top}$（標準単体 $\Delta^n$ を対象とする圏）とします。このとき、制限米田関手 $I(X) = \text{Hom}_{\mathbf{Top}}(-, X)|_{\mathbf{\Delta}_{top}}$ は、各単体 $\Delta^n$ から位相空間 $X$ への連続写像（特異 $n$-単体）の集合を与える前層であり、これはまさに $X$ の<strong>特異単体集合 (singular simplicial set) $\text{Sing}(X)$</strong> です。<br>
+        制限米田の補題は、特異単体集合 $\text{Sing}(X)$ から任意の前層 $F$ への自然変換 $\alpha$ を決定するには、<strong>「$X$ 内のあらゆる特異単体 $s: \Delta^n \to X$ に対して $F(\Delta^n)$ の元を一つずつ選び、それが面や退化（境界の貼り合わせ）の条件と矛盾しないように割り当てること」</strong>と完全に同じである、という幾何学的に極めて自然な事実を述べています。大きな空間 $X$ を直接扱う代わりに、小さなテスト空間（単体）の写像たちを通してデータを完全に掌握できるという強力なツールです。
+    </div>
+
+    <h2>3. 制限米田関手と密性</h2>
+
+    <p>制限米田関手 $I$ の振る舞いと、部分圏が密であることの関係について、以下の基本的な同値性が成立する。前節の制限米田の補題を用いることで極めて見通しよく証明できる。</p>
+
+    <div class="theorem">
+        <strong>定理 3.1</strong><br>
+        制限米田関手 $I: \mathcal{C} \to \mathbf{Set}^{\mathcal{B}^{\text{op}}}$ が忠実充満 (fully faithful) であること（すなわち前層の圏への完全な埋め込みであること）と、$\mathcal{B}$ が $\mathcal{C}$ の密な部分圏であることは同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>$I$ が忠実充満であるとは、任意の $X, Y \in \text{Ob}(\mathcal{C})$ に対して、写像
+        $$I_{X,Y}: \text{Hom}_{\mathcal{C}}(X, Y) \to \text{Nat}(I(X), I(Y)), \quad f \mapsto I(f)$$
+        が全単射になることである。ここで $I(f)$ は、各 $S \in \text{Ob}(\mathcal{B})$ において $I(f)_S: \text{Hom}_{\mathcal{C}}(S, X) \to \text{Hom}_{\mathcal{C}}(S, Y)$ を $s \mapsto f \circ s$ と定める自然変換 (natural transformation) である。</p>
+
+        <p><strong>ステップ 1: 自然変換と余錐の対応</strong><br>
+        制限米田の補題（定理 2.1）において、前層を $F = I(Y)$ と置く。すると自然な全単射
+        $$\text{Nat}(I(X), I(Y)) \cong \varprojlim_{(S, s) \in (\mathcal{B} \downarrow X)^{\text{op}}} I(Y)(S)$$
+        が得られる。ここで右辺の極限の中身は $I(Y)(S) = \text{Hom}_{\mathcal{C}}(S, Y)$ である。コンマ圏の逆極限 $\varprojlim_{s: S \to X} \text{Hom}_{\mathcal{C}}(S, Y)$ の元とは、各 $s: S \to X$ に対して射 $c_s: S \to Y$ を割り当てる規則であり、任意の $\mathcal{B}$ の射 $u: S' \to S$ について $c_{s \circ u} = c_s \circ u$ を満たす族 $\{c_s\}$ のことである。</p>
+        
+        <p>これはまさに、図式 $\mathcal{B} \downarrow X$ から対象 $Y$ への<strong>余錐 (cocone)</strong> の定義に他ならない。</p>
+
+        <p><strong>ステップ 2: 同値性の帰結</strong><br>
+        前述の通り、射 $f: X \to Y$ から定まる自然変換 $I(f)$ は余錐 $c_s = f \circ s$ に対応する。したがって、$I_{X,Y}$ が全単射である（関手が忠実充満である）という主張は、以下のように翻訳できる。</p>
+        <p>「図式 $\mathcal{B} \downarrow X$ から $Y$ への任意の余錐 $\{c_s\}$ に対して、ただ一つの射 $f: X \to Y$ が存在して、すべての $s$ について $c_s = f \circ s$ が成り立つ。」</p>
+        <p>これはまさに、$X$ を頂点とし $\{s\}$ を辺とする族が、図式の余極限になるという普遍性の定義そのものである。したがって、定理の同値性が示された。</p>
+        <div class="proof-end">証明終</div>
+    </div>
+
+    <h2>4. Grothendieck位相と層の条件</h2>
+
+    <p>次に、部分圏 $\mathcal{B}$ にGrothendieck位相 (Grothendieck topology) $J$ が与えられているとする。このとき、前層 $I(X)$ が層になるための条件を考察する。</p>
+
+    <div class="definition">
+        <strong>定義 4.1 (ふるい)</strong><br>
+        $\mathcal{B}$ の対象 $S$ 上の<strong>ふるい (sieve)</strong> $R$ とは、$S$ を終域とする射の集まりであって、任意の射の引き戻しについて閉じているもの（すなわち $f \in R$ かつ $g$ が $f$ と合成可能な $\mathcal{B}$ の射ならば $f \circ g \in R$）である。
+    </div>
+
+    <p>前層 $F: \mathcal{B}^{\text{op}} \to \mathbf{Set}$ が位相 $J$ についての層 (sheaf) であるとは、任意の $S \in \text{Ob}(\mathcal{B})$ とその上の任意の被覆ふるい (covering sieve) $R \in J(S)$ に対して、制限写像
+    $$F(S) \cong \text{Nat}(\text{Hom}_{\mathcal{B}}(-, S), F) \xrightarrow{\cong} \text{Nat}(R, F)$$
+    が全単射になることである。</p>
+
+    <div class="theorem">
+        <strong>定理 4.2</strong><br>
+        任意の $X \in \text{Ob}(\mathcal{C})$ に対して前層 $\text{Hom}_{\mathcal{C}}(-, X)|_{\mathcal{B}}$ が $J$ 上の層になるための必要十分条件は、位相 $J$ による任意の被覆ふるいが、大きな圏 $\mathcal{C}$ において、対象 $S$ を余極限として持つことである。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>$F = \text{Hom}_{\mathcal{C}}(-, X)|_{\mathcal{B}}$ とする。層の条件 $F(S) \cong \text{Nat}(R, F)$ の両辺を要素ごとに書き下す。</p>
+        <p>左辺は定義より $F(S) = \text{Hom}_{\mathcal{C}}(S, X)$ である。右辺の自然変換 $\alpha \in \text{Nat}(R, F)$ は、各 $f: U \to S \in R$ に対して射 $\alpha(f): U \to X \in \mathcal{C}$ を対応させる族であり、自然性の条件として、任意の $\mathcal{B}$ の射 $h: V \to U$ に対し
+        $$\alpha(f \circ h) = \alpha(f) \circ h$$
+        を満たす。これは、ふるい $R$ に属する射からなるインデックス圏から $X$ への両立条件を満たす射の族（すなわち余錐）に他ならない。</p>
+        <p>層の条件を満たすための写像 $\Phi: \text{Hom}_{\mathcal{C}}(S, X) \to \text{Nat}(R, F)$ は、$x \mapsto \{x \circ f\}_{f \in R}$ で与えられる。この $\Phi$ が全単射であるということは、以下の2条件が満たされることと同値である。</p>
+        <ol>
+            <li><strong>全射性:</strong> 任意の自然変換（両立する族）$\alpha$ に対して、ある射 $x: S \to X$ が存在して $\alpha(f) = x \circ f$ がすべての $f \in R$ で成立する。</li>
+            <li><strong>単射性:</strong> そのような $x$ は一意に定まる。</li>
+        </ol>
+        <p>これはまさに、ふるい $R$ （のなす図式）から $X$ への任意の余錐が、$S$ を経由して一意に分解できること、すなわち<strong>図式 $R$ が圏 $\mathcal{C}$ において対象 $S$ を余極限に持つこと</strong>の普遍性の定義そのものである。</p>
+        <div class="proof-end">証明終</div>
+    </div>
+
+    <h2>5. 具体例1：位相空間の圏とコンパクト生成空間</h2>
+
+    <div class="example">
+        <strong>舞台設定</strong>
+        <ul>
+            <li>$\mathcal{C} = \mathbf{Top}$ : 任意の位相空間と連続写像の圏。</li>
+            <li>$\mathcal{B} = \mathbf{CompHaus}$ : コンパクトかつHausdorffな位相空間の充満部分圏。</li>
+        </ul>
+    </div>
+
+    <h3>5.1. 密な部分圏とコンパクト生成空間</h3>
+    <p>位相空間 $X$ について「$\mathbf{CompHaus}$ が $X$ において密である」という条件は、コンマ圏 $\mathbf{CompHaus} \downarrow X$ の余極限として $X$ が表現できることを意味する。$\mathbf{Top}$ における余極限の位相は商位相 (final topology) であるため、この圏論的条件は位相空間論における<strong>コンパクト生成空間 (compactly generated space / k-space)</strong> の定義（部分集合 $V \subset X$ が開 $\iff$ 任意のコンパクトHausdorff空間からの連続写像による逆像が常に開）と完全に同値になる。</p>
+
+    <p>定理3.1より、制限米田関手 $I: \mathbf{Top} \to \mathbf{Set}^{\mathbf{CompHaus}^{\text{op}}}$ は、コンパクト生成空間のなす充満部分圏 $\mathbf{CompGen}$ に制限したときに初めて忠実充満（完全な埋め込み）となる。逆を言えば、コンパクト生成空間ではない巨大な空間では情報が欠落し、忠実充満にはならない。</p>
+
+    <h3>5.2. 有限閉被覆のGrothendieck位相と写像の貼り合わせ</h3>
+    <p>$\mathbf{CompHaus}$ 上のGrothendieck位相 $J$ として、「有限個の閉部分空間による被覆」から生成される位相を考える。このとき定理4.2の「被覆ふるい $R$ が $\mathbf{Top}$ で $K$ を余極限に持つ」という条件は、一般位相空間論における<strong>写像の貼り合わせの補題 (Gluing Lemma)</strong> そのものとなる。したがって、この位相の組において前層 $I(X)$ が層になるという性質は、幾何学的な「局所的な連続写像の貼り合わせの一意性」を綺麗に反映している。</p>
+
+    <h2>6. 具体例2：位相空間の圏と点列空間（収束列 $\hat{\mathbb{N}}$ による生成）</h2>
+
+    <p>前節では $\mathbf{CompHaus}$ という巨大な部分圏を考えたが、ここでは「収束する点列」のプロトタイプとなる、たった一つの位相空間からなる充満部分圏を考える。可算離散空間 $\mathbb{N}$ の一点コンパクト化を $\hat{\mathbb{N}} = \mathbb{N} \cup \{\infty\}$ と書き、対象をこれのみに限定した充満部分圏を $\mathcal{B} = \{\hat{\mathbb{N}}\}$ とする。</p>
+    
+    <p>集合としては $\hat{\mathbb{N}} = \mathbb{N} \cup \{\infty\}$ であり、その位相は次のように定まる。</p>
+    <ul>
+        <li>各 $n \in \mathbb{N}$ は孤立点である（すなわち $\{n\}$ は開集合）。</li>
+        <li>$\infty$ の基本近傍系は、$\mathbb{N}$ の有限部分集合 $F$ を用いて $\hat{\mathbb{N}} \smallsetminus F$ と書ける集合全体である。</li>
+    </ul>
+
+    <div class="lemma">
+        <strong>補題 6.1 ($\hat{\mathbb{N}}$ からの連続写像)</strong><br>
+        任意の位相空間 $X$ について、写像 $f: \hat{\mathbb{N}} \to X$ が連続であることの必要十分条件は、点列 $(f(n))_{n=1}^{\infty}$ が $X$ において点 $f(\infty)$ に収束することである。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>($\Rightarrow$ の証明)</strong><br>
+        $f$ が連続であるとする。$f(\infty)$ の $X$ における任意の開近傍 $U$ をとる。$f$ の連続性より、逆像 $f^{-1}(U)$ は $\hat{\mathbb{N}}$ における $\infty$ の開近傍である。$\hat{\mathbb{N}}$ の位相の定義から、ある有限集合 $F \subset \mathbb{N}$ が存在して $\hat{\mathbb{N}} \smallsetminus F \subset f^{-1}(U)$ となる。$F$ は有限であるため、ある自然数 $N$ が存在して、すべての $n \ge N$ について $n \notin F$ となる。したがって $n \ge N$ ならば $n \in f^{-1}(U)$、すなわち $f(n) \in U$ である。これは点列 $(f(n))$ が $f(\infty)$ に収束することを意味する。</p>
+        
+        <p><strong>($\Leftarrow$ の証明)</strong><br>
+        点列 $(f(n))$ が $f(\infty)$ に収束すると仮定する。$X$ の任意の開集合 $U$ をとり、その逆像 $f^{-1}(U)$ が $\hat{\mathbb{N}}$ で開集合になることを示す。もし $\infty \notin f^{-1}(U)$ であれば、$f^{-1}(U) \subset \mathbb{N}$ である。$\mathbb{N}$ の任意の部分集合は開集合であるから、$f^{-1}(U)$ は開集合である。一方、$\infty \in f^{-1}(U)$、すなわち $f(\infty) \in U$ の場合、収束の仮定より、ある $N$ が存在して $n \ge N$ ならば $f(n) \in U$ となる。したがって $f^{-1}(U)$ は $\infty$ を含み、かつ補集合が有限集合（高々 $\{1, \dots, N-1\}$ の部分集合）となるため、$\hat{\mathbb{N}}$ における開集合である。よって $f$ は連続である。</p>
+        <div class="proof-end">証明終</div>
+    </div>
+
+    <h3>6.1. 点列空間の定義</h3>
+
+    <div class="definition">
+        <strong>定義 6.2 (点列的に開 / 閉)</strong><br>
+        位相空間 $X$ の部分集合 $U \subset X$ が<strong>点列的に開 (sequentially open)</strong> であるとは、$X$ の任意の点列 $(x_n)$ が $x \in U$ に収束するならば、ある $N \in \mathbb{N}$ が存在して、すべての $n \ge N$ に対して $x_n \in U$ となることである。<br>
+        補集合が点列的に開であること、すなわち「$F$ の任意の点列 $(x_n)$ が $x \in X$ に収束するならば、$x \in F$ である」という条件を満たす集合 $F$ を<strong>点列的に閉 (sequentially closed)</strong> であるという。
+    </div>
+
+    <div class="definition">
+        <strong>定義 6.3 (点列空間)</strong><br>
+        位相空間 $X$ が<strong>点列空間 (sequential space)</strong> であるとは、$X$ の部分集合 $U$ が開集合であるための必要十分条件が、$U$ が点列的に開であること（同値な条件として、部分集合が閉集合であるための必要十分条件が点列的に閉であること）である。
+    </div>
+
+    <h3>6.2. 前層の圏への埋め込みと点列空間の同値性</h3>
+    <p>部分圏 $\mathcal{B} = \{\hat{\mathbb{N}}\}$ は単一対象からなるため、その上の前層の圏 $\mathbf{Set}^{\{\hat{\mathbb{N}}\}^{\text{op}}}$ は、$\hat{\mathbb{N}}$ の自己連続写像モノイド $\text{End}(\hat{\mathbb{N}})$ が作用する集合の圏と等価である。このとき、制限米田関手（前層の圏への埋め込み）
+    $$I: \mathbf{Top} \to \mathbf{Set}^{\{\hat{\mathbb{N}}\}^{\text{op}}}, \quad X \mapsto \text{Hom}_{\mathbf{Top}}(\hat{\mathbb{N}}, X)$$
+    は、空間 $X$ を「$X$ 内のすべての収束点列の集合」へと送り出す。この埋め込みが忠実充満（構造を壊さない完全な写像）となる空間のクラスを特徴付けることができる。</p>
+
+    <div class="theorem">
+        <strong>定理 6.4 (点列空間の圏論的特徴付け)</strong><br>
+        位相空間 $X$ について、制限米田埋め込みが忠実充満である（すなわち、$\{\hat{\mathbb{N}}\}$ が $X$ において密であり $X \cong \varinjlim (\{\hat{\mathbb{N}}\} \downarrow X)$ が成立する）ことの必要十分条件は、$X$ が<strong>点列空間 (sequential space)</strong> であることである。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>位相空間の圏 $\mathbf{Top}$ における余極限の位相は最終位相 (final topology) である。圏論的な同型 $X \cong \varinjlim (\{\hat{\mathbb{N}}\} \downarrow X)$ が成り立つということは、集合としての $X$ に与えられている位相が、すべての連続写像 $f: \hat{\mathbb{N}} \to X$ に関する最終位相と一致することと同値である。最終位相の定義より、これは以下のように言い換えられる。</p>
+        
+        <p>「$X$ の部分集合 $U$ が開集合である $\iff$ 任意の連続写像 $f: \hat{\mathbb{N}} \to X$ に対して、$f^{-1}(U)$ が $\hat{\mathbb{N}}$ の開集合である。」</p>
+        
+        <p>補題 6.1 より、$\hat{\mathbb{N}}$ から $X$ への連続写像は、$X$ における収束列とその極限点の組と完全に一対一対応する。すなわち、$f$ が連続であるとは、点列 $(f(n))$ が $f(\infty)$ に収束することに他ならない。</p>
+        
+        <p>ここで、「$f^{-1}(U)$ が $\hat{\mathbb{N}}$ の開集合である」という条件を解読する。<br>
+        もし $f(\infty) \notin U$ ならば、$\infty \notin f^{-1}(U)$ となり、$\mathbb{N}$ の任意の部分集合は開集合であるから無条件で成立する。<br>
+        問題は $f(\infty) \in U$ の場合である。$\infty \in f^{-1}(U)$ が $\hat{\mathbb{N}}$ の開集合であるための必要十分条件は、補集合が有限であること、すなわち「ある $N \in \mathbb{N}$ が存在して、すべての $n \ge N$ について $n \in f^{-1}(U)$（つまり $f(n) \in U$）」となることである。</p>
+        
+        <p>これをまとめると、上記の条件は以下のように翻訳される。</p>
+        
+        <p>「$X$ の部分集合 $U$ が開集合である $\iff$ $X$ において点 $x \in U$ に収束する任意の点列 $(x_n)$ に対して、ある $N$ が存在して $n \ge N$ ならば $x_n \in U$ となる。」</p>
+        
+        <p>この右辺は、まさに $U$ が点列的に開 (sequentially open) であるという定義そのものである。したがって、この圏論的な等式は、「開集合であること」と「点列的に開であること」が一致するという点列空間の定義と完全に同値である。</p>
+        <div class="proof-end">証明終</div>
+    </div>
+
+    <p>第一可算公理を満たす空間（すべての距離空間など）やCW複体はすべて点列空間であるため、これらの空間の構造は、前層の圏へと完全に埋め込んで圏論的に処理することが可能である。</p>
+
+    <h3>6.3. $\{\hat{\mathbb{N}}\}$ 上のGrothendieck位相と層の貼り合わせ</h3>
+    <p>次に、この単一対象圏 $\mathcal{B} = \{\hat{\mathbb{N}}\}$ の上にGrothendieck位相を導入し、層の条件（局所データから大域データの一意な復元）が点列空間の文脈でどのように現れるかを具体的に観察する。</p>
+    <p>$\mathcal{B}$ における次の2つの射（自己連続写像）を考える：
+    <ul>
+        <li>$f: \hat{\mathbb{N}} \to \hat{\mathbb{N}} \quad (f(n) = n+1, \ f(\infty) = \infty)$ ： 点列のインデックスを1つ後ろにずらすシフト写像。</li>
+        <li>$c_1: \hat{\mathbb{N}} \to \hat{\mathbb{N}} \quad (c_1(x) = 1)$ ： すべての点を最初の孤立点 $1$ に送る定数写像。</li>
+    </ul>
+    この射の族 $\{f, c_1\}$ が生成する $\hat{\mathbb{N}}$ 上の右ふるい $R$ を考える。このふるいは、$\hat{\mathbb{N}}$ を「最初の1点 $\{1\}$（$c_1$ の像）」と「残りの尾部 $\{2,3,\dots,\infty\}$（$f$ の像）」の2つの閉集合に分割する被覆に対応している。</p>
+
+    <div class="theorem">
+        <strong>定理 6.5 (点列のドッキングによる層条件)</strong><br>
+        この閉被覆から誘導されるふるい $R$ は $\mathbf{Top}$ において $\hat{\mathbb{N}}$ を余極限として持つ。したがって、任意の位相空間 $X$ に対する前層 $I(X) = \text{Hom}_{\mathbf{Top}}(-, X)|_{\mathcal{B}}$ は、このふるい $R$ に関して層の条件を満たす。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>定理4.2より、前層 $I(X)$ が層の条件を満たすための必要十分条件は、写像
+        $$\Phi: \text{Hom}_{\mathbf{Top}}(\hat{\mathbb{N}}, X) \to \text{Nat}(R, I(X))$$
+        が全単射となることである。右辺の自然変換（両立する局所データの族）を具体的に下ろすと、ふるいの生成元 $c_1, f$ に対する引き戻しの性質から、次の2つのデータを与えることと等価になる：
+        <ol>
+            <li>定数写像 $c_1$ による引き戻し：単なる $X$ の点 $x_1 \in X$。</li>
+            <li>シフト写像 $f$ による引き戻し：$X$ におけるある収束点列 $(y_1, y_2, \dots ; y_\infty)$。</li>
+        </ol>
+        共通部分（この分割では交わりは空集合）における両立条件は自動的に満たされる。このとき、層の全単射条件 $\Phi$ は、「一意な点 $x_1$ と、一意な収束列 $(y_n) \to y_\infty$ が与えられたとき、それらを先頭と尾部としてドッキングした、全体としての新しい収束点列
+        $$(x_1, y_1, y_2, y_3, \dots ; y_\infty)$$
+        が $X$ 内にただ一つ一意に定まる」という主張になる。これは位相空間論における収束列の性質（有限個の項を先頭に付け加えても収束性と極限は変わらない）から常に真である。したがって、普遍性が満たされ、$I(X)$ は層となる。</p>
+        <div class="proof-end">証明終</div>
+    </div>
+
+    <p>このように、抽象的な「前層が層になる」という圏論の幾何学的要請は、点列の文脈においては**「バラバラに与えられた先頭の項と、後ろの収束列のパーツを繋ぎ合わせて、一つの正しい収束列を復元できる」**という極めて具体的な貼り合わせの事実に他ならないことが示される。</p>
+
+
+    <h2>7. 具体例3：加群の圏における生成元と密性（Topとの違い）</h2>
+
+    <div class="example">
+        <strong>舞台設定</strong>
+        <ul>
+            <li>$R$ : 単位元を持つ環。</li>
+            <li>$\mathcal{C} = \mathbf{Mod}_R$ : 右 $R$-加群と準同型の圏。</li>
+            <li>$\mathcal{B} = \{R\}$ : 環 $R$ 自身（階数1の自由加群）のみからなる充満部分圏。</li>
+        </ul>
+    </div>
+
+    <p>任意の $M \in \text{Ob}(\mathbf{Mod}_R)$ に対する制限米田関手は $I(M)(R) = \text{Hom}_R(R, M) \cong M$ となり、加群をその台集合に対応させる忘却関手となる。コンマ圏 $\{R\} \downarrow M$ は「加群 $M$ の元の集合」で添字付けられた図式をなす。</p>
+    
+    <p>代数的な関係（元の加法とスカラー倍）のみで構造が決定される加群の圏においては、任意の加群 $M$ はその元を生成元とする自由加群からの自然な全射の余極限（canonical presentation）として記述できる。すなわち、
+    $$M \cong \varinjlim_{x \in \{R\} \downarrow M} R$$
+    が制限なしに**圏 $\mathbf{Mod}_R$ 全体において常に成立する**。</p>
+
+    <div class="note">
+        <p><strong>代数的圏と幾何学的圏（Top）の決定的な違い：</strong><br>
+        位相空間の圏 $\mathbf{Top}$ では、部分圏がどれだけ巨大（$\mathbf{CompHaus}$）であれ、極小（$\{\hat{\mathbb{N}}\}$）であれ、空間の持つ「トポロジーの微細な情報」を拾いきれない対象が存在するため、圏全体では密にならず、制限（$\mathbf{CompGen}$ や $\mathbf{Seq}$）が必要であった。<br>
+        しかし代数的な Grothendieck 圏である $\mathbf{Mod}_R$ においては、基本的なビルディングブロック（自由加群 $R$）を一つ用意するだけで、何ら対象を制限することなく圏のすべてを完璧に復元（密であること・忠実充満）できる。ここに、幾何空間と代数構造の持つ圏論的な性質の美しいコントラストが現れている。</p>
+    </div>
+
+
+    <h2>8. 参考文献</h2>
+    <ul>
+        <li>Mac Lane, S. (1971). <em>Categories for the Working Mathematician</em>. Springer-Verlag.</li>
+        <li>Artin, M., Grothendieck, A., Verdier, J. L. (1972). <em>SGA 4: Théorie des Topos et Cohomologie Etale des Schémas</em>. Lecture Notes in Mathematics, vol 269. Springer.</li>
+        <li>Johnstone, P. T. (2002). <em>Sketches of an Elephant: A Topos Theory Compendium</em>. Oxford University Press.</li>
+        <li>Kashiwara, M., Schapira, P. (2006). <em>Categories and Sheaves</em>. Springer-Verlag. <br><a href="https://link.springer.com/book/10.1007/3-540-27950-4" target="_blank">https://link.springer.com/book/10.1007/3-540-27950-4</a></li>
+        <li>Engelking, R. (1989). <em>General Topology</em>. Heldermann Verlag.</li>
+    </ul>
+
+</body>
+</html>

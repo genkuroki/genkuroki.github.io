@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>超不連結コンパクトHausdorff空間の圏におけるGrothendieck位相とカノニカル位相の厳密な考察</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', 'Noto Serif JP', serif;
+            line-height: 1.8;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            background-color: #fcfcfc;
+            color: #333;
+        }
+        h1 {
+            font-size: 24pt;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4a5568;
+            padding-bottom: 10px;
+            color: #1a202c;
+        }
+        h2 {
+            font-size: 16pt;
+            border-left: 5px solid #2b6cb0;
+            padding-left: 10px;
+            margin-top: 40px;
+            color: #2d3748;
+        }
+        h3 {
+            font-size: 13pt;
+            margin-top: 30px;
+            color: #4a5568;
+            border-bottom: 1px dashed #cbd5e0;
+            padding-bottom: 4px;
+        }
+        p {
+            margin-bottom: 1.5em;
+            text-align: justify;
+        }
+        .proof {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .proof::before {
+            content: "【証明】";
+            font-weight: bold;
+            color: #2b6cb0;
+        }
+        .proof::after {
+            content: " ◼";
+            float: right;
+            color: #2b6cb0;
+        }
+        .definition {
+            background-color: #f0f4f8;
+            border-left: 4px solid #4b5563;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .definition::before {
+            content: "【定義】";
+            font-weight: bold;
+            color: #4b5563;
+        }
+        .example {
+            background-color: #fbf7f0;
+            border-left: 4px solid #b7791f;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .example::before {
+            content: "【例】";
+            font-weight: bold;
+            color: #b7791f;
+        }
+        .note {
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        code {
+            font-family: monospace;
+            background-color: #edf2f7;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        ul {
+            margin-bottom: 1.5em;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        a {
+            color: #2b6cb0;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .math-display {
+            overflow-x: auto;
+            margin: 1.5em 0;
+            text-align: center;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>超不連結コンパクトHausdorff空間の圏におけるGrothendieck位相とカノニカル位相の厳密な考察</h1>
+
+<h2>1. 導入</h2>
+<p>
+本稿の目的は、圏論および局所構造の貼り合わせを記述する幾何学的道具であるGrothendieck位相に関して、これまでのチャットで議論された数学的論点を完全にself-containedな形で整理・明文化することです。
+</p>
+<p>
+特に、前回の議論において生じた「恒等射のみを被覆とする自明な位相」の厳密な定義とその公理の検証、および超不連結コンパクトHausdorff空間の圏（$\mathbf{EDCompHaus}$）におけるカノニカル位相（canonical topology）の特徴付けにまつわる論理的飛躍について、真摯な修正と厳密なフルな証明を与えます。
+</p>
+<p>
+数学的な議論の過程において、圏論における「ふるい（sieve）」の定義がいかに厳密な右合成の閉鎖性を要求するかを再確認し、直和からの射がふるいに属するか否かという繊細な境界線を明確にします。これにより、位相空間論における強力な定理であるGleasonの定理が、圏論の舞台でどのようにカノニカル位相を決定づけるのかを浮き彫りにします。
+</p>
+
+<h2>2. 基本概念の定義</h2>
+<p>
+本節では、以降の議論で必要となる基本概念を厳密に定義する。本稿を通じて、対象の包含関係は $\subset$ を用い、空集合は $\varnothing$、集合の差は $\smallsetminus$ で表す。
+</p>
+
+<div class="definition">（ふるい）
+圏 $\mathcal{C}$ の対象 $X$ 上の<strong>ふるい (sieve)</strong> $R$ とは、$X$ を余域（target）とする射の集合であって、右からの任意の合成に関して閉じているものである。すなわち、以下の条件を満たす集合 $R \subset \bigcup_{Y \in \text{Ob}(\mathcal{C})} \text{Hom}_{\mathcal{C}}(Y, X)$ である：
+$$f \in R \implies \text{任意の射 } g \text{ に対し、合成 } f \circ g \text{ が定義可能ならば } f \circ g \in R.$$
+</div>
+
+<div class="definition">（Grothendieck位相）
+圏 $\mathcal{C}$ 上の<strong>Grothendieck位相 (Grothendieck topology)</strong> $J$ とは、各対象 $X \in \text{Ob}(\mathcal{C})$ に対して $X$ 上のふるいの族 $J(X)$ を割り当てる写像であって、以下の3つの公理を満たすものである。$J(X)$ の要素を $X$ の被覆ふるい（covering sieve）と呼ぶ。
+<ul style="list-style-type: decimal; padding-left: 25px; margin-top: 10px;">
+    <li><strong>恒等射の公理（maximality）：</strong> $X$ に向かうすべての射の集合（最大ふるい） $t_X = \bigcup_{Y} \text{Hom}_{\mathcal{C}}(Y, X)$ は必ず $J(X)$ に含まれる。</li>
+    <li><strong>引き戻しの公理（stability）：</strong> $S \in J(X)$ であり、$f: Y \to X$ が任意の射であるとき、引き戻しふるい $f^*(S) = \{ g: Z \to Y \mid f \circ g \in S \}$ は $J(Y)$ に含まれる。</li>
+    <li><strong>局所性の公理（transitivity）：</strong> $S \in J(X)$ であり、$R$ が $X$ 上の任意のふるいとする。もし $S$ に含まれるすべての射 $f: Y \to X$ について引き戻しふるい $f^*(R)$ が $J(Y)$ に含まれるならば、$R$ 自身も $J(X)$ に含まれる。</li>
+</ul>
+</div>
+
+<div class="definition">（前層と層、およびカノニカル位相）
+圏 $\mathcal{C}$ 上の反変関手 $F: \mathcal{C}^{\text{op}} \to \mathbf{Set}$ を前層（presheaf）と呼ぶ。表現可能関手 $h_X = \text{Hom}_{\mathcal{C}}(-, X)$ も前層の例である。
+Grothendieck位相 $J$ を備えた圏 $(\mathcal{C}, J)$ 上の前層 $F$ が<strong>層 (sheaf)</strong> であるとは、任意の対象 $X$ および任意の被覆ふるい $S \in J(X)$ に対して、自然な射
+$$\text{Nat}(h_X, F) \to \text{Nat}(S, F)$$
+が全単射であることをいう。
+圏 $\mathcal{C}$ 上のすべての表現可能前層 $h_X$ を層にするような最大のGrothendieck位相を、その圏の<strong>カノニカル位相 (canonical topology)</strong> と呼ぶ。
+</div>
+
+<h2>3. 恒等射のみからなる自明な位相の厳密な検証</h2>
+<p>
+「恒等射のみを被覆とする位相」という表現は直観的であるものの、ふるいの言葉を用いて厳密化すると、「各対象 $X$ に対して、最大ふるい $t_X$ のみからなる族 $J_{\text{trivial}}(X) = \{t_X\}$ を被覆ふるいの全体とする」という意味になる。これが現実にGrothendieck位相の3つの公理を完璧に満たすことを以下にフルな証明をもって示す。
+</p>
+
+<h3>命題 3.1</h3>
+<p>
+任意の圏 $\mathcal{C}$ において、各対象 $X \in \text{Ob}(\mathcal{C})$ に対し $J_{\text{trivial}}(X) = \{t_X\}$ と定義すると、これは $\mathcal{C}$ 上のGrothendieck位相の公理を満たす。
+</p>
+
+<div class="proof">
+各公理について個別に検証を行う。
+<br><br>
+<strong>1. 恒等射の公理の検証：</strong>
+<br>
+定義より、$J_{\text{trivial}}(X)$ は最大ふるい $t_X$ を唯一の要素として含む集合である。したがって、$t_X \in J_{\text{trivial}}(X)$ は自明に成り立つ。
+<br><br>
+<strong>2. 引き戻しの公理の検証：</strong>
+<br>
+$S \in J_{\text{trivial}}(X)$ とする。定義より $S = t_X$ である。ここで任意の射 $f: Y \to X$ をとる。このとき、引き戻しふるい $f^*(t_X)$ は以下のように計算される：
+$$f^*(t_X) = \{ g: Z \to Y \mid f \circ g \in t_X \}.$$
+ここで $t_X$ は $X$ を余域とするすべての射の集合である。射 $f: Y \to X$ と射 $g: Z \to Y$ の合成 $f \circ g$ は、その余域が必ず $X$ になるため、定義から常に $f \circ g \in t_X$ を満たす。
+したがって、任意の射 $g: Z \to Y$ は条件 $f \circ g \in t_X$ を自動的に満たすため、
+$$f^*(t_X) = \{ g: Z \to Y \mid \text{任意の射} \} = t_Y$$
+となる。$t_Y \in J_{\text{trivial}}(Y) = \{t_Y\}$ であるため、引き戻しの公理は満たされる。
+<br><br>
+<strong>3. 局所性の公理の検証：</strong>
+<br>
+$S \in J_{\text{trivial}}(X)$（すなわち $S = t_X$）とし、$R$ を $X$ の任意のふるいとする。
+仮定より、$S = t_X$ に含まれるすべての射 $f: Y \to X$ について、$f^*(R) \in J_{\text{trivial}}(Y)$ が成り立つ。$J_{\text{trivial}}(Y) = \{t_Y\}$ であるから、この仮定は
+$$\forall f \in t_X, \quad f^*(R) = t_Y$$
+と言い換えられる。
+ここで、最大ふるい $t_X$ には $X$ の恒等射 $\text{id}_X: X \to X$ が当然含まれている。そこで、上記の条件において $f = \text{id}_X$ を代入すると、
+$$\text{id}_X^*(R) = t_X$$
+が得られる。恒等射による引き戻しの定義を確認すると、
+$$\text{id}_X^*(R) = \{ g: Z \to X \mid \text{id}_X \circ g \in R \} = \{ g: Z \to X \mid g \in R \} = R$$
+である。したがって、$R = t_X$ が導かれる。
+$t_X \in J_{\text{trivial}}(X)$ であるから、$R \in J_{\text{trivial}}(X)$ となり、局所性の公理が満たされる。
+</div>
+
+<p>
+この位相は圏論において<strong>自明な位相 (trivial topology)</strong> あるいは<strong>密着位相 (indiscrete topology)</strong> と呼ばれます。この位相のもとでは、貼り合わせを要求する被覆が「自分自身全体」という最大ふるいしか存在しないため、すべての前層が自動的に層になります。その結果、層の圏 $\mathbf{Sh}(\mathcal{C}, J_{\text{trivial}})$ と前層の圏 $\mathbf{PSh}(\mathcal{C})$ は完全に一致（圏同型）します。
+</p>
+
+<h2>4. $\mathbf{CompHaus}$ および $\mathbf{Stone}$ におけるカノニカル位相</h2>
+<p>
+コンパクトHausdorff空間の圏 $\mathbf{CompHaus}$ および Stone空間（コンパクト完全不連結Hausdorff空間）の圏 $\mathbf{Stone}$ におけるカノニカル位相は、自明な位相とは異なり、豊かなトポロジー的構造を反映している。これらの圏におけるカノニカル位相は、<strong>有限結合全射族 (finite jointly surjective family)</strong> によって生成されるふるいとして特徴付けられる。
+</p>
+<p>
+具体的には、対象 $X$ に対し、有限個の射の族 $\{f_i: X_i \to X\}_{i=1}^n$ が<strong>結合的に全射 (jointly surjective)</strong> であるとは、$\bigcup_{i=1}^n f_i(X_i) = X$ が成り立つことをいう。
+</p>
+<p>
+なぜ無限個の被覆がカノニカル位相に属さないのかについて、位相空間論的な観点からフルな証明のメカニズムを解説する。
+仮に無限個の閉集合による被覆 $\{F_\lambda\}_{\lambda \in \Lambda}$（ただし有限部分被覆を持たないもの）から生成されるふるいを被覆と認めてしまうと、各 $F_\lambda$ 上では連続であるが、空間 $X$ 全体では不連続になるような写像が構成可能となり、表現可能前層が層であるという公理（貼り合わせの一意存在）に矛盾する。
+</p>
+<p>
+コンパクトHausdorff空間において、無限閉被覆が有限部分被覆を持たない場合、空間 $X$ はその被覆に関して弱位相（weak topology）を持たない。弱位相を持たないということは、「被覆の各要素 $F_\lambda$ との共通部分は常に閉集合であるにもかかわらず、全体としては閉集合にならない」ような部分集合 $A \subset X$ が存在することを意味する。このとき、$A$ の特性関数、あるいはUrysohnの補題を用いて構成される関数は、各 $F_\lambda$ に制限すると連続関数になるが、$X$ 全体では不連続関数となる。これは表現可能関手 $h_I$（$I$ は単位区間など）が層の公理を満たさない原因となり、カノニカル位相の最大性に反する。したがって、カノニカル位相を生成する共同全射族は有限族に限られる。
+</p>
+
+<h2>5. $\mathbf{EDCompHaus}$ における誤謬の検証と正しい特徴付け</h2>
+
+<h3>5.1 前回の誤った論理の指摘</h3>
+<p>
+前回の解説において、私は超不連結コンパクトHausdorff空間の圏 $\mathbf{EDCompHaus}$（extremally disconnected compact Hausdorff spaces）におけるカノニカル位相もまた「自明な位相になる」と主張し、以下のような論理を展開してしまいました。
+</p>
+<p class="tex2jax_ignore" style="background-color: #ffe6e6; padding: 15px; border-left: 4px solid #cc0000; font-style: italic;">
+「有限結合全射族 $\{f_i: X_i \to X\}_{i=1}^n$ を含む任意の有効全射的ふるい $R$ を考える。直和からの自然な射 $p: \coprod X_i \to X$ を作ると、ふるい $R$ は族 $\{f_i\}$ から作られているため直和からの射 $p$ を含む。Gleasonの定理より $X$ は射影的であるから $p$ は断面 $s$ を持ち、$p \circ s = \text{id}_X \in R$ となるため $R$ は最大ふるいになる。」
+</p>
+<p>
+<strong>この論理は明確に誤りです。</strong> 誤謬の核心は「ふるい $R$ は族 $\{f_i\}$ から作られているため直和からの射 $p$ を含む」という記述にあります。
+</p>
+<p>
+ふるい $R$ が族 $\{f_i\}_{i=1}^n$ によって生成されている、あるいはそれを含んでいるということの厳密な定義は、
+$$\forall i \in \{1, \dots, n\}, \quad f_i \in R$$
+ということです。そしてふるいの定義（右合成閉鎖性）から、$R$ に含まれることが保証される射は、<strong>「いずれかの単一の $f_i$ を右から経由する射 ($f_i \circ g$)」のみ</strong>です。
+</p>
+<p>
+一方で、有限直和からの射 $p: \coprod_{i=1}^n X_i \to X$ は、各直和成分への包含射 $k_i: X_i \hookrightarrow \coprod X_i$ との合成において $p \circ k_i = f_i$ を満たしますが、<strong>$p$ 自身がいずれか単一の $f_i$ を経由して $p = f_i \circ h$ と書けるわけではありません。</strong>
+したがって、$f_i \in R$ から $p \in R$ を導くことは不可能であり、前回の証明は完全に崩壊します。
+</p>
+
+<h3>5.2 超不連結空間とGleasonの定理</h3>
+<p>
+正しい議論を行うために、基本定義と定理をだである調で導入する。
+</p>
+
+<div class="definition">（超不連結空間）
+位相空間 $X$ が<strong>超不連結 (extremally disconnected)</strong> であるとは、任意の開集合 $U \subset X$ の閉包 $\overline{U}$ が再び開集合（したがってclopen集合）になることをいう。
+</div>
+
+<p>
+超不連結コンパクトHausdorff空間の重要性は、以下のGleasonの定理によって圏論的に特徴付けられる。
+</p>
+
+<div class="definition">（Gleasonの定理）
+圏 $\mathbf{CompHaus}$ において、対象 $X$ が全射に関して<strong>射影的対象 (projective object)</strong> であることと、$X$ が超不連結空間であることは同値である。
+すなわち、$X$ が超不連結コンパクトHausdorff空間であるとき、任意の全射連続写像 $p: Y \to Z$ と任意の連続写像 $g: X \to Z$ に対して、 $p \circ h = g$ を満たす連続写像 $h: X \to Y$ が存在する。
+</div>
+
+<h3>5.3 カノニカル位相の正しい特徴付けとフルな証明</h3>
+<p>
+Gleasonの定理を「ふるいの定義」を侵さないように正しく適用することで、$\mathbf{EDCompHaus}$ におけるカノニカル位相の正確な幾何学的構造が得られる。結論として、この圏におけるカノニカル位相は自明な位相ではなく、<strong>空間の有限個の互いに素なclopen集合への分割</strong>によって生成される。
+</p>
+
+<h3>定理 5.1</h3>
+<p>
+$\mathbf{EDCompHaus}$ において、有限結合全射族 $\{f_i: X_i \to X\}_{i=1}^n$ を含む任意の被覆ふるい $R$ は、必ず $X$ のある有限clopen分割による包含射の族 $\{j_i: U_i \hookrightarrow X\}_{i=1}^n$ を含む。
+</p>
+
+<div class="proof">
+論理を一段ずつ厳密に進める。
+<br><br>
+<strong>ステップ 1: 直和空間の構成と全射の用意</strong>
+<br>
+被覆ふるい $R \in J(X)$ が有限結合全射族 $\{f_i: X_i \to X\}_{i=1}^n$ を含んでいるとする。すなわち、各 $i$ に対して $f_i \in R$ であり、かつ $\bigcup_{i=1}^n f_i(X_i) = X$ である。
+ここで、有限個の超不連結コンパクトHausdorff空間の位相的非交和（直和） $Y = \coprod_{i=1}^n X_i$ を構成する。有限個の直和であるため、 $Y$ は再び $\mathbf{EDCompHaus}$ の対象となる。
+直和の普遍性により、各成分への包含射を $k_i: X_i \hookrightarrow Y$ とすると、任意の $i$ で $p \circ k_i = f_i$ を満たす一意な連続写像 $p: Y \to X$ が存在する。
+$\{f_i\}$ は結合的に全射であったため、この $p$ は単独で全射連続写像となる。
+<br><br>
+<strong>ステップ 2: Gleasonの定理による断面の存在</strong>
+<br>
+空間 $X$ は $\mathbf{EDCompHaus}$ の対象であるため、Gleasonの定理より $\mathbf{CompHaus}$ における全射に関して射影的である。
+いま、$p: Y \to X$ は全射連続写像であり、恒等射 $\text{id}_X: X \to X$ が存在する。 $X$ の射影性により、 $p \circ s = \text{id}_X$ を満たす連続写像（断面） $s: X \to Y$ が存在する。
+<br><br>
+<strong>ステップ 3: 空間 $X$ のclopen分割の導出</strong>
+<br>
+直和空間 $Y = \coprod_{i=1}^n X_i$ の定義から、各成分 $X_i$ は $Y$ の中において開集合かつ閉集合（clopen集合）である。
+断面 $s: X \to Y$ は連続写像であるため、clopen集合の逆像は再びclopen集合となる。そこで、各 $i \in \{1, \dots, n\}$ に対して、 $X$ の部分集合 $U_i$ を以下のように定義する：
+$$U_i = s^{-1}(X_i).$$
+各 $X_i$ は $Y$ の互いに素な分割（$Y = \coprod X_i$）をなしているため、その逆像である $\{U_i\}_{i=1}^n$ もまた、 $X$ の互いに素な開かつ閉（clopen）分割を与える。すなわち、
+$$X = \coprod_{i=1}^n U_i \quad (\text{ただし } U_i \cap U_j = \varnothing \ \ [i \neq j])$$
+が成り立つ。
+<br><br>
+<strong>ステップ 4: ふるいの定義に基づく包含の証明</strong>
+<br>
+各 $U_i$ から $X$ への自然な包含射を $j_i: U_i \hookrightarrow X$ とする。また、 $s$ の定義域を $U_i$ に制限し、共域を $X_i$ に制限した写像を $s_i: U_i \to X_i$ とする。 $U_i = s^{-1}(X_i)$ であるから、この制限写像 $s_i$ はwell-definedな連続写像である。
+任意の $x \in U_i$ に対して、以下の合成写像の挙動を計算する：
+$$(f_i \circ s_i)(x) = f_i(s_i(x)) = f_i(s(x)).$$
+ここで、ステップ 1 より $f_i = p \circ k_i$ であり、 $s(x) \in X_i$ に対する包含射 $k_i$ の作用は単に $s(x)$ を $Y$ の要素とみなすことであるため、
+$$f_i(s(x)) = p(k_i(s(x))) = p(s(x))$$
+となる。さらにステップ 2 より $p \circ s = \text{id}_X$ であるから、
+$$p(s(x)) = \text{id}_X(x) = x$$
+が得られる。これは、包含射 $j_i(x) = x$ と完全に一致する。
+したがって、射としての以下の厳密な等式が成立する：
+$$j_i = f_i \circ s_i.$$
+ここで、最初のエントリ条件より $f_i \in R$ であった。ふるい $R$ は右からの合成に関して閉じているため、 $f_i$ に右から連続写像 $s_i$ を合成した射 $f_i \circ s_i$ もまた、必ず $R$ に属さなければならない。
+ゆえに、すべての $i \in \{1, \dots, n\}$ について、
+$$j_i \in R$$
+が証明された。すなわち、被覆ふるい $R$ は $X$ の有限clopen分割の包含射の族 $\{j_i: U_i \hookrightarrow X\}$ を含む。
+</div>
+
+<p>
+以上の正しい証明が示す通り、$\mathbf{EDCompHaus}$ のカノニカル位相は恒等射のみからなる自明な位相（密着位相）には退化しません。空間全体を一撃で覆うことはできなくても、空間を有限個のclopenなピースにバラバラに分割する包含射の族であれば、それらは被覆ふるいとして認められます。これは代数幾何学におけるザリスキー位相（Zariski topology）や、一般の圏論におけるコヒーレント位相（coherent topology）の振る舞いと非常に強く類似した、非自明で幾何学的なトポロジー構造を保持していることを意味しています。
+</p>
+
+<h2>6. 結論と展望</h2>
+<p>
+本稿では、圏論におけるふるいの定義を厳密に適用し、一見正しそうに見える「直和射を用いた簡便な証明」の陥りやすい罠を暴きました。直和からの全射 $p$ 自体は生成元 $f_i$ を個別には経由しないという事実の指摘は、ふるいの概念を扱う上での重要な教訓となります。
+</p>
+<p>
+また、Gleasonの定理がもたらす超不連結空間の「全射に関する射影性」が、直和射そのものをふるいに入れるのではなく、断面を介して「元の空間のclopen分割」を誘起し、その分割包含射をふるいへと滑り込ませるという真のメカニズムをフルに書き下しました。
+</p>
+<p>
+この結果は、P. T. Johnstoneが1979年の先駆的な論文 <a href="https://doi.org/10.1112/plms/s3-38.2.225" target="_blank">"On a Topological Topos"</a> で示した、位相空間の圏をより良い圏論的性質を持つトポスへと埋め込む議論（Topological Topos の構成）などの基礎とも深く繋がっています。厳密な論理を積み重ねることで、幾何学と圏論の美しいインターフェースがより一層強固なものとして理解されます。
+</p>
+
+<h2>参考文献</h2>
+<p style="padding-left: 20px; text-indent: -20px;">
+[1] P. T. Johnstone, "On a Topological Topos", <i>Proceedings of the London Mathematical Society</i>, Third Series, Vol. 38, No. 2, 1979, pp. 225–247. DOI: <a href="https://doi.org/10.1112/plms/s3-38.2.225" target="_blank">10.1112/plms/s3-38.2.225</a>
+</p>
+<p style="padding-left: 20px; text-indent: -20px;">
+[2] A. M. Gleason, "Projective topological spaces", <i>Illinois Journal of Mathematics</i>, Vol. 2, No. 4, 1958, pp. 482–489. Project Euclid: <a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank">10.1215/ijm/1255454110</a>
+</p>
+
+</body>
+</html>

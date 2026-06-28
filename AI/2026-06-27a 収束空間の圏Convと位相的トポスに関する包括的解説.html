@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>収束空間の圏 Conv と位相的トポスに関する包括的解説</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      packages: {'[+]': ['base', 'ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  body {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+  }
+  h1 { font-size: 2em; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; color: #2c3e50; margin-top: 40px; }
+  h2 { font-size: 1.5em; border-bottom: 1px solid #7f8c8d; padding-bottom: 5px; color: #34495e; margin-top: 30px; }
+  h3 { color: #2980b9; margin-top: 25px; }
+  .definition, .theorem, .proof, .example {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+  }
+  .definition { border-left: 5px solid #3498db; }
+  .theorem { border-left: 5px solid #e74c3c; background-color: #fdf5f5; }
+  .proof { border-left: 5px solid #2ecc71; background-color: #f4fbf7; }
+  .example { border-left: 5px solid #f39c12; background-color: #fef9f1; }
+  .header { font-weight: bold; margin-bottom: 15px; display: block; font-size: 1.1em; }
+  .informal { color: #444; margin-bottom: 20px; }
+  ul, ol { padding-left: 20px; }
+  a { color: #2980b9; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .bibliography { background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-top: 40px; word-wrap: break-word; }
+  .bibliography li { margin-bottom: 10px; }
+</style>
+</head>
+<body class="tex2jax_process">
+
+<h1>収束空間の圏 $\mathbf{Conv}$ と位相的トポスに関する包括的解説</h1>
+
+<div class="informal">
+  <p>本稿は、位相空間の圏が抱える構造的な欠陥を克服するために考案された「収束空間の圏 $\mathbf{Conv}$」の完全な数学的定義から始まり、現代数学における凝縮数学 (condensed mathematics) との思想的繋がり、そして P. T. Johnstone による「位相的トポス (topological topos)」の構築とその内部論理に至るまでの議論を、数学的に厳密かつ自己完結的 (self-contained) にまとめたものです。</p>
+  <p>フォーマルな定義や定理・証明については「だ・である調」で厳密に記述し、概念の背景や直観的な補足解説については「です・ます調」で親切に解説します。</p>
+</div>
+
+<h2>1. 収束空間の圏 $\mathbf{Conv}$ の構成</h2>
+
+<div class="informal">
+  <p>通常の位相空間の圏 $\mathbf{Top}$ では、2つの空間の間の連続写像全体の集合に常に適切な位相を入れること（指数対象の構成）が困難です。例えば、評価写像が連続になるためには、定義域の空間が局所コンパクト (locally compact) Hausdorff 空間であるなどの厳しい条件が要求されます。この問題を「開集合」ではなく「点へのフィルターの収束」を基本原理として再構築したのが、収束空間の圏 $\mathbf{Conv}$ です。</p>
+</div>
+
+<div class="definition">
+  <span class="header">定義 1.1（フィルター）</span>
+  集合 $X$ 上のフィルター (filter) とは、$X$ の部分集合の族 $\mathcal{F}$ であり、以下の条件を満たすものである。
+  <ul>
+    <li>(F1) $X \in \mathcal{F}$ であり、空集合 $\varnothing \notin \mathcal{F}$ である。</li>
+    <li>(F2) $A \in \mathcal{F}$ かつ $B \in \mathcal{F}$ ならば、$A \cap B \in \mathcal{F}$ である。</li>
+    <li>(F3) $A \in \mathcal{F}$ かつ $A \subset B$ ならば、$B \in \mathcal{F}$ である。</li>
+  </ul>
+  $X$ の要素 $x \in X$ に対し、$x$ を含むすべての部分集合からなる族 $\dot{x} = \{ A \subset X \mid x \in A \}$ はフィルターとなる。これを $x$ により生成される主フィルター (principal filter) と呼ぶ。$X$ 上のフィルター全体の集合を $\mathbb{F}(X)$ と表記する。
+</div>
+
+<div class="definition">
+  <span class="header">定義 1.2（収束空間と圏 $\mathbf{Conv}$）</span>
+  $\mathbf{Conv}$ の対象 (objects) は、組 $(X, c)$ である。ここで、$X$ は集合であり、$c \subset \mathbb{F}(X) \times X$ は「フィルターと点との間の収束関係」である。$(\mathcal{F}, x) \in c$ であることを $\mathcal{F} \xrightarrow{c} x$ または単に $\mathcal{F} \to x$ と書き、「$\mathcal{F}$ は $x$ に収束する」と言う。この関係 $c$ は以下の3つの公理を満たす。
+  <ul>
+    <li><strong>公理1（主フィルターの収束）:</strong> 任意の $x \in X$ について、$\dot{x} \to x$ である。</li>
+    <li><strong>公理2（細分の収束）:</strong> $\mathcal{F} \to x$ であり、フィルター $\mathcal{G}$ が $\mathcal{F} \subset \mathcal{G}$ を満たすならば、$\mathcal{G} \to x$ である。</li>
+    <li><strong>公理3（有限交叉の収束）:</strong> $\mathcal{F} \to x$ かつ $\mathcal{G} \to x$ ならば、$\mathcal{F} \cap \mathcal{G} \to x$ である（ここで $\mathcal{F} \cap \mathcal{G}$ は共通部分として得られるフィルターである）。</li>
+  </ul>
+
+  $\mathbf{Conv}$ における対象 $(X, c_X)$ から $(Y, c_Y)$ への射 (morphisms) は、連続写像 (continuous maps) として定義される。関数 $f: X \to Y$ が連続写像であるとは、任意の $x \in X$ と任意の $\mathcal{F} \in \mathbb{F}(X)$ について、
+  $$ \mathcal{F} \xrightarrow{c_X} x \implies f(\mathcal{F}) \xrightarrow{c_Y} f(x) $$
+  が成り立つことである。ただし、$f(\mathcal{F})$ は $\{ B \subset Y \mid f^{-1}(B) \in \mathcal{F} \}$ によって定義される $Y$ 上の像フィルターである。
+  <br><br>
+  恒等写像は明らかに連続であり、連続写像の合成も連続となるため、これらはwell-definedな圏を構成する。
+</div>
+
+<h2>2. $\mathbf{Conv}$ の優れた圏論的性質</h2>
+
+<div class="informal">
+  <p>$\mathbf{Conv}$ は $\mathbf{Top}$ が抱えていた不便な点を完璧に解消しています。その主要な理由は以下の3つの強力な圏論的性質にあります。</p>
+</div>
+
+<div class="theorem">
+  <span class="header">定理 2.1（デカルト閉性と位相的圏）</span>
+  圏 $\mathbf{Conv}$ はデカルト閉 (cartesian closed) であり、さらに $\mathbf{Set}$ 上の位相的圏 (topological category) である。また、$\mathbf{Conv}$ は準トポス (quasitopos) となる。
+</div>
+
+<div class="proof">
+  <span class="proof-header">証明の構成:</span><br>
+  <strong>1. デカルト閉性:</strong><br>
+  対象 $X, Y$ に対して、連続写像全体の集合 $C(X, Y)$ に「連続収束 (continuous convergence)」の構造を入れる。$C(X, Y)$ 上のフィルター $\Phi$ が関数 $f \in C(X, Y)$ に収束するとは、任意の $X$ における収束 $\mathcal{F} \to x$ に対して、評価写像による像フィルター $ev(\Phi \times \mathcal{F}) \to f(x)$ が $Y$ において成り立つことであると定義する。この構造により、指数法則 $\operatorname{Hom}(X \times Y, Z) \cong \operatorname{Hom}(X, C(Y, Z))$ が自然な全単射として成立し、$\mathbf{Conv}$ はデカルト閉となる。<br><br>
+  <strong>2. 位相的圏 (topological category):</strong><br>
+  任意の関数の族 $f_i : X \to Y_i$ ($Y_i \in \mathbf{Conv}$) に対して、これらすべてを連続にするような $X$ 上の最も粗い収束構造（初期構造）が常に存在する。具体的には、$\mathcal{F} \xrightarrow{X} x \iff \forall i, f_i(\mathcal{F}) \xrightarrow{Y_i} f_i(x)$ と定義すればよい。双対的に、商空間や直和を与える終構造も一意に存在する。これにより極限と余極限の振る舞いが完全に保たれ、完備かつ余完備となる。<br><br>
+  <strong>3. 準トポス (quasitopos):</strong><br>
+  $\mathbf{Conv}$ においては、強部分対象を分類する強部分対象分類子 (strong subobject classifier) が存在する。これは完全な Grothendieck トポスの $\Omega$ ほど強力ではないが、閉包演算に関連する部分空間を完全に分類できる論理的構造を備えている。
+</div>
+
+<h2>3. 凝縮数学 (Condensed Mathematics) との思想的繋がり</h2>
+
+<div class="informal">
+  <p>Dustin Clausen と Peter Scholze により創始された凝縮数学 (condensed mathematics) もまた、「$\mathbf{Top}$ をより扱いやすい圏に置き換える」という全く同じ動機から出発しています。両者のアプローチは「空間を、扱いやすいテスト空間からの関手（前層や層）として再定義する」という哲学を共有しています。</p>
+  <p>しかし、採用した「テスト空間のサイト」に決定的な違いがあります。</p>
+  <ul>
+    <li><strong>$\mathbf{Conv}$ のサイト:</strong> 単一フィルター空間（点の極めて局所的で解析的な振る舞い）。</li>
+    <li><strong>凝縮数学のサイト:</strong> 副有限空間 (profinite spaces) や 超不連結 (extremally disconnected) 空間（代数と相性の良い、コンパクトでゼロ次元の硬い空間）。</li>
+  </ul>
+  <p>ホモロジー代数やコホモロジー理論を展開するためには、対象が完全なアーベル圏の構造を持つ Grothendieck トポス（層の圏）であることが必須です。$\mathbf{Conv}$ のような準トポスでは代数的な要求を満たしきれないため、Scholze らは超不連結 (extremally disconnected) 空間上の層として凝縮集合を定義し、サイズ問題を到達不能基数で回避することで完全なトポスを構築しました。</p>
+</div>
+
+<h2>4. Johnstone の位相的トポス (Topological Topos)</h2>
+
+<div class="informal">
+  <p>では、収束空間の側のアプローチ（解析的なアプローチ）で完全なトポスを作ることはできないのでしょうか？ 実は、1979年に P. T. Johnstone が<strong>「位相的トポス (topological topos)」</strong>としてこれを実現しています。</p>
+  <p>巨大すぎるすべてのフィルターをテスト空間にすると集合論的サイズ問題が生じるため、Johnstone はターゲットを「点列の収束」にのみ絞り込み、層を定義するための厳密なメカニズム（ふるいと被覆）を構築しました。</p>
+</div>
+
+<h3>4.1. 圏論におけるふるい (sieve) と層 (sheaf) の定義</h3>
+
+<div class="informal">
+  <p>Grothendieck トポスを構成するためには、まず「対象を覆う射の集まり」を定式化する必要があります。これが「ふるい (sieve)」という概念です。</p>
+</div>
+
+<div class="definition">
+  <span class="header">定義 4.1（ふるい）</span>
+  圏 $\mathcal{C}$ の対象 $C$ 上のふるい (sieve) $R$ とは、余域 (codomain) が $C$ であるような射の集まりであり、任意の射の合成に対して閉じている（右イデアルである）もののことである。すなわち、以下を満たす。<br>
+  任意の射 $f: D \to C$ が $R$ に属し、任意の射 $g: E \to D$ が $\mathcal{C}$ の射であるならば、合成射 $f \circ g : E \to C$ も必ず $R$ に属する。
+  <br><br>
+  対象 $C$ 上のすべての射の集まり（極大ふるい）もふるいとなる。
+</div>
+
+<div class="definition">
+  <span class="header">定義 4.2（Grothendieck 位相と被覆ふるいによる層）</span>
+  圏 $\mathcal{C}$ 上の Grothendieck 位相 $J$ とは、各対象 $C \in \mathcal{C}$ に対して、「被覆 (covering) とみなされる特別なふるいの族 $J(C)$」を割り当てる規則であり、特定の公理（極大ふるいを含むこと、引き戻しで閉じていること、推移律を満たすこと）を満たすものである。$J(C)$ に属するふるいを被覆ふるい (covering sieve) と呼ぶ。
+  <br><br>
+  サイト $(\mathcal{C}, J)$（Grothendieck 位相を備えた小さな圏）上の前層 (presheaf) $F: \mathcal{C}^{op} \to \mathbf{Set}$ が層 (sheaf) であるとは、任意の対象 $C \in \mathcal{C}$ と、その上の任意の被覆ふるい $R \in J(C)$ に対して、以下の条件を満たすことである。<br>
+  <br>
+  <strong>【一意的な貼り合わせの存在】</strong><br>
+  任意の「整合的な元の族 (matching family)」に対して、それを一意的に引き起こすような「貼り合わせ (amalgamation)」がただ一つ存在する。<br>
+  <ul>
+    <li><strong>整合的な元の族:</strong> ふるい $R$ に属する各射 $f: D \to C$ に対して、元 $x_f \in F(D)$ が割り当てられており、任意の射 $g: E \to D$ に対して $F(g)(x_f) = x_{f \circ g}$ が成り立つような元の族 $(x_f)_{f \in R}$ のことである。</li>
+    <li><strong>貼り合わせ:</strong> ある単一の元 $x \in F(C)$ であり、すべての $f \in R$ について $F(f)(x) = x_f$ を満たすものである。</li>
+  </ul>
+</div>
+
+<h3>4.2. 位相的トポスのサイトと被覆ふるいの厳密な定義</h3>
+
+<div class="informal">
+  <p>Johnstone は、点列の収束空間を模倣するために、非常にシンプルなテスト空間を用いてサイト $(\mathcal{C}, J)$ を構成しました。ここでの被覆ふるいの定義には、位相空間論における「Urysohn の部分列原理」が見事に翻訳されています。</p>
+</div>
+
+<div class="definition">
+  <span class="header">定義 4.3（位相的トポスのサイトと位相）</span>
+  テスト空間として、自然数の1点コンパクト化空間 $\mathbb{N}_\infty = \mathbb{N} \cup \{\infty\}$ を採用する。この空間の収束構造は、自然数の列が $\infty$ に収束するという唯一の動的構造を持つ。
+  <br><br>
+  小さな圏 (small category) $\mathcal{C}$ を以下のように定める。
+  <ul>
+    <li>対象: $\mathbb{N}_\infty$ および単一の点 $1$ の2つのみ。</li>
+    <li>射: これら対象間のすべての連続写像。</li>
+  </ul>
+  圏 $\mathcal{C}$ 上の Grothendieck 位相 $J$ を次のように厳密に定義する。対象 $1$ 上の被覆ふるいは極大ふるい（すべての射を含むもの）のみとする。対象 $\mathbb{N}_\infty$ 上のふるい $R$ が被覆ふるい (covering sieve) であるとは、以下の2つの条件を同時に満たすことである。
+  <br><br>
+  <ol>
+    <li><strong>定数写像の包含:</strong> 任意の $x \in \mathbb{N}_\infty$ に対する定数写像 $c_x : \mathbb{N}_\infty \to \mathbb{N}_\infty$ （すべての点を $x$ に写す写像）が、ふるい $R$ に属していること。</li>
+    <li><strong>部分列の抽出（位相的埋め込みによる定式化）:</strong> 任意の位相的埋め込み (topological embedding) $e : \mathbb{N}_\infty \to \mathbb{N}_\infty$ が与えられたとき、さらにある位相的埋め込み $e' : \mathbb{N}_\infty \to \mathbb{N}_\infty$ が存在して、合成写像 $e \circ e'$ がふるい $R$ に属すること。</li>
+  </ol>
+  ※ここで、連続写像が位相的埋め込みであることは、自然数の無限部分集合を昇順に（単射として）なぞり、かつ $\infty$ を $\infty$ に写す写像であることと同値である。すなわち、条件2は「どんな無限部分列 $e$ を提示されても、さらにその無限部分列 $e'$ を適切に選べば、その合成 $e \circ e'$ を $R$ に属させることができる」という解析学的な部分列原理を完全に表現している。
+</div>
+
+<div class="theorem">
+  <span class="header">定理 4.4（位相的トポス）</span>
+  上記のサイト $(\mathcal{C}, J)$ 上の層の圏 $\mathbf{Sh}(\mathcal{C}, J)$ を Johnstone の位相的トポス $\mathcal{E}$ と呼ぶ。これは完全な Grothendieck トポスとなる。
+</div>
+
+<h2>5. 位相的トポスに埋め込まれる空間と $\mathbf{Top}$ からの逸脱</h2>
+
+<div class="informal">
+  <p>Johnstone のトポス $\mathcal{E}$ には、実用上極めて重要な空間（すべての距離空間や CW 複体など）が含まれる「部分点列空間の圏」が充満忠実 (fully faithful) に埋め込まれます。しかし、この「部分点列空間の圏」は、通常の位相空間の圏 $\mathbf{Top}$ からはみ出してしまうことが知られています。</p>
+</div>
+
+<div class="definition">
+  <span class="header">定義 5.1（部分点列空間 / L-空間）</span>
+  集合 $X$ と、点列 $(x_n)_{n=1}^\infty$ から点 $x \in X$ への収束関係 $(x_n) \to x$ のペアが部分点列空間 (subsequential space, または L-space) であるとは、以下の3条件を満たすことである。
+  <ol>
+    <li>任意の $x \in X$ について、定数点列 $(x, x, \dots)$ は $x$ に収束する。</li>
+    <li>$(x_n) \to x$ ならば、その任意の部分列 $(x_{n_k})$ も $x$ に収束する。</li>
+    <li>（Urysohn の公理）ある点列 $(x_n)$ について、「その任意の部分列が、さらに $x$ に収束する部分列を持つ」ならば、元の点列 $(x_n)$ も $x$ に収束する。</li>
+  </ol>
+</div>
+
+<div class="theorem">
+  <span class="header">定理 5.2</span>
+  部分点列空間の圏は、位相空間の圏 $\mathbf{Top}$ の充満部分圏とはならない（すなわち、位相空間の開集合系 $\tau$ では記述できない動的構造を持つ L-空間が存在する）。
+</div>
+
+<div class="proof">
+  <span class="proof-header">証明:</span><br>
+  位相空間における閉包演算のベキ等性 (idempotency) と矛盾する L-空間を構成することで証明する。<br>
+  集合 $X$ を $X = \{*\} \cup \mathbb{N} \cup (\mathbb{N} \times \mathbb{N})$ と定義する。<br>
+  収束関係を以下のように定義し、L-空間の公理を満たすようにこれらとその部分列のみが収束すると定める。
+  <ul>
+    <li>各 $m \in \mathbb{N}$ に対して、点列 $S_m = ((m, 1), (m, 2), (m, 3), \dots)$ は $m$ に収束する。</li>
+    <li>点列 $S = (1, 2, 3, \dots)$ は $*$ に収束する。</li>
+    <li><strong>$\mathbb{N} \times \mathbb{N}$ の要素のみからなる点列は、$*$ には決して収束しない。</strong></li>
+  </ul>
+  この空間は L-空間の公理を満たす。さて、この収束関係を完全に再現する位相空間の開集合系 $\tau$（およびそれによる閉包演算 $Cl$）が存在すると仮定して矛盾を導く。<br><br>
+  部分集合 $A = \mathbb{N} \times \mathbb{N}$ を考える。位相空間において、$A$ 内の点列が収束する極限点は必ず $Cl(A)$ に含まれる。点列 $S_m$ は $A$ 内の点列であり、$m$ に収束するため、すべての $m \in \mathbb{N}$ は $Cl(A)$ に含まれる。すなわち、$\mathbb{N} \subset Cl(A)$ である。<br>
+  次に、点列 $S$ は $\mathbb{N}$ 内の点列であり、$*$ に収束するため、$* \in Cl(\mathbb{N})$ である。<br>
+  位相空間の閉包演算はベキ等であるため、$Cl(Cl(A)) = Cl(A)$ が成り立つ。したがって、
+  $$ * \in Cl(\mathbb{N}) \subset Cl(Cl(A)) = Cl(A) $$
+  となり、$*$ は $A$ の閉包に含まれなければならない。<br>
+  しかし、この位相 $\tau$ は点列の収束によって記述される空間であるため、$* \in Cl(A)$ であるならば、「$A$ 内の点列で $*$ に収束するもの」が存在しなければならない。しかし定義により、$\mathbb{N} \times \mathbb{N}$ (すなわち $A$) 内の点列は $*$ には収束しない。これは矛盾である。<br>
+  ゆえに、この L-空間の構造は位相空間として表現することはできず、部分点列空間の圏は $\mathbf{Top}$ の外側にはみ出している。
+</div>
+
+<h2>6. トポスの内部論理における $\neg\neg$分離対象</h2>
+
+<div class="informal">
+  <p>位相的トポスの内部は古典論理ではなく「直観主義論理 (intuitionistic logic)」が支配する宇宙です。この宇宙において、前述の「部分点列空間」は、論理学的な美しい言葉で特徴づけられます。</p>
+  <p>直観的 (intuitive) に言えば、トポス内の一般的な「点」は、単なる位置ではなく「そこに至る経路やスピードの履歴」を持っています。そのため、同じ目的地に向かっていても経路が違うと「完全に等しい ($x=y$) とは言えないが、決定的に異なるとも言えない ($\neg\neg(x=y)$)」という直観主義特有の幽霊のような状態が生じます。この余剰データを強制的に削ぎ落とし、古典的な空間論の常識を回復させるのが $\neg\neg$分離対象です。</p>
+</div>
+
+<div class="definition">
+  <span class="header">定義 6.1（$\neg\neg$分離対象）</span>
+  トポス $\mathcal{E}$ 内の対象 $X$ が $\neg\neg$分離対象 ($\neg\neg$-separated object) であるとは、内部論理において以下の等号に関する性質を満たすことである。
+  $$ \forall x, y \in X, \quad \neg\neg(x=y) \implies x=y $$
+</div>
+
+<div class="theorem">
+  <span class="header">定理 6.2</span>
+  Johnstone の位相的トポス $\mathcal{E}$ において、二重否定位相に関する分離対象（すなわち $\neg\neg$分離対象）が成す充満部分圏は、前述の部分点列空間（L-空間）の圏と圏同値である。
+</div>
+
+<div class="informal">
+  <p>これは、$\mathbf{Conv}$ におけるサイズや柔らかさの問題を、トポスの内部論理という強力なフィルターを通すことによって、「解析学に耐えうる可算で素直な情報だけを持つ空間」へと浄化するメカニズムだと言えます。</p>
+</div>
+
+<div class="bibliography">
+  <span class="header">参考文献 (References)</span>
+  <ul>
+    <li>Day, B. J., & Kelly, G. M. (1970). <em>On topological quotient maps preserved by pullbacks or products</em>. Mathematical Proceedings of the Cambridge Philosophical Society, 67(3), 553-558. <a href="https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/on-topological-quotient-maps-preserved-by-pullbacks-or-products/F5A5B4D784889DAC4D97D4E491035F43" target="_blank">https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/on-topological-quotient-maps-preserved-by-pullbacks-or-products/F5A5B4D784889DAC4D97D4E491035F43</a></li>
+    <li>Johnstone, P. T. (1979). <em>On a topological topos</em>. Proceedings of the London Mathematical Society, s3-38(2), 237-271. <a href="https://doi.org/10.1112/plms/s3-38.2.237" target="_blank">https://doi.org/10.1112/plms/s3-38.2.237</a></li>
+    <li>Clausen, D., & Scholze, P. (2019). <em>Lectures on Condensed Mathematics</em>. (Lecture Notes). <a href="https://www.math.uni-bonn.de/people/scholze/Condensed.pdf" target="_blank">https://www.math.uni-bonn.de/people/scholze/Condensed.pdf</a></li>
+    <li>Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+  </ul>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>可換環の圏における正則・有効モノ射およびエピ射の代数的・幾何的特徴付け</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            chtml: {
+                matchFontHeight: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        h1 { font-size: 1.8em; margin-bottom: 30px; }
+        h2 { font-size: 1.5em; margin-top: 40px; }
+        .definition, .theorem, .proof, .remark {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .definition { background-color: #e8f4f8; border-left: 5px solid #3498db; }
+        .theorem { background-color: #fcf3cf; border-left: 5px solid #f1c40f; }
+        .proof { background-color: #f9f9f9; border-left: 5px solid #95a5a6; }
+        .remark { background-color: #fdf2e9; border-left: 5px solid #e67e22; }
+        .title { font-weight: bold; margin-bottom: 10px; display: block; }
+        .qedsymbol { float: right; font-weight: bold; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul, ol { margin-left: 20px; }
+        code { background-color: #f1f1f1; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <h1>可換環の圏における正則・有効モノ射およびエピ射の代数的・幾何的特徴付け</h1>
+
+    <p>本稿では、これまでの議論を統合し、可換環の圏 $\mathbf{CRing}$ におけるモノ射 (monomorphism) とエピ射 (epimorphism)、およびそれらの正則性 (regularity) と有効性 (effectivity) について、完全な証明とともに自己完結的 (self-contained) な解説を行う。また、アフィンスキームの圏 $\mathbf{AffSch}$ への翻訳を通じて、これらの代数的な条件が持つ幾何学的な直観を解き明かす。</p>
+
+    <h2>1. モノ射に関する圏論における基本概念</h2>
+    <p>まずは一般の圏における射の性質について、厳密な定義を与える。</p>
+
+    <div class="definition">
+        <span class="title">定義 1.1: 正則モノ射 (regular monomorphism) と等化子 (equalizer)</span>
+        圏 $\mathcal{C}$ における射 $f: A \to B$ が<strong>等化子 (equalizer)</strong> であるとは、ある対象 $C$ と平行な2つの射 $g, h: B \rightrightarrows C$ が存在して、以下の普遍性を満たすことである。
+        <ol>
+            <li>$g \circ f = h \circ f$ が成り立つ。</li>
+            <li>任意の対象 $X$ と射 $k: X \to B$ について、$g \circ k = h \circ k$ が成り立つならば、一意な射 $m: X \to A$ が存在して $k = f \circ m$ と分解される。</li>
+        </ol>
+        ある平行な2つの射の等化子として表される射 $f$ のことを、<strong>正則モノ射 (regular monomorphism)</strong> と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 1.2: 有効モノ射 (effective monomorphism) と余核対 (cokernel pair)</span>
+        圏 $\mathcal{C}$ における射 $f: A \to B$ に対して、図式 $B \xleftarrow{f} A \xrightarrow{f} B$ の<strong>押し出し (pushout)</strong> が存在するとき、それを $f$ の<strong>余核対 (cokernel pair)</strong> と呼び、$B \sqcup_A B$ と表記する。押し出しの表現として、<strong>ファイバー余積 (fibered coproduct)</strong> と呼ばれることもある。<br><br>
+        射 $f: A \to B$ が<strong>有効モノ射 (effective monomorphism)</strong> であるとは、$f$ の余核対 $B \sqcup_A B$ と自然な射 $i_1, i_2: B \rightrightarrows B \sqcup_A B$ が存在し、さらに元の射 $f$ がこの $i_1, i_2$ の等化子となっていることである。すなわち、次の完全列（等化子図式）が成立することである。
+        $$A \xrightarrow{f} B \underset{i_2}{\overset{i_1}{\rightrightarrows}} B \sqcup_A B$$
+    </div>
+
+    <h2>2. 可換環の圏 $\mathbf{CRing}$ におけるモノ射の特徴付け</h2>
+    <p>可換環の圏 $\mathbf{CRing}$ においては、対象 $A$ 上の押し出し（余核対）は、テンソル積 $B \otimes_A B$ によって具体的に構成される。すなわち、2つの自然な射は $i_1(b) = b \otimes 1$ および $i_2(b) = 1 \otimes b$ で与えられる。</p>
+    <p>これにより、可換環の圏における有効モノ射の条件は、Amitsur複体 (Amitsur complex) の最初の部分の完全性、すなわち集合の言葉で $A = \{ b \in B \mid b \otimes 1 = 1 \otimes b \in B \otimes_A B \}$ が成立することと言い換えられる。</p>
+
+    <div class="theorem">
+        <span class="title">定理 2.1</span>
+        可換環の圏 $\mathbf{CRing}$ において、射 $f: A \to B$ が正則モノ射であることと、有効モノ射であることは同値である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        有効モノ射は定義により余核対という特定の平行射の等化子であるため、自動的に正則モノ射である。以下、正則モノ射ならば有効モノ射であることを示す。
+        <br><br>
+        $f: A \to B$ を正則モノ射とする。定義より、ある可換環 $C$ と準同型 $g, h: B \rightrightarrows C$ が存在し、$f$ は $g, h$ の等化子である。すなわち $A = \{ b \in B \mid g(b) = h(b) \}$ と同一視できる。
+        $f$ が有効モノ射であることを示すには、$f$ が $i_1, i_2: B \rightrightarrows B \otimes_A B$ の等化子であること、すなわち $A = \{ b \in B \mid b \otimes 1 = 1 \otimes b \}$ を示せばよい。
+        <br><br>
+        (1) $A \subset \{ b \in B \mid b \otimes 1 = 1 \otimes b \}$ の証明：<br>
+        任意の $a \in A$ について、テンソル積 $B \otimes_A B$ は $A$-加群上のテンソル積であるから、$f(a) \otimes 1 = 1 \cdot f(a) \otimes 1 = 1 \otimes f(a) \cdot 1 = 1 \otimes f(a)$ が定義から自明に成り立つ。
+        <br><br>
+        (2) $\{ b \in B \mid b \otimes 1 = 1 \otimes b \} \subset A$ の証明：<br>
+        写像 $u: B \times B \to C$ を $u(b_1, b_2) = g(b_1)h(b_2)$ で定義する。これが $A$-双線型写像であることを確認する。任意の $a \in A$ に対して、$g(f(a)) = h(f(a))$ であるため、
+        $$u(b_1 f(a), b_2) = g(b_1 f(a))h(b_2) = g(b_1)g(f(a))h(b_2) = g(b_1)h(f(a))h(b_2) = g(b_1)h(f(a)b_2) = u(b_1, f(a)b_2)$$
+        が成り立つ。よってテンソル積の普遍性から、環準同型 $\tilde{u}: B \otimes_A B \to C$ が $\tilde{u}(b_1 \otimes b_2) = g(b_1)h(b_2)$ として一意に誘導される（$C$ は可換環であるため、積の保存も容易に確認できる）。
+        <br><br>
+        さて、$B \otimes_A B$ において $b \otimes 1 = 1 \otimes b$ を満たす任意の $b \in B$ をとる。この等式の両辺に $\tilde{u}$ を適用すると、
+        $$\tilde{u}(b \otimes 1) = g(b)h(1) = g(b)$$
+        $$\tilde{u}(1 \otimes b) = g(1)h(b) = h(b)$$
+        となる。両辺は等しいので $g(b) = h(b)$ を得る。$f: A \to B$ は $g, h$ の等化子であったから、$g(b) = h(b)$ を満たす $b$ は $A$ の像に含まれる。すなわち $b \in A$ である。
+        <br>
+        以上により、$A = \{ b \in B \mid b \otimes 1 = 1 \otimes b \}$ が示され、$f$ は有効モノ射である。
+        <span class="qedsymbol">■</span>
+    </div>
+
+    <h2>3. 有効モノ射となる代数的な十分条件</h2>
+    <p>テンソル積における元の相等 $b \otimes 1 = 1 \otimes b$ を直接判定するのは困難な場合が多い。そこで、正則モノ射（有効モノ射）であることを保証する強力な十分条件として機能する3つの重要な代数的なクラスを導入し、証明を与える。</p>
+
+    <div class="definition">
+        <span class="title">定義 3.1: 分裂モノ射 (split monomorphism)</span>
+        環準同型 $f: A \to B$ が<strong>分裂モノ射 (split monomorphism)</strong> であるとは、左逆射となる環準同型 $r: B \to A$ （すなわち $r \circ f = \text{id}_A$ を満たすもの）が存在することである。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 3.2</span>
+        分裂モノ射は有効モノ射である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $f: A \to B$ を分裂モノ射とし、左逆射 $r: B \to A$ が存在するとする（包含写像とみなし $r(a) = a$ とする）。
+        $B \otimes_A B \to B$ なる写像 $\phi$ を、$\phi(x \otimes y) = x \cdot r(y)$ と定義する。
+        これが well-defined であることを確認する。$(xa, y)$ と $(x, ay)$ について（$a \in A$）、
+        $\phi(xa \otimes y) = xa \cdot r(y)$。一方 $\phi(x \otimes ay) = x \cdot r(ay) = x \cdot r(a)r(y) = x \cdot a \cdot r(y)$ （$r(a)=a$ より）。
+        よって $\phi$ は well-defined な $A$-加群の準同型である。
+        <br><br>
+        $B \otimes_A B$ において $b \otimes 1 = 1 \otimes b$ が成り立つと仮定する。両辺に $\phi$ を適用すると、
+        $\phi(b \otimes 1) = b \cdot r(1) = b \cdot 1 = b$。
+        $\phi(1 \otimes b) = 1 \cdot r(b) = r(b)$。
+        したがって $b = r(b)$ が得られる。$r$ の値域は $A$ であるため、$b \in A$ が示された。
+        <span class="qedsymbol">■</span>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 3.3: 純な準同型 (pure homomorphism)</span>
+        環準同型 $A \to B$ が<strong>純 (pure)</strong> であるとは、任意の $A$-加群 $M$ に対して、自然な写像 $M \to M \otimes_A B \quad (m \mapsto m \otimes 1)$ が単射になることである。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 3.4</span>
+        純な準同型は有効モノ射である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $A \to B$ を純な包含写像とする。$A$-加群の完全列 $0 \to A \xrightarrow{f} B \xrightarrow{p} B/A \to 0$ を考える。
+        これに $\otimes_A B$ を適用すると、右完全性から次の列が完全となる。
+        $$A \otimes_A B \xrightarrow{f \otimes 1_B} B \otimes_A B \xrightarrow{p \otimes 1_B} (B/A) \otimes_A B \to 0$$
+        $B \otimes_A B$ において $b \otimes 1 = 1 \otimes b$ を満たす $b \in B$ をとる。これに $p \otimes 1_B$ を適用する。
+        <br>
+        右辺: $(p \otimes 1_B)(1 \otimes b) = p(1) \otimes b = 0 \otimes b = 0$ （$1 \in A$ より $p(1)=0$）。
+        <br>
+        左辺: $(p \otimes 1_B)(b \otimes 1) = p(b) \otimes 1$。
+        <br>
+        ゆえに $(B/A) \otimes_A B$ において $p(b) \otimes 1 = 0$ が成り立つ。
+        ここで $A \to B$ が純であるという仮定を、加群 $M = B/A$ に適用する。自然な写像 $B/A \to (B/A) \otimes_A B \quad (x \mapsto x \otimes 1)$ は単射である。
+        $p(b) \otimes 1 = 0$ であるから、単射性より $B/A$ において $p(b) = 0$ である。これは $b \in A$ を意味する。
+        <span class="qedsymbol">■</span>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 3.5: 平坦 (flat) および 忠実平坦 (faithfully flat)</span>
+        環準同型 $A \to B$ に対して、$B$ を $A$-加群とみたとき、関手 $- \otimes_A B$ が完全関手になる場合、$B$ は $A$ 上<strong>平坦 (flat)</strong> であるという。<br>
+        さらに、任意の $A$-加群 $M \neq 0$ に対して $M \otimes_A B \neq 0$ となる（あるいは同値だが、任意の極大イデアル $\mathfrak{m} \subset A$ に対して $\mathfrak{m}B \neq B$ となる）とき、<strong>忠実平坦 (faithfully flat)</strong> であるという。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 3.6</span>
+        忠実平坦な準同型は純な準同型であり、したがって有効モノ射である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        任意の $A$-加群 $M$ に対し、$i: M \to M \otimes_A B \quad (m \mapsto m \otimes 1)$ の核を $K$ とし、完全列 $0 \to K \to M \xrightarrow{i} M \otimes_A B$ を得る。
+        $B$ は平坦であるから、$\otimes_A B$ を施しても完全性が保たれる。
+        $$0 \to K \otimes_A B \to M \otimes_A B \xrightarrow{i \otimes 1_B} (M \otimes_A B) \otimes_A B$$
+        ここで $i \otimes 1_B$ は $m \otimes b \mapsto m \otimes 1 \otimes b$ という写像である。
+        写像 $\mu: (M \otimes_A B) \otimes_A B \to M \otimes_A B$ を $\mu(m \otimes x \otimes y) = m \otimes xy$ で定義すると、
+        $\mu \circ (i \otimes 1_B)(m \otimes b) = \mu(m \otimes 1 \otimes b) = m \otimes b$ となる。
+        すなわち $\mu \circ (i \otimes 1_B) = \text{id}_{M \otimes_A B}$ であり、$i \otimes 1_B$ は左逆射をもつ（分裂モノ射である）。
+        したがって $i \otimes 1_B$ は単射であり、その核である $K \otimes_A B$ は $0$ である。
+        $B$ は忠実平坦であるため、$K \otimes_A B = 0 \implies K = 0$ が結論付けられる。
+        ゆえに $M \to M \otimes_A B$ は単射であり、$A \to B$ は純である。
+        <span class="qedsymbol">■</span>
+    </div>
+
+    <h2>4. モノ射に関するアフィンスキームによる幾何的直観</h2>
+    <div class="remark">
+        <p>ここでは、「ですます調」を用いてインフォーマルな幾何学的直観を補足します。<br>
+        可換環の圏 $\mathbf{CRing}$ からアフィンスキームの圏 $\mathbf{AffSch}$ へ移行すると、包含関係の向きが逆転します。環の埋め込み $A \subset B$ は、幾何学的には上の被覆空間 $Y = \text{Spec}(B)$ から下のベース空間 $X = \text{Spec}(A)$ への射影 $Y \to X$ に対応します。</p>
+        
+        <ul>
+            <li><strong>有効モノ射の直観：</strong> $A = \{ b \in B \mid b \otimes 1 = 1 \otimes b \}$ という等化子の条件は、幾何学の言葉では<strong>「降下理論 (Descent theory)」</strong>に相当します。テンソル積 $B \otimes_A B$ はファイバー積 $Y \times_X Y$（上の空間の重なり）に対応します。関数 $b$ が $b \otimes 1 = 1 \otimes b$ を満たすとは、「重なり部分のどこで測っても同じ値を返すなら、それはベース空間 $X$ に『下ろせる』関数である」という、地図の貼り合わせの原理を意味しています。これが成り立つとき、$Y \to X$ は幾何学的な商写像（有効エピ射）として機能します。</li>
+            <li><strong>分裂モノ射の直観：</strong> 射影 $Y \to X$ に対して、逆向きの切断 (section) $X \to Y$ が存在することに対応します。被覆空間 $Y$ の中にベース空間 $X$ が断面として綺麗に埋め込まれているため、関数を断面に制限するだけで容易に下ろすことができます。</li>
+            <li><strong>忠実平坦の直観：</strong> 空間をトポロジー的に潰したりシワを寄せたりすることなく、均一な厚みで過不足なくベース空間 $X$ の全体をカバーしている（結合的に全射である）状態に対応します。</li>
+            <li><strong>純の直観：</strong> 忠実平坦ほど滑らかではないかもしれませんが、少なくともベースのどの点の上にも必ず $Y$ のファイバーが存在し、全射性を完全にキープしている状態です。</li>
+        </ul>
+    </div>
+
+    <h2>5. 非正則モノ射の例と、正規化に関する重要な数学的補足</h2>
+    <p>すべてのモノ射（単射）が正則モノ射になるわけではない。幾何学的に「商空間を作れない（関数を正しく下ろせない）」ような射の例を見てみよう。</p>
+
+    <div class="definition">
+        <span class="title">例 5.1: 局所化 (localization) — 穴の開いた空間</span>
+        多項式環 $A = k[x]$ から、原点を局所化したローラン多項式環 $B = k[x, x^{-1}]$ への包含写像を考える。幾何学的には、直線 $X = \mathbb{A}^1$ から原点を取り除いた開部分スキーム $Y = \mathbb{A}^1 \smallsetminus \{0\}$ の包含 $Y \to X$ に対応する。<br><br>
+        このとき、$B \otimes_A B = k[x, x^{-1}] \otimes_{k[x]} k[x, x^{-1}] \cong k[x, x^{-1}] = B$ である。この同型のもとで $b \otimes 1 \mapsto b$ かつ $1 \otimes b \mapsto b$ となるため、任意の $b \in B$ に対して $b \otimes 1 = 1 \otimes b$ が成立してしまう。
+        すなわち $\{ b \in B \mid b \otimes 1 = 1 \otimes b \} = B$ であり、$A$ とは一致しない。したがって、これは正則モノ射ではない。
+    </div>
+
+    <div class="remark">
+        <p><strong>局所化の直観：</strong> 空間 $Y$ は $X$ の中で稠密なので、関数を見分けるには十分です（だからモノ射です）。しかし、原点という「穴」が開いているため、$Y$ の情報だけでは「原点における関数の振る舞い（$1/x$ が極を持つことなど）」をコントロールできず、ベース空間全体を復元することができません。</p>
+    </div>
+
+    <div class="remark">
+        <p><strong>注意（正規化 (normalization) について）：</strong><br>
+        特異点の正規化 $A = k[t^2, t^3] \subset B = k[t]$ は、直観的には空間のシワを伸ばしてしまうため非正則に見えますが、代数幾何学の厳密な計算を行うと平坦ではないものの $\mathbf{CRing}$ における<strong>正則モノ射（有効モノ射）になります。</strong>ファイバー積の中に潜む「非被約構造」が、特異点の尖り具合（微分情報）を正確に記憶しているためです。以下に証明を記載します。</p>
+    </div>
+
+    <div class="proof">
+        <span class="title">定理 5.2の証明: カスプ特異点の正規化は正則モノ射である</span>
+        $A = k[t^2, t^3]$ （カスプ曲線 $y^2 = x^3$ の座標環）、$B = k[t]$ （アフィン直線の座標環）とする。標数は $2, 3$ ではないとする。
+        テンソル積 $B \otimes_A B$ は、$k[t] \otimes_{k[x,y]/(y^2-x^3)} k[s] \cong k[t, s] / (t^2-s^2, t^3-s^3)$ と計算される。
+        イデアルを $I = (t^2-s^2, t^3-s^3)$ とおく。
+        <br><br>
+        $x(t) \in B$ が $x(t) \otimes 1 = 1 \otimes x(t)$ を満たすとする。これは $k[t,s]$ において $x(t) - x(s) \in I$ であることと同値である。
+        $x(t) = a_0 + a_1 t + a_2 t^2 + a_3 t^3 + \dots$ と展開する。
+        $$x(t) - x(s) = a_1(t-s) + a_2(t^2-s^2) + a_3(t^3-s^3) + \dots$$
+        $k \ge 2$ に対して $t^k - s^k \in I$ であることは容易にわかる。
+        したがって、法 $I$ で考えると、
+        $$x(t) - x(s) \equiv a_1(t-s) \pmod I$$
+        となる。これが $0$ になるためには $a_1(t-s) \in I$ が必要である。<br>
+        ここで、イデアル $I$ の生成元 $t^2-s^2$ と $t^3-s^3$ はともに次数 $2$ 以上の同次多項式である。
+        一方 $t-s$ は次数 $1$ であるため、$t-s \notin I$ である。したがって定数 $a_1$ について $a_1(t-s) \in I \iff a_1 = 0$ が従う。
+        <br><br>
+        $a_1 = 0$ であるということは、$x(t) = a_0 + a_2 t^2 + a_3 t^3 + \dots$ となり、これはまさに $x(t) \in k[t^2, t^3] = A$ であることを意味する。
+        ゆえに $\{ x \in B \mid x \otimes 1 = 1 \otimes x \} = A$ が成立し、$A \to B$ は正則モノ射（有効モノ射）であることが示された。
+        <span class="qedsymbol">■</span>
+    </div>
+
+    <h2>6. 可換環の圏におけるエピ射と正則エピ射</h2>
+    <p>次に、双対概念であるエピ射について詳述する。可換環の圏において、エピ射は「全射」であるとは限らないという特異な性質を持つ。</p>
+
+    <div class="definition">
+        <span class="title">定義 6.1: エピ射 (epimorphism)</span>
+        圏 $\mathcal{C}$ における射 $f: A \to B$ が<strong>エピ射 (epimorphism)</strong> であるとは、任意の対象 $C$ と平行な2つの射 $g, h: B \rightrightarrows C$ に対して、$g \circ f = h \circ f \implies g = h$ が成り立つことである。右簡約可能であるとも言われる。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 6.2: $\mathbf{CRing}$ におけるエピ射の特徴付け</span>
+        可換環の圏 $\mathbf{CRing}$ において、環準同型 $f: A \to B$ がエピ射であるための必要十分条件は、乗法写像 $\mu: B \otimes_A B \to B \quad (b_1 \otimes b_2 \mapsto b_1 b_2)$ が同型写像となることである。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $(\implies)$ $f$ がエピ射であると仮定する。2つの $A$-代数準同型 $i_1, i_2: B \rightrightarrows B \otimes_A B$ を、$i_1(b) = b \otimes 1$ および $i_2(b) = 1 \otimes b$ と定義する。
+        任意の $a \in A$ に対して $i_1(f(a)) = f(a) \otimes 1 = 1 \otimes f(a) = i_2(f(a))$ であるため、$i_1 \circ f = i_2 \circ f$ が成り立つ。
+        $f$ がエピ射であるという仮定より、$i_1 = i_2$ が導かれる。すなわち、任意の $b \in B$ について $b \otimes 1 = 1 \otimes b$ である。
+        これを用いれば、任意の $b_1, b_2 \in B$ に対して、
+        $$b_1 \otimes b_2 = b_1 (1 \otimes b_2) = b_1 (b_2 \otimes 1) = b_1 b_2 \otimes 1$$
+        が成立する。したがって、写像 $\nu: B \to B \otimes_A B$ を $\nu(b) = b \otimes 1$ で定義すると、$\nu(\mu(b_1 \otimes b_2)) = \nu(b_1 b_2) = b_1 b_2 \otimes 1 = b_1 \otimes b_2$ であり、また $\mu(\nu(b)) = \mu(b \otimes 1) = b$ であるから、$\mu$ と $\nu$ は互いに逆写像である。ゆえに $\mu$ は同型写像である。<br><br>
+        $(\impliedby)$ $\mu: B \otimes_A B \to B$ が同型写像であると仮定する。$g, h: B \rightrightarrows C$ を $g \circ f = h \circ f$ を満たす任意の環準同型とする。
+        $C$ は可換環であるから、双線型写像の普遍性により $A$-代数準同型 $\phi: B \otimes_A B \to C$ が $\phi(b_1 \otimes b_2) = g(b_1)h(b_2)$ によって一意に定まる。
+        $\mu$ は同型であるから、$B \otimes_A B$ において任意の $b \in B$ に対して $b \otimes 1 = 1 \otimes b$ が成り立つ（$\mu$ で送ると両辺とも $b$ になるため）。
+        これに $\phi$ を適用すると、
+        $$g(b) = g(b)h(1) = \phi(b \otimes 1) = \phi(1 \otimes b) = g(1)h(b) = h(b)$$
+        となる。ゆえに $g = h$ であり、$f$ はエピ射である。
+        <span class="qedsymbol">■</span>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 6.3: 正則エピ射 (regular epimorphism) と有効エピ射 (effective epimorphism)</span>
+        圏 $\mathcal{C}$ における射 $f: A \to B$ が<strong>正則エピ射 (regular epimorphism)</strong> であるとは、$f$ がある平行な2つの射 $g, h: R \rightrightarrows A$ の<strong>余等化子 (coequalizer)</strong> となっていることである。<br><br>
+        また、射 $f: A \to B$ の<strong>核対 (kernel pair)</strong> とは、図式 $A \xrightarrow{f} B \xleftarrow{f} A$ の引き戻し（ファイバー積）$A \times_B A$ のことである。$f$ が自身の核対 $p_1, p_2: A \times_B A \rightrightarrows A$ の余等化子となっているとき、$f$ を<strong>有効エピ射 (effective epimorphism)</strong> と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 6.4: $\mathbf{CRing}$ における正則エピ射の特徴付け</span>
+        可換環の圏 $\mathbf{CRing}$ において、環準同型 $f: A \to B$ について以下の3つは同値である。
+        <ol>
+            <li>$f$ は全射である。</li>
+            <li>$f$ は有効エピ射である。</li>
+            <li>$f$ は正則エピ射である。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $(1 \implies 2)$ $f: A \to B$ が全射であると仮定する。核対 $R = A \times_B A = \{ (a_1, a_2) \in A \times A \mid f(a_1) = f(a_2) \}$ を考え、$p_1, p_2: R \rightrightarrows A$ を自然な射影とする。明らかに $f \circ p_1 = f \circ p_2$ である。
+        任意の環 $C$ と環準同型 $q: A \to C$ が $q \circ p_1 = q \circ p_2$ を満たすとする。このとき、$B$ から $C$ への一意な写像 $\bar{q}$ が存在して $q = \bar{q} \circ f$ となることを示せばよい。
+        $f$ は全射であるため、任意の $b \in B$ に対して $f(a) = b$ となる $a \in A$ が存在する。そこで $\bar{q}(b) = q(a)$ と定義する。
+        これが well-defined であることを確認する。$f(a) = f(a') = b$ とすると、$(a, a') \in R$ である。仮定より $q(a) = q(p_1(a, a')) = q(p_2(a, a')) = q(a')$ となり値は一致する。
+        $\bar{q}$ が環準同型であることは $q$ が環準同型であることから容易に従い、また $f$ が全射（すなわちエピ射）であるため $\bar{q}$ の一意性も保証される。
+        したがって、$f$ は自身の核対の余等化子であり、有効エピ射である。<br><br>
+        $(2 \implies 3)$ 有効エピ射は、自身の核対の余等化子であるため、定義から自明に正則エピ射である。<br><br>
+        $(3 \implies 1)$ $f$ が正則エピ射であると仮定する。定義より、ある $g, h: R \rightrightarrows A$ が存在し、$f$ はその余等化子である。
+        $\mathbf{CRing}$ において、$g, h$ の余等化子は、集合 $\{ g(x) - h(x) \mid x \in R \}$ が生成する $A$ のイデアルを $I$ としたときの、商環への自然な射影 $\pi: A \to A/I$ によって与えられる。
+        余等化子は同型を除いて一意に定まるため、$B \cong A/I$ であり、$f$ は自然な射影と同一視できる。自然な射影は全射であるから、$f$ は全射である。
+        <span class="qedsymbol">■</span>
+    </div>
+
+    <h2>7. エピ射の例とアフィンスキームでの幾何的直観</h2>
+    <p>モノ射のときと同様に、アフィンスキームの圏 $\mathbf{AffSch}$ への翻訳を行う。環の準同型 $A \to B$ がエピ射であることは、空間の射 $Y \to X$ においては<strong>モノ射（像への単射的かつファイバーが1点のみの射）</strong>であることを意味する。</p>
+
+    <div class="definition">
+        <span class="title">例 7.1: 正則エピ射の例（商環）</span>
+        多項式環 $A = k[x, y]$ から、イデアル $I = (x^2 + y^2 - 1)$ による商環 $B = k[x, y]/I$ への自然な射影 $A \to B$ は全射であるため、正則エピ射（有効エピ射）である。<br>
+        <strong>幾何的直観：</strong> これはアフィン平面 $X = \mathbb{A}^2$ の中に、円 $Y$ を<strong>閉部分スキーム (closed subscheme)</strong> として埋め込む射 $Y \hookrightarrow X$ に対応する。正則エピ射であること（イデアルで割ること）は、幾何学的には「方程式を課して部分空間を切り出す」という閉埋め込みの操作に完全に一致している。
+    </div>
+
+    
+
+    <div class="definition">
+        <span class="title">例 7.2: 正則でないエピ射の例（局所化）</span>
+        例 5.1 でモノ射ではない例として挙げた局所化 $\mathbb{Z} \to \mathbb{Q}$ は、実は $\mathbf{CRing}$ におけるエピ射である。なぜなら、$\mathbb{Q} \otimes_{\mathbb{Z}} \mathbb{Q} \cong \mathbb{Q}$ が成り立つため、定理 6.2 よりエピ射となるからである。<br>
+        しかし、整数環から有理数体への写像は明らかに全射ではない（例えば $1/2$ は像に含まれない）。したがって定理 6.4 より、これは正則エピ射ではない。<br>
+        <strong>幾何的直観：</strong> 空間の射 $Y = \text{Spec}(\mathbb{Q}) \to X = \text{Spec}(\mathbb{Z})$ を考えると、これは $X$ の生成点（一般点）の埋め込みに対応する。トポロジー的に単射であり、関数を見分けるための「稠密な一点」であるため $\mathbf{AffSch}$ のモノ射（$\mathbf{CRing}$ のエピ射）として機能するが、方程式で切り出された閉部分スキームではないため、正則エピ射にはなれない。同様に、開部分スキームの埋め込み（例えば $k[x] \to k[x, x^{-1}]$）も、正則でないエピ射の典型例である。
+    </div>
+
+    <h2>8. 参考文献</h2>
+    <ul>
+        <li>Matsumura, H., <em>Commutative Ring Theory</em>, Cambridge Studies in Advanced Mathematics 8, Cambridge University Press, 1989. <a href="https://doi.org/10.1017/CBO9781139171762" target="_blank">[DOI リンク]</a></li>
+        <li>The Stacks project authors, <em>The Stacks project</em>. 特に Tag 023P (Faithfully flat descent), Tag 02JN (Pure ring maps), および Tag 00HN (Epimorphisms of rings). <a href="https://stacks.math.columbia.edu/" target="_blank">[Web リンク]</a></li>
+        <li>Waterhouse, W. C., <em>Introduction to Affine Group Schemes</em>, Graduate Texts in Mathematics 66, Springer, 1979. <a href="https://link.springer.com/book/10.1007/978-1-4612-6217-6" target="_blank">[Springer リンク]</a></li>
+        <li>Grothendieck, A., <em>Revêtements étales et groupe fondamental (SGA 1)</em>, Lecture Notes in Mathematics 224, Springer, 1971. <a href="https://arxiv.org/abs/math/0206203" target="_blank">[arXiv リンク]</a></li>
+    </ul>
+
+</body>
+</html>
