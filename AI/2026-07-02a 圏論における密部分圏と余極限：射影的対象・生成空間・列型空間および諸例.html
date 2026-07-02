@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圏論における密部分圏と余極限：射影的対象・生成空間・列型空間および諸例</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Noto Serif JP", serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fafafa;
+        }
+        h1, h2, h3, h4 {
+            font-family: "Noto Sans JP", sans-serif;
+            color: #111;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .informal {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .definition {
+            background-color: #fdfdfd;
+            border-left: 5px solid #0066cc;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .theorem {
+            background-color: #f9f9f9;
+            border-left: 5px solid #d9534f;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .proof {
+            background-color: #ffffff;
+            border-left: 3px double #5cb85c;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        .proof-alt {
+            background-color: #f4fbf4;
+            border-left: 3px dashed #5cb85c;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        .example {
+            background-color: #fef8e3;
+            border-left: 5px solid #f0ad4e;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            background-color: #fff;
+            padding: 20px;
+            border-top: 2px solid #ccc;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>圏論における密部分圏と余極限：射影的対象・生成空間・列型空間および諸例</h1>
+
+    <div class="informal">
+        <p>本稿は、部分圏を用いた対象の余極限表現（密性）に関する数学的議論を、自己完結的（self-contained）にまとめたものである。基本概念の定義や直観的な理解を助ける具体例を豊富に追加し、論理の飛躍がないようにすべての証明を完全に書き下している。圏論の枠組みが、位相空間論や代数学においていかに強力な統制力を発揮するかを確認してほしい。</p>
+    </div>
+
+    <h2>1. 基礎概念の準備</h2>
+    
+    <p>以降の議論を展開する上で不可欠となる圏論および位相空間論の基本的な概念を定義する。</p>
+
+    <div class="definition">
+        <h4>定義 1.1: 圏 (category) とコンマ圏 (comma category)</h4>
+        <p>圏 $C$ は、対象 (object) の集まり $\operatorname{Ob}(C)$ と、各対象 $X, Y$ の間の射 (morphism) の集合 $\operatorname{Hom}(X, Y)$、および結合則と単位律を満たす射の合成からなる。</p>
+        <p>$C$ を圏とし、$B$ を $C$ の部分圏 (subcategory) とする。$C$ の任意の対象 $X$ に対し、<strong>コンマ圏 (comma category)</strong> $B \downarrow X$ を以下のように定義する。</p>
+        <ul>
+            <li><strong>対象:</strong> 組 $(S, f)$。ここで $S \in \operatorname{Ob}(B)$ であり、$f: S \to X$ は $C$ における射である。</li>
+            <li><strong>射:</strong> 対象 $(S_1, f_1)$ から $(S_2, f_2)$ への射 $u$ とは、$B$ における射 $u: S_1 \to S_2$ であって、$f_2 \circ u = f_1$ を満たすものである。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <h4>定義 1.2: 余極限 (colimit) と密部分圏 (dense subcategory)</h4>
+        <p>圏 $C$ の対象からなる図式に対して、その<strong>余極限 (colimit)</strong> とは、図式からの対象への射の族である「錐 (cone)」の中で普遍性を持つもの（余極限錐）の頂点となる対象のことである。直観的には、与えられた図式の情報を「貼り合わせる」操作に対応する。</p>
+        <p>部分圏 $B \subset C$ が $C$ において<strong>密 (dense)</strong> であるとは、$C$ の任意の対象 $X$ が、コンマ圏 $B \downarrow X$ を添字圏とする忘却関手 $U: B \downarrow X \to C$ （$(S, f) \mapsto S$）の余極限として標準的に同型となることをいう。すなわち、次が成立することである。</p>
+        $$ X \cong \operatorname{colim}_{(S, f) \in \operatorname{Ob}(B \downarrow X)} S $$
+    </div>
+
+    <div class="definition">
+        <h4>定義 1.3: 最終部分圏 (final subcategory)</h4>
+        <p>圏 $I$ とその部分圏 $J$ について、$J$ が $I$ における<strong>最終部分圏 (final subcategory)</strong>（または共終部分圏: cofinal subcategory）であるとは、$I$ から任意の圏 $C$ への関手 $F: I \to C$ について、部分圏 $J$ 上の余極限が全体 $I$ 上の余極限と一致することである。</p>
+        $$ \operatorname{colim}_{j \in J} F(j) \cong \operatorname{colim}_{i \in I} F(i) $$
+        <p>$J \subset I$ が最終部分圏となるための必要十分条件は、$I$ の任意の対象 $i$ に対して、コンマ圏 $i \downarrow J$ が空でなく（到達可能性）、かつ連結（任意の2つの対象が射のジグザグ経路で結ばれる）であることである。</p>
+    </div>
+
+    <h2>2. 超不連結空間の圏とコンパクトHausdorff空間の圏</h2>
+
+    <p>位相空間論における重要な定理である Gleason の定理を用いて、密部分圏の具体的な構成を見る。</p>
+
+    <div class="definition">
+        <h4>定義 2.1: コンパクトHausdorff空間と超不連結空間</h4>
+        <p>位相空間 $X$ が <strong>コンパクト (compact)</strong> であるとは、任意の開被覆が有限部分被覆を持つことである。また、<strong>Hausdorff空間 (Hausdorff space)</strong> であるとは、任意の相異なる2点が互いに素な開集合で分離できることである。コンパクトHausdorff空間を対象とし、連続写像を射とする圏を $\mathbf{CHaus}$ と記述する。</p>
+        <p>位相空間 $X$ が <strong>clopen</strong> な集合を持つとは、開かつ閉であるような部分集合を持つことである。<br>
+        $X$ が <strong>超不連結 (extremally disconnected)</strong> であるとは、$X$ の任意の開集合の閉包が再び開集合となる（すなわち clopen になる）ことである。超不連結空間の全体を対象とする $\mathbf{CHaus}$ の充満部分圏を $\mathbf{ED}$ とする。</p>
+    </div>
+
+    <div class="theorem">
+        <h4>定理 2.2: Gleason の定理 (1958) と射影的被覆</h4>
+        <p>圏 $\mathbf{CHaus}$ における射影的対象 (projective object)、すなわち任意の全射連続写像（有効エピ射）に対して持ち上げの性質を持つ対象は、超不連結 (extremally disconnected) 空間に他ならない。さらに、任意のコンパクトHausdorff空間 $X$ に対して、超不連結空間 $P \in \operatorname{Ob}(\mathbf{ED})$ と全射連続写像 $p: P \to X$ の組が存在する。このような $p$ を $X$ の射影的被覆 (projective cover) と呼ぶ。</p>
+    </div>
+
+    <p>この定理により、$\mathbf{ED}$ は $\mathbf{CHaus}$ において密部分圏となる。このことを示すために、コンマ圏 $\mathbf{ED} \downarrow X$ の中に極めて小さな最終部分圏 $D$ を構築する。（※次項の別証明として、直接普遍性を確認する方法も提示する。）</p>
+
+    <div class="definition">
+        <h4>定義 2.3: コンマ圏における極めて小さな部分圏 $D$ の構築</h4>
+        <p>任意の $X \in \operatorname{Ob}(\mathbf{CHaus})$ を固定する。Gleason の定理を用い、以下の対象と射を定義する。</p>
+        <ol>
+            <li>$p: P \to X$ を $X$ の射影的被覆とする（$P \in \operatorname{Ob}(\mathbf{ED})$、$p$ は全射）。</li>
+            <li>$P \times_X P = \{ (y_1, y_2) \in P \times P \mid p(y_1) = p(y_2) \}$ を $p$ の引き戻し（ファイバー積）とし、$\pi_0, \pi_1: P \times_X P \to P$ を各成分への射影とする。</li>
+            <li>$q: Q \to P \times_X P$ を引き戻し空間 $P \times_X P$ の射影的被覆とする（$Q \in \operatorname{Ob}(\mathbf{ED})$、$q$ は全射）。</li>
+            <li>$d_0 = \pi_0 \circ q$、および $d_1 = \pi_1 \circ q$ と定義する。これらは $Q$ から $P$ への $\mathbf{ED}$ における射である。</li>
+            <li>$h = p \circ d_0$ と置く。引き戻しの性質 $p \circ \pi_0 = p \circ \pi_1$ により、$h = p \circ d_1$ も成り立つ。</li>
+        </ol>
+        <p>コンマ圏 $\mathbf{ED} \downarrow X$ の部分圏 $D$ を次のように構成する。</p>
+        <ul>
+            <li><strong>対象:</strong> $P_0 = (P, p)$ および $P_1 = (Q, h)$ の2つのみ。</li>
+            <li><strong>射:</strong> 恒等射 $\operatorname{id}_{P_0}, \operatorname{id}_{P_1}$ に加え、$d_0: P_1 \to P_0$ と $d_1: P_1 \to P_0$ の4つのみ。</li>
+        </ul>
+    </div>
+
+    <div class="proof">
+        <p><strong>証明（最終部分圏を用いる方法）.</strong></p>
+        <p><strong>部分圏 $D$ が $\mathbf{ED} \downarrow X$ において最終部分圏となることの証明:</strong></p>
+        <p>包含関手を $I: D \hookrightarrow \mathbf{ED} \downarrow X$ とする。$D$ が最終部分圏であることを示すには、任意の対象 $(S, f) \in \operatorname{Ob}(\mathbf{ED} \downarrow X)$ に対して、コンマ圏 $(S, f) \downarrow I$ が空でなく、かつ連結であることを示せば十分である。</p>
+        <p><strong>1. 空でないこと（到達可能性）の証明:</strong><br>
+        対象 $(S, f) \in \operatorname{Ob}(\mathbf{ED} \downarrow X)$ を任意にとる（$S \in \operatorname{Ob}(\mathbf{ED})$、$f: S \to X$）。
+        $p: P \to X$ は射影的被覆であるため全射である。$S$ は $\mathbf{ED}$ の対象であり、Gleasonの定理により $\mathbf{CHaus}$ の射影的対象である。射影的対象の性質より、全射 $p$ に対して連続写像 $f: S \to X$ を持ち上げる連続写像 $u: S \to P$ が存在し、$p \circ u = f$ を満たす。
+        この $u$ は、コンマ圏における射 $u: (S, f) \to P_0$ を与えるため、$(S, f) \downarrow I$ は空ではない。</p>
+        
+        <p><strong>2. 連結性の証明:</strong><br>
+        $(S, f) \downarrow I$ の任意の2つの対象（すなわち $D$ の対象への射）が、ジグザグ経路で結ばれることを示す。
+        任意の射 $v: (S, f) \to P_1$ が存在した場合、合成 $d_0 \circ v: (S, f) \to P_0$ を考えることで、$P_0$ への射に押し込むことができる。したがって、2つの射 $u_1, u_2: (S, f) \to P_0$ が経路で結ばれることを示せば十分である。</p>
+        <p>$u_1, u_2$ が $(S, f)$ から $P_0$ への射であるため、$p \circ u_1 = f$ および $p \circ u_2 = f$、すなわち $p \circ u_1 = p \circ u_2$ が成り立つ。<br>
+        引き戻し $P \times_X P$ の普遍性により、一意な連続写像 $v: S \to P \times_X P$ が存在し、$\pi_0 \circ v = u_1$ および $\pi_1 \circ v = u_2$ を満たす。<br>
+        $q: Q \to P \times_X P$ は射影的被覆であり全射であるため、$S$ の射影性を用いて $v$ を持ち上げる連続写像 $w: S \to Q$ が得られ、$q \circ w = v$ を満たす。<br>
+        この $w$ について、$h \circ w = p \circ \pi_0 \circ q \circ w = p \circ \pi_0 \circ v = p \circ u_1 = f$ が成り立つため、$w$ は $(S, f)$ から $P_1$ への正当な射である。<br>
+        さらに、<br>
+        $$d_0 \circ w = \pi_0 \circ q \circ w = \pi_0 \circ v = u_1$$
+        $$d_1 \circ w = \pi_1 \circ q \circ w = \pi_1 \circ v = u_2$$
+        が成立する。これはコンマ圏 $(S, f) \downarrow I$ において、次のようなスパン（経路）が形成されることを意味する：
+        $$ u_1 \overset{d_0}{\longleftarrow} w \overset{d_1}{\longrightarrow} u_2 $$
+        （厳密には、$(S, f) \downarrow I$ の対象は $u_1, u_2, w$ であり、射は $d_0: w \to u_1$ および $d_1: w \to u_2$ である。）
+        これにより、任意の2つの対象が結ばれることが示され、$(S, f) \downarrow I$ は連結である。以上より、$D$ は最終部分圏である。(証明終)</p>
+    </div>
+
+    <div class="proof-alt">
+        <p><strong>別証明（余極限の普遍性を直接確認する方法）.</strong></p>
+        <p>最終部分圏を経由せず、コンマ圏全体 $\mathbf{ED} \downarrow X$ の余極限が $X$ となることを、普遍性に基づいて要素レベルで直接証明することも可能である。</p>
+        <p>コンマ圏の対象 $(S, f)$ に対し、自然な錐を $\lambda_{(S, f)} = f: S \to X$ と定める。別の位相空間 $Y \in \operatorname{Ob}(\mathbf{CHaus})$ と、錐 $\mu_{(S, f)}: S \to Y$ が与えられたとき、条件 $\phi \circ f = \mu_{(S, f)}$ を満たす一意な連続写像 $\phi: X \to Y$ が存在することを示す。</p>
+        
+        <p><strong>1. 写像 $\phi$ の構成と well-defined 性:</strong><br>
+        $X$ の射影的被覆 $p: P \to X$ をとる。$P \in \operatorname{Ob}(\mathbf{ED})$ であり、$p$ は全射であるため、$(P, p) \in \operatorname{Ob}(\mathbf{ED} \downarrow X)$ である。任意の $x \in X$ に対し、$p(z) = x$ を満たす $z \in P$ を一つ選び、
+        $$ \phi(x) = \mu_{(P, p)}(z) $$
+        と定義する。<br>
+        この定義が代表元 $z$ の取り方によらないことを確認する。別の $z' \in P$ が $p(z') = x$ を満たしたとする。このとき、組 $(z, z')$ は引き戻し $P \times_X P$ の要素となる。<br>
+        $P \times_X P$ の射影的被覆 $q: Q \to P \times_X P$ を考えると、$q$ は全射であるため、$q(w) = (z, z')$ となる $w \in Q$ が存在する。前述の定義と同様に $d_0 = \pi_0 \circ q$ および $d_1 = \pi_1 \circ q$ とすると、$d_0(w) = z$, $d_1(w) = z'$ であり、かつ $p \circ d_0 = p \circ d_1$ が成り立つ。この合成を $h: Q \to X$ とおく。<br>
+        ここで、$d_0$ と $d_1$ はコンマ圏における射 $d_i: (Q, h) \to (P, p)$ として機能する。したがって、錐 $\mu$ の可換条件から
+        $$ \mu_{(Q, h)} = \mu_{(P, p)} \circ d_0 = \mu_{(P, p)} \circ d_1 $$
+        が成り立つ。両辺を要素 $w$ で評価すると、
+        $$ \mu_{(P, p)}(d_0(w)) = \mu_{(Q, h)}(w) = \mu_{(P, p)}(d_1(w)) $$
+        すなわち $\mu_{(P, p)}(z) = \mu_{(P, p)}(z')$ が得られる。これにより、写像 $\phi$ は well-defined である。</p>
+        
+        <p><strong>2. 任意の対象 $(S, f)$ に対する可換性の証明:</strong><br>
+        任意の $(S, f) \in \operatorname{Ob}(\mathbf{ED} \downarrow X)$ を考える。$S \in \operatorname{Ob}(\mathbf{ED})$ は $\mathbf{CHaus}$ で射影的であり、$p: P \to X$ は全射（有効エピ射）であるため、$f$ を持ち上げる連続写像 $u: S \to P$ が存在して $p \circ u = f$ となる。これはコンマ圏の射 $u: (S, f) \to (P, p)$ である。<br>
+        錐の条件より $\mu_{(S, f)} = \mu_{(P, p)} \circ u$ である。任意の $s \in S$ に対し、$x = f(s)$ とおくと $p(u(s)) = f(s) = x$ であるから、$\phi$ の定義より
+        $$ \phi(f(s)) = \phi(x) = \mu_{(P, p)}(u(s)) = \mu_{(S, f)}(s) $$
+        が成り立つ。すなわち集合の写像として $\phi \circ f = \mu_{(S, f)}$ が示された。</p>
+        
+        <p><strong>3. 連続性と一意性の証明:</strong><br>
+        構成より $\phi \circ p = \mu_{(P, p)}$ である。コンパクトHausdorff空間の間の全射連続写像 $p: P \to X$ は閉写像であり、したがって商写像 (quotient map) となる。商写像の性質から、$\phi \circ p$ が連続（$\mu_{(P, p)}$ は連続）であれば、$\phi$ 自身も連続である。また、$p$ が全射であるため、等式 $\phi \circ p = \mu_{(P, p)}$ を満たすような $\phi$ はただ一つに決定される。<br>
+        以上より普遍性が示され、$X \cong \operatorname{colim}_{(S, f) \in \operatorname{Ob}(\mathbf{ED} \downarrow X)} S$ が成立する。(証明終)</p>
+    </div>
+
+    <h2>3. 射影的対象からなる部分圏の密性定理 (抽象化)</h2>
+
+    <p>前節での $\mathbf{CHaus}$ と $\mathbf{ED}$ に関する結果は、引き戻しを持つ一般の圏へと美しく抽象化される。これを定理として定式化する。</p>
+
+    <div class="theorem">
+        <h4>定理 3.1: 射影的対象からなる部分圏の密性 (Density of Projective Subcategories)</h4>
+        <p>$C$ を引き戻し（ファイバー積）を持つ圏とし、$E$ を $C$ における有効エピ射 (effective epimorphism) のクラスとする。$B$ を $C$ の充満部分圏とする。以下の2つの条件が満たされるとき、<strong>$B$ は $C$ において密 (dense) である</strong>。</p>
+        <ol>
+            <li><strong>$E$-射影性:</strong> $B$ の任意の対象 $S$ は、$E$ に関して射影的である。すなわち、任意の射 $e: Y \to Z \in E$ と射 $f: S \to Z$ に対し、ある射 $g: S \to Y$ が存在して $e \circ g = f$ となる。</li>
+            <li><strong>被覆の存在:</strong> $C$ の任意の対象 $X$ に対して、$B$ の対象 $P$ と、$E$ に属する射 $p: P \to X$ が存在する。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <p><strong>証明.</strong></p>
+        <p>任意の $X \in \operatorname{Ob}(C)$ を固定する。条件2より、$X$ への有効エピ射 $p: P \to X$ （$P \in \operatorname{Ob}(B)$）が存在する。$C$ は引き戻しを持つため、$p$ の核対 (kernel pair) となる引き戻し $P \times_X P \rightrightarrows P$ が構成できる。
+        再び条件2により、$P \times_X P$ への有効エピ射 $q: Q \to P \times_X P$ （$Q \in \operatorname{Ob}(B)$）が存在する。
+        前節と全く同様の論法（条件1の射影性を使用）により、$Q \rightrightarrows P \to X$ から構成される小さな部分圏 $D$ は、コンマ圏 $B \downarrow X$ において最終部分圏となる。</p>
+        
+        <p>$E$ が有効エピ射のクラスであるという性質から、$p: P \to X$ は自身の核対 $\pi_0, \pi_1: P \times_X P \rightrightarrows P$ の余等化子 (coequalizer) である。
+        ここで、部分圏 $D$ における射 $d_0 = \pi_0 \circ q$ および $d_1 = \pi_1 \circ q$ について、$p$ が $d_0, d_1$ の余等化子でもあることを厳密に示す。
+        任意の射 $g: P \to Y$ が $g \circ d_0 = g \circ d_1$ を満たすと仮定する。このとき、
+        $$ g \circ \pi_0 \circ q = g \circ \pi_1 \circ q $$
+        が成り立つ。$q$ は有効エピ射であり、したがってエピ射（右簡約可能）であるため、$q$ をキャンセルして
+        $$ g \circ \pi_0 = g \circ \pi_1 $$
+        を得る。$p$ は $\pi_0, \pi_1$ の余等化子であるため、一意な射 $k: X \to Y$ が存在して $k \circ p = g$ を満たす。
+        これはまさに $p$ が $d_0, d_1$ の余等化子であることを意味する。
+        </p>
+        <p>したがって、$D$ 上の余極限は $X$ と同型である。最終性により、$B \downarrow X$ 全体における余極限もまた $X$ と同型になる。すなわち、
+        $$ X \cong \operatorname{colim}_{(S, f) \in \operatorname{Ob}(B \downarrow X)} S $$
+        が成立し、$B$ は $C$ で密である。(証明終)</p>
+    </div>
+
+    <h2>4. コンパクト生成空間とコンパクトHausdorff空間</h2>
+
+    <p>次に、同じく $\mathbf{CHaus}$ を用いた別の密性定理を見る。ここでの包含関係は前節と逆方向であり、同型が成立するメカニズムも大きく異なる。</p>
+
+    <div class="definition">
+        <h4>定義 4.1: コンパクト生成空間</h4>
+        <p>位相空間 $X$ が <strong>コンパクト生成空間 (compactly generated space)</strong> であるとは、その位相がコンパクトHausdorff空間からの連続写像族によって完全に決定されることである。すなわち、$X$ の部分集合 $A$ が閉集合（または開集合）であるための必要十分条件は、任意のコンパクトHausdorff空間 $K$ と連続写像 $f: K \to X$ に対して、逆像 $f^{-1}(A)$ が $K$ において閉集合（または開集合）となることである。<br>
+        このような空間を対象とし、連続写像を射とする圏を $\mathbf{CG}$ と記述する。（※ここでは弱Hausdorff性の仮定を置かない一般的な定義を採用する。）</p>
+    </div>
+
+    <div class="theorem">
+        <h4>定理 4.2: コンパクトHausdorff空間の部分圏としての密性</h4>
+        <p>$C = \mathbf{CG}$ をコンパクト生成空間の圏とし、$B = \mathbf{CHaus}$ をコンパクトHausdorff空間の圏とする。このとき、$B$ は $C$ において密である。すなわち、任意のコンパクト生成空間 $X$ は、
+        $$ X \cong \operatorname{colim}_{(S, f) \in \operatorname{Ob}(\mathbf{CHaus} \downarrow X)} S $$
+        を満たす。</p>
+    </div>
+
+    <div class="proof">
+        <p><strong>証明.</strong></p>
+        <p>コンマ圏 $\mathbf{CHaus} \downarrow X$ の対象は、コンパクトHausdorff空間 $S$ と連続写像 $f: S \to X$ の組 $(S, f)$ である。これらを添字圏とする忘却関手 $U: \mathbf{CHaus} \downarrow X \to \mathbf{CG}$ を考える。</p>
+        <p>各対象 $(S, f)$ に対して $\lambda_{(S, f)} = f: S \to X$ と定めると、これは $U$ から $X$への自然な錐 (cone) を構成する。これが余極限錐であることを示す。<br>
+        任意のコンパクト生成空間 $Y$ と、錐 $\mu_{(S, f)}: S \to Y$ が与えられたとする。このとき、条件 $\phi \circ f = \mu_{(S, f)}$ を満たす一意な連続写像 $\phi: X \to Y$ が存在することを示せばよい。</p>
+        <p><strong>集合としての写像の構成:</strong> $X$ の任意の点 $x$ に対し、一点空間（これはコンパクトHausdorffである）からの包含写像 $i_x: \{*\} \to X$ を考える。$( \{*\}, i_x )$ はコンマ圏の対象となるため、$\phi(x) = \mu_{(\{*\}, i_x)}(*)$ として $\phi: X \to Y$ を well-defined に定義する。錐の可換性を用いると、任意の $(S, f)$ と $s \in S$ について、$f(s) = x$ のとき、$S$ 内の一点 $s$ への定値写像などを経由して $\phi(f(s)) = \mu_{(S, f)}(s)$ が成り立つことが確認できる。これにより $\phi \circ f = \mu_{(S, f)}$ が集合の写像として成立する。</p>
+        <p><strong>連続性の証明:</strong> $\phi$ が連続であることを示すために、$Y$ の任意の閉集合 $F$ に対し、$A = \phi^{-1}(F)$ が $X$ の閉集合となることを示す。コンパクト生成空間の定義により、$A$ が閉集合であることを確認するには、任意のコンパクトHausdorff空間 $K$ と連続写像 $g: K \to X$ に対して $g^{-1}(A)$ が $K$ で閉集合となることを言えば十分である。<br>
+        定義より $g^{-1}(A) = g^{-1}(\phi^{-1}(F)) = (\phi \circ g)^{-1}(F)$ である。前段の構成より $\phi \circ g = \mu_{(K, g)}$ であり、$\mu_{(K, g)}$ は連続写像であるため、連続写像による閉集合 $F$ の逆像は閉集合となる。したがって $g^{-1}(A)$ は閉集合であり、定義より $A$ は $X$ において閉集合となるため、$\phi$ は連続写像である。</p>
+        <p>以上により余極限の普遍性が満たされ、全体 $\mathbf{CHaus} \downarrow X$ 上の余極限が位相空間として $X$ と同型になることが示された。(証明終)</p>
+    </div>
+
+    <h2>5. 列型空間と一点コンパクト化</h2>
+
+    <p>対象が単一しかない極端に小さな部分圏であっても、空間全体を密に生成する強力な例が存在する。</p>
+
+    <div class="definition">
+        <h4>定義 5.1: 列型空間 (sequential space)</h4>
+        <p>位相空間 $X$ が <strong>列型空間 (sequential space)</strong> であるとは、以下の同値な条件を満たすことである。<br>
+        「$X$ の任意の部分集合 $A$ に対して、$A$ が閉集合であるための必要十分条件は、$A$ 内の任意の収束列 $(x_n)_{n \in \mathbb{N}}$ が極限点 $x \in X$ に収束するならば、必ず $x \in A$ が成り立つことである。」<br>
+        直観的に言えば、空間の位相（閉集合・開集合の構造）が、収束列の振る舞いだけで完全に決定される空間のことである。第一可算公理を満たす空間（距離空間など）はすべて列型空間となる。</p>
+    </div>
+
+    <div class="theorem">
+        <h4>定理 5.2: 収束列モデルによる列型空間の生成</h4>
+        <p>$C = \mathbf{Seq}$ を列型空間の圏とする。自然数に無限遠点 $\infty$ を加えた一点コンパクト化を $\widehat{\mathbb{N}} = \mathbb{N} \cup \{\infty\}$ とする。この単一の対象のみからなる $\mathbf{Seq}$ の充満部分圏を $B = \{\widehat{\mathbb{N}}\}$ とする。このとき、$B$ は $\mathbf{Seq}$ において密である。すなわち、任意の列型空間 $X$ に対して、
+        $$ X \cong \operatorname{colim}_{(S, f) \in \operatorname{Ob}(B \downarrow X)} S $$
+        が成立する。</p>
+    </div>
+
+    <div class="proof">
+        <p><strong>証明.</strong></p>
+        <p>忘却関手を $U: B \downarrow X \to \mathbf{Seq}$ （$U(\widehat{\mathbb{N}}, f) = \widehat{\mathbb{N}}$）とする。コンマ圏 $B \downarrow X$ の対象は、$X$ 内の一つの収束列とその極限点を指定する連続写像 $f: \widehat{\mathbb{N}} \to X$ と同一視できる。</p>
+        <p>各対象 $j = (\widehat{\mathbb{N}}, f)$ に対し、$\lambda_j = f: \widehat{\mathbb{N}} \to X$ と定義すると、これは $U$ から対象 $X$ への自然変換であり、余極限錐 (colimit cone) の候補となる錐 $\lambda = (\lambda_j)_j$ をなす。この $\lambda$ が普遍性を持つことを示す。</p>
+        
+        <p>任意の列型空間 $Y$ と、別の錐 $\mu = (\mu_j)_j : U \to \Delta Y$ が与えられたとする。条件 $\mu_j = \phi \circ \lambda_j$ を満たす連続写像 $\phi: X \to Y$ の一意な存在を示さねばならない。</p>
+        <p>任意の $x \in X$ に対し、値が常に $x$ である定値写像 $c_x: \widehat{\mathbb{N}} \to X$ を考える（すべての $m \in \widehat{\mathbb{N}}$ で $c_x(m) = x$）。$c_x$ は連続であるため $j_x = (\widehat{\mathbb{N}}, c_x)$ は $B \downarrow X$ の対象である。そこで、写像 $\phi: X \to Y$ を $\phi(x) = \mu_{j_x}(\infty)$ と well-defined に定義する。</p>
+        
+        <p><strong>写像の可換性の証明:</strong> $X$ 内の任意の収束列を代表する連続写像 $f: \widehat{\mathbb{N}} \to X$ をとり、$j = (\widehat{\mathbb{N}}, f)$ と置く。$\phi(f(y)) = \mu_j(y)$ が任意の $y \in \widehat{\mathbb{N}}$ で成り立つことを示す。<br>
+        まず $y = \infty$ の場合を考える。連続な自己写像 $\alpha: \widehat{\mathbb{N}} \to \widehat{\mathbb{N}}$ を、すべての $m \in \widehat{\mathbb{N}}$ に対して $\alpha(m) = \infty$ となる定値写像として定める。すると $(f \circ \alpha)(m) = f(\infty)$ となるため、$f \circ \alpha = c_{f(\infty)}$ である。
+        これは $\alpha$ が $B \downarrow X$ における射 $\alpha: j_{f(\infty)} \to j$ であることを意味する。錐の可換性から $\mu_{j_{f(\infty)}} = \mu_j \circ \alpha$ となり、$\infty$ を代入すると
+        $$ \phi(f(\infty)) = \mu_{j_{f(\infty)}}(\infty) = \mu_j(\alpha(\infty)) = \mu_j(\infty) $$
+        を得る。<br>
+        次に $y = n \in \mathbb{N}$ の場合を考える。連続な自己写像 $\beta_n: \widehat{\mathbb{N}} \to \widehat{\mathbb{N}}$ を、すべての $m \in \widehat{\mathbb{N}}$ に対して $\beta_n(m) = n$ となる定値写像として定める。
+        （※注意：$\beta_n$ は定数 $n$ に値をとるため極限も $n$ であり、$\beta_n(\infty) = n$ と定義することで連続写像となる。）
+        すると $(f \circ \beta_n)(m) = f(n)$ となるため、$f \circ \beta_n = c_{f(n)}$ である。
+        これは $\beta_n$ が $B \downarrow X$ における射 $\beta_n: j_{f(n)} \to j$ であることを意味する。錐の可換性から $\mu_{j_{f(n)}} = \mu_j \circ \beta_n$ となり、$\infty$ を代入すると
+        $$ \phi(f(n)) = \mu_{j_{f(n)}}(\infty) = \mu_j(\beta_n(\infty)) = \mu_j(n) $$
+        を得る。以上により、集合の写像として $\phi \circ f = \mu_j$ 、すなわち $\phi \circ \lambda_j = \mu_j$ が証明された。</p>
+
+        <p><strong>連続性の証明:</strong> $\phi$ の連続性を示すため、$Y$ の任意の閉集合 $F$ に対し、$A = \phi^{-1}(F)$ が $X$ の閉集合となることを示す。$X$ は列型空間であるため、$A$ 内の任意の収束列 $(x_n)_{n \in \mathbb{N}} \to x$ に対して $x \in A$ となることを示せば十分である。<br>
+        この収束列 $(x_n)$ と極限 $x$ は、連続写像 $f: \widehat{\mathbb{N}} \to X$ （$f(n) = x_n, f(\infty) = x$）を定める。$j = (\widehat{\mathbb{N}}, f)$ に対する $\mu_j$ は連続であるため、$\widehat{\mathbb{N}}$ における収束 $n \to \infty$ を保存し、空間 $Y$ において $\mu_j(n) \to \mu_j(\infty)$ となる。
+        前段の可換性より $\mu_j(n) = \phi(f(n)) = \phi(x_n)$ であり、仮定より $x_n \in A$ なのでこれらはすべて $F$ に属する。
+        一般の位相空間において、閉集合 $F$ 内の列が収束するならば、その極限点も必ず $F$ に含まれる。したがって $\mu_j(\infty) \in F$ である。
+        再び可換性より $\mu_j(\infty) = \phi(f(\infty)) = \phi(x)$ であるため $\phi(x) \in F$、すなわち $x \in A$ が示された。よって $A$ は閉集合であり、$\phi$ は連続である。
+        </p>
+        <p>また、このような $\phi$ は $\phi(x) = \mu_{j_x}(\infty)$ として一意に決定されるため、余極限の普遍性が完全に証明された。(証明終)</p>
+    </div>
+
+    <h2>6. 密性・余密性の有用な5つの例</h2>
+
+    <p>未知で複雑な対象を「基本的な構成要素（テスト対象）」に分解して理解するという密部分圏の哲学は、数学の様々な分野で核心的な役割を果たしている。特に有用な5つの例を以下に挙げる。</p>
+
+    <div class="example">
+        <h4>1. 前層の圏と米田埋め込み (Density Theorem)</h4>
+        <p><strong>圏 $C$:</strong> 小さい圏 $\mathbf{D}$ から集合の圏 $\mathbf{Set}$ への反変関手の圏 $\mathbf{Set}^{\mathbf{D}^{\mathrm{op}}}$（前層の圏）。<br>
+        <strong>部分圏 $B$:</strong> 表現可能関手 $h_A = \operatorname{Hom}_{\mathbf{D}}(-, A)$ たちからなる充満部分圏（米田埋め込みによる像）。</p>
+        <p><strong>解説:</strong> 任意の前層 $X$ は、コンマ圏 $B \downarrow X$（要素の圏）を添字とする表現可能関手たちの余極限として一意に記述される。これを<strong>前層の密度定理 (Density Theorem)</strong> と呼ぶ。空間を測るための定規である表現可能関手をどう当てはめたかという情報だけで、元の対象が完全に復元されることを示している。</p>
+    </div>
+
+    <div class="example">
+        <h4>2. 単体集合と標準単体 (代数的位相幾何学)</h4>
+        <p><strong>圏 $C$:</strong> 単体集合の圏 $\mathbf{sSet} = \mathbf{Set}^{\mathbf{\Delta}^{\mathrm{op}}}$。<br>
+        <strong>部分圏 $B$:</strong> 標準単体 $\Delta^n$（$n \ge 0$）たちからなる充満部分圏。</p>
+        <p><strong>解説:</strong> 1の密度定理の直接的な応用例である。どんなに複雑で巨大な単体集合 $X$ であっても、要素である点、線分、三角形、四面体…といった標準単体を、指定された指示（面写像と退化写像）に従って貼り合わせる（余極限をとる）ことで完全に再構成できる。図形を組合せ論的に分解するホモトピー論の基礎である。</p>
+    </div>
+
+    <div class="example">
+        <h4>3. アーベル群と単一対象 $\mathbb{Z}$ (代数学)</h4>
+        <p><strong>圏 $C$:</strong> アーベル群の圏 $\mathbf{Ab}$。<br>
+        <strong>部分圏 $B$:</strong> 整数群 $\mathbb{Z}$ のみを唯一の対象とする充満部分圏。</p>
+        <p><strong>解説:</strong> 列型空間と $\widehat{\mathbb{N}}$ の関係と全く同じ構造を持つ代数版の例である。$\mathbb{Z}$ から任意のアーベル群 $X$ への準同型写像 $f: \mathbb{Z} \to X$ を指定することは、$X$ の元を一つ選ぶことと同値である。したがって、任意のアーベル群は単一の対象 $\mathbb{Z}$ のコピーたちを適当な関係式で割る（余極限・余等化子をとる）ことで表現できる。$\mathbb{Z}$ が $\mathbf{Ab}$ のジェネレータ（生成元）であることを体現している。</p>
+    </div>
+
+    <div class="example">
+        <h4>4. CW複体と細胞 (位相幾何学)</h4>
+        <p><strong>圏 $C$:</strong> CW複体と連続写像の圏 $\mathbf{CW}$。<br>
+        <strong>部分圏 $B$:</strong> 各次元の閉円板（細胞） $D^n = \{x \in \mathbb{R}^n \mid \|x\| \le 1\}$ ($n \ge 0$) たち。</p>
+        <p><strong>解説:</strong> 任意の位相空間全体では細胞のみで空間を再構成することは不可能であるが、対象をCW複体に限定すれば密性が成り立つ。CW複体は、低次元の骨格から境界球面 $S^{n-1}$ に沿って新しい細胞 $D^n$ を接着していくことで構成される。この接着操作は「押し出し (pushout)」と呼ばれる余極限の一種である。任意のCW複体を細胞の余極限（コンマ圏 $\{D^n\} \downarrow X$ 上の余極限）として捉えることで、空間全体のホモロジー群などの位相的性質を、各細胞からの特性写像の情報へと還元して計算することが可能になる。</p>
+    </div>
+
+    <div class="example">
+        <h4>5. プロ有限群と有限群 (ガロア理論・数論)</h4>
+        <p><strong>圏 $C$:</strong> プロ有限群 (profinite group) の圏 $\mathbf{ProFin}$。<br>
+        <strong>部分圏 $B$:</strong> 有限群の圏 $\mathbf{FinGrp}$。</p>
+        <p><strong>解説:</strong> この例はこれまでと矢印の向きが逆になる<strong>双対（余密: codense / 極限による表現）</strong>の例である。無限次ガロア拡大のガロア群などに現れる巨大なプロ有限群 $X$ は、一般に極めて複雑な位相群である。しかし、コンマ圏 $X \downarrow B$ （$X$ から有限群への連続な全射準同型たち）を考えると、任意のプロ有限群 $X$ は、これらの有限群たちの<strong>逆極限 (limit)</strong> として完全に表現される。巨大な対象を部分圏への「影（有限商）」たちの極限として統制する、数論において不可欠の手法である。</p>
+    </div>
+
+    <div class="references">
+        <h3>参考文献</h3>
+        <ol>
+            <li>Gleason, A. M. (1958). <i>Projective topological spaces</i>. Illinois Journal of Mathematics, 2(4A), 482-489. <a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank">[Project Euclid]</a></li>
+            <li>Mac Lane, S. (1998). <i>Categories for the Working Mathematician</i> (2nd ed.). Springer. <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8" target="_blank">[SpringerLink]</a></li>
+            <li>Engelking, R. (1989). <i>General Topology</i>. Heldermann Verlag.</li>
+            <li>Awodey, S. (2010). <i>Category Theory</i> (2nd ed.). Oxford University Press. <a href="https://global.oup.com/academic/product/category-theory-9780199237180" target="_blank">[OUP]</a></li>
+        </ol>
+    </div>
+
+</body>
+</html>

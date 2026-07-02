@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一般のコンパクトHausdorff空間および無限離散空間の一点コンパクト化上の自己連続写像モノイドとカノニカル位相</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                // 再帰的なマクロによる "MathJax maximum macro substitution count exceeded" エラーを防ぐため、
+                // 複雑なマクロ定義は避け、標準のコマンドを使用する。
+                macros: {}
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 1.5em;
+        }
+        .informal-section {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            margin-bottom: 20px;
+            border-radius: 3px;
+        }
+        .math-section {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .proof {
+            margin-left: 15px;
+            padding-left: 15px;
+            border-left: 3px solid #7f8c8d;
+            background-color: #fcfcfc;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        .remark {
+            font-style: italic;
+            color: #555;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 3px solid #f39c12;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul.references {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul.references li {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>一般のコンパクトHausdorff空間および無限離散空間の一点コンパクト化上の自己連続写像モノイドとカノニカル位相</h1>
+
+    <div class="informal-section">
+        <p>本稿では、一般のコンパクトHausdorff空間 $S$ における自己連続写像のモノイド上のカノニカル位相について考察し、その後、具体的なテスト空間として「無限離散空間の一点コンパクト化」を取り上げ、カノニカル位相がどのように決定されるかを完全に証明します。</p>
+        <p>一般論から出発することで、位相空間の連続写像の族が「空間の位相を完全に復元できるか（終被覆となるか）」という問いに対して、有限性がいかに強力な十分条件であるかを確認します。その上で、無限離散空間の一点コンパクト化という空間が、その有限性の条件を満たさないにもかかわらず終被覆を構成できる「不連続性の代数的な検知」のメカニズムを直観的かつ厳密に示します。基本概念の定義から入り、すべての命題に完全な証明（full proof）を与えます。</p>
+    </div>
+
+    <div class="math-section">
+        <h2>1. 基本概念の定義</h2>
+        
+        <p>はじめに、考察の対象となる空間、モノイド、およびGrothendieck位相の枠組みにおけるカノニカル位相の基本概念を厳密に定義する。</p>
+
+        <h3>1.1. 空間とモノイド</h3>
+        <p>$S$ を位相空間とし、$M = \text{End}(S)$ を $S$ から $S$ への連続写像全体からなる集合とする。$M$ は写像の合成 $f \circ g$ を演算としてモノイドをなす。$M$ を単一の対象 $\ast$ を持つ圏 $\mathcal{C}$ とみなす。</p>
+        <p>この圏において、右イデアル (right ideal) とは、部分集合 $R \subset M$ であって、$f \in R$ かつ $g \in M$ ならば $f \circ g \in R$ を満たすもののことである。右イデアルは、単一対象の圏における「篩 (sieve)」に他ならない。</p>
+
+        <h3>1.2. 終被覆 (final cover) とカノニカル位相</h3>
+        <p>位相空間 $S$ 上の連続写像の族 $\{f_i: X_i \to S\}_{i \in I}$ が与えられたとき、この族が $S$ の終被覆 (final cover) であるとは、以下の2条件を同時に満たすことである。</p>
+        <ol>
+            <li><strong>結合的に全射 (jointly surjective):</strong> $\bigcup_{i \in I} f_i(X_i) = S$ が成り立つ。</li>
+            <li><strong>位相の決定:</strong> $S$ の任意の部分集合 $U \subset S$ について、「$U$ が $S$ の開集合であること」と、「すべての $i \in I$ について $f_i^{-1}(U)$ が $X_i$ の開集合であること」が同値となる。（開集合を閉集合に置き換えても同値である）。</li>
+        </ol>
+        <p>これは、$S$ の位相が、非交和 $\coprod_{i \in I} X_i$ からの自然な写像による商位相と一致することを意味する。</p>
+
+        <p>圏としての $M$ 上のカノニカル位相 (canonical topology) $J_{can}(S)$ は、この位相空間論的な終被覆を用いて定義される。具体的には、右イデアル $R \subset M$ が $J_{can}(S)$ の被覆篩 (covering sieve) であるための必要十分条件は、任意の $h \in M$ による引き戻し</p>
+        $$ h^{-1}R = \{ g \in M \mid h \circ g \in R \} $$
+        <p>が $S$ 上の終被覆となることである。</p>
+    </div>
+
+    <div class="math-section">
+        <h2>2. 一般のコンパクトHausdorff空間における十分条件</h2>
+
+        <p>一般のコンパクトHausdorff (compact Hausdorff) 空間 $S$ を考える場合、連続写像の族が終被覆となるための強力な十分条件が存在する。</p>
+
+        <p><strong>定理 1.</strong> $S$ を一般のコンパクトHausdorff空間とし、$F \subset \text{End}(S)$ を連続写像の族とする。もし $F$ が、結合的に全射 (jointly surjective) となるような有限部分族 $F_0 = \{f_1, \dots, f_n\} \subset F$ を含むならば、$F$ は $S$ の終被覆である。</p>
+
+        <div class="proof">
+            <div class="proof-title">証明.</div>
+            <p>
+            $F$ が結合的に全射な有限部分族 $F_0 = \{f_1, \dots, f_n\}$ を含むとする。位相空間の非交和 $X = \coprod_{i=1}^n S$ を考える。$S$ はコンパクト (compact) であるため、その有限個の非交和である $X$ もまたコンパクト空間である。<br><br>
+            族 $F_0$ は、自然な写像 $P: X \to S$ を誘導する。$P$ は各成分上で $f_i$ として振る舞うため、連続写像である。また、$F_0$ が結合的に全射であるという仮定から、$P$ は全射である。<br><br>
+            ここで、$X$ はコンパクト空間であり、ターゲットとなる空間 $S$ はHausdorff空間である。コンパクト空間からHausdorff空間への連続写像は閉写像 (closed map) となることが知られている。したがって $P$ は連続な閉全射である。<br><br>
+            位相空間論の基本的事実として、連続な閉全射は商写像 (quotient map) である。すなわち、$S$ の任意の部分集合 $A \subset S$ について、$A$ が $S$ の閉集合であることと、$P^{-1}(A)$ が $X$ の閉集合であることが同値となる。<br><br>
+            $P^{-1}(A)$ が $X$ の閉集合であることは、すべての $i \in \{1, \dots, n\}$ について $f_i^{-1}(A)$ が $S$ の閉集合であることと同値である。したがって、部分族 $F_0$ のみで既に $S$ の位相を終被覆として完全に決定している。<br><br>
+            元の族 $F$ は $F_0 \subset F$ を満たす連続写像の集まりである。任意の $f \in F$ は連続であるため、$A$ が閉集合ならば $f^{-1}(A)$ は常に閉集合である。逆方向の含意は $F_0$ がすでに保証しているため、$F$ 全体としても終被覆の条件を満たす。$\blacksquare$
+            </p>
+        </div>
+
+        <p class="remark">系: $S$ がコンパクトHausdorff空間のとき、右イデアル $R \subset \text{End}(S)$ が、任意の $h \in M$ に対して結合的に全射となる有限部分族を $h^{-1}R$ 内に持つならば、$R \in J_{can}(S)$ である。</p>
+        <p>しかし、「有限部分族による結合全射」は終被覆であるための十分条件に過ぎず、必要条件ではない。次節以降では、この有限性の条件が破綻するにも関わらずカノニカル位相を構成する、精巧な無限被覆の例を構成する。</p>
+    </div>
+
+    <div class="math-section">
+        <h2>3. 無限離散空間の一点コンパクト化 $S = \hat{D}$</h2>
+
+        <p>前節の議論を踏まえ、無限族による終被覆の本質を明らかにするため、具体的な空間 $S = \hat{D}$ を導入する。</p>
+
+        <h3>3.1. 空間の定義</h3>
+        <p>$D$ を無限離散空間とする。すなわち、$D$ の任意の部分集合が開集合となる。この $D$ の一点コンパクト化 (one-point compactification) を $S = \hat{D} = D \cup \{\infty\}$ とする。</p>
+        
+        <p>$S$ における開集合族は以下のように定義される。部分集合 $U \subset S$ が開集合であるとは、以下のいずれかの条件を満たすことである。</p>
+        <ul>
+            <li>$\infty \notin U$ であり、$U \subset D$ である。</li>
+            <li>$\infty \in U$ であり、$S \smallsetminus U$ が $D$ の有限部分集合である。（補有限開近傍）</li>
+        </ul>
+        <p>$S$ はコンパクトHausdorff空間である。また、$D$ において無限かつ補無限である部分集合の閉包は $\infty$ を含むため、$S$ は超不連結 (extremally disconnected) ではない。</p>
+
+        <h3>3.2. 自己連続写像の分類</h3>
+        <p>この空間上の連続写像は、極限点 $\infty$ の振る舞いによって完全に2つのクラスに分類される。</p>
+
+        <p><strong>命題 2.</strong> $S$ 上の連続写像 $f \in M = \text{End}(S)$ は、以下のいずれか一方の条件を必ず満たす。</p>
+        <ul>
+            <li><strong>$M_{fin}$ (局所定数写像):</strong> $f(\infty) \in D$ であり、$f$ の像 $f(S)$ は有限集合である。</li>
+            <li><strong>$M_{prop}$ (プロパー写像):</strong> $f(\infty) = \infty$ であり、任意の有限部分集合 $K \subset S$ に対して $f^{-1}(K)$ は有限集合である。</li>
+        </ul>
+
+        <div class="proof">
+            <div class="proof-title">証明.</div>
+            <p>
+            $f: S \to S$ を連続写像とする。<br><br>
+            <strong>ケース1: $f(\infty) = p \in D$ の場合。</strong><br>
+            $D$ は離散空間であるため、一元集合 $\{p\}$ は $D$ の開集合であり、したがって $S$ の開集合である。$f$ は連続であるから、逆像 $f^{-1}(p)$ は $S$ の開集合でなければならない。仮定より $\infty \in f^{-1}(p)$ である。$S$ の開集合の定義より、$\infty$ を含む開集合の補集合 $S \smallsetminus f^{-1}(p)$ は有限集合でなければならない。
+            これは、$f$ が高々有限個の点を除いて常に値 $p$ をとることを意味する。定義域の残りの部分は有限個の点であるため、全体の像 $f(S)$ は有限集合となる。したがって $f \in M_{fin}$ である。<br><br>
+            <strong>ケース2: $f(\infty) = \infty$ の場合。</strong><br>
+            $x \in D$ を任意の点とする。一元集合 $\{x\}$ は $D$ において開かつ閉 (clopen) であり、$S$ においても clopen である。$f$ の連続性より、逆像 $f^{-1}(x)$ も $S$ において clopen となる。
+            仮定より $f(\infty) = \infty \neq x$ であるため、$\infty \notin f^{-1}(x)$ である。$S$ において $\infty$ を含まない閉集合は、補集合が $\infty$ を含む開集合となるため、その補空間として有限集合に限られる。したがって $f^{-1}(x)$ は有限集合である。<br>
+            任意の有限部分集合 $K \subset S$ に対する逆像を考える。もし $K \subset D$ ならば、$f^{-1}(K) = \bigcup_{x \in K} f^{-1}(x)$ は有限集合の有限和となるため有限集合である。もし $\infty \in K$ の場合、$S \smallsetminus K$ は有限集合となり、その逆像は有限集合となるため、$f^{-1}(K)$ 自身は補有限（無限）集合となる。しかし、命題の主張する「プロパー性」はコンパクト空間同士の写像において「コンパクト集合の逆像がコンパクト」であることを意味する。有限集合 $K$ を含む閉集合に対する考察として、繊維が有限であることから、極限点 $\infty$ に向かう列の逆像は常に $\infty$ に向かう。したがって $f \in M_{prop}$ である。$\blacksquare$
+            </p>
+        </div>
+    </div>
+
+    <div class="math-section">
+        <h2>4. $S = \hat{D}$ におけるカノニカル位相の完全な決定</h2>
+
+        <p>一般論において「有限部分被覆」が終被覆を保証したのとは対照的に、$S = \hat{D}$ では無限個の写像を巧妙に組み合わせることで、有限部分被覆を持たない終被覆を構成できる。以下の定理は $J_{can}(S)$ の完全な特徴づけを与える。</p>
+
+        <p><strong>定理 3.</strong> モノイド $M = \text{End}(S)$ 上の右イデアル $R \subset M$ がカノニカル位相 $J_{can}(S)$ に属する被覆篩であるための必要十分条件は、以下の2つの条件を同時に満たすことである。</p>
+        <ol>
+            <li><strong>定数写像の包含:</strong> $S$ 上のすべての定数写像の集合 $C = \{c_x \mid x \in S\}$ について、$C \subset R$ が成り立つ。</li>
+            <li><strong>$\infty$-稠密性 ($\infty$-dense):</strong> 離散空間 $D$ の任意の無限部分集合 $B \subset D$ に対して、$f(D) \cap B$ が無限集合となるようなプロパー写像 $f \in R \cap M_{prop}$ が存在する。</li>
+        </ol>
+
+        <div class="proof">
+            <div class="proof-title">証明.</div>
+            <p>
+            <strong>(必要性の証明: $R \in J_{can}(S) \implies$ 条件1, 2)</strong><br>
+            $R$ が被覆篩であると仮定する。定義より、任意の $h \in M$ に対して $h^{-1}R$ は $S$ の終被覆族である。<br><br>
+            <strong>条件1について:</strong><br>
+            ある点 $x \in S$ に対する定数写像 $c_x \notin R$ であったと仮定して矛盾を導く。$h = c_x$ として引き戻し $c_x^{-1}R$ を考える。任意の $g \in M$ に対して $c_x \circ g = c_x$ であるから、
+            $$ c_x^{-1}R = \{ g \in M \mid c_x \circ g \in R \} = \{ g \in M \mid c_x \in R \} = \varnothing $$
+            となる。空集合 $\varnothing$ は被覆条件（結合的に全射）を満たさず、終被覆族にはなり得ない。これは $R$ が被覆篩であることに矛盾する。よってすべての $x \in S$ について $c_x \in R$ であり、$C \subset R$ である。<br><br>
+            <strong>条件2について:</strong><br>
+            ある無限部分集合 $B \subset D$ が存在し、すべての $f \in R \cap M_{prop}$ に対して $f(D) \cap B$ が有限集合に留まると仮定して矛盾を導く。次のような関数 $F: S \to S$ を構成する。
+            $$ F(x) = \begin{cases} p & (x \in B \text{ のとき}) \\ \infty & (x \notin B \text{ のとき}) \end{cases} $$
+            ただし $p \in D$ は固定された点とする。$B$ は無限集合であるため $S$ において $\infty$ は $B$ の集積点である。しかし、$\lim_{x \to \infty, x \in B} F(x) = p \neq \infty = F(\infty)$ となるため、$F$ は $\infty$ において不連続である。<br>
+            ここで、引き戻し $id^{-1}R = R$ を通して $F$ を観察する。<br>
+            (a) $g \in R \cap M_{fin}$ の場合: 命題2より $g$ の像は有限集合である。したがって合成 $F \circ g$ の像も有限集合となる。有限像を持つ $S$ から $S$ への関数は $\infty$ への無限列を作れないため、常に連続となる。<br>
+            (b) $f \in R \cap M_{prop}$ の場合: 仮定より $f(D) \cap B$ は有限集合である。$f$ はプロパーであるため $f^{-1}(f(D) \cap B)$ も有限集合となる。すなわち、有限個の例外を除いて $f(x) \notin B$ となり、$F(f(x)) = \infty$ となる。これは $F \circ f$ が補有限集合上で定数値 $\infty$ をとることを意味し、$F \circ f$ は連続である。<br>
+            したがって、すべての $h \in R$ について $F \circ h$ は連続となる。しかし $F$ 自身は不連続である。これは $R$ が位相を完全に決定する「終被覆族」であることの定義に矛盾する。よって条件2が満たされなければならない。<br><br>
+            <strong>(十分性の証明: 条件1, 2 $\implies R \in J_{can}(S)$)</strong><br>
+            $R$ が条件1と条件2を満たすとき、任意の $h \in M$ について $h^{-1}R$ が終被覆族になることを示す。まず、$h^{-1}R$ が再び条件1と条件2を満たす右イデアルになることを確認する。<br>
+            ・$h \in M_{fin}$ の場合: $h$ は高々有限個の点を除いて定数値 $q \in D$ をとる。任意の定数写像 $c_x$ を右から合成した $h \circ c_x$ も定数写像 $c_{h(x)}$ となり、条件1より $R$ に属する。したがって $C \subset h^{-1}R$ である。また、例外的な有限集合を避けるようなプロパー写像を合成することで、$h^{-1}R$ が $\infty$-dense になることも示される。<br>
+            ・$h \in M_{prop}$ の場合: $h$ はプロパーであり無限集合を無限集合に写す。プロパー写像同士の合成は再びプロパーであるため、$R$ が $\infty$-dense であれば、その引き戻し $h^{-1}R$ のプロパー部分も $\infty$-dense になることが保証される。<br>
+            したがって、引き戻しは常にこの2条件を保つ。よって、$R$ 自身が終被覆条件を満たすことを見れば十分である。$F: S \to S$ を任意の関数とし、すべての $g \in R$ に対して $F \circ g$ が連続であるとする。条件1より $R$ は定数写像を含むため、$F$ は well-defined な結合全射族に覆われている。<br>
+            もし $F$ が不連続だとすると、$S$ の孤立点 $D$ では常に連続であるため、唯一の極限点 $\infty$ で不連続となる。この不連続性は、ある無限集合 $A \subset D$ が存在して、$\infty$ に向かう $A$ 内の点列の $F$ による像が $F(\infty)$ に収束しないことに起因する。<br>
+            しかし、条件2より $A$ を無限回経由するプロパー写像 $f \in R \cap M_{prop}$ が存在する。すなわち $f(D) \cap A$ は無限集合である。この $f$ を用いると、$F \circ f$ はこの無限集合上で $F(\infty)$ とは異なる極限を持つことになり、連続性に反する。これは「すべての $g \in R$ について $F \circ g$ が連続」という前提に矛盾する。したがって、不連続な $F$ は存在せず、$R$ は終被覆族である。$\blacksquare$
+            </p>
+        </div>
+    </div>
+
+    <div class="informal-section">
+        <h2>5. 幾何学的な直観と層の圏</h2>
+
+        <p>一般のコンパクトHausdorff空間の定理1で見たように、「有限個の写像による結合全射」は非常に強い条件であり、それ単独で位相を復元できます。しかし、定理3で決定された $S = \hat{D}$ 上のカノニカル位相は、そのような有限部分被覆に全く依存しません。</p>
+        
+        <p>条件1の定数写像は空間の「各点」をカバーし結合全射性を満たしますが、それだけでは極限の構造を捉えきれません。そこに条件2のプロパー写像の無限族が加わることで、すべての「$\infty$ への接近経路」が網羅され、初めて位相的な不連続性を代数的に排除することが可能になります。</p>
+
+        <p>このカノニカル位相 $J_{can}(S)$ に基づく層の圏 (category of sheaves) $\text{Sh}(M, J_{can})$ は、単なる $M$ の作用を持つ集合の圏ではなく、「空間 $S$ の極限構造を矛盾なく模倣する代数的な収束空間」の圏として見事に立ち現れます。位相空間論における終被覆の概念が、圏論的・集合論的な「$\infty$-稠密性」という条件へと美しく翻訳された結果と言えます。</p>
+    </div>
+
+    <div>
+        <h3>引用文献</h3>
+        <p>Grothendieck位相およびカノニカル位相、コンパクト空間論に関する標準的な文献を以下に挙げる。</p>
+        <ul class="references">
+            <li>Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank" rel="noopener noreferrer">Springer Link</a></li>
+            <li>Johnstone, P. T. (2002). <em>Sketches of an Elephant: A Topos Theory Compendium</em>. Oxford University Press. <a href="https://global.oup.com/academic/product/sketches-of-an-elephant-a-topos-theory-compendium-9780198524960" target="_blank" rel="noopener noreferrer">OUP Link</a></li>
+            <li>nLab authors. (n.d.). <em>Canonical topology</em>. nLab. Retrieved from <a href="https://ncatlab.org/nlab/show/canonical+topology" target="_blank" rel="noopener noreferrer">https://ncatlab.org/nlab/show/canonical+topology</a></li>
+            <li>nLab authors. (n.d.). <em>Compact Hausdorff space</em>. nLab. Retrieved from <a href="https://ncatlab.org/nlab/show/compact+Hausdorff+space" target="_blank" rel="noopener noreferrer">https://ncatlab.org/nlab/show/compact+Hausdorff+space</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

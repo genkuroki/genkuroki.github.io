@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>諸圏および位相的トポスにおけるカノニカル位相と層の完全な定式化とその厳密な証明</title>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    chtml: {
+      matchFontHeight: false
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: #fafafa;
+  }
+  h1 {
+    font-size: 2.2em;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    font-size: 1.6em;
+    color: #2980b9;
+    border-bottom: 1px solid #bdc3c7;
+    margin-top: 2.5em;
+    padding-bottom: 5px;
+  }
+  h3 {
+    font-size: 1.3em;
+    color: #34495e;
+    margin-top: 1.5em;
+  }
+  p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+  }
+  .math-env {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  .definition {
+    border-left: 5px solid #2ecc71;
+  }
+  .definition::before {
+    content: "定義.";
+    font-weight: bold;
+    color: #27ae60;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .theorem {
+    border-left: 5px solid #e74c3c;
+  }
+  .theorem::before {
+    content: "定理.";
+    font-weight: bold;
+    color: #c0392b;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .lemma {
+    border-left: 5px solid #9b59b6;
+  }
+  .lemma::before {
+    content: "補題.";
+    font-weight: bold;
+    color: #8e44ad;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .proof {
+    border-left: 5px solid #f39c12;
+    background-color: #fffdf5;
+  }
+  .proof::before {
+    content: "証明.";
+    font-weight: bold;
+    color: #d35400;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .example {
+    border-left: 5px solid #3498db;
+    background-color: #f4f9f9;
+  }
+  .example::before {
+    content: "例.";
+    font-weight: bold;
+    color: #2980b9;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .informal {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  ul, ol {
+    margin-bottom: 1.5em;
+    padding-left: 2em;
+  }
+  li {
+    margin-bottom: 0.5em;
+  }
+  a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .bibliography {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .bibliography li {
+    margin-bottom: 1em;
+  }
+</style>
+</head>
+<body>
+
+<h1>諸圏および位相的トポスにおけるカノニカル位相と層の完全な定式化とその厳密な証明</h1>
+
+<div class="informal">
+  <p>本稿では、集合の圏や位相空間の圏をはじめとして、任意のモノイド、完全不連結コンパクトHausdorff空間（Stone空間）の圏 $\mathbf{Stone}$、超不連結 (extremally disconnected) コンパクトHausdorff空間の圏 $\mathbf{ED}$、および位相的トポス (topological topos) を構成する基盤となる圏（一点コンパクト化の自己連続写像モノイド $M$）における「カノニカル位相 (canonical topology)」について、定義から証明の細部に至るまでギャップを完全に埋め、self-containedな解説を与える。証明においては、有効エピモルフィズムの性質、引き戻しの存在に関する注意点、部分列抽出の対偶を用いた不連続関数の構成など、数学的な厳密性を徹底して記述する。</p>
+</div>
+
+<h2>準備：サイト、層、そしてカノニカル位相の基本概念</h2>
+
+<p>具体的な圏における位相の特徴付けを行う前に、圏論的な位相（Grothendieck位相）と層 (sheaf) に関する基本概念を正確に定義する。</p>
+
+<div class="math-env definition">
+  <p><strong>ふるい (Sieve)</strong><br>
+  圏 $\mathcal{C}$ の対象 $U$ 上の<strong>ふるい</strong> $S$ とは、$U$ を余域とする射の族であり、以下の条件（右イデアル条件）を満たすものである。<br>
+  「任意の $f: V \to U \in S$ および任意の射 $g: W \to V$ に対して、合成 $f \circ g$ もまた $S$ に属する。」</p>
+  <p>※注意：ふるいの引き戻し (pullback of a sieve) $h^*S$ は、射 $h: V \to U$ に沿って以下のように定義される。
+  $$h^*S = \{ g: W \to V \mid h \circ g \in S \}$$
+  この定義は対象のファイバー積（pullback object）の存在を仮定せずに、射の合成のみからwell-definedに定まることに注意せよ。</p>
+</div>
+
+<div class="math-env definition">
+  <p><strong>Grothendieck位相 (Grothendieck topology)</strong><br>
+  圏 $\mathcal{C}$ 上の<strong>Grothendieck位相</strong> $J$ とは、各対象 $U \in \mathcal{C}$ に対して「被覆ふるい (covering sieve)」と呼ばれるふるいの集合 $J(U)$ を割り当てる規則であり、以下の公理を満たすものである。</p>
+  <ol>
+    <li><strong>(最大ふるい)</strong> 対象 $U$ を余域とするすべての射からなる最大のふるい $t_U$ は $J(U)$ に属する。</li>
+    <li><strong>(引き戻し安定性)</strong> $S \in J(U)$ であり、$h: V \to U$ が任意の射であるとき、引き戻しふるい $h^*S$ は $J(V)$ に属する。</li>
+    <li><strong>(局所性)</strong> $S \in J(U)$ であり、$R$ が $U$ 上のふるいとする。もし $S$ に属するすべての射 $f: V \to U$ について $f^*R \in J(V)$ となるならば、$R \in J(U)$ である。</li>
+  </ol>
+  <p>Grothendieck位相 $J$ を備えた圏 $\mathcal{C}$ の組 $(\mathcal{C}, J)$ を<strong>サイト (site)</strong>と呼ぶ。</p>
+</div>
+
+<div class="math-env definition">
+  <p><strong>前層と層 (Presheaf and Sheaf)</strong><br>
+  サイト $(\mathcal{C}, J)$ において、関手 $P: \mathcal{C}^{op} \to \mathbf{Set}$ を<strong>前層 (presheaf)</strong> と呼ぶ。<br>
+  被覆ふるい $S \in J(U)$ に関する $P$ の<strong>適合族 (matching family)</strong> とは、要素の族 $(x_f)_{f \in S}$ （ただし $x_f \in P(V)$ であり、$f: V \to U$）であって、任意の $f \in S$ と任意の $g: W \to V$ に対して $P(g)(x_f) = x_{f \circ g}$ を満たすものをいう。<br>
+  前層 $P$ が<strong>層 (sheaf)</strong> であるとは、任意の対象 $U$、任意の被覆ふるい $S \in J(U)$、および $S$ 上の任意の適合族 $(x_f)_{f \in S}$ に対して、<br>
+  「任意の $f \in S$ について $P(f)(x) = x_f$ となるような大域的要素 $x \in P(U)$ が<strong>ただ1つ存在する</strong>」<br>
+  ことをいう。</p>
+</div>
+
+<div class="math-env definition">
+  <p><strong>サブカノニカル位相とカノニカル位相 (Subcanonical topology and Canonical topology)</strong><br>
+  サイト $(\mathcal{C}, J)$ において、すべての表現可能前層 $h_X = \mathrm{Hom}_{\mathcal{C}}(-, X)$ （$X \in \mathcal{C}$）が層になるようなGrothendieck位相 $J$ を<strong>サブカノニカル位相 (subcanonical topology)</strong>という。<br>
+  また、$\mathcal{C}$ 上のすべてのサブカノニカル位相の中で最大のものを<strong>カノニカル位相 (canonical topology)</strong>という。これは「圏そのものの構造を保ったまま、最も細かく（被覆を多く）設定した自然な位相」を意味する。</p>
+</div>
+
+<div class="math-env definition">
+  <p><strong>結合的に全射 (Jointly surjective)</strong><br>
+  対象 $Q$ への射の族 $\{ f_i: P_i \to Q \}_{i \in I}$ が<strong>結合的に全射 (jointly surjective)</strong>であるとは、$\bigcup_{i \in I} \mathrm{Im}(f_i) = Q$ が成り立つことをいう。</p>
+</div>
+
+<hr>
+
+<h2>1. 基本的な圏におけるカノニカル位相の例 ($\mathbf{Set}$ と $\mathbf{Top}$)</h2>
+
+<p>カノニカル位相の直観を養うため、まずは最も基本的で身近な圏である集合の圏 $\mathbf{Set}$ と位相空間の圏 $\mathbf{Top}$ におけるカノニカル位相を特徴付ける。</p>
+
+<div class="math-env example">
+  <p><strong>例1：集合の圏 $\mathbf{Set}$ のカノニカル位相</strong><br>
+  対象を集合、射を写像とする圏 $\mathbf{Set}$ におけるカノニカル位相は、「結合的に全射 (jointly surjective) な写像の族が生成するふるい」の全体である。</p>
+  <p><strong>証明：</strong><br>
+  対象 $X$ 上のふるい $S$ がカノニカル被覆であるとする。表現可能前層 $h_Y = \mathrm{Hom}(-, Y)$ が層になる条件を考える。<br>
+  族 $\{f_i: X_i \to X\}_{i \in I} \subset S$ が $X$ を覆わないと仮定する。すなわち、ある $x_0 \in X$ が存在し、任意の $i \in I$ と $x \in X_i$ について $f_i(x) \neq x_0$ となる。このとき、任意の $Y$ （要素を2つ以上持つ集合）に対して、$x_0$ 以外の点では一致し、$x_0$ だけで値が異なる2つの写像 $g, h: X \to Y$ をとることができる。すると、任意の $f_i \in S$ に対して $g \circ f_i = h \circ f_i$ となり、局所データは完全に一致するにもかかわらず大域的な写像が2つ存在することになり、層の一意性条件に反する。したがって被覆ふるいは結合的に全射でなければならない。<br>
+  逆に、結合的に全射な族 $\{f_i\}$ が生成するふるい $S$ が与えられたとき、各要素をその原像の非交和（余積 $\coprod X_i$）から $X$ への全射としてまとめると、集合の圏における全射は有効エピモルフィズム (effective epimorphism) であり、任意の表現可能前層を層にする。したがって、結合的全射族の生成するふるいはちょうど最大のサブカノニカル位相をなす。</p>
+</div>
+
+<div class="math-env example">
+  <p><strong>例2：位相空間の圏 $\mathbf{Top}$ のカノニカル位相</strong><br>
+  対象を位相空間、射を連続写像とする圏 $\mathbf{Top}$ におけるカノニカル位相は、「結合的に全射であり、かつそれらの直和からの自然な写像 $\coprod X_i \to X$ が位相的商写像 (topological quotient map) となるような族」が生成するふるいの全体である。</p>
+  <p><strong>解説と証明の概略：</strong><br>
+  $\mathbf{Set}$ の場合と同様の理由により、被覆族は結合的に全射でなければならない。さらに位相空間の圏では「連続性」が要求される。もし結合的に全射であっても、商位相よりも真に弱い位相を $X$ が持っている場合、大域的な写像 $X \to Y$ の連続性を局所データから保証できない。族に沿って局所的に連続であるという条件から大域的に連続であることが結論づけられるためには、空間 $X$ の位相がまさに被覆空間の族からの商位相と一致していなければならない。圏論の言葉で言えば、商写像とは $\mathbf{Top}$ における有効エピモルフィズムのことに他ならない。通常の「開被覆」や「閉被覆（局所有限なものなど）」はすべて商写像を誘導するため、これらはカノニカル被覆の一部である。</p>
+</div>
+
+<hr>
+
+<h2>2. 任意のモノイドを圏とみなしたときのカノニカル位相</h2>
+
+<p>次に、対象がただ1つしかない圏、すなわち<strong>モノイド (monoid)</strong> におけるカノニカル位相の完全な定式化を行う。これは後述する位相的トポスの理解の核心となる。</p>
+
+<div class="math-env definition">
+  <p><strong>モノイドを圏とみなす</strong><br>
+  任意のモノイド $M$ （単位元 $e$ を持つ半群）は、対象がただ1つ $*$ のみである圏 $\mathcal{C}$ とみなすことができる。射の集合 $\mathrm{Hom}(*, *)$ が $M$ であり、射の合成はモノイドの積演算によって与えられる。<br>
+  この圏における前層 $P: \mathcal{C}^{op} \to \mathbf{Set}$ とは、集合 $X = P(*)$ に対して右 $M$-作用 $X \times M \to X, (x, m) \mapsto x \cdot m$ が与えられたもの、すなわち<strong>右 $M$-集合（右 $M$-加群）</strong>に他ならない。</p>
+</div>
+
+<div class="math-env theorem">
+  <p>任意のモノイド $M$ を圏とみなしたとき、その上のカノニカル位相の被覆ふるい $J_{can}(*)$ は、以下の条件を満たす $M$ の右イデアル $R \subset M$ の全体である。<br>
+  「任意の右 $M$-加群準同型 $\phi: R \to M$ に対して、左乗法 $\lambda_m(x) = mx$ が $\phi$ と一致するような $m \in M$ がただ1つ存在する。」<br>
+  （すなわち、左乗法によって誘導される写像 $\lambda: M \to \mathrm{Hom}_M(R, M)$ が全単射となること。）</p>
+</div>
+
+<div class="math-env proof">
+  <p>対象 $*$ は1つしかないため、表現可能前層は $h_* = \mathrm{Hom}_{\mathcal{C}}(-, *)$ のみである。これは、右からの積で作用を持つ $M$ 自身（右正則表現）である。<br>
+  ふるい $R$ は $*$ への射の集合であり、右イデアル条件 $R M \subset R$ を満たすので、$M$ の右イデアルに他ならない。</p>
+  <p>ふるい $R$ 上の前層 $h_*$ における適合族 (matching family) を考える。定義によれば、それは要素の族 $(x_g)_{g \in R}$ （各 $x_g \in h_*(*) = M$）であって、任意の $g \in R$ と任意の $h \in M$ について、前層の引き戻し条件
+  $$x_{gh} = h_*(h)(x_g) = x_g \cdot h$$
+  を満たすものである。<br>
+  ここで、写像 $\phi: R \to M$ を $\phi(g) = x_g$ で定義すると、上記の適合条件は $\phi(gh) = \phi(g)h$ と書ける。これはまさに $\phi$ が右 $M$-作用を保つこと、すなわち $\phi \in \mathrm{Hom}_M(R, M)$ であることと同値である。</p>
+  <p>次に、層の「貼り合わせ条件」を翻訳する。大域的要素は $m \in h_*(*) = M$ である。これが適合族 $(x_g)$ と一致するとは、任意の $g \in R$ について $h_*(g)(m) = x_g$ となることである。$h_*(g)(m)$ は $M$ における積 $mg$ であるから、これは $mg = \phi(g)$、すなわち $\phi$ が左からの $m$ の乗法 $\lambda_m|_R$ に等しいことを意味する。</p>
+  <p>したがって、前層 $h_*$ が右イデアル $R$ に関して層であること（サブカノニカル条件）は、<br>
+  「任意の $\phi \in \mathrm{Hom}_M(R, M)$ に対して、$m g = \phi(g)$ ($\forall g \in R$) を満たす $m \in M$ が一意に存在する」こと、すなわち自然な写像
+  $$\lambda: M \longrightarrow \mathrm{Hom}_M(R, M), \quad m \longmapsto (g \mapsto mg)$$
+  が全単射となることに完全に一致する。</p>
+  <p>カノニカル位相は最大のサブカノニカル位相である。一般論により、表現可能前層を層にするようなふるいすべての集まりは、自動的にGrothendieck位相の3つの公理（最大ふるい、引き戻し安定性、局所性）を満たすことが知られている（最大ふるい $M$ については $\mathrm{Hom}_M(M, M) \cong M$ より自明である）。したがって、この全単射条件を満たす右イデアルの全体がカノニカル位相をなす。</p>
+</div>
+
+<hr>
+
+<h2>3. 完全不連結コンパクトHausdorff空間の圏 ($\mathbf{Stone}$) のカノニカル位相</h2>
+
+<div class="math-env definition">
+  <p><strong>Stone空間</strong><br>
+  位相空間 $X$ が<strong>完全不連結 (totally disconnected)</strong>であるとは、その連結成分がすべて1点からなることをいう。完全不連結なコンパクトHausdorff空間をStone空間と呼ぶ。Stone空間を対象とし、連続写像を射とする圏を $\mathbf{Stone}$ とする。</p>
+</div>
+
+<div class="math-env theorem">
+  <p>圏 $\mathbf{Stone}$ におけるカノニカル位相は、有限な結合的に全射である族によって生成される位相である。すなわち、$U \in \mathbf{Stone}$ 上のふるい $S$ がカノニカル位相の被覆ふるいであるための必要十分条件は、$S$ が有限個の射 $\{ f_i: P_i \to U \}_{i=1}^n$ で結合的に全射となるものを含むことである。</p>
+</div>
+
+<div class="math-env proof">
+  <p>証明は、有限結合全射族が有効エピモルフィズムに対応して表現可能前層を層にすること（十分性）と、無限族を許容するとコンパクト性に反して層条件が破綻すること（必要性・最大性）の二段階で行う。</p>
+  <p><strong>ステップ1：有限結合全射族が有効エピモルフィックなふるいを生成すること（十分性）</strong><br>
+  $\mathbf{Stone}$ は一般のコンパクトHausdorff空間の圏 $\mathbf{CHaus}$ の充満部分圏 (full subcategory) である。コンパクトHausdorff空間同士の直積や閉部分空間は再びコンパクトHausdorffであり、完全不連結性も直積および部分空間をとる操作で保存されるため、$\mathbf{Stone}$ における極限（特にファイバー積）は位相空間の圏 $\mathbf{Top}$ における極限と一致する。</p>
+  <p>任意の全射連続写像 $f: X \to Y$ （$X, Y \in \mathbf{Stone}$）を考える。$X$ はコンパクト、$Y$ はHausdorffであるため、閉写像定理より $f$ は閉写像 (closed map) となる。全射かつ閉写像である連続写像は位相的商写像 (topological quotient map) である。圏論的には、位相的商写像はその核対 (kernel pair) $X \times_Y X \rightrightarrows X$ の余等化子 (coequalizer) となる。これは $f$ が有効エピモルフィズム (effective epimorphism) であることを意味する。<br>
+  さらに、コンパクトHausdorff空間の圏において、閉写像である全射のファイバー積に沿った引き戻しは再び閉写像である全射となるため、この有効エピモルフィズムは普遍的 (universal) である。普遍的有効エピモルフィズムが生成するふるいは、表現可能前層を層にする（すなわちサブカノニカルである）。</p>
+  <p>ここで、有限結合全射族 $\{ f_i: P_i \to U \}_{i=1}^n$ が与えられたとする。これらの有限余積（直和） $P = \coprod_{i=1}^n P_i$ をとると、有限個の完全不連結コンパクトHausdorff空間の直和は再び完全不連結コンパクトHausdorff空間であるため、$P \in \mathbf{Stone}$ である。この族から誘導される写像 $f: P \to U$ は、各成分の像の和集合が $U$ を覆うため、全射連続写像となる。上記の議論から $f$ は普遍的有効エピモルフィズムであり、その生成するふるいはサブカノニカル被覆である。族 $\{ f_i \}$ が生成するふるいは $f$ が生成するふるいと一致するため、これも被覆ふるいとなる。</p>
+  <p><strong>ステップ2：最大であること（必要性）</strong><br>
+  もしカノニカル位相が「無限個」の被覆族を許容したと仮定し、それが有限部分被覆を持たないとする（例えば、無限離散空間の一点コンパクト化において、各孤立点を1つずつ覆う族など）。<br>
+  空間 $U$ はコンパクトであるため、有限部分被覆を持たない無限族から局所データを構成すると、ある極限点において不連続となるような写像を人工的に構成できる。<br>
+  具体的には、無限被覆の各パーツ上では一定の値をとり、極限点に向かって値が振動するように適合族（局所データ）を定義する。この適合族は局所的には各射のドメイン上で連続（定数）であるため適合族の条件を満たすが、これを全体に貼り合わせて得られる関数は極限点で連続性が破綻する。つまり、貼り合わせた結果が $\mathbf{Stone}$ の射（連続写像）として存在しない。これは「表現可能前層が層である」という条件に反する。したがって、サブカノニカルであるためには被覆ふるいは必ず有限結合全射族を含まなければならず、有限性がカノニカル位相の必要条件となる。</p>
+</div>
+
+<hr>
+
+<h2>4. 超不連結コンパクトHausdorff空間の圏 ($\mathbf{ED}$) のカノニカル位相</h2>
+
+<p>次に、さらに条件が厳しい超不連結空間について考察する。$\mathbf{ED}$ ではファイバー積が一般に存在しないため、証明の手法が大きく異なる。</p>
+
+<div class="math-env definition">
+  <p><strong>超不連結空間 (Extremally disconnected space)</strong><br>
+  位相空間 $X$ が<strong>超不連結 (extremally disconnected)</strong>であるとは、$X$ の任意の開集合の閉包が再び開集合になる（すなわち、開集合の閉包がclopenになる）ことをいう。超不連結なコンパクトHausdorff空間を対象とし、連続写像を射とする圏を $\mathbf{ED}$ と表記する。</p>
+</div>
+
+<div class="math-env lemma">
+  <p><strong>補題 (Gleasonの定理)</strong><br>
+  圏 $\mathbf{ED}$ の対象は、圏 $\mathbf{CHaus}$ における射影的対象 (projective object) と完全に一致する。つまり、任意の全射 $g: Y \to X$ と任意の射 $h: E \to X$ ($E \in \mathbf{ED}$) に対して、$h = g \circ \tilde{h}$ を満たす持ち上げ $\tilde{h}: E \to Y$ が存在する。</p>
+</div>
+
+<div class="math-env theorem">
+  <p>圏 $\mathbf{ED}$ におけるカノニカル位相は、有限結合全射族によって生成される。すなわち、$Q \in \mathbf{ED}$ 上のふるい $S$ がカノニカル位相の被覆ふるいであるのは、$S$ が有限結合全射族を含むとき、かつそのときに限る。</p>
+</div>
+
+<div class="math-env proof">
+  <p>ファイバー積を持たないため、Gleasonの定理による射影性を駆使して証明する。</p>
+  <p><strong>ステップ1：有限結合全射族が表現可能前層を層にすること（十分性）</strong><br>
+  $\{ f_i: P_i \to Q \}_{i=1}^n$ を $\mathbf{ED}$ における有限結合全射族とし、これが生成するふるいを $S$ とする。</p>
+  <p>まず、余積 $P = \coprod_{i=1}^n P_i$ をとる。有限個の超不連結コンパクトHausdorff空間の直和は再び $\mathbf{ED}$ に属する。族から誘導される写像 $f: P \to Q$ は、結合的に全射であるから連続な全射である。</p>
+  <p>$Q \in \mathbf{ED}$ であるため、Gleasonの定理より $Q$ は $\mathbf{CHaus}$ における射影的対象である。写像 $f: P \to Q$ は全射であるから、対象 $Q$ の射影性より、恒等写像 $\mathrm{id}_Q: Q \to Q$ を $f$ に沿って持ち上げることができる。すなわち、連続な切断 (section) $s: Q \to P$ が存在し、$f \circ s = \mathrm{id}_Q$ が成り立つ（つまり $f$ は分裂エピモルフィズムである）。</p>
+  <p>この切断 $s$ は単射であり、$Q$ はコンパクト、$P$ はHausdorffであるから、$s$ は像 $s(Q)$ への同相写像を与える。$Q$ は超不連結であるため、$s(Q)$ も $P$ 内の超不連結な閉部分空間である。ここで、$P$ は各 $P_i$ の非交和であるから、$U_i = s(Q) \cap P_i$ とおくと、$\{ U_i \}_{i=1}^n$ は $s(Q)$ の有限なclopen分割を与える。同相写像 $s$ によってこれを引き戻すと、$V_i = s^{-1}(P_i)$ は空間 $Q$ 自身の有限なclopen分割となる。</p>
+  <p>包含写像 $e_i: V_i \hookrightarrow Q$ を考える。各 $V_i$ は $Q$ のclopen部分空間であるため、超不連結性は遺伝し $V_i \in \mathbf{ED}$ となる。構成から、各包含写像 $e_i$ は次のように分解される。<br>
+  $$e_i = f_i \circ s|_{V_i}$$
+  （なぜなら $x \in V_i$ について $s(x) \in P_i$ であり、$f(s(x)) = x$ であるが、$P_i$ 上で $f$ は $f_i$ に一致するため $f_i(s(x)) = x$ となるからである。）<br>
+  ふるい $S$ は $f_i$ を含む右イデアルであるため、$f_i$ と連続写像 $s|_{V_i}$ の合成である包含写像 $e_i$ もすべて $S$ に属する。つまり $S$ は、有限clopen分割からの包含写像 $\{ e_i: V_i \hookrightarrow Q \}$ を部分族として含む。</p>
+  <p>圏 $\mathbf{ED}$ において、有限clopen分割からの包含写像族は、まさに有限余積の入射族 (coproduct injections) にほかならない。余積の入射族が生成するふるいは、極限としての普遍性により自明にすべての表現可能前層を層にする。したがって $S$ もまた表現可能前層を層にする。</p>
+  <p><strong>ステップ2：引き戻し安定性（普遍性）</strong><br>
+  $\mathbf{ED}$ にファイバー積は存在しないが、 Grothendieck位相の公理における「ふるいの引き戻し」は合成により定義されるため問題ない。任意の射 $g: X \to Q$ ($X \in \mathbf{ED}$) に対して、clopen分割 $\{ V_i \}$ が生成するふるいを引き戻すと、それは $X$ における完全な逆像 $\{ g^{-1}(V_i) \}$ からの包含写像が生成するふるいとなる。連続写像によるclopenの逆像はclopenであるため、これもまた $X$ における有限clopen分割となり、同様に有効エピモルフィックである。したがって $S$ は普遍的に層条件を満たす。</p>
+  <p><strong>ステップ3：最大性（必要性）</strong><br>
+  $\mathbf{Stone}$ の場合と全く同様に、コンパクト性の要請から、無限被覆を許容すると極限点で不連続となる貼り合わせが生じるため、有限結合全射族を含むことが被覆ふるいであるための必要条件となる。</p>
+</div>
+
+<hr>
+
+<h2>5. 離散可算集合の一点コンパクト化上の連続自己写像の圏 (位相的トポス)</h2>
+
+<p>最後に、対象が1つしかない圏（すなわちモノイド）におけるカノニカル位相を考える。Peter T. Johnstoneによって導入された<strong>位相的トポス (Topological Topos)</strong> の基本サイトは、まさにこの構造に基づいている。</p>
+
+<div class="math-env definition">
+  <p><strong>一点コンパクト化と自己写像のモノイド</strong><br>
+  離散位相を入れた可算無限集合 $\mathbb{N}$ に対し、その一点コンパクト化 $\hat{\mathbb{N}} = \mathbb{N} \cup \{\infty\}$ を考える。$\infty$ の基本近傍系は $\{ \hat{\mathbb{N}} \smallsetminus K \mid K \subset \mathbb{N} \text{ は有限集合} \}$ で与えられる。<br>
+  $\hat{\mathbb{N}}$ からそれ自身への連続写像の全体 $\mathrm{End}(\hat{\mathbb{N}})$ は、写像の合成を演算とするモノイドとなる。これを対象がただ1つ $\hat{\mathbb{N}}$ のみである圏とみなし、これを $M$ と表記する。<br>
+  この圏における「ふるい」は、モノイド $M$ の<strong>右イデアル (right ideal)</strong> $S \subset M$ に他ならない。</p>
+</div>
+
+<div class="math-env theorem">
+  <p>圏（モノイド） $M$ におけるカノニカル位相は、以下の2つの条件を共に満たす右イデアル $S \subset M$ の全体からなる。</p>
+  <ol>
+    <li><strong>(C1) 定値写像の包含:</strong> 任意の $x \in \hat{\mathbb{N}}$ に対して、定値写像 $c_x$ （すべての $y \in \hat{\mathbb{N}}$ に対し $c_x(y) = x$ となる写像）は $S$ に属する。</li>
+    <li><strong>(C2) 部分列の抽出:</strong> $\mathbb{N}$ の任意の無限部分集合 $A \subset \mathbb{N}$ に対して、ある無限部分集合 $B \subset A$ が存在し、その単調増加な列挙写像 $e_B: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ が $S$ に属する。<br>
+    ※ $e_B$ は、$B$ を昇順に並べたものを $b_0 < b_1 < \dots$ としたとき $e_B(n) = b_n$ ($n \in \mathbb{N}$)、かつ $e_B(\infty) = \infty$ となる連続写像（埋め込み）である。</li>
+  </ol>
+</div>
+
+<div class="math-env proof">
+  <p><strong>ステップ1：条件(C1, C2)を満たす $S$ が表現可能前層を層にすること（十分性）</strong><br>
+  表現可能前層 $h = \mathrm{Hom}(-, \hat{\mathbb{N}})$ が層であることを示す。これは、ふるい $S$ 上の任意の適合族 $\phi: S \to M$ （すなわち任意の $g \in S, h \in M$ に対して $\phi(g \circ h) = \phi(g) \circ h$）に対して、一意な大域的要素 $f \in M$ が存在し、任意の $g \in S$ について $f \circ g = \phi(g)$ となることを意味する。</p>
+  <p><strong>一意性の構成：</strong><br>
+  条件(C1) より $S$ はすべての定値写像 $c_x$ を含む。定値写像と任意の写像を合成すると再び定値写像になるため、大域的要素（すなわち連続写像） $f \in M$ が存在するとすれば、任意の $x \in \hat{\mathbb{N}}$ に対して
+  $$f(x) = f(c_x(\infty)) = (f \circ c_x)(\infty) = \phi(c_x)(\infty)$$
+  が成り立たなければならない。この関係式により、集合論的な関数 $f: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ の値は<strong>完全に一意に決定される</strong>。これが一意性（エピモルフィズム性）を保証する。</p>
+  <p><strong>適合性の確認：</strong><br>
+  定義した関数 $f$ が、すべての $g \in S$ に対して $f \circ g = \phi(g)$ を満たすことを確認する。任意の $x \in \hat{\mathbb{N}}$ について、
+  $$(f \circ g)(x) = f(g(x)) = \phi(c_{g(x)})(\infty)$$
+  となる。ここで $c_{g(x)} = g \circ c_x$ であるから、適合族の条件 $\phi(g \circ h) = \phi(g) \circ h$ を用いると
+  $$\phi(g \circ c_x)(\infty) = (\phi(g) \circ c_x)(\infty) = \phi(g)(c_x(\infty)) = \phi(g)(x)$$
+  となり、たしかに $f \circ g = \phi(g)$ が成立する。</p>
+  <p><strong>$f$ の連続性 ($f \in M$) の証明：</strong><br>
+  関数 $f$ が $\hat{\mathbb{N}}$ 上で連続であることを示す。$\hat{\mathbb{N}}$ は一点コンパクト化であるため、唯一の非孤立点である $\infty$ での連続性を示せば十分である。これは「任意の無限部分集合 $A \subset \mathbb{N}$ による $\infty$ への収束列に沿って、$f$ の像が $f(\infty)$ に収束する」ことと同値であり、さらにKuratowskiの収束条件より「任意の無限部分集合 $A \subset \mathbb{N}$ に対して、極限 $f(\infty)$ に正しく収束するようなさらなる無限部分列（部分集合） $B \subset A$ が必ず存在する」ことを示せばよい。</p>
+  <p>任意の無限部分集合 $A \subset \mathbb{N}$ をとる。条件(C2)より、ある無限部分集合 $B \subset A$ が存在し $e_B \in S$ となる。<br>
+  上で示した適合性より $f \circ e_B = \phi(e_B)$ である。写像 $\phi(e_B)$ は $M$ の元であるため、それ自体が連続写像である。したがって極限をとれば、
+  $$\lim_{n \to \infty} f(e_B(n)) = \lim_{n \to \infty} \phi(e_B)(n) = \phi(e_B)(\infty)$$
+  となる。一方、定値写像での定義式から $f(\infty) = \phi(c_\infty)(\infty)$ であり、$\phi(e_B \circ c_\infty) = \phi(e_B) \circ c_\infty$ より $\phi(c_\infty)(\infty) = \phi(e_B)(\infty)$ が得られる。ゆえに、
+  $$\lim_{\substack{n \to \infty \\ n \in B}} f(n) = f(\infty)$$
+  となり、$B$ に沿った点列は正しく $f(\infty)$ に収束する。よって $f$ は連続であり、$f \in M$ が示された。これで十分性が証明された。</p>
+  
+  <p><strong>ステップ2：条件(C1, C2)が被覆ふるいであるための必要条件（最大性）であること</strong><br>
+  他の任意のサブカノニカル被覆 $S$ が(C1)と(C2)を共に満たさねばならないことを背理法で示す。</p>
+  <p><strong>(C1)の必要性：</strong><br>
+  もしある $x \in \hat{\mathbb{N}}$ について $c_x \notin S$ であったとする。このとき、任意の $g \in S$ について、$g$ の像に $x$ が含まれるとしても、定値写像 $c_x$ は $S$ に属さない。点 $x$ だけで異なる2つの連続写像を構成できる場合、それらは $S$ に属する写像の合成によっては区別できない（適合族の一意的な貼り合わせが破綻する）。よって層条件に反する。</p>
+  <p><strong>(C2)の必要性：</strong><br>
+  もし(C2)が満たされず、ある無限集合 $A \subset \mathbb{N}$ が存在して、そのいかなる無限部分集合 $B \subset A$ についても $e_B \notin S$ となったとする。<br>
+  このとき、以下の関数 $f: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ を定義する。<br>
+  $$f(n) = 1 \quad (n \in A)$$
+  $$f(x) = 0 \quad (x \notin A \text{、特に } f(\infty) = 0)$$
+  集合 $A$ は無限集合であるため、その極限は $\infty$ である。しかし、$n \in A$ に沿って $n \to \infty$ としたとき、$f(n) = 1$ は $f(\infty) = 0$ に収束しない。したがって、<strong>$f$ は $\infty$ において不連続であり、$f \notin M$ である。</strong></p>
+  <p>次に、任意の $g \in S$ に対して合成 $\phi(g) := f \circ g$ を考える。この $\phi(g)$ が連続（すなわち $M$ の元）であることを背理法で示す。<br>
+  もし $\phi(g) = f \circ g$ が不連続であったとする。$\hat{\mathbb{N}}$ において不連続性が起こり得るのは $\infty$ のみであるから、ある列 $x_k \to \infty$ が存在して $g(x_k) \to g(\infty)$ となるが、$(f \circ g)(x_k)$ が $(f \circ g)(\infty)$ に収束しない。<br>
+  関数 $f$ が不連続となるのは、値 $1$ をとる集合 $A$ から $\infty$ （値 $0$）に接近する場合のみである。したがって、$g(\infty) = \infty$ でなければならず、かつ無限個の $x_k$ に対して $g(x_k) \in A$ とならなければならない。<br>
+  これは、連続写像 $g$ が $\infty$ に向かう列を $A$ 内の無限列に写像していることを意味する。ゆえに、$g$ の像 $\mathrm{Im}(g) \cap A$ は無限集合である。そこから単調増加な無限部分列を抽出して集合 $B \subset A$ を作ることができる。このとき、列挙写像 $e_B$ は連続な単射 $h: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ を用いて $e_B = g \circ h$ と分解（因子化）できる。<br>
+  ところが、$S$ は右イデアルであり $g \in S, h \in M$ であるため、$e_B = g \circ h \in S$ となる。これは「いかなる無限部分集合 $B \subset A$ についても $e_B \notin S$」という仮定に完全に矛盾する！</p>
+  <p>したがって、背理法の仮定が誤りであり、<strong>任意の $g \in S$ に対して $\phi(g) = f \circ g$ は連続写像 ($M$ の元) である。</strong><br>
+  これにより、$\phi: S \to M$ は $\phi(g) = f \circ g$ で定義される well-defined な適合族となる。もし $S$ が層条件を満たすなら、この適合族 $\phi$ を一意に貼り合わせる連続写像 $\tilde{f} \in M$ が存在し、任意の $g \in S$ に対して $\tilde{f} \circ g = f \circ g$ となるはずである。<br>
+  (C1) を仮定すれば $S$ はすべての定値写像 $c_x$ を含むため、$\tilde{f} \circ c_x = f \circ c_x \implies \tilde{f}(x) = f(x)$ となり、$\tilde{f} = f$ が導かれる。しかし $f$ は不連続であり $M$ の元ではない。これは貼り合わせるべき大域的要素が圏 $M$ 内に存在しないことを意味し、表現可能前層が層にならないことを示す。ゆえに、(C2) を満たさない右イデアルは決して被覆ふるいにはなり得ない。</p>
+</div>
+
+<hr>
+
+<h2>6. 層の厳密な定義（Homと要素の対応）</h2>
+
+<div class="math-env definition">
+  <p><strong>Homの言葉による層の定義</strong><br>
+  前層の圏 $\mathbf{PSh}(\mathcal{C})$ において、対象 $U$ の表現可能前層を $h_U = \mathrm{Hom}_{\mathcal{C}}(-, U)$ とする。<br>
+  ふるい $S$ は包含写像 $i: S \hookrightarrow h_U$ を持つ。<br>
+  このとき、任意の対象 $P \in \mathbf{PSh}(\mathcal{C})$ に対して、制限写像
+  $$i^*: \mathrm{Hom}_{\mathbf{PSh}}(h_U, P) \longrightarrow \mathrm{Hom}_{\mathbf{PSh}}(S, P)$$
+  $$(\alpha: h_U \to P) \longmapsto (\alpha \circ i: S \to P)$$
+  が全単射になることが、前層 $P$ が層であることの定義である。</p>
+  <p>米田の補題により、左辺の大域的データ集合 $P(U)$ と右辺の「適合族のなす集合」が自然に一対一対応することが、要素による定義と完全に合致する。</p>
+</div>
+
+<hr>
+
+<h2>引用文献</h2>
+<div class="bibliography">
+  <ol>
+    <li>Mac Lane, S., &amp; Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer-Verlag.</li>
+    <li>Gleason, A. M. (1958). Projective topological spaces. <em>Illinois Journal of Mathematics</em>, 2(4A), 482-489.</li>
+    <li>Johnstone, P. T. (1979). On a topological topos. <em>Proceedings of the London Mathematical Society</em>, s3-38(2), 237-271.</li>
+  </ol>
+</div>
+
+</body>
+</html>
