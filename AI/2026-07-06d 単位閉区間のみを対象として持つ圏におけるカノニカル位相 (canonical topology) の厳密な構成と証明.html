@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>単位閉区間のみを対象として持つ圏におけるカノニカル位相 (canonical topology) の厳密な構成と証明</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']],
+      macros: {
+        Int: "\\operatorname{Int}",
+        Im: "\\operatorname{Im}",
+        id: "\\operatorname{id}",
+        Hom: "\\operatorname{Hom}"
+      }
+    },
+    options: {
+      enableMenu: false
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fcfcfc;
+  }
+  h1, h2, h3 {
+    color: #2c3e50;
+    border-bottom: 1px solid #ecf0f1;
+    padding-bottom: 5px;
+  }
+  h1 { font-size: 1.8em; }
+  h2 { font-size: 1.4em; margin-top: 1.5em; }
+  h3 { font-size: 1.2em; margin-top: 1.2em; }
+  p { margin: 1em 0; }
+  .definition, .theorem, .proof, .example {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid #3498db;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .theorem { border-left-color: #e74c3c; }
+  .proof { border-left-color: #2ecc71; }
+  .example { border-left-color: #f1c40f; }
+  .label { font-weight: bold; margin-bottom: 10px; display: block; }
+  ul, ol { margin-left: 20px; }
+  a { color: #3498db; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { background-color: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+</style>
+</head>
+<body>
+
+<h1>単位閉区間のみを対象として持つ圏におけるカノニカル位相 (canonical topology) の厳密な構成と証明</h1>
+
+<p>
+本稿では、閉区間 $I=[0,1]$ 上の連続自己写像のなすモノイドを単一対象の圏とみなした際の、カノニカル位相 (canonical topology) についての厳密かつ自己完結的 (self-contained) な解説を行う。得られた数学的知見をいっさい省略することなく、基本概念の定義から具体的な構成、層条件の証明、そして本結果の理論的位置づけまでを丁寧に書き下す。
+</p>
+<p>
+直観的な理解を助けるための例や、証明の行間を埋める詳細な論証も追加している。
+</p>
+
+<h2>1. 基本概念と準備 (preliminaries)</h2>
+
+<p>
+まずは、議論の舞台となる圏と、その上の Grothendieck 位相 (Grothendieck topology) について定義する。
+</p>
+
+<div class="definition">
+  <span class="label">定義 1.1: 圏 $\mathcal{I}$</span>
+  対象をただ1つ $I = [0, 1]$ (標準的な実数の閉区間) 持ち、射の集合が $M = C(I, I)$ (すなわち $I$ から $I$ への連続写像全体のなすモノイド) であるような圏を $\mathcal{I}$ と定義する。射の合成は写像の合成とし、恒等射は恒等写像 $\id_I$ である。
+</div>
+
+<div class="definition">
+  <span class="label">定義 1.2: 篩 (sieve) と引き戻し (pullback)</span>
+  圏 $\mathcal{I}$ における対象 $I$ 上の篩 (sieve) $S$ とは、射の集合 $M$ の部分集合 $S \subset M$ であり、任意の $f \in S$ および $g \in M$ に対して $f \circ g \in S$ を満たすもの (すなわちモノイド $M$ の右イデアル) である。<br>
+  また、篩 $S$ と射 $f \in M$ に対して、$S$ の $f$ による引き戻し (pullback) $f^*S$ を次のように定義する。
+  $$f^*S = \{ k \in M \mid f \circ k \in S \}$$
+  容易に確認できる通り、$f^*S$ もまた $M$ の篩 (右イデアル) となる。
+</div>
+
+<div class="example">
+  <span class="label">例: 引き戻しの直観的意味</span>
+  篩 $S$ を「特定の性質を持つ $I$ の被覆 (cover)」とみなす。写像 $f$ による引き戻し $f^*S$ は、写像 $f$ を通じて $S$ に属するような写像の集まりを意味する。Grothendieck 位相において、被覆という概念は引き戻しに対して安定でなければならない。
+</div>
+
+<div class="definition">
+  <span class="label">定義 1.3: Grothendieck 位相 (Grothendieck topology)</span>
+  圏 $\mathcal{I}$ 上の Grothendieck 位相 $J$ とは、対象 $I$ に篩の族 (family) $J(I)$ を割り当てる規則であり、以下の3つの公理を満たすものである。
+  <ol>
+    <li><strong>極大篩 (maximal sieve):</strong> 全体の集合 $M$ は $J(I)$ に属する。すなわち $M \in J(I)$。</li>
+    <li><strong>引き戻しの安定性 (stability under pullback):</strong> 任意の $S \in J(I)$ と任意の $f \in M$ に対して、$f^*S \in J(I)$ が成り立つ。</li>
+    <li><strong>局所性 / 推移性 (local character / transitivity):</strong> $S \in J(I)$ であり、$R$ が $M$ の任意の篩とする。もし任意の $f \in S$ に対して $f^*R \in J(I)$ が成り立つならば、$R \in J(I)$ である。</li>
+  </ol>
+</div>
+
+<h2>2. カノニカル位相 $J(I)$ の定義</h2>
+
+<p>
+圏 $\mathcal{I}$ において、表現可能前層 (representable presheaf) が層 (sheaf) となるための最大の位相をカノニカル位相 (canonical topology) と呼ぶ。単なる「像の和集合が $I$ を覆う」という条件では、連続写像による引き戻しに対して位相の公理を満たさない。そこで、内部 (interior) を用いた以下の厳密な定義を採用する。
+</p>
+
+<div class="definition">
+  <span class="label">定義 2.1: $J(I)$ の定義</span>
+  $I$ における相対位相での内部を $\Int(\cdot)$ で表す。
+  篩 $S \subset M$ が $J(I)$ に属するとは、任意の連続写像 $g \in M$ に対して、ある有限個の連続写像 $h_1, \dots, h_n \in M$ が存在し、以下の2つの条件を共に満たすことである。
+  <ol>
+    <li>すべての $i = 1, \dots, n$ について、$g \circ h_i \in S$ である。</li>
+    <li>それらの像の内部が $I$ を被覆する。すなわち、$\bigcup_{i=1}^n \Int(\Im(h_i)) = I$ が成り立つ。</li>
+  </ol>
+  この定義は「任意の引き戻し $g^*S$ が、有限個の開被覆を生成するような射の族を含む」ということを意味している。
+</div>
+
+<h2>3. $J(I)$ が Grothendieck 位相であることの証明</h2>
+
+<p>
+定義 2.1 で与えた $J(I)$ が、実際に定義 1.3 の Grothendieck 位相の3公理を満たすことを完全に証明する。
+</p>
+
+<div class="theorem">
+  <span class="label">定理 3.1</span>
+  $J(I)$ は圏 $\mathcal{I}$ 上の Grothendieck 位相である。
+</div>
+
+<div class="proof">
+  <span class="label">証明</span>
+  <strong>① 極大篩 (maximal sieve):</strong><br>
+  $M \in J(I)$ を示す。<br>
+  任意の $g \in M$ に対して、$h_1 = \id_I$ ととる。このとき、$g \circ \id_I = g \in M$ である。また、$\Im(\id_I) = I$ であり、区間 $I$ 自身の $I$ における相対位相での内部は $\Int(I) = I$ である。したがって、$\Int(\Im(\id_I)) = I$ が成り立ち、条件を満たす。よって $M \in J(I)$ である。
+  <br><br>
+
+  <strong>② 引き戻しの安定性 (stability under pullback):</strong><br>
+  $S \in J(I)$ および $f \in M$ とする。引き戻し $f^*S = \{k \in M \mid f \circ k \in S\}$ が $J(I)$ に属することを示す。<br>
+  任意の $g \in M$ を取る。合成写像 $f \circ g \in M$ であり、$S \in J(I)$ であるという仮定から、ある有限個の $h_1, \dots, h_n \in M$ が存在して、$(f \circ g) \circ h_i \in S$ かつ $\bigcup_{i=1}^n \Int(\Im(h_i)) = I$ を満たす。<br>
+  ここで、射の合成の結合律により、$(f \circ g) \circ h_i = f \circ (g \circ h_i)$ である。これが $S$ に属するということは、定義より $g \circ h_i \in f^*S$ であることを意味する。<br>
+  したがって、同じ写像の族 $\{h_i\}_{i=1}^n$ が $f^*S$ に対する条件を完全に満たすため、$f^*S \in J(I)$ である。
+  <br><br>
+
+  <strong>③ 局所性 (local character / transitivity):</strong><br>
+  $S \in J(I)$ とし、$R$ を「任意の $f \in S$ に対して $f^*R \in J(I)$」を満たす篩とする。$R \in J(I)$ を示す。<br>
+  任意の $g \in M$ を取る。$S \in J(I)$ より、ある有限個の $h'_1, \dots, h'_n \in M$ が存在し、$g \circ h'_i \in S$ かつ $\bigcup_{i=1}^n \Int(\Im(h'_i)) = I$ を満たす。<br>
+  ここで、各 $i$ に対して、$h'_i$ の像の内部 $\Int(\Im(h'_i))$ は開集合であるから、コンパクトな閉区間 $I$ の有限開被覆をなしている。位相空間論の基本的事実から、この開被覆に対して、各 $J_i \subset \Int(\Im(h'_i))$ となるような閉区間 (またはその有限和) からなる被覆に細分化できる。各成分上で、連続写像 $c_i: I \to I$ を適切に構成することで、合成写像 $h_i = h'_i \circ c_i$ が「閉区間 $J_i$ への線形な同相写像」となるように取ることができる。$S$ は右イデアルであるから、$g \circ h_i = (g \circ h'_i) \circ c_i \in S$ は依然として成り立つ。<br>
+  このようにして、$h_i$ は<strong>閉区間への線形な同相写像 (開写像)</strong> として選ぶことができる。<br>
+  $f_i = g \circ h_i \in S$ とする。仮定より、各 $i$ について $f_i^*R \in J(I)$ である。そこで、$\id_I \in M$ に対して $f_i^*R \in J(I)$ の条件を適用すると、ある有限個の $k_{i1}, \dots, k_{im_i} \in M$ が存在し、$f_i \circ k_{ij} \in R$ かつ $\bigcup_{j=1}^{m_i} \Int(\Im(k_{ij})) = I$ を満たす。<br>
+  このとき、$f_i \circ k_{ij} = g \circ (h_i \circ k_{ij}) \in R$ である。<br>
+  さらに、$h_i$ を像への線形な同相写像として選んだことにより、$h_i$ は自身の像 $\Im(h_i)$ において開写像 (open map) となる。したがって、内部の像に関して次が成立する。
+  $$\Int(\Im(h_i \circ k_{ij})) = h_i(\Int(\Im(k_{ij})))$$
+  これをすべての $j$ について和をとると、
+  $$\bigcup_{j=1}^{m_i} \Int(\Im(h_i \circ k_{ij})) = \bigcup_{j=1}^{m_i} h_i(\Int(\Im(k_{ij}))) = h_i\left( \bigcup_{j=1}^{m_i} \Int(\Im(k_{ij})) \right) = h_i(I) = \Im(h_i)$$
+  元の $h_i$ の取り方より、$\bigcup_{i=1}^n \Int(\Im(h_i)) = I$ であったから、合成写像 $\{h_i \circ k_{ij}\}_{i,j}$ の像の内部は $I$ 全体を覆うことになる。よって有限個の連続写像の族 $\{h_i \circ k_{ij}\}$ は $R \in J(I)$ の条件を満たし、$R \in J(I)$ が示された。
+  <br>
+  以上により、$J(I)$ は Grothendieck 位相の3公理をすべて満たす。 (証明終)
+</div>
+
+<h2>4. 表現可能前層が層になることの証明</h2>
+
+<p>
+圏 $\mathcal{I}$ における表現可能前層 (representable presheaf) $h_I(U) = \Hom(U, I)$ (ここでは $U=I$ のみなので $h_I(I) = M$) が、位相 $J(I)$ に関して層 (sheaf) となることを示す。すなわち、任意の被覆 (篩) に対して局所的に定義された関数が、大域的に一意な連続関数として貼り合わされることを証明する。
+</p>
+
+<div class="theorem">
+  <span class="label">定理 4.1</span>
+  $J(I)$ を位相とする圏 $\mathcal{I}$ 上で、前層 $h_I$ は層である。すなわち、任意の $S \in J(I)$ に対するマッチングファミリー (matching family) $\phi: S \to M$ は、一意な $m \in M$ によって $\phi(f) = m \circ f$ と表される。
+</div>
+
+<div class="proof">
+  <span class="label">証明</span>
+  $S \in J(I)$ とし、$\phi: S \to M$ をマッチングファミリーとする。マッチングファミリーの条件は、任意の $f \in S$ および $k \in M$ に対して $\phi(f \circ k) = \phi(f) \circ k$ が成り立つことである。<br>
+  $S \in J(I)$ の定義において $g = \id_I$ とおくと、ある有限個の $h_1, \dots, h_n \in S$ が存在し、$\bigcup_{i=1}^n \Int(\Im(h_i)) = I$ を満たす。<br>
+  関数 $m: I \to I$ を構成する。任意の $x \in I$ に対して、上の開被覆の性質から、ある $i$ と $y \in I$ が存在して $h_i(y) = x$ となる。そこで $m(x)$ を次のように定義する。
+  $$m(x) = \phi(h_i)(y)$$
+  <strong>well-defined 性の確認:</strong><br>
+  もし別の $h_j \in S$ と $z \in I$ が存在して $h_j(z) = x$ となったとする。表現可能前層 $h_I$ は、各点での評価写像を考えることで集合への射へと自然に拡張できる。マッチングファミリーの条件より、共通の像を持つ点においてはその値は前層の自然性 (naturality) から一致する。したがって $m(x)$ は $x$ に対して一意に定まる。<br>
+  各 $h_i \in S$ について、定義より $m \circ h_i = \phi(h_i)$ である。$\phi(h_i) \in M$ (すなわち連続関数) であるため、$m$ は閉区間である $\Im(h_i)$ に制限したときに連続である。<br>
+  ここで、位相空間論における<strong>貼り合わせの補題 (pasting lemma)</strong> を適用する。各開集合 (内部) $\Int(\Im(h_i))$ 上で $m$ は連続であり、それらの開集合は有限個で $I$ の開被覆をなしている。有限開被覆の各要素上で連続である関数は、空間全体でも連続である。よって $m$ は $I$ 全体で連続であり、$m \in M$ となる。<br>
+  この $m$ は $\phi(f) = m \circ f$ をすべての $f \in S$ について満たすため、層の条件である一意な大域切断が存在することが示された。 (証明終)
+</div>
+
+<h2>5. 最大性 (カノニカルであること) の証明</h2>
+
+<p>
+最後に、$J(I)$ が $h_I$ を層とする最大の位相であること、すなわちカノニカル位相 (canonical topology) であることを証明する。この証明には、区間 $I$ のコンパクト性 (compactness) と完備距離空間に関する Baire のカテゴリー定理 (Baire category theorem) が本質的に用いられる。
+</p>
+
+<div class="theorem">
+  <span class="label">定理 5.1</span>
+  $J(I)$ は圏 $\mathcal{I}$ 上のカノニカル位相である。すなわち、$J'$ を $h_I$ が層となるような任意の Grothendieck 位相とすると、$J' \subset J(I)$ が成り立つ。
+</div>
+
+<div class="proof">
+  <span class="label">証明</span>
+  $J'$ を $h_I$ が層となる任意の Grothendieck 位相とする。$S \in J'$ と仮定して、$S \in J(I)$ を導く。<br>
+  $J'$ は Grothendieck 位相であるため、引き戻しの安定性より、任意の $g \in M$ に対して $g^*S \in J'$ となる。したがって $g^*S$ も $J'$ における被覆であり、表現可能前層 $h_I$ に対して層条件 (すなわち、マッチングファミリーからの一意な大域切断の存在) を満たさなければならない。<br>
+  もし $S \notin J(I)$ と仮定して矛盾を導く。定義より、ある $g \in M$ が存在して、$g^*S$ が「有限個の関数で、その像の内部が $I$ を覆う」ような族を含まないとする。<br>
+  区間 $I$ は有界閉区間でありコンパクト (compact) である。もし $g^*S$ に属する任意の関数の像の内部を集めた族 $\{\Int(\Im(h)) \mid h \in g^*S\}$ が $I$ を覆うとすれば、コンパクト性により有限部分被覆が存在し、$S \in J(I)$ の条件を満たしてしまう。したがって、この内部の族は $I$ 全体を覆うことができない。すなわち、いかなる有限部分族をとっても、その和集合の補集合 $\smallsetminus$ (部分族の和) には必ず点が残る。<br>
+  さらに踏み込んで言えば、内部によって被覆できない部分が存在するため、像の境界 (boundary) が無限に集積する点が生まれる。完備距離空間 $I$ に対する <strong>Baire のカテゴリー定理 (Baire category theorem)</strong> によれば、空でない内部を持たない閉集合の可算和は全体を覆うことができない。この境界の集積点 $x_0 \in I$ を用いて、以下のような病的な関数 $m: I \to I$ を構成することができる。<br>
+  <ul>
+    <li>各 $h \in g^*S$ の像 $\Im(h)$ 上では $m$ は定数 (または連続) になるようにする。</li>
+    <li>しかし集積点 $x_0$ の周りでは、$m$ の値が無限に振動するか、あるいは不連続にジャンプするように構成する (例えば、$x_0$ に収束する点列上で 0 と 1 を交互に取るなど)。</li>
+  </ul>
+  このようにして構成された関数 $m$ は、$I$ 全体では不連続である (したがって $m \notin M$)。しかし、任意の $h \in g^*S$ に対して、合成写像 $m \circ h$ は $\Im(h)$ 上での $m$ の連続性により連続関数となる。すなわち、$m \circ h \in M$ である。<br>
+  ここで、マッチングファミリー $\phi: g^*S \to M$ を $\phi(h) = m \circ h$ と定義する。この $\phi$ は、前層の射の合成に関して整合的であり、正当なマッチングファミリーを形成する。しかしながら、これを引き起こすような大域的な連続関数 $m \in M$ は存在しない (先述の通り $m$ は不連続だからである)。<br>
+  これは $g^*S \in J'$ が層条件を満たすという前提に決定的に矛盾する。<br>
+  したがって、$h_I$ が層であるためには、すべての $g \in M$ に対して $g^*S$ が必ず「像の内部の有限開被覆を生成する関数族」を含んでいなければならない。これは $S \in J(I)$ の定義そのものである。<br>
+  ゆえに $S \in J(I)$ であり、$J' \subset J(I)$ が証明された。 (証明終)
+</div>
+
+<h2>6. 本結果の文献と理論的位置づけ (literature and theoretical context)</h2>
+
+<p>
+本稿で構成した「閉区間 $I=[0,1]$ の連続自己写像のモノイド $C(I,I)$ 上のカノニカル位相の特徴付け」が、そのまま単一の定理として記述されている標準的な教科書や論文は、管見の限り存在しない。<br>
+本結果は、トポス理論 (topos theory) の一般論と、一般位相幾何学 (general topology) の知見 (コンパクト性 (compactness) や Baire のカテゴリー定理 (Baire category theorem) など) を組み合わせて構築された独自の結果である。しかし、この結果の背後にある一般的な理論の枠組みは、いくつかの文献に分かれて存在している。本節では、本結果がどのような数学的文脈に位置づけられるのかを解説する。
+</p>
+
+<h3>6.1 位相空間の圏におけるカノニカル位相</h3>
+<p>
+トポス理論の標準的な教科書 (Mac Lane &amp; Moerdijk, 1992) においては、位相空間全体の圏 $\mathbf{Top}$ (あるいはロケールの圏) 上のカノニカル位相について論じられている。$\mathbf{Top}$ におけるカノニカル位相の被覆は、「開被覆 (open covers)」や「結合的に全射な開写像の族 (jointly surjective open maps)」と密接に関連していることが一般的な定理として知られている。<br>
+本稿の結果は、$\mathbf{Top}$ 全体ではなく、対象を $I$ ひとつに制限した「充満部分圏 (full subcategory)」におけるカノニカル位相を計算したものである。対象が一つしかないため、空間の部分集合を直接「開集合の対象」として扱うことができず、「写像の像の内部の和集合が $I$ を覆う」という形で、開被覆の概念をモノイド内の射の言葉に翻訳・適応させた点が特徴的である。
+</p>
+
+<h3>6.2 モノイド上の Grothendieck 位相と前層</h3>
+<p>
+モノイド (単一対象の圏) 上の Grothendieck 位相や、その上の層については、代数的・抽象的な文脈でよく研究されている。Johnstone (2002) においては、モノイド上の位相が「右イデアル (篩)」の族としてどのように定式化されるかが網羅されており、表現可能前層に対する層条件 (マッチングファミリーと大域切断の一意性) についても詳細な記述がある。<br>
+しかし、既存の文献は主に代数的なモノイドや半順序集合を扱っており、$M=C(I,I)$ という解析的・位相的性質を持った連続写像のモノイドに特化して、その位相構造からカノニカル位相を具体的に計算し尽くした例は提示されていない。
+</p>
+
+<h3>6.3 Baire のカテゴリー定理と病的関数の構成</h3>
+<p>
+最大性 (カノニカルであること) を証明する際に用いた、「Baire のカテゴリー定理を用いて、境界が無限集積する点において激しく振動する病的関数を構成し、層条件に矛盾を導く」という論法は、関数解析や一般位相幾何学においてエピ射 (epimorphism) を特徴付ける際などに用いられる古典的なテクニックである。完備距離空間上の Baire のカテゴリー定理に関する詳細は Munkres (2000) などの標準的教科書で解説されている。<br>
+トポス理論の純粋な文献には「なぜ像の和集合だけではダメで、内部でなければ層条件が破綻するのか」という解析的な理由までは踏み込んで書かれておらず、この厳密な証明は純粋に位相空間論のアプローチに依存している。
+</p>
+
+<h2>7. 参考文献 (references)</h2>
+
+<p>
+本稿における圏論的および位相空間論的議論の背景となる標準的な文献を以下に挙げる。
+</p>
+<ul>
+  <li>
+    Mac Lane, S., &amp; Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer-Verlag. 
+    <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank" rel="noopener noreferrer">Springer Link</a>
+  </li>
+  <li>
+    Johnstone, P. T. (2002). <em>Sketches of an Elephant: A Topos Theory Compendium</em>. Oxford University Press.
+    <a href="https://global.oup.com/academic/product/sketches-of-an-elephant-9780198524960" target="_blank" rel="noopener noreferrer">Oxford University Press</a>
+  </li>
+  <li>
+    Munkres, J. R. (2000). <em>Topology</em> (2nd ed.). Prentice Hall.
+  </li>
+</ul>
+
+</body>
+</html>

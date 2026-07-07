@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圏論における稠密部分圏（Dense Subcategories）の定義、同値性の完全証明、および20個の具体的応用例に関する包括的・自己完結的解説</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            color: #111;
+            border-bottom: 3px solid #0056b3;
+            padding-bottom: 15px;
+            font-size: 2.2em;
+            text-align: center;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+            margin-top: 50px;
+            font-size: 1.6em;
+        }
+        h3 {
+            color: #333;
+            margin-top: 35px;
+            font-size: 1.3em;
+            border-left: 4px solid #0056b3;
+            padding-left: 10px;
+        }
+        p {
+            margin: 18px 0;
+            text-align: justify;
+        }
+        .introduction-box {
+            background-color: #eef5fc;
+            border: 1px solid #bce0fd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .definition, .proposition, .example {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition { border-left: 6px solid #0056b3; }
+        .proposition { border-left: 6px solid #dc3545; }
+        .example { border-left: 6px solid #28a745; }
+        
+        .definition::before {
+            content: "【定義】";
+            font-weight: bold;
+            color: #0056b3;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .proposition::before {
+            content: "【命題】";
+            font-weight: bold;
+            color: #dc3545;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .example::before {
+            content: "【例】";
+            font-weight: bold;
+            color: #28a745;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .proof {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .proof::before {
+            content: "【証明】";
+            font-weight: bold;
+            color: #495057;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .proof::after {
+            content: "（証明終）";
+            font-weight: bold;
+            color: #495057;
+            display: block;
+            text-align: right;
+            margin-top: 15px;
+        }
+        code {
+            background-color: #f1f3f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+        }
+        ul {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+        li {
+            margin: 8px 0;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+            border-bottom: 1px dashed #0056b3;
+        }
+        a:hover {
+            color: #003d82;
+            border-bottom: 1px solid #003d82;
+        }
+        .references {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 2px solid #dee2e6;
+        }
+        .references h2 {
+            color: #495057;
+            border: none;
+            margin-top: 0;
+        }
+        .references ul {
+            list-style-type: square;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="tex2jax_process">
+
+    <h1>圏論における稠密部分圏（Dense Subcategories）の包括的解説</h1>
+
+    <div class="introduction-box">
+        <p><strong>はじめに</strong><br>
+        本稿では、圏論における基礎的かつ極めて強力な概念の一つである「稠密部分圏 (dense subcategory)」、より一般には「稠密関手 (dense functor)」について、その定義、基礎となる理論、同値性の完全な証明、そして数学の諸分野（代数学、幾何学、トポス理論、計算機科学）にわたる20個の具体的な応用例を詳細に解説します。ある部分圏が稠密であるという事実は、幾何学的には「空間が局所的なパッチの貼り合わせで構成できること」、代数学的には「任意の代数系が自由代数の商や極限として表現できること」に対応しており、大域的な対象を扱いやすい基本ブロックに分解して研究するための普遍的な基盤を提供します。本稿はすべて自己完結的 (self-contained) に構成されています。</p>
+    </div>
+
+    <h2>1. 基礎概念の準備</h2>
+    <p>稠密性の厳密な定義に踏み込む前に、必要となる圏論の基礎概念を整理する。これにより、本稿全体の記述を自立したものとする。</p>
+
+    <div class="definition">
+        小さな圏 $\mathcal{D}$ から圏 $\mathcal{C}$ への関手 $K: \mathcal{D} \to \mathcal{C}$ および $\mathcal{C}$ の対象 $C$ に対し、<strong>コンマ圏 (comma category)</strong> $(K \downarrow C)$ とは、以下のように定義される圏である。
+        <ul>
+            <li><strong>対象:</strong> 組 $(D, f)$。ここで $D$ は $\mathcal{D}$ の対象であり、$f: K(D) \to C$ は $\mathcal{C}$ の射である。</li>
+            <li><strong>射:</strong> 対象 $(D, f)$ から $(D', f')$ への射とは、$\mathcal{D}$ の射 $g: D \to D'$ であって、$\mathcal{C}$ において可換図式 $f' \circ K(g) = f$ を満たすものである。</li>
+        </ul>
+        また、このコンマ圏から全体圏 $\mathcal{C}$ への自然な<strong>忘却関手 (forgetful functor)</strong> $F_C: (K \downarrow C) \to \mathcal{C}$ が以下のように定まる。
+        $$F_C(D, f) = K(D), \quad F_C(g) = K(g)$$
+    </div>
+
+    <div class="definition">
+        圏 $\mathcal{C}$ の対象 $C$ に対し、$\mathcal{C}$ から集合の圏 $\mathbf{Set}$ への反変関手 $Y(C) = \mathrm{Hom}_{\mathcal{C}}(-, C)$ を<strong>表現可能前層 (representable presheaf)</strong> と呼ぶ。これらを対応させる関手
+        $$Y: \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$$
+        を<strong>米田埋め込み (Yoneda embedding)</strong> と呼ぶ。米田の補題 (Yoneda lemma) により、この関手は常に充満忠実 (fully faithful) である。
+    </div>
+
+    <h2>2. 稠密関手および稠密部分圏の定義</h2>
+    <p>稠密性の定式化には、余極限 (colimit) を用いるアプローチと、制限された米田埋め込みを用いるアプローチの2種類が存在する。これらは完全に同値である。以下では関手 $K: \mathcal{D} \to \mathcal{C}$ の稠密性を定義する。部分圏 $\mathcal{D} \subset \mathcal{C}$ が稠密部分圏であるとは、包含関手 $K: \mathcal{D} \hookrightarrow \mathcal{C}$ が稠密関手であることを意味する。</p>
+
+    <div class="definition">
+        関手 $K: \mathcal{D} \to \mathcal{C}$ が<strong>稠密 (dense)</strong> であるとは、以下のいずれかの同値な条件を満たすことである。
+        
+        <h3>条件 1（余極限による定式化）</h3>
+        任意の対象 $C \in \mathcal{C}$ に対し、忘却関手 $F_C: (K \downarrow C) \to \mathcal{C}$ をドメインとする図式を考える。各対象 $(D, f: K(D) \to C)$ から $C$ への射の族 $\lambda_{(D,f)} = f$ は、関手 $F_C$ から定数関手 $\Delta C$ への自然変換（すなわち余錐）をなす。この余錐が $\mathcal{C}$ において<strong>普遍性を持つ（すなわち余極限錐である）</strong>こと。すなわち、以下が成り立つことである。
+        $$C \cong \mathrm{colim}_{(D, f) \in (K \downarrow C)} K(D)$$
+
+        <h3>条件 2（制限された米田埋め込みによる定式化）</h3>
+        関手 $K$ は、$\mathcal{C}$ の各対象 $C$ に対して $\mathcal{D}$ 上の前層を対応させる以下の関手 $\tilde{K}$ を誘導する。
+        $$\tilde{K}: \mathcal{C} \to [\mathcal{D}^{\mathrm{op}}, \mathbf{Set}]$$
+        $$C \mapsto \mathrm{Hom}_{\mathcal{C}}(K(-), C)$$
+        この誘導された関手 $\tilde{K}$ が<strong>充満忠実 (fully faithful)</strong> であること。すなわち、任意の対象 $C, C' \in \mathcal{C}$ に対し、写像
+        $$\tilde{K}_{C, C'}: \mathrm{Hom}_{\mathcal{C}}(C, C') \to \mathrm{Nat}(\tilde{K}(C), \tilde{K}(C'))$$
+        が全単射となることである。
+    </div>
+
+    <h2>3. 定義の同値性の完全証明</h2>
+    <p>条件1（余極限による定義）と条件2（充満忠実性による定義）が同値であることを、省略を一切挟まず完全に証明する。この証明により、圏論的稠密性の代数的一面と幾何学的一面が一本の線で結ばれることになる。</p>
+
+    <div class="proposition">
+        関手 $K: \mathcal{D} \to \mathcal{C}$ について、条件1が成り立つことと、条件2が成り立つことは同値である。
+    </div>
+
+    <div class="proof">
+        まず、条件1（任意の $C$ が標準的な余極限であること）を仮定し、条件2（$\tilde{K}$ が充満忠実であること）を導く。<br>
+        任意の $C, C' \in \mathcal{C}$ を固定する。写像 $\tilde{K}_{C, C'}: \mathrm{Hom}_{\mathcal{C}}(C, C') \to \mathrm{Nat}(\tilde{K}(C), \tilde{K}(C'))$ が全単射であることを示せばよい。
+        
+        <h4>(i) 全射性の証明</h4>
+        任意の自然変換 $\alpha: \tilde{K}(C) \implies \tilde{K}(C')$ をとる。自然変換の定義により、各 $D \in \mathcal{D}$ に対して集合の間の写像
+        $$\alpha_D: \mathrm{Hom}_{\mathcal{C}}(K(D), C) \to \mathrm{Hom}_{\mathcal{C}}(K(D), C')$$
+        が与えられており、$\mathcal{D}$ の任意の射 $g: D \to D'$ に対して
+        $$\alpha_{D} \circ \mathrm{Hom}_{\mathcal{C}}(K(g), C) = \mathrm{Hom}_{\mathcal{C}}(K(g), C') \circ \alpha_{D'}$$
+        が成立している。写像のレベルで書き下せば、任意の $f': K(D') \to C$ に対し、
+        $$\alpha_D(f' \circ K(g)) = \alpha_{D'}(f') \circ K(g)$$
+        が成り立つ。<br>
+        ここで、各 $(D, f) \in (K \downarrow C)$ に対し、$\mathcal{C}$ の射 $\mu_{(D,f)}: K(D) \to C'$ を $\mu_{(D,f)} = \alpha_D(f)$ によって定義する。この射の族 $\mu$ が、忘却関手 $F_C: (K \downarrow C) \to \mathcal{C}$ から対象 $C'$ への余錐をなすことを確かめる。$(K \downarrow C)$ の任意の射 $g: (D, f) \to (D', f')$ に対し、$f' \circ K(g) = f$ が満たされている。このとき、
+        $$\mu_{(D,f)} = \alpha_D(f) = \alpha_D(f' \circ K(g)) = \alpha_{D'}(f') \circ K(g) = \mu_{(D,f')} \circ F_C(g)$$
+        となり、$\mu$ は確かに余錐となる。<br>
+        仮定（条件1）より、$C$ と射の族 $\lambda_{(D,f)} = f$ は $F_C$ の余極限錐である。したがって、余極限の普遍性（一意存在性）により、一意な射 $h: C \to C'$ が存在して、すべての $(D, f) \in (K \downarrow C)$ に対し、
+        $$h \circ \lambda_{(D,f)} = \mu_{(D,f)} \quad \text{すなわち} \quad h \circ f = \alpha_D(f)$$
+        が成立する。これは、自然変換としての等式 $\tilde{K}(h) = \alpha$ を意味する。よって $\tilde{K}_{C, C'}$ は全射である。
+        
+        <h4>(ii) 単射性の証明</h4>
+        2つの射 $h, h': C \to C'$ が $\tilde{K}(h) = \tilde{K}(h')$ を満たすとする。自然変換の各成分を比較すると、任意の $D \in \mathcal{D}$ および任意の $f: K(D) \to C$ に対し、
+        $$h \circ f = h' \circ f$$
+        が成り立つ。これは、射の族 $\nu_{(D,f)} = h \circ f$ が忘却関手 $F_C$ から $C'$ への余錐をなすとき、余極限 $C$ から $C'$ への射の普遍性による一意性から、$h = h'$ でなければならないことを意味する。よって $\tilde{K}_{C, C'}$ は単射である。以上より、条件1から条件2が従う。<br>
+
+        逆として、条件2（$\tilde{K}$ が充満忠実であること）を仮定し、条件1を導く。<br>
+        任意の対象 $C \in \mathcal{C}$ を固定する。射の族 $\lambda_{(D,f)} = f$ が忘却関手 $F_C: (K \downarrow C) \to \mathcal{C}$ の余極限錐であることを示す。いま、別の対象 $C'$ と $F_C$ から $C'$ への任意の余錐 $\mu_{(D,f)}: K(D) \to C'$ が与えられたとする。余錐の定義より、$(K \downarrow C)$ の任意の射 $g: (D, f) \to (D', f')$ に対し、$\mu_{(D,f)} = \mu_{(D,f')} \circ K(g)$ が成り立つ。<br>
+        各 $D \in \mathcal{D}$ に対し、写像 $\alpha_D: \mathrm{Hom}_{\mathcal{C}}(K(D), C) \to \mathrm{Hom}_{\mathcal{C}}(K(D), C')$ を $\alpha_D(f) = \mu_{(D,f)}$ で定義する。これが $\mathcal{D}$ に関して自然変換 $\alpha: \tilde{K}(C) \implies \tilde{K}(C')$ を定めることを確認する。$\mathcal{D}$ の射 $g: D \to D'$ と $f' \in \mathrm{Hom}_{\mathcal{C}}(K(D'), C)$ に対し、
+        $$\alpha_D(f' \circ K(g)) = \mu_{(D, f' \circ K(g))}$$
+        であるが、$g$ は $(K \downarrow C)$ において $(D, f' \circ K(g))$ から $(D', f')$ への射とみなせるため、余錐 $\mu$ の普遍性から、
+        $$\mu_{(D, f' \circ K(g))} = \mu_{(D', f')} \circ K(g) = \alpha_{D'}(f') \circ K(g)$$
+        が成り立つ。したがって $\alpha$ は自然変換である。<br>
+        ここで仮定（条件2）より、$\tilde{K}$ は充満忠実であるため、全単射 $\tilde{K}_{C, C'}$ を通じて、$\tilde{K}(h) = \alpha$ となる一意な射 $h: C \to C'$ が存在する。各成分の定義をたどれば、任意の $(D, f)$ に対し、
+        $$h \circ f = \alpha_D(f) = \mu_{(D,f)}$$
+        が成り立つ。さらに、このような射 $h$ の一意性は $\tilde{K}_{C, C'}$ の単射性から直ちに保障される。したがって、$C$ は $F_C$ の余極限であり、条件1が成り立つ。
+    </proof>
+
+    <h2>4. 具体的応用例（20選）の詳細な解説</h2>
+    <p>ここからは、特に有用と考えられる稠密部分圏（および稠密関手）の応用例を20個挙げる。各例について、全体圏、部分圏、および稠密性が成り立つ仕組みを詳細に記述する。</p>
+
+    <div class="example">
+        <h3>1. 前層の圏における表現可能前層（稠密性定理）</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 小さな圏 $\mathcal{C}$ 上の前層の圏 $\hat{\mathcal{C}} = [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$</li>
+            <li><strong>部分圏:</strong> 米田埋め込み $Y: \mathcal{C} \to \hat{\mathcal{C}}$ による像としての表現可能前層の全部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            これは<strong>稠密性定理 (Density Theorem)</strong> として広く知られる圏論の根幹定理である。任意の前層 $F: \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ に対し、その「要素の圏 (category of elements)」 $\int F$ を構成する。この圏の対象は組 $(C, x)$（$C \in \mathcal{C}, x \in F(C)$）であり、忘却関手 $P: \int F \to \mathcal{C}$ を伴う。米田の補題により、各要素 $x \in F(C)$ は自然変換 $\bar{x}: Y(C) \implies F$ と一対一に対応する。これらすべての表現可能前層を貼り合わせることで、任意の前層が以下のような標準的余極限として一意に表される。
+            $$F \cong \mathrm{colim}_{(C, x) \in \int F} Y(C)$$
+            制限された米田埋め込みの視点からは、この稠密性は米田埋め込み $Y$ 自身が充満忠実であるという事実そのものに帰着される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>2. 集合の圏 $\mathbf{Set}$ における単集合 $\{\mathbf{1}\}$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 集合と写像の圏 $\mathbf{Set}$</li>
+            <li><strong>部分圏:</strong> 1つの要素のみからなる単集合 $\mathbf{1} = \{*\}$ とその恒等射のみからなる全部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            任意の集合 $X$ を固定する。包含関手 $K: \{\mathbf{1}\} \to \mathbf{Set}$ に対するコンマ圏 $(K \downarrow X)$ の対象は、写像 $f: \mathbf{1} \to X$ である。単集合からの写像は $X$ の要素 $x \in X$ を選ぶことと完全に一対一対応するため、このコンマ圏は集合 $X$ を離散圏とみなしたものと同値になる。$\mathbf{Set}$ における離散図式の余極限は非交和（直和）に他ならないため、以下が成立する。
+            $$X \cong \coprod_{x \in X} \mathbf{1}$$
+            「すべての集合は点の集まりである」という数学的直観が、余極限の言語によって完全に定式化されている。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>3. 集合 of 圏 $\mathbf{Set}$ における有限集合の圏 $\mathbf{FinSet}$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 集合と写像の圏 $\mathbf{Set}$</li>
+            <li><strong>部分圏:</strong> 有限集合とその間の写像からなる全部分圏 $\mathbf{FinSet}$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            任意の集合 $X$ に対し、$X$ のすべての有限部分集合の族を包含関係で順序づけたものを $\mathcal{P}_{\mathrm{fin}}(X)$ とする。これは有向集合（すなわちフィルター付き圏）をなす。各有限部分集合 $U \subset X$ に対し、自然な包含写像 $i_U: U \hookrightarrow X$ が存在し、これらの有限写像たちのフィルター付き余極限（直極限）をとると、
+            $$X \cong \mathrm{colim}_{U \in \mathcal{P}_{\mathrm{fin}}(X)} U$$
+            が成り立つ。包含関手 $K: \mathbf{FinSet} \to \mathbf{Set}$ によるコンマ圏 $(K \downarrow X)$ は、この $\mathcal{P}_{\mathrm{fin}}(X)$ を共初期な部分圏として含むため、全体の余極限も $X$ に一致する。これは $\mathbf{Set}$ が $\mathbf{FinSet}$ のInd対象の圏 $\mathrm{Ind}(\mathbf{FinSet})$ と同値であることを意味する。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>4. 単体的集合の圏 $\mathbf{sSet}$ における単体圏 $\Delta$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 単体的集合の圏 $\mathbf{sSet} = [\Delta^{\mathrm{op}}, \mathbf{Set}]$</li>
+            <li><strong>部分圏:</strong> 米田埋め込みによる標準単体 $\Delta^n = \mathrm{Hom}_{\Delta}(-, [n])$ の全体からなる部分圏 $\Delta$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            例1の「前層の圏における表現可能前層の稠密性」の最も重要な応用例である。幾何学的なトポロジーにおいて、任意の幾何学的対象（幾何学的複体など）を組み合わせ的に模倣したものが単体的集合である。任意の単体的集合 $X$ は、各次元の幾何学的構成要素である標準単体 $\Delta^n$ を、面写像 (face map) や退化写像 (degeneracy map) の境界関係に沿って貼り合わせることで得られる。
+            $$X \cong \mathrm{colim}_{([n], x \in X_n)} \Delta^n$$
+            この稠密性により、単体的集合の間のホモトピー理論は、標準単体上での代数的挙動に完全に還元される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>5. スキームの圏 $\mathbf{Sch}$ におけるアフィンスキームの圏 $\mathbf{Aff}$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> スキームの圏 $\mathbf{Sch}$</li>
+            <li><strong>部分圏:</strong> アフィンスキーム（可換環のスペクトル $\mathrm{Spec}(A)$）からなる全部分圏 $\mathbf{Aff}$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            代数幾何学において、一般のスキームは「局所的にアフィンスキームと局所同型な局所環付き空間」として定義される。スキーム $X$ に対し、アフィン開集合による開被覆 $\{U_i \subset X\}$ およびそれらの交わり $U_i \cap U_j$ を考えると、これらはすべてアフィンスキーム（またはアフィンスキームの和）であり、$X$ はこれら局所的なパッチの貼り合わせ図式のコイコライザー（余極限）として大域的に構成される。コンマ圏 $(\mathbf{Aff} \downarrow X)$ はこれらすべての開アフィン部分スキームからの射を包含するため、その余極限は $X$ 自身を創出する。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>6. ベクトル空間の圏 $\mathbf{Vect}_k$ における有限次元ベクトル空間の圏 $\mathbf{fdVect}_k$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 体 $k$ 上のベクトル空間の圏 $\mathbf{Vect}_k$</li>
+            <li><strong>部分圏:</strong> 有限次元ベクトル空間からなる全部分圏 $\mathbf{fdVect}_k$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            任意の無限次元ベクトル空間 $V$ は、そのすべての有限次元部分空間 $W \subset V$ の族によって覆われる。この包含関係の族はフィルター付き図式を形成し、その代数的な直極限（余極限）をとると、
+            $$V \cong \mathrm{colim}_{W \subset V, \dim W < \infty} W$$
+            が成立する。コンマ圏 $(\mathbf{fdVect}_k \downarrow V)$ からの忘却関手の余極限もこれに一致するため、有限次元線形代数の知識の極限として無限次元ベクトル空間の構造が完全に決定される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>7. 局所有限表示可能圏における有限表示可能対象の圏</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 局所有限表示可能圏 (locally finitely presentable category; LFP圏) $\mathcal{C}$</li>
+            <li><strong>部分圏:</strong> 有限表示可能 (finitely presentable) な対象の全部分圏 $\mathcal{C}_{\omega}$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            代数構造の一般論において、対象が有限表示可能であるとは、「有限個の生成元と有限個の関係式によって定義されること」を抽象化した性質である。LFP圏の定義そのものが、「$\mathcal{C}_{\omega}$ が実質的に小さく、かつ $\mathcal{C}$ の任意の対象が $\mathcal{C}_{\omega}$ の対象のフィルター付き余極限として一意に表されること」を要求している。したがって、包含関手 $\mathcal{C}_{\omega} \hookrightarrow \mathcal{C}$ の稠密性はLFP圏の概念の中核をなす。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>8. 多様体の圏 $\mathbf{Man}$ におけるユークリッド空間の圏 $\mathbf{Euc}$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 滑らかな多様体と滑らかな写像の圏 $\mathbf{Man}$</li>
+            <li><strong>部分圏:</strong> ユークリッド空間の開集合（座標近傍）からなる全部分圏 $\mathbf{Euc}$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            微分幾何学において、多様体 $M$ は $\mathbb{R}^n$ の開集合と等しい局所座標近傍たちを、滑らかな座標変換写像によって貼り合わせることで定義される。多様体 $M$ に含まれるすべての開座標近傍 $U_i$ とその交わり $U_i \cap U_j$、およびそれらの間の包含写像のなす図式は $\mathbf{Euc}$ の中に完全に収まる。この図式の圏論的余極限は多様体 $M$ となり、局所的なユークリッド的データから大域的幾何構造が完全に復元される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>9. 代数系の圏における有限生成自由代数の圏（Lawvere理論）</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 群の圏 $\mathbf{Grp}$ や可換環の圏 $\mathbf{CRing}$ などの等式的代数系 (variety) の圏 $\mathcal{V}$</li>
+            <li><strong>部分圏:</strong> 有限生成自由代数（有限生成自由群など）からなる全部分圏 $\mathcal{V}_{\mathrm{fgf}}$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            任意の代数系の対象 $A \in \mathcal{V}$ は、自由代数からの全射（生成元の指定）とその核（関係式の一致）によるコイコライザーとして提示 (presentation) できる。これを有限生成自由代数に制限しても、フィルター付き余極限を組み合わせることで任意の $A$ を記述可能である。F. W. Lawvereは、この稠密部分圏 $\mathcal{V}_{\mathrm{fgf}}$ の構造（特に積を保つ性質）こそが代数系の「本質的な構造（代数理論）」を保持していることを見出し、Lawvere理論を創始した。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>10. 任意の圏 $\mathcal{C}$ とそのKaroubi包絡 $\mathrm{Split}(\mathcal{C})$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 圏 $\mathcal{C}$ のKaroubi包絡 (Karoubi envelope) $\mathrm{Split}(\mathcal{C})$（コーシー完備化とも呼ばれる）</li>
+            <li><strong>部分圏:</strong> カノニカルな埋め込みによる $\mathcal{C}$ の像</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            $\mathrm{Split}(\mathcal{C})$ の対象は、$\mathcal{C}$ の対象 $X$ とその上の冪等元 $e: X \to X$ （$e^2 = e$）の組 $(X, e)$ として定義される。この新しい対象 $(X, e)$ は、拡張された圏において $e$ のレトラクト（像）として振る舞うが、これは $\mathcal{C}$ の元の射たちが織りなす極めて単純な等式図式の分裂する余極限として表現される。元の圏 $\mathcal{C}$ の対象から余極限を形式的に添加して作られた圏であるため、$\mathcal{C}$ は拡張先において稠密となる。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>11. 環上の加群の圏 $\mathbf{Mod}_R$ における「環 $R$ 自身」</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 環 $R$ 上の左加群の圏 $\mathbf{Mod}_R$</li>
+            <li><strong>部分圏:</strong> $R$ 自身を階数1の自由左 $R$ 加群とみなした、単一の対象からなる部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            任意の左 $R$ 加群 $M$ に対し、準同型写像 $f: R \to M$ を与えることは、$M$ の元 $x = f(1)$ を一意に決定することと同値である。したがって、コンマ圏 $(R \downarrow M)$ の対象は $M$ の元と一対一に対応する。これらすべての射 $R \to M$ のドメインを直和で束ねると、自由加群 $\coprod_{x \in M} R$ から $M$ への自然な全射（結合全射）が得られ、さらにその関係式も $R$ の直和からの射で制御される。結果として、任意の加群 $M$ は $R$ のみの図式から余極限として一意に構成される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>12. 位相空間の開集合の圏 $\mathcal{O}(X)$ における「開基」</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 位相空間 $X$ の開集合全体を対象とし、包含関係 $\subset$ を射とする順序圏 $\mathcal{O}(X)$</li>
+            <li><strong>部分圏:</strong> $X$ の位相の開基 (base) となる開集合の族 $\mathcal{B}$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            順序集合を圏とみなした場合、図式の余極限は「上限」、すなわち集合の和集合に対応する。開基 $\mathcal{B}$ の定義は、「$X$ の任意の開集合 $U$ に対し、$\mathcal{B}$ に属する適当な開集合の族 $\{V_i\}_{i \in I}$ が存在して $U = \bigcup_{i \in I} V_i$ と表せること」である。これを圏論の言葉に翻訳すると、包含関手 $\mathcal{B} \hookrightarrow \mathcal{O}(X)$ に対し、任意の $U$ が $\mathcal{B}$ の元の余極限になることを意味し、開基の稠密性が成立する。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>13. グラフの圏 $\mathbf{Graph}$ における「頂点」と「辺」</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 有向グラフとグラフ準同型の圏 $\mathbf{Graph}$</li>
+            <li><strong>部分圏:</strong> 頂点1つのみからなるグラフ $V$ と、2頂点とそれを結ぶ1つの有向辺からなるグラフ $E$ の2対象からなる部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            有向グラフの圏 $\mathbf{Graph}$ は、2つの対象（頂点、辺）と始点・終点に対応する2つの平行射からなる小さな圏 $\mathcal{I}$ からの関手圏 $[\mathcal{I}, \mathbf{Set}]$ と同値である。このとき、$V$ と $E$ は表現可能前層に対応する。前層の圏における普遍的な稠密性定理（例1）により、あらゆる複雑な有向グラフは、その最小構成単位である頂点 $V$ と辺 $E$ を、結合関係（始点・終点）の指示に従って無限に貼り合わせる（余極限をとる）ことで完全に復元される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>14. Grothendieckトポス（層の圏）における「表現可能層」</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 小さなサイト $(\mathcal{C}, J)$ 上の層の圏 $\mathbf{Sh}(\mathcal{C}, J)$</li>
+            <li><strong>部分圏:</strong> $\mathcal{C}$ の対象 $C$ から定まる表現可能前層 $Y(C)$ を層化したもの（表現可能層）の全体</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            前層の圏 $\hat{\mathcal{C}}$ から層の圏 $\mathbf{Sh}(\mathcal{C}, J)$ への包含関手は、左随伴関手として「層化関手 (sheafification)」 $\mathbf{a}: \hat{\mathcal{C}} \to \mathbf{Sh}(\mathcal{C}, J)$ を持つ。左随伴関手は任意の余極限を保存するため、前層の圏における表現可能前層の稠密性関係式（例1）の両辺を層化関手 $\mathbf{a}$ で送ることにより、任意の層 $F$ が表現可能層の余極限として記述できることが保証される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>15. 立方体的集合の圏 $\mathbf{cSet}$ における立方体圏 $\square$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 立方体的集合の圏 $\mathbf{cSet} = [\square^{\mathrm{op}}, \mathbf{Set}]$</li>
+            <li><strong>部分圏:</strong> 米田埋め込みによる標準的な $n$ 次元超立方体 $\square^n$ の全体からなる部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            単体的集合（例4）の幾何学的バリエーションである。高次幾何学やホモトピー型理論 (HoTT) において、空間の変形（ホモトピー）を直積構造と親和性の高い幾何学ブロックで扱うために立方体が好まれる。任意の立方体的集合（幾何学的空間の組み合わせモデル）は、0次元の点、1次元の線分、2次元の正方形などの標準超立方体を、境界の等式（面写像や退化写像）に沿って余極限で縫い合わせることで一意に構築される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>16. 小さな圏の圏 $\mathbf{Cat}$ における単体圏 $\Delta$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 小さな圏と関手を対象とする圏 $\mathbf{Cat}$</li>
+            <li><strong>部分圏:</strong> 単体圏 $\Delta$（各対象 $[n] = \{0 < 1 < \dots < n\}$ を $n$ 個の射が直列に並んだ全順序圏とみなして埋め込んだもの）</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            任意の小さな圏 $\mathcal{C}$ に対し、その可換図式（射の合成列）の全体を記録する単体的集合を<strong>神経 (Nerve)</strong> $N(\mathcal{C}) \in \mathbf{sSet}$ と呼ぶ。この神経関手 $N: \mathbf{Cat} \to \mathbf{sSet} = [\Delta^{\mathrm{op}}, \mathbf{Set}]$ は充満忠実であることが知られている。これは、稠密性の第2の定義（制限された米田埋め込みが充満忠実であること）そのものであり、任意の小さな圏 $\mathcal{C}$ が、直列な有限パス圏 $[n]$ たちを合成規則に沿って貼り合わせた余極限として一意に決定されることを意味する。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>17. 球体的集合の圏 $\mathbf{GSet}$ における球体圏 $\mathbb{G}$</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 球体的集合（Globular sets）の圏 $\mathbf{GSet} = [\mathbb{G}^{\mathrm{op}}, \mathbf{Set}]$</li>
+            <li><strong>部分圏:</strong> 標準的な $n$ 次元球体（点、矢印、2つの矢印の隙間を埋める円板など）からなる球体圏 $\mathbb{G}$</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            高次圏論（厳密または弱 $n$ 圏の定義など）において、射の間の高次変換を幾何学的に記述するための基本構成要素が球体（グローブ）である。球体的集合の圏自体が $\mathbb{G}$ 上の前層の圏として定義されるため、米田の表現可能性定理に基づき、標準球体の圏 $\mathbb{G}$ は稠密となる。あらゆる高次圏の幾何学的形状は、これらの球体セルの貼り合わせ（余極限）として一意に表される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>18. CW複体の圏における「基本胞体」</h3>
+        <ul>
+            <li><strong>全体圏:</strong> CW複体と連続写像の圏</li>
+            <li><strong>部分圏:</strong> 各次元の標準的な閉円板 $D^n$ および球面 $S^{n-1}$、それらの間の包含射からなる小さな部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            位相幾何学において、CW複体は、低次元の骨格（スケルトン） $X^{(n-1)}$ に対して、円板の境界である球面からの付着写像 $\varphi: S^{n-1} \to X^{(n-1)}$ を介して $n$ 次元円板 $D^n$ を次々と貼り合わせることで再帰的に定義される。この胞体貼付 (cell attachment) の操作は、位相空間の圏における<strong>押し出し (pushout)</strong> という特定の余極限に他ならない。すべてのCW複体は、これらの円板と球面の間の交わりを記述するインデックス図式の全体的な余極限として大域的に一意構成される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>19. 鎖複体の圏 $\mathbf{Ch}(R)$ における「鎖円板」と「鎖球面」</h3>
+        <ul>
+            <li><strong>全体圏:</strong> 環 $R$ 上の鎖複体 (chain complex) の圏 $\mathbf{Ch}(R)$</li>
+            <li><strong>部分圏:</strong> 各次元 $n$ の標準鎖球面 $S^n(R)$ および標準鎖円板 $D^n(R)$ からなる部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            ホモロジー代数において、18のトポロジー的な胞体分割のアイデアを代数的に模倣したものがこれである。$S^n(R)$ は次数 $n$ にのみ $R$ を持ち、他の次数が $0$ の複体であり、$D^n(R)$ は次数 $n, n-1$ に $R$ を持ち、その間の微分が恒等写像 $\mathrm{id}_R$ であるような複体である。鎖複体 $C$ に対し、$S^n(R) \to C$ という射は $n$ 次のサイクル（微分して0になる元）を決定し、$D^n(R) \to C$ という射は境界元を決定する。代数的なホモロジー的情報をすべて含んだ複体全体の構造は、これら自由な球面的・円板的複体からの準同型写像（射）の族の余極限として完全に制御される。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h3>20. 領域理論における「完備半順序集合」と「コンパクト要素」</h3>
+        <ul>
+            <li><strong>全体圏:</strong> スコット領域 (Scott domains) などの連続的な有向完備半順序集合（DCPO）の圏</li>
+            <li><strong>部分圏:</strong> 各領域内部におけるコンパクト要素（有限的情報要素）の成す順序部分圏</li>
+            <li><strong>稠密性の仕組み:</strong><br>
+            計算機科学のプログラミング言語意味論において、無限に続く計算プロセスや極限的なデータ構造を数学的に扱う基盤が領域理論 (domain theory) である。要素 $x$ がコンパクト（有限的）であるとは、それが有向な近似の極限として現れるとき、有限ステップ目で必ずその要素に到達できることを意味する。連続領域の定義は、「任意の要素 $x$ が、それ自身を近似するコンパクト要素の族 $K_x = \{c \le x \mid c \text{ はコンパクト}\}$ の有向上限 (directed supremum) として表せること」である。半順序集合を圏とみなしたとき、有向上限は「フィルター付き余極限」に一致するため、有限の情報（コンパクト要素）が無限の情報を含む領域全体において稠密であることが保障される。</li>
+        </ul>
+    </div>
+
+    <div class="references">
+        <h2>5. 参考文献</h2>
+        <ul>
+            <li>
+                Saunders Mac Lane, 
+                <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8" target="_blank" rel="noopener noreferrer">
+                    <em>Categories for the Working Mathematician</em>
+                </a>, 
+                2nd ed., Graduate Texts in Mathematics, Vol. 5, Springer-Verlag, 1998. (Chapter X, Section 6: "Density").
+            </li>
+            <li>
+                nLab, 
+                <a href="https://ncatlab.org/nlab/show/dense+functor" target="_blank" rel="noopener noreferrer">
+                    "dense functor"
+                </a>.
+            </li>
+            <li>
+                nLab, 
+                <a href="https://ncatlab.org/nlab/show/density+theorem" target="_blank" rel="noopener noreferrer">
+                    "density theorem"
+                </a>.
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

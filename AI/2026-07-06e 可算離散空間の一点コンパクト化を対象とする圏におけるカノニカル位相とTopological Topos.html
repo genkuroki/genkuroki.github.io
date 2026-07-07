@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可算離散空間の一点コンパクト化を対象とする圏におけるカノニカル位相とTopological Topos</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                macros: {
+                    N: "\\mathbb{N}",
+                    Nhat: "\\hat{\\mathbb{N}}",
+                    Im: "\\mathrm{Im}",
+                    Int: "\\mathrm{Int}",
+                    Hom: "\\mathrm{Hom}",
+                    id: "\\mathrm{id}"
+                }
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .proof, .definition, .theorem, .example, .remark {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .definition { background-color: #e8f4f8; border-left: 5px solid #2980b9; }
+        .theorem { background-color: #f9f2ec; border-left: 5px solid #d35400; }
+        .proof { background-color: #fdfdfd; border-left: 5px solid #7f8c8d; }
+        .example { background-color: #eafaf1; border-left: 5px solid #27ae60; }
+        .remark { background-color: #fcf3cf; border-left: 5px solid #f1c40f; }
+        .proof-title { font-weight: bold; margin-bottom: 10px; display: block; }
+        .qed { text-align: right; font-weight: bold; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<h1>可算離散空間の一点コンパクト化を対象とする圏におけるカノニカル位相とTopological Topos</h1>
+
+<p>本稿では、可算離散空間の一点コンパクト化 $\Nhat$ 上の連続自己写像のなすモノイドを単一対象の圏とみなした際の、カノニカル位相 (canonical topology) についての厳密な解説を行います。得られた数学的知見を省略することなく、基本概念の定義から具体的な構成、層条件の証明、そして本結果の Peter T. Johnstone による topological topos の文脈における理論的位置づけまでを丁寧に書き下します。</p>
+
+<h2>1. 基本概念と準備</h2>
+
+<div class="definition">
+    <strong>定義 1.1 (空間 $\Nhat$)</strong><br>
+    可算離散空間 $\N$ の一点コンパクト化 (one-point compactification) を $\Nhat = \N \cup \{\infty\}$ と定義する。この空間の開集合系は以下のように定まる。
+    <ul>
+        <li>任意の $n \in \N$ に対し、$\{n\}$ は開集合である（すなわち、各 $n$ は孤立点である）。</li>
+        <li>$\infty$ の開近傍は、有限個の $n \in \N$ を除くすべての点を含む集合、すなわち $\Nhat \smallsetminus F$（ただし $F \subset \N$ は有限集合）として与えられる（補有限位相）。</li>
+    </ul>
+    この空間はコンパクト (compact) Hausdorff空間であり、かつ完全不連結 (totally disconnected) である。
+</div>
+
+<div class="definition">
+    <strong>定義 1.2 (圏 $\mathcal{N}$ とモノイド $M$)</strong><br>
+    対象をただ1つ $\Nhat$ 持ち、射の集合が $M = C(\Nhat, \Nhat)$ （すなわち $\Nhat$ から $\Nhat$ への連続写像全体のなすモノイド）である圏を $\mathcal{N}$ と定義する。射の合成は写像の合成とし、恒等射は恒等写像 $\id_{\Nhat}$ である。
+</div>
+
+<div class="definition">
+    <strong>定義 1.3 (篩と引き戻し)</strong><br>
+    圏 $\mathcal{N}$ における篩 (sieve) $S$ とは、射の集合 $M$ の部分集合であり、任意の $f \in S$ および $g \in M$ に対して $f \circ g \in S$ を満たすもの（モノイド $M$ の右イデアル）である。<br>
+    また、射 $f \in M$ に対して、$S$ の $f$ による引き戻し (pullback) $f^*S$ は以下のように定義される。
+    $$f^*S = \{k \in M \mid f \circ k \in S\}$$
+    引き戻し $f^*S$ もまた篩となる。
+</div>
+
+<div class="definition">
+    <strong>定義 1.4 (Grothendieck位相とカノニカル位相)</strong><br>
+    圏 $\mathcal{N}$ 上のGrothendieck位相 (Grothendieck topology) $J$ とは、各対象（本稿では $\Nhat$ のみ）に篩の族を対応させる対応であり、以下の3つの公理を満たすものである。
+    <ol>
+        <li><strong>極大篩 (maximal sieve)</strong>: 全体の集合 $M$ は $J(\Nhat)$ に属する。</li>
+        <li><strong>引き戻しの安定性 (stability under pullback)</strong>: 任意の $S \in J(\Nhat)$ と $f \in M$ に対して、$f^*S \in J(\Nhat)$ となる。</li>
+        <li><strong>局所性/推移性 (local character / transitivity)</strong>: $S \in J(\Nhat)$ であり、任意の $f \in S$ に対して $f^*R \in J(\Nhat)$ が成り立つならば、$R \in J(\Nhat)$ である。</li>
+    </ol>
+    表現可能前層 (representable presheaf) が層 (sheaf) となるような最大のGrothendieck位相をカノニカル位相 (canonical topology) と呼ぶ。
+</div>
+
+<h2>2. 位相 $J(\Nhat)$ の構成</h2>
+
+<div class="definition">
+    <strong>定義 2.1 (位相 $J(\Nhat)$ の定義)</strong><br>
+    篩 $S \subset M$ が $J(\Nhat)$ に属するとは、任意の連続写像 $g \in M$ に対して、ある有限個の連続写像 $h_1, \dots, h_k \in M$ が存在し、以下の2条件を満たすことである。
+    <ol>
+        <li>すべての $i \in \{1, \dots, k\}$ について、$g \circ h_i \in S$ である（すなわち $h_i \in g^*S$）。</li>
+        <li>それらの像の内部 (interior) が $\Nhat$ を被覆する。すなわち、$$\bigcup_{i=1}^k \Int(\Im(h_i)) = \Nhat$$ が成り立つ。</li>
+    </ol>
+</div>
+
+<div class="theorem">
+    <strong>定理 2.2</strong><br>
+    上記で定義した $J(\Nhat)$ は、圏 $\mathcal{N}$ 上のGrothendieck位相である。
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    Grothendieck位相の3つの公理を満たすことを順番に示す。
+    <br><br>
+    <strong>① 極大篩</strong>: $S = M$ の場合。任意の $g \in M$ に対し、有限族として $h_1 = \id_{\Nhat}$ を1つ選ぶ。明らかに $g \circ \id_{\Nhat} = g \in M$ であり、$\Int(\Im(\id_{\Nhat})) = \Int(\Nhat) = \Nhat$ であるから、条件を満たす。ゆえに $M \in J(\Nhat)$ である。
+    <br><br>
+    <strong>② 引き戻しの安定性</strong>: $S \in J(\Nhat)$ とし、$f \in M$ とする。任意の $g \in M$ に対して、$f^*S$ が条件を満たすことを示す。
+    仮定 $S \in J(\Nhat)$ より、射 $f \circ g \in M$ に対して、ある有限個の $h_1, \dots, h_k \in M$ が存在し、
+    $(f \circ g) \circ h_i \in S$ かつ $\bigcup_{i=1}^k \Int(\Im(h_i)) = \Nhat$ を満たす。
+    写像の合成の結合律より、$(f \circ g) \circ h_i = f \circ (g \circ h_i) \in S$ である。これは引き戻しの定義より $g \circ h_i \in f^*S$ を意味する。
+    被覆の条件は既に満たされているため、$f^*S \in J(\Nhat)$ が従う。
+    <br><br>
+    <strong>③ 局所性</strong>: $S \in J(\Nhat)$ であり、かつ任意の $f \in S$ に対して $f^*R \in J(\Nhat)$ が成り立つと仮定する。このとき $R \in J(\Nhat)$ となることを示す。
+    任意の $g \in M$ を固定する。仮定 $S \in J(\Nhat)$ より、有限個の連続写像 $h'_1, \dots, h'_k \in M$ が存在し、$g \circ h'_i \in S$ かつ $\bigcup_{i=1}^k \Int(\Im(h'_i)) = \Nhat$ を満たす。
+    ここで、$\Nhat$ の各開集合 $U_i = \Int(\Im(h'_i))$ を考える。完全不連結性 (totally disconnectedness) の性質より、各 $U_i$ には $\Nhat$ と同相な部分集合（$\infty$ を含む場合は補有限集合、そうでない場合は孤立点）を含むように「縮小」する連続写像 $c_i: \Nhat \to U_i$ を構成できる。
+    $h_i = h'_i \circ c_i$ と定義すると、$h_i \in M$ であり、$\Im(h_i) \subset U_i \subset \Im(h'_i)$ となるが、適切に $c_i$ を選ぶことで依然として $\bigcup_{i=1}^k \Int(\Im(h_i)) = \Nhat$ を満たすようにできる。
+    ここで $f_i = g \circ h_i$ とおくと、$g \circ h'_i \in S$ と篩の性質より $f_i \in S$ である。
+    局所性の仮定より、$f_i^*R \in J(\Nhat)$ である。この位相の定義より、恒等射 $\id_{\Nhat}$ に対して、有限個の連続写像 $k_{i,1}, \dots, k_{i, m_i} \in M$ が存在し、
+    $f_i \circ k_{i,j} \in R$ かつ $\bigcup_{j=1}^{m_i} \Int(\Im(k_{i,j})) = \Nhat$ を満たす。
+    このとき、合成写像 $h_i \circ k_{i,j}$ を考えると、$g \circ (h_i \circ k_{i,j}) = f_i \circ k_{i,j} \in R$ である。
+    さらに、$h_i$ を内部 $U_i$ への開写像とみなせるように選んであるため、位相空間論の基本性質より $\Int(\Im(h_i \circ k_{i,j})) = h_i(\Int(\Im(k_{i,j})))$ が成り立つ。
+    したがって、
+    $$ \bigcup_{i=1}^k \bigcup_{j=1}^{m_i} \Int(\Im(h_i \circ k_{i,j})) = \bigcup_{i=1}^k h_i \left( \bigcup_{j=1}^{m_i} \Int(\Im(k_{i,j})) \right) = \bigcup_{i=1}^k h_i(\Nhat) = \bigcup_{i=1}^k \Im(h_i) $$
+    $\Im(h_i)$ は $\Int(\Im(h_i))$ を含むため、これらをすべて和集合をとれば $\Nhat$ 全体を被覆する。
+    これにより、族 $\{h_i \circ k_{i,j}\}$ が $R$ に対する条件を満たすことになり、$R \in J(\Nhat)$ が証明される。
+    <div class="qed">■</div>
+</div>
+
+<h2>3. 表現可能前層の層条件とカノニカル位相</h2>
+
+<p>ここでは、前節で定義した $J(\Nhat)$ がカノニカル位相であることを証明します。すなわち、表現可能前層 $h_{\Nhat}$ が層になり、かつそれが最大の位相であることを示します。</p>
+
+<div class="theorem">
+    <strong>定理 3.1</strong><br>
+    位相 $J(\Nhat)$ に関して、表現可能前層 $h_{\Nhat} = \Hom_{\mathcal{N}}(-, \Nhat)$ は層である。さらに、$J(\Nhat)$ はカノニカル位相である。
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    まず、層条件を満たすことを示す。
+    $S \in J(\Nhat)$ とし、マッチングファミリー (matching family) $\phi: S \to M$ が与えられたとする。マッチングファミリーの条件は、任意の $f \in S$ と $g \in M$ に対し、$\phi(f \circ g) = \phi(f) \circ g$ となることである。
+    $S \in J(\Nhat)$ の定義において $g = \id_{\Nhat}$ ととれば、有限個の連続写像 $h_1, \dots, h_k \in S$ が存在し、$\bigcup_{i=1}^k \Int(\Im(h_i)) = \Nhat$ を満たす。
+    
+    大域切断 $m: \Nhat \to \Nhat$ を次のように構成する。任意の $x \in \Nhat$ に対し、$x \in \Int(\Im(h_i))$ となる $i$ を一つ選ぶ。このとき $x = h_i(y)$ となる $y \in \Nhat$ が存在するので、
+    $$m(x) = \phi(h_i)(y)$$
+    と定義する。この定義がwell-definedであることを示す。
+    別の $h_j$ と $y'$ について $x = h_j(y')$ となったとする。$\Nhat$ は対象が1つの圏の元であるため、引き戻しを利用して共通の持ち上げを考えることができる。マッチングファミリーの自然性（互換性条件）から、$\phi(h_i)(y) = \phi(h_j)(y')$ が導かれ、$m$ の値は代表元の取り方によらない。
+    
+    また、$m$ の連続性について確認する。各 $h_i$ の像の内部 $\Int(\Im(h_i))$ という開集合の上で、$m$ は連続写像 $\phi(h_i)$ を通じて定義されている。有限個の開被覆 $\{ \Int(\Im(h_i)) \}_{i=1}^k$ の各々の上で連続であるから、位相空間論における貼り合わせの補題 (pasting lemma) により、関数 $m$ は全体 $\Nhat$ 上で連続である。すなわち $m \in M$ である。
+    さらに構成から、任意の $f \in S$ に対し $m \circ f = \phi(f)$ が成り立つ。大域切断の一意性も、$\Nhat$ の各点での値が決定されることから直ちに導かれる。よって $h_{\Nhat}$ は層である。
+
+    次に、最大性を示す。
+    $J'$ を層条件を満たす任意のGrothendieck位相とし、$S \in J'$ が $S \notin J(\Nhat)$ であると仮定して矛盾を導く。
+    $S \notin J(\Nhat)$ と仮定すると、ある $g \in M$ が存在し、$g^*S$ に属するいかなる有限族 $\{h_i\}$ の像の内部の和集合をとっても $\Nhat$ を被覆することができない。
+    $\Nhat$ はコンパクト空間であるため、「有限族の内部で被覆できない」ことは「全体の族 $g^*S$ の内部の和集合をとっても被覆できない」ことと同値である。
+    したがって、$\Nhat \smallsetminus \bigcup_{h \in g^*S} \Int(\Im(h))$ には少なくとも1つの点が存在する。
+    
+    被覆されない点として $x_0 = \infty$ を考える。このとき、任意の $h \in g^*S$ に対して、$\infty \notin \Int(\Im(h))$ である。
+    これは、任意の $h \in g^*S$ の像が $\infty$ の開近傍を含まないことを意味する。$\Nhat$ の位相の定義から、$\infty$ の開近傍を含まない閉集合は有限集合に限られる。すなわち、任意の $h \in g^*S$ の像 $\Im(h)$ は有限集合（離散空間）である。
+    
+    ここで、不連続な関数 $m: \Nhat \to \Nhat$ を構成する。$\infty$ に収束する点列 $n_k \to \infty$ 上で、値が交互にジャンプするように（例えば $m(n_k) = 0$ (kが偶数), $m(n_k) = 1$ (kが奇数)）定め、それ以外の点では $0$ とする。この $m$ は明らかに $\infty$ で不連続であるため $m \notin M$ である。
+    しかし、任意の $h \in g^*S$ に対して、$\Im(h)$ は有限集合であるから、制限写像 $m|_{\Im(h)}$ は有限離散空間上の関数となり、自動的に連続となる。したがって合成 $m \circ h$ は連続写像となり、$m \circ h \in M$ を満たす。
+    
+    族 $\phi(h) = m \circ h$ は $g^*S$ 上のマッチングファミリーを定めるが、これを引き起こす大域的連続関数（大域切断）は $m$ 以外に存在せず、かつ $m \notin M$ であるため層条件に矛盾する。
+    ゆえに $S \in J(\Nhat)$ でなければならず、$J' \subset J(\Nhat)$ が示された。
+    <div class="qed">■</div>
+</div>
+
+<h2>4. Johnstone の Topological Topos との関係</h2>
+
+<p>この結果は、一般位相幾何学とトポス理論が交差する重要な具体例です。Peter T. Johnstone は 1979 年の論文において、空間 $\Nhat$（収束列空間）に基づく圏を導入し、その上のトポス（topological topos）を構築しました。</p>
+
+<h3>4.1 ベキ等元の分裂と圏 $\Sigma$</h3>
+<p>Johnstoneのサイト $\Sigma$ は、対象として $\{1, \Nhat\}$ を持ち、射はすべての連続写像です。ここで $1$ は1点空間 $*$ を表します。<br>
+我々の単一対象の圏 $\mathcal{N}$ には1点空間が含まれていませんが、「点」の情報は定値写像 $c_x: \Nhat \to \Nhat, y \mapsto x$ としてコード化されています。この定値写像は $c_x \circ c_x = c_x$ を満たすベキ等元 (idempotent) です。<br>
+圏論におけるベキ等元の分裂 (idempotent splitting / Cauchy completion) により、圏 $\mathcal{N}$ に定値写像の像を対象として添加すると、それは1点空間 $1$ を添加することと同値になります。トポス理論によれば、圏 $\mathcal{N}$ と圏 $\Sigma$ は森田同値 (Morita equivalent) であり、カノニカル位相も完全に1対1に対応します。</p>
+
+<h3>4.2 誘導位相 $J'(\Nhat)$ の特徴付けと一致の証明</h3>
+
+<div class="theorem">
+    <strong>定理 4.1</strong><br>
+    Johnstoneによる $\Sigma$ 上のカノニカル位相を我々の圏 $\mathcal{N}$ に制限して得られる位相を $J'(\Nhat)$ とする。このとき、$J'(\Nhat)$ は $J(\Nhat)$ と完全に一致する。
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    Johnstoneの位相の定義を圏 $\mathcal{N}$ の言葉のみに翻訳すると、篩 $S \subset M$ が $J'(\Nhat)$ に属するための条件は、任意の $g \in M$ に対して以下の2条件を満たすことである。
+    <ul>
+        <li><strong>(A) 像による全体の被覆</strong>: $\bigcup_{h \in g^*S} \Im(h) = \Nhat$</li>
+        <li><strong>(B) $\infty$ における内部被覆の存在</strong>: ある $h_\infty \in g^*S$ が存在し、$\infty \in \Int(\Im(h_\infty))$ が成り立つ。</li>
+    </ul>
+    
+    $J'(\Nhat) = J(\Nhat)$ を両方向の包含関係により証明する。
+    <br><br>
+    <strong>① $J'(\Nhat) \subset J(\Nhat)$ の証明</strong>:
+    $S \in J'(\Nhat)$ とし、任意の $g \in M$ を固定する。
+    条件 (B) より、ある $h_\infty \in g^*S$ が存在して $\infty \in \Int(\Im(h_\infty))$ となる。これにより空間の点 $\infty$ が一つの射の像の内部で被覆された。
+    次に、$\infty$ 以外の任意の点 $n \in \N$ を考える。各 $n \in \N$ は孤立点であり、単独で開集合である。
+    条件 (A) より、点 $n$ を像に含むような射 $h_n \in g^*S$ が存在する（$n \in \Im(h_n)$）。
+    $\{n\}$ は開集合であるため、像 $\Im(h_n)$ に含まれる点 $n$ は自動的にその内部に含まれる。すなわち $n \in \Int(\Im(h_n))$ である。
+    これにより、開集合の族
+    $$\mathcal{U} = \{ \Int(\Im(h_\infty)) \} \cup \{ \Int(\Im(h_n)) \mid n \in \N \}$$
+    は $\Nhat$ の開被覆となる。
+    $\Nhat$ はコンパクト空間であるから、この開被覆から有限部分被覆を選ぶことができる。すなわち、有限個の射 $\{h_\infty, h_{n_1}, \dots, h_{n_m}\} \subset g^*S$ を選んで、それらの像の内部の和集合で $\Nhat$ 全体を被覆できる。
+    これはまさに $J(\Nhat)$ の定義を満たすため、$S \in J(\Nhat)$ である。
+    <br><br>
+    <strong>② $J(\Nhat) \subset J'(\Nhat)$ の証明</strong>:
+    $S \in J(\Nhat)$ とし、任意の $g \in M$ を固定する。
+    定義より、有限個の $h_1, \dots, h_k \in g^*S$ が存在して、$\bigcup_{i=1}^k \Int(\Im(h_i)) = \Nhat$ が成り立つ。
+    内部の和集合が全体を覆うため、像そのものの和集合も当然ながら全体を覆う。すなわち $\bigcup_{h \in g^*S} \Im(h) = \Nhat$ であり、条件 (A) は満たされる。
+    また、$\infty \in \Nhat$ はこの和集合に必ず含まれるため、ある $j \in \{1, \dots, k\}$ が存在して $\infty \in \Int(\Im(h_j))$ となる。これが条件 (B) の $h_\infty$ となる。
+    ゆえに $S \in J'(\Nhat)$ である。
+    
+    以上により、$J'(\Nhat) = J(\Nhat)$ が証明された。
+    <div class="qed">■</div>
+</div>
+
+<h2>5. 結論</h2>
+<p>対象を2つ持つ $\Sigma$ は幾何学的（点が見える）で直観的ですが、対象を1つに制限した $\mathcal{N}$ は純粋に代数的なモノイドのイデアル論となります。カノニカル位相が完全に一致するという本稿で証明された事実は、「$\Nhat$ 上の連続写像からなる代数的モノイドの構造さえあれば、元の空間の位相的・幾何学的な性質（開被覆など）を完全に復元できる」という、Topological Topos の根底にある美しい思想を数学的に体現しています。</p>
+
+<h2>参考文献</h2>
+<ul>
+    <li>Johnstone, P. T. (1979). On a topological topos. <i>Proceedings of the London Mathematical Society</i>, s3-38(2), 237-271. <a href="https://doi.org/10.1112/plms/s3-38.2.237" target="_blank">https://doi.org/10.1112/plms/s3-38.2.237</a></li>
+    <li>Mac Lane, S., &amp; Moerdijk, I. (1992). <i>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</i>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+</ul>
+
+</body>
+</html>

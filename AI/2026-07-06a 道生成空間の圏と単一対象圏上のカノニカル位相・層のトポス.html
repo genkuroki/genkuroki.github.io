@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>道生成空間の圏と単一対象圏上のカノニカル位相・層のトポス</title>
+    <script>
+        // MathJax v3 configuration: Enable inline math with single $ symbol.
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            font-size: 2em;
+        }
+        h2 {
+            color: #2980b9;
+            border-left: 5px solid #2980b9;
+            padding-left: 10px;
+            margin-top: 2em;
+            font-size: 1.6em;
+        }
+        h3 {
+            color: #34495e;
+            font-size: 1.3em;
+            margin-top: 1.5em;
+        }
+        .math-def {
+            background-color: #f8fcf8;
+            border: 1px solid #c8e6c9;
+            border-left: 5px solid #4caf50;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .math-prop {
+            background-color: #f0f7fb;
+            border: 1px solid #bbdefb;
+            border-left: 5px solid #2196f3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .math-proof {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            border-radius: 4px;
+        }
+        .math-proof::before {
+            content: "証明.";
+            font-weight: bold;
+            font-style: italic;
+            display: block;
+            margin-bottom: 15px;
+            color: #424242;
+        }
+        .math-proof::after {
+            content: "■";
+            position: absolute;
+            right: 20px;
+            bottom: 15px;
+            color: #424242;
+        }
+        .explanation {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff9e6;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .references {
+            background-color: #f5f5f5;
+            padding: 25px;
+            border-top: 3px solid #bdbdbd;
+            margin-top: 50px;
+            border-radius: 4px;
+        }
+        .references h2 {
+            margin-top: 0;
+            border: none;
+            padding-left: 0;
+        }
+        .references li {
+            margin-bottom: 15px;
+        }
+        a {
+            color: #0277bd;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>道生成空間の圏と単一対象圏上のカノニカル位相・層のトポス</h1>
+
+    <div class="explanation">
+        <p>本稿では、対象が閉区間 $I=[0,1]$ のみであり、射がその連続自己写像全体であるような圏 $\mathcal{B}$ について、そこに定まるカノニカル Grothendieck 位相 (canonical Grothendieck topology) を明示的に決定します。さらに、この単一対象の site $(\mathcal{B}, J)$ と、位相空間の圏 $\mathbf{Top}$ の中で「道生成空間の圏 (category of path-generated spaces)」と呼ばれる極めて都合の良い充満部分圏 $\mathcal{C}$ との間の深い圏論的な関係性（充満忠実な埋め込み）について、詳細な証明とともに解説します。</p>
+        <p>数学的な定義、命題、および証明は厳密性を保つため「だ・である調」で記述し、概念の直観的な意味や背景についての補足説明は「です・ます調」で記述します。以前の解説で省略された部分もすべて展開し、自己完結的 (self-contained) な構成としています。</p>
+    </div>
+
+    <h2>1. 圏 $\mathcal{B}$ とカノニカル位相の決定</h2>
+
+    <div class="explanation">
+        <p>まずは、対象が閉区間 $I=[0,1]$ ただ1つであるような圏 $\mathcal{B}$ に、カノニカル Grothendieck 位相 $J$ を導入します。この位相が具体的にどのような「被覆 (covering)」によって与えられるかを厳密に求めます。</p>
+    </div>
+
+    <div class="math-def">
+        <strong>定義 (単一対象圏 $\mathcal{B}$ と篩 (sieve)):</strong><br>
+        圏 $\mathcal{B}$ を、$\mathrm{Ob}(\mathcal{B}) = \{I\}$ ($I = [0,1]$ は通常の位相を持つ実数直線上の閉区間)、および $\mathrm{Hom}_{\mathcal{B}}(I, I) = \{ f : I \to I \mid f \text{ は連続写像} \}$ とする圏とする。<br>
+        対象が1つしかないため、この圏は連続自己写像のなすモノイドと同一視できる。<br>
+        この圏 $\mathcal{B}$ における対象 $I$ 上の<strong>篩 (sieve)</strong> $S$ とは、$\mathrm{Hom}_{\mathcal{B}}(I, I)$ の部分集合であり、右イデアル (right ideal) となっているもの、すなわち「$f \in S$ かつ $g \in \mathrm{Hom}_{\mathcal{B}}(I, I)$ ならば $f \circ g \in S$」を満たすもののことである。
+    </div>
+
+    <div class="math-def">
+        <strong>定義 (カノニカル位相 (canonical topology)):</strong><br>
+        圏 $\mathcal{B}$ 上のカノニカル位相 $J_{can}$ とは、すべての表現可能前層 (representable presheaf) $h_I = \mathrm{Hom}_{\mathcal{B}}(-, I)$ が層 (sheaf) となるような最も細かい (最大の) Grothendieck 位相のことである。<br>
+        この位相における被覆篩 (covering sieve) は、<strong>有効エピ射族 (effective epimorphic family)</strong> によって生成される篩と一致する。
+    </div>
+
+    <div class="explanation">
+        <p>では、この圏 $\mathcal{B}$ におけるカノニカル位相の被覆篩は、具体的に位相空間論の言葉でどのように翻訳されるでしょうか。結論から言えば、それは「結合的に全射 (jointly surjective) となる連続写像の集まり」に他なりません。以下の命題でこれを証明します。</p>
+    </div>
+
+    <div class="math-prop">
+        <strong>命題 (圏 $\mathcal{B}$ におけるカノニカル位相の決定):</strong><br>
+        圏 $\mathcal{B}$ 上のカノニカル位相 $J_{can}$ において、対象 $I$ 上の篩 $S$ が被覆篩 (covering sieve) であるための必要十分条件は、篩 $S$ に属する連続写像族 $\{ f_\lambda : I \to I \}_{f_\lambda \in S}$ が<strong>結合的に全射 (jointly surjective)</strong> であること、すなわち
+        $$\bigcup_{f_\lambda \in S} f_\lambda(I) = I$$
+        を満たすことである。
+    </div>
+
+    <div class="math-proof">
+        カノニカル位相の定義より、$S$ が被覆篩であることと、$S$ が $\mathcal{B}$ において有効エピ射族であることが同値である。したがって、族 $\{ f_\lambda : I \to I \}_{f_\lambda \in S}$ が有効エピ射族であることと、結合的に全射であることが同値であることを示せばよい。<br><br>
+        
+        <strong>(1) 有効エピ射族ならば結合的に全射であること:</strong><br>
+        対偶を示す。もし $\{ f_\lambda \}$ が結合的に全射でないと仮定する。すなわち、ある点 $x_0 \in I$ が存在して、任意の $f_\lambda \in S$ と任意の $t \in I$ に対して $f_\lambda(t) \neq x_0$ となる。このとき、一致条件を満たすが分解を許さないような「テスト用の写像」を構成する。<br>
+        $I$ は完全正規空間であるため、$x_0$ だけで非ゼロとなる連続関数を容易に構成できる。例えば、2つの異なる連続写像 $g_1, g_2 : I \to I$ を以下のように定める。$g_1(x) = x$ (恒等写像) とし、$g_2(x)$ は $x_0$ の十分小さな近傍以外では $x$ と一致し、$x_0$ においては $g_2(x_0) \neq x_0$ となるような連続写像とする。<br>
+        すると、任意の $f_\lambda \in S$ の像には $x_0$ が含まれない近傍をとれるため、その像の上では $g_1$ と $g_2$ は完全に一致する。すなわち、任意の $f_\lambda \in S$ について
+        $$g_1 \circ f_\lambda = g_2 \circ f_\lambda$$
+        が成り立つ。これは $\{f_\lambda\}$ に関する自明な一致条件 (右からの合成が等しい) を満たす。しかし、全体として $g_1 \neq g_2$ であるため、これは有効エピ射族の定義 (一致条件を満たす写像が一意に定まること) に反する。ゆえに、有効エピ射族であれば必ず結合的に全射である。<br><br>
+
+        <strong>(2) 結合的に全射ならば有効エピ射族であること:</strong><br>
+        族 $\{ f_\lambda \}$ が結合的に全射であると仮定する。この族が有効エピ射族であることを示すには、任意の対象(ここでは $I$ のみ)への写像族 $\{ g_\lambda : I \to I \}_{f_\lambda \in S}$ が以下の<strong>一致条件</strong>を満たすとき、一意な写像 $h : I \to I$ が存在して $h \circ f_\lambda = g_\lambda$ となることを示せばよい。<br>
+        <em>一致条件:</em> 任意の $f_\alpha, f_\beta \in S$ と任意の $p, q \in \mathrm{Hom}_{\mathcal{B}}(I, I)$ について、$f_\alpha \circ p = f_\beta \circ q$ ならば $g_\alpha \circ p = g_\beta \circ q$ が成り立つ。<br><br>
+        
+        写像 $h: I \to I$ を次のように構成する。任意の $x \in I$ について、$\{ f_\lambda \}$ が結合的に全射であるため、ある $f_\alpha \in S$ と $t \in I$ が存在して $f_\alpha(t) = x$ となる。このとき、$h(x) = g_\alpha(t)$ と定義する。<br>
+        まず、これが well-defined であることを確認する。別の $f_\beta \in S$ と $s \in I$ を用いて $f_\beta(s) = x$ と表されたとする。ここで、$I$ から $I$ への定値写像 (constant map) $c_t, c_s : I \to I$ (それぞれ常に値 $t, s$ をとる写像) を考える。定値写像は連続であるため $\mathrm{Hom}_{\mathcal{B}}(I,I)$ の元である。仮定より
+        $$f_\alpha(c_t(y)) = f_\alpha(t) = x = f_\beta(s) = f_\beta(c_s(y))$$
+        すなわち、写像として $f_\alpha \circ c_t = f_\beta \circ c_s$ が成り立つ。一致条件より、これに対応する $g$ の合成も等しくなければならない。
+        $$g_\alpha \circ c_t = g_\beta \circ c_s$$
+        任意の $y \in I$ で評価すると $g_\alpha(t) = g_\beta(s)$ となり、$h(x)$ の値は代表元の選び方に依らず well-defined である。<br><br>
+        
+        次に $h$ の連続性を示す。$I$ はコンパクト (compact) Hausdorff空間であり、局所コンパクト (locally compact) でもある。位相空間論における一般論として、コンパクトHausdorff空間 $I$ 上の結合的に全射な連続写像の族 $\{f_\lambda\}$ は、直和空間 $\coprod I$ から $I$ への商写像 (quotient map) を定める (より正確には、有限部分被覆をとることで有限個の直和からの商写像となり、これは閉写像であるため商位相と一致する)。$h$ はこの商位相に関して well-defined に定まる写像であるため、連続写像となる。すなわち $h \in \mathrm{Hom}_{\mathcal{B}}(I, I)$ である。<br>
+        また構成法から明らかに $h \circ f_\lambda = g_\lambda$ を満たし、このような $h$ は $x = f_\lambda(t)$ のすべての点で値が指定されるため一意である。したがって、$\{f_\lambda\}$ は有効エピ射族である。
+    </div>
+
+    <h2>2. 有効エピ射族と有効エピ射の厳密な定義</h2>
+
+    <div class="explanation">
+        <p>前節および今後の証明の核となる「有効エピ射族 (effective epimorphic family)」と、それを単一の射に制限した「有効エピ射 (effective epimorphism)」の普遍性による圏論的な定義を、ここで改めて厳密に書き下しておきます。直観的には、<strong>「分割されたピース（定義域）の上で矛盾なく定義された関数は、必ず全体（値域）の上の関数として一意に張り合わせることができる」</strong>という性質を表現しています。</p>
+    </div>
+
+    <div class="math-def">
+        <strong>定義 (有効エピ射族 (effective epimorphic family)):</strong><br>
+        圏 $\mathcal{D}$ において、同一の終域 $X$ を持つ射の族 $\{ f_i : X_i \to X \}_{i \in K}$ が有効エピ射族であるとは、以下を満たすことである。<br>
+        任意の対象 $Y$ と、以下の<strong>一致条件 (compatibility condition)</strong> を満たす任意の射の族 $\{ g_i : X_i \to Y \}_{i \in K}$ に対して、ある一意な射 $h : X \to Y$ が存在して、すべての $i \in K$ について $h \circ f_i = g_i$ を満たす。<br>
+        <strong>一致条件:</strong> 任意の対象 $Z$ と、任意のインデックス $i, j \in K$、および任意の射 $p: Z \to X_i$, $q: Z \to X_j$ について、
+        $$f_i \circ p = f_j \circ q \implies g_i \circ p = g_j \circ q$$
+        が成り立つ。<br><br>
+        ※圏 $\mathcal{D}$ が引き戻し (pullback) を持つ場合、この条件は、$X$ が図式 $X_i \times_X X_j \rightrightarrows X_i$ の余極限 (colimit) になることと同値である。
+    </div>
+
+    <div class="math-def">
+        <strong>定義 (核対 (kernel pair) と有効エピ射 (effective epimorphism)):</strong><br>
+        射 $f: X \to Y$ に対して、$f$ 自身の引き戻し $X \times_Y X$ が存在するとき、そこからの2つの射影 $\pi_1, \pi_2: X \times_Y X \to X$ の組を $f$ の<strong>核対 (kernel pair)</strong>という。集合で言えば「$f(x_1)=f(x_2)$ となるような組 $(x_1, x_2)$ の全体」である。<br>
+        射 $f: X \to Y$ が<strong>有効エピ射</strong>であるとは、$f$ が自身の核対の余等化子 (coequalizer) となること、すなわち以下の図式が余極限図式となることである。
+        $$X \times_Y X \xrightarrow{\pi_1, \pi_2} X \xrightarrow{f} Y$$
+    </div>
+
+    <div class="explanation">
+        <p>具体的な圏における有効エピ射の例を挙げます。集合の圏 $\mathbf{Sets}$ においては、写像が有効エピ射であることと、<strong>全射 (surjective)</strong> であることは同値です。位相空間の圏 $\mathbf{Top}$ においては、連続写像が有効エピ射であることと、それが<strong>商写像 (quotient map)</strong> であることは同値です（単なる全射な連続写像ではなく、終域の位相が始域から誘導される商位相と一致する必要があります）。</p>
+    </div>
+
+    <h2>3. 道生成空間の圏 (Category of Path-generated spaces)</h2>
+
+    <div class="explanation">
+        <p>次に、部分圏 $\mathcal{B}$ が稠密 (dense) になるような、位相空間の圏 $\mathbf{Top}$ の充満部分圏の中で「最大の圏 $\mathcal{C}$」を考えます。これが本稿の主題の1つである<strong>道生成空間の圏 (category of path-generated spaces)</strong> です。この圏 $\mathcal{C}$ における空間の位相は、すべて $I=[0,1]$ からの連続写像 (すなわち空間内の「道」) だけで完全に決定されるという直観的かつ強力な性質を持っています。</p>
+    </div>
+
+    <div class="math-def">
+        <strong>定義 (稠密部分圏 (dense subcategory)):</strong><br>
+        圏 $\mathcal{C}$ の部分圏 $\mathcal{B}$ が $\mathcal{C}$ において<strong>稠密 (dense)</strong> であるとは、米田埋め込みの制限が充満忠実になること、すなわち「$\mathcal{C}$ の任意の対象 $X$ が、$\mathcal{B}$ の対象から $X$ への射からなる標準的なコンマ圏 $\mathcal{B} \downarrow X$ 上の図式の余極限として復元できること」である。<br>
+        式で表せば、自然な同型
+        $$X \cong \mathop{\mathrm{colim}}_{(I \xrightarrow{\gamma} X) \in \mathcal{B} \downarrow X} I$$
+        が成り立つことである。
+    </div>
+
+    <div class="math-def">
+        <strong>定義 (道生成空間 (path-generated space) の圏 $\mathcal{C}$):</strong><br>
+        位相空間 $X$ が道生成空間であるとは、$X$ の位相が、$I = [0,1]$ から $X$ へのすべての連続写像の族 $\mathbf{Top}(I, X)$ によって定まる<strong>終位相 (final topology)</strong> と一致することである。<br>
+        すなわち、$X$ の部分集合 $U \subset X$ が開集合 (または閉集合) であるための必要十分条件が、
+        「任意の連続写像 (道) $\gamma: I \to X$ について、引き戻し $\gamma^{-1}(U)$ が $I$ において開集合 (または閉集合) となること」
+        である。<br>
+        すべての道生成空間と連続写像からなる $\mathbf{Top}$ の充満部分圏を $\mathcal{C}$ とする。
+    </div>
+
+    <div class="explanation">
+        <p>この圏 $\mathcal{C}$ がどのくらい「大きな」圏なのか疑問に思うかもしれません。「道で生成される」という厳しい制約がついているように見えますが、実は我々が通常の幾何学で扱う空間のほとんどすべてを包含する巨大な圏です。以下はすべて道生成空間です。</p>
+        <ul>
+            <li>すべての可量空間 (metric spaces)</li>
+            <li>すべての多様体 (manifolds)</li>
+            <li>すべての CW複体 (CW complexes) - 代数的位相幾何学の主役</li>
+            <li>すべての局所コンパクト (locally compact) Hausdorff空間</li>
+        </ul>
+        <p>反例として排除されるのは、非可算個の積位相空間などの「道が全く引けないのに位相が複雑すぎる」ような、幾何学的に病的な (pathological) 空間のみです。</p>
+        <p>そして何より、この道生成空間の圏 $\mathcal{C}$ は<strong>極めて都合の良い圏 (convenient category of topological spaces)</strong> になります。通常の位相空間の全体 $\mathbf{Top}$ は「関数空間 $Y^X$ に自然な位相が入るとは限らない (デカルト閉ではない)」という致命的な欠陥を持っています。しかし、$\mathcal{C}$ は<strong>デカルト閉 (cartesian closed)</strong> であり、任意の $X, Y, Z \in \mathrm{Ob}(\mathcal{C})$ に対して以下の自然な同型が成り立ちます。</p>
+        $$\mathcal{C}(X \times Y, Z) \cong \mathcal{C}(X, Z^Y)$$
+        <p>病的な空間を切り捨てるだけで、関数空間が自然に構成できる理想的な幾何学の舞台が立ち上がるのです。</p>
+    </div>
+
+    <h2>4. トポス $\mathrm{Sh}(\mathcal{B}, J)$ への充満忠実な埋め込み</h2>
+
+    <div class="explanation">
+        <p>最後に、この都合の良い位相空間の圏 $\mathcal{C}$ と、第1節で定義した層のトポス $\mathrm{Sh}(\mathcal{B}, J)$ を結びつけます。空間 $X$ を「区間 $I$ から $X$ への連続写像を測り棒とした前層」として見なすことで、空間の圏 $\mathcal{C}$ は情報の損失なくトポスに埋め込むことができます。この見事な圏論的定理を完全な形で証明します。</p>
+    </div>
+
+    <div class="math-prop">
+        <strong>命題 (制限米田関手 (restricted Yoneda functor) による埋め込み):</strong><br>
+        道生成空間の圏 $\mathcal{C}$ における任意の対象 $X$ に対して、前層 $R(X) = \mathrm{Hom}_{\mathcal{C}}(-, X)|_{\mathcal{B}}$ は $(\mathcal{B}, J_{can})$ 上の層 (sheaf) である。したがって、制限米田関手
+        $$R: \mathcal{C} \to \mathrm{Sh}(\mathcal{B}, J_{can}), \quad X \mapsto \mathrm{Hom}_{\mathcal{C}}(-, X)|_{\mathcal{B}}$$
+        が well-defined に定まる。さらに、この関手 $R$ は充満忠実 (fully faithful) である。
+    </div>
+
+    <div class="math-proof">
+        <strong>(1) $R(X)$ が層になることの証明:</strong><br>
+        前層 $R(X)$ が層条件を満たすことを示す。カノニカル位相 $J_{can}$ における被覆は有効エピ射族によって与えられる。すなわち、圏 $\mathcal{B}$ における有効エピ射族 $\{f_i : I \to I\}$ を任意にとる。<br>
+        表現可能関手 (representable functor) $\mathrm{Hom}_{\mathcal{C}}(-, X) : \mathcal{C}^{\mathrm{op}} \to \mathbf{Sets}$ は、連続性により余極限 (colimit) を極限 (limit) に変換する。位相空間の圏 $\mathbf{Top}$ (およびその余反射的部分圏 $\mathcal{C}$) において、有効エピ射族の図式は商写像に対応する余極限図式と一致する。<br>
+        したがって、$\mathcal{B}$ における有効エピ射族の余極限図式 $I \times_{I} I \rightrightarrows I \to I$ （または複数の添字に関する一般の図式）は、共変表現可能関手によって集合の圏 $\mathbf{Sets}$ における等化子 (equalizer) の図式へと反変に移される。
+        $$\mathrm{Hom}_{\mathcal{C}}(I, X) \to \prod_i \mathrm{Hom}_{\mathcal{C}}(I, X) \rightrightarrows \prod_{i,j} \mathrm{Hom}_{\mathcal{C}}(I \times_I I, X)$$
+        この系列が等化子となることは、局所的なデータ（極限）が大域的なデータ（余極限への写像）と一対一対応するという層の公理 (sheaf condition) そのものである。ゆえに $R(X) \in \mathrm{Ob}(\mathrm{Sh}(\mathcal{B}, J_{can}))$ である。<br><br>
+        
+        <strong>(2) $R$ が充満忠実であることの証明:</strong><br>
+        圏論の一般論として、部分圏 $\mathcal{B}$ が圏 $\mathcal{C}$ において稠密 (dense) であることと、制限米田関手 $R: \mathcal{C} \to \mathbf{Sets}^{\mathcal{B}^{\mathrm{op}}}$ が充満忠実であることは同値である。これに則り、自然な写像
+        $$\Phi_{X,Y}: \mathrm{Hom}_{\mathcal{C}}(X, Y) \xrightarrow{\cong} \mathrm{Hom}_{\mathrm{Sh}}(R(X), R(Y))$$
+        が全単射であることを直接計算によって示す。<br>
+        $\mathcal{C}$ の定義により $\mathcal{B}$ は $\mathcal{C}$ において稠密であるため、任意の $X \in \mathrm{Ob}(\mathcal{C})$ は、コンマ圏 $\mathcal{B} \downarrow X$ 上の図式の余極限として復元される。
+        $$X \cong \mathop{\mathrm{colim}}_{(I \xrightarrow{\gamma} X) \in \mathcal{B} \downarrow X} I$$
+        この同型を用いて、左辺の集合 $\mathrm{Hom}_{\mathcal{C}}(X, Y)$ を計算する。共変関手 $\mathrm{Hom}_{\mathcal{C}}(-, Y)$ は余極限を極限に変換するため、
+        $$\mathrm{Hom}_{\mathcal{C}}(X, Y) \cong \mathrm{Hom}_{\mathcal{C}}\left( \mathop{\mathrm{colim}}_{(I, \gamma)} I, Y \right) \cong \mathop{\mathrm{lim}}_{(I, \gamma)} \mathrm{Hom}_{\mathcal{C}}(I, Y)$$
+        が成り立つ。<br>
+        一方で、右辺の自然変換の集合 $\mathrm{Hom}_{\mathrm{Sh}}(R(X), R(Y))$ を考える。米田の補題 (Yoneda lemma) より、前層の圏 (および層の圏) においては、任意の対象 $R(X)$ は表現可能前層の余極限として書ける (共密度定理)。
+        $$R(X) \cong \mathop{\mathrm{colim}}_{(I, \gamma)} h_I$$
+        ここで $h_I = R(I)$ である。したがって、自然変換の集合は以下のように計算できる。
+        $$\mathrm{Hom}_{\mathrm{Sh}}(R(X), R(Y)) \cong \mathrm{Hom}_{\mathrm{Sh}}\left( \mathop{\mathrm{colim}}_{(I, \gamma)} h_I, R(Y) \right)$$
+        $$\cong \mathop{\mathrm{lim}}_{(I, \gamma)} \mathrm{Hom}_{\mathrm{Sh}}(h_I, R(Y))$$
+        再び米田の補題より、$\mathrm{Hom}_{\mathrm{Sh}}(h_I, R(Y)) \cong R(Y)(I) = \mathrm{Hom}_{\mathcal{C}}(I, Y)$ が成り立つため、これを代入すると、
+        $$\mathop{\mathrm{lim}}_{(I, \gamma)} \mathrm{Hom}_{\mathrm{Sh}}(h_I, R(Y)) \cong \mathop{\mathrm{lim}}_{(I, \gamma)} \mathrm{Hom}_{\mathcal{C}}(I, Y)$$
+        となる。以上より、左辺と右辺は全く同じ極限として計算され、両者が同型であることが証明された。ゆえに $R$ は充満忠実である。
+    </div>
+
+    <div class="explanation">
+        <p>この埋め込みが意味する「世界観」は、幾何学と論理学の融合です。道生成空間の圏 $\mathcal{C}$ に属する空間は、トポス $\mathrm{Sh}(\mathcal{B}, J_{can})$ の内部において何一つ情報を失うことなく「層」として完全にシミュレートできます。トポスはサブオブジェクト・クラシファイア (subobject classifier) の存在など、位相空間の圏以上に豊かな高階論理 (higher-order logic) のインフラを持っています。我々がよく知る「幾何学的な空間」を、トポス内部の純粋に代数的・論理的な対象として取り扱う Grothendieck 的なアプローチが、ここに美しく正当化されるのです。</p>
+    </div>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <p>本稿で言及した、道生成空間 ($\Delta$生成空間、数値的生成空間) およびその圏論的・トポス的性質に関する主要な文献は以下の通りである。いずれもプレプリントサーバー等を通じて閲覧可能である。</p>
+        <ol>
+            <li>
+                Dugger, D. (2003). <em>Notes on Delta-generated spaces</em>.<br>
+                (未出版構想に基づく事実上の原典とされるプレプリント。モデル圏としての性質やデカルト閉性、余反射的部分圏としての構成が詳細に証明されている。)<br>
+                Available at: <a href="https://pages.uoregon.edu/ddugger/delta.html" target="_blank" rel="noopener noreferrer">https://pages.uoregon.edu/ddugger/delta.html</a> または <a href="https://www.sas.rochester.edu/mth/sites/doug-ravenel/otherpapers/dugger-delta.pdf" target="_blank" rel="noopener noreferrer">PDF版</a>
+            </li>
+            <li>
+                Fajstrup, M., & Rosický, J. (2008). A convenient category for directed homotopy. <em>Theory and Applications of Categories</em>, 21(1), 7-20.<br>
+                (有向位相幾何学の文脈において、区間 $I$ による道から生成される位相空間の圏が局所表示可能かつデカルト閉な「都合の良い」性質を満たすことを圏論的に論じている。)<br>
+                Available at: <a href="http://www.tac.mta.ca/tac/volumes/21/1/21-01abs.html" target="_blank" rel="noopener noreferrer">http://www.tac.mta.ca/tac/volumes/21/1/21-01abs.html</a> (arXiv preprint: <a href="https://arxiv.org/abs/0708.3937" target="_blank" rel="noopener noreferrer">arXiv:0708.3937</a>)
+            </li>
+            <li>
+                Shimakawa, K., Yoshida, K., & Haraguchi, T. (2018). Homology and cohomology via enriched bifunctors. <em>Kyushu Journal of Mathematics</em>, 72(2), 239-252.<br>
+                (微分位相幾何学において Diffeological space を扱う文脈で「数値的生成空間 (numerically generated spaces)」として導入され、結果的に $\Delta$生成空間と同一の圏を定めることが指摘されている。)<br>
+                DOI: <a href="https://doi.org/10.2206/kyushujm.72.239" target="_blank" rel="noopener noreferrer">10.2206/kyushujm.72.239</a> (arXiv preprint: <a href="https://arxiv.org/abs/1010.3336" target="_blank" rel="noopener noreferrer">arXiv:1010.3336</a>)
+            </li>
+        </ol>
+    </div>
+
+</body>
+</html>

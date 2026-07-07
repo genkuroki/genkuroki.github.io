@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンパクト生成空間に関する諸性質と反例のまとめ</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        h1 { font-size: 1.8em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; border-bottom: 1px solid #bdc3c7; }
+        
+        .definition, .theorem, .proof, .example, .remark {
+            background-color: #ffffff;
+            border-left: 5px solid;
+            padding: 15px 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-radius: 3px;
+        }
+        .definition { border-color: #27ae60; }
+        .theorem { border-color: #e74c3c; }
+        .proof { border-color: #7f8c8d; background-color: #f9f9f9; }
+        .example { border-color: #f39c12; }
+        .remark { border-color: #8e44ad; }
+        
+        .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .definition .label { color: #27ae60; }
+        .theorem .label { color: #e74c3c; }
+        .proof .label { color: #7f8c8d; }
+        .example .label { color: #f39c12; }
+        .remark .label { color: #8e44ad; }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .bibliography {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 50px;
+        }
+        .bibliography ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .bibliography li {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+    <h1>コンパクト生成空間に関する諸性質と反例のまとめ</h1>
+
+    <div class="remark">
+        <span class="label">はじめに</span>
+        本稿では、これまでのチャットで議論された「コンパクト生成空間 (compactly generated space)」に関する数学的性質を、自己完結的 (self-contained) かつ厳密な形で網羅的にまとめます。直観的な理解を助けるための解説を交えつつ、各命題に対しては一切の省略を行わずに完全な証明を与えます。位相空間論や代数的位相幾何学において、空間の圏をいかに振る舞いの良いものに整えるかという視点で非常に重要な概念です。
+    </div>
+
+    <h2>1. 基本概念の定義</h2>
+
+    <p>まずは本稿を通して用いる基本概念を厳密に定義します。以降の数学的な命題や証明は「だ・である調」で記述します。</p>
+
+    <div class="definition">
+        <span class="label">定義 1.1 (コンパクト生成空間 / compactly generated space)</span>
+        位相空間 $X$ が<strong>コンパクト生成 (compactly generated)</strong> であるとは、$X$ の任意の部分集合 $A$ に対して以下の条件が同値となることである。
+        <ol>
+            <li>$A$ は $X$ の閉集合である。</li>
+            <li>任意のコンパクト Hausdorff 空間 $K$ および任意の連続写像 $f \colon K \to X$ に対して、逆像 $f^{-1}(A)$ は $K$ の閉集合である。</li>
+        </ol>
+        コンパクト生成空間はしばしば <strong>k-空間 (k-space)</strong> とも呼ばれる。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 1.2 (列型空間 / sequential space)</span>
+        位相空間 $X$ が<strong>列型空間 (sequential space)</strong> であるとは、$X$ の任意の部分集合 $A$ に対して以下の条件が同値となることである。
+        <ol>
+            <li>$A$ は $X$ の閉集合である。</li>
+            <li>$A$ 内の任意の収束点列の極限点は、必ず $A$ に含まれる（すなわち $A$ は点列閉集合である）。</li>
+        </ol>
+    </div>
+
+    <h2>2. 有限位相空間とコンパクト生成性</h2>
+
+    <p>最初のテーマは「有限空間」とコンパクト生成性の関係です。位相の構造が有限で完結している場合、空間は常に非常に良い性質を持ちます。</p>
+
+    <div class="theorem">
+        <span class="label">定理 2.1</span>
+        任意の有限位相空間はコンパクト生成空間である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $X$ を任意の有限位相空間とする。$X$ がコンパクト生成であることを示すためには、$X$ の任意の部分集合 $A \subset X$ が閉集合でないと仮定したとき、あるコンパクト Hausdorff 空間 $K$ と連続写像 $f \colon K \to X$ が存在して、$f^{-1}(A)$ が $K$ の閉集合にならないことを示せば十分である。
+
+        $A$ は閉集合ではないため、閉包 $\overline{A}$ に属するが $A$ には属さない点 $x \in X$ が存在する。すなわち、
+        $$x \in \overline{A} \smallsetminus A$$
+        である。ここで、部分集合 $A$ は有限集合であるから、$A = \bigcup_{a \in A} \{a\}$ と表せる。位相空間の性質より、有限個の集合の和集合の閉包は各集合の閉包の和集合に等しいため、
+        $$\overline{A} = \bigcup_{a \in A} \overline{\{a\}}$$
+        が成り立つ。$x \in \overline{A}$ であるから、ある $a \in A$ が存在して $x \in \overline{\{a\}}$ となる。この関係は、「$X$ において $x$ を含む任意の開集合は必ず $a$ も含む」ということを意味する。
+
+        次に、テスト空間として $K = \mathbb{N} \cup \{\infty\}$ を考える。ここで $\mathbb{N}$ には離散位相を与え、$K$ はその 1点コンパクト化とする。$K$ はコンパクト Hausdorff 空間である。$K$ における $\infty$ の基本近傍系は、$\mathbb{N}$ の有限部分集合を除外した集合からなる。
+
+        写像 $f \colon K \to X$ を次のように定義する：
+        $$
+        f(y) = 
+        \begin{cases} 
+        a & (y \in \mathbb{N}) \\
+        x & (y = \infty) 
+        \end{cases}
+        $$
+        
+        この写像 $f$ が連続であることを確認する。$X$ の任意の開集合 $U$ について逆像 $f^{-1}(U)$ を考える。
+        <ul>
+            <li>$x \in U$ かつ $a \in U$ の場合： $f^{-1}(U) = K$ であり、$K$ の開集合である。</li>
+            <li>$x \notin U$ かつ $a \in U$ の場合： $f^{-1}(U) = \mathbb{N}$ であり、$\mathbb{N}$ は $K$ において開集合であるため問題ない。</li>
+            <li>$x \in U$ かつ $a \notin U$ の場合： 前述の通り、$x \in \overline{\{a\}}$ であるため $x$ を含む開集合 $U$ は必ず $a$ を含む。したがって、この場合は存在しない。</li>
+            <li>$x \notin U$ かつ $a \notin U$ の場合： $f^{-1}(U) = \varnothing$ であり、$K$ の開集合である。</li>
+        </ul>
+        したがって $f$ は連続写像である。
+
+        最後に $f^{-1}(A)$ を計算する。$a \in A$ であり、$x \notin A$ であるから、
+        $$f^{-1}(A) = \mathbb{N}$$
+        となる。テスト空間 $K$ において、$\mathbb{N}$ は無限遠点 $\infty$ を含まない稠密な真部分集合であるため、閉集合ではない。
+        よって、部分集合 $A$ が閉集合でないことを $K$ からの連続写像によって検知できた。ゆえに $X$ はコンパクト生成空間である。$\blacksquare$
+    </div>
+
+    <h2>3. 部分空間の非遺伝性</h2>
+
+    <p>位相空間の性質（例えば Hausdorff 性や第2可算公理など）の多くは部分空間に遺伝しますが、コンパクト生成性はそのような素直な性質を持っていません。</p>
+
+    <div class="theorem">
+        <span class="label">定理 3.1</span>
+        コンパクト生成空間の任意の部分空間が常にコンパクト生成空間になるとは限らない。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明（反例の構成）</span>
+        非可算集合 $J$ を添え字集合とする。各 $j \in J$ に対して、実数直線 $\mathbb{R}$ への埋め込みを考える。より大きな空間として、各成分をコンパクトな閉区間の拡張である $[-\infty, \infty]$ とした Tychonoff 立方体 $K = [-\infty, \infty]^J$ を考える。
+        
+        Tychonoff の定理により、任意のコンパクト空間の直積はコンパクトであるから、$K$ はコンパクト Hausdorff 空間である。コンパクト Hausdorff 空間は常にコンパクト生成空間であるため、$K$ はコンパクト生成空間である。
+
+        次に、$K$ の部分空間として $X = \mathbb{R}^J$ を考える（自然な包含写像によって $X \subset K$ とみなす）。$X$ は完全正則空間 (completely regular space) であるが、非可算直積空間 $\mathbb{R}^J$ は第1可算公理を満たさず、さらにコンパクト生成空間（k-空間）にもならないことが知られている（詳細は Engelking (1989) 等を参照）。
+
+        したがって、$K$ はコンパクト生成空間であるが、その部分空間 $X$ はコンパクト生成空間ではない。ゆえに、コンパクト生成空間の部分空間は常にコンパクト生成空間になるとは限らない。$\blacksquare$
+    </div>
+
+    <div class="remark">
+        <span class="label">注意</span>
+        任意の部分空間では性質が壊れますが、<strong>閉部分空間 (closed subspace)</strong> に限ればコンパクト生成性は保たれます。閉集合の中に含まれるコンパクト集合は、元の空間から見ても素直に振る舞うからです。反例の $\mathbb{R}^J$ は $K$ の中において閉集合ではありません。
+    </div>
+
+    <h2>4. 余極限（商空間と直和）の保存性</h2>
+
+    <p>コンパクト生成空間の圏が代数的位相幾何学において「便利な圏 (convenient category)」として標準的に用いられる最大の理由が、以下の定理に示す通り<strong>商空間や直和をとる操作（余極限）に対して完全に閉じている</strong>という事実にあります。</p>
+
+    <div class="theorem">
+        <span class="label">定理 4.1（商空間）</span>
+        コンパクト生成空間の任意の商空間はコンパクト生成空間である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $X$ をコンパクト生成空間とし、$q \colon X \to Y$ を全射の商写像とする（すなわち、$Y$ は $X$ の商空間である）。$Y$ がコンパクト生成空間であることを示す。
+
+        任意の部分集合 $A \subset Y$ をとり、任意のコンパクト Hausdorff 空間 $K$ と任意の連続写像 $g \colon K \to Y$ に対して、$g^{-1}(A)$ が $K$ の閉集合であると仮定する。この仮定のもとで、$A$ が $Y$ の閉集合であることを示せばよい。
+
+        商位相の定義により、$A$ が $Y$ で閉集合であることと、$q^{-1}(A)$ が $X$ で閉集合であることは同値である。したがって、$q^{-1}(A)$ が $X$ の閉集合であることを示す。
+
+        $X$ はコンパクト生成空間であるため、$q^{-1}(A)$ が閉集合であることを判定するには任意のテスト空間を用いればよい。任意のコンパクト Hausdorff 空間 $K'$ と、任意の連続写像 $f \colon K' \to X$ をとる。このとき、$f^{-1}(q^{-1}(A))$ が $K'$ の閉集合になるかを確認する。
+
+        $f$ も $q$ も連続写像であるため、その合成写像 $q \circ f \colon K' \to Y$ も連続写像である。仮定により、$Y$ への任意のコンパクト Hausdorff 空間からの連続写像による $A$ の逆像は閉集合になるため、
+        $$(q \circ f)^{-1}(A)$$
+        は $K'$ の閉集合である。ここで、逆像の性質から
+        $$(q \circ f)^{-1}(A) = f^{-1}(q^{-1}(A))$$
+        である。ゆえに $f^{-1}(q^{-1}(A))$ は $K'$ の閉集合である。
+
+        これが任意の $K'$ と連続写像 $f \colon K' \to X$ について成り立つため、$X$ がコンパクト生成空間であることの定義から、$q^{-1}(A)$ は $X$ の閉集合である。商位相の定義より、$A$ は $Y$ の閉集合である。ゆえに $Y$ はコンパクト生成空間である。$\blacksquare$
+    </div>
+
+    <div class="theorem">
+        <span class="label">定理 4.2（直和）</span>
+        コンパクト生成空間の任意の族の直和（非交和）は、コンパクト生成空間である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $\{X_\lambda\}_{\lambda \in \Lambda}$ をコンパクト生成空間の任意の族とし、その直和空間を $X = \coprod_{\lambda \in \Lambda} X_\lambda$ とする。$X$ がコンパクト生成空間であることを示す。
+
+        $A \subset X$ を任意の部分集合とする。仮定として、任意のコンパクト Hausdorff 空間 $K$ と任意の連続写像 $g \colon K \to X$ に対して $g^{-1}(A)$ が $K$ の閉集合になるとする。このとき $A$ が $X$ の閉集合であることを導く。
+
+        直和位相の定義により、$A$ が $X$ の閉集合であることと、すべての $\lambda \in \Lambda$ について $A \cap X_\lambda$ が $X_\lambda$ の閉集合であることは同値である。したがって、任意の $\lambda \in \Lambda$ を固定し、$A \cap X_\lambda$ が $X_\lambda$ で閉集合であることを示す。
+
+        成分 $X_\lambda$ はコンパクト生成空間であるから、任意のコンパクト Hausdorff 空間 $K'$ と連続写像 $f \colon K' \to X_\lambda$ をとり、$f^{-1}(A \cap X_\lambda)$ が $K'$ の閉集合になることを示せばよい。
+
+        $\iota_\lambda \colon X_\lambda \to X$ を自然な包含写像とする。直和の定義により $\iota_\lambda$ は連続写像である。したがって、合成写像
+        $\iota_\lambda \circ f \colon K' \to X$
+        は連続写像である。仮定より、テスト空間 $K'$ から $X$ への連続写像による $A$ の逆像は閉集合となるため、
+        $$(\iota_\lambda \circ f)^{-1}(A)$$
+        は $K'$ の閉集合である。ここで逆像を計算すると、
+        $$(\iota_\lambda \circ f)^{-1}(A) = f^{-1}(\iota_\lambda^{-1}(A)) = f^{-1}(A \cap X_\lambda)$$
+        となる。したがって $f^{-1}(A \cap X_\lambda)$ は $K'$ の閉集合である。
+
+        $X_\lambda$ がコンパクト生成空間であることから $A \cap X_\lambda$ は $X_\lambda$ の閉集合である。これがすべての $\lambda \in \Lambda$ について成立するため、直和位相の定義から $A$ は $X$ の閉集合である。ゆえに $X$ はコンパクト生成空間である。$\blacksquare$
+    </div>
+
+    <h2>5. 直積位相とコンパクト生成性の崩壊</h2>
+
+    <p>位相空間の直積 (product) という操作は、実はコンパクト生成性との相性があまり良くありません。極めて行儀の良い空間同士を掛け合わせても、局所コンパクト性 (local compactness) の欠如によって空間が複雑に絡み合い、コンパクト生成性が崩れてしまうことがあります。</p>
+
+    <div class="theorem">
+        <span class="label">定理 5.1</span>
+        コンパクト生成空間同士の直積（通常の直積位相を入れたもの）は、必ずしもコンパクト生成空間にならない。
+    </div>
+
+    <div class="theorem">
+        <span class="label">定理 5.2（列型空間との直積）</span>
+        列型空間 (sequential space) とコンパクト生成空間の直積であっても、また、列型空間同士の直積であっても、必ずしもコンパクト生成空間になるとは限らない。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明（定理 5.1, 5.2 共通の反例）</span>
+        位相空間のクラスとして、第1可算空間 $\subset$ 列型空間 $\subset$ コンパクト生成空間 という包含関係があることに注意する。したがって、列型空間同士の直積がコンパクト生成空間にならない例を一つ構成すれば、双方の定理の証明となる。
+
+        Michael (1968) による有名な反例を提示する。
+        <ul>
+            <li>$X = \mathbb{R} / \mathbb{Z}$ を、実数直線 $\mathbb{R}$ のすべての整数 $\mathbb{Z}$ を 1点に同一視した商空間とする。これは可算無限個の円周を1点で貼り合わせた無限ブーケであり、CW複体である。CW複体は第1可算空間の商空間であるため列型空間であり、したがってコンパクト生成空間である。しかし、同一視された点（原点）において局所コンパクトではない。</li>
+            <li>$Y = \mathbb{Q}$ を、通常の距離位相を入れた有理数体とする。距離空間は第1可算公理を満たすため列型空間であり、したがってコンパクト生成空間である。$\mathbb{Q}$ はいかなる点においても局所コンパクトではない。</li>
+        </ul>
+
+        これらの直積空間 $X \times Y$ に通常の直積位相を与える。$X, Y$ はいずれも局所コンパクトではないため、それぞれの局所的に複雑な非コンパクト構造が直積によって掛け合わされる。その結果、$X \times Y$ の部分集合の中には、「任意のコンパクト集合（あるいは収束点列）との共通部分をとると閉集合に見えるが、直積位相全体から見ると閉集合ではない」という特異な部分集合が存在してしまうことが知られている（具体的な閉集合の構成の詳細は Michael (1968) を参照）。
+
+        したがって、列型空間（かつコンパクト生成空間）である $X$ と $Y$ を用いても、$X \times Y$ はコンパクト生成空間にはならない。$\blacksquare$
+    </div>
+
+    <div class="remark">
+        <span class="label">注意（k-化について）</span>
+        直積をとるたびに性質が壊れることは、代数トポロジーの理論構築において非常に不便です。そのため、通常の直積位相 $X \times Y$ の代わりに、すべてのコンパクト集合からの連続写像による逆像が閉集合になるような集合を<strong>「強制的に閉集合とみなして位相を再定義する（細かくする）」</strong>という操作が行われます。これを空間の <strong>k-化 (k-ification)</strong> と呼び、得られた直積を <strong>k-直積 (k-product)</strong> $X \times_k Y$ と表します。
+        この k-直積を用いることで、コンパクト生成空間の圏はデカルト閉圏 (Cartesian closed category) となり、マッピングスペースと美しい随伴関係（指数法則）を持つようになります (Steenrod, 1967)。
+    </div>
+
+    <h2>6. Hausdorff でないコンパクト空間でコンパクト生成でないものの例</h2>
+
+    <p>すべてのコンパクト空間がコンパクト生成空間になるわけではありません。「テスト空間としてコンパクト Hausdorff 空間を用いる」という定義（定義 1.1）を採用した場合、テスト空間からの連続写像が空間の位相を十分に検知できないような、非常に特異な構造を持つコンパクト空間が存在します。</p>
+
+    <div class="theorem">
+        <span class="label">定理 6.1</span>
+        コンパクト空間であり、Hausdorff でなく、かつコンパクト生成空間でもないような位相空間が存在する。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        有理数体 $\mathbb{Q}$ に通常の距離位相を与えた空間に対し、1点を追加して Alexandroff の 1点コンパクト化を施した空間を $X = \mathbb{Q}^* = \mathbb{Q} \cup \{\infty\}$ とする。
+        $X$ の開集合は、$\mathbb{Q}$ の開集合、および $V \cup \{\infty\}$ （ただし $\mathbb{Q} \smallsetminus V$ は $\mathbb{Q}$ のコンパクト部分集合）のいずれかの形である。
+        
+        $X$ はコンパクト空間である。また、$\mathbb{Q}$ が局所コンパクト (locally compact) ではないため、$X$ において $\infty$ と任意の有理数 $x \in \mathbb{Q}$ を交わらない開集合で分離することができず、$X$ は Hausdorff 空間ではない。
+
+        さらに、空間 $Z = X \times X$ に通常の直積位相を与えたものを考える。
+        Tychonoff の定理より、$Z$ はコンパクト空間である。また、$X$ が Hausdorff でないため、その直積である $Z$ も Hausdorff 空間ではない。この空間 $Z$ がコンパクト生成空間<strong>ではない</strong>ことを証明する。
+
+        はじめに、空間 $X$ において、すべてのコンパクト部分集合が閉集合であること（すなわち $X$ が <strong>KC空間</strong> であること）を示す。
+        $C \subset X$ を任意のコンパクト部分集合とする。もし $\infty \notin C$ であれば、$C$ は $\mathbb{Q}$ のコンパクト部分集合であるから、Hausdorff 空間 $\mathbb{Q}$ において閉集合であり、したがって $X$ でも閉集合である。
+        もし $\infty \in C$ であれば、$C \cap \mathbb{Q}$ が $\mathbb{Q}$ の閉集合であることを示せば十分である（それにより $C$ の補集合が $\mathbb{Q}$ の開集合となり、$C$ は $X$ の閉集合となる）。$q \in \mathbb{Q} \smallsetminus C$ とし、$q$ が $C \cap \mathbb{Q}$ の極限点であると仮定する。このとき $C$ 内の点列で $q$ に収束するものが存在する。空間 $X$ において点列が $q \in \mathbb{Q}$ に収束する条件は $\mathbb{Q}$ 上の通常の収束と同じであるため、この点列の $X$ における極限点は $q$ 唯一つである。しかし $C$ はコンパクトであるから極限点 $q$ を含まねばならず、$q \notin C$ に矛盾する。したがって $C \cap \mathbb{Q}$ は $\mathbb{Q}$ で閉集合であり、$C$ は $X$ で閉集合である。よって $X$ は KC空間 である。
+
+        次に、$Z = X \times X$ における対角線集合 $\Delta = \{(x, x) \mid x \in X\}$ を考える。
+        $\Delta$ は $X$ と同相であるため、コンパクト部分集合である。しかし $X$ が Hausdorff 空間ではないため、$\Delta$ は $Z$ の閉集合ではない。すなわち、$Z$ には「閉集合ではないコンパクト部分集合」が存在するため、$Z$ は KC空間 ではない。
+
+        最後に、背理法を用いて $Z$ がコンパクト生成でないことを示す。
+        $Z$ がコンパクト生成空間であると仮定する。任意のコンパクト Hausdorff 空間 $K$ と任意の連続写像 $f \colon K \to Z$ をとる。$f$ の成分を $f = (f_1, f_2)$ とする（$f_i \colon K \to X$ は連続）。
+        $Y = f_1(K) \cup f_2(K)$ とおくと、$Y$ はコンパクト空間 $X$ のコンパクト部分集合の和集合であるから、$X$ のコンパクト部分集合である。前段で証明した通り $X$ は KC空間 であるため、$Y$ は $X$ の閉集合である。
+        任意のコンパクト Hausdorff 空間からの連続写像による像が常に閉集合になるような空間は <strong>弱 Hausdorff (weak Hausdorff) 空間</strong> と呼ばれる。したがって、$X$ は弱 Hausdorff 空間である。
+        弱 Hausdorff 空間同士の有限直積は再び弱 Hausdorff 空間となるため、$Z = X \times X$ も弱 Hausdorff 空間である。
+        
+        ここで、位相空間論における標準的な定理として「コンパクト生成空間かつ弱 Hausdorff 空間である空間は、必ず KC空間 になる」という事実がある（証明の概略：任意のコンパクト集合 $A \subset Z$ に対し、テスト写像 $f \colon K \to Z$ による引き戻しを考える。弱 Hausdorff 性より $f(K)$ は閉集合であり、$A \cap f(K)$ はコンパクト集合であるため $f(K)$ 内で閉集合となる。これが任意の $K, f$ について成立し、コンパクト生成性から $A$ 全体も閉集合となるため）。
+
+        しかし、前段で確認した通り $Z$ は KC空間 ではない（対角線 $\Delta$ が閉集合でないため）。これは $Z$ がコンパクト生成空間であるという仮定に矛盾する。
+        ゆえに、$Z = \mathbb{Q}^* \times \mathbb{Q}^*$ はコンパクト空間であり、Hausdorff ではなく、かつコンパクト生成空間でもない。$\blacksquare$
+    </div>
+    
+    <div class="proof-section">
+  <h2>7. 列型空間がコンパクト生成であることの証明</h3>
+  <p>位相空間 $X$ を列型空間（sequential space）とします。このとき、$X$ がコンパクト生成空間（k-space）であることを示します。</p>
+  
+  <div class="proof" style="padding: 15px; border-left: 3px solid #ccc; background-color: #f9f9f9;">
+    <p><strong>証明:</strong></p>
+    <p>コンパクト生成空間の定義より、$X$ の任意の部分集合 $A$ について、「すべてのコンパクト部分集合 $K \subseteq X$ に対して $A \cap K$ が $K$ の閉集合である」ならば「$A$ は $X$ の閉集合である」ことを示せば十分である。</p>
+    
+    <p>そこで、任意のコンパクト部分集合 $K$ に対して $A \cap K$ が $K$ の閉集合であると仮定する。$X$ は列型空間であるため、$A$ が $X$ の閉集合であることを示すには、$A$ が<strong>点列閉集合</strong>であること（すなわち、$A$ 内の収束する点列の極限が必ず $A$ に含まれること）を示せばよい。</p>
+    
+    <p>点列 $(x_n)_{n=1}^{\infty}$ を $A$ 内の点列とし、$X$ 内の点 $x$ に収束するとする。</p>
+    
+    <p>このとき、集合 $K_0 = \{x_n \mid n \in \mathbb{N}\} \cup \{x\}$ を考える。収束する点列とその極限点からなる集合はコンパクトであるため、$K_0$ は $X$ のコンパクト部分集合となる。</p>
+    
+    <p>仮定より、$A \cap K_0$ は $K_0$ において閉集合である。点列 $(x_n)$ はすべて $A$ の要素であり、当然 $K_0$ の要素でもあるため、すべての $n$ について $x_n \in A \cap K_0$ となる。</p>
+    
+    <p>点列 $(x_n)$ は $x$ に収束し、$A \cap K_0$ は $K_0$ 内の閉集合であるため、その極限点 $x$ も $A \cap K_0$ に含まれなければならない。したがって、$x \in A$ である。</p>
+    
+    <p>以上より、$A$ は点列閉集合である。$X$ が列型空間であるという前提から、点列閉集合である $A$ は $X$ における閉集合となる。よって、$X$ はコンパクト生成空間である。 $\blacksquare$</p>
+  </div>
+</div>
+
+    <div class="bibliography">
+        <span class="label" style="font-weight:bold; font-size:1.1em;">参考文献</span>
+        <ul>
+            <li>Engelking, R. (1989). <em>General Topology</em>. Heldermann Verlag. (完全正則空間、列型空間に関する標準的教科書). <a href="https://zbmath.org/?q=an:0684.54001" target="_blank" rel="noopener noreferrer">zbMATH</a></li>
+            <li>Kelley, J. L. (1975). <em>General Topology</em>. Springer-Verlag. (k-空間の基礎的な定義と性質). <a href="https://link.springer.com/book/9780387901251" target="_blank" rel="noopener noreferrer">SpringerLink</a></li>
+            <li>Michael, E. (1968). Local compactness and Cartesian products of quotient maps and k-spaces. <em>Annales de l'Institut Fourier</em>, 18(2), 281-286. ($\mathbb{R}/\mathbb{Z} \times \mathbb{Q}$ が k-空間にならないことの決定的な反例). <a href="http://www.numdam.org/item/AIF_1968__18_2_281_0/" target="_blank" rel="noopener noreferrer">Numdam</a></li>
+            <li>Steenrod, N. E. (1967). A convenient category of topological spaces. <em>Michigan Math. J.</em>, 14, 133-152. (コンパクト生成空間の圏論的性質、k-直積とマッピングスペースに関する古典的論文). <a href="https://projecteuclid.org/journals/michigan-mathematical-journal/volume-14/issue-2/A-convenient-category-of-topological-spaces/10.1307/mmj/1028999711.full" target="_blank" rel="noopener noreferrer">Project Euclid</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>
