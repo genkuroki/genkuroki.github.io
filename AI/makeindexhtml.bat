@@ -14,7 +14,7 @@ echo ^<link rel=^"stylesheet^" type=^"text/css^" href=^"../default.css^"^> >> "%
 echo ^</head^> >> "%F%"
 echo ^<body^> >> "%F%"
 echo ^<h1^>生成AIで作ったノート群^</h1^> >> "%F%"
-echo ^<p^>内容の正しさは保証されません。^</p^> >> "%F%"
+echo ^<p^>内容の正しさは保証されません。試行錯誤の途中のひどい内容のノートも結構あります。^</p^> >> "%F%"
 echo ^<ul^> >> "%F%"
 
 dir /A:-D /B /O:-N | nkf -w > list.txt
