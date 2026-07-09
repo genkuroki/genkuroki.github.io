@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圏 CompHaus におけるカノニカル位相とGrothendieck位相の完全な解説</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    macros: {
+      // マクロ展開ループを避けるため、複雑な再帰的マクロは定義しない
+    },
+    packages: {'[+]': ['noerrors']}
+  },
+  options: {
+    enableMenu: false
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    line-height: 1.6;
+    margin: 40px auto;
+    max-width: 900px;
+    padding: 0 20px;
+    color: #333;
+  }
+  h1, h2, h3, h4 {
+    color: #0056b3;
+  }
+  h1 { border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
+  h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 2em; }
+  .definition, .theorem, .proof, .example {
+    margin: 1em 0;
+    padding: 1em;
+    border-radius: 5px;
+  }
+  .definition { background-color: #e9f7ef; border-left: 5px solid #28a745; }
+  .theorem { background-color: #e3f2fd; border-left: 5px solid #007bff; }
+  .proof { background-color: #fdfefe; border-left: 5px solid #6c757d; font-style: normal; }
+  .example { background-color: #fff3cd; border-left: 5px solid #ffc107; }
+  .remark { background-color: #f8f9fa; border-left: 5px solid #17a2b8; padding: 1em; margin: 1em 0; }
+  .title { font-weight: bold; margin-bottom: 0.5em; }
+  a { color: #007bff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ul, ol { margin-left: 20px; }
+</style>
+</head>
+<body>
+
+<h1>圏 CompHaus におけるカノニカル位相とGrothendieck位相の完全な解説</h1>
+
+<p>本稿では、一般の圏におけるGrothendieck位相とカノニカル位相の定義を出発点とし、コンパクトHausdorff空間の圏 $\mathbf{CompHaus}$ 上のカノニカル位相が「有限結合全射位相」に一致することを、証明の細部を厳密に詰めて解説する。既存の解説の簡略化を排し、関数解析を用いたアプローチと、純粋な位相空間論・圏論を用いたアプローチの両方からフルな証明を書き下す。</p>
+
+<h2>1. 基本概念の定義</h2>
+
+<div class="definition">
+<div class="title">定義 1.1 (ふるい)</div>
+<p>圏 $\mathcal{B}$ における対象 $X \in \operatorname{Ob}(\mathcal{B})$ 上の<strong>ふるい (sieve)</strong> $S$ とは、$X$ を余域 (codomain) とする射の集合であって、右からの合成について閉じているものをいう。すなわち、$f \in S$ かつ $\operatorname{codom}(g) = \operatorname{dom}(f)$ を満たす任意の射 $g$ に対して、$f \circ g \in S$ が成り立つ。</p>
+</div>
+
+<p>ふるいは、位相空間における開被覆の概念を一般の圏へと拡張するための基礎的な道具である。ふるいを用いることで、単なる「被覆」だけでなく、被覆を細分するすべての射を束ねた巨大なイデアルとして被覆概念を扱うことができる。</p>
+
+<div class="definition">
+<div class="title">定義 1.2 (Grothendieck位相)</div>
+<p>圏 $\mathcal{B}$ 上の<strong>Grothendieck位相 (Grothendieck topology)</strong> $J$ とは、各対象 $X \in \operatorname{Ob}(\mathcal{B})$ に対して $X$ 上のふるいの集合 $J(X)$ （これを被覆ふるいと呼ぶ）を割り当てる写像であり、以下の3つの公理を満たすものである。</p>
+<ol>
+  <li><strong>極大性 (maximality)</strong>: $X$ 上の最大のふるい $t_X = \{f \in \operatorname{Mor}(\mathcal{B}) \mid \operatorname{codom}(f) = X\}$ は $J(X)$ に属する。</li>
+  <li><strong>安定性 (stability under base change)</strong>: $S \in J(X)$ であり、$h: Y \to X$ を $\mathcal{B}$ の任意の射とする。このとき、$S$ の $h$ による引き戻しふるい $h^*S = \{g \in \operatorname{Mor}(\mathcal{B}) \mid \operatorname{codom}(g) = Y, \; h \circ g \in S\}$ は $J(Y)$ に属する。</li>
+  <li><strong>推移性 (transitivity / local character)</strong>: $S \in J(X)$ とし、$R$ を $X$ 上の任意のふるいとする。すべての $h \in S$ に対して $h^*R \in J(\operatorname{dom}(h))$ が成り立つならば、$R \in J(X)$ である。</li>
+</ol>
+</div>
+
+<div class="definition">
+<div class="title">定義 1.3 (サブカノニカル位相とカノニカル位相)</div>
+<p>圏 $\mathcal{B}$ 上のGrothendieck位相 $J$ に関して、任意の対象 $Y \in \operatorname{Ob}(\mathcal{B})$ が定める表現可能前層 (representable presheaf) $h_Y = \operatorname{Hom}_{\mathcal{B}}(-, Y)$ がすべて $J$ に関する層 (sheaf) になるとき、$J$ を<strong>サブカノニカル位相 (subcanonical topology)</strong> と呼ぶ。</p>
+<p>圏 $\mathcal{B}$ 上の<strong>カノニカル位相 (canonical topology)</strong> $J_{\mathrm{can}}$ とは、$\mathcal{B}$ 上のすべてのサブカノニカル位相を包含する最大のGrothendieck位相のことである。</p>
+</div>
+
+<div class="example">
+<div class="title">例 1.4</div>
+<p>位相空間 $X$ の開集合全体が包含関係を射としてなす圏 $\mathcal{O}(X)$ を考える。この圏における標準的なGrothendieck位相は、開被覆から生成される位相である。任意の位相空間 $Y$ に対して、連続写像の層 $U \mapsto \operatorname{Hom}_{\mathbf{Top}}(U, Y)$ は層条件を満たすため、この位相はサブカノニカルである。</p>
+</div>
+
+<h2>2. 圏 CompHaus と有限結合全射位相</h2>
+
+<p>ここでは、対象がコンパクトHausdorff空間全体であり、射がそれらの間の連続写像である圏 $\mathbf{CompHaus}$ を考える。</p>
+
+<div class="definition">
+<div class="title">定義 2.1 (有限結合全射位相)</div>
+<p>圏 $\mathbf{CompHaus}$ において、対象 $X$ 上のふるい $S$ が<strong>有限結合全射位相 (finite jointly surjective topology)</strong> $J_{\mathrm{fjs}}(X)$ に属するとは、$S$ の部分集合として、有限個の射の族 $\{f_i: X_i \to X\}_{i=1}^n \subset S$ が存在し、それらが結合的に全射であること、すなわち $\bigcup_{i=1}^n f_i(X_i) = X$ が成り立つことと定義する。</p>
+</div>
+
+<p>この $J_{\mathrm{fjs}}$ が実際にGrothendieck位相の公理を満たすことを証明する。証明には、圏 $\mathbf{CompHaus}$ において引き戻し (ファイバー積) が存在し、それが再びコンパクトHausdorff空間になるという事実が不可欠である。</p>
+
+<div class="theorem">
+<div class="title">定理 2.2</div>
+<p>圏 $\mathbf{CompHaus}$ は有限極限を持つ。特に任意の射の対 $f: X \to Z$、$g: Y \to Z$ に対して引き戻しが存在する。</p>
+</div>
+<div class="proof">
+<div class="title">証明</div>
+<p>集合論的なファイバー積 $X \times_Z Y = \{(x, y) \in X \times Y \mid f(x) = g(y)\}$ を考える。Tychonoffの定理により、直積空間 $X \times Y$ はコンパクトHausdorff空間である。写像 $h: X \times Y \to Z \times Z$ を $h(x, y) = (f(x), g(y))$ と定義すると、$f, g$ の連続性より $h$ も連続である。<br>
+$Z$ はHausdorff空間であるため、対角集合 $\Delta_Z = \{(z, z) \mid z \in Z\}$ は $Z \times Z$ における閉集合である。したがって、$X \times_Z Y = h^{-1}(\Delta_Z)$ は $X \times Y$ の閉部分集合となる。コンパクト空間の閉部分集合はコンパクトであり、Hausdorff空間の部分空間はHausdorffであるため、$X \times_Z Y$ はコンパクトHausdorff空間となり、$\mathbf{CompHaus}$ の対象である。射影 $\pi_1: X \times_Z Y \to X$ と $\pi_2: X \times_Z Y \to Y$ が引き戻しの普遍性を満たすことは通常の位相空間論の議論から従う。</p>
+</div>
+
+<div class="theorem">
+<div class="title">定理 2.3</div>
+<p>$J_{\mathrm{fjs}}$ は圏 $\mathbf{CompHaus}$ 上のGrothendieck位相である。</p>
+</div>
+<div class="proof">
+<div class="title">証明</div>
+<p>ふるいの定義のみに基づく厳密な証明を行う。</p>
+<p><strong>1. 極大性:</strong><br>
+$X$ 上の最大のふるい $t_X$ を考える。恒等射 $\operatorname{id}_X: X \to X$ は $t_X$ に属する。単元からなる有限族 $\{\operatorname{id}_X\}$ を考えると、その像は $\operatorname{id}_X(X) = X$ であり全射である。よって、$t_X$ は有限結合全射な部分族を持つため、$t_X \in J_{\mathrm{fjs}}(X)$ である。</p>
+<p><strong>2. 安定性:</strong><br>
+$S \in J_{\mathrm{fjs}}(X)$ とし、$g: Y \to X$ を任意の連続写像とする。定義より、ある有限族 $\{f_i: X_i \to X\}_{i=1}^n \subset S$ が存在し、$\bigcup_{i=1}^n f_i(X_i) = X$ を満たす。<br>
+各 $i$ に対して引き戻し $P_i = X_i \times_X Y$ を構成し、射影を $\pi_{1,i}: P_i \to X_i$、$\pi_{2,i}: P_i \to Y$ とする。このとき $f_i \circ \pi_{1,i} = g \circ \pi_{2,i}$ が成り立つ。<br>
+$S$ は右イデアルであり、$f_i \in S$ であるから、$f_i \circ \pi_{1,i} \in S$ である。したがって $g \circ \pi_{2,i} \in S$ となり、引き戻しふるいの定義より $\pi_{2,i} \in g^*S$ である。これにより、有限族 $\{\pi_{2,i}: P_i \to Y\}_{i=1}^n \subset g^*S$ が得られる。<br>
+この族が結合的に全射であることを示す。任意の $y \in Y$ に対し $g(y) \in X$ である。$\{f_i\}_{i=1}^n$ の結合全射性より、ある $k \in \{1, \dots, n\}$ と $x_k \in X_k$ が存在して $f_k(x_k) = g(y)$ となる。このとき $(x_k, y) \in X_k \times_X Y = P_k$ であり、$\pi_{2,k}(x_k, y) = y$ である。よって $\bigcup_{i=1}^n \pi_{2,i}(P_i) = Y$ が成り立ち、$g^*S \in J_{\mathrm{fjs}}(Y)$ である。</p>
+<p><strong>3. 推移性:</strong><br>
+$S \in J_{\mathrm{fjs}}(X)$ とし、$R$ を $X$ 上のふるいとする。すべての $f \in S$ に対して $f^*R \in J_{\mathrm{fjs}}(\operatorname{dom}(f))$ であると仮定する。<br>
+$S \in J_{\mathrm{fjs}}(X)$ より、有限族 $\{f_i: X_i \to X\}_{i=1}^n \subset S$ が存在し、$\bigcup_{i=1}^n f_i(X_i) = X$ を満たす。<br>
+仮定より、各 $i$ について $f_i^*R \in J_{\mathrm{fjs}}(X_i)$ である。したがって、有限族 $\{g_{i,j}: Z_{i,j} \to X_i\}_{j=1}^{m_i} \subset f_i^*R$ が存在し、$\bigcup_{j=1}^{m_i} g_{i,j}(Z_{i,j}) = X_i$ を満たす。<br>
+$g_{i,j} \in f_i^*R$ の定義より、$f_i \circ g_{i,j} \in R$ である。ここで、合成射からなる族 $F = \{f_i \circ g_{i,j}: Z_{i,j} \to X \mid 1 \le i \le n, \; 1 \le j \le m_i\}$ を考える。$n$ も各 $m_i$ も有限であるため、$F$ は $R$ に含まれる有限族である。<br>
+任意の $x \in X$ をとる。$\{f_i\}$ の結合全射性より、ある $k$ と $x_k \in X_k$ が存在して $f_k(x_k) = x$ となる。さらに $\{g_{k,j}\}_j$ の結合全射性より、ある $l$ と $z_{k,l} \in Z_{k,l}$ が存在して $g_{k,l}(z_{k,l}) = x_k$ となる。ゆえに $(f_k \circ g_{k,l})(z_{k,l}) = f_k(x_k) = x$ であり、$F$ は結合的に全射である。<br>
+したがって、$R$ は有限結合全射な族 $F$ を含むため、$R \in J_{\mathrm{fjs}}(X)$ である。以上により、すべての公理が示された。</p>
+</div>
+
+<h2>3. カノニカル位相との一致の証明</h2>
+
+<p>ここからが本題である。$\mathbf{CompHaus}$ において、$J_{\mathrm{fjs}}$ がカノニカル位相 $J_{\mathrm{can}}$ に等しいこと、すなわち $J_{\mathrm{can}} = J_{\mathrm{fjs}}$ を証明する。双方向の包含関係 $J_{\mathrm{fjs}} \subset J_{\mathrm{can}}$ および $J_{\mathrm{can}} \subset J_{\mathrm{fjs}}$ を順に示す。</p>
+
+<h3>3.1. $J_{\mathrm{fjs}} \subset J_{\mathrm{can}}$ の証明</h3>
+
+<p>$J_{\mathrm{fjs}}$ がサブカノニカルであることを示すには、$J_{\mathrm{fjs}}$ に属する任意のふるいが「普遍的有効エピ (universally effective epimorphic)」であることを示せばよい。この性質は、$\mathbf{CompHaus}$ が Barr完全圏 (Barr-exact category) であるという強力な事実から自然に導かれる。</p>
+
+<div class="definition">
+<div class="title">定義 3.1 (正則圏とBarr完全圏)</div>
+<p>圏 $\mathcal{C}$ が<strong>正則圏 (regular category)</strong> であるとは、以下の条件を満たすことである。</p>
+<ol>
+  <li>$\mathcal{C}$ はすべての有限極限を持つ。</li>
+  <li>任意の射の核対 (kernel pair) は余等化子 (coequalizer) を持つ。</li>
+  <li>正則エピ射 (ある平行な射の対の余等化子として表される射) は、任意の射による引き戻しに沿って安定している。</li>
+</ol>
+<p>さらに、正則圏 $\mathcal{C}$ が<strong>Barr完全圏 (Barr-exact category)</strong> であるとは、$\mathcal{C}$ 内の任意の同値関係が有効 (effective) であること、すなわちある射の核対として実現されることをいう。</p>
+</div>
+
+<p class="remark">
+$\mathbf{Top}$ (一般の位相空間の圏) は正則圏ではない (商写像が引き戻しで保たれないため) が、$\mathbf{CompHaus}$ はコンパクト性により商写像の性質が極めて良く、正則圏かつBarr完全圏となる (例えば <a href="https://ncatlab.org/nlab/show/CompHaus" target="_blank">nLab: CompHaus</a> や Johnstone の "Stone Spaces" などを参照)。
+</p>
+
+<div class="theorem">
+<div class="title">定理 3.2</div>
+<p>$J_{\mathrm{fjs}} \subset J_{\mathrm{can}}$ である。</p>
+</div>
+<div class="proof">
+<div class="title">証明</div>
+<p>$S \in J_{\mathrm{fjs}}(X)$ とすると、有限族 $\{f_i: X_i \to X\}_{i=1}^n \subset S$ で $\bigcup_{i=1}^n f_i(X_i) = X$ なるものが存在する。<br>
+対象の有限余積 $\coprod_{i=1}^n X_i$ は有限個のコンパクトHausdorff空間の非交和であるため、再びコンパクトHausdorff空間である。射の族 $\{f_i\}$ は一意な連続写像 $p: \coprod_{i=1}^n X_i \to X$ を誘導し、仮定より $p$ は全射である。<br>
+$\mathbf{CompHaus}$ において、コンパクト空間からHausdorff空間への連続写像は閉写像である。したがって全射 $p$ は商写像 (quotient map) であり、圏論的には正則エピ射である。<br>
+$\mathbf{CompHaus}$ は Barr完全圏であるため、正則エピ射は引き戻しに沿って安定であり、かつ有効降下射 (effective descent morphism) となる。したがって、この正則エピ射 $p$ から生成されるふるい $S$ は普遍的有効エピ射であり、すべての表現可能前層を層にする。定義より $S \in J_{\mathrm{can}}(X)$ である。</p>
+</div>
+
+<h3>3.2. $J_{\mathrm{can}} \subset J_{\mathrm{fjs}}$ の証明 (解析的アプローチ)</h3>
+
+<p>カノニカル位相に属するふるいが必ず有限結合全射な族を持つことを、実数値連続関数のバナッハ空間 $C(X, \mathbb{R})$ を用いて証明する。この証明は関数解析的手法を利用する。</p>
+
+<div class="theorem">
+<div class="title">定理 3.3 (関数解析的証明)</div>
+<p>任意のサブカノニカル位相 $J'$ に対して $J' \subset J_{\mathrm{fjs}}$ である。特に $J_{\mathrm{can}} \subset J_{\mathrm{fjs}}$ である。</p>
+</div>
+<div class="proof">
+<div class="title">証明</div>
+<p>背理法で示す。あるふるい $S \in J'(X)$ が存在し、$S \notin J_{\mathrm{fjs}}(X)$ であると仮定する。すなわち、$S$ はいかなる有限結合全射な部分族も含まない。<br>
+各 $f \in S$ の像 $K_f = f(\operatorname{dom}(f))$ は $X$ のコンパクト部分集合であり、したがって閉集合である。仮定より、任意の有限部分集合 $F \subset S$ に対して $K_F = \bigcup_{f \in F} K_f \neq X$ である。<br>
+$J'$ はサブカノニカルであるため、コンパクトHausdorff空間 $Z = [-1, 1]$ に対する表現可能前層 $h_Z = \operatorname{Hom}_{\mathbf{CompHaus}}(-, Z)$ は $J'$ に関する層である。これにより、バナッハ空間 $C(X) = C(X, \mathbb{R})$ から射影極限への自然な線形同型が存在する：
+$$T: C(X) \xrightarrow{\sim} \lim_{f \in S} C(K_f)$$
+$C(X)$ は一様ノルム $\|g\|_\infty = \sup_{x \in X} |g(x)|$ を持つバナッハ空間であり、$\lim_{f \in S} C(K_f)$ は射影極限位相 (局所凸位相) を持つ。同型写像 $T$ の逆写像 $T^{-1}$ は連続線形写像でなければならない。局所凸空間の性質 (および開写像定理の帰結) から、バナッハ空間 $C(X)$ のノルムはある有限個の成分のセミノルムによって抑えられなければならない。すなわち、ある有限部分集合 $F \subset S$ と定数 $C > 0$ が存在して、すべての $g \in C(X)$ に対して
+$$\|g\|_\infty \le C \max_{f \in F} \|g|_{K_f}\|_\infty$$
+が成り立つ。<br>
+しかし、仮定より $K_F \neq X$ であるから、$X \smallsetminus K_F$ は空でない開集合である。点 $x_0 \in X \smallsetminus K_F$ を一つ選ぶ。Urysohnの補題より、コンパクトHausdorff空間 $X$ 上の連続関数 $g: X \to [0, 1]$ であって、
+$g(K_F) = \{0\}$ かつ $g(x_0) = 1$
+を満たすものが存在する。<br>
+この関数 $g$ を上記の不等式に代入する。左辺は $\|g\|_\infty \ge g(x_0) = 1$ である。一方、任意の $f \in F$ に対して $K_f \subset K_F$ であり $g$ は $K_F$ 上で $0$ であるから、$\|g|_{K_f}\|_\infty = 0$ である。ゆえに右辺は $C \cdot 0 = 0$ となる。<br>
+したがって $1 \le 0$ という矛盾を得る。よって背理法の仮定は誤りであり、$S \in J_{\mathrm{fjs}}(X)$ である。</p>
+</div>
+
+<h3>3.3. $J_{\mathrm{can}} \subset J_{\mathrm{fjs}}$ の証明 (純粋な位相・圏論的アプローチ)</h3>
+
+<p>前節の証明はバナッハ空間とノルムの性質を用いたが、$\mathbf{CompHaus}$ におけるカノニカル位相の最大性は、関数解析を一切用いず、純粋な位相空間論 (フィルター、Stone-Čechコンパクト化) と圏論の言葉だけで完全に証明できる。この方法は「位相のコヒーレントな拡大」あるいは「普遍的エピ射性の破綻」を直接突くものである。</p>
+
+<div class="theorem">
+<div class="title">定理 3.4 (純粋位相的証明)</div>
+<p>任意のサブカノニカル位相 $J'$ に対して $J' \subset J_{\mathrm{fjs}}$ である。</p>
+</div>
+<div class="proof">
+<div class="title">証明</div>
+<p>背理法を用いる。あるふるい $S \in J'(X)$ が有限部分被覆を持たないと仮定する。各 $f \in S$ に対し、その像 $C_f = f(\operatorname{dom}(f))$ は $X$ の閉集合である。<br>
+<strong>ステップ 1: フィルター基底の構成</strong><br>
+仮定より、任意の有限部分集合 $F \subset S$ に対して $\bigcup_{f \in F} C_f \neq X$ である。したがって、補集合をとった開集合の族
+$$\mathcal{B} = \left\{ X \smallsetminus \bigcup_{f \in F} C_f \;\middle|\; F \subset S \text{ は有限集合} \right\}$$
+は空集合を含まず、有限交差性 (finite intersection property) を持つ。よって $\mathcal{B}$ は $X$ 上の開フィルター基底となる。<br>
+<strong>ステップ 2: Stone-Čechコンパクト化による反例の構成</strong><br>
+$S \in J'(X)$ であり $J'$ がカノニカル位相に含まれるならば、$S$ は (有効である以前に) 普遍的エピ射 (universally epimorphic) でなければならない。すなわち、任意の対象 $E$ と連続写像 $p: E \to X$ による引き戻し $p^*S$ もまたエピ射 (像の和集合が $E$ で稠密) でなければならない。<br>
+反例となる空間 $E$ として、集合 $X$ に離散位相を与えた空間 $X_d$ の Stone-Čech コンパクト化 $E = \beta(X_d)$ を考える。自然な連続全射 $p: \beta(X_d) \to X$ が存在する (これは $\operatorname{id}: X_d \to X$ の連続拡張である)。<br>
+$\beta(X_d)$ の点は $X_d$ 上の超フィルター (ultrafilter) と同一視できる。ステップ1で構成したフィルター基底 $\mathcal{B}$ はある超フィルター $\mathcal{U} \in \beta(X_d)$ に拡張される。<br>
+<strong>ステップ 3: 普遍的エピ射性の破綻</strong><br>
+各 $f \in S$ に対して引き戻し $p^{-1}(C_f)$ を考える。$S$ が普遍的エピ射であるためには、$E = \beta(X_d)$ において $\bigcup_{f \in S} p^{-1}(C_f)$ が稠密でなければならず、特に点 $\mathcal{U}$ がその閉包に含まれなければならない。もしそうであれば、$\mathcal{U}$ の任意の基本近傍は、ある $p^{-1}(C_f)$ と交わるはずである。<br>
+しかし、$C_f$ の補集合 $X \smallsetminus C_f$ は $X_d$ において開かつ閉 (clopen) であり、その $\beta(X_d)$ における閉包 $V_f = \overline{X \smallsetminus C_f}^{\beta(X_d)}$ は $\mathcal{U} \supset \mathcal{B} \ni X \smallsetminus C_f$ であることから $\mathcal{U}$ の開近傍となる。<br>
+この近傍 $V_f$ は構造上 $p^{-1}(C_f)$ と交わらない (点 $x \in X \smallsetminus C_f$ は $C_f$ に属さないため)。これは、いかなる $f \in S$ に対しても、$\mathcal{U}$ の近傍と $p^{-1}(C_f)$ の交わりが空になるような近傍が存在することを意味する。したがって、$\mathcal{U}$ は $\bigcup_{f \in S} p^{-1}(C_f)$ の閉包に属さず、稠密性が破綻する。<br>
+ゆえに $S$ は普遍的エピ射ではなくなり、表現可能関手 $h_Z$ に対する層条件を満たさない。これは $S \in J'(X)$ という前提に矛盾する。したがって、仮定は誤りであり、$S$ は有限結合全射な族を含まなければならない。よって $J_{\mathrm{can}} \subset J_{\mathrm{fjs}}$ が示された。</p>
+</div>
+
+<div class="remark">
+<div class="title">注釈 (余極限とコヒーレント位相の観点)</div>
+<p>上記証明のステップ3は、一般の位相空間の圏 $\mathbf{Top}$ における余極限 (colimit) を用いて直観的に解釈することもできる。$\mathbf{Top}$ において図式 $\{f: \operatorname{dom}(f) \to X\}_{f \in S}$ の余極限空間 $X_{\mathrm{coh}}$ を作ると、その位相 $\tau_{\mathrm{coh}}$ は閉集合族 $\{C_f\}_{f \in S}$ から誘導される<strong>コヒーレント位相 (弱位相)</strong> となる。有限部分被覆を持たない閉被覆から定まるコヒーレント位相は元の位相 $\tau_X$ より真に強くなり ($\tau_{\mathrm{coh}} \supsetneq \tau_X$)、$X_{\mathrm{coh}}$ はもはやコンパクトではなくなる。<br>
+層条件が成り立つということは、元の空間が圏の中で余極限として振る舞うことを要求するが、位相が真に強くなってしまうため、元の $\tau_X$ 上では不連続だが $\tau_{\mathrm{coh}}$ 上では連続になる関数が存在してしまう。これが層としての貼り合わせの一意存在性 (エピ射性・有効性) を破壊する原因である。</p>
+</div>
+
+<h2>参考文献</h2>
+<ul>
+  <li>Johnstone, P. T. (1982). <em>Stone Spaces</em>. Cambridge University Press. (<a href="https://en.wikipedia.org/wiki/Stone_Spaces" target="_blank">Wikipedia: Stone Spaces</a>)</li>
+  <li>Mac Lane, S. (1998). <em>Categories for the Working Mathematician</em>. Springer. (<a href="https://en.wikipedia.org/wiki/Categories_for_the_Working_Mathematician" target="_blank">Wikipedia: Categories for the Working Mathematician</a>)</li>
+  <li>Borceux, F. (1994). <em>Handbook of Categorical Algebra</em> (Vol. 2 & Vol. 3). Cambridge University Press.</li>
+  <li>nLab contributors. "CompHaus". <em>nLab</em>. <a href="https://ncatlab.org/nlab/show/CompHaus" target="_blank">https://ncatlab.org/nlab/show/CompHaus</a></li>
+  <li>Ásgeirsson, D. et al. (2024). <em>Formalizing Condensed Mathematics</em>. arXiv. <a href="https://arxiv.org/abs/2407.12840" target="_blank">arXiv:2407.12840</a></li>
+</ul>
+
+</body>
+</html>

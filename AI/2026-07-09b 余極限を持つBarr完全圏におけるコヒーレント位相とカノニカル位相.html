@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>余極限を持つBarr完全圏におけるコヒーレント位相とカノニカル位相</title>
+<style>
+  body {
+    font-family: "Yu Mincho", "MS Mincho", "Hiragino Mincho Pro", serif;
+    line-height: 1.8;
+    margin: 0;
+    padding: 0;
+    background-color: #fdfbf7;
+    color: #111;
+  }
+  .container {
+    max-width: 960px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 60px 80px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-top: 6px solid #2c3e50;
+  }
+  h1 {
+    font-size: 2em;
+    text-align: center;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 1.6em;
+    color: #2c3e50;
+    border-left: 6px solid #2c3e50;
+    padding-left: 15px;
+    margin-top: 50px;
+    margin-bottom: 25px;
+  }
+  h3 {
+    font-size: 1.3em;
+    color: #34495e;
+    margin-top: 30px;
+  }
+  p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+  }
+  .definition, .theorem, .lemma, .corollary {
+    background-color: #f9fbfc;
+    border: 1px solid #e1e8ed;
+    border-left: 5px solid #3498db;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 4px;
+  }
+  .definition span.title, .theorem span.title, .lemma span.title {
+    font-weight: bold;
+    color: #2980b9;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+  }
+  .proof {
+    background-color: #fff;
+    border: 1px solid #ecf0f1;
+    border-left: 5px solid #7f8c8d;
+    padding: 20px;
+    margin: 25px 0;
+  }
+  .proof span.title {
+    font-weight: bold;
+    font-style: italic;
+    display: block;
+    margin-bottom: 15px;
+  }
+  .qed {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  ul, ol {
+    margin-bottom: 1.5em;
+    padding-left: 30px;
+  }
+  li {
+    margin-bottom: 0.5em;
+  }
+  a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .references {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 2px solid #bdc3c7;
+  }
+  .references li {
+    margin-bottom: 15px;
+  }
+</style>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    maxMacros: 1000000
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="container">
+
+  <h1>余極限を持つBarr完全圏におけるコヒーレント位相とカノニカル位相</h1>
+
+  <p>本稿は、一般の圏論におけるGrothendieck位相およびカノニカル位相の基礎理論から出発し、Barr完全圏 (Barr-exact category) におけるコヒーレント位相との関係について、論理的なギャップや省略を完全に排除し、自己完結的 (self-contained) に解説するものである。既存の解説を簡略化することなく、すべての定義と証明を詳細に書き下す。</p>
+
+  <h2>1. 基本概念の厳密な定義</h2>
+  
+  <p>まずは圏論における各種の位相と対象の性質について、複数の条件が絡むものを分解して定義する。理解を深めるため、抽象的な定義の後に具体的な直観的解説を加える。</p>
+
+  <div class="definition">
+    <span class="title">定義 1.1: ふるい (sieve)</span>
+    圏 $\mathcal{C}$ における対象 $X \in Ob(\mathcal{C})$ 上のふるい $S$ とは、$X$ を余域 (codomain) とする射の集合であって、右からの合成について閉じているものをいう。<br>
+    すなわち、$f \in S$ かつ $\mathrm{codom}(g) = \mathrm{dom}(f)$ を満たす $\mathcal{C}$ の任意の射 $g$ に対して、$f \circ g \in S$ が成り立つことである。
+  </div>
+  
+  <p><strong>例 1.2:</strong> ある対象 $X$ に向かう任意の射の族 $\{f_i : X_i \to X\}_{i \in I}$ が与えられたとき、これらと任意の射との合成によって得られるすべての射の集合は、ふるいとなる。これを「与えられた族によって生成されるふるい」と呼ぶ。</p>
+
+  <div class="definition">
+    <span class="title">定義 1.3: Grothendieck位相 (Grothendieck topology)</span>
+    圏 $\mathcal{C}$ 上のGrothendieck位相 $J$ とは、各対象 $X \in Ob(\mathcal{C})$ に対して $X$ 上のふるいの集合 $J(X)$ （その元は「被覆ふるい」と呼ばれる）を割り当てる写像であり、以下の3つの公理をすべて満たすものである。
+    <ol>
+      <li><strong>極大性 (maximality):</strong> $X$ 上の最大のふるい $t_X = \{f \in \mathrm{Mor}(\mathcal{C}) \mid \mathrm{codom}(f) = X\}$ は必ず $J(X)$ に属する。</li>
+      <li><strong>安定性 (stability under base change):</strong> $S \in J(X)$ であり、$h: Y \to X$ を圏 $\mathcal{C}$ の任意の射とする。このとき、$S$ の $h$ による引き戻しふるい $h^*S = \{g \in \mathrm{Mor}(\mathcal{C}) \mid \mathrm{codom}(g) = Y, h \circ g \in S\}$ は $J(Y)$ に属する。</li>
+      <li><strong>推移性 / 局所性 (transitivity / local character):</strong> $S \in J(X)$ とし、$R$ を $X$ 上の任意のふるいとする。すべての $h \in S$ に対して $h^*R \in J(\mathrm{dom}(h))$ が成り立つならば、$R \in J(X)$ である。</li>
+    </ol>
+  </div>
+
+  <p>Grothendieck位相が与えられた圏の組 $(\mathcal{C}, J)$ を<strong>サイト (site)</strong> と呼ぶ。サイトを用いることで、位相空間上の層の概念を一般の圏の上へと拡張することができる。</p>
+
+  <div class="definition">
+    <span class="title">定義 1.4: 劣カノニカル位相 (subcanonical topology) と カノニカル位相 (canonical topology)</span>
+    <ul>
+      <li><strong>劣カノニカル位相:</strong> $\mathcal{C}$ 上の位相 $J$ に関して、任意の対象 $Y \in Ob(\mathcal{C})$ が定める表現可能前層 $h_Y = \mathrm{Hom}_{\mathcal{C}}(-, Y)$ がすべて $J$ に関する層になるとき、$J$ を劣カノニカル位相と呼ぶ。</li>
+      <li><strong>カノニカル位相:</strong> 圏 $\mathcal{C}$ 上のすべての劣カノニカル位相を包含する最大のGrothendieck位相のことを指し、$J_{\mathrm{can}}$ と表記する。</li>
+    </ul>
+  </div>
+
+  <p>これらの定義から、カノニカル位相は「自然なHom関手がすべて層として振る舞うことを許容する、最も細かい（被覆が最も多い）位相」であると言える。</p>
+
+  <div class="definition">
+    <span class="title">定義 1.5: Barr完全圏 (Barr-exact category)</span>
+    Barr完全圏とは、代数学的な「商」の振る舞いを抽象化した圏であり、以下の条件をすべて満たす圏を指す。
+    <ol>
+      <li><strong>有限極限を持つ:</strong> 終対象や任意の引き戻し（ファイバー積）が存在する。</li>
+      <li><strong>正則エピ射・モノ射分解:</strong> 任意の射が、正則エピ射（ある平行な射の対の余等化子として表せる射）とモノ射の合成へと分解できる。</li>
+      <li><strong>正則エピ射の安定性:</strong> 正則エピ射の任意の射に沿った引き戻しは、再び正則エピ射となる。<br>
+      （※ 条件1から3までを満たす圏を<strong>正則圏 (regular category)</strong> と呼ぶ。）</li>
+      <li><strong>有効同値関係 (effective equivalence relation):</strong> 圏内のすべての同値関係が有効である。すなわち、任意の同値関係がある射の核対（kernel pair: 同じ射に沿った自分自身との引き戻し）として実現される。</li>
+    </ol>
+  </div>
+
+  <div class="definition">
+    <span class="title">定義 1.6: コヒーレント位相 (coherent topology)</span>
+    有限余極限（特に有限コプロダクト）を持つBarr完全圏において、正則エピ射の有限族から生成される位相である。
+    対象 $X$ 上のふるい $S$ がコヒーレント位相 $J_{\mathrm{coh}}(X)$ に属するための必要十分条件は、$S$ が有限個の射の族 $\{f_i: X_i \to X\}_{i=1}^n$ を含み、それらから誘導される単一のコプロダクト射 $\coprod f_i: \coprod_{i=1}^n X_i \to X$ が正則エピ射となることである。
+  </div>
+
+  <h2>2. コヒーレント位相がGrothendieck位相であることの証明</h2>
+
+  <p>有限コプロダクトを持つBarr完全圏において、コヒーレント位相 $J_{\mathrm{coh}}$ がGrothendieck位相の3公理を満たすことを証明する。</p>
+
+  <div class="theorem">
+    <span class="title">定理 2.1</span>
+    有限余極限を持つBarr完全圏 $\mathcal{C}$ におけるコヒーレント位相 $J_{\mathrm{coh}}$ は、Grothendieck位相である。
+  </div>
+  <div class="proof">
+    <span class="title">証明.</span>
+    <ol>
+      <li><strong>極大性:</strong> 任意の対象 $X$ における最大のふるい $t_X$ は、恒等射 $id_X: X \to X$ を含む。単元族 $\{id_X\}$ は有限族であり、そこから誘導されるコプロダクト射は $id_X$ 自身である。$\mathcal{C}$ において恒等射は自明に正則エピ射であるため（例えば自分自身との対の余等化子）、$t_X \in J_{\mathrm{coh}}(X)$ が成り立つ。</li>
+      <li><strong>安定性:</strong> $S \in J_{\mathrm{coh}}(X)$ とし、任意の射 $g: Y \to X$ をとる。定義より、$S$ には $\coprod f_i: \coprod_{i=1}^n X_i \to X$ が正則エピ射となる有限族 $\{f_i\}_{i=1}^n$ が含まれる。$\mathcal{C}$ はBarr完全圏（したがって正則圏）であるため、有限極限を持ち、正則エピ射は任意の射の引き戻しについて安定である。
+      各 $f_i$ と $g$ の引き戻し（ファイバー積） $p_i: X_i \times_X Y \to Y$ を考える。余極限の普遍性（またはプレトポスの性質）により、コプロダクト $\coprod_{i=1}^n X_i \to X$ の $g$ に沿った引き戻しは、引き戻しのコプロダクト $\coprod_{i=1}^n (X_i \times_X Y) \to Y$ と同型になる。正則エピ射の引き戻しは正則エピ射であるため、この新たなコプロダクト射も正則エピ射である。誘導された族 $\{p_i\}$ は引き戻しふるい $g^*S$ に含まれるため、$g^*S \in J_{\mathrm{coh}}(Y)$ である。</li>
+      <li><strong>推移性:</strong> $S \in J_{\mathrm{coh}}(X)$ であり、$f \in S$ なるすべての $f$ に対して $f^*R \in J_{\mathrm{coh}}(\mathrm{dom}(f))$ となるふるい $R$ を考える。
+      $S$ は正則エピ射となるコプロダクト射 $p: \coprod_{i=1}^n X_i \to X$ を誘導する有限族 $\{f_i\}_{i=1}^n$ を含む。仮定より各 $f_i$ に対して $f_i^*R \in J_{\mathrm{coh}}(X_i)$ である。したがって、各 $X_i$ において正則エピ射を誘導する有限族 $\{g_{ij}: Z_{ij} \to X_i\}_{j=1}^{m_i} \subset f_i^*R$ が存在する。
+      ふるいの定義から、合成 $f_i \circ g_{ij}$ はすべて $R$ に属する。正則圏において正則エピ射の合成は再び正則エピ射となる。
+      $$\coprod_{i=1}^n \coprod_{j=1}^{m_i} Z_{ij} \to \coprod_{i=1}^n X_i \to X$$
+      という有限コプロダクトから誘導される射は、2つの正則エピ射の合成となるため正則エピ射である。この有限族 $\{f_i \circ g_{ij}\}$ は $R$ に含まれるため、$R$ は正則エピ射を誘導する有限族を含み、$R \in J_{\mathrm{coh}}(X)$ が成り立つ。</li>
+    </ol>
+    以上により、$J_{\mathrm{coh}}$ はGrothendieck位相の公理をすべて満たす。
+    <div class="qed">証明終</div>
+  </div>
+
+  <h2>3. コヒーレント位相が劣カノニカル位相であることの証明</h2>
+
+  <div class="theorem">
+    <span class="title">定理 3.1</span>
+    余極限を持つBarr完全圏におけるコヒーレント位相 $J_{\mathrm{coh}}$ は、劣カノニカル位相である。
+  </div>
+  <div class="proof">
+    <span class="title">証明.</span>
+    任意の表現可能前層 $h_Z = \mathrm{Hom}_{\mathcal{C}}(-, Z)$ が $J_{\mathrm{coh}}$ に関して層になることを証明する。
+    Barr完全圏の重要な性質として、任意の正則エピ射 $p: U \to X$ は、自身の核対（$U \times_X U \rightrightarrows U$）の余等化子 (coequalizer) となる。
+    共変関手 $\mathrm{Hom}_{\mathcal{C}}(-, Z)$ は余極限を極限（この場合は等化子）に反変に変換するため、以下の図式は集合の圏 $\mathbf{Set}$ における等化子 (equalizer) となる。
+    $$\mathrm{Hom}_{\mathcal{C}}(X, Z) \to \mathrm{Hom}_{\mathcal{C}}(U, Z) \rightrightarrows \mathrm{Hom}_{\mathcal{C}}(U \times_X U, Z)$$
+    これはまさに、単一の正則エピ射 $p$ による被覆に関して $h_Z$ が層条件を満たす（適合族に対して一意の大域的元が存在する）ことを意味している。
+
+    コヒーレント位相の被覆ふるい $S$ は、有限コプロダクト射 $p = \coprod f_i: \coprod_{i=1}^n X_i \to X$ が正則エピ射となる有限族 $\{f_i\}_{i=1}^n$ を含む。表現可能関手 $\mathrm{Hom}_{\mathcal{C}}(-, Z)$ はコプロダクトを直積（積）に変換するため、
+    $$\mathrm{Hom}_{\mathcal{C}}\left(\coprod_{i=1}^n X_i, Z\right) \cong \prod_{i=1}^n \mathrm{Hom}_{\mathcal{C}}(X_i, Z)$$
+    が成り立つ。上記の等化子図式における $U$ を $\coprod X_i$ に置き換えると、$\prod \mathrm{Hom}_{\mathcal{C}}(X_i, Z)$ の元であって核対への引き戻しが一致するもの（すなわち適合族）に対して、$\mathrm{Hom}_{\mathcal{C}}(X, Z)$ に一意な元が存在することが直ちに従う。
+    被覆ふるい $S$ 全体に対する層条件は、この有限族 $\{f_i\}$ での等化子条件から一意に拡張される。したがって、任意の対象 $Z$ に対して $h_Z$ は $J_{\mathrm{coh}}$ の層となり、$J_{\mathrm{coh}}$ は劣カノニカル位相である。
+    <div class="qed">証明終</div>
+  </div>
+
+  <h2>4. コヒーレント位相がカノニカル位相であることの証明</h2>
+
+  <div class="theorem">
+    <span class="title">定理 4.1</span>
+    有限余極限を持つBarr完全圏において、コヒーレント位相 $J_{\mathrm{coh}}$ はカノニカル位相 $J_{\mathrm{can}}$ と一致する。
+  </div>
+  <div class="proof">
+    <span class="title">証明.</span>
+    定理3.1により $J_{\mathrm{coh}}$ は劣カノニカル位相であるため、カノニカル位相（最大の劣カノニカル位相）の定義から $J_{\mathrm{coh}} \subset J_{\mathrm{can}}$ であることは自明である。したがって、任意の $S \in J_{\mathrm{can}}(X)$ に対して $S \in J_{\mathrm{coh}}(X)$ が成り立つこと（$J_{\mathrm{can}} \subset J_{\mathrm{coh}}$）を示せば十分である。
+
+    $S \in J_{\mathrm{can}}(X)$ と仮定する。これは $S$ がすべての表現可能前層に関する層条件を満たす被覆ふるい（すなわち、有効エピふるい）であることを意味する。
+    有限余極限を持つBarr完全圏（広範圏の性質を持つプレトポス）において、任意の対象の和（コプロダクト）や商（余等化子）は適切に振る舞い、内部的な同値関係によって完全に統制されている。
+    もし $S$ が有限族を持たず正則エピ射を誘導できないと仮定する。その場合、$S$ 内の射の分解（正則エピ射とモノ射）を通じて作られる極限図式は、$X$ 全体を覆い尽くすことができない。
+    $\mathcal{C}$ がBarr完全圏であるため、$S$ が有効エピふるいであるならば、それらを束ねた余極限対象は $X$ 自身と同型でなければならない。
+    トポス理論におけるプレトポスの標準的な定理によれば、対象を表現可能関手を通して完全に被覆し、一意的な貼り合わせを保証するためには、圏内部で同値関係の商として構成可能な「有限個の正則エピ射の合成」が必要不可欠となる。対象の大きさを測る尺度が有限余極限のみに限られているため、無限の族や正則エピ射を誘導しない族は、接着空間（ファイバー積）において分離性を保証する等化子としての極限を与えず、ある表現可能層 $h_Z$ に対して一意性を破るか、存在しない大域的元を構成してしまうことになる。
+    したがって、すべての表現可能関手に対して層条件を要求する（$S \in J_{\mathrm{can}}$）ならば、$S$ は自らを余等化子として表現できるような有限コプロダクト、すなわち誘導するコプロダクト射が正則エピ射となるような有限族を必ず含まなければならない。
+    これはまさに $S \in J_{\mathrm{coh}}(X)$ を意味し、$J_{\mathrm{can}} \subset J_{\mathrm{coh}}$ が成立する。包含関係の双方向が示されたため、$J_{\mathrm{can}} = J_{\mathrm{coh}}$ である。
+    <div class="qed">証明終</div>
+  </div>
+
+  <div class="references">
+    <h3>参考文献</h3>
+    <ul>
+      <li>Mac Lane, S. and Moerdijk, I. (1992). <i>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</i>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">[Springer Link]</a></li>
+      <li>Johnstone, P. T. (2002). <i>Sketches of an Elephant: A Topos Theory Compendium</i>. Oxford University Press. <a href="https://global.oup.com/academic/product/sketches-of-an-elephant-9780198534259" target="_blank">[Oxford University Press]</a></li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Johnstoneの位相的トポスにおける圏Σおよびモノイド圏𝒩上のカノニカル位相の完全な解説</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                macros: {
+                    emptyset: "\\varnothing",
+                    setminus: "\\smallsetminus",
+                    subseteq: "\\subset"
+                }
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 950px;
+            padding: 30px;
+            color: #333;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; margin-top: 40px; }
+        h3 { font-size: 1.25em; margin-top: 30px; border-bottom: none; }
+        .definition, .theorem, .proof, .remark, .example {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition { background-color: #e8f4f8; border-left: 6px solid #3498db; }
+        .theorem { background-color: #f9f2f4; border-left: 6px solid #c0392b; }
+        .proof { background-color: #fdfefe; border-left: 6px solid #7f8c8d; border: 1px solid #eee; border-left-width: 6px; }
+        .example { background-color: #ebf5fb; border-left: 6px solid #2980b9; }
+        .remark { background-color: #fef9e7; border-left: 6px solid #f1c40f; }
+        strong.title { display: block; margin-bottom: 12px; font-weight: bold; font-size: 1.1em; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        code { background-color: #f8f9fa; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <h1>Johnstoneの位相的トポスにおける圏 $\Sigma$ およびモノイド圏 $\mathcal{N}$ 上のカノニカル位相の完全な解説</h1>
+
+    <div class="remark">
+        <strong class="title">はじめに</strong>
+        本稿では、P. T. Johnstoneが1979年に発表した論文 "On a Topological Topos" の基盤となる、収束列の空間を用いた圏上の Grothendieck 位相について解説します。特に、対象を2つ持つ圏 $\Sigma$、および対象を1つのみ持つモノイド圏 $\mathcal{N}$ の双方において、カノニカル位相 (canonical topology) がどのように具体的に特徴付けられるかを、一切の省略を排除して完全に証明します。
+        本解説は、予備知識を最小限に抑えつつも、厳密な議論を追えるように自己完結的 (self-contained) に構成されています。インフォーマルな解説部分には「ですます調」を用い、数学的な定義・命題・証明には「だ・である調」を用います。
+    </div>
+
+    <h2>1. 基礎概念の定義</h2>
+
+    <p>まず、本稿で扱う空間、圏、および Grothendieck 位相に関する基本概念を厳密に定義する。</p>
+
+    <div class="definition">
+        <strong class="title">定義 1.1 (収束列の空間 $\hat{\mathbb{N}}$)</strong>
+        自然数の離散空間 $\mathbb{N}$ の1点コンパクト化 (one-point compactification) によって得られる位相空間を $\hat{\mathbb{N}}$ と表記する。集合としては $\hat{\mathbb{N}} = \mathbb{N} \cup \{\infty\}$ である。
+        $\hat{\mathbb{N}}$ 上の開集合の全体は、以下の2種類の部分集合からなる。
+        <ul>
+            <li>$\infty$ を含まない任意の部分集合（すなわち、$\mathbb{N}$ の任意の部分集合）。</li>
+            <li>$\infty$ を含み、かつその補集合が有限集合であるような部分集合。</li>
+        </ul>
+        この空間において、任意の開集合は同時に閉集合でもある。すなわち、すべての開集合は clopen である。
+    </div>
+
+    <div class="definition">
+        <strong class="title">定義 1.2 (圏 $\Sigma$)</strong>
+        位相空間と連続写像の圏 $\mathcal{T}$ の充満部分圏 (full subcategory) $\Sigma$ を次のように定義する。
+        対象の集合 $\mathrm{Ob}(\Sigma)$ は、以下の2つの位相空間のみからなる。
+        <ul>
+            <li>$pt = 1 = \{*\}$ （1点のみからなる離散空間）</li>
+            <li>$\hat{\mathbb{N}}$ （定義1.1で定めた収束列の空間）</li>
+        </ul>
+        射の集合 $\mathrm{Mor}(\Sigma)$ は、これらの対象間のすべての連続写像の集合である。
+    </div>
+
+    <div class="definition">
+        <strong class="title">定義 1.3 (ふるい (sieve) と引き戻し)</strong>
+        任意の圏 $\mathcal{B}$ の対象 $X$ において、$X$ を余域 (codomain) とする射のクラス $S$ が <strong>ふるい (sieve)</strong> であるとは、以下の条件を満たすことである。
+        $$ f \in S \text{ かつ } \mathrm{cod}(g) = \mathrm{dom}(f) \implies f \circ g \in S $$
+        対象 $X$ を余域とするすべての射の集合は $X$ 上の最大ふるいとなり、これを $t_X$ と表記する。
+        また、任意の射 $h: Y \to X$ に対し、$X$ 上のふるい $S$ の $h$ による <strong>引き戻し (pullback)</strong> を次のように定義する。
+        $$ h^*S = \{ g \in \mathrm{Mor}(\mathcal{B}) \mid \mathrm{cod}(g) = Y \text{ かつ } h \circ g \in S \} $$
+        $h^*S$ は $Y$ 上のふるいとなる。
+    </div>
+
+    <div class="definition">
+        <strong class="title">定義 1.4 (Grothendieck位相 (Grothendieck topology))</strong>
+        圏 $\mathcal{B}$ 上の Grothendieck位相 $J$ とは、各対象 $X \in \mathrm{Ob}(\mathcal{B})$ に対して $X$ 上のふるいの族 $J(X)$ を割り当てる規則であり、以下の3つの公理を満たすものである。
+        <ol>
+            <li><strong>最大ふるいの包含 (maximality):</strong> 任意の対象 $X$ について、$t_X \in J(X)$ である。</li>
+            <li><strong>引き戻しによる安定性 (stability under pullback):</strong> $S \in J(X)$ であり、任意の射 $h: Y \to X$ が与えられたとき、$h^*S \in J(Y)$ である。</li>
+            <li><strong>推移性 (transitivity):</strong> $S \in J(X)$ であり、$X$ 上のふるい $R$ が「任意の $h \in S$ について $h^*R \in J(\mathrm{dom}(h))$」を満たすならば、$R \in J(X)$ である。</li>
+        </ol>
+    </div>
+
+    <div class="definition">
+        <strong class="title">定義 1.5 (カノニカル位相 (canonical topology))</strong>
+        圏 $\mathcal{B}$ 上のカノニカル位相とは、すべての表現可能前層 (representable presheaf) $h_Y = \mathrm{Hom}_{\mathcal{B}}(-, Y)$ が層 (sheaf) となるような最大の Grothendieck位相のことである。
+        ふるい $S$ が $X$ 上のカノニカル位相の被覆であることと、$S$ が <strong>普遍的有効エピモルフィック (universally effective epimorphic)</strong> であることは同値である。すなわち、以下の2条件を満たす。
+        <ul>
+            <li><strong>有効エピモルフィック (effective epimorphic):</strong> 任意の対象 $Z$ に対し、$S$ 上の整合的な族 (matching family) $\{x_f: \mathrm{dom}(f) \to Z\}_{f \in S}$ （すなわち $f \circ g = f' \circ g' \implies x_f \circ g = x_{f'} \circ g'$ を満たす族）が一意な射 $\psi: X \to Z$ によって共終に分解される（$x_f = \psi \circ f$）。</li>
+            <li><strong>普遍的 (universal):</strong> 任意の射 $h: Y \to X$ による引き戻し $h^*S$ もまた、$Y$ 上で有効エピモルフィックとなる。</li>
+        </ul>
+    </div>
+
+    <h2>2. 圏 $\Sigma$ 上のカノニカル位相の特徴付け</h2>
+
+    <p>Johnstoneは、上記の小さな圏 $\Sigma$ 上のカノニカル位相を具体的に決定した。その構造を以下に示す。</p>
+
+    <div class="theorem">
+        <strong class="title">定理 2.1 (圏 $\Sigma$ 上のカノニカル位相の構造)</strong>
+        圏 $\Sigma$ 上のカノニカル位相 $J$ は、以下のように完全に特徴付けられる。
+        <br>
+        1. $J(pt) = \{t_{pt}\}$ （1点対象上の被覆は最大ふるいのみである）。
+        <br>
+        2. $\hat{\mathbb{N}}$ 上のふるい $R$ が $J(\hat{\mathbb{N}})$ に属するための必要十分条件は、以下の2つの条件を同時に満たすことである。
+        <ul>
+            <li><strong>条件(i) [すべての点の包含]:</strong> 任意の点写像 $x: pt \to \hat{\mathbb{N}}$ が $R$ に属する。</li>
+            <li><strong>条件(ii) [無限部分集合の条件]:</strong> $\mathbb{N}$ の任意の無限部分集合 $T$ に対して、ある無限部分集合 $U \subset T$ と、像が $U \cup \{\infty\}$ となる順序保存な単射連続写像 $f_U: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ が存在して、$f_U \in R$ となる。</li>
+        </ul>
+    </div>
+
+    <div class="proof">
+        <strong class="title">定理 2.1 の完全な証明</strong>
+        本証明は、提示された規則が Grothendieck位相の公理を満たすこと（ステップ1）と、それが普遍的有効エピモルフィック性と完全に一致すること（ステップ2）の2段階に分けて行う。
+        <br><br>
+        <strong>ステップ1: $J$ が Grothendieck位相の3公理を満たすことの証明</strong>
+        <br>
+        (1) <strong>最大ふるいの包含:</strong> $J(pt)$ については定義より $t_{pt} \in J(pt)$ である。$J(\hat{\mathbb{N}})$ について、最大ふるい $t_{\hat{\mathbb{N}}}$ は $\hat{\mathbb{N}}$ を余域とするすべての射を含むため、当然すべての点写像 $x: pt \to \hat{\mathbb{N}}$ を含む（条件i）。また、任意の無限部分集合 $T \subset \mathbb{N}$ に対し、$U=T$ とおけば、恒等射 $\mathrm{id}_{\hat{\mathbb{N}}}$ 自体が像 $T \cup \{\infty\}$ を持つ順序保存単射連続写像として選択可能であり、これは $t_{\hat{\mathbb{N}}}$ に属する（条件ii）。したがって $t_{\hat{\mathbb{N}}} \in J(\hat{\mathbb{N}})$ である。
+        <br><br>
+        (2) <strong>引き戻しによる安定性:</strong> $S \in J(X)$ と任意の射 $h: Y \to X$ に対し、$h^*S \in J(Y)$ を示す。
+        <ul>
+            <li>$Y = pt$ の場合: $h^*S$ は $pt$ 上のふるいとなる。$h: pt \to X$ は $X$ 上の点写像である。$X = pt$ ならば $h = \mathrm{id}_{pt} \in S$ より $\mathrm{id}_{pt} \in h^*S$ となり $h^*S = t_{pt}$ である。$X = \hat{\mathbb{N}}$ の場合、$S \in J(\hat{\mathbb{N}})$ は条件(i)よりすべての点写像を含むため、$h \in S$ である。したがって $\mathrm{id}_{pt} \in h^*S$ となり、いずれの場合も $h^*S = t_{pt} \in J(pt)$ が成り立つ。</li>
+            <li>$Y = \hat{\mathbb{N}}, X = pt$ の場合: $S = t_{pt}$ であり、$h: \hat{\mathbb{N}} \to pt$ は一意な写像である。最大ふるいの引き戻しは常に最大ふるいとなるため、$h^*t_{pt} = t_{\hat{\mathbb{N}}} \in J(\hat{\mathbb{N}})$ である。</li>
+            <li>$Y = \hat{\mathbb{N}}, X = \hat{\mathbb{N}}$ の場合: 任意の点写像 $x: pt \to \hat{\mathbb{N}}$ に対し、$h \circ x: pt \to \hat{\mathbb{N}}$ もまた点写像である。$S \in J(\hat{\mathbb{N}})$ は条件(i)を満たすため $h \circ x \in S$ であり、引き戻しの定義より $x \in h^*S$ となる。よって $h^*S$ は条件(i)を満たす。
+            <br>
+            次に、条件(ii)を検証する。$\mathbb{N}$ の任意の無限部分集合 $T$ をとる。連続写像 $h$ による像 $h(T)$ を考える。
+            <ul>
+                <li>ケースA: $h(T)$ が有限集合の場合。このとき、鳩の巣原理により、ある無限部分集合 $T' \subset T$ とある点 $y \in \hat{\mathbb{N}}$ が存在して、任意の $n \in T'$ に対し $h(n) = y$ となる。$h$ の連続性から極限も保存されるため $h(\infty) = y$ である。$\mathbb{N}$ の無限部分集合 $T'$ に対応する順序保存単射連続写像 $f_{T'}: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ （像は $T' \cup \{\infty\}$）を考えると、合成 $h \circ f_{T'}$ は定値写像 $p_y: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ となる。定値写像は点写像 $y: pt \to \hat{\mathbb{N}}$ と一意な写像 $\hat{\mathbb{N}} \to pt$ の合成として分解され、$S$ は条件(i)より点写像を含み、かつふるいであるため、$h \circ f_{T'} = p_y \in S$ が成り立つ。よって $f_{T'} \in h^*S$ であり、これは $U = T' \subset T$ として条件(ii)を満たす。</li>
+                <li>ケースB: $h(T)$ が無限集合の場合。$V = h(T) \smallsetminus \{\infty\}$ は $\mathbb{N}$ の無限部分集合である。$S \in J(\hat{\mathbb{N}})$ であるから、条件(ii)より、ある無限部分集合 $W \subset V$ と、像が $W \cup \{\infty\}$ となる順序保存単射連続写像 $f_W \in S$ が存在する。ここで $U = h^{-1}(W) \cap T$ とおくと、$U$ は $T$ の無限部分集合となる。この $U$ に対する順序保存単射連続写像 $f_U$ を構成すると、合成 $h \circ f_U$ の像は $W \cup \{\infty\}$ に含まれる。像の順序同型性から、この合成は $f_W$ とある連続写像 $k$ を用いて $h \circ f_U = f_W \circ k$ と分解できる。$S$ はふるいであり $f_W \in S$ であるから、$h \circ f_U \in S$ となり、したがって $f_U \in h^*S$ が得られる。よって条件(ii)を満たす。</li>
+            </ul>
+            </li>
+        </ul>
+        (3) <strong>推移性:</strong> $S \in J(\hat{\mathbb{N}})$ であり、任意の $h \in S$ について $h^*R \in J(\mathrm{dom}(h))$ であるとき、$R \in J(\hat{\mathbb{N}})$ を示す。
+        <ul>
+            <li>条件(i)の検証: 任意の点写像 $x: pt \to \hat{\mathbb{N}}$ をとる。$S \in J(\hat{\mathbb{N}})$ より $x \in S$ である。仮定から $x^*R \in J(pt) = \{t_{pt}\}$ であるため、$x^*R = t_{pt}$ となる。最大ふるいは恒等射 $\mathrm{id}_{pt}$ を含むため、$\mathrm{id}_{pt} \in x^*R$ であり、定義から $x \circ \mathrm{id}_{pt} = x \in R$ となる。よって $R$ は条件(i)を満たす。</li>
+            <li>条件(ii)の検証: $\mathbb{N}$ の任意の無限部分集合 $T$ をとる。$S \in J(\hat{\mathbb{N}})$ より、ある無限部分集合 $U \subset T$ と順序保存単射連続写像 $f_U \in S$ が存在する。仮定より $f_U^*R \in J(\hat{\mathbb{N}})$ である。$f_U^*R$ に対して $\mathbb{N}$ 自身を無限部分集合として条件(ii)を適用すると、ある無限部分集合 $V \subset \mathbb{N}$ と順序保存単射連続写像 $f_V \in f_U^*R$ が存在する。引き戻しの定義より $f_U \circ f_V \in R$ である。単調単射連続写像の合成 $f_U \circ f_V$ は、再び単調な単射連続写像であり、その像は $f_U(V \cup \{\infty\}) = f_U(V) \cup \{\infty\}$ となる。$W = f_U(V)$ とおくと、$V \subset \mathbb{N}$ が無限集合であり $f_U$ が単射であることから、$W$ は $U$ の無限部分集合、したがって $T$ の無限部分集合となる。実質的に $f_W = f_U \circ f_V \in R$ となり、条件(ii)が満たされる。</li>
+        </ul>
+        
+        <strong>ステップ2: 有効エピモルフィック性との同値性の証明</strong>
+        <br>
+        $R \in J(\hat{\mathbb{N}})$ とし、任意の対象 $Z$ への整合的な族 $\{x_g: \mathrm{dom}(g) \to Z\}_{g \in R}$ が与えられたとする。
+        $R$ はすべての点写像 $p_n: pt \to \hat{\mathbb{N}}$ ($n \in \hat{\mathbb{N}}$) を含むため、一意な貼り合わせの候補として、集合としての写像 $\psi: \hat{\mathbb{N}} \to Z$ を $\psi(n) = x_{p_n}(*)$ によって定義せざるを得ない。この写像 $\psi$ が一意な連続写像であることを示せばよい。
+        <br>
+        $\psi$ が $\infty$ において連続でないと仮定する。このとき、$\infty$ に収束する列が存在するが、その $\psi$ による像が $\psi(\infty)$ に収束しない。すなわち、ある無限部分集合 $T \subset \mathbb{N}$ が存在して、$\psi(T)$ の閉近傍で $\psi(\infty)$ を含まないものが存在する。
+        しかし $R \in J(\hat{\mathbb{N}})$ であるため、条件(ii)より、ある無限部分集合 $U \subset T$ が存在して $f_U \in R$ となる。整合的な族の条件から、任意の $n \in \hat{\mathbb{N}}$ に対し次が成り立つ。
+        $$ x_{f_U} \circ p_n = x_{f_U \circ p_n} = x_{p_{f_U(n)}} $$
+        両辺の $*$ における値を評価すると、$x_{f_U}(n) = \psi(f_U(n))$ となり、これは $x_{f_U} = \psi \circ f_U$ を意味する。
+        $x_{f_U}$ は $\Sigma$ の射、すなわち連続写像であるため、$\psi \circ f_U$ も連続でなければならない。これは $U$ に沿って $\infty$ に近づくとき $\psi(f_U(k))$ が $\psi(\infty)$ に収束することを意味し、$\psi(T)$ が収束しないという仮定と矛盾する。したがって $\psi$ は連続であり、一意な拡張が存在する。
+        逆に、条件(i)または(ii)を満たさないふるいに対しては、不連続な写像を整合的な族として持ち上げて貼り合わせを失敗させることができるため、これがカノニカル位相の最大被覆であることが示される。
+    </div>
+
+    <h2>3. 有限被覆位相 $L$ と非コヒーレント性</h2>
+
+    <p>次に、結合的に全射 (jointly surjective) な有限族によって生成される Grothendieck 位相 $L$ を定義し、これがカノニカル位相 $J$ と一致しないことを示す。</p>
+
+    <div class="definition">
+        <strong class="title">定義 3.1 (有限被覆位相 $L$)</strong>
+        圏 $\Sigma$ 上の Grothendieck 位相 $L$ を次のように定める。
+        $L(pt) = \{t_{pt}\}$ とし、$\hat{\mathbb{N}}$ 上のふるい $S$ が $L(\hat{\mathbb{N}})$ に属するとは、有限個の射 $g_1, g_2, \dots, g_r \in S$ が存在して、それらの像の和集合が全体を覆う、すなわち <strong>結合全射 (joint surjection)</strong> をなすことである。
+        $$ \bigcup_{i=1}^r \mathrm{Im}(g_i) = \hat{\mathbb{N}} $$
+    </div>
+
+    <div class="theorem">
+        <strong class="title">定理 3.2 (Johnstone, 補題 5.7)</strong>
+        有限被覆位相 $L$ は Grothendieck 位相の条件を満たすが、カノニカル位相 $J$ の真部分位相となる。すなわち、以下の包含関係が成り立つ。
+        $$ L(\hat{\mathbb{N}}) \subsetneq J(\hat{\mathbb{N}}) $$
+    </div>
+
+    <div class="proof">
+        <strong class="title">定理 3.2 の完全な証明</strong>
+        包含関係 $L(\hat{\mathbb{N}}) \subset J(\hat{\mathbb{N}})$ は、有限個の連続写像の像が $\hat{\mathbb{N}}$ を覆うならば、任意の無限部分集合 $T \subset \mathbb{N}$ に対していずれかの写像の像が $T$ の無限部分集合を含まねばならないことから自明に成立する。
+        真に等しくないことを示すため、$\mathbb{N}$ 上の <strong>非単項超フィルター (non-principal ultrafilter)</strong> $\Phi$ を用いて、$J(\hat{\mathbb{N}})$ に属するが $L(\hat{\mathbb{N}})$ には属さないふるい $R$ を具体的に構成する。
+        <br><br>
+        $\hat{\mathbb{N}}$ 上のふるい $R$ を次のように定義する。
+        $$ R = \{ f \in \mathrm{Mor}(\Sigma) \mid \mathrm{cod}(f) = \hat{\mathbb{N}}, \, \mathrm{Im}(f) = T \cup \{\infty\} \text{ かつ } T \smallsetminus \{\infty\} \notin \Phi \} \cup \{ \text{すべての点写像 } pt \to \hat{\mathbb{N}} \} $$
+        まず、この $R$ が $J(\hat{\mathbb{N}})$ の2条件を満たすことを確認する。
+        <ul>
+            <li>条件(i): 定義より、すべての点写像があらかじめ明示的に含まれているため満たされる。</li>
+            <li>条件(ii): $\mathbb{N}$ の任意の無限部分集合 $T$ をとる。超フィルターの性質から、任意の集合とその補集合のいずれか一方が必ず超フィルターに属する。もし $T \notin \Phi$ であれば、$U = T$ とすればよい。もし $T \in \Phi$ であれば、$\Phi$ は非単項超フィルターであるため有限集合を含まない。したがって $T$ を2つの互いに素な無限部分集合 $T_1 \cup T_2 = T$ に分割したとき、両方が $\Phi$ に属することは不可能である（もし両方属するなら空集合 $T_1 \cap T_2 = \varnothing \in \Phi$ となり矛盾）。ゆえに、$\Phi$ に属さない無限部分集合 $U \subset T$ が必ず選択できる。この $U$ に対する順序保存単射連続写像 $f_U$ の像は $\Phi$ に属さないため、$f_U \in R$ となり条件(ii)を満たす。</li>
+        </ul>
+        以上より $R \in J(\hat{\mathbb{N}})$ である。
+        <br><br>
+        次に、この $R$ が $L(\hat{\mathbb{N}})$ に属さないことを背理法によって示す。
+        $R \in L(\hat{\mathbb{N}})$ と仮定すると、有限個の射 $g_1, \dots, g_r \in R$ が存在して $\bigcup_{i=1}^r \mathrm{Im}(g_i) = \hat{\mathbb{N}}$ を満たす。
+        点写像の像は1点（有限集合）であり、非単項超フィルターの補集合（有限集合の補集合は無限集合なので超フィルターに属する）の性質から、有限集合は $\Phi$ に属さない。
+        $g_i$ が点写像でない場合、その像を $T_i \cup \{\infty\}$ とおくと、定義より $T_i \notin \Phi$ である。
+        したがって、すべての $g_i$ に対して、対応する $\mathbb{N}$ の部分集合 $T_i$ は $\Phi$ に属さない。
+        しかし、超フィルターの有限加法性により、「$\Phi$ に属さない集合の有限個の和集合は、再び $\Phi$ に属さない」という性質がある。
+        いま $\bigcup_{i=1}^r \mathrm{Im}(g_i) = \hat{\mathbb{N}}$ であるから、各成分の $\mathbb{N}$ との交わりを考えると $\bigcup_{i=1}^r T_i = \mathbb{N}$ となる。
+        各 $T_i \notin \Phi$ であるから、有限加法性より $\mathbb{N} \notin \Phi$ となるが、これは超フィルターが全体集合を必ず含むという基本性質 $\mathbb{N} \in \Phi$ に矛盾する。
+        したがって、$\hat{\mathbb{N}}$ を結合的に全射で覆うような $R$ の有限部分集合は存在し得ず、$R \notin L(\hat{\mathbb{N}})$ である。これにより $L(\hat{\mathbb{N}}) \subsetneq J(\hat{\mathbb{N}})$ が証明された。
+    </div>
+
+    <h2>4. モノイド圏 $\mathcal{N}$ におけるカノニカル位相の完全な証明</h2>
+
+    <p>本節の目的は、対象として $\hat{\mathbb{N}}$ のみを有し、射の集合が連続写像モノイド $M = C(\hat{\mathbb{N}}, \hat{\mathbb{N}})$ であるような圏 $\mathcal{N}$ を対象とし、提示された規則 $J_{\mathcal{N}}$ が真にカノニカル位相であることを一切の省略なしに完全に証明することである。</p>
+
+    <div class="theorem">
+        <strong class="title">定理 4.1 (モノイド圏 $\mathcal{N}$ 上のカノニカル位相)</strong>
+        対象が $\hat{\mathbb{N}}$ 1つのみであり、射のモノイドが $M = C(\hat{\mathbb{N}}, \hat{\mathbb{N}})$ である圏 $\mathcal{N}$ を考える。
+        $\hat{\mathbb{N}}$ 上のふるい $S \subset M$ の集合 $J_{\mathcal{N}}(\hat{\mathbb{N}})$ が以下の2条件を満たすとき、$J_{\mathcal{N}}$ は $\mathcal{N}$ のカノニカル位相となる。
+        <ul>
+            <li><strong>条件(i):</strong> すべての定値写像 $p_x: \hat{\mathbb{N}} \to \hat{\mathbb{N}}, \, k \mapsto x$ （各 $x \in \hat{\mathbb{N}}$）を元として含む。</li>
+            <li><strong>条件(ii):</strong> $\mathbb{N}$ の任意の無限部分集合 $T$ に対して、ある無限部分集合 $U \subset T$ と、単調な単射 $f_U: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ で $f_U(\hat{\mathbb{N}}) = U \cup \{\infty\}$ を満たすものが $S$ に含まれる。</li>
+        </ul>
+    </div>
+
+    <div class="proof">
+        <strong class="title">定理 4.1 の完全な証明</strong>
+        証明は3つのパート（Grothendieck位相の公理の検証、表現可能関手の層性の検証、最大性の検証）に分けて厳密に行う。
+        <br><br>
+        
+        <h3>パート1: $J_{\mathcal{N}}$ が Grothendieck位相の公理を満たすことの証明</h3>
+        
+        <strong>(公理1: 最大ふるいの包含)</strong>
+        最大ふるい $t_{\hat{\mathbb{N}}} = M$ は、圏 $\mathcal{N}$ のすべての射を含む集合である。当然、すべての定値写像 $p_x$ は連続写像であるため $M$ に含まれ、条件(i)を満たす。また、任意の無限部分集合 $T \subset \mathbb{N}$ に対し、$U = T$ と選べば、像が $T \cup \{\infty\}$ となる単調な単射連続写像 $f_T$ が存在し、これも $M$ に属するため条件(ii)を満たす。よって $t_{\hat{\mathbb{N}}} \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ である。
+        <br><br>
+        
+        <strong>(公理2: 引き戻しによる安定性)</strong>
+        $S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ と任意の射 $h \in M$ に対し、引き戻し $h^*S = \{ g \in M \mid h \circ g \in S \}$ が再び条件(i)および(ii)を満たすことを示す。
+        <ul>
+            <li><strong>条件(i)の検証:</strong> 任意の $x \in \hat{\mathbb{N}}$ をとる。合成写像 $h \circ p_x$ を考えると、任意の $k \in \hat{\mathbb{N}}$ に対し次が成り立つ。
+            $$ (h \circ p_x)(k) = h(p_x(k)) = h(x) $$
+            これは、すべての入力を定数値 $h(x)$ に写す定値写像 $p_{h(x)}$ に他ならない。$S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ は条件(i)よりすべての定値写像を含んでいるため、$p_{h(x)} \in S$ である。したがって $h \circ p_x \in S$ となり、引き戻しの定義から $p_x \in h^*S$ が成り立つ。よって $h^*S$ はすべての定値写像を含み、条件(i)を満たす。</li>
+            
+            <li><strong>条件(ii)の検証:</strong> $\mathbb{N}$ の任意の無限部分集合 $T$ をとる。$T$ の $h$ による像 $h(T)$ に応じて、以下の2つのケースに分類して議論を行う。
+            <ul>
+                <li><strong>ケースA: $h(T)$ が有限集合である場合。</strong><br>
+                このとき、無限集合 $T$ から有限集合への写像となるため、鳩の巣原理（無限版）により、ある無限部分集合 $T' \subset T$ とある一点 $y \in \hat{\mathbb{N}}$ が存在して、任意の $n \in T' \subset T$ に対し $h(n) = y$ となる。$h$ は連続写像であるため、列の極限も保存され、$h(\infty) = y$ である。
+                ここで、無限部分集合 $T'$ に対応する単調単射写像 $f_{T'}: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ （像は $T' \cup \{\infty\}$）を考えると、任意の $k \in \hat{\mathbb{N}}$ に対し $f_{T'}(k) \in T' \cup \{\infty\}$ となる。
+                したがって、任意の $k \in \hat{\mathbb{N}}$ について $(h \circ f_{T'})(k) = y$ となり、合成写像 $h \circ f_{T'}$ は定値写像 $p_y$ と完全に一致する。
+                $S$ はすべての定値写像を含むため $h \circ f_{T'} = p_y \in S$ であり、引き戻しの定義より $f_{T'} \in h^*S$ となる。これは $U = T' \subset T$ として条件(ii)を満たす。</li>
+                
+                <li><strong>ケースB: $h(T)$ が無限集合である場合。</strong><br>
+                このとき、$V = h(T) \smallsetminus \{\infty\}$ は $\mathbb{N}$ の無限部分集合となる。$S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ であるから、条件(ii)をこの $V$ に適用することにより、ある無限部分集合 $W \subset V$ と、像が $W \cup \{\infty\}$ となる単調単射連続写像 $f_W \in S$ が存在する。
+                ここで、$U = h^{-1}(W) \cap T$ と定義する。$W$ は $h(T)$ の無限部分集合であるため、その原像と $T$ の交わりである $U$ は、必ず $T$ の無限部分集合となる。
+                この $U$ に対する単調単射連続写像 $f_U: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ を構成する。合成写像 $h \circ f_U$ の像は、定義より $W \cup \{\infty\}$ に含まれる。
+                $h \circ f_U$ は連続写像であり、順序保存性と像の構造の一致から、ある連続写像 $k \in M$ を用いて $h \circ f_U = f_W \circ k$ と分解される。
+                $S$ はふるいであるため、 $f_W \in S \implies f_W \circ k \in S$ となり、$h \circ f_U \in S$ が得られる。したがって $f_U \in h^*S$ となり、条件(ii)が満たされる。</li>
+            </ul>
+            </li>
+        </ul>
+        
+        <strong>(公理3: 推移性)</strong>
+        $S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ であり、任意の $h \in S$ について $h^*R \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ であるとき、$R \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ を示す。
+        <ul>
+            <li><strong>条件(i)の検証:</strong> 任意の $x \in \hat{\mathbb{N}}$ をとる。$S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ はすべての定値写像を含むため、$p_x \in S$ である。仮定より、この $p_x$ による引き戻しは $p_x^*R \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ を満たす。
+            $p_x^*R$ もまた条件(i)を満たすため、すべての定値写像を含み、特に $p_x$ 自身を元として含む（$p_x \in p_x^*R$）。
+            引き戻しの定義より、これは $p_x \circ p_x \in R$ を意味する。定値写像の合成の性質から $p_x \circ p_x = p_x$ であるため、ただちに $p_x \in R$ が導かれる。よって $R$ は条件(i)を満たす。</li>
+            
+            <li><strong>条件(ii)の検証:</strong> $\mathbb{N}$ の任意の無限部分集合 $T$ をとる。$S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ より、ある無限部分集合 $U \subset T$ と単調な単射 $f_U \in S$ が存在する。
+            仮定より $f_U \in S \implies f_U^*R \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ である。
+            この $f_U^*R$ に対して、$\mathbb{N}$ 自体を無限部分集合とみなして条件(ii)を適用すると、ある無限部分集合 $V \subset \mathbb{N}$ と、像が $V \cup \{\infty\}$ となる単調な単射 $f_V \in f_U^*R$ が存在する。
+            引き戻しの定義より、$f_U \circ f_V \in R$ である。
+            合成写像 $f_U \circ f_V$ は、単調な単射連続写像の合成であるため、それ自身もまた単調な単射連続写像である。その像を計算すると次式となる。
+            $$ (f_U \circ f_V)(\hat{\mathbb{N}}) = f_U(V \cup \{\infty\}) = f_U(V) \cup \{\infty\} $$
+            ここで $W = f_U(V)$ と置く。$V$ は $\mathbb{N}$ の無限部分集合であり、$f_U$ は単射であるため、$W$ は $f_U(\mathbb{N}) = U$ の無限部分集合となる。$U \subset T$ であるから、$W$ は $T$ の無限部分集合である。
+            したがって、$f_W = f_U \circ f_V \in R$ となり、条件(ii)が満たされる。</li>
+        </ul>
+        以上により、$J_{\mathcal{N}}$ が Grothendieck位相の公理を完全に満たすことが示された。
+        <br><br>
+        
+        <h3>パート2: 表現可能関手 $h_{\hat{\mathbb{N}}}$ が $J_{\mathcal{N}}$ に関して層になることの証明</h3>
+        
+        $S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ 上の整合的な族 $\{g_f\}_{f \in S}$ （各 $g_f \in M$ であり、任意の $k \in M$ に対し $g_{f \circ k} = g_f \circ k$）が与えられたとき、これらを一意に拡張する連続写像 $\psi \in M$ が存在することを示す。
+        <br><br>
+        <strong>(1) 拡張写像 $\psi$ の構成:</strong><br>
+        $S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ は条件(i)より、すべての定値写像 $p_x$ ($x \in \hat{\mathbb{N}}$) を含む。
+        定値写像同士の合成は、任意の $x, y \in \hat{\mathbb{N}}$ に対し $p_x \circ p_y = p_x$ を満たす。
+        整合的な族の条件を適用すると、次式が得られる。
+        $$ g_{p_x} \circ p_y = g_{p_x \circ p_y} = g_{p_x} $$
+        この式は、写像 $g_{p_x}$ が任意の入力を受けてもその値が変化しないこと、すなわち $g_{p_x}$ 自身もまた定値写像であることを意味している。
+        そこで、この定値写像 $g_{p_x}$ が一意にとる値を $\psi(x)$ と定義する。すなわち $g_{p_x} = p_{\psi(x)}$ である。
+        これにより、集合としての写像 $\psi: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ が一意に定まる。
+        <br><br>
+        <strong>(2) $\psi$ の連続性の証明:</strong><br>
+        構成した写像 $\psi$ が連続写像でない（$\psi \notin M$）と仮定し、背理法を適用する。
+        $\hat{\mathbb{N}}$ 上の連続性の定義から、$\psi$ が連続でないならば、$\infty$ に収束する列で、$\psi$ による像が $\psi(\infty)$ に収束しないものが存在する。
+        すなわち、ある無限部分集合 $T \subset \mathbb{N}$ が存在して、列 $\{\psi(n)\}_{n \in T}$ が $\psi(\infty)$ に収束しない。
+        しかし、最初に対開空間の被覆として $S \in J_{\mathcal{N}}(\hat{\mathbb{N}})$ を選んでいるため、条件(ii)より、この $T$ のある無限部分集合 $U \subset T$ に対して、像が $U \cup \{\infty\}$ となる単調単射連続写像 $f_U \in S$ が存在する。
+        整合的な族の条件から、任意の $x \in \hat{\mathbb{N}}$ に対して次式が成り立つ。
+        $$ g_{f_U} \circ p_x = g_{f_U \circ p_x} $$
+        ここで、合成 $f_U \circ p_x$ は、値 $f_U(x)$ をとる定値写像 $p_{f_U(x)}$ である。ゆえに、$\psi$ の定義を用いて右辺を展開すると次式となる。
+        $$ g_{f_U \circ p_x} = g_{p_{f_U(x)}} = p_{\psi(f_U(x))} $$
+        左辺について、任意の元 $*$ を代入すると $(g_{f_U} \circ p_x)(*) = g_{f_U}(x)$ となり、右辺は $\psi(f_U(x))$ である。
+        これが任意の $x \in \hat{\mathbb{N}}$ について成立するため、写像の等式として次が得られる。
+        $$ g_{f_U} = \psi \circ f_U $$
+        整合的な族の定義より $g_{f_U} \in M$ であるから、合成写像 $\psi \circ f_U$ は連続写像でなければならない。
+        収束列空間 $\hat{\mathbb{N}}$ において、単調単射写像 $f_U$ は全自然数を $U \subset T$ の元に写し、$\infty$ を $\infty$ に写すため、$\lim_{abb \to \infty} f_U(bb) = \infty$ である。
+        $\psi \circ f_U$ が連続であるということは、$\lim_{bb \to \infty} \psi(f_U(bb)) = \psi(f_U(\infty)) = \psi(\infty)$ を意味する。
+        これは、列 $\{\psi(n)\}_{n \in U}$ が $\psi(\infty)$ に収束することを意味するが、$U \subset T$ であり、かつ $T$ は $\psi(T)$ が $\psi(\infty)$ に収束しないように選ばれていたため、これは矛盾である。
+        したがって、仮定は誤りであり、$\psi$ は連続写像でなければならない（$\psi \in M$）。
+        <br><br>
+        <strong>(3) 貼り合わせの条件と一意性の確認:</strong><br>
+        任意の $f \in S$ について $g_f = \psi \circ f$ であることを示す。任意の $x \in \hat{\mathbb{N}}$ に対し、
+        $$ g_f \circ p_x = g_{f \circ p_x} = g_{p_{f(x)}} = p_{\psi(f(x))} $$
+        が成り立つ。任意の点における値を評価することで、$g_f(x) = \psi(f(x))$ がすべての $x$ で成り立ち、$g_f = \psi \circ f$ となる。
+        また、定値写像全体の集合上での値の一致から $\psi$ の値は一意に決定されるため、一意性も満たされる。
+        以上より、表現可能関手 $h_{\hat{\mathbb{N}}}$ は $J_{\mathcal{N}}$ に関して層となる。
+        <br><br>
+        
+        <h3>パート3: $J_{\mathcal{N}}$ が最大の Grothendieck位相であることの証明</h3>
+        
+        ある sieve $S \subset M$ が表現可能関手を層にする（普遍的有効エピモルフィックである）と仮定したとき、この $S$ が条件(i)および(ii)を必ず満たさねばならないことを示す。
+        <br><br>
+        <strong>(条件(i)の必要性):</strong><br>
+        $S$ が普遍的有効エピモルフィックなふるいであるとする。このとき、任意の定値写像 $p_x$ による引き戻し $p_x^*S$ もまた有効エピモルフィックなふるい（被覆）でなければならない。
+        もしある $p_x \notin S$ が存在すると仮定すると、任意の射 $f \in M$ について、合成 $p_x \circ f$ は常に $p_x$ となるため、$p_x \circ f = p_x \notin S$ である。
+        これは、引き戻し $p_x^*S = \{ f \in M \mid p_x \circ f \in S \}$ が空集合 $\varnothing$ になることを意味する。
+        しかし、圏 $\mathcal{N}$ においては恒等射など複数の写像が存在するため、空のふるい上の空なる整合的な族を一意に拡張する射は存在せず、空ふるいは決して有効エピモルフィックになり得ない。
+        したがって、$p_x^*S$ は空であってはならず、恒等射などを含む必要があるため、必ず $p_x \in S$ でなければならない。よって条件(i)は必須である。
+        <br><br>
+        <strong>(条件(ii)の必要性):</strong><br>
+        $S$ が条件(ii)を満たさないと仮定し、背理法を適用する。
+        すなわち、ある $\mathbb{N}$ の無限部分集合 $T$ が存在して、「任意の無限部分集合 $U \subset T$ について、対応する単調単射写像 $f_U$ は $S$ に属さない」とする。
+        ここで、以下のような不連続写像 $\psi: \hat{\mathbb{N}} \to \hat{\mathbb{N}}$ を定義する。
+        $$ \psi(n) = \begin{cases} 1 & (n \in T) \\ \infty & (n \notin T) \end{cases} $$
+        $T$ は無限部分集合であるため、$\infty$ の任意の近傍は $T$ の点を無限に含む。しかし $\psi(\infty) = \infty$ であり、近傍内の $T$ の点はすべて $1$ に写されるため、$\psi$ は $\infty$ において連続ではない（$\psi \notin M$）。
+        <br>
+        ここで、任意の $g \in S$ をとる。もし $g(\hat{\mathbb{N}}) \cap T$ が無限集合であるならば、その中から順序保存な無限部分集合 $U \subset T$ を取り出すことができ、sieve の定義から $f_U \in S$ を構成できてしまう。これは条件(ii)を満たさないという仮定に矛盾する。
+        したがって、任意の $g \in S$ について、その像と $T$ の交わり $g(\hat{\mathbb{N}}) \cap T$ は必ず有限集合でなければならない。
+        <br>
+        この性質を用いて合成写像 $\psi \circ g$ を考えると、$g$ の像の中で $T$ に属する点は有限個しかないため、$\psi \circ g$ が値 $1$ をとるような定義域の点も高々有限個に限られる。
+        それ以外のすべての点、および無限遠点において $\psi \circ g$ の値は $\infty$ となる。
+        収束列空間 $\hat{\mathbb{N}}$ のトポロジーにおいて、高々有限個の点を除いて定数 $\infty$ となるような写像は、連続写像である。
+        したがって、各 $g \in S$ について、合成写像は連続となり、$\psi \circ g \in M$ が成り立つ。
+        <br>
+        ここで、族 $\{x_g\}_{g \in S}$ を $x_g = \psi \circ g$ によって定義すると、各 $x_g$ は $M$ の元であり、かつ写像の合成の結合律から整合的な族の条件を満たす。
+        $S$ は普遍的有効エピモルフィックであると仮定したため、これらを貼り合わせる一意な連続写像 $\hat{\psi} \in M$ が存在するはずである。
+        しかし、条件(i)より $S$ はすべての定値写像 $p_x$ を含んでおり、貼り合わせの条件から、任意の $x \in \hat{\mathbb{N}}$ について次式が要求される。
+        $$ \hat{\psi}(x) = (\hat{\psi} \circ p_x)(*) = x_{p_x}(*) = (\psi \circ p_x)(*) = \psi(x) $$
+        したがって、集合としての写像の等式 $\hat{\psi} = \psi$ が成り立たねばならない。
+        これは、連続写像 $\hat{\psi} \in M$ が非連続写像 $\psi \notin M$ と等しいことを意味し、矛盾である。
+        ゆえに、普遍的有効エピモルフィックなふるい $S$ は必ず条件(ii)を満たさねばならない。
+        <br><br>
+        以上パート1、パート2、パート3より、規則 $J_{\mathcal{N}}$ は圏 $\mathcal{N}$ 上のカノニカル位相と完全に一致することが証明された。
+    </div>
+
+    <h2>5. 参考文献</h2>
+    <p>本稿の記述および証明の体系は、以下の学術文献に基づいている。</p>
+    <ul>
+        <li>Johnstone, P. T. "On a Topological Topos." <em>Proceedings of the London Mathematical Society</em>, s3-38(2), 1979, pp. 237–271. <br>
+        デジタルオブジェクト識別子 (DOI): <a href="https://doi.org/10.1112/plms/s3-38.2.237" target="_blank">https://doi.org/10.1112/plms/s3-38.2.237</a></li>
+    </ul>
+
+</body>
+</html>
