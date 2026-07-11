@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圏の拡大と前層の層条件：引き戻しと稠密性を仮定しない普遍的定式化</title>
+    <style>
+        body {
+            font-family: "Noto Serif JP", "Yu Mincho", serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #faf8f5;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-size: 1.6em;
+            border-left: 5px solid #34495e;
+            padding-left: 15px;
+            background-color: #ecf0f1;
+            padding: 10px 15px;
+        }
+        h3 {
+            font-size: 1.3em;
+            border-bottom: 1px dashed #7f8c8d;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 1.2em;
+            text-align: justify;
+        }
+        .theorem, .definition, .proof, .example, .remark {
+            background-color: #fff;
+            border: 1px solid #bdc3c7;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .theorem-title, .definition-title, .proof-title, .example-title, .remark-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .theorem-title { color: #c0392b; }
+        .definition-title { color: #2980b9; }
+        .proof-title { color: #27ae60; font-style: italic; }
+        .example-title { color: #8e44ad; }
+        .remark-title { color: #d35400; }
+        
+        .references {
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 20px;
+            border-top: 3px solid #34495e;
+        }
+        .references ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .references li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <!-- MathJax 3 Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>圏の拡大と前層の層条件<br>引き戻しと稠密性を仮定しない普遍的定式化</h1>
+
+<div class="remark">
+    <span class="remark-title">インフォーマルな導入と本稿の目的</span>
+    <p>これまでの議論において、部分圏 $B$ を含む大きな圏 $C$ において、対象 $Y$ の表現可能関手を $B$ に制限した前層 $k_Y = \operatorname{Hom}_C(-, Y)|_B$ が、いつ $B$ 上のサイトに関して層 (sheaf) になるかを考察してきました。</p>
+    <p>前位相 (pretopology) を用いた定理の定式化では、被覆族に対して「有効的かつ結合的に全射 (effectively jointly epimorphic)」という条件を課すことで層条件を導きました。しかし、このアプローチでは被覆の重なり（局所的なデータの一致条件）を記述するために、圏 $B$ における「引き戻し (pullback)」の存在を仮定する必要がありました。また、被覆篩 (covering sieve) を用いて層条件を再定式化しようとした別のアプローチ（第6節）では、制限された前層の余極限 $k_A$ と表現可能前層 $h_A$ を同一視するために、部分圏 $B$ が圏 $C$ の稠密かつ充満な部分圏 (dense and full subcategory) であるという極めて強い条件が要求されていました。</p>
+    <p>本稿の目的は、Grothendieck位相における「篩 (sieve)」の概念が本来持っている圏論的構造（右イデアル性）をフルに活用することで、これらの強い仮定をすべて排除できることを示すことです。前位相における等化子 (equalizer) の一致条件は、篩を巨大な図式とみなした際の極限 (limit) の普遍性として自然に吸収されます。これにより、<strong>引き戻しの存在も、部分圏の稠密性や充満性も一切仮定しない、層条件の最も普遍的で洗練された定理</strong>を構成し、完全かつ自己完結的 (self-contained) な証明を与えます。</p>
+</div>
+
+<h2>1. 準備となる基本概念</h2>
+
+<p>以下の数学的な定義、例、および定理・証明は、厳密な論理展開とするため「だである調」で記述する。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 1.1: 篩 (sieve) と Grothendieck位相 (Grothendieck topology)</span>
+    <p>圏 $B$ の対象 $X$ 上の篩 (sieve) $S$ とは、 $X$ を余域とする射の集まりであり、任意の $f: A \to X \in S$ と任意の射 $h: A' \to A$ に対して、その合成 $f \circ h: A' \to X$ も必ず $S$ に属するという右イデアル (right ideal) の性質を満たすものをいう。</p>
+    <p>圏 $B$ 上の Grothendieck位相 (Grothendieck topology) $J$ とは、各対象 $X$ に対して「被覆篩 (covering sieve)」と呼ばれる $X$ 上の篩の集まり $J(X)$ を割り当てる対応であり、以下の3つの公理を満たすものである。</p>
+    <ol>
+        <li><strong>恒等篩の公理:</strong> 対象 $X$ を余域とするすべての射からなる最大篩 (maximal sieve) $t_X = \{ f \mid \operatorname{cod}(f) = X \}$ は $J(X)$ に属する。</li>
+        <li><strong>基底変換の公理:</strong> $S \in J(X)$ であり、 $g: Y \to X$ が $B$ の任意の射であるならば、引き戻し篩 (pullback sieve) $g^*(S) = \{ h \mid \operatorname{cod}(h) = Y, g \circ h \in S \}$ は $J(Y)$ に属する。</li>
+        <li><strong>局所性の公理:</strong> $S \in J(X)$ であり、 $R$ が $X$ 上の篩とする。もし任意の $f: Y \to X \in S$ に対して $f^*(R) \in J(Y)$ が成り立つならば、 $R \in J(X)$ である。</li>
+    </ol>
+</div>
+
+<div class="example">
+    <span class="example-title">例 1.2: 位相空間における開被覆と篩の対応</span>
+    <p>Grothendieck位相は、通常の位相空間における開被覆を圏論的に一般化した概念である。位相空間 $X$ における開集合全体は、包含関係 $V \subset U$ を射 $V \to U$ とみなすことで、開集合の圏 $\operatorname{Open}(X)$ をなす。</p>
+    <p>開集合 $U$ 上の篩 $S$ とは、圏の定義から「 $U$ に含まれる開集合たちの集まりであって、もし $V \in S$ ならば $V$ に含まれる任意の開集合 $W$ も $S$ に属する」という性質を持つものである。この篩 $S$ が Grothendieck位相 $J$ において「被覆篩」であること $S \in J(U)$ は、篩に属する開集合たちの和集合が $U$ と完全に一致すること、すなわち $\bigcup_{V \in S} V = U$ が成り立つこととして定義される。</p>
+    <p>このように考えると、篩の右イデアル性は「被覆の細分もまた被覆である」という直観的な性質を体現していることがわかる。</p>
+</div>
+
+<div class="definition">
+    <span class="definition-title">定義 1.3: サイト (site) と層 (sheaf)</span>
+    <p>サイト (site) $(B, J)$ 上の前層 (presheaf) とは、反変関手 $P: B^{\operatorname{op}} \to \mathbf{Set}$ のことである。前層 $P$ が層 (sheaf) であるとは、任意の対象 $X \in \operatorname{Ob}(B)$ と任意の被覆篩 $S \in J(X)$ に対して、包含から誘導される自然な写像</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(t_X, P) \to \operatorname{Hom}_{\widehat{B}}(S, P) $$</p>
+    <p>が全単射となることである。ここで $\widehat{B} = \mathbf{Set}^{B^{\operatorname{op}}}$ は $B$ 上の前層の圏であり、 $\operatorname{Hom}_{\widehat{B}}(-, -)$ は前層の間の自然変換 (natural transformation) の全体からなる集合を表す。</p>
+</div>
+
+<div class="definition">
+    <span class="definition-title">定義 1.4: 篩に付随する図式 (diagram associated with a sieve)</span>
+    <p>圏 $B$ の対象 $X$ 上の篩 $S$ は、それ自体をひとつの小さな圏（添字圏）とみなすことができる。</p>
+    <ul>
+        <li><strong>対象:</strong> $S$ に属する射 $f: A \to X$ である。</li>
+        <li><strong>射:</strong> 対象 $f: A \to X$ から対象 $g: A' \to X$ への射は、 $B$ の射 $u: A \to A'$ であって可換三角形 $g \circ u = f$ を満たすものである。</li>
+    </ul>
+    <p>圏 $C$ の部分圏 $B$ の包含関手を $I: B \to C$ とするとき、篩 $S$ に付随する図式 $P_S: S \to C$ を、対象 $(f: A \to X)$ に対して $C$ の対象 $A$ を割り当て、射 $u$ に対して $C$ の射 $I(u)$ を割り当てる関手として定義する。</p>
+</div>
+
+<h2>2. 稠密性と引き戻しを仮定しない層条件の普遍的定式化</h2>
+
+<p>前位相の等化子図式においては、被覆の重なり部分 $A \times_X A'$ を用いてデータの一致条件 $x_g \circ p_1 = x_h \circ p_2$ を課していた。しかし、篩 $S$ は定義により「 $X$ へ向かう射の全体（右イデアル）」であるため、局所的なデータを貼り合わせるための重なりの情報（可換三角形）をすべてその内部に含んでいる。したがって、篩を図式とみなした際の余極限 (colimit) を考えることで、特定の引き戻し対象が存在するかどうかに依存せず、極限の普遍性として層条件を定式化することが可能となる。また、このアプローチでは $B$ における表現可能前層 $h_X$ をそのまま用いるため、稠密性や充満性といった強い仮定を完全に排除できる。</p>
+
+<div class="theorem">
+    <span class="theorem-title">定理 2.1: 普遍的な余極限による層条件の構成</span>
+    <p>$C$ を圏とし、 $B$ をその部分圏とする（ここで $B$ が $C$ の稠密部分圏 (dense subcategory) であることや充満部分圏 (full subcategory) であることは<strong>一切仮定しない</strong>）。 $J$ を $B$ 上の Grothendieck位相とする。</p>
+    <p>もし $B$ の任意の対象 $X \in \operatorname{Ob}(B)$ と $J(X)$ に属する任意の被覆篩 $S$ に対して、大きな圏 $C$ において対象 $X$ が図式 $P_S: S \to C$ の余極限 (colimit) となるならば、任意の $Y \in \operatorname{Ob}(C)$ に対して前層 $k_Y = \operatorname{Hom}_C(-, Y)|_B$ はサイト $(B, J)$ 上の層になる。</p>
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    <p>任意の $Y \in \operatorname{Ob}(C)$ を取る。前層 $k_Y: B^{\operatorname{op}} \to \mathbf{Set}$ がサイト $(B, J)$ 上の層であることを示すためには、定義1.3より、任意の $X \in \operatorname{Ob}(B)$ と被覆篩 $S \in J(X)$ に対して、自然な写像</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(t_X, k_Y) \to \operatorname{Hom}_{\widehat{B}}(S, k_Y) $$</p>
+    <p>が全単射になることを示せばよい。ここで $\widehat{B}$ は $B$ 上の前層の圏であり、 $t_X$ は $X$ 上の最大篩である。</p>
+    
+    <p><strong>ステップ 1: 左辺の展開</strong></p>
+    <p>最大篩 $t_X$ は、対象 $X$ を余域とするすべての射を含むため、 $B$ 上の表現可能前層 $h_X = \operatorname{Hom}_B(-, X)$ と前層の圏 $\widehat{B}$ において自然に同型である（ $t_X \cong h_X$ ）。したがって、圏 $B$ における米田の補題 (Yoneda lemma) を適用すると、全単射を示すべき写像の左辺は以下のように展開される。</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(t_X, k_Y) \cong \operatorname{Hom}_{\widehat{B}}(h_X, k_Y) \cong k_Y(X) $$</p>
+    <p>ここで米田の補題は、任意の（制限されたものを含む）前層 $P$ に対して $\operatorname{Hom}_{\widehat{B}}(h_X, P) \cong P(X)$ が成り立つことを保証するものであり、この同型は部分圏 $B$ の稠密性や充満性には一切依存せずに無条件で成立することに注意する。前層 $k_Y$ の定義より $k_Y(X) = \operatorname{Hom}_C(X, Y)$ であるため、左辺は最終的に $\operatorname{Hom}_C(X, Y)$ と同型になる。</p>
+
+    <p><strong>ステップ 2: 右辺の極限への展開</strong></p>
+    <p>次に右辺の $\operatorname{Hom}_{\widehat{B}}(S, k_Y)$ について考える。前層の圏 $\widehat{B}$ において、任意の篩 $S$ は、その要素である $B$ 上の表現可能前層 $h_A = \operatorname{Hom}_B(-, A)$ たちの余極限として標準的に表される。すなわち、定義1.4で定めた添字圏としての $S$ 上の図式に対する余極限として、</p>
+    <p>$$ S \cong \operatorname{colim}_{(f: A \to X) \in S} h_A $$</p>
+    <p>が $\widehat{B}$ において成り立つ。反変関手 $\operatorname{Hom}_{\widehat{B}}(-, k_Y)$ は余極限を極限 (limit) に変換する普遍的な性質を持つため、右辺は次のように展開できる。</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(S, k_Y) \cong \operatorname{Hom}_{\widehat{B}} \left( \operatorname{colim}_{(f: A \to X) \in S} h_A, k_Y \right) \cong \lim_{(f: A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_{\widehat{B}}(h_A, k_Y) $$</p>
+    <p>ここで再び圏 $B$ における米田の補題を各表現可能前層 $h_A$ に対して適用すると、 $\operatorname{Hom}_{\widehat{B}}(h_A, k_Y) \cong k_Y(A) = \operatorname{Hom}_C(A, Y)$ が得られる。これを代入すると、右辺は以下の同型を満たす。</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(S, k_Y) \cong \lim_{(f: A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_C(A, Y) $$</p>
+
+    <p><strong>ステップ 3: 定理の仮定による同型の結合</strong></p>
+    <p>ここで定理の仮定を用いる。仮定より、圏 $C$ において対象 $X$ は図式 $P_S: S \to C$ の余極限である。すなわち、大きな圏 $C$ の内部において、自然な同型</p>
+    <p>$$ X \cong \operatorname{colim}_{(f: A \to X) \in S} A $$</p>
+    <p>が成り立っている。表現関手 $\operatorname{Hom}_C(-, Y): C^{\operatorname{op}} \to \mathbf{Set}$ は反変関手であるため、 $C$ における対象の余極限を集合の圏 $\mathbf{Set}$ における極限に変換する。したがって、仮定の余極限に表現関手を適用すると、以下の同型が得られる。</p>
+    <p>$$ \operatorname{Hom}_C(X, Y) \cong \operatorname{Hom}_C \left( \operatorname{colim}_{(f: A \to X) \in S} A, Y \right) \cong \lim_{(f: A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_C(A, Y) $$</p>
+
+    <p><strong>ステップ 4: 結論</strong></p>
+    <p>以上の各ステップで得られた同型をすべて繋ぎ合わせることで、最終的な結論を得る。</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(t_X, k_Y) \cong \operatorname{Hom}_C(X, Y) \cong \lim_{(f: A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_C(A, Y) \cong \operatorname{Hom}_{\widehat{B}}(S, k_Y) $$</p>
+    <p>これにより、層条件が要請する自然な全単射が得られた。この論証過程のどこにも、部分圏 $B$ における引き戻しの存在や、 $B$ が $C$ の稠密部分圏あるいは充満部分圏であるという仮定は使用されていない。ゆえに、前層 $k_Y$ はサイト $(B, J)$ 上の層である。 $\blacksquare$</p>
+</div>
+
+<div class="references">
+    <h3>参考文献</h3>
+    <ul>
+        <li>Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+        <li>Johnstone, P. T. (2002). <em>Sketches of an Elephant: A Topos Theory Compendium</em>. Oxford University Press. <a href="https://global.oup.com/academic/product/sketches-of-an-elephant-9780198534259" target="_blank" rel="noopener noreferrer">https://global.oup.com/academic/product/sketches-of-an-elephant-9780198534259</a></li>
+        <li>nLab contributors. (n.d.). <em>Grothendieck topology</em>. nLab. <a href="https://ncatlab.org/nlab/show/Grothendieck+topology" target="_blank" rel="noopener noreferrer">https://ncatlab.org/nlab/show/Grothendieck+topology</a></li>
+    </ul>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圏の任意の対象が部分圏の位相上の層になるための十分条件</title>
+
+<!-- MathJax v3 の設定: $ によるインライン数式の有効化と、無限ループ回避 -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  chtml: {
+    matchFontHeight: false
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #4a5568;
+        --accent-color: #718096;
+        --bg-color: #f7fafc;
+        --box-bg: #ffffff;
+        --border-color: #e2e8f0;
+        --accent-subtle: #edf2f7;
+    }
+    body {
+        font-family: 'Helvetica Neue', 'Yu Gothic', 'Hiragino Sans', sans-serif;
+        color: var(--primary-color);
+        line-height: 1.8;
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-color);
+        font-size: 12.5pt;
+    }
+    * { box-sizing: border-box; }
+    .header {
+        background-color: #ffffff;
+        color: var(--primary-color);
+        padding: 60px 10%;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .header h1 {
+        margin: 0;
+        font-size: 24pt;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+    .header p {
+        margin-top: 15px;
+        font-size: 13.5pt;
+        color: var(--secondary-color);
+    }
+    .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 40px 50px;
+        background-color: var(--box-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+    }
+    h2 {
+        font-size: 18pt;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--secondary-color);
+        padding-bottom: 8px;
+        margin-top: 50px;
+    }
+    h3 {
+        font-size: 15pt;
+        color: var(--secondary-color);
+        margin-top: 40px;
+        border-left: 3px solid var(--accent-color);
+        padding-left: 10px;
+    }
+    p {
+        font-size: 12.5pt;
+        margin-bottom: 1.5em;
+        text-align: left;
+    }
+    .math-box {
+        background-color: #f8fafc;
+        border: 1px solid var(--border-color);
+        padding: 22px;
+        margin: 25px 0;
+        text-align: center;
+        overflow-x: auto;
+        border-radius: 4px;
+        font-size: 115%;
+    }
+    .definition, .theorem, .lemma {
+        background-color: #ffffff;
+        border: 1px solid var(--border-color);
+        padding: 25px;
+        margin: 30px 0;
+        border-radius: 4px;
+    }
+    .definition {
+        border-left: 4px solid #4a5568;
+    }
+    .theorem {
+        border-left: 4px solid #1a202c;
+    }
+    .lemma {
+        border-left: 4px solid #718096;
+    }
+    .definition-title, .theorem-title, .lemma-title {
+        font-weight: bold;
+        font-size: 13.5pt;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+    .example {
+        background-color: #fafafa;
+        border: 1px solid var(--border-color);
+        padding: 15px 20px;
+        margin: 20px 0;
+        font-size: 12pt;
+        border-radius: 4px;
+    }
+    ul, ol {
+        padding-left: 30px;
+        margin-bottom: 20px;
+        font-size: 12.5pt;
+    }
+    li {
+        margin-bottom: 12px;
+    }
+    .proof-section {
+        background-color: #fcfdfd;
+        border: 1px solid var(--border-color);
+        border-left: 3px solid #94a3b8;
+        padding: 20px 25px;
+        margin: 20px 0 40px 0;
+        border-radius: 4px;
+    }
+    .proof-title {
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-size: 13pt;
+        color: var(--secondary-color);
+    }
+    .qed {
+        text-align: right;
+        font-weight: bold;
+        margin-top: 10px;
+        font-size: 14pt;
+        color: var(--secondary-color);
+    }
+    .references {
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 20px;
+    }
+    .references li {
+        margin-bottom: 25px;
+    }
+    .references p.reason {
+        font-size: 11.5pt;
+        color: var(--secondary-color);
+        margin: 5px 0 0 20px;
+        background-color: #f8fafc;
+        padding: 10px 15px;
+        border-left: 2px solid var(--border-color);
+    }
+    .references a {
+        color: #2b6cb0;
+        text-decoration: none;
+    }
+    .references a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+    <div class="header">
+        <h1>圏の任意の対象が部分圏の位相上の層になるための十分条件</h1>
+        <p>記法の論理的区別から普遍的な余極限による前層の層化条件まで</p>
+    </div>
+    
+    <div class="container">
+        <p>本稿は、圏論において極限および余極限を計算する際に、<strong>「どの圏を舞台として演算が実行されているか」</strong>を厳密に区別するための記号法を確立し、それに基づいて Grothendieck 位相上の層条件を稠密性（denseness）や充満性（fullness）の仮定なしに証明した一連の議論を、自己完結的（self-contained）にまとめたものです。</p>
+
+        <h2>1. 記号の定義と基本方針</h2>
+        <p>議論の論理的明晰さを保つため、演算が行われる圏を上付き文字で明示します。基盤となる集合の圏 $\mathbf{Set}$ についてのみ特例を設けます。</p>
+        <div class="definition">
+            <ul>
+                <li><strong>任意の圏 $A$ における演算：</strong> 極限を $\operatorname{lim}^{A}$、余極限を $\operatorname{colim}^{A}$ と表記する。</li>
+                <li><strong>前層の圏 $\widehat{B} = [B^{\mathrm{op}}, \mathbf{Set}]$ における演算：</strong> 極限を $\operatorname{lim}^{\widehat{B}}$、余極限を $\operatorname{colim}^{\widehat{B}}$ と表記する。</li>
+                <li><strong>集合の圏 $\mathbf{Set}$ における演算：</strong> 最も基本的な圏であるため上付き文字を省略し、単に $\operatorname{lim}$、 $\operatorname{colim}$ と表記する。</li>
+            </ul>
+        </div>
+
+        <h2>2. 基礎概念の復習と層条件の定式化</h2>
+
+        <h3>2.1. 表現可能前層と篩（Sieve）</h3>
+        <p>圏 $B$ の対象 $X$ に対し、<strong>表現可能前層（Representable presheaf）</strong> $h_X$ は $h_X = \operatorname{Hom}_B(-, X)$ として定義されます。これは対象 $A$ に対して射の集合 $\operatorname{Hom}_B(A, X)$ を割り当てる関手です。</p>
+        
+        <p>圏 $B$ の対象 $X$ 上の<strong>篩（Sieve）</strong> $S$ ととは、余域を $X$ とする射の集まりであって、任意の射の右合成について閉じているものを指します。すなわち、$f: A \to X$ が $S$ に属し、$g: Y \to A$ が任意の射であるとき、合成 $f \circ g: Y \to X$ も必ず $S$ に属するという条件を満たします。</p>
+        <p>関手として見れば、篩 $S$ は表現可能前層 $h_X$ の部分関手（$S \hookrightarrow h_X$）です。</p>
+
+        <div class="example">
+            <strong>例：主篩（Principal Sieve）</strong><br>
+            ある1つの射 $f: A \to X$ によって生成される篩を主篩と呼びます。これは $f$ と任意の射を合成して得られるすべての射の集合です。特に、恒等射 $\operatorname{id}_X: X \to X$ によって生成される篩は、$X$ を余域とする<strong>すべての射</strong>を含みます。これを<strong>最大篩 $t_X$</strong> と呼びます。定義により、最大篩 $t_X$ は表現可能前層 $h_X$ そのものと完全に一致します（$t_X \cong h_X$）。
+        </div>
+
+        <h3>2.2. Grothendieck位相の定義</h3>
+        <p>圏 $B$ 上の<strong>Grothendieck位相（Grothendieck topology）</strong> $J$ とは、各対象 $X \in \operatorname{Ob}(B)$ に対して、$X$ 上の篩の集合 $J(X)$ （これらに属する篩を $X$ の<strong>被覆篩（covering sieve）</strong>と呼ぶ）を割り当てる対応であって、以下の3つの公理を満たすもののことです。</p>
+        
+        <div class="definition">
+            <div class="definition-title">Grothendieck位相の公理</div>
+            <ol>
+                <li><strong>最大篩の公理（Identity）：</strong> 任意の対象 $X \in B$ に対し、最大篩 $t_X$ （すなわち $h_X$ 自身）は $J(X)$ に属する。</li>
+                <li><strong>引き戻しの安定性（Stability）：</strong> 篩 $S$ が $J(X)$ に属し、$f: Y \to X$ が $B$ の任意の射であるとき、射 $f$ による $S$ の引き戻し（ベースチェンジ）
+                    <div class="math-box">
+                        $$f^*(S) := \{ g: Z \to Y \mid f \circ g \in S \}$$
+                    </div>
+                    は $J(Y)$ に属する。
+                </li>
+                <li><strong>推移性（Transitivity）：</strong> $S$ が $J(X)$ に属し、$T$ を $X$ 上の任意の篩とする。もし、任意の射 $f: Y \to X \in S$ に対して、その引き戻し $f^*(T)$ が $J(Y)$ に属するならば、$T$ もまた $J(X)$ に属する。</li>
+            </ol>
+        </div>
+        <p>これらの公理は、通常の位相空間における「開被覆」の概念を抽象化したものです。公理1は「空間全体はそれ自身の被覆であること」、公理2は「被覆を開部分集合へ制限してもやはり被覆であること」、公理3は「被覆の各要素をさらに細かい開被覆で覆ったとき、それらをすべて集めたものも全体としてなお被覆であること」をそれぞれ意味しています。Grothendieck位相が与えられた圏を<strong>サイト（Site）</strong>と呼びます。</p>
+
+        <h3>2.3. 層（Sheaf）の定義</h3>
+        <p>サイト $(B, J)$ において、前層 $P \in \widehat{B}$ が<strong>層（Sheaf）</strong>であるとは、任意の対象 $X \in B$ とその任意の被覆篩 $S \in J(X)$ に対して、包含写像 $S \hookrightarrow t_X$ が引き起こす自然な写像が全単射になること、すなわち以下が成り立つこととして定義されます。</p>
+        <div class="math-box">
+            $$P(X) \cong \operatorname{Hom}_{\widehat{B}}(S, P)$$
+        </div>
+        <p>この式は、「被覆篩 $S$ 上で定義された局所的な切断の族が、対象 $X$ 全体での大域的な切断 $P(X)$ へと一意に張り合わせられる」という幾何学的な直観を代数的に表現したものです。</p>
+
+
+        <h2>3. 主要な補題とその証明</h2>
+        <p>層条件の定理を証明するにあたり、必要となる3つの重要な補題をここで独立して証明します。</p>
+
+        <div class="lemma">
+            <div class="lemma-title">補題 1：米田の補題（Yoneda Lemma）</div>
+            <p>任意の小さな圏 $B$、その対象 $X \in \operatorname{Ob}(B)$、および任意の前層 $P \in \widehat{B}$ に対して、以下の自然な全単射が存在する。</p>
+            <div class="math-box">
+                $$\operatorname{Hom}_{\widehat{B}}(h_X, P) \cong P(X)$$
+            </div>
+            <p>※ ここで左辺は、関手 $h_X$ から $P$ への自然変換のなす集合である。</p>
+        </div>
+        <div class="proof-section">
+            <div class="proof-title">証明</div>
+            <p>写像 $\Phi: \operatorname{Hom}_{\widehat{B}}(h_X, P) \to P(X)$ と、その逆写像 $\Psi: P(X) \to \operatorname{Hom}_{\widehat{B}}(h_X, P)$ を具体的に構成し、これらが互いに逆であることを示す。</p>
+            <p><strong>Step 1: $\Phi$ の構成</strong><br>
+            自然変換 $\alpha: h_X \to P$ が与えられたとする。$\alpha$ は各対象 $A \in B$ ごとに写像 $\alpha_A: h_X(A) \to P(A)$ を持つ。対象 $X$ 自身を考えると、$h_X(X) = \operatorname{Hom}_B(X, X)$ には恒等射 $\operatorname{id}_X$ が存在する。そこで、次のように定義する。</p>
+            <div class="math-box">
+                $$\Phi(\alpha) = \alpha_X(\operatorname{id}_X) \in P(X)$$
+            </div>
+            <p><strong>Step 2: $\Psi$ の構成</strong><br>
+            逆に、元 $x \in P(X)$ が与えられたとする。自然変換 $\alpha^{(x)}: h_X \to P$ を構成したい。任意の対象 $A$ と、射 $f \in h_X(A)$ （すなわち $f: A \to X$）に対して、$P$ は反変関手であるから、写像 $P(f): P(X) \to P(A)$ が誘導される。そこで次のように定義する。</p>
+            <div class="math-box">
+                $$\alpha^{(x)}_A(f) = P(f)(x) \in P(A)$$
+            </div>
+            <p>この $\alpha^{(x)}$ が自然変換の公理（可換図式）を満たすことは、関手 $P$ の定義（$P(f \circ g) = P(g) \circ P(f)$）から直ちに従う。これにより $\Psi(x) = \alpha^{(x)}$ が定義された。</p>
+            <p><strong>Step 3: 全単射性の確認</strong><br>
+            $\Phi(\Psi(x)) = \Phi(\alpha^{(x)}) = \alpha^{(x)}_X(\operatorname{id}_X) = P(\operatorname{id}_X)(x) = \operatorname{id}_{P(X)}(x) = x$ となり、$\Phi \circ \Psi = \operatorname{id}$ である。<br>
+            逆に $\Psi(\Phi(\alpha))$ を考える。任意の $A$ と $f: A \to X$ に対して、自然変換 $\alpha$ の自然性（関手性）を用いると、図式の可換性から $P(f)(\alpha_X(\operatorname{id}_X)) = \alpha_A(f \circ \operatorname{id}_X) = \alpha_A(f)$ が成り立つ。したがって $\Psi(\Phi(\alpha))_A(f) = P(f)(\Phi(\alpha)) = \alpha_A(f)$ となり、$\Psi \circ \Phi = \operatorname{id}$ である。<br>
+            以上により、全単射性が証明された。</p>
+            <div class="qed">$\blacksquare$</div>
+        </div>
+
+        <div class="lemma">
+            <div class="lemma-title">補題 2：$\operatorname{Hom}$ 関手による余極限の極限への変換</div>
+            <p>任意の圏 $C$、添字圏 $I$、図式 $F: I \to C$、および対象 $Y \in C$ について、$C$ において $\operatorname{colim}^C F$ が存在するならば、以下の自然な同型が成り立つ。</p>
+            <div class="math-box">
+                $$\operatorname{Hom}_C(\operatorname{colim}^C_{i \in I} F(i), Y) \cong \operatorname{lim}_{i \in I^{\mathrm{op}}} \operatorname{Hom}_C(F(i), Y)$$
+            </div>
+        </div>
+        <div class="proof-section">
+            <div class="proof-title">証明</div>
+            <p>余極限の普遍性から直接導かれる。左辺の元である射 $g: \operatorname{colim}^C F(i) \to Y$ を一つ選ぶことは、余極限の定義により、図式 $F$ から対象 $Y$ への「余錐（cocone）」を一つ与えることと完全に同値である。</p>
+            <p>余錐とは、各対象 $i \in I$ に対する射の族 $\{ g_i: F(i) \to Y \}_{i \in I}$ であって、任意の $I$ の射 $u: i \to j$ に対して $g_j \circ F(u) = g_i$ を満たすもののことである。</p>
+            <p>一方、右辺 $\operatorname{lim}_{i \in I^{\mathrm{op}}} \operatorname{Hom}_C(F(i), Y)$ は集合の圏における極限である。集合の圏における極限の元とは、まさに各集合 $\operatorname{Hom}_C(F(i), Y)$ から元 $g_i$ を選び、遷移写像（ここでは引き戻し）について一貫している族 $\{ g_i \}_{i \in I}$ のことに他ならない。<br>
+            したがって、両者は構成要素のレベルで同一の概念を指しており、自然な全単射（同型）が存在する。</p>
+            <div class="qed">$\blacksquare$</div>
+        </div>
+
+        <div class="lemma">
+            <div class="lemma-title">補題 3：表現可能前層の余極限としての篩</div>
+            <p>圏 $B$ の対象 $X$ 上の任意の篩 $S$ に対して、前層の圏 $\widehat{B}$ において以下が成り立つ。</p>
+            <div class="math-box">
+                $$S \cong \operatorname{colim}^{\widehat{B}}_{(f: A \to X) \in S} h_A$$
+            </div>
+            <p>※ 添字圏 $J_S$ は、対象を $S$ に属する射 $(f: A \to X)$ とし、射を $X$ 上の可換三角形（$g \circ u = f$ を満たす $u: A \to A'$）とする圏である。</p>
+        </div>
+
+        <h3>補題3の背景：要素の圏における一般定理の特殊化</h3>
+        <p>補題3で示される同型は、圏論における非常に強力かつ一般的な定理である<strong>「すべての前層は表現可能関手の余極限である」</strong>という定理の<strong>特殊な場合</strong>にあたります。</p>
+        <p>一般に、任意の圏 $B$ とその上の任意の前層 $P \in \widehat{B}$ に対し、その<strong>要素の圏（Category of elements）</strong> $\int P$ が定義されます。$\int P$ の対象はペア $(A, x)$ （ただし $A \in B, x \in P(A)$）であり、射 $u: (A, x) \to (A', x')$ は $P(u)(x') = x$ を満たす $B$ の射 $u: A \to A'$ です。このとき、次の一般定理が成り立ちます。</p>
+        <div class="math-box">
+            $$P \cong \operatorname{colim}^{\widehat{B}}_{(A, x) \in \int P} h_A$$
+        </div>
+        <p>ここで、前層 $P$ として<strong>表現可能前層 $h_X$ の部分関手である篩 $S \hookrightarrow h_X$</strong> を代入してみます。篩の定義から、$x \in S(A)$ であることと、射 $f: A \to X$ が $S$ に属することは完全に同値です。したがって、篩 $S$ に対する要素の圏 $\int S$ は、その対象がそのまま $S$ に属する射 $(f: A \to X)$ となり、遷移写像の条件はまさに可換三角形 $f' \circ u = f$ に一致します。すなわち、$\int S$ は本稿で定義した添字圏 $J_S$ と完全に一致します。</p>
+        <p>ゆえに、補題3の式は、「任意の前層をその要素の圏からの図式の余極限として表す」という一般定理を、特に「部分関手としての篩」に適用して得られる明示的かつ直接的な特殊化の形そのものとなっています。</p>
+
+        <div class="proof-section">
+            <div class="proof-title">証明</div>
+            <p>図式 $D: J_S \to \widehat{B}$ を $D(f: A \to X) = h_A$ として定義する。この図式の余極限が $S$ であることを、普遍性を用いて示す。</p>
+            <p><strong>Step 1: 篩 $S$ への余錐（cocone）の構成</strong><br>
+            各対象 $(f: A \to X)$ に対して、自然変換 $\tau_f: h_A \to S$ を構成する。米田の補題（補題1）によれば、自然変換 $h_A \to S$ は $S(A)$ の元と1対1に対応する。$f \in S(A)$ であるため、これに対応する自然変換 $\tau_f$ を採用する。具体的には、任意の対象 $Y$ と射 $g \in h_A(Y)$ （すなわち $g: Y \to A$）に対して、$\tau_{f, Y}(g) = f \circ g \in S(Y)$ と定義する。これが余錐の条件を満たすことは、添字圏の射 $u: A \to A'$ に対して $f' \circ u = f$ が成り立つとき、$\tau_{f'} \circ h_u = \tau_f$ となることから確認できる。</p>
+            
+            <p><strong>Step 2: 普遍性の証明</strong><br>
+            任意の前層 $P \in \widehat{B}$ と、図式 $D$ から $P$ への任意の余錐 $\{ \alpha_f: h_A \to P \}_{f \in S}$ が与えられたとする。このとき、一意な自然変換 $\beta: S \to P$ が存在して、$\beta \circ \tau_f = \alpha_f$ を満たすことを示せばよい。</p>
+            <p>$\beta$ を次のように構成する。任意の対象 $C \in \operatorname{Ob}(B)$ と、任意の元 $g \in S(C)$ （すなわち $g: C \to X$）について、$\beta_C(g) \in P(C)$ を決定しなければならない。そこで、$g$ 自体を添字圏の対象 $(g: C \to X)$ とみなし、与えられた余錐から $\alpha_g: h_C \to P$ を取り出す。ここで再び米田の補題の対応関係（$\Phi$ の構成）を用い、以下のように定義する。</p>
+            <div class="math-box">
+                $$\beta_C(g) = (\alpha_g)_C(\operatorname{id}_C)$$
+            </div>
+            <p>この $\beta$ が条件 $\beta \circ \tau_f = \alpha_f$ を満たすか確認する。対象 $C$ と $h \in h_A(C)$ （$h: C \to A$）について、<br>
+            $(\beta \circ \tau_f)_C(h) = \beta_C(\tau_{f, C}(h)) = \beta_C(f \circ h) = (\alpha_{f \circ h})_C(\operatorname{id}_C)$<br>
+            となる。余錐 $\{ \alpha \}$ の両立条件から、添字圏の射 $h: (f \circ h: C \to X) \to (f: A \to X)$ により $\alpha_{f \circ h} = \alpha_f \circ h_h$ が成り立つ。したがって、<br>
+            $(\alpha_{f \circ h})_C(\operatorname{id}_C) = (\alpha_f)_C(h_h(\operatorname{id}_C)) = (\alpha_f)_C(h)$<br>
+            となり、$\beta \circ \tau_f = \alpha_f$ が示された。構成の仕方から、このような $\beta$ は一意に定まる。<br>
+            以上より、$S$ は図式 $D$ の普遍的な余極限であることが証明された。</p>
+            <div class="qed">$\blacksquare$</div>
+        </div>
+
+        <h2>4. 稠密性を仮定しない層条件の完全な証明</h2>
+        <p>本定理は、圏 $B$ が $C$ の稠密（dense）かつ充満（full）な部分圏であるという仮定を一切必要としません。</p>
+
+        <div class="theorem">
+            <div class="theorem-title">定理：普遍的な余極限による層条件の構成</div>
+            <p>$C$ を任意の圏とし、$B$ をその部分圏とする（<strong>$B$ が $C$ の稠密部分圏であることや充満部分圏であることは一切仮定しない</strong>）。$J$ を $B$ 上の Grothendieck 位相とする。</p>
+            <p>もし、$B$ の任意の対象 $X$ と $J(X)$ に属する任意の被覆篩 $S$ に対して、大きな圏 $C$ の内部において $X$ が図式 $P_S: J_S \to C$ （ただし $(f: A \to X) \mapsto A$）の余極限として振る舞うならば、任意の $Y \in \operatorname{Ob}(C)$ に対して制限前層 $k_Y = \operatorname{Hom}_C(-, Y)|_B$ はサイト $(B, J)$ 上の層になる。</p>
+        </div>
+
+        <div class="proof-section">
+            <div class="proof-title">証明</div>
+            <p>任意の $Y \in \operatorname{Ob}(C)$ を取る。前層 $k_Y$ がサイト $(B, J)$ 上の層であることを示すためには、層の定義に従い、任意の $X \in \operatorname{Ob}(B)$ と被覆篩 $S \in J(X)$ について以下の同型が成り立つことを示せばよい。</p>
+            <div class="math-box">
+                $$k_Y(X) \cong \operatorname{Hom}_{\widehat{B}}(S, k_Y)$$
+            </div>
+
+            <p><strong>Step 1: 左辺の変形（米田の補題の適用）</strong><br>
+            まず、最大篩 $t_X$ が表現可能前層 $h_X$ と同型であること（$t_X \cong h_X$）を用い、前層の圏 $\widehat{B}$ において<strong>補題1（米田の補題）</strong>を適用する。この操作は無条件で成立する。</p>
+            <div class="math-box">
+                $$k_Y(X) \cong \operatorname{Hom}_{\widehat{B}}(h_X, k_Y) \cong \operatorname{Hom}_{\widehat{B}}(t_X, k_Y)$$
+            </div>
+            <p>前層 $k_Y$ の定義より $k_Y(X) = \operatorname{Hom}_C(X, Y)$ であるため、左辺は $\operatorname{Hom}_C(X, Y)$ と同型になる。</p>
+
+            <p><strong>Step 2: 右辺の変形（$\widehat{B}$ における余極限）</strong><br>
+            次に、右辺 $\operatorname{Hom}_{\widehat{B}}(S, k_Y)$ を考える。<strong>補題3</strong>により、前層の圏 $\widehat{B}$ において、任意の篩 $S$ はその要素である表現可能前層 $h_A$ の形式的な張り合わせ（余極限）として標準的に表される。</p>
+            <div class="math-box">
+                $$S \cong \operatorname{colim}^{\widehat{B}}_{(f: A \to X) \in S} h_A$$
+            </div>
+            <p>ここで<strong>補題2</strong>（反変関手 $\operatorname{Hom}_{\widehat{B}}(-, k_Y)$ による極限への変換）を適用すると、右辺は次のように展開できる。</p>
+            <div class="math-box">
+                $$\operatorname{Hom}_{\widehat{B}}(S, k_Y) \cong \operatorname{Hom}_{\widehat{B}} \left( \operatorname{colim}^{\widehat{B}}_{(f: A \to X) \in S} h_A, k_Y \right) \cong \operatorname{lim}_{(f: A \to X) \in S^{\mathrm{op}}} \operatorname{Hom}_{\widehat{B}}(h_A, k_Y)$$
+            </div>
+            <p>ここで再び各 $h_A$ に対して<strong>補題1（米田の補題）</strong>を適用すると $\operatorname{Hom}_{\widehat{B}}(h_A, k_Y) \cong k_Y(A) = \operatorname{Hom}_C(A, Y)$ となるため、これを代入する。</p>
+            <div class="math-box">
+                $$\operatorname{Hom}_{\widehat{B}}(S, k_Y) \cong \operatorname{lim}_{(f: A \to X) \in S^{\mathrm{op}}} \operatorname{Hom}_C(A, Y)$$
+            </div>
+
+            <p><strong>Step 3: 定理の仮定の適用と結論の導出（$C$ における余極限）</strong><br>
+            ここで本定理の仮定を用いる。仮定より、圏 $C$ の内部において、対象 $X$ は図式 $P_S$ の余極限に一致する。</p>
+            <div class="math-box">
+                $$X \cong \operatorname{colim}^C_{(f: A \to X) \in S} A$$
+            </div>
+            <p>この仮定の式に対して、表現関手 $\operatorname{Hom}_C(-, Y)$ を適用する。<strong>補題2</strong>と同様に、圏 $C$ における余極限は集合の圏 $\mathbf{Set}$ における極限に変換されるため、以下の同型が得られる。</p>
+            <div class="math-box">
+                $$\operatorname{Hom}_C(X, Y) \cong \operatorname{Hom}_C \left( \operatorname{colim}^C_{(f: A \to X) \in S} A, Y \right) \cong \operatorname{lim}_{(f: A \to X) \in S^{\mathrm{op}}} \operatorname{Hom}_C(A, Y)$$
+            </div>
+
+            <p><strong>Step 4: 統合</strong><br>
+            以上の Step 1 から Step 3 までの自然な同型をすべて繋ぎ合わせる。</p>
+            <div class="math-box">
+                $$k_Y(X) \cong \operatorname{Hom}_C(X, Y) \cong \operatorname{lim}_{(f: A \to X) \in S^{\mathrm{op}}} \operatorname{Hom}_C(A, Y) \cong \operatorname{Hom}_{\widehat{B}}(S, k_Y)$$
+            </div>
+            <p>これにより、求める層条件 $k_Y(X) \cong \operatorname{Hom}_{\widehat{B}}(S, k_Y)$ が導かれた。この一連の論証過程のどこにも、部分圏 $B$ が $C$ において稠密であることや充満であることは使用されていない。ゆえに、前層 $k_Y$ はサイト $(B, J)$ 上の層であることが完全に証明された。</p>
+            <div class="qed">$\blacksquare$</div>
+        </div>
+
+        <div class="references">
+            <h3>引用文献および引用理由</h3>
+            <ol>
+                <li>
+                    Mac Lane, S. (1998). <i>Categories for the Working Mathematician</i> (2nd ed.). Springer. <br>
+                    <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4757-4721-8</a>
+                    <p class="reason"><strong>【引用理由】</strong> 本稿の土台となる「米田の補題（補題1）」の標準的な証明や、関手圏における pointwise な極限・余極限の一般的性質、および「要素の圏を用いた前層の余極限表示」の基本定式化を参照・検証するための基礎文献として引用しました。</p>
+                </li>
+                <li>
+                    Kashiwara, M., & Schapira, P. (2006). <i>Categories and Sheaves</i>. Springer. <br>
+                    <a href="https://link.springer.com/book/10.1007/3-540-27950-4" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/3-540-27950-4</a>
+                    <p class="reason"><strong>【引用理由】</strong> 本稿の中核である<strong>「Grothendieck 位相と層条件の代数的定式化」</strong>を厳密に取り扱うために引用しました。特に本書の第2章および第3章では、前層の圏における篩（Sieve）の取り扱い、部分関手としての包含関係、およびそれらに関わる余極限の極限変換の挙動が極めて数学的に厳密な形で展開されています。過去の議論で生じていた「稠密性や充満性を課さなければ層化条件が崩れるのではないか」という懸念に対し、本書の定義体系（米田の補題を各表現可能関手 $h_A$ に直接適用するアプローチ）に立ち戻ることで、無駄な仮定を排した明晰な証明を構築できることを立証するために、最も権威ある現代的レファレンスとして本書の明示的な引用が不可欠でした。</p>
+                </li>
+                <li>
+                    nLab authors. (n.d.). <i>Sheaf</i>. nLab. <br>
+                    <a href="https://ncatlab.org/nlab/show/sheaf" target="_blank" rel="noopener noreferrer">https://ncatlab.org/nlab/show/sheaf</a>
+                    <p class="reason"><strong>【引用理由】</strong> Grothendieck 位相（サイト）上での層の定義について、古典的な幾何学のコンテキストだけでなく、高次圏論や抽象圏論の観点からも「$\operatorname{Hom}_{\widehat{B}}(S, P)$」という形式的な全単射条件が最も普遍的かつ洗練された定義として機能していることを確認するために引用しました。</p>
+                </li>
+                <li>
+                    nLab authors. (n.d.). <i>Dense subcategory</i>. nLab. <br>
+                    <a href="https://ncatlab.org/nlab/show/dense+subcategory" target="_blank" rel="noopener noreferrer">https://ncatlab.org/nlab/show/dense+subcategory</a>
+                    <p class="reason"><strong>【引用理由】</strong> 過去の誤解の根源であった「稠密部分圏（Dense subcategory）」の定義を再確認し、左カン拡張やコ・イコライザーを用いた従来の構成経路と、本稿で示した普遍余極限による経路との論理的な差異を明確に区別するために引用しました。</p>
+                </li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

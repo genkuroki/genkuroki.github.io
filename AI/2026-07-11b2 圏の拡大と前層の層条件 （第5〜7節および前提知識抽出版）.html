@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圏の拡大と前層の層条件（第5〜7節および前提知識抽出版）</title>
+    <style>
+        body {
+            font-family: "Noto Serif JP", serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #faf8f5;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-size: 1.6em;
+            border-left: 5px solid #34495e;
+            padding-left: 15px;
+            background-color: #ecf0f1;
+            padding: 10px 15px;
+        }
+        h3 {
+            font-size: 1.3em;
+            border-bottom: 1px dashed #7f8c8d;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 1.2em;
+            text-align: justify;
+        }
+        .theorem, .definition, .proof, .example {
+            background-color: #fff;
+            border: 1px solid #bdc3c7;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .theorem-title, .definition-title, .proof-title, .example-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .theorem-title { color: #c0392b; }
+        .definition-title { color: #2980b9; }
+        .proof-title { color: #27ae60; font-style: italic; }
+        .example-title { color: #8e44ad; }
+        .references {
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 20px;
+            border-top: 3px solid #34495e;
+        }
+        .references ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .references li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <!-- MathJax 3 -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>圏の拡大と前層の層条件<br>（第5〜7節および前提知識抽出版）</h1>
+
+<p>本稿は、ある圏 $B$ をより大きな圏 $C$ の（稠密）充満部分圏とみなした際に、$C$ の対象を $B$ 上に制限した表現可能前層が、$B$ 上の Grothendieck位相に関して層となるかという問題について、第5節から第7節の議論を中心に、必要な前提定義を補ってまとめたものである。</p>
+
+<h2>前提となる基本概念（他節からの抽出）</h2>
+
+<div class="definition">
+    <span class="definition-title">定義 1.1: 篩 (sieve) と Grothendieck位相</span>
+    <p>圏 $B$ の対象 $X$ 上の篩 (sieve) $S$ とは、 $X$ を余域とする射の集まりであり、任意の $f: A \to X \in S$ と任意の射 $h: A' \to A$ に対して、その合成 $f \circ h: A' \to X$ も必ず $S$ に属するという右イデアルの性質を満たすものをいう。</p>
+    <p>圏 $B$ 上の Grothendieck位相 (Grothendieck topology) $J$ とは、 $B$ の各対象 $X$ に対して、被覆 (covering) と呼ばれる $X$ 上の篩の集まり $J(X)$ を割り当てる対応であり、以下の公理を満たすものである。</p>
+    <ol>
+        <li>（恒等篩） $X$ 上の最大篩 (maximal sieve) $t_X = \{ f \mid \operatorname{cod}(f) = X \}$ は $J(X)$ に属する。</li>
+        <li>（基底変換） $S \in J(X)$ であり、 $g: Y \to X$ が $B$ の射であるならば、引き戻し篩 (pullback sieve) $g^*(S) = \{ h \mid \operatorname{cod}(h) = Y, g \circ h \in S \}$ は $J(Y)$ に属する。</li>
+        <li>（局所性） $S \in J(X)$ であり、 $R$ が $X$ 上の篩とする。もし任意の $f: Y \to X \in S$ に対して $f^*(R) \in J(Y)$ が成り立つならば、 $R \in J(X)$ である。</li>
+    </ol>
+</div>
+
+<div class="definition">
+    <span class="definition-title">定義 1.2: サイト (site) と層 (sheaf)</span>
+    <p>サイト (site) $(B, J)$ 上の前層 (presheaf) $P: B^{\operatorname{op}} \to \mathbf{Set}$ が層 (sheaf) であるとは、任意の $X \in \operatorname{Ob}(B)$ と任意の被覆篩 $S \in J(X)$ に対して、自然な写像</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(t_X, P) \to \operatorname{Hom}_{\widehat{B}}(S, P) $$</p>
+    <p>が全単射となることである。ここで $\widehat{B} = \mathbf{Set}^{B^{\operatorname{op}}}$ は $B$ 上の前層の圏である。これを射の族の言葉で言い換えると、被覆となる射の族 $\{ f_i: A_i \to X \}_{i \in I}$ に対して、次のような図式が $\mathbf{Set}$ における等化子 (equalizer) になることである。</p>
+    <p>$$ P(X) \to \prod_{i \in I} P(A_i) \rightrightarrows \prod_{i, j \in I} P(A_i \times_X A_j) $$</p>
+</div>
+
+<div class="definition">
+    <span class="definition-title">定義 4.1: 稠密充満部分圏 (dense full subcategory)</span>
+    <p>圏 $C$ の部分圏 $B$ が稠密 (dense) であるとは、任意の $C$ の対象が $B$ の対象たちの余極限として自然に表されることを意味する。より厳密には、包含関手 $I: B \to C$ から誘導される制限された米田関手 $R: C \to \widehat{B}$ （ $Y \mapsto \operatorname{Hom}_C(-, Y)|_B$ ）が充満忠実であることと定義される。</p>
+</div>
+
+<hr>
+
+<h2>5. 第4の問題：層条件を満たすための圏論的十分条件</h2>
+
+<p>コンパクト生成空間の圏 $C = \mathbf{CG}$ とコンパクトHausdorff空間の圏 $B = \mathbf{CHaus}$ のペアのように、特定の良い圏の拡張においては命題が成立する。これを圏論的に一般化する。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 5.1: 有効全射 (effective epimorphism) と有効的結合的に全射な族</span>
+    <p>圏 $C$ において、射 $f: A \to X$ が有効全射 (effective epimorphism) であるとは、 $f$ の自分自身との引き戻し $A \times_X A$ が存在し、図式 $A \times_X A \rightrightarrows A \xrightarrow{f} X$ が $C$ における余等化子となることである。</p>
+    <p>射の族 $\{ f_i: A_i \to X \}_{i \in I}$ が有効的結合的に全射 (effectively jointly epimorphic) であるとは、 $C$ において余積 $\coprod_{i \in I} A_i$ が存在し、誘導される射 $\coprod_{i \in I} A_i \to X$ が有効全射になることである。すなわち、以下の図式が余等化子になることを意味する。</p>
+    <p>$$ \coprod_{i, j \in I} (A_i \times_X A_j) \rightrightarrows \coprod_{i \in I} A_i \to X $$</p>
+</div>
+
+<div class="theorem">
+    <span class="theorem-title">定理 5.2</span>
+    <p>$C$ を圏とし、 $B$ をその部分圏（※ここでは充満性や稠密性は不要）とする。 $J$ を $B$ 上の Grothendieck位相とする。もし $J$ に属する任意の被覆族 $\{ f_i: A_i \to X \}_{i \in I}$ が以下の2つの条件を満たすならば、任意の $Y \in \operatorname{Ob}(C)$ に対して前層 $k_Y = \operatorname{Hom}_C(-, Y)|_B$ はサイト $(B, J)$ 上の層になる。</p>
+    <ol>
+        <li><strong>引き戻しの保存:</strong> $B$ における引き戻し $A_i \times_X A_j$ は、 $C$ における引き戻しでもある。</li>
+        <li><strong>有効的結合的エピ性:</strong> 族 $\{ f_i \}$ は $C$ において有効的結合的に全射な族である。</li>
+    </ol>
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    <p>任意の $Y \in \operatorname{Ob}(C)$ を取る。 $k_Y$ が層であることを示すためには、被覆 $\{ f_i: A_i \to X \}$ に対して、以下の図式が $\mathbf{Set}$ における等化子になることを示せばよい。</p>
+    <p>$$ \operatorname{Hom}_C(X, Y) \xrightarrow{e} \prod_{i \in I} \operatorname{Hom}_C(A_i, Y) \rightrightarrows \prod_{i, j \in I} \operatorname{Hom}_C(A_i \times_X A_j, Y) $$</p>
+    <p>仮定2より、族 $\{ f_i \}$ は $C$ において有効的結合的に全射である。したがって、 $C$ において以下の図式は余等化子である。</p>
+    <p>$$ \coprod_{i, j \in I} (A_i \times_X A_j) \rightrightarrows \coprod_{i \in I} A_i \to X $$</p>
+    <p>表現関手 $\operatorname{Hom}_C(-, Y): C^{\operatorname{op}} \to \mathbf{Set}$ は反変関手であるため、 $C$ における任意の余極限を $\mathbf{Set}$ における極限に変換する。したがって、上記の余等化子図式に $\operatorname{Hom}_C(-, Y)$ を適用すると、 $\mathbf{Set}$ における等化子図式が得られる。反変関手は余積を直積に変換するため、この等化子図式はまさに目的の層条件の図式と自然同型になる。ゆえに $k_Y$ はサイト $(B, J)$ 上の層である。 $\blacksquare$</p>
+</div>
+
+<h3>補足：なぜ第5節では「稠密性」や「充満性」が不要なのか？</h3>
+<p>第6節の定理6.2では部分圏の「稠密性」と「充満性」が不可欠であるのに対し、この第5節の定理5.2ではそれらを一切仮定していません。この違いは、<strong>層条件の評価アプローチの違い</strong>に由来します。</p>
+<p>定理5.2では、層条件を「射の族（被覆）」に対して直接評価しています。前層 $k_Y$ を被覆を構成する対象 $X$ や $A_i$ に適用すると、$k_Y(X) = \operatorname{Hom}_C(X, Y)$ となり、最初から大きな圏 $C$ における集合の圏 $\mathbf{Set}$ への関手として計算が進みます。そのため、$C$ 内部で「有効的結合的に全射」という形で余等化子が成立していれば、表現関手 $\operatorname{Hom}_C(-, Y)$ を適用するだけで、そのまま $\mathbf{Set}$ の等化子（層条件）が自然に導かれます。圏 $C$ と $\mathbf{Set}$ の関係だけで完結しているため、 $B$ と $C$ の間の射の一致などは不要なのです。</p>
+
+<h2>6. 第5の問題：篩 (sieve) を用いた位相の再定式化</h2>
+
+<p>前述の条件は、Grothendieck位相を篩 (sieve) によって定義する標準的な定式化を用いることで、「余極限の保存」というより洗練された形に書き直すことができる。篩は射の合成関係を内包しているため、引き戻しの保存を個別に仮定する必要がなくなる。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 6.1: 篩に付随する図式と余極限</span>
+    <p>包含関手を $I: B \to C$ とする。篩 $S$ に対して、関手 $P_S: S \to C$ を考える。これは、対象 $f: A \to X$ に対して $C$ の対象 $A$ を割り当て、射 $h$ に対して $C$ の射 $I(h)$ を割り当てる図式である。</p>
+</div>
+
+<div class="theorem">
+    <span class="theorem-title">定理 6.2 (Sieve Topology Formulation)</span>
+    <p>$C$ を圏とし、 $B$ をその<strong>稠密充満部分圏</strong>とする。 $J$ を $B$ 上の Grothendieck位相とする。もし任意の対象 $X \in \operatorname{Ob}(B)$ と $J(X)$ に属する任意の被覆篩 $S$ に対して、 $X$ が $C$ における図式 $P_S: S \to C$ の余極限となるならば、任意の $Y \in \operatorname{Ob}(C)$ に対して前層 $k_Y = \operatorname{Hom}_C(-, Y)|_B$ はサイト $(B, J)$ 上の層になる。</p>
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    <p>任意の $Y \in \operatorname{Ob}(C)$ を取る。 $k_Y$ が層であることを示すためには、任意の $X \in \operatorname{Ob}(B)$ と $J(X)$ に属する被覆篩 $S$ に対して、以下の写像が全単射であることを示せばよい。</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(k_X, k_Y) \xrightarrow{\cong} \operatorname{Hom}_{\widehat{B}}(S, k_Y) $$</p>
+    <p>層条件の左辺について考える。我々が欲しい同型は、 $B$ 上の前層 $k_X = \operatorname{Hom}_C(-, X)|_B$ と $k_Y = \operatorname{Hom}_C(-, Y)|_B$ に関する自然な同型</p>
+    <p>$$ \operatorname{Hom}_C(X, Y) \cong \operatorname{Hom}_{\widehat{B}}(k_X, k_Y) $$</p>
+    <p>である。定理の仮定より $B$ は $C$ の稠密部分圏であるため、制限された米田関手 $C \to \widehat{B}$ は充満忠実となり、この同型が成立する。</p>
+    <p>一方、右辺について考える。前層の圏 $\widehat{B}$ において、任意の篩 $S$ はその要素である前層 $k_A$ の余極限として標準的に表される。すなわち、 $\widehat{B}$ において $S \cong \operatorname{colim}_{(A \to X) \in S} k_A$ が成り立つ。反変関手 $\operatorname{Hom}_{\widehat{B}}(-, k_Y)$ は余極限を極限に変換するため、右辺は次のように展開できる。</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(S, k_Y) \cong \operatorname{Hom}_{\widehat{B}} \left( \operatorname{colim}_{(A \to X) \in S} k_A, k_Y \right) \cong \lim_{(A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_{\widehat{B}}(k_A, k_Y) $$</p>
+    <p>ここでも $B$ が $C$ の稠密部分圏であることから得られる同型 $\operatorname{Hom}_C(A, Y) \cong \operatorname{Hom}_{\widehat{B}}(k_A, k_Y)$ を適用することで、右辺は $\lim_{(A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_C(A, Y)$ となる。</p>
+    <p>ここで定理の余極限に関する仮定を用いる。仮定より、 $C$ において $X$ は図式 $P_S: S \to C$ の余極限である。すなわち、 $X \cong \operatorname{colim}_{(A \to X) \in S} A$ が $C$ において成り立っている。表現関手 $\operatorname{Hom}_C(-, Y)$ は反変関手であり余極限を極限に変換するため、これに適用すると以下の同型が得られる。</p>
+    <p>$$ \operatorname{Hom}_C(X, Y) \cong \operatorname{Hom}_C \left( \operatorname{colim}_{(A \to X) \in S} A, Y \right) \cong \lim_{(A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_C(A, Y) $$</p>
+    <p>以上の同型をすべて繋ぎ合わせると、</p>
+    <p>$$ \operatorname{Hom}_{\widehat{B}}(k_X, k_Y) \cong \operatorname{Hom}_C(X, Y) \cong \lim_{(A \to X) \in S^{\operatorname{op}}} \operatorname{Hom}_C(A, Y) \cong \operatorname{Hom}_{\widehat{B}}(S, k_Y) $$</p>
+    <p>となり、自然な全単射が存在することが示された。ゆえに、 $k_Y$ はサイト $(B, J)$ 上の層である。 $\blacksquare$</p>
+</div>
+
+<h3>補足：なぜ第6節では「充満性」が必須なのか？</h3>
+<p>定理 6.2 において、単なる「稠密部分圏」ではなく「稠密かつ<strong>充満な</strong>部分圏」であることが必須である理由は、証明内で「 $B$ 上の篩 $S$ 」と「 $C$ から制限された前層 $k_A$ 」を同一視するステップにあります。</p>
+<p>一方、定理6.2のように層条件を「篩（Sieve）」という前層の言葉で再定式化して評価する場合、 $\operatorname{Hom}_{\widehat{B}}(S, k_Y)$ のように<strong>「前層の圏 $\widehat{B}$ における自然変換」</strong>として扱う必要があります。前層の圏 $\widehat{B}$ において、篩 $S$ は本来、 $B$ における表現可能前層 $h_A = \operatorname{Hom}_B(-, A)$ の部分関手として定義され、 $S \cong \operatorname{colim}_{(A \to X) \in S} h_A$ と標準的に表されます。証明中ではこれを $S \cong \operatorname{colim}_{(A \to X) \in S} k_A$ と置き換えていますが、これが正当化されるためには、任意の対象 $A$ に対して $h_A \cong k_A$ 、すなわち $\operatorname{Hom}_B(-, A) = \operatorname{Hom}_C(-, A)$ が成り立たなければなりません。これはまさに $B$ が $C$ の「充満部分圏」であることの定義そのものです。</p>
+<p>したがって、「稠密性」によって $\operatorname{Hom}_C(X, Y) \cong \operatorname{Hom}_{\widehat{B}}(k_X, k_Y)$ を保証し、「充満性」によってサイト上の被覆の構造（ $h_A$ ）と制限された前層の構造（ $k_A$ ）を一致させるという、両方の性質が不可欠となります。</p>
+
+<h2>7. 第6の問題：前位相 (Pretopology) から生成される篩の位相への拡張</h2>
+
+<p>第5節の定理5.2では、被覆族（前位相、pretopology）に対する層条件を扱いました。一方、第6節の定理6.2では篩（sieve）の言葉で位相を定式化しましたが、そこでは $B$ の稠密性と充満性が不可欠となりました。ここでは、稠密性や充満性を一切仮定することなく、第5節の強い仮定を Grothendieck 前位相に課すことで、そこから生成される篩の位相 (Grothendieck topology) についても層条件が成立することを示します。</p>
+
+<div class="definition">
+    <span class="definition-title">定義 7.1: 前位相から生成される位相</span>
+    <p>圏 $B$ 上の Grothendieck 前位相 (pretopology) $K$ とは、各対象 $X$ に対して「被覆族」と呼ばれる射の族の集まりを指定するものであり、恒等射の公理、合成の公理、および引き戻しの公理を満たすものである。前位相 $K$ は $B$ 上に Grothendieck 位相 $J$ を生成する。具体的には、対象 $X$ 上の篩 $S$ が $J(X)$ に属するための必要十分条件は、$S$ がある $K$ の被覆族 $\{ f_i: A_i \to X \}_{i \in I}$ を含むことである。</p>
+</div>
+
+<div class="theorem">
+    <span class="theorem-title">定理 7.2: 層条件の同値性</span>
+    <p>圏 $B$ 上の前位相 $K$ と、そこから生成された Grothendieck 位相 $J$ を考える。このとき、$B$ 上の前層 $P$ が $K$ に関する層条件（被覆族に関する等化子条件）を満たすことと、$P$ がサイト $(B, J)$ 上の層（篩に関する普遍写像条件を満たすこと）は同値である。</p>
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    <p><strong>($J$-層 $\implies K$-層の証明):</strong> 前層 $P$ が $J$ に関する層であると仮定する。任意の被覆族 $R = \{ f_i: A_i \to X \} \in K(X)$ を取る。$R$ から生成される篩 $S$ （すなわち、$f_i$ を経由して分解される射の全体）は、生成の定義から $J(X)$ に属する。$R$ 上で一致条件を満たす元の族 $(x_i)_{i \in I}$ （等化子図式の平行な射のイコライザーに入る元）が与えられたとする。篩 $S$ に属する任意の射 $g: Y \to X$ は $g = f_i \circ h$ と書けるため、$x_g = P(h)(x_i)$ と定義すれば、等化子の一致条件によりこの定義は分解の仕方に依存せず、$S$ から $P$ への自然な写像（適合族）を一つ定める。$P$ は $J$-層であるため、この適合族はただ一つの $x \in P(X)$ から誘導される（$\operatorname{Hom}_{\widehat{B}}(S, P) \cong P(X)$）。ゆえに $P$ は $K$ に関しても層条件を満たす。</p>
+    <p><strong>($K$-層 $\implies J$-層の証明):</strong> 逆に、前層 $P$ が $K$ に関する層であると仮定する。任意の被覆篩 $S \in J(X)$ を取り、$S$ 上の適合族（自然変換 $\alpha: S \to P$）が与えられたとする。生成位相の定義より、$S$ の部分集合として $K(X)$ に属する被覆族 $R = \{ f_i: A_i \to X \}_{i \in I}$ が存在する。$\alpha$ を $R$ に制限すると、これは $R$ 上の一致条件を満たす元の族になる。$P$ は $K$-層であるため、これを引き起こす一意の元 $x \in P(X)$ が存在する。この $x$ が $R$ だけでなく $S$ 全体に対して $\alpha$ と一致することを示す。任意の $g: Y \to X \in S$ を取る。前位相の引き戻し公理より、族 $g^*R = \{ \pi_2: A_i \times_X Y \to Y \}$ は $K(Y)$ に属する被覆族となる。$P$ は $K$-層であるから、$Y$ 上で評価される値は $g^*R$ 上への制限によって完全に決定される。$\alpha_g \in P(Y)$ と $P(g)(x) \in P(Y)$ の両者を $g^*R$ 上に制限すると、部分族 $R$ 上で両者が一致していることと自然変換 $\alpha$ の可換性から、引き戻し上でも完全に一致することがわかる。したがって $\alpha_g = P(g)(x)$ となり、$x$ は $S$ 全体での一意な拡張となる。ゆえに $P$ は $J$-層である。 $\blacksquare$</p>
+</div>
+
+<div class="theorem">
+    <span class="theorem-title">定理 7.3: 生成された位相における層の構成</span>
+    <p>$C$ を圏とし、 $B$ をその部分圏（※充満性や稠密性は不要）とする。 $K$ を $B$ 上の Grothendieck 前位相とし、 $J$ を $K$ から生成される $B$ 上の Grothendieck 位相とする。もし $K$ に属する任意の被覆族 $\{ f_i: A_i \to X \}_{i \in I}$ が定理5.2の2つの条件（引き戻しの保存、および $C$ における有効的結合的エピ性）を満たすならば、任意の $Y \in \operatorname{Ob}(C)$ に対して前層 $k_Y = \operatorname{Hom}_C(-, Y)|_B$ はサイト $(B, J)$ 上の層になる。</p>
+</div>
+
+<div class="proof">
+    <span class="proof-title">証明:</span>
+    <p>定理5.2の証明により、$K$ に属する任意の被覆族 $\{ f_i: A_i \to X \}_{i \in I}$ に対して、$k_Y$ は $\mathbf{Set}$ における等化子条件を満たす。これはすなわち、$k_Y$ が前位相 $K$ に関する被覆族の層条件を満たすことを意味している。</p>
+    <p>ここで先の定理7.2（層条件の同値性）より、前層 $k_Y$ が前位相 $K$ に関する層条件を満たすことと、生成された Grothendieck 位相 $J$ に関して層になることは完全に同値である。したがって $k_Y$ は篩に関する普遍写像条件も満たし、サイト $(B, J)$ 上の層となる。</p>
+    <p>この過程全体を通して、層条件を前層の圏 $\widehat{B}$ における篩の余極限として評価するのではなく、$C$ 上の表現関手 $\operatorname{Hom}_C(-, Y)$ と $\mathbf{Set}$ への極限への変換のみに依存して評価しているため、部分圏 $B$ の充満性や稠密性は一切用いられていない。これにより命題が完全に証明される。 $\blacksquare$</p>
+</div>
+
+<div class="references">
+    <h3>参考文献</h3>
+    <ul>
+        <li>Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer.</li>
+        <li>Johnstone, P. T. (2002). <em>Sketches of an Elephant: A Topos Theory Compendium</em>. Oxford University Press.</li>
+        <li>nLab contributors. (n.d.). <em>Grothendieck topology</em>. nLab.</li>
+        <li>nLab contributors. (n.d.). <em>Dense subcategory</em>. nLab.</li>
+    </ul>
+</div>
+
+</body>
+</html>
