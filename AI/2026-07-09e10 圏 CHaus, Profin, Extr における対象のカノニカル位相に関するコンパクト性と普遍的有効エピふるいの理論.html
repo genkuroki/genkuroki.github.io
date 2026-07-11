@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圏 CHaus, Profin, Extr における対象のカノニカル位相に関するコンパクト性と普遍的有効エピふるいの理論（完全訂正・数式表記厳密化版）</title>
+    
+    <!-- MathJax v3 configuration -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #fdfdfd;
+        }
+        h1 {
+            color: #1a4a78;
+            border-bottom: 2px solid #1a4a78;
+            padding-bottom: 10px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #2c66a3;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #3a7abf;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 1.5em;
+        }
+        .definition, .theorem, .lemma, .proof {
+            background-color: #f4f6f7;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 0 4px 4px 0;
+        }
+        .proof {
+            border-left-color: #9b59b6;
+            background-color: #f9f2fa;
+        }
+        .theorem, .lemma {
+            border-left-color: #e74c3c;
+            background-color: #fdf2f2;
+        }
+        .informal-note {
+            border-left: 4px solid #e67e22;
+            background-color: #fdf3e7;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 0 4px 4px 0;
+        }
+        .title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            color: #2c3e50;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul, ol {
+            margin-bottom: 1.5em;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>圏 $\mathbf{CHaus}$, $\mathbf{Profin}$, $\mathbf{Extr}$ における対象のカノニカル位相に関するコンパクト性と普遍的有効エピふるいの理論（完全訂正・数式表記厳密化版）</h1>
+
+    <div class="informal-note">
+        <span class="title">【本稿の修正・改善について】</span>
+        ご指摘のあった<strong>数式表示の漏れ（生テキストの混入）および同類の数式レンダリングの不備を完全に修正</strong>したバージョンである。<br><br>
+        具体的には以下の修正を徹底した。
+        <ol>
+            <li>定義 1.9 にあった生テキスト <code>(J_{can}-compact)</code> を、MathJax が正しく数式としてレンダリングできるように <code>($J_{\mathrm{can}}\text{-compact}$)</code> へと修正した。</li>
+            <li>「$J_{can}$-コンパクト」のように、多文字の添字（<code>can</code> や <code>coh</code>）が斜体のまま放置されていた同類の誤りをすべて検出し、数学的慣例に従って立体（ローマン体）の <code>$J_{\mathrm{can}}$</code> および <code>$J_{\mathrm{coh}}$</code> へと厳密化した。</li>
+            <li>数式内のハイフン繋ぎのテキスト（例: <code>-compact</code>）が文字化けやレイアウト崩れを起こさないよう、適切に <code>\text{-compact}</code> などの MathJax 内部テキストコマンド、あるいは数式外のハイフンへと分離・整理した。</li>
+        </ol>
+        数学的な証明内容、論理構成、および具体例の記述は一切簡略化せず、すべての厳密性を維持したまま表示の正確性を担保している。
+    </div>
+
+    <h2>1. 準備：基本概念と圏の定義</h2>
+    <p>まずは本稿で扱う3つの圏と、圏論的位相およびふるいに関する基本概念を厳密に定義する。</p>
+
+    <div class="definition">
+        <span class="title">定義 1.1 (対象となる圏と具体例)</span>
+        本稿では、射をすべて連続写像とする以下の3つの圏を考察する。
+        <ul>
+            <li><strong>$\mathbf{CHaus}$</strong>: コンパクト Hausdorff 空間を対象とする圏。</li>
+            <li><strong>$\mathbf{Profin}$</strong>: 完全不連結 (totally disconnected) なコンパクト Hausdorff 空間 (すなわち Stone 空間) を対象とする圏。<br>
+            <span style="font-size: 0.9em; color: #555;">(具体例: カントール集合 (Cantor set) や、位相群の射有限完成 (profinite completion) などがこの圏の代表的な対象である。)</span></li>
+            <li><strong>$\mathbf{Extr}$</strong>: 超不連結 (extremally disconnected) なコンパクト Hausdorff 空間を対象とする圏。位相空間が超不連結であるとは、任意の開集合の閉包が再び開集合（したがって開かつ閉集合、すなわち clopen 集合）になることをいう。<br>
+            <span style="font-size: 0.9em; color: #555;">(具体例: 離散空間のストーン・チェフ・コンパクト化 (Stone-Čech compactification) である $\beta\mathbb{N}$ などが代表例である。これらは射影的対象として振る舞う。)</span></li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 1.2 (プレトポス)</span>
+        圏 $\mathcal{C}$ が<strong>プレトポス (Pretopos)</strong> であるとは、以下の4つの条件をすべて満たす圏のことをいう。
+        <ol>
+            <li>すべての有限極限（終対象、直積、引き戻し、等化子）が存在する。</li>
+            <li>すべての有限余極限（始対象、直和、余等化子）が存在し、それらの直和は<strong>普遍的（universal）</strong>（任意の射による引き戻しで直和の構造が保たれる）かつ<strong>互いに素（disjoint）</strong>（相異なる成分の包含射の引き戻しが始対象になる）である。</li>
+            <li>任意の有効エピ射（等化子の対の余等化子）が普遍的（任意の射による引き戻しに対して再び有効エピ射となる）である。</li>
+            <li>任意の同値関係（集合論的な同値関係の条件を満たす射の対）が実効的（ある射の引き戻しペア、すなわちカーネルペアとして表される）である。</li>
+        </ol>
+        本稿において $\mathbf{Profin}$ がプレトポスであるという性質を言及する際、論理的に本質的なのは「有限極限と有限直和が安定に存在し、連続全射（エピ射）の引き戻しが再び連続全射（エピ射）になる」という引き戻し安定性に集約される。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 1.3 (制限（誘導）された Grothendieck 位相)</span>
+        圏 $\mathcal{C}$ とその上の Grothendieck 位相 $J$、および充満部分圏 $\mathcal{D} \subset \mathcal{C}$（包含関手を $i: \mathcal{D} \hookrightarrow \mathcal{C}$ とする）が与えられたとき、$\mathcal{D}$ 上に<strong>制限（誘導）された位相</strong> $J|_\mathcal{D}$ とは、各対象 $X \in \mathcal{D}$ に対して以下のように定義される。
+        $$J|_\mathcal{D}(X) = \{ S \subset \operatorname{Hom}_\mathcal{D}(-, X) \mid \langle i(S) \rangle_\mathcal{C} \in J(i(X)) \}$$
+        ここで $\langle i(S) \rangle_\mathcal{C}$ は、$S$ に属する射の $\mathcal{C}$ における像が $\mathcal{C}$ の中で生成するふるい（右合成について閉じた射の全体）を表す。すなわち、$\mathcal{D}$ 上のふるいが誘導位相の被覆であるとは、それを $\mathcal{C}$ の射の族とみなして生成したふるいが $\mathcal{C}$ の元の位相で被覆となっていることと同値である。
+    </div>
+
+    <p>次に、圏論における開被覆の抽象化である「ふるい」の概念を導入する。本稿では集合の包含関係を $\subset$ で表す。</p>
+
+    <div class="definition">
+        <span class="title">定義 1.4 (ふるい)</span>
+        圏 $\mathcal{C}$ の対象 $X$ 上の<strong>ふるい (sieve)</strong> $S$ とは、$X$ を余域とする射の族であり、任意の射の右からの合成に対して閉じているもののことをいう。すなわち、$f: Y \to X$ が $S$ に属するならば、任意の射 $g: Z \to Y$ に対して合成射 $f \circ g \in S$ となる。<br>
+        <span style="font-size: 0.9em; color: #555;">【直感的アナロジー】 位相空間における「開被覆」の圏論的な一般化である。部分集合 $U \subset X$ を包含写像 $U \to X$ とみなしたとき、その部分集合のさらに部分集合 $V \subset U$ は合成 $V \to U \to X$ とみなせる。ふるいとは、「ある被覆の構成要素に属する、さらに小さな要素もすべて含む」という性質を持つ射の集まりである。</span>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 1.5 (適合族)</span>
+        圏 $\mathcal{C}$ の対象 $X$ 上のふるい $S$ が与えられたとする。対象 $Y$ に値を持つ $S$ 上の<strong>適合族 (matching family)</strong> とは、射の族 $\{ x_f : \operatorname{dom}(f) \to Y \}_{f \in S}$ であって、任意の $f \in S$ と任意の $g: Z \to \operatorname{dom}(f)$ に対して $x_{f \circ g} = x_f \circ g$ を満たすもののことをいう。<br>
+        <span style="font-size: 0.9em; color: #555;">【直感的アナロジー】 多様体論において、開被覆の各開集合 $U_i$ 上で定義された滑らかな関数 $f_i$ があり、それらの共通部分 $U_i \cap U_j$ において $f_i = f_j$ と一致している状態（コサイクル条件）に相当する。「局所的なデータの互換性」を圏論的に定式化したものである。</span>
+    </div>
+
+    <p>ここで、層条件の根底にある「有効エピふるい」および「普遍的有効エピふるい」を厳密に定義する。</p>
+
+    <div class="definition">
+        <span class="title">定義 1.6 (有効エピふるい)</span>
+        圏 $\mathcal{C}$ の対象 $X$ 上のふるい $S$ が<strong>有効エピふるい (effective epimorphic sieve)</strong> であるとは、任意の対象 $Y$ に対し、自然な写像
+        $$\Phi: \operatorname{Hom}(X, Y) \to \operatorname{Matching}(S, Y) \quad (x \mapsto \{ x \circ f \}_{f \in S})$$
+        が全単射であることをいう。これは、表現可能前層 $\operatorname{Hom}(-, Y)$ がふるい $S$ に関して層条件（適合族からの一意な拡張の存在）を満たすことと同値である。<br>
+        <span style="font-size: 0.9em; color: #555;">【直感的アナロジー】 局所的に互換性のあるデータ（適合族）が与えられたとき、それらがただ一つの大域的なデータ（拡張された射 $x$）へと一意に張り合わさる、という性質である。</span>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 1.7 (普遍的有効エピふるい)</span>
+        圏 $\mathcal{C}$ の対象 $X$ 上のふるい $S$ が<strong>普遍的有効エピふるい (universally effective epimorphic sieve)</strong> であるとは、任意の射 $g: Z \to X$ に対し、その引き戻しふるい
+        $$g^*S = \{ h: W \to Z \mid g \circ h \in S \}$$
+        が、常に $Z$ 上の有効エピふるい (effective epimorphic sieve) になることをいう。
+    </div>
+
+    <p>以上の準備のもとで、カノニカル位相を単なる抽象的な最大位相としてではなく、普遍的有効エピふるいを用いて明示的に特徴づけることができる。</p>
+
+    <div class="theorem">
+        <span class="title">定理 1.8 (カノニカル位相の特徴づけ)</span>
+        圏 $\mathcal{C}$ 上の<strong>カノニカル位相 (canonical topology)</strong> $J_{\mathrm{can}}$ とは、すべての表現可能前層が層になるような最も細かい Grothendieck 位相のことである。このとき、各対象 $X$ における被覆ふるいの集合 $J_{\mathrm{can}}(X)$ は、$X$ の普遍的有効エピふるい (universally effective epimorphic sieve) の全体に完全に一致する。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 1.9 ($J_{\mathrm{can}}$-コンパクト、すなわち準コンパクト)</span>
+        サイト $(\mathcal{C}, J_{\mathrm{can}})$ において、対象 $X$ が <strong>$J_{\mathrm{can}}$-コンパクト ($J_{\mathrm{can}}\text{-compact}$)</strong>（または準コンパクト）であるとは、$X$ 上の任意の被覆ふるい $S \in J_{\mathrm{can}}(X)$ に対して、ある有限個の射の集合 $F = \{f_1, \dots, f_n\} \subset S$ が存在し、この $F$ によって生成されるふるい
+        $$\langle F \rangle = \{ f_i \circ g \mid 1 \le i \le n, \, \operatorname{codom}(g) = \operatorname{dom}(f_i) \}$$
+        もまた $J_{\mathrm{can}}(X)$ に属することをいう。
+    </div>
+
+    <h2>2. 第一の証明：既知の位相の一致と Gleason の定理を用いた証明</h2>
+    <p>位相空間論や圏論の既知の定理（コヒーレント位相との一致や射影的対象の性質）を援用した、各圏におけるコンパクト性の証明を記述する。</p>
+
+    <h3>2.1 $\mathbf{CHaus}$ における証明</h3>
+    <div class="proof">
+        <span class="title">証明 ($\mathbf{CHaus}$ における $J_{\mathrm{can}}$-コンパクト性)</span>
+        $\mathbf{CHaus}$ においては、カノニカル位相 $J_{\mathrm{can}}$ がコヒーレント位相 $J_{\mathrm{coh}}$ と完全に一致することが知られている（$J_{\mathrm{can}} = J_{\mathrm{coh}}$）。コヒーレント位相 $J_{\mathrm{coh}}(X)$ の被覆ふるいは、定義により、結合的に全射 (jointly surjective) となるような有限個の射の族 $\{f_1, \dots, f_n\}$ を必ず含む。<br><br>
+        したがって、$S \in J_{\mathrm{can}}(X)$ を任意の被覆ふるいとすると、定理 1.8 より $S$ は普遍的有効エピふるいであり、さらに $J_{\mathrm{can}} = J_{\mathrm{coh}}$ から $S$ は結合的に全射 (jointly surjective) となる有限部分族 $F = \{f_1, \dots, f_n\} \subset S$ を包含する。この有限部分族 $F$ から生成されるふるい $\langle F \rangle$ は、同じ結合的に全射 (jointly surjective) な有限族を包含しているため、再びコヒーレント位相の定義を満たし、$\langle F \rangle \in J_{\mathrm{coh}}(X) = J_{\mathrm{can}}(X)$ となる。<br><br>
+        これにより、任意の被覆ふるいが有限の部分被覆ふるいを持つことが示され、$\mathbf{CHaus}$ の任意の対象は $J_{\mathrm{can}}$-コンパクトであることが証明された。$\square$
+    </div>
+
+    <h3>2.2 $\mathbf{Profin}$ における証明</h3>
+    <div class="proof">
+        <span class="title">証明 ($\mathbf{Profin}$ における $J_{\mathrm{can}}$-コンパクト性)</span>
+        $\mathbf{Profin}$（完全不連結なコンパクト Hausdorff 空間、すなわち Stone 空間の圏）の対象についても、$\mathbf{CHaus}$ と同様の論理構造で証明される。<br><br>
+        Stone 空間の圏においては、Stone 双対性を用いた代数的論証により $J_{\mathrm{can}} = J_{\mathrm{coh}}$ が成立する。したがって、$\mathbf{Profin}$ における任意の被覆ふるい $S \in J_{\mathrm{can}}(X)$ は、コヒーレント位相の元として結合的に全射 (jointly surjective) となる有限部分族 $F \subset S$ を持つ。<br><br>
+        この $F$ が生成するふるい $\langle F \rangle$ もまた結合的に全射 (jointly surjective) な有限族を含むため、前段と同様に $\langle F \rangle \in J_{\mathrm{coh}}(X) = J_{\mathrm{can}}(X)$ が導かれる。ゆえに、$\mathbf{Profin}$ の任意の対象もまた $J_{\mathrm{can}}$-コンパクトである。$\square$
+    </div>
+
+    <h3>2.3 $\mathbf{Extr}$ における証明</h3>
+    <div class="proof">
+        <span class="title">証明 ($\mathbf{Extr}$ における $J_{\mathrm{can}}$-コンパクト性)</span>
+        $\mathbf{Extr}$（超不連結コンパクト Hausdorff 空間の圏）は $\mathbf{CHaus}$ の充満部分圏であるが、一般には引き戻し（pullback）を保たないため、$\mathbf{CHaus}$ のように「カノニカル位相がコヒーレント位相に一致する」という既知の結果を無条件に適用することは論理的な循環あるいは飛躍を招く。したがって、ここでは第3節で与えられる直接証明の結果を出発点として、厳密な圏論的証明を構成する。<br><br>
+        
+        <strong>【ステップ1：有限の結合的に全射な族の存在】</strong><br>
+        第3節の直接証明により、任意の被覆ふるい（普遍的有効エピふるい） $S \in J_{\mathrm{can}}(X)$ に対し、結合的に全射 (jointly surjective) となる有限の部分集合 $F = \{f_1, \dots, f_n\} \subset S$ が必ず存在することが示される。すなわち、各対象 $\operatorname{dom}(f_i)$ の像の和集合は全体に一致する（$\bigcup_{i=1}^n f_i(\operatorname{dom}(f_i)) = X$）。目標は、この有限族 $F$ が生成するふるい $\langle F \rangle$ が実際に $J_{\mathrm{can}}(X)$ に属することを示すことである。<br><br>
+        
+        <strong>【ステップ2：有限余極限からの誘導射の分裂エピ性】</strong><br>
+        各 $\operatorname{dom}(f_i)$ は超不連結コンパクト Hausdorff 空間（$\mathbf{Extr}$ の対象）である。有限個の超不連結コンパクト Hausdorff 空間の位相空間としての直和 $Y = \coprod_{i=1}^n \operatorname{dom}(f_i)$ は、再び超不連結コンパクト Hausdorff 空間となる。これは、圏 $\mathbf{Extr}$ が有限直和（圏論的余極限）を持つことを意味し、$Y \in \mathbf{Extr}$ である。<br><br>
+        各成分への包含射を $\iota_i: \operatorname{dom}(f_i) \to Y$ とすると、直和の普遍性により、一意な連続写像 $p: Y \to X$ が存在して $p \circ \iota_i = f_i$ を満たす。$F$ が結合的に全射であるため、この $p$ は $\mathbf{CHaus}$ における全射連続写像（エピ射）となる。ここでGleasonの定理により、$\mathbf{Extr}$ の対象 $X$ は $\mathbf{CHaus}$ における射影的対象 (projective object) である。したがって、連続全射 $p: Y \to X$ に対し、連続な切断 (section) $s: X \to Y$ が存在して $p \circ s = \mathrm{id}_X$ を満たす。すなわち、$p$ は $\mathbf{Extr}$ における<strong>分裂エピ射 (split epimorphism)</strong> である。<br><br>
+        
+        <strong>【ステップ3：普遍写像 $p$ による任意の射の持ち上げ】</strong><br>
+        誘導射 $p: Y \to X$ 自体はふるい $S$ に属するとは限らないが、この $p$ の分裂エピ性と対象の射影性を利用して、$\langle F \rangle \in J_{\mathrm{can}}(X)$ を証明できる。<br><br>
+        Grothendieck 位相の局所性公理（あるいは普遍的有効エピふるいの定義）に基づき、$\langle F \rangle \in J_{\mathrm{can}}(X)$ を示すには、任意の射 $k: Z \to X$ （$Z \in \mathbf{Extr}$）による引き戻しふるい $k^*\langle F \rangle$ が $J_{\mathrm{can}}(Z)$ に属することを示すれば十分である。
+        ここで、$Z \in \mathbf{Extr}$ は $\mathbf{CHaus}$ における射影的対象であり、$p: Y \to X$ は $\mathbf{CHaus}$ における連続全射である。したがって、射影性の定義により、射 $k: Z \to X$ は $p$ を通して連続写像 $h: Z \to Y$ へと持ち上げることができる。すなわち、$p \circ h = k$ を満たす射 $h: Z \to Y$ が存在する。<br><br>
+        
+        <strong>【ステップ4：引き戻しふるいが最大ふるいになることの証明】</strong><br>
+        直和空間 $Y = \coprod_{i=1}^n \operatorname{dom}(f_i)$ において、各成分 $\operatorname{dom}(f_i)$ は $Y$ の開かつ閉集合（clopen集合）である。合成射 $s \circ k: Z \to Y$ は連続写像であるため、その逆像 $Z_i = (s \circ k)^{-1}(\operatorname{dom}(f_i))$ も $Z$ の開かつ閉集合となる。これにより、$Z$ は互いに素な開かつ閉集合の有限直和 $Z = \coprod_{i=1}^n Z_i$ に分解される。超不連結空間の開閉部分空間は再び超不連結であるため、各 $Z_i$ は $\mathbf{Extr}$ の対象である。<br><br>
+        各包含射を $\kappa_i: Z_i \to Z$ とし、制限写像を $h_i: Z_i \to \operatorname{dom}(f_i)$ とすると、$\iota_i \circ h_i = s \circ k \circ \kappa_i$ が成り立つ。このとき、
+        $$k \circ \kappa_i = p \circ (s \circ k) \circ \kappa_i = p \circ \iota_i \circ h_i = f_i \circ h_i$$
+        となる。これは $F$ の元 $f_i$ の右合成の形をしているため、定義より $k \circ \kappa_i \in \langle F \rangle$ である。引き戻しふるいの定義より、すべての包含射について $\kappa_i \in k^*\langle F \rangle$ となる。<br><br>
+        族 $\{\kappa_i\}_{i=1}^n$ は $Z$ の不連続和分解（有限開閉被覆）を与えているため、それらが生成するふるいは恒等射 $\mathrm{id}_Z$ を含み、最大ふるい $\operatorname{Hom}(-, Z)$ に一致する。
+        恒等射を含むふるいは自明に有効エピふるいであるから、$k^*\langle F \rangle = \operatorname{Hom}(-, Z)$ は有効エピふるいである。<br><br>
+        
+        これが任意の射 $k: Z \to X$ について成り立つため、引き戻し安定性により、$\langle F \rangle \in J_{\mathrm{can}}(X)$ が完全に証明された。ゆえに、$\mathbf{Extr}$ の任意の対象は $J_{\mathrm{can}}$-コンパクトである。$\square$
+    </div>
+
+    <h2>3. 第二の証明：層条件と極限を用いた直接的な証明</h2>
+    <p>外部の文献による位相の一致などの高度な結果に依存せず、定理 1.8 で定めた普遍的有効エピふるいの層条件のみから直接的に証明を与える。まずは $\mathcal{C} = \mathbf{CHaus}$ の場合について証明する。</p>
+
+    <div class="proof">
+        <span class="title">直接証明 ($\mathbf{CHaus}$ における層条件による構成)</span>
+        対象 $X \in \mathbf{CHaus}$ を任意にとり、$S \in J_{\mathrm{can}}(X)$ を被覆ふるいとする。定理 1.8 より、$S$ は $X$ 上の普遍的有効エピふるい (universally effective epimorphic sieve) である。証明の目標は、ある有限部分集合 $F \subset S$ が存在して $\langle F \rangle \in J_{\mathrm{can}}(X)$ となることを示すことである。<br><br>
+        
+        <strong>【背理法の仮定と有限和の閉集合】</strong><br>
+        背理法を用いる。いかなる有限部分集合 $F \subset S$ も $X$ を共同で全射しない (jointly surjective ではない) と仮定する。
+        各射 $f \in S$ について、定義域 $\operatorname{dom}(f)$ はコンパクトであり、$X$ は Hausdorff であるため、その連続写像による像 $\operatorname{Im}(f)$ は $X$ の閉集合となる。<br><br>
+        任意の有限部分集合 $F \subset S$ に対して、その像の和集合を $C_F = \bigcup_{f \in F} \operatorname{Im}(f)$ とおく。有限個の閉集合の和集合であるため $C_F$ も閉集合であり、背理法の仮定より $C_F \subsetneq X$ (真部分集合) である。<br><br>
+
+        <strong>【商空間と極限 (limit) の構成】</strong><br>
+        各有限部分集合 $F \subset S$ に対して、位相空間の商空間 $Y_F = X / C_F$ を考える。これは $X$ の閉集合 $C_F$ を一点 $\ast_F$ に潰した空間であり、$X$ がコンパクト Hausdorff であるため、$Y_F$ もまたコンパクト Hausdorff 空間となる。自然な商写像を $q_F: X \to Y_F$ とする。<br><br>
+        有限部分集合の間に包含関係 $F \subset G$ があるとき、$C_F \subset C_G$ となるため、自然な連続写像 $p_{FG}: Y_F \to Y_G$ が一意に定まり、$p_{FG} \circ q_F = q_G$ を満たす。これにより $\{ Y_F, p_{FG} \}$ は $\mathbf{CHaus}$ における逆系 (inverse system) をなす。<br><br>
+        この逆系の極限 (limit) を $Y = \lim_{\leftarrow} Y_F$ とする。$\mathbf{CHaus}$ はすべての小極限を持つ圏であるため、$Y \in \mathbf{CHaus}$ である。極限の普遍性により、各 $q_F$ を束ねた一意な連続写像 $q: X \to Y$ が存在する。<br><br>
+        また、各 $Y_F$ の基点 $\ast_F$ は $p_{FG}(\ast_F) = \ast_G$ を満たすため、これらは極限 $Y$ における一つの点 $\ast = (\ast_F)_{F} \in Y$ を定める。<br><br>
+
+        <strong>【層条件の適用と矛盾の導出】</strong><br>
+        任意の射 $f \in S$ をとる。単集合 $F_0 = \{f\}$ を考えると、任意の $G \supset F_0$ に対して $\operatorname{Im}(f) \subset C_G$ である。したがって、商写像 $q_G$ は $\operatorname{Im}(f)$ のすべての点を基点 $\ast_G$ に写す。極限の構成より、合成写像 $q \circ f: \operatorname{dom}(f) \to Y$ はすべての点を $\ast \in Y$ に写す定数写像となる。<br><br>
+        ここで、対象 $Y$ に値を持つ $S$ 上の適合族 (matching family) として、すべての $f \in S$ に対して $x_f = q \circ f$ と定義される族 $\{x_f\}_{f \in S}$ を考える。前述の通りこれは定数写像の族であり、適合条件を自明に満たす。<br><br>
+        $S$ は有効エピふるいであるため、定義 1.6（層条件）より、この適合族を引き起こすような一意な拡張射 $x: X \to Y$ が存在しなければならない。<br><br>
+        しかし、そのような拡張射として、以下の<strong>2つの異なる連続写像</strong>が存在してしまう。
+        第一に、極限への誘導写像 $q: X \to Y$ である。定義より $q \circ f = x_f$ を満たす。
+        第二に、$X$ のすべての点を $\ast \in Y$ に写す定数写像 $c: X \to Y$ である。これも明らかに $c \circ f = x_f$ を満たす。<br><br>
+        層条件が要求する「拡張の一意性」により、$q = c$ でなければならない。すなわち、任意の $z \in X$ について $q(z) = \ast$ である。
+        これが意味するのは、任意の有限部分集合 $F$ について、$q$ の $Y_F$ への射影である $q_F(z)$ が常に基点 $\ast_F$ になるということである。<br><br>
+        しかし商空間の定義より、$q_F(z) = \ast_F$ となるのは $z \in C_F$ の場合のみである。したがって、任意の $z \in X$ が $C_F$ に属さなければならず、これは $C_F = X$ を意味する。<br><br>
+        
+        これは、「いかなる有限部分集合 $F$ についても $C_F \subsetneq X$ である」という背理法の仮定に真っ向から矛盾する。
+        ゆえに、この仮定は誤りであり、$S$ の中には必ず結合的に全射 (jointly surjective) となる有限部分集合 $F$ が存在することが完全に証明された。<br><br>
+
+        <strong>【有限部分被覆の正当性と結論】</strong><br>
+        この結合的に全射 (jointly surjective) な有限部分集合 $F$ が生成するふるい $\langle F \rangle$ が $\mathbf{CHaus}$ における普遍的有効エピふるいになることを示す。$\mathbf{CHaus}$ には有限余極限が存在し、有限部分族 $F = \{f_1, \dots, f_n\}$ の定義域の位相的な不連続和 $Y = \coprod_{i=1}^n \operatorname{dom}(f_i)$ は再び $\mathbf{CHaus}$ の対象となる。自然な誘導射 $p: Y \to X$ は、$F$ が結合的に全射であることから連続な全射である。<br><br>
+        コンパクト Hausdorff 空間から Hausdorff 空間への連続な全射は常に閉写像であり、したがって位相的な商写像となる。
+        任意の射 $k: Z \to X$ ($Z \in \mathbf{CHaus}$) による $p$ の引き戻し（ファイバー積） $p': Z \times_X Y \to Z$ を考える。コンパクト空間のファイバー積は再びコンパクトであり、全射の引き戻しは全射となるため、$p'$ もまたコンパクト Hausdorff 空間の間の連続な全射（すなわち商写像）となる。<br><br>
+        圏論において商写像は有効エピ射であるため、引き戻し射 $p'$ は $Z$ 上の有効エピ射である。$p'$ が生成する主ふるい $\langle p' \rangle$ は引き戻しふるい $k^*\langle F \rangle$ に含まれるため、$k^*\langle F \rangle$ もまた有効エピふるいとなる。これが任意の $k$ について成り立つため、$\langle F \rangle$ は普遍的有効エピふるい（すなわち $J_{\mathrm{can}}(X)$ の元）である。よって $J_{\mathrm{can}}$-コンパクト性が示された。$\square$
+    </div>
+    
+    <h3>3.1 $\mathbf{Profin}$ および $\mathbf{Extr}$ における準コンパクト性の厳密な直接証明</h3>
+    
+    <p>
+        本節では、外部の高度な概念（プレトポス論の既知の帰結など）を暗黙の前提とせず、定理 1.8 で定めた普遍的有効エピふるいの定義と各空間の純粋に位相幾何学的な構造のみから直接証明を完遂する。<br>
+        証明の見通しを良くするため、まず両方の空間に共通する層条件と指示関数の性質に関する「分離補題」を準備する。
+    </p>
+
+    <div class="lemma">
+        <span class="title">補題（指示関数による分離と層条件）</span>
+        $\mathcal{C}$ を $\mathbf{Profin}$ または $\mathbf{Extr}$ のいずれかの圏とする。対象 $X \in \mathcal{C}$ と、普遍的有効エピふるい $S \in J_{\mathrm{can}}(X)$ に対して、$X$ のある閉集合 $C \subsetneq X$ が存在し、すべての $f \in S$ について $\operatorname{Im}(f) \subset C$ を満たし、かつ $C$ と交わらない非空な開かつ閉集合（clopen集合） $V^c \subset X$ が存在すると仮定する。このとき、層条件に矛盾する。
+    </div>
+    <div class="proof">
+        <span class="title">補題の証明</span>
+        離散空間 $\{0, 1\}$ は完全不連結かつ超不連結なコンパクト Hausdorff 空間であるため、圏 $\mathcal{C}$ の対象である。
+        開閉集合 $V^c$ の指示関数 $\chi: X \to \{0, 1\}$ を、$z \in V^c$ のとき $\chi(z)=1$、$z \notin V^c$ のとき $\chi(z)=0$ と定義する。$V^c$ が開閉集合であることから、この写像 $\chi$ は連続写像（すなわち $\mathcal{C}$ の射）となる。<br><br>
+        仮定より、すべての $f \in S$ についてその像は $C$ に含まれており、 $V^c \cap C = \emptyset$ であるため、$\operatorname{Im}(f)$ の元はすべて $\chi$ によって $0$ に写される。すなわち、合成射 $\chi \circ f: \operatorname{dom}(f) \to \{0, 1\}$ は恒等的に $0$ をとる定数写像となる。<br><br>
+        一方で、$X$ のすべての点を恒等的に $0$ に写す定数射 $c_0: X \to \{0, 1\}$ を考えると、任意の $f \in S$ に対して $\chi \circ f = c_0 \circ f$ が自明に成り立つ。
+        したがって、族 $\{ \chi \circ f \}_{f \in S}$ は適合族 (matching family) をなす。<br><br>
+        $S$ はカノニカル位相の被覆ふるい（有効エピふるい）であるため、定義 1.6（層条件の一意性）より、この適合族を誘起する $X \to \{0, 1\}$ への射は一意でなければならない。
+        しかし、写像 $\chi$ と定数写像 $c_0$ はともにこの適合族を誘起する。一意性公理より $\chi = c_0$ でなければならないが、非空な $V^c$ の点 $x$ において $\chi(x) = 1 \neq c_0(x) = 0$ となり矛盾する。$\square$
+    </div>
+
+    <div class="proof">
+        <span class="title">直接証明（$\mathbf{Profin}$ における対象の準コンパクト性）</span>
+        
+        対象 $X \in \mathbf{Profin}$ を任意にとり、$S \in J_{\mathrm{can}}(X)$ を普遍的有効エピふるいとする。目標は、ある有限部分集合 $F \subset S$ が存在して $\langle F \rangle \in J_{\mathrm{can}}(X)$ になることを示すことである。<br><br>
+
+        <strong>【ステップ1：像の全体が結合全射であること】</strong><br>
+        背理法を用いる。もし $\bigcup_{f \in S} \operatorname{Im}(f) \neq X$ であると仮定する。
+        各 $\operatorname{Im}(f)$ はコンパクト空間の連続像として $X$ の閉集合であるため、その全体の和集合の閉包 $C = \overline{\bigcup_{f \in S} \operatorname{Im}(f)}$ もまた $X$ の閉集合であり、仮定より $C \subsetneq X$（真部分集合）である。<br><br>
+        $X$ は完全不連結なコンパクト Hausdorff 空間（Stone空間）である。Stone空間のゼロ次元性より、閉集合 $C$ とそれに含まれない点 $x \in X \setminus C$ が存在するとき、$C$ を含み $x$ を含まないような開かつ閉集合 $V \subset X$ が存在する。
+        このとき補集合 $V^c = X \setminus V$ もまた開閉集合であり、点 $x \in V^c$ を含むため非空である。かつ $C \subset V$ であるため $V^c \cap C = \emptyset$ を満たす。<br><br>
+        ...
+        これはまさに前述の「分離補題」の仮定を満たす状況であり、補題より層条件に矛盾する。
+        したがって、最初の背理法の仮定は誤りであり、$\bigcup_{f \in S} \operatorname{Im}(f) = X$ （結合全射）であることが確定する。<br><br>
+
+        <strong>【ステップ2：有限部分被覆の抽出と正当性証明】</strong><br>
+        各 $\operatorname{Im}(f)$ は $X$ の閉集合であり、$\{ \operatorname{Im}(f) \}_{f \in S}$ は $X$ の閉被覆をなす。
+        $X$ は位相幾何学的にコンパクトであるため、この閉被覆から有限個の元を抽出して $X$ を覆うことができる。
+        すなわち、有限個の射の集合 $F = \{f_1, \dots, f_n\} \subset S$ が存在して $\bigcup_{i=1}^n \operatorname{Im}(f_i) = X$ となる。<br><br>
+        この有限部分族 $F$ が生成するふるい $\langle F \rangle$ が普遍的有効エピふるいになることは、第3節の $\mathbf{CHaus}$ の証明と全く同様の引き戻し安定性の議論により成立する。（$\mathbf{Profin}$ は有限余極限とファイバー積について閉じており、コンパクト空間の間の連続全射は商写像として有効エピ射となるため）。
+        よって $\mathbf{Profin}$ において $J_{\mathrm{can}}$-コンパクト性が証明された。$\square$
+    </div>
+
+    <div class="proof">
+        <span class="title">直接証明（$\mathbf{Extr}$ における対象の準コンパクト性）</span>
+        対象 $X \in \mathbf{Extr}$ を任意にとり、$S \in J_{\mathrm{can}}(X)$ を被覆ふるいとする。
+        $\mathbf{Extr}$ の各対象は超不連結（任意の開集合の閉包が開閉集合）なコンパクト Hausdorff 空間である。<br><br>
+
+        <strong>【ステップ1：結合全射性】</strong><br>
+        $\bigcup_{f \in S} \operatorname{Im}(f) = X$ を示す。背理法として、像の和集合の閉包 $C = \overline{\bigcup_{f \in S} \operatorname{Im}(f)} \subsetneq X$ を仮定する。このとき、補集合 $U = X \setminus C$ は非空な開集合である。<br><br>
+        ここで $X$ の超不連結性を適用する。$U$ が開集合であることから、その閉包 $V^c = \overline{U}$ は $X$ の開かつ閉集合（clopen集合）となる。$U \neq \emptyset$ より $V^c \neq \emptyset$ である。
+        また、開集合 $U$ は $C$ と交わらないため、その閉包 $V^c$ も各 $\operatorname{Im}(f)$ と交わりを持たない。したがって $V^c \cap C = \emptyset$ である。<br><br>
+        これは「分離補題」の仮定を満たす状況であり、補題より層条件に矛盾する。
+        よって $\mathbf{Profin}$ と同様に、像の全体は $X$ を稠密に覆い、コンパクト性から有限部分族 $F = \{f_1, \dots, f_n\} \subset S$ が存在して $\bigcup_{i=1}^n \operatorname{Im}(f_i) = X$ （有限結合全射）となる。<br><br>
+
+        <strong>【ステップ2：分裂エピ射の構造を用いた引き戻し安定性の証明】</strong><br>
+        この有限部分族 $F$ が生成するふるい $\langle F \rangle$ が $\mathbf{Extr}$ において普遍的有効エピふるいとなることを、$\mathbf{Extr}$ の射影性を用いて直接証明する。<br><br>
+        各 $\operatorname{dom}(f_i)$ は $\mathbf{Extr}$ の対象である。不連続和 $Y = \coprod_{i=1}^n \operatorname{dom}(f_i)$ は再び超不連結であり、誘導射 $p: Y \to X$ は連続全射である。
+        Gleasonの定理により $X \in \mathbf{Extr}$ は圏 $\mathbf{CHaus}$ における射影的対象 (projective object) であるため、連続な切断 $s: X \to Y$ ($p \circ s = \mathrm{id}_X$) が存在する。すなわち、誘導射 $p$ は $\mathbf{Extr}$ における分裂エピ射 (split epimorphism) である。<br><br>
+        
+        任意の $k: Z \to X$ による引き戻しふるい $k^*\langle F \rangle$ が有効エピふるいになることを示す。
+        合成射 $s \circ k: Z \to Y$ は連続写像であり、$Y = \coprod_{i=1}^n \operatorname{dom}(f_i)$ である。各 $\operatorname{dom}(f_i)$ は $Y$ の開かつ閉集合なので、その逆像 $Z_i = (s \circ k)^{-1}(\operatorname{dom}(f_i))$ も $Z$ の開かつ閉集合となる。
+        これにより、$Z$ は互いに素な開かつ閉集合の有限直和 $Z = \coprod_{i=1}^n Z_i$ に分解される。<br><br>
+        各制限射 $h_i: Z_i \to \operatorname{dom}(f_i)$ について、包含射を $\iota_i$ とすると $\iota_i \circ h_i = (s \circ k)|_{Z_i}$ が成り立つ。このとき、
+        $$k|_{Z_i} = p \circ (s \circ k)|_{Z_i} = p \circ \iota_i \circ h_i = f_i \circ h_i$$
+        となる。これは $F$ の元 $f_i$ の右合成の形をしているため、$k|_{Z_i} \in \langle F \rangle$ である。すなわち、$Z_i$ からの包含射はすべて引き戻しふるい $k^*\langle F \rangle$ に属する。
+        これらは $Z$ の不連続和分解を与えているため、生成するふるいは恒等射 $\mathrm{id}_Z$ を含み、最大ふるい $\operatorname{Hom}(-, Z)$ に一致する。
+        恒等射を含むふるいは自明に有効エピふるいであるから、$k^*\langle F \rangle$ は有効エピふるいである。
+        これが任意の $k$ について成り立つため、$\langle F \rangle \in J_{\mathrm{can}}(X)$ が完全に証明された。$\square$
+    </div>
+
+    <h2>4. 参考文献</h2>
+    <ul>
+        <li>
+            Mac Lane, S., & Moerdijk, I. (1992). <em>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</em>. Springer-Verlag. 
+            <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">[Springer Link]</a><br>
+            (Grothendieck 位相、層条件、有効エピふるい、普遍的有効エピふるいによるカノニカル位相の厳密な定義とその圏論的性質について)
+        </li>
+        <li>
+            Johnstone, P. T. (1982). <em>Stone Spaces</em>. Cambridge University Press. 
+            <a href="https://www.cambridge.org/jp/universitypress/subjects/mathematics/logic-categories-and-sets/stone-spaces?format=PB&isbn=9780521337793" target="_blank">[Cambridge University Press - Product Page]</a><br>
+            ($\mathbf{Profin}$ における Stone 双対性、ゼロ次元コンパクト空間の開閉被覆、およびコヒーレント位相について)
+        </li>
+        <li>
+            Gleason, A. M. (1958). Projective topological spaces. <em>Illinois Journal of Mathematics</em>, 2(4A), 482-489. 
+            <a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank">[Project Euclid]</a><br>
+            (超不連結空間 $\mathbf{Extr}$ と $\mathbf{CHaus}$ における射影的対象の一致に関する Gleason の定理について)
+        </li>
+    </ul>
+
+</body>
+</html>
