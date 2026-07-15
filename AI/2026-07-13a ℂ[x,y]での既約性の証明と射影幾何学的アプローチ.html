@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ℂ[x,y]での既約性の証明と射影幾何学的アプローチ</title>
+    
+    <!-- MathJax v3 設定: テストで成功した確実な設定を使用 -->
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fafafa;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #2980b9;
+            border-left: 5px solid #2980b9;
+            padding-left: 15px;
+            margin-top: 50px;
+            background-color: #f1f8fc;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 30px;
+            border-bottom: 1px dashed #16a085;
+            padding-bottom: 5px;
+        }
+        .definition, .theorem {
+            background-color: #e8f4f8;
+            border: 1px solid #bce8f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition-title, .theorem-title {
+            font-weight: bold;
+            color: #31708f;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #31708f;
+            display: inline-block;
+        }
+        .proof {
+            background-color: #ffffff;
+            border-left: 5px solid #7f8c8d;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .example {
+            background-color: #fff9e6;
+            border-left: 5px solid #f1c40f;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul, ol {
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .references {
+            background-color: #f2f2f2;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+    <h1>ℂ[x,y]での既約性の証明と射影幾何学的アプローチ</h1>
+
+    <p>
+        本稿では、まず最初に、複素数係数の2変数多項式 $f(x, y) = x^5 + y^5 + 1$ が多項式環 $\mathbb{C}[x, y]$ において既約（irreducible）であることを証明します。証明には、純代数的な手法である<strong>アイゼンシュタインの判定法（Eisenstein's Criterion）</strong>を用いる方法と、代数幾何学の強力な定理である<strong>ベズーの定理（Bézout's Theorem）</strong>を用いる幾何学的な方法の2通りを解説します。
+    </p>
+    <p>
+        また、後者の幾何学的手法の有効性をより深く理解するための補助として、実際に「既約でない（可約な）多項式」にこの理論を適用した場合、特異点がどのように現れるかを示す計算例も併せて詳細に示します。
+    </p>
+
+    <!-- 基本概念の定義 -->
+    <h2>1. 準備：基本概念の定義</h2>
+    <p>証明に入る前に、本稿で用いる重要な代数学および幾何学の基礎概念を定義します。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 1.1：既約多項式 (Irreducible Polynomial)</div>
+        <p>
+            環 $R$ 上の多項式 $f$ が<strong>既約</strong>であるとは、$f$ が定数（単元）ではなく、かつ $f = g \cdot h$ （$g, h \in R$）と分解したときに、$g$ または $h$ のいずれかが定数（単元）にならざるを得ないことをいう。逆に、2つ以上の定数でない多項式の積に分解できるとき、これを<strong>可約 (reducible)</strong> という。
+        </p>
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 1.2：単項イデアル整域 (Principal Ideal Domain, PID)</div>
+        <p>
+            すべてのイデアルが単一の元によって生成される整域のこと。体 $K$ 上の一変数多項式環 $K[x]$ は PID である。今回の代数的な証明では、複素数係数の1変数多項式環 $\mathbb{C}[x]$ が PID であるという性質を基礎として利用する。
+        </p>
+    </div>
+
+    <!-- 代数的手法 -->
+    <h2>2. 代数的手法：アイゼンシュタインの判定法</h2>
+    
+    <p>最初の証明では、2変数の多項式を「$x$ の多項式を係数に持つ $y$ の1変数多項式」と見なしてアプローチします。</p>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 2.1：アイゼンシュタインの判定法 (Eisenstein's Criterion)</div>
+        <p>
+            $R$ を単項イデアル整域（PID）とし、$p \in R$ を素元とする。$y$ を変数とする $R$ 係数の多項式
+            $$ f(y) = a_n y^n + a_{n-1} y^{n-1} + \dots + a_1 y + a_0 $$
+            について、以下の3つの条件がすべて満たされるとき、$f(y)$ は $R$ の商体上において既約である。
+            <ol>
+                <li>$p$ はすべての非最高次係数 $a_0, a_1, \dots, a_{n-1}$ を割り切る。</li>
+                <li>$p$ は最高次係数 $a_n$ を割り切らない。</li>
+                <li>$p^2$ は定数項 $a_0$ を割り切らない。</li>
+            </ol>
+            さらに、$f(y)$ がモニック（最高次係数が $1$）であるなどの条件を満たし原始的（primitive）な多項式であれば、ガウスの補題により元の環 $R[y]$ 上でも既約となる。
+        </p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明 1（アイゼンシュタインの判定法によるアプローチ）</div>
+        <p>
+            2変数多項式環 $\mathbb{C}[x, y]$ は、$\mathbb{C}[x]$ を係数環とする $y$ の多項式環 $(\mathbb{C}[x])[y]$ と同型であるため、そのように見なすことができる。したがって、$f(x, y)$ を $y$ について整理すると以下のようになる。
+            $$ f(y) = y^5 + 0 \cdot y^4 + 0 \cdot y^3 + 0 \cdot y^2 + 0 \cdot y + (x^5 + 1) $$
+            ここで、基礎となる環は $R = \mathbb{C}[x]$ であり、これは体上の1変数多項式環であるため PID である。
+        </p>
+        
+        <p><strong>ステップ 1：素元 $p(x)$ の選定</strong></p>
+        <p>
+            定数項 $a_0 = x^5 + 1$ は、代数学の基本定理により $\mathbb{C}[x]$ において一次式の積に完全に分解される。方程式 $x^5 + 1 = 0$ の根、すなわち $-1$ の5乗根の一つを $\omega = e^{i\pi/5}$ とする。
+            このとき、一次多項式 $p(x) = x - \omega$ は $\mathbb{C}[x]$ における素元である。これをアイゼンシュタインの判定法を適用するための素元として採用する。
+        </p>
+
+        <p><strong>ステップ 2：3つの条件の検証</strong></p>
+        <ul>
+            <li>
+                <strong>非最高次係数について：</strong><br>
+                係数は $a_0 = x^5 + 1$ および $a_1 = a_2 = a_3 = a_4 = 0$ である。<br>
+                $x^5 + 1 = 0$ の根の一つが $\omega$ であるから、因数定理により $x^5 + 1 = (x - \omega)q(x)$ （$q(x)$ は多項式）と因数分解できる。ゆえに $p(x)$ は $a_0$ を割り切る。また、$0$ は任意の元で割り切れるため、$p(x)$ は $a_1, \dots, a_4$ もすべて割り切る。
+            </li>
+            <li>
+                <strong>最高次係数について：</strong><br>
+                最高次係数は $a_5 = 1$ である。定数でない多項式 $p(x) = x - \omega$ は定数 $1$ を割り切らない。（次数を比較すれば明らかである。）
+            </li>
+            <li>
+                <strong>平方条件について（$p(x)^2$ が $a_0$ を割り切らないこと）：</strong><br>
+                $p(x)^2 = (x - \omega)^2$ が $a_0 = x^5 + 1$ を割り切るためには、$\omega$ が $x^5 + 1 = 0$ の「重根」でなければならない。<br>
+                多項式が重根を持つための必要十分条件は、その多項式と、その形式的微分とが共通の根を持つことである。定数項を微分してみると、
+                $$ \frac{d}{dx}(x^5 + 1) = 5x^4 $$
+                となる。この導関数の根は $x = 0$ のみである。ここで $\omega \neq 0$ であるから、$\omega$ は導関数の根ではない。すなわち、$\omega$ は重根ではなく、$x^5 + 1$ の根はすべて相異なる。したがって $x^5 + 1$ は無平方（square-free）であり、$p(x)^2$ は $a_0$ を割り切らない。
+            </li>
+        </ul>
+
+        <p><strong>結論：</strong></p>
+        <p>
+            アイゼンシュタインの判定法の条件がすべて満たされたため、$f(x, y)$ は商体 $\mathbb{C}(x)$ 上で既約である。さらに $f(x, y)$ は $y$ のモニック多項式（最高次係数が1であり、係数の最大公約数が1の原始多項式）であるため、ガウスの補題（Gauss's Lemma）により、元の多項式環 $\mathbb{C}[x, y]$ 上でも既約であることが証明された。 $\blacksquare$
+        </p>
+    </div>
+
+    <!-- 幾何学的手法 -->
+    <h2>3. 幾何学的手法：ベズーの定理と特異点</h2>
+    
+    <p>代数幾何学の手法を用いると、非常に洗練された形で既約性を示すことができます。このアプローチでは、多項式を射影平面上の「曲線」と見なして幾何学的な性質から代数的な性質を導き出します。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 3.1：斉次化 (Homogenization) と射影平面 (Projective Space $\mathbb{P}^2_{\mathbb{C}}$)</div>
+        <p>
+            多項式のすべての項の次数を同じにするため、新しい変数 $z$ を導入する操作を<strong>斉次化（同次化）</strong>という。<br>
+            また、複素射影平面 $\mathbb{P}^2_{\mathbb{C}}$ は、$(x, y, z) \neq (0, 0, 0)$ なる3つ組の比 $[x : y : z]$ 全体の集合として定義される。空間内の原点を通る直線を1つの「点」と見なす空間である。
+        </p>
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 3.2：ベズーの定理 (Bézout's Theorem)</div>
+        <p>
+            代数閉体上の射影平面 $\mathbb{P}^2$ において、次数 $m$ と $n$ の2つの代数曲線（共通成分を持たないとする）は、重複度を込めて正確に $mn$ 個の交点を持つ。この定理から導かれる極めて重要な事実は、<strong>「射影平面上の任意の2つの曲線は、必ず少なくとも1点で交わる」</strong>ということである。
+        </p>
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 3.3：特異点 (Singular Point) と滑らかさ (Smoothness)</div>
+        <p>
+            曲線 $F(x, y, z) = 0$ 上の点 $P$ において、すべての偏微分が $0$ になる、すなわち
+            $$ \frac{\partial F}{\partial x}(P) = 0 $$
+            $$ \frac{\partial F}{\partial y}(P) = 0 $$
+            $$ \frac{\partial F}{\partial z}(P) = 0 $$
+            が同時に成り立つとき、点 $P$ を曲線の<strong>特異点</strong>という。特異点を持たない曲線を<strong>滑らか（非特異, non-singular）</strong>であるという。<br>
+            もし曲線が可約（複数の曲線の和集合 $F = G \cdot H = 0$）である場合、2つの成分の交点では積の微分法則により全偏微分が必ず $0$ となり、特異点が生じる。
+        </p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明 2（ベズーの定理によるアプローチ）</div>
+        
+        <p><strong>ステップ 1：多項式の斉次化</strong></p>
+        <p>
+            $f(x, y) = x^5 + y^5 + 1$ の各項の次数はそれぞれ $5, 5, 0$ であり、最高次数は5である。これを複素射影平面 $\mathbb{P}^2_{\mathbb{C}}$ 上の曲線として扱うため、変数 $z$ を補ってすべての項の次数を5に揃える。
+            $$ F(x, y, z) = x^5 + y^5 + z^5 $$
+            もし元の $f(x, y)$ が $\mathbb{C}[x, y]$ において可約であるならば、その斉次化である $F(x, y, z)$ も $\mathbb{C}[x, y, z]$ において可約でなければならない。
+            すなわち、$F = G \cdot H$ と分解できるはずである（ここで $G, H$ は次数 $d_1, d_2 \ge 1$、$d_1 + d_2 = 5$ の同次多項式）。
+        </p>
+
+        <p><strong>ステップ 2：交点と特異点の関係</strong></p>
+        <p>
+            幾何学的には、$F = 0$ は射影曲線 $C$ を定義する。もし $F = G \cdot H$ ならば、$C$ は2つの小さな曲線群の和集合 $C = V(G) \cup V(H)$ となる。<br>
+            ここでベズーの定理を用いる。複素射影平面 $\mathbb{P}^2_{\mathbb{C}}$ 上の任意の2つの曲線 $V(G)$ と $V(H)$ は必ず交差する。この交点を $P$ とおく。<br>
+            点 $P$ は両方の曲線上にあるため、$G(P) = 0$ かつ $H(P) = 0$ である。積の微分法則 $\nabla F = H \nabla G + G \nabla H$ により、点 $P$ での $F$ の勾配は、
+            $$ \nabla F(P) = 0 \cdot \nabla G(P) + 0 \cdot \nabla H(P) = 0 $$
+            となる。すべての偏微分が $0$ になるため、点 $P$ は曲線 $C$ の特異点として現れる。<br>
+            ゆえに、「$F$ が可約ならば、$V(F)$ は少なくとも一つの特異点を持つ」ことが証明された。対偶をとれば、<strong>「$V(F)$ が特異点を持たない（完全に滑らかである）ならば、$F$ は既約である」</strong>。
+        </p>
+
+        <p><strong>ステップ 3：$V(F)$ の特異点の検証</strong></p>
+        <p>
+            曲線 $V(F)$ が特異点を持つ条件は、すべての偏微分が同時に $0$ になることである。計算すると以下のようになる。
+            $$ F_x = 5x^4 = 0 \implies x = 0 $$
+            $$ F_y = 5y^4 = 0 \implies y = 0 $$
+            $$ F_z = 5z^4 = 0 \implies z = 0 $$
+            これらすべてを同時に満たす解は $(x, y, z) = (0, 0, 0)$ のみである。<br>
+            しかし、定義で述べたように、射影空間 $\mathbb{P}^2_{\mathbb{C}}$ において、すべての座標が0である比 $[0 : 0 : 0]$ は点として許容されない。
+        </p>
+
+        <p><strong>結論：</strong></p>
+        <p>
+            すべての偏微分が $0$ になる有効な射影空間上の点は存在しない。したがって、曲線 $x^5 + y^5 + z^5 = 0$ は特異点を一切持たず、完全に滑らか（非特異）である。<br>
+            滑らかな曲線は、交差する2つの曲線の和集合になり得ないため、$F(x, y, z)$ は既約でなければならない。その非斉次化である元の多項式 $f(x, y) = x^5 + y^5 + 1$ もまた $\mathbb{C}[x, y]$ において既約であることが証明された。 $\blacksquare$
+        </p>
+    </div>
+
+    <!-- 可約な例 -->
+    <h2>4. 可約な多項式における特異点の計算例</h2>
+    
+    <p>方法2の幾何学的アプローチが如何に強力であるかを直感的に理解するため、<strong>実際に既約でない（可約な）多項式</strong>に同じ理論を適用した計算例を紹介します。可約な多項式が定義する曲線は、必ずどこかで交差し、そこに「特異点」を発生させます。</p>
+
+    <div class="example">
+        <h3>例1：通常の平面で交わる場合（直線の交差）</h3>
+        <p>
+            多項式 $f(x, y) = (x - 1)(y - 1)$ を考えます。展開すると $f(x, y) = xy - x - y + 1$ となり、明らかに可約です（2つの直線 $x=1$ と $y=1$ の積）。
+        </p>
+        
+        <p><strong>ステップ1：多項式の斉次化</strong></p>
+        <p>
+            最高次数は2なので、変数 $z$ を補って各項の次数を2にします。
+            $$ F(x, y, z) = xy - xz - yz + z^2 $$
+        </p>
+
+        <p><strong>ステップ2：偏微分を計算して0とおく</strong></p>
+        <p>
+            $$ F_x = y - z = 0 \implies y = z $$
+            $$ F_y = x - z = 0 \implies x = z $$
+            $$ F_z = -x - y + 2z = 0 $$
+        </p>
+
+        <p><strong>ステップ3：連立方程式を解く</strong></p>
+        <p>
+            上の2式から $x = z$ かつ $y = z$ が得られます。これを3つ目の式に代入すると $-z - z + 2z = 0$ となり、これは任意の $z$ について成立します。<br>
+            射影平面上の点として $(0,0,0)$ 以外を選べばよいので、例えば $z = 1$ とおくと、<strong>特異点 $[x : y : z] = [1 : 1 : 1]$</strong> が見つかります。
+        </p>
+        <p>
+            <strong>幾何学的な意味：</strong> $z=1$ は通常の平面を意味するため、これは通常の $xy$ 平面上の点 $(1, 1)$ に対応します。直線 $x=1$ と直線 $y=1$ がまさに交差している点であり、2つの成分が交わるためここで曲線が「尖って（特異点になって）」いることが代数的に検出されました。
+        </p>
+    </div>
+
+    <div class="example">
+        <h3>例2：無限遠点で交わる場合（平行線の交差）</h3>
+        <p>
+            次に多項式 $f(x, y) = x^2 - 1 = (x - 1)(x + 1)$ を考えます。これも可約であり、通常の平面上では「決して交わらない2本の平行線（$x=1$ と $x=-1$）」を表します。
+        </p>
+        
+        <p><strong>ステップ1：斉次化</strong></p>
+        <p>
+            $$ F(x, y, z) = x^2 - z^2 $$
+        </p>
+
+        <p><strong>ステップ2：偏微分を計算して0とおく</strong></p>
+        <p>
+            $$ F_x = 2x = 0 \implies x = 0 $$
+            $$ F_y = 0 \implies \text{常に成り立つ（} y \text{ は任意）} $$
+            $$ F_z = -2z = 0 \implies z = 0 $$
+        </p>
+
+        <p><strong>ステップ3：連立方程式を解く</strong></p>
+        <p>
+            $x = 0$ かつ $z = 0$ であれば、すべての偏微分が $0$ になります。$y$ は任意の実数または複素数でよいので、$y = 1$ とおきます。
+            これにより、<strong>特異点 $[x : y : z] = [0 : 1 : 0]$</strong> が見つかります。
+        </p>
+        <p>
+            <strong>幾何学的な意味：</strong> $z = 0$ となっている点は、通常の平面には存在しない<strong>無限遠点</strong>です。ユークリッド幾何学では平行線は交わりませんが、射影幾何学では「平行な2直線は無限遠点で交わる」と考えます。この計算結果は、平行な2直線であっても射影平面上では交差して特異点を作るため、ベズーの定理の通りに可約性が示されるという美しい事実を捉えています。
+        </p>
+    </div>
+
+    <!-- 参考文献 -->
+    <div class="references">
+        <h2>5. 参考文献</h2>
+        <p>本稿の証明や定理の背景に関するより深い学習のための文献を挙げます。代数学および代数幾何学の標準的なテキストです。</p>
+        <ul>
+            <li>
+                <strong>代数学・アイゼンシュタインの判定法について：</strong><br>
+                Judson, Thomas W. <em>Abstract Algebra: Theory and Applications</em>. 
+                <a href="https://open.umn.edu/opentextbooks/textbooks/abstract-algebra-theory-and-applications" target="_blank">https://open.umn.edu/opentextbooks/textbooks/abstract-algebra-theory-and-applications</a> 
+                <br>（オープンソースの代数学の標準的な教科書。多項式環とPID、Eisensteinの判定法に関する詳細な解説を含む。）
+            </li>
+            <li>
+                <strong>代数幾何学・ベズーの定理について：</strong><br>
+                Fulton, William. <em>Algebraic Curves: An Introduction to Algebraic Geometry</em>. 
+                <a href="https://users.math.msu.edu/users/magyarp/Math419H/Fulton-Alg-Curves.pdf" target="_blank">https://users.math.msu.edu/users/magyarp/Math419H/Fulton-Alg-Curves.pdf</a> 
+                <br>（ウェブサイトで無料公開されている代数幾何の古典的名著。射影平面、特異点、Bézoutの定理の厳密な証明が記載されている。）
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

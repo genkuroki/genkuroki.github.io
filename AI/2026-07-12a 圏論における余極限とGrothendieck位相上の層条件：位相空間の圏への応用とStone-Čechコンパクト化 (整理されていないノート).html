@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圏論における余極限とGrothendieck位相上の層条件：位相空間の圏への応用とStone-Čechコンパクト化</title>
+    <!-- MathJaxの設定（マクロ依存をなくし、基本設定のみに変更） -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        h1 {
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .theorem, .definition, .proof, .lemma {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+        }
+        .proof {
+            border-left-color: #2ecc71;
+            background-color: #fdfdfd;
+        }
+        .theorem-title, .definition-title, .proof-title, .lemma-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>圏論における余極限とGrothendieck位相上の層条件：位相空間の圏への応用とStone-Čechコンパクト化</h1>
+
+    <h2>1. はじめに</h2>
+    <p>
+        本稿は、圏論において極限 (limit) および余極限 (colimit) を計算する際に、「どの圏を舞台として演算が実行されているか」を厳密に区別するアプローチに基づき、部分圏のGrothendieck位相上の層条件を構成する手法をまとめたものである。特に、位相空間の圏 $\mathcal{C} = \mathrm{Top}$ とその部分圏であるコンパクトHausdorff空間の圏 $\mathcal{B} = \mathrm{CHaus}$ を舞台とし、表現可能関手から誘導される制限前層が層 (sheaf) となる条件について、部分圏が稠密 (dense) や充満 (full) であるという仮定を一切用いることなく、完全に自己完結的 (self-contained) に証明を与える。また、後半では部分圏における余極限が包含先の大きな圏において保存されるための一般論としての十分条件、絶対余極限、正則エピ射と被覆篩の関係、および $\mathrm{CHaus}$ が $\mathrm{Top}$ の反射的部分圏となるための左随伴関手（Stone-Čechコンパクト化）の構成と証明を提示する。
+    </p>
+
+    <h2>2. 基礎概念の定義と準備</h2>
+    <p>
+        証明を展開するにあたり、必要となる基本的な数学的概念をここで厳密に定義する。
+    </p>
+
+    <div class="definition">
+        <span class="definition-title">定義 2.1: 篩 (sieve)</span>
+        <p>
+            圏 $\mathcal{B}$ の対象 $K$ 上の篩 $S$ とは、余域を $K$ とする射の集まりであって、任意の射の右合成について閉じているものを指す。すなわち、 $f: A \to K$ が $S$ に属し、 $g: Y \to A$ が圏 $\mathcal{B}$ の任意の射であるとき、合成 $f \circ g: Y \to K$ も必ず $S$ に属する。
+        </p>
+        <p>
+            前層の圏 $\hat{\mathcal{B}} = [\mathcal{B}^{\mathrm{op}}, \mathrm{Set}]$ において、表現可能前層 $h_K = \operatorname{Hom}_{\mathcal{B}}(-, K)$ を考えると、篩 $S$ は $h_K$ の部分関手 $S \hookrightarrow h_K$ と完全に同一視される。
+        </p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 2.2: カノニカル位相 (canonical topology) と劣カノニカル位相 (subcanonical topology)</span>
+        <p>
+            圏 $\mathcal{B}$ 上のGrothendieck位相 (Grothendieck topology) $\mathcal{J}_{\mathcal{B}, \mathrm{can}}$ であって、すべての表現可能前層 $h_X$ ($X \in \mathrm{Ob}(\mathcal{B})$) がその位相に関して層になるような最大のものを<b>カノニカル位相</b>と呼ぶ。また、カノニカル位相に含まれる任意のGrothendieck位相を<b>劣カノニカル位相</b>と呼ぶ。
+        </p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 2.3: 添字圏 (index category) $\mathcal{J}_S$</span>
+        <p>
+            対象 $K$ 上の篩 $S$ に対し、図式の定義域となる添字圏 $\mathcal{J}_S$ は以下のように定義される。
+            <ul>
+                <li>対象: $S$ に属する射 $f: A \to K$ の全体。</li>
+                <li>射: 対象 $g: B \to K$ から対象 $f: A \to K$ への射は、 $\mathcal{B}$ における射 $u: B \to A$ であって、可換三角形 $f \circ u = g$ を満たすものとする。</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 2.4: 結合全射族 (jointly surjective family)</span>
+        <p>
+            射の族 $\{ f_i: A_i \to K \}_{i \in I}$ であって、像の和集合が余域全体を覆うもの、すなわち $\bigcup_{i \in I} f_i(A_i) = K$ を満たすものを指す。
+        </p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 2.5: 引き戻し (pullback)</span>
+        <p>
+            射 $f: A \to K$ と $g: B \to K$ が与えられたとき、その引き戻し $P = A \times_K B$ は普遍性を持つ極限として定義される。集合の圏や位相空間の圏においては、具体的に $P = \{ (a, b) \in A \times B \mid f(a) = g(b) \}$ として構成される。
+        </p>
+        <p>
+            位相空間の圏 $\mathcal{C} = \mathrm{Top}$ において $P$ は直積空間 $A \times B$ の部分空間として構成される。さらに、 $A, B$ がコンパクトHausdorff空間、 $K$ がHausdorff空間であるとき、 $P$ は $A \times B$ の閉部分集合となる。コンパクト空間の閉部分集合はコンパクトであるため、 $P$ はコンパクトHausdorff空間の圏 $\mathcal{B} = \mathrm{CHaus}$ の対象としてwell-definedである。
+        </p>
+    </div>
+
+    <h2>3. カノニカル位相と普遍的な余極限の一般論</h2>
+    <p>
+        位相空間の設定に限らず、一般の圏において以下の非常に強力な定理が成立する。
+    </p>
+
+    <div class="theorem">
+        <span class="theorem-title">命題 3.1: 表現可能前層の余極限としての篩と極限への変換</span>
+        <p>
+            圏 $\mathcal{C}$ の部分圏 $\mathcal{B}$ と $K \in \mathrm{Ob}(\mathcal{B})$、 $\mathcal{B}$ における $K$ 上の篩 $S$、 $\mathcal{B}$ 上の前層 $P \in \mathrm{Ob}(\hat{\mathcal{B}})$、 $h_K = \operatorname{Hom}_{\mathcal{B}}(-, K)$、 $Y \in \mathrm{Ob}(\mathcal{C})$ と制限前層 $k_Y = \operatorname{Hom}_{\mathcal{C}}(-, Y)|_{\mathcal{B}}$ について、以下が自然な同型として成立する。
+        </p>
+        <ol>
+            <li>$S \cong \operatorname{colim}^{\hat{\mathcal{B}}}_{f \in S} h_{\operatorname{dom}(f)}$</li>
+            <li>$\operatorname{Hom}_{\hat{\mathcal{B}}}(S, P) \cong \lim_{f \in S} \operatorname{Hom}_{\hat{\mathcal{B}}}(h_{\operatorname{dom}(f)}, P) \cong \lim_{f \in S} P(\operatorname{dom}(f))$</li>
+            <li>$\operatorname{Hom}_{\hat{\mathcal{B}}}(S, k_Y) \cong \lim_{f \in S} k_Y(\operatorname{dom}(f)) \cong \lim_{f \in S} \operatorname{Hom}_{\mathcal{C}}(\operatorname{dom}(f), Y)$</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明</span>
+        <p>
+            前層の圏 $\hat{\mathcal{B}}$ において、一般論として任意の前層はその要素の圏からの図式の余極限として標準的に表されるため、篩 $S$ はその要素の圏がまさに添字圏 $\mathcal{J}_S$ に一致することから第1の同型 $S \cong \operatorname{colim}^{\hat{\mathcal{B}}}_{f \in S} h_{\operatorname{dom}(f)}$ が自然に成り立つ。
+        </p>
+        <p>
+            この同型に対して反変関手 $\operatorname{Hom}_{\hat{\mathcal{B}}}(-, P)$ を適用する。Hom関手の第一引数に余極限を入力すると、極限に変換されて外に出るという普遍的な性質により、次が成立する。
+            $$ \operatorname{Hom}_{\hat{\mathcal{B}}}(S, P) \cong \operatorname{Hom}_{\hat{\mathcal{B}}}(\operatorname{colim}^{\hat{\mathcal{B}}}_{f \in S} h_{\operatorname{dom}(f)}, P) \cong \lim_{f \in S} \operatorname{Hom}_{\hat{\mathcal{B}}}(h_{\operatorname{dom}(f)}, P) $$
+        </p>
+        <p>
+            さらに、表現可能前層からの自然変換に対して米田の補題 (Yoneda Lemma) を適用すると $\operatorname{Hom}_{\hat{\mathcal{B}}}(h_{\operatorname{dom}(f)}, P) \cong P(\operatorname{dom}(f))$ が成り立つため、これを代入して次を得る。
+            $$ \operatorname{Hom}_{\hat{\mathcal{B}}}(S, P) \cong \lim_{f \in S} P(\operatorname{dom}(f)) $$
+        </p>
+        <p>
+            最後に、特定の前層として $P = k_Y$ を代入する。定義より $k_Y(\operatorname{dom}(f)) = \operatorname{Hom}_{\mathcal{C}}(\operatorname{dom}(f), Y)$ であるから、これをそのまま適用することで、
+            $$ \operatorname{Hom}_{\hat{\mathcal{B}}}(S, k_Y) \cong \lim_{f \in S} k_Y(\operatorname{dom}(f)) \cong \lim_{f \in S} \operatorname{Hom}_{\mathcal{C}}(\operatorname{dom}(f), Y) $$
+            が成り立つ。これにより命題のすべてが完全に証明された。
+        </p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">命題 3.2: カノニカル位相の余極限による特徴づけ</span>
+        <p>
+            圏 $\mathcal{B}$ のカノニカル位相 $\mathcal{J}_{\mathcal{B}, \mathrm{can}}$ と $K \in \mathrm{Ob}(\mathcal{B})$、 $K$ 上の篩 $S$ について、 $S \in \mathcal{J}_{\mathcal{B}, \mathrm{can}}(K)$ であることと、以下の2条件が成立することは同値である。
+        </p>
+        <ul>
+            <li>自然に $K \cong \operatorname{colim}^{\mathcal{B}}_{f \in S} \operatorname{dom}(f)$ となる。</li>
+            <li>任意の $L \in \mathrm{Ob}(\mathcal{B})$ と $h \in \operatorname{Hom}_{\mathcal{B}}(L, K)$ に対して、引き戻しを $T = h^*(S) = \{ g \in \mathrm{Mor}(\mathcal{B}) \mid \operatorname{codom}(g) = L, h \circ g \in S \}$ とおくと、自然に $L \cong \operatorname{colim}^{\mathcal{B}}_{g \in T} \operatorname{dom}(g)$ となる。</li>
+        </ul>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明</span>
+        <p>
+            <b>($\implies$ の証明):</b><br>
+            $S \in \mathcal{J}_{\mathcal{B}, \mathrm{can}}(K)$ と仮定する。Grothendieck位相の引き戻しの安定性公理より、任意の $L \in \mathrm{Ob}(\mathcal{B})$ と $h \in \operatorname{Hom}_{\mathcal{B}}(L, K)$ に対して、引き戻し $T = h^*(S)$ は $\mathcal{J}_{\mathcal{B}, \mathrm{can}}(L)$ に属する。
+            カノニカル位相の定義より、任意の表現可能前層 $h_X$ は被覆篩 $T$ に関して層の条件を満たす。すなわち、 $h_X(L) \cong \operatorname{Hom}_{\hat{\mathcal{B}}}(T, h_X)$ が成立する。
+        </p>
+        <p>
+            ここで命題 3.1 の結果において $P = h_X$ を適用すると、 $\operatorname{Hom}_{\hat{\mathcal{B}}}(T, h_X) \cong \lim_{g \in T} h_X(\operatorname{dom}(g)) = \lim_{g \in T} \operatorname{Hom}_{\mathcal{B}}(\operatorname{dom}(g), X)$ となる。
+            したがって、任意の $X$ に対して以下の自然な同型が成り立つ。
+            $$ \operatorname{Hom}_{\mathcal{B}}(L, X) \cong \lim_{g \in T} \operatorname{Hom}_{\mathcal{B}}(\operatorname{dom}(g), X) $$
+        </p>
+        <p>
+            この同型はまさに、圏 $\mathcal{B}$ において対象 $L$ が図式 $\{ \operatorname{dom}(g) \}_{g \in T}$ の余極限であることを普遍性により特徴づける式に他ならない。ゆえに $L \cong \operatorname{colim}^{\mathcal{B}}_{g \in T} \operatorname{dom}(g)$ が成立する。特に $L = K, h = \mathrm{id}_K$ の場合を考えると $T = S$ となるため、 $K \cong \operatorname{colim}^{\mathcal{B}}_{f \in S} \operatorname{dom}(f)$ も同時に成立する。
+        </p>
+        <p>
+            <b>($\impliedby$ の証明):</b><br>
+            任意の $L$ と $h: L \to K$ に対する引き戻し $T = h^*(S)$ について $L \cong \operatorname{colim}^{\mathcal{B}}_{g \in T} \operatorname{dom}(g)$ が成立すると仮定する。余極限の普遍性より、任意の $X \in \mathrm{Ob}(\mathcal{B})$ に対して $\operatorname{Hom}_{\mathcal{B}}(L, X) \cong \lim_{g \in T} \operatorname{Hom}_{\mathcal{B}}(\operatorname{dom}(g), X)$ が自然に成り立つ。
+        </p>
+        <p>
+            命題 3.1 の同型を逆に辿ることにより、これは $h_X(L) \cong \operatorname{Hom}_{\hat{\mathcal{B}}}(T, h_X)$ を意味する。すなわち、すべての表現可能前層 $h_X$ が、篩 $S$ およびその任意の引き戻し $T$ に対して層の貼り合わせ条件を満たすことを示している。
+            このような「任意の引き戻しが表現可能前層に対する普遍的な余極限となる篩」の集まりはGrothendieck位相を生成し、それは構成からすべての表現可能前層を層にする。カノニカル位相 $\mathcal{J}_{\mathcal{B}, \mathrm{can}}$ はそのような最大の位相であるため、必然的に $S \in \mathcal{J}_{\mathcal{B}, \mathrm{can}}(K)$ でなければならない。これにより同値性が証明された。
+        </p>
+    </div>
+
+    <h2>4. 位相空間の圏における具体的な証明（直接的アプローチと洗練されたアプローチ）</h2>
+    <p>
+        ここから、具体的な位相空間の圏 $\mathcal{C} = \mathrm{Top}$ とコンパクトHausdorff空間の圏 $\mathcal{B} = \mathrm{CHaus}$ を扱う。以下の命題に対し、まずは集合の圏における引き戻しの要素計算に基づく「直接的な証明」を与え、続いて命題 3.2 の一般論を用いた「洗練された証明」の2つを提示する。
+    </p>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 4.1: Top における余極限としてのコンパクトHausdorff空間</span>
+        <p>
+            $\mathcal{C} = \mathrm{Top}$、 $\mathcal{B} = \mathrm{CHaus}$ とする。 $\mathcal{J}$ を $\mathcal{B}$ 上の劣カノニカル位相とする。このとき、任意の $K \in \mathrm{Ob}(\mathcal{B})$ と任意の $S \in \mathcal{J}(K)$ について、圏 $\mathcal{C}$ において以下が成立する。
+            $$ \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f) \cong K $$
+        </p>
+    </div>
+
+    <h3>方法 1: Set における引き戻しを用いた直接的な証明</h3>
+    <div class="proof">
+        <span class="proof-title">証明（方法 1）</span>
+        <p>
+            圏 $\mathcal{C}$ において、篩 $S$ に対応する図式の余極限を $L = \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ と置く。普遍性により各 $f \in S$ に対し自然な連続写像 $\phi: L \to K$ が一意に定まる。この $\phi$ が同相写像であることを示す。
+        </p>
+        <p>
+            位相 $\mathcal{J}$ は劣カノニカル位相であるため、圏 $\mathcal{B}$ のカノニカル位相に含まれる。コンパクト空間におけるカノニカル位相の性質により、被覆篩 $S \in \mathcal{J}(K)$ は、結合的に全射となるような有限個の射の族 $\{ f_i: A_i \to K \}_{i=1}^n \subset S$ を必ず含む。
+        </p>
+        <p>
+            <b>Step 1: Set における $\phi$ の全単射性</b><br>
+            $L$ への標準的な包含写像を $\iota_f: \operatorname{dom}(f) \to L$ とする。普遍性より $f = \phi \circ \iota_f$ である。<br>
+            【全射性】 $S$ は結合全射族 $\{ f_i \}_{i=1}^n$ を含むため、任意の $k \in K$ に対してある $i$ と $x \in A_i$ が存在し、 $f_i(x) = k$ を満たす。このとき $\phi(\iota_{f_i}(x)) = f_i(x) = k$ となるため、 $\phi$ は全射である。<br>
+            【単射性】 $L$ の元 $\alpha, \beta$ が $\phi(\alpha) = \phi(\beta) = k \in K$ を満たすと仮定する。 $L$ は集合の直和の商として構成されるため、ある $f: A \to K \in S$ と $x \in A$ 、および $g: B \to K \in S$ と $y \in B$ が存在し、 $\alpha = \iota_f(x)$ かつ $\beta = \iota_g(y)$ と表せる。仮定より $f(x) = g(y) = k$ である。
+            圏 $\mathcal{B}$ における $f$ と $g$ の引き戻し $P = A \times_K B$ を考えると、射影 $p_1: P \to A$ と $p_2: P \to B$ について合成射 $h = f \circ p_1 = g \circ p_2: P \to K$ は篩の定義より $S$ に属する。添字圏 $\mathcal{J}_S$ の可換性により余極限において $\iota_h = \iota_f \circ p_1$ および $\iota_h = \iota_g \circ p_2$ が成り立つ。 $f(x) = g(y)$ より要素 $z = (x, y)$ は $P$ に属し、 $p_1(z) = x, p_2(z) = y$ である。これを代入すると $\alpha = \iota_f(p_1(z)) = \iota_h(z)$ かつ $\beta = \iota_g(p_2(z)) = \iota_h(z)$ となり、 $\alpha = \beta$ が示された。よって $\phi$ は全単射である。
+        </p>
+        <p>
+            <b>Step 2: Top における同相性の証明</b><br>
+            余極限 $L$ には終位相 (final topology) が与えられており、 $\phi$ が連続な全単射であることは分かっているため、 $\phi$ が閉写像 (closed map) であることを示せば十分である。<br>
+            各 $A_i$ はコンパクト空間であり、 $K$ はHausdorff空間であるため、各 $f_i$ は閉写像である。有限個の直和からの自然な写像 $F: \coprod_{i=1}^n A_i \to K$ は、有限和であることと各 $f_i$ が閉写像であることから閉写像となり、族が結合全射であることから全射となる。全射かつ閉写像である連続写像は商写像 (quotient map) である。<br>
+            $L$ の任意の閉集合 $C \subset L$ をとる。商写像 $F$ の性質から、 $\phi(C)$ が $K$ で閉集合であることと、逆像 $F^{-1}(\phi(C)) = \bigcup_{i=1}^n f_i^{-1}(\phi(C))$ が直和空間で閉集合であることは同値である。<br>
+            $\phi$ は全単射であり $\phi \circ \iota_{f_i} = f_i$ であるため、任意の $x \in A_i$ について $x \in f_i^{-1}(\phi(C)) \iff \iota_{f_i}(x) \in C \iff x \in \iota_{f_i}^{-1}(C)$ が成り立つ。すなわち $f_i^{-1}(\phi(C)) = \iota_{f_i}^{-1}(C)$ である。<br>
+            $C$ は終位相を持つ $L$ の閉集合であるため、各 $\iota_{f_i}^{-1}(C)$ は $A_i$ の閉集合である。したがってそれらの有限和 $F^{-1}(\phi(C))$ も閉集合となり、 $\phi(C)$ が $K$ の閉集合であることが導かれる。<br>
+            ゆえに $\phi$ は閉写像であり、同相写像となる。これにより $\operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f) \cong K$ が完全に証明された。
+        </p>
+    </div>
+
+    <h3>方法 2: 一般論 (命題 3.2) を用いた洗練された証明</h3>
+    <div class="proof">
+        <span class="proof-title">証明（方法 2: カノニカル位相の普遍性の利用）</span>
+        <p>
+            前提として、位相 $\mathcal{J}$ は $\mathcal{B} = \mathrm{CHaus}$ 上の劣カノニカル位相であるため、定義よりカノニカル位相に含まれる ($\mathcal{J} \subset \mathcal{J}_{\mathcal{B}, \mathrm{can}}$)。したがって、任意の被覆篩 $S \in \mathcal{J}(K)$ は自動的に $S \in \mathcal{J}_{\mathcal{B}, \mathrm{can}}(K)$ を満たす。
+        </p>
+        <p>
+            ここで命題 3.2 を適用すれば、要素の計算を一切行うことなく、純粋に圏論的な結論として直ちに圏 $\mathcal{B}$ の内部において $K \cong \operatorname{colim}^{\mathcal{B}}_{f \in S} \operatorname{dom}(f)$ が成立することが保証される。
+        </p>
+        <p>
+            あとは、部分圏 $\mathcal{B}$ での余極限 $K$ が、大きな圏 $\mathcal{C} = \mathrm{Top}$ においても依然として余極限として振る舞うことを確認するだけでよい。<br>
+            方法 1 の Step 2 と同様に、 $\mathrm{CHaus}$ のコンパクト性により、被覆篩 $S$ は有限結合全射族 $\{ f_i: A_i \to K \}_{i=1}^n$ を含む。各 $f_i$ はコンパクト空間からHausdorff空間への連続写像であるため閉写像である。有限個の閉写像からなる直和からの自然な写像 $\coprod_{i=1}^n A_i \to K$ は全射かつ閉写像となるため、位相空間の圏 $\mathrm{Top}$ における商写像となる。<br>
+            この商写像の性質（余極限の終位相と $K$ の元の位相が一致すること）から、圏 $\mathcal{C}$ における余極限もまた $K$ と同相になることが結論づけられる。
+        </p>
+    </div>
+
+    <h2>5. 制限前層が層になることの完全な証明</h2>
+    <p>
+        定理 4.1 の結果を用いることで、最終的な目標である層条件の証明が直ちに従う。
+    </p>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 5.1: 表現可能関手から誘導される制限前層の層条件</span>
+        <p>
+            $\mathcal{C} = \mathrm{Top}$、 $\mathcal{B} = \mathrm{CHaus}$ とし、 $\mathcal{J}$ を $\mathcal{B}$ 上の劣カノニカル位相とする。任意の $Y \in \mathrm{Ob}(\mathcal{C})$ について、圏 $\mathcal{B}$ 上の前層 $k_Y = \operatorname{Hom}_{\mathcal{C}}(-, Y)|_{\mathcal{B}}$ はサイト $(\mathcal{B}, \mathcal{J})$ 上の層になる。
+        </p>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明</span>
+        <p>
+            提供された文献の定理（普遍的な余極限による層条件の構成）によれば、圏 $\mathcal{B}$ が圏 $\mathcal{C}$ の部分圏であり、 $\mathcal{J}$ を $\mathcal{B}$ 上のGrothendieck位相とする。もし、 $\mathcal{B}$ の任意の対象 $K$ と $\mathcal{J}(K)$ に属する任意の被覆篩 $S$ に対して、大きな圏 $\mathcal{C}$ の内部において $K$ が図式の余極限として振る舞うならば、任意の $Y \in \mathrm{Ob}(\mathcal{C})$ に対して制限前層 $k_Y = \operatorname{Hom}_{\mathcal{C}}(-, Y)|_{\mathcal{B}}$ はサイト $(\mathcal{B}, \mathcal{J})$ 上の層になることが示されている。
+        </p>
+        <p>
+            定理 4.1 の証明により、任意の $K \in \mathrm{Ob}(\mathcal{B})$ と $S \in \mathcal{J}(K)$ に対して、大きな圏 $\mathcal{C}=\mathrm{Top}$ において余極限 $\operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f) \cong K$ が成立することが厳密に確認されている。
+            したがって、文献に記載されている定理の十分条件が完全に満たされている。
+        </p>
+        <p>
+            ゆえに、この層条件の構成定理を適用することにより、任意の $Y \in \mathrm{Ob}(\mathcal{C})$ に対して前層 $k_Y$ はサイト $(\mathcal{B}, \mathcal{J})$ 上の層であることが直ちに従う。文献の定理が保証している通り、この結論を導く過程において、部分圏 $\mathcal{B}$ が圏 $\mathcal{C}$ において稠密 (dense) であることや充満 (full) であることは一切仮定されていない。これにて証明が完了した。
+        </p>
+    </div>
+
+    <h2>6. 部分圏の余極限が大きな圏の余極限と一致するための十分条件</h2>
+    <p>
+        前述の定理において、「部分圏 $\mathcal{B}$ において $K \cong \operatorname{colim}^{\mathcal{B}}_{f \in S} \operatorname{dom}(f)$ であるならば、大きな圏 $\mathcal{C}$ においても $K \cong \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ となる」という事実が決定的な役割を果たした。ここでは、包含関手が余極限を保存するための圏論的な十分条件や、図式に依存する「絶対余極限」の概念を整理する。
+    </p>
+
+    <div class="theorem">
+        <span class="theorem-title">命題 6.1: 余反射的部分圏による十分条件</span>
+        <p>
+            圏 $\mathcal{B}$ が圏 $\mathcal{C}$ の余反射的部分圏 (coreflective subcategory) であるならば、圏 $\mathcal{B}$ における $K \cong \operatorname{colim}^{\mathcal{B}}_{f \in S} \operatorname{dom}(f)$ から、常に圏 $\mathcal{C}$ における $K \cong \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ が成立する。
+        </p>
+    </div>
+    <div class="proof">
+        <span class="proof-title">証明</span>
+        <p>
+            包含関手 $I: \mathcal{B} \hookrightarrow \mathcal{C}$ が右随伴関手 $R: \mathcal{C} \to \mathcal{B}$ を持つとする（すなわち $I \dashv R$ ）。
+            一般の圏論において、左随伴関手はすべての余極限を保存する (preserve colimits)。
+            包含関手 $I$ が左随伴関手であるため、圏 $\mathcal{B}$ における任意の図式 $D$ に対して自然な同型 $I(\operatorname{colim}^{\mathcal{B}} D) \cong \operatorname{colim}^{\mathcal{C}} I(D)$ が成り立つ。
+            本件における図式を添字圏 $\mathcal{J}_S$ から圏 $\mathcal{B}$ への関手 $D(f) = \operatorname{dom}(f)$ とおく。
+            仮定より圏 $\mathcal{B}$ における余極限は $K$ であるため、これに包含関手 $I$ を適用することで、圏 $\mathcal{C}$ において $I(K) \cong \operatorname{colim}^{\mathcal{C}}_{f \in S} I(\operatorname{dom}(f))$ となる。
+            部分圏の包含関手は対象をそのまま見なす操作であるため、これは圏 $\mathcal{C}$ において $K \cong \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ が成立することを意味している。
+        </p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">命題 6.2: 反射的部分圏における単位元の同型性による十分条件</span>
+        <p>
+            圏 $\mathcal{B}$ が圏 $\mathcal{C}$ の反射的部分圏 (reflective subcategory) であるとする。圏 $\mathcal{C}$ において対象図式の余極限 $X = \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ が存在し、随伴から誘導される単位元 (unit) $\eta_X: X \to L(X)$ が圏 $\mathcal{C}$ における同型射となるならば、 $K \cong \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ が成立する。
+        </p>
+    </div>
+    <div class="proof">
+        <span class="proof-title">証明</span>
+        <p>
+            包含関手 $I: \mathcal{B} \hookrightarrow \mathcal{C}$ が左随伴関手 $L: \mathcal{C} \to \mathcal{B}$ （リフレクターと呼ばれる）を持つとする（すなわち $L \dashv I$ ）。
+            一般に、反射的部分圏 $\mathcal{B}$ における図式の余極限は、包含先の圏 $\mathcal{C}$ における余極限にリフレクター $L$ を適用したものとして構成される。
+            すなわち、圏 $\mathcal{C}$ において $X = \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ が存在するとき、圏 $\mathcal{B}$ における余極限は $L(X)$ と同型である。
+            仮定より、圏 $\mathcal{B}$ における余極限は $K$ であるから、 $K \cong L(X)$ が成り立つ。
+            随伴 $L \dashv I$ により、圏 $\mathcal{C}$ の対象 $X$ には自然な単位元 $\eta_X: X \to I(L(X)) \cong K$ が存在する。
+            命題の仮定より、この射 $\eta_X$ が圏 $\mathcal{C}$ において同型射であるならば、直ちに $X \cong K$ が導かれる。
+            ゆえに、圏 $\mathcal{C}$ において $K \cong \operatorname{colim}^{\mathcal{C}}_{f \in S} \operatorname{dom}(f)$ が成立する。
+        </p>
+    </div>
+    <div class="note">
+        <b>実践的な十分条件:</b> 単位元 $\eta_X: X \to L(X)$ が同型射になるための最も使いやすく本質的な十分条件（必要十分条件）は、<b>「大きな圏 $\mathcal{C}$ で計算された対象 $X$ が、すでに部分圏 $\mathcal{B}$ の対象になっていること」</b>（すなわち $X \in \mathrm{Ob}(\mathcal{B})$）である。例えば $\mathcal{C} = \mathrm{Top}$、 $\mathcal{B} = \mathrm{CHaus}$ の場合、圏 $\mathrm{Top}$ で構成した余極限の空間 $X$ が「コンパクトHausdorff空間」であることを（商写像が閉写像になる等の理由から）直接示せれば、それだけで $\eta_X$ は同型射となり条件を満たす。セクション4（方法 1、方法 2）の証明はまさにこの論法を用いている。
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">命題 6.3: 絶対余極限 (Absolute Colimits) に基づく図式的な十分条件</span>
+        <p>
+            圏の性質（反射的など）に依存せず、図式自身の性質のみによって余極限が任意の関手（部分圏の包含関手を含む）で保存されるものを<b>絶対余極限</b>と呼ぶ。図式が以下のいずれかの条件を満たすとき、その余極限は絶対余極限となり、部分圏と全体圏で必ず一致する。
+        </p>
+        <ol>
+            <li><b>添字圏が終対象を持つ場合:</b> 添字圏 $\mathcal{J}$ に終対象 $t \in \mathrm{Ob}(\mathcal{J})$ が存在する場合、図式 $D: \mathcal{J} \to \mathcal{B}$ の余極限は常に $D(t)$ となる。</li>
+            <li><b>分裂余等化子 (Split Coequalizer) をなす図式:</b> 射 $f, g: X \to Y$ と $e: Y \to Z$ に加えて、逆向きの射 $s: Z \to Y$ と $t: Y \to X$ が存在し、 $e \circ f = e \circ g$、 $e \circ s = \mathrm{id}_Z$、 $f \circ t = \mathrm{id}_Y$、 $g \circ t = s \circ e$ の代数的な等式を満たす場合、 $e$ は必ず $f, g$ の絶対余等化子となる。</li>
+            <li><b>分裂エピ射 (Split Epimorphism) を含む篩:</b> 篩 $S$ が圏 $\mathcal{B}$ において分裂エピ射を1つでも含む（すなわちある $f: A \to K \in S$ と $s: K \to A$ が存在して $f \circ s = \mathrm{id}_K$ を満たす）場合。</li>
+        </ol>
+    </div>
+    <div class="proof">
+        <span class="proof-title">証明（分裂エピ射の場合）</span>
+        <p>
+            篩の定義より、 $S$ は対象 $K$ への射の集まりであり、圏 $\mathcal{B}$ の任意の射による右合成について閉じている。
+            したがって、 $f \in S$ と $s$ の合成である $f \circ s = \mathrm{id}_K$ もまた必ず篩 $S$ に属する。
+            ここで、 $K$ を余域とする任意の射 $g: Y \to K$ を考える。 $g$ は $g = \mathrm{id}_K \circ g$ と表すことができる。 $S$ は右合成について閉じているため、 $\mathrm{id}_K \in S$ であるならば任意の $g$ も $S$ に属する。
+            ゆえに、分裂エピ射を含む篩 $S$ は、 $K$ を余域とするすべての射を含む最大篩 (maximal sieve) と完全に一致する。
+            最大篩に対する図式の余極限は、余錐の頂点 $K$ と恒等射 $\mathrm{id}_K$ による射影が常に普遍性を満たすため絶対余極限となり、その結果は $K$ 自身となる。
+        </p>
+    </div>
+
+    <h2>7. 正則エピ射と被覆篩による余極限の構成</h2>
+    <p>
+        位相空間論におけるコンパクト被覆などを圏論的に抽象化する際、「有限個の部分空間の余積からの射が正則エピ射 (regular epimorphism) になる」という条件と「それが篩である」という条件が揃うことで、余極限が余域に一致することが証明できる。
+    </p>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 7.1: 正則エピ射と篩の余極限</span>
+        <p>
+            圏 $\mathcal{B}$ は引き戻し (pullback) および普遍的な余積 (universal coproducts) を持つとする。 $K \in \mathrm{Ob}(\mathcal{B})$ と $\mathcal{B}$ における $K$ 上の篩 $S$ について、 $S$ のある有限部分集合 $F$ が存在して、余積からの射 $p = \coprod_{f \in F} f : \coprod_{f \in F} \operatorname{dom}(f) \to K$ が正則エピ射になるならば、次が成立する。
+            $$ \operatorname{colim}^{\mathcal{B}}_{f \in S} \operatorname{dom}(f) \cong K $$
+        </p>
+    </div>
+    <div class="proof">
+        <span class="proof-title">証明</span>
+        <p>
+            有限部分集合 $F \subseteq S$ に対して、余積 $C = \coprod_{f \in F} \operatorname{dom}(f)$ と自然な包含射 $\iota_f: \operatorname{dom}(f) \to C$ を考える。
+            $p: C \to K$ が正則エピ射であるため、圏 $\mathcal{B}$ に引き戻しが存在するという仮定の下で、$p$ は自身の核対 (kernel pair) $p_1, p_2: C \times_K C \rightrightarrows C$ の余等化子となる。すなわち $K \cong \operatorname{coeq}(p_1, p_2)$ である。
+        </p>
+        <p>
+            篩 $S$ の図式の下への余錐 $\{h_g: \operatorname{dom}(g) \to X\}_{g \in S}$ が与えられたとき、各 $f \in F$ に対する射 $h_f$ を余積の普遍性で束ねることで、一意な射 $H: C \to X$ （$H \circ \iota_f = h_f$ を満たす）が得られる。
+        </p>
+        <p>
+            $H$ が余等化子 $p$ を経由して $K$ に落ちることを示すため、 $H \circ p_1 = H \circ p_2$ を証明する。
+            余積が普遍的（引き戻しと分配的）であるため、核対 $C \times_K C$ は成分ごとの引き戻しの余積として展開できる。
+            $$ C \times_K C \cong \coprod_{f, f' \in F} (\operatorname{dom}(f) \times_K \operatorname{dom}(f')) $$
+            各成分 $P_{f, f'} = \operatorname{dom}(f) \times_K \operatorname{dom}(f')$ に対する射影を $\pi_1, \pi_2$ とすると、引き戻しの定義より $f \circ \pi_1 = f' \circ \pi_2$ となる。これを $g: P_{f, f'} \to K$ と置く。
+            ここで <b>$S$ が篩である</b>という性質により、 $f \in S$ かつ篩は右合成で閉じているため、 $g = f \circ \pi_1 \in S$ となる。
+            余錐の図式の可換性から $h_g = h_f \circ \pi_1 = h_{f'} \circ \pi_2$ となり、$H$ の定義を代入すると
+            $$ H \circ \iota_f \circ \pi_1 = H \circ \iota_{f'} \circ \pi_2 $$
+            が得られる。これは核対のすべての成分上において $H \circ p_1 = H \circ p_2$ が一致することを意味する。
+            したがって余等化子の普遍性により、一意な射 $\tilde{h}: K \to X$ が存在して $\tilde{h} \circ p = H$ を満たし、各成分に戻せば $\tilde{h} \circ f = h_f$ となるため余極限であることが証明された。
+        </p>
+    </div>
+    <div class="note">
+        <b>引き戻しの必要性に関する注意:</b> 正則エピ射自体は「ある平行な2つの射 $u, v$ の余等化子」として定義されるため、引き戻しが存在しない圏でも定義可能である。しかし、引き戻しが存在しない（あるいは余積の普遍性がない）一般の圏においては、単一の余等化子から得られる $u, v$ を「余積の各成分 $\operatorname{dom}(f)$ と関係づけ、篩 $S$ の右合成で閉じているという条件を適用できる形」に還元することができない。このため、一般の圏において上記の命題を成立させるには、単に正則エピ射であることだけでは不十分であり、引き戻し（核対）の存在が決定的な役割を果たす。
+    </div>
+
+    <h2>8. 包含関手の左随伴関手（Stone-Čechコンパクト化）の構成と証明</h2>
+    <p>
+        前述の「反射的部分圏」の具体例として、包含関手 $I: \mathrm{CHaus} \hookrightarrow \mathrm{Top}$ の左随伴関手 $L: \mathrm{Top} \to \mathrm{CHaus}$ を構成する。これは位相空間論において<b>Stone-Čechのコンパクト化 (Stone-Čech compactification)</b> と呼ばれる極めて重要な構成である。
+    </p>
+    
+    <div class="definition">
+        <span class="definition-title">対象に対する関手 $L$ の構成</span>
+        <p>
+            位相空間 $X \in \mathrm{Ob}(\mathrm{Top})$ が与えられたとき、それに対応するコンパクトHausdorff空間 $L(X)$ を以下のように構成する。
+        </p>
+        <ol>
+            <li>
+                <b>連続関数の集合の定義:</b><br>
+                $X$ から閉区間 $[0, 1]$ へのすべての連続写像の集合を $C = \operatorname{Hom}_{\mathrm{Top}}(X, [0, 1])$ と定義する。
+            </li>
+            <li>
+                <b>チコノフ・キューブ (Tychonoff cube) への埋め込み:</b><br>
+                直積空間 $[0, 1]^C$ を考える。チコノフの定理より、コンパクト空間の任意の直積はコンパクトであり、Hausdorff空間の直積はHausdorffであるため、 $[0, 1]^C \in \mathrm{Ob}(\mathrm{CHaus})$ である。ここで、評価写像 (evaluation map) $e_X: X \to [0, 1]^C$ を次のように定義する。
+                $$ e_X(x) = (f(x))_{f \in C} $$
+                直積位相の普遍性（各成分への射影が連続であること）により、 $e_X$ は連続写像となる。
+            </li>
+            <li>
+                <b>閉包による $L(X)$ の定義:</b><br>
+                $L(X)$ を、空間 $[0, 1]^C$ における像 $e_X(X)$ の閉包として定義する。
+                $$ L(X) = \overline{e_X(X)} \subset [0, 1]^C $$
+                コンパクト空間の閉部分集合はコンパクトであり、Hausdorff空間の部分空間はHausdorffであるため、自動的に $L(X) \in \mathrm{Ob}(\mathrm{CHaus})$ となる。
+            </li>
+            <li>
+                <b>単位元 (Unit) の定義:</b><br>
+                随伴から定まる単位元 $\eta_X: X \to L(X)$ は、 $e_X$ の終域を $L(X)$ に制限した連続写像として定める（すなわち $\eta_X(x) = e_X(x)$）。
+            </li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">普遍性（左随伴性）の証明</span>
+        <p>
+            関手 $L$ が包含関手 $I$ の左随伴 ($L \dashv I$) であることを示すには、任意の $K \in \mathrm{Ob}(\mathrm{CHaus})$ と連続写像 $g: X \to K$ に対して、以下の可換図式を満たす連続写像 $\tilde{g}: L(X) \to K$ が<b>一意に存在</b>すること（普遍性）を証明すれば十分である。
+            $$ \tilde{g} \circ \eta_X = g $$
+            これにより、自然な全単射 $\operatorname{Hom}_{\mathrm{CHaus}}(L(X), K) \cong \operatorname{Hom}_{\mathrm{Top}}(X, I(K))$ が確立される。
+        </p>
+        <p>
+            <b>【存在性の証明】</b><br>
+            $K \in \mathrm{Ob}(\mathrm{CHaus})$ とする。 $J = \operatorname{Hom}_{\mathrm{Top}}(K, [0, 1])$ とおくと、 $X$ の時と同様に連続写像 $e_K: K \to [0, 1]^J$ を定義できる。 $K$ はコンパクトHausdorff（特に完全正則かつ $T_1$）であるため、 $e_K$ は自身の像 $e_K(K)$ への<b>同相写像</b>となる。
+        </p>
+        <p>
+            ここで、写像 $g: X \to K$ によって誘導される自然な射影 $\pi: [0, 1]^C \to [0, 1]^J$ を構成する。
+            要素 $y \in [0, 1]^C$ は関数 $y: C \to [0, 1]$ とみなせる。各 $u \in J$ （すなわち連続関数 $u: K \to [0,1]$）に対して、合成 $u \circ g$ は $X$ から $[0,1]$ への連続関数となるため $u \circ g \in C$ である。そこで、 $\pi$ を次のように定義する。
+            $$ \pi(y)(u) = y(u \circ g) $$
+            この $\pi$ は直積成分の射影の組み合わせであるため連続写像である。また、任意の $x \in X$ と $u \in J$ に対して、
+            $$ \pi(e_X(x))(u) = e_X(x)(u \circ g) = u(g(x)) = e_K(g(x))(u) $$
+            が成り立つため、 $\pi \circ e_X = e_K \circ g$ という可換性が得られる。
+        </p>
+        <p>
+            次に、 $\pi$ を $L(X)$ 上に制限したときの像を考える。 $\pi$ の連続性より、閉包の像は像の閉包に含まれる。
+            $$ \pi(L(X)) = \pi(\overline{e_X(X)}) \subseteq \overline{\pi(e_X(X))} = \overline{e_K(g(X))} $$
+            $K$ はコンパクトであるため像 $e_K(K)$ もコンパクトであり、Hausdorff空間 $[0, 1]^J$ において閉集合となる。したがって、 $\overline{e_K(g(X))} \subseteq e_K(K)$ が成り立つ。
+            結果として、 $\pi(L(X)) \subseteq e_K(K)$ である。
+        </p>
+        <p>
+            $e_K$ は $e_K(K)$ への同相写像であるため、連続な逆写像 $e_K^{-1}: e_K(K) \to K$ が存在する。そこで求める写像 $\tilde{g}: L(X) \to K$ を次のように定義する。
+            $$ \tilde{g} = e_K^{-1} \circ \left( \pi|_{L(X)} \right) $$
+            定義より、 $\tilde{g} \circ \eta_X(x) = e_K^{-1}(\pi(e_X(x))) = e_K^{-1}(e_K(g(x))) = g(x)$ となり、 $\tilde{g} \circ \eta_X = g$ を満たす連続写像 $\tilde{g}$ の存在が示された。
+        </p>
+        <p>
+            <b>【一意性の証明】</b><br>
+            $L(X)$ は像 $\eta_X(X) = e_X(X)$ の閉包として定義されているため、 $\eta_X(X)$ は $L(X)$ において稠密 (dense) である。
+            仮に $\tilde{h} \circ \eta_X = g$ を満たす別の連続写像 $\tilde{h}: L(X) \to K$ が存在したとする。このとき $\tilde{g}$ と $\tilde{h}$ は稠密部分集合 $\eta_X(X)$ 上で完全に一致する。
+            余域 $K$ はHausdorff空間であるため、「稠密な部分集合上で一致する2つの連続写像は空間全体で一致する」という位相空間論の基本定理により、 $\tilde{g} = \tilde{h}$ が結論づけられる。よって、 $\tilde{g}$ は一意である。
+        </p>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">射に対する構成（関手性の確認）</span>
+        <p>
+            対象に対する割り当て $X \mapsto L(X)$ が定まったので、射 $f: X \to Y \in \mathrm{Mor}(\mathrm{Top})$ に対する $L(f): L(X) \to L(Y)$ の構成を行う。
+        </p>
+        <p>
+            合成写像 $X \xrightarrow{f} Y \xrightarrow{\eta_Y} L(Y)$ を考える。 $L(Y)$ はコンパクトHausdorff空間 ($\mathrm{Ob}(\mathrm{CHaus})$) であるため、上で証明した普遍性を直接適用することができる。
+            すなわち、可換図式 $\tilde{f} \circ \eta_X = \eta_Y \circ f$ を満たす連続写像 $\tilde{f}: L(X) \to L(Y)$ が一意に存在する。この一意な写像 $\tilde{f}$ を $L(f)$ と定義する。
+        </p>
+        <p>
+            普遍性における一意性から、 $L(\mathrm{id}_X) = \mathrm{id}_{L(X)}$ および $L(f_2 \circ f_1) = L(f_2) \circ L(f_1)$ も自然に従い、 $L$ が妥当な関手であることが確認される。これにより、 $L \dashv I$ の構成および証明が完結する。
+        </p>
+    </div>
+
+    <h2>9. 参考文献</h2>
+    <ul>
+        <li>Mac Lane, S. (1998). <i>Categories for the Working Mathematician</i> (2nd ed.). Springer. <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8" target="_blank">https://link.springer.com/book/10.1007/978-1-4757-4721-8</a></li>
+        <li>Kashiwara, M., & Schapira, P. (2006). <i>Categories and Sheaves</i>. Springer. <a href="https://link.springer.com/book/10.1007/3-540-27950-4" target="_blank">https://link.springer.com/book/10.1007/3-540-27950-4</a></li>
+        <li>nLab authors. (n.d.). <i>Sheaf</i>. nLab. <a href="https://ncatlab.org/nlab/show/sheaf" target="_blank">https://ncatlab.org/nlab/show/sheaf</a></li>
+        <li>nLab authors. (n.d.). <i>Dense subcategory</i>. nLab. <a href="https://ncatlab.org/nlab/show/dense+subcategory" target="_blank">https://ncatlab.org/nlab/show/dense+subcategory</a></li>
+        <li>nLab authors. (n.d.). <i>Grothendieck topology</i>. nLab. <a href="https://ncatlab.org/nlab/show/Grothendieck+topology" target="_blank">https://ncatlab.org/nlab/show/Grothendieck+topology</a></li>
+        <li>nLab authors. (n.d.). <i>Stone-Cech compactification</i>. nLab. <a href="https://ncatlab.org/nlab/show/Stone-Cech+compactification" target="_blank">https://ncatlab.org/nlab/show/Stone-Cech+compactification</a></li>
+    </ul>
+
+</body>
+</html>

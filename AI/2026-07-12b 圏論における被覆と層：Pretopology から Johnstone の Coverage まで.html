@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圏論における被覆と層：Pretopology から Johnstone の Coverage まで</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']],
+      processEscapes: true,
+      macros: {
+        C: "\\mathcal{C}",
+        Set: "\\mathbf{Set}",
+        can: "\\mathrm{can}",
+        CHaus: "\\mathrm{CHaus}"
+      }
+    },
+    chtml: {
+      matchFontHeight: false
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    line-height: 1.6;
+    padding: 2em;
+    max-width: 1000px;
+    margin: 0 auto;
+    color: #333;
+  }
+  h1, h2, h3 {
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.3em;
+  }
+  p {
+    margin: 1em 0;
+  }
+  .definition, .theorem, .lemma, .proof, .remark {
+    margin: 1.5em 0;
+    padding: 1.2em;
+    border-radius: 5px;
+  }
+  .definition { background-color: #e8f4f8; border-left: 5px solid #2980b9; }
+  .theorem { background-color: #fdf2e9; border-left: 5px solid #d35400; }
+  .lemma { background-color: #fcf3cf; border-left: 5px solid #f1c40f; }
+  .proof { background-color: #f9f9f9; border-left: 5px solid #7f8c8d; }
+  .remark { background-color: #f4f6f7; border-left: 5px solid #bdc3c7; }
+  .label { font-weight: bold; margin-bottom: 0.5em; display: block; }
+  a { color: #3498db; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>圏論における被覆と層：Pretopology から Johnstone の Coverage まで</h1>
+
+<p>本稿では、圏論における位相（トポロジー）の概念と層の理論について解説します。位相空間上の開集合の被覆を圏の射の族へと一般化することで、圏上のトポロジー（Grothendieck topology）が得られます。ここでは、ファイバー積を持つ圏における pretopology から出発し、ファイバー積を持たない圏においても層の概念を適切に定式化できる Johnstone の coverage まで、理論の発展とその証明を完全に網羅して解説します。</p>
+
+<h2>1. 基礎概念の準備</h2>
+
+<div class="remark">
+<span class="label">インフォーマルな解説：</span>
+本節では、以降の議論を self-contained にするための基本的な圏論の概念を復習します。すでに圏論の基礎に精通している読者は適宜読み飛ばしても構いません。
+</div>
+
+<div class="definition">
+<span class="label">定義 1.1 (ファイバー積 / Pullback)</span>
+圏 $\mathcal{C}$ において、対象 $U_i, U_j, U$ および射 $f_i \colon U_i \to U$ と $f_j \colon U_j \to U$ が与えられたとする。このとき、ファイバー積 (fiber product) または引き戻し (pullback) とは、対象 $U_i \times_U U_j$ と射影 $p_1 \colon U_i \times_U U_j \to U_i$ および $p_2 \colon U_i \times_U U_j \to U_j$ の組であって、$f_i \circ p_1 = f_j \circ p_2$ を満たし、かつ次の普遍性を満たすものである。すなわち、任意の対象 $W$ と射 $g_1 \colon W \to U_i$ , $g_2 \colon W \to U_j$ で $f_i \circ g_1 = f_j \circ g_2$ を満たすものが与えられたとき、一意な射 $h \colon W \to U_i \times_U U_j$ が存在して、$p_1 \circ h = g_1$ かつ $p_2 \circ h = g_2$ が成り立つ。
+</div>
+
+<div class="definition">
+<span class="label">定義 1.2 (前層 / Presheaf)</span>
+圏 $\mathcal{C}$ 上の（集合に値をとる）前層 (presheaf) とは、反変関手 $F \colon \mathcal{C}^{op} \to \Set$ のことである。対象 $U \in \mathcal{C}$ に対して $F(U)$ の元を $U$ 上の切断 (section) と呼ぶ。射 $f \colon V \to U$ に対する写像 $F(f) \colon F(U) \to F(V)$ を引き戻し (pullback) または制限 (restriction) と呼び、切断 $s \in F(U)$ に対して $F(f)(s)$ を $s|_V$ または $f^\ast s$ と書くことがある。
+</div>
+
+<div class="definition">
+<span class="label">定義 1.3 (Sieve)</span>
+圏 $\mathcal{C}$ の対象 $U$ 上の sieve (ふるい) $S$ とは、余ドメインが $U$ である射の集まりであって、右イデアルの性質を満たすものをいう。すなわち、$f \colon V \to U \in S$ であり、$g \colon W \to V$ が任意の射であるとき、$f \circ g \in S$ となる。
+<br><br>
+射の族 $\{f_i \colon U_i \to U\}_{i \in I}$ が生成する sieve を $S(\{f_i\})$ と書く。これは $f_i \circ g$ の形の射の全体である。
+また、sieve $S$ 上の $U$ への射 $h \colon V \to U$ による引き戻し (pullback sieve) は $h^\ast S=\{g \colon W \to V \mid h \circ g \in S\}$ と定義される。これは $V$ 上の sieve となる。
+</div>
+
+<h2>2. ファイバー積を持つ圏における Pretopology と Grothendieck Topology</h2>
+
+<p>この節では、圏 $\mathcal{C}$ が任意のファイバー積を持つと仮定する。</p>
+
+<div class="definition">
+<span class="label">定義 2.1 (Grothendieck pretopology)</span>
+圏 $\mathcal{C}$ 上の pretopology (pretopology) とは、$\mathcal{C}$ の各対象 $U$ に対して、被覆族 (covering family) と呼ばれる射の族 $\{f_i \colon U_i \to U\}_{i \in I}$ の集まり $Cov(U)$ を割り当てる規則であり、以下の3つの公理を満たすものである。
+<ul>
+<li>(PT1) 同型射 (isomorphism)：任意の同型射 $f \colon V \to U$ に対して、単元からなる族 $\{f\} \in Cov(U)$ である。</li>
+<li>(PT2) 基底変換 (base change) / 引き戻し (pullback)：$\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ であり、$g \colon V \to U$ が $\mathcal{C}$ の任意の射であるとする。このとき、各 $i \in I$ についてファイバー積 $U_i \times_U V$ が存在し、射影 $p_i \colon U_i \times_U V \to V$ を考えると、引き戻された族 $\{p_i\}_{i \in I} \in Cov(V)$ である。</li>
+<li>(PT3) 局所的性質 (local character) / 合成 (composition)：$\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ であり、各 $i \in I$ について $\{g_{ij} \colon U_{ij} \to U_i\}_{j \in J_i} \in Cov(U_i)$ であるとする。このとき、合成射の族 $\{f_i \circ g_{ij} \colon U_{ij} \to U\}_{i \in I, j \in J_i}$ は $Cov(U)$ に属する。</li>
+</ul>
+</div>
+
+<p>pretopology は直観的で扱いやすい反面、異なる pretopology が「同じ」被覆の概念（層の圏が同値になるなど）を定めることがある。これをより厳密に体系化したのが Grothendieck topology である。</p>
+
+<div class="definition">
+<span class="label">定義 2.2 (Grothendieck topology)</span>
+圏 $\mathcal{C}$ 上の Grothendieck topology (Grothendieck topology) $J$ とは、各対象 $U$ に対して $U$ 上の sieve の集まり $J(U)$ を割り当てる規則であり、以下の公理を満たすものである。$J(U)$ に属する sieve を被覆 sieve (covering sieve) と呼ぶ。
+<ul>
+<li>(GT1) 極大 sieve (maximality)：$U$ 上の極大 sieve、すなわち $U$ を余ドメインとする全ての射からなる sieve $t_U$ は $J(U)$ に属する。</li>
+<li>(GT2) 安定性 (stability)：$S \in J(U)$ であり、$h \colon V \to U$ が任意の射であるとき、$h^\ast S \in J(V)$ である。</li>
+<li>(GT3) 推移性 (transitivity)：$S \in J(U)$ とし、$R$ を $U$ 上の sieve とする。もし、任意の $f \colon V \to U \in S$ に対して $f^\ast R \in J(V)$ であるならば、$R \in J(U)$ である。</li>
+</ul>
+</div>
+
+<div class="definition">
+<span class="label">定義 2.3 (Pretopology から誘導される Grothendieck topology)</span>
+$Cov$ を圏 $\mathcal{C}$ 上の pretopology とする。$Cov$ から誘導される Grothendieck topology $J_{Cov}$ を次のように構成する。
+$U$ 上の sieve $S$ が $J_{Cov}(U)$ に属するとは、ある被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ が存在して、$S(\{f_i\}) \subset S$ となることである。
+</div>
+
+<div class="theorem">
+<span class="label">定理 2.4</span>
+上記で構成された $J_{Cov}$ は実際に Grothendieck topology の公理を満たす。
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+$J_{Cov}$ が (GT1), (GT2), (GT3) を満たすことを順に証明する。
+
+<p><strong>(GT1) の証明：</strong> $U$ 上の極大 sieve $t_U$ が $J_{Cov}(U)$ に属することを示す。公理 (PT1) より、$\{id_U \colon U \to U\} \in Cov(U)$ である。$id_U$ が生成する sieve $S(\{id_U\})$ は $t_U$ 自身に他ならない。$t_U \subset t_U$ であるから、定義より $t_U \in J_{Cov}(U)$ である。</p>
+
+<p><strong>(GT2) の証明：</strong> $S \in J_{Cov}(U)$ とし、$h \colon V \to U$ を任意の射とする。$h^\ast S \in J_{Cov}(V)$ を示す。$S \in J_{Cov}(U)$ より、ある被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ が存在して、$S(\{f_i\}) \subset S$ となる。公理 (PT2) より、各 $f_i$ と $h$ のファイバー積をとり、射影 $p_i \colon U_i \times_U V \to V$ および $q_i \colon U_i \times_U V \to U_i$ を得ると、$h \circ p_i = f_i \circ q_i$ が成り立ち、かつ $\{p_i\}_{i \in I} \in Cov(V)$ である。
+ここで $S(\{p_i\}) \subset h^\ast S$ を示す。任意の $p_i \circ g \in S(\{p_i\})$ （ただし $g \colon W \to U_i \times_U V$）に対して、
+$$h \circ (p_i \circ g) = (h \circ p_i) \circ g = (f_i \circ q_i) \circ g = f_i \circ (q_i \circ g)$$
+となる。$f_i \circ (q_i \circ g)$ は $S(\{f_i\})$ の元である。仮定 $S(\{f_i\}) \subset S$ より、$f_i \circ (q_i \circ g) \in S$ となる。したがって、$h \circ (p_i \circ g) \in S$ であり、引き戻し sieve の定義により $p_i \circ g \in h^\ast S$ である。
+よって $S(\{p_i\}) \subset h^\ast S$ が示され、$h^\ast S \in J_{Cov}(V)$ である。</p>
+
+<p><strong>(GT3) の証明：</strong> $S \in J_{Cov}(U)$ とし、$R$ を $U$ 上の sieve とする。任意の $f \colon V \to U \in S$ について $f^\ast R \in J_{Cov}(V)$ であると仮定する。$R \in J_{Cov}(U)$ を示す。
+$S \in J_{Cov}(U)$ より、ある $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ が存在して、$S(\{f_i\}) \subset S$ となる。
+各 $i \in I$ について、$f_i \in S(\{f_i\}) \subset S$ であるから、仮定より $f_i^\ast R \in J_{Cov}(U_i)$ である。
+したがって $J_{Cov}$ の構成より、各 $i \in I$ に対して、ある $\{g_{ij} \colon U_{ij} \to U_i\}_{j \in J_i} \in Cov(U_i)$ が存在して、$S(\{g_{ij}\}_{j \in J_i}) \subset f_i^\ast R$ となる。
+公理 (PT3) より、合成射の族 $\{f_i \circ g_{ij} \colon U_{ij} \to U\}_{i \in I, j \in J_i}$ は $Cov(U)$ に属する。
+この被覆族が生成する sieve を考える。任意の $i \in I, j \in J_i$ について、$g_{ij} \in S(\{g_{ij}\}) \subset f_i^\ast R$ であるから、引き戻し sieve の定義により $f_i \circ g_{ij} \in R$ である。
+$R$ は sieve であるから、$f_i \circ g_{ij}$ を経由するすべての射も $R$ に属する。すなわち $S(\{f_i \circ g_{ij}\}_{i \in I, j \in J_i}) \subset R$ である。
+被覆族が生成する sieve が $R$ に含まれるため、構成の定義により $R \in J_{Cov}(U)$ である。証明終。</p>
+</div>
+
+<h3>層の定義</h3>
+
+<div class="definition">
+<span class="label">定義 2.5 (Pretopology の言葉による層)</span>
+前層 $F$ が pretopology $Cov$ に関する層 (sheaf) であるとは、任意の対象 $U \in \mathcal{C}$ と任意の被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ に対して、以下の条件 (等化子条件) を満たすことである。
+任意の切断の族 $\{s_i \in F(U_i)\}_{i \in I}$ が整合性条件 (compatibility condition) を満たすならば（すなわち、任意の $i, j \in I$ について、ファイバー積 $U_i \times_U U_j$ とその射影 $p_1 \colon U_i \times_U U_j \to U_i$ , $p_2 \colon U_i \times_U U_j \to U_j$ を考えたとき、$F(p_1)(s_i) = F(p_2)(s_j)$ が成り立つならば）、ある唯一の切断 $s \in F(U)$ が存在して、任意の $i \in I$ について $F(f_i)(s) = s_i$ となる。
+<br><br>
+これは、図式
+$$F(U) \to \prod_{i \in I} F(U_i) \rightrightarrows \prod_{i, j \in I} F(U_i \times_U U_j)$$
+が $\Set$ における等化子 (equalizer) となることと同値である。
+</div>
+
+<div class="definition">
+<span class="label">定義 2.6 (Grothendieck topology の言葉による層)</span>
+$U$ 上の sieve $S$ と前層 $F$ に対し、$S$ 上の $F$ の整合的族 (matching family) とは、写像族 $\{s_f \in F(V)\}_{f \colon V \to U \in S}$ であって、任意の $f \colon V \to U \in S$ と任意の $g \colon W \to V$ に対して $F(g)(s_f) = s_{f \circ g}$ を満たすものである。
+<br><br>
+前層 $F$ が Grothendieck topology $J$ に関する層であるとは、任意の対象 $U \in \mathcal{C}$ と任意の被覆 sieve $S \in J(U)$ に対して、任意の $S$ 上の整合的族 $\{s_f\}$ にたいして、唯一の $s \in F(U)$ が存在して、すべての $f \colon V \to U \in S$ について $F(f)(s) = s_f$ となることである。
+</div>
+
+<div class="theorem">
+<span class="label">定理 2.7</span>
+$\mathcal{C}$ をファイバー積を持つ圏、$Cov$ を $\mathcal{C}$ 上の pretopology、$J_{Cov}$ を $Cov$ から誘導される Grothendieck topology とする。前層 $F \colon \mathcal{C}^{op} \to \Set$ について、以下は同値である。
+<ol>
+<li>$F$ は $Cov$ の意味で層である。</li>
+<li>$F$ は $J_{Cov}$ の意味で層である。</li>
+</ol>
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+
+<p><strong>(2) $\Rightarrow$ (1) の証明:</strong><br>
+$F$ が $J_{Cov}$ に関する層であると仮定し、$F$ が $Cov$ に関する層であることを示す。
+任意の被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ と、整合性条件を満たす切断の族 $\{s_i \in F(U_i)\}_{i \in I}$ が与えられたとする。
+被覆族 $\{f_i\}$ が生成する sieve を $S = S(\{f_i\})$ とする。$J_{Cov}$ の構成より $S \in J_{Cov}(U)$ である。
+$S$ 上の $F$ の整合的族を次のように構成する。$f \colon V \to U \in S$ に対して、$S$ の定義より $f = f_i \circ g$ となる $i \in I$ と $g \colon V \to U_i$ が存在する。このような表現を選び、$s_f = F(g)(s_i) \in F(V)$ と定義する。
+まず、この $s_f$ が表現 $f = f_i \circ g = f_j \circ h$ の選び方によらないこと (well-defined) を示す。
+$f = f_i \circ g = f_j \circ h$ とすると、$U_i \times_U U_j$ をファイバー積、射影を $p_i \colon U_i \times_U U_j \to U_i$ , $p_j \colon U_i \times_U U_j \to U_j$ とすれば、ファイバー積の普遍性により、一意な射 $k \colon V \to U_i \times_U U_j$ が存在して、$p_i \circ k = g$ かつ $p_j \circ k = h$ を満たす。
+整合性条件より $F(p_i)(s_i) = F(p_j)(s_j)$ であるから、両辺に $F(k)$ を適用して
+$$F(k)(F(p_i)(s_i)) = F(k)(F(p_j)(s_j))$$
+$$F(p_i \circ k)(s_i) = F(p_j \circ k)(s_j)$$
+$$F(g)(s_i) = F(h)(s_j)$$
+となり、well-defined であることが示された。</p>
+
+<p>次に、この $\{s_f\}_{f \in S}$ が $S$ 上の整合的族であることを示す。任意の $f \colon V \to U \in S$ と $w \colon W \to V$ に対して、$s_f = F(g)(s_i)$ （ただし $f = f_i \circ g$）とすると、$f \circ w = f_i \circ (g \circ w)$ であるから、
+$$s_{f \circ w} = F(g \circ w)(s_i) = F(w)(F(g)(s_i)) = F(w)(s_f)$$
+となり、整合的族の条件を満たす。</p>
+
+<p>$F$ は $J_{Cov}$ の層であるから、$S \in J_{Cov}(U)$ と整合的族 $\{s_f\}$ に対して、一意な $s \in F(U)$ が存在して、任意の $f \in S$ について $F(f)(s) = s_f$ となる。
+特に $f_i \in S$ を選べば（$f_i = f_i \circ id_{U_i}$ なので）、$F(f_i)(s) = s_{f_i} = F(id_{U_i})(s_i) = s_i$ となる。
+また、$s$ の一意性について。もし $s' \in F(U)$ も $F(f_i)(s') = s_i$ を満たすなら、任意の $f = f_i \circ g \in S$ に対して $F(f)(s') = F(g)(F(f_i)(s')) = F(g)(s_i) = s_f$ となるため、整合的族への制限が完全に一致し、$s = s'$ となる。
+以上により、$F$ は $Cov$ の意味での層である。</p>
+
+<p><strong>(1) $\Rightarrow$ (2) の証明:</strong><br>
+$F$ が $Cov$ に関する層であると仮定し、$F$ が $J_{Cov}$ に関する層であることを示す。
+任意の $U \in \mathcal{C}$ 、$S \in J_{Cov}(U)$ 、および $S$ 上の整合的族 $\{s_f \in F(V)\}_{f \colon V \to U \in S}$ をとる。
+$S \in J_{Cov}(U)$ の定義により、ある被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ が存在して、$S(\{f_i\}) \subset S$ となる。
+特に各 $f_i$ は $S$ に属するため、$s_{f_i} \in F(U_i)$ が存在する。この族 $\{s_{f_i}\}_{i \in I}$ が $Cov$ に関する整合性条件を満たすことを示す。
+任意の $i, j \in I$ に対して、ファイバー積 $U_i \times_U U_j$ と射影 $p_1 \colon U_i \times_U U_j \to U_i$ , $p_2 \colon U_i \times_U U_j \to U_j$ を考える。
+$f_i \circ p_1 = f_j \circ p_2$ である。この射を $f \colon U_i \times_U U_j \to U$ と置く。$f_i, f_j \in S$ と $S$ が sieve であることから、$f \in S$ である。
+$\{s_f\}$ が $S$ 上の整合的族であるから、
+$$F(p_1)(s_{f_i}) = s_{f_i \circ p_1} = s_f$$
+$$F(p_2)(s_{f_j}) = s_{f_j \circ p_2} = s_f$$
+よって $F(p_1)(s_{f_i}) = F(p_2)(s_{f_j})$ となり、整合性条件を満たす。</p>
+
+<p>$F$ は $Cov$ に関する層であるから、ある一意な $s \in F(U)$ が存在して、任意の $i \in I$ について $F(f_i)(s) = s_{f_i}$ となる。
+この $s$ が元の sieve $S$ 上のすべての $h \colon W \to U \in S$ に対して $F(h)(s) = s_h$ を満たすことを示す。
+$h \in S$ を固定する。公理 (PT2) により、$h$ による被覆族 $\{f_i\}$ の引き戻し $\{p_i \colon U_i \times_U W \to W\}_{i \in I}$ は $Cov(W)$ に属する。
+ここで射影を $q_i \colon U_i \times_U W \to U_i$ とすると、$h \circ p_i = f_i \circ q_i$ である。
+この射を $k_i \colon U_i \times_U W \to U$ と置く。$S$ が sieve であるから $k_i \in S$ である。
+整合的族の性質と、$F(f_i)(s) = s_{f_i}$ より、
+$$F(p_i)(F(h)(s)) = F(h \circ p_i)(s) = F(f_i \circ q_i)(s) = F(q_i)(F(f_i)(s)) = F(q_i)(s_{f_i})$$
+一方、整合的族の性質より
+$$F(q_i)(s_{f_i}) = s_{f_i \circ q_i} = s_{k_i} = s_{h \circ p_i} = F(p_i)(s_h)$$
+よって、任意の $i \in I$ について $F(p_i)(F(h)(s)) = F(p_i)(s_h)$ が成り立つ。
+さて、被覆族 $\{p_i\}_{i \in I} \in Cov(W)$ と、族 $\{s'_i = F(p_i)(s_h)\}_{i \in I}$ を考える。
+これらは $W$ 上の単一の切断 $s_h$ を引き戻したものであるから、自明に整合性条件を満たす。
+$F$ は $Cov$ の意味で層であるため、被覆族 $\{p_i\}$ に対する条件から、すべての $p_i$ での制限が一致するような $W$ 上の切断は一意である。
+$F(h)(s)$ と $s_h$ はともにすべての $p_i$ で引き戻すと $F(p_i)(s_h)$ に等しくなるため、一意性により $F(h)(s) = s_h$ が成り立つ。</p>
+
+<p>最後に $s$ の一意性について。$s' \in F(U)$ もすべての $h \in S$ について $F(h)(s') = s_h$ を満たすとする。特に $f_i \in S$ だから $F(f_i)(s') = s_{f_i}$ となる。$F$ が $Cov$ に関する層であることの $s$ の一意性により、$s = s'$ となる。
+以上により、$F$ は $J_{Cov}$ の意味での層である。証明終。</p>
+</div>
+
+<h2>3. Johnstone の Coverage</h2>
+
+<p>前節までの理論は圏がファイバー積を持つことを前提としていた。しかし、ファイバー積を持たない圏においても層の概念を定式化するために導入されたのが、Johnstone の coverage である。</p>
+
+<div class="definition">
+<span class="label">定義 3.1 (Johnstone's coverage)</span>
+圏 $\mathcal{C}$ における Johnstone の coverage (Johnstone's coverage) とは、$\mathcal{C}$ の各対象 $U$ に対して、被覆族 (covering family) と呼ばれる射の族 $\{f_i \colon U_i \to U\}_{i \in I}$ の集まり $Cov(U)$ を割り当てる規則であり、以下の公理をただ1つ満たすものである。
+<ul>
+<li><strong>被覆の分解条件 (coverage axiom)：</strong> 任意の被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ と、$\mathcal{C}$ の任意の射 $g \colon V \to U$ に対して、ある被覆族 $\{h_j \colon V_j \to V\}_{j \in J} \in Cov(V)$ が存在して、各 $j \in J$ について合成射 $g \circ h_j$ がいずれかの $f_i$ を経由する。すなわち、各 $j \in J$ に対してある $i \in I$ と射 $k \colon V_j \to U_i$ が存在し、$g \circ h_j = f_i \circ k$ が成り立つ。</li>
+</ul>
+</div>
+
+<p>ファイバー積 $U_i \times_U V$ の存在を要求せず、それに代わる「被覆の引き戻しに相当する被覆」の存在のみを要請している点が特徴である。
+Johnstone の coverage $Cov$ は恒等射の族が被覆であることを要求せず、また被覆の合成が再び被覆になること（推移性）も要求しないため、誘導される Grothendieck topology $J_{Cov}$ の構成は「帰納的に生成される最小の sieve の族」という概念を、閉包系の共通部分として厳密に定義することで行われる。</p>
+
+<div class="definition">
+<span class="label">定義 3.2 (Sieve の割り当てと条件)</span>
+各対象 $U \in \operatorname{Ob}(\mathcal{C})$ に対して、$U$ 上の sieve の集合を割り当てる規則 $\mathcal{K}$ を考える。$\mathcal{K}$ が以下の3つの条件を満たすとき、$\mathcal{K}$ を <strong>$Cov$ と整合する割り当て</strong> と呼ぶ。
+<ul>
+<li>(C1) 極大 sieve の含有：任意の対象 $U$ について、極大 sieve $t_U$ は $\mathcal{K}(U)$ に属する。</li>
+<li>(C2) 被覆族が生成する sieve の含有：任意の被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ に対して、それが生成する sieve $S(\{f_i\})$ は $\mathcal{K}(U)$ に属する。</li>
+<li>(C3) 推移性：$S \in \mathcal{K}(U)$ であり、$R$ が $U$ 上の sieve であるとする。任意の $f \in S$ について引き戻し $f^\ast R \in \mathcal{K}(\operatorname{dom}(f))$ が成り立つならば、$R \in \mathcal{K}(U)$ である。</li>
+</ul>
+</div>
+
+<div class="definition">
+<span class="label">定義 3.3 (誘導される Grothendieck topology)</span>
+$Cov$ から誘導される Grothendieck topology $J_{Cov}$ とは、すべての「$Cov$ と整合する割り当て $\mathcal{K}$」の共通部分である。すなわち、$U$ 上の sieve $S$ に対して、
+$$S \in J_{Cov}(U) \iff \text{すべての } Cov \text{ と整合する割り当て } \mathcal{K} \text{ について } S \in \mathcal{K}(U)$$
+と定義する。この定義により、$J_{Cov}$ は (C1), (C2), (C3) を満たす「最小の」割り当てとなる。
+</div>
+
+<div class="lemma">
+<span class="label">補題 3.4 (上方閉包性)</span>
+$R \in J_{Cov}(U)$ であり、$R'$ が $R \subset R'$ を満たす $U$ 上の sieve であるならば、$R' \in J_{Cov}(U)$ である。
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+任意の $f \colon V \to U \in R$ をとる。仮定 $R \subset R'$ より $f \in R'$ である。したがって、引き戻し sieve の定義から $f^\ast R' = t_V$ となる。$J_{Cov}$ は (C1) を満たすため、$f^\ast R' \in J_{Cov}(V)$ である。これが任意の $f \in R$ で成り立つことと、$R \in J_{Cov}(U)$ であること、および $J_{Cov}$ が (C3) を満たすことから、$R' \in J_{Cov}(U)$ が結論づけられる。証明終。
+</div>
+
+<div class="theorem">
+<span class="label">定理 3.5</span>
+構成された $J_{Cov}$ は Grothendieck topology の公理を満たす。
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+Grothendieck topology の公理 (GT1) 極大 sieve、(GT2) 安定性、(GT3) 推移性を満たすことを示す。
+<ul>
+<li><strong>(GT1) 極大 sieve：</strong> $J_{Cov}$ は定義より (C1) を満たすため、自明に $t_U \in J_{Cov}(U)$ である。</li>
+<li><strong>(GT3) 推移性：</strong> $J_{Cov}$ は定義より (C3) を満たすため、これも自明に満たされる。</li>
+<li><strong>(GT2) 安定性：</strong> $S \in J_{Cov}(U)$ と任意の射 $h \colon W \to U$ について、$h^\ast S \in J_{Cov}(W)$ となることを示す。そのために、新たな sieve の割り当て $\mathcal{K}'$ を次のように定義する。
+$$\mathcal{K}'(U) = \{S \in J_{Cov}(U) \mid \text{任意の射 } h \colon V \to U \text{ について } h^\ast S \in J_{Cov}(V)\}$$
+この $\mathcal{K}'$ が (C1), (C2), (C3) を満たすことを示す。
+  <ul>
+  <li><strong>(C1) の証明：</strong> 任意の $h \colon V \to U$ について、$h^\ast t_U = t_V$ である。$J_{Cov}$ は (C1) を満たすため $t_V \in J_{Cov}(V)$ となり、$t_U \in \mathcal{K}'(U)$ である。</li>
+  <li><strong>(C2) の証明：</strong> $\{f_i \colon U_i \to U\} \in Cov(U)$ とし、$S = S(\{f_i\})$ とする。任意の射 $h \colon V \to U$ をとる。coverage の公理により、ある被覆族 $\{h_j \colon V_j \to V\} \in Cov(V)$ が存在し、各 $j$ について $h \circ h_j = f_i \circ k$ となる $i$ と $k$ が存在する。これは $h \circ h_j \in S(\{f_i\})$ を意味し、引き戻し sieve の定義から $h_j \in h^\ast S$ となる。したがって、$S(\{h_j\}) \subset h^\ast S$ である。$J_{Cov}$ は (C2) を満たすため $S(\{h_j\}) \in J_{Cov}(V)$ であり、補題 3.4（上方閉包性）より $h^\ast S \in J_{Cov}(V)$ となる。よって $S \in \mathcal{K}'(U)$ である。</li>
+  <li><strong>(C3) の証明：</strong> $S \in \mathcal{K}'(U)$ とし、$R$ を $U$ 上の sieve とする。任意の $f \in S$ について $f^\ast R \in \mathcal{K}'(\operatorname{dom}(f))$ であると仮定する。$R \in \mathcal{K}'(U)$、すなわち任意の $h \colon V \to U$ について $h^\ast R \in J_{Cov}(V)$ となることを示す。
+  $S \in \mathcal{K}'(U)$ であるから、$h^\ast S \in J_{Cov}(V)$ である。ここで任意の $k \colon X \to V \in h^\ast S$ をとる。定義より $h \circ k \in S$ である。仮定より $(h \circ k)^\ast R \in \mathcal{K}'(X)$ である。特に恒等射 $id_X$ を用いて引き戻すと、$id_X^\ast((h \circ k)^\ast R) \in J_{Cov}(X)$ となる。引き戻しの性質より $(h \circ k)^\ast R = k^\ast(h^\ast R)$ であるから、$k^\ast(h^\ast R) \in J_{Cov}(X)$ が任意の $k \in h^\ast S$ について成り立つ。
+  $h^\ast S \in J_{Cov}(V)$ に対して (C3) を適用することで、$h^\ast R \in J_{Cov}(V)$ が得られる。よって $R \in \mathcal{K}'(U)$ である。</li>
+  </ul>
+以上より $\mathcal{K}'$ は (C1), (C2), (C3) を満たす。$J_{Cov}$ の「最小性」（共通部分としての定義）から $J_{Cov}(U) \subset \mathcal{K}'(U)$ である。これはすなわち、任意の $S \in J_{Cov}(U)$ と任意の $h \colon V \to U$ について $h^\ast S \in J_{Cov}(V)$ となることを意味し、(GT2) が証明された。</li>
+</ul>
+</div>
+
+<h3>層の定義と同値性</h3>
+
+<p>前層 $F \colon \mathcal{C}^{op} \to \Set$ を考える。ファイバー積の存在を前提としないため、任意のテスト対象 $W$ を経由する射を用いて「整合性」を直接表現する。</p>
+
+<div class="definition">
+<span class="label">定義 3.6 (整合的族 / compatible family)</span>
+前層 $F$ と被覆族 $\{f_i \colon U_i \to U\}_{i \in I} \in Cov(U)$ が与えられたとする。切断の族 $\{s_i \in F(U_i)\}_{i \in I}$ が整合的族 (compatible family) であるとは、任意の $i, j \in I$ および対象 $W$ 、射 $g \colon W \to U_i$ 、$h \colon W \to U_j$ について、$f_i \circ g = f_j \circ h$ が成り立つならば常に $F(g)(s_i) = F(h)(s_j)$ が満たされることをいう。
+</div>
+
+<div class="definition">
+<span class="label">定義 3.7 (Johnstone の coverage に関する層)</span>
+前層 $F$ が Johnstone の coverage $Cov$ に関する層 (sheaf) であるとは、任意の対象 $U$ 、任意の被覆族 $\{f_i\}_{i \in I} \in Cov(U)$ 、および任意の整合的族 $\{s_i\}_{i \in I}$ に対して、ある唯一の切断 $s \in F(U)$ が存在して、すべての $i \in I$ について $F(f_i)(s) = s_i$ となることである。
+</div>
+
+<div class="theorem">
+<span class="label">定理 3.8</span>
+前層 $F$ について、以下は同値である。
+<ol>
+<li>$F$ は $Cov$ の意味で層である。</li>
+<li>$F$ は誘導された Grothendieck topology $J_{Cov}$ の意味で層である。</li>
+</ol>
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+前層 $F$ に対して、$U$ 上の sieve の集まり $J_F(U)$ を「$S$ 上の任意の整合的族 (matching family) が一意な貼り合わせを持つような sieve $S$」の全体として定義する。すなわち、$S \in J_F(U)$ とは、任意の族 $\{x_f \in F(\operatorname{dom}(f))\}_{f \in S}$ が条件「$f \in S$ かつ $g \colon W \to \operatorname{dom}(f)$ ならば $F(g)(x_f) = x_{f \circ g}$」を満たすとき、一意な $x \in F(U)$ が存在してすべての $f \in S$ で $F(f)(x) = x_f$ となることである。
+
+<p><strong>(1) $\Rightarrow$ (2) の証明:</strong><br>
+$F$ が $Cov$ に関して層であると仮定する。$J_F$ が 定義 3.2 の条件 (C1), (C2), (C3) を満たす割り当てであることを示す。
+<ul>
+<li><strong>(C1) の証明：</strong> $t_U$ 上の整合的族 $\{x_f\}_{f \in t_U}$ に対して、$f=id_U \in t_U$ での要素 $x_{id_U} \in F(U)$ を考えると、任意の $f \in t_U$ について $F(f)(x_{id_U}) = x_{id_U \circ f} = x_f$ となり、これが一意な貼り合わせを与える。よって $t_U \in J_F(U)$ である。</li>
+<li><strong>(C2) の証明：</strong> $\{f_i\}_{i \in I} \in Cov(U)$ とし、$S = S(\{f_i\})$ とする。$S$ 上の整合的族 $\{x_f\}_{f \in S}$ をとる。各 $i$ について $f_i \in S$ であるため、$s_i = x_{f_i}$ とおく。族 $\{s_i\}$ が $Cov$ の意味で整合的族であることを示す。$f_i \circ g = f_j \circ h$ とし、これを射 $k \colon W \to U$ と置く。$S$ は右イデアルなので $k \in S$ である。整合的族の性質より、$F(g)(s_i) = F(g)(x_{f_i}) = x_{f_i \circ g} = x_k$ であり、同様に $F(h)(s_j) = x_k$ である。よって $F(g)(s_i) = F(h)(s_j)$ となる。
+$F$ は $Cov$ に関する層であるから、一意な $s \in F(U)$ が存在し $F(f_i)(s) = s_i$ となる。任意の $f \in S$ は $f = f_i \circ g$ と書けるため、$F(f)(s) = F(g)(F(f_i)(s)) = F(g)(s_i) = F(g)(x_{f_i}) = x_{f_i \circ g} = x_f$ となり、$s$ は元の整合的族の貼り合わせである。一意性も同様に示される。ゆえに $S \in J_F(U)$ である。</li>
+<li><strong>(C3) の証明：</strong> $S \in J_F(U)$ であり、任意の $f \in S$ について $f^\ast R \in J_F(\operatorname{dom}(f))$ であるとする。$R$ 上の整合的族 $\{x_g\}_{g \in R}$ をとる。各 $f \in S$ について、族 $\{x_{f \circ k}\}_{k \in f^\ast R}$ は $f^\ast R$ 上の整合的族となる。$f^\ast R \in J_F(\operatorname{dom}(f))$ であるから、一意な貼り合わせ $y_f \in F(\operatorname{dom}(f))$ が存在し、任意の $k \in f^\ast R$ に対して $F(k)(y_f) = x_{f \circ k}$ となる。
+この $\{y_f\}_{f \in S}$ が $S$ 上の整合的族になることを示す。$f \in S$ と $m \colon Z \to \operatorname{dom}(f)$ に対して、$F(m)(y_f)$ と $y_{f \circ m}$ はともに $(f \circ m)^\ast R$ 上の整合的族 $\{x_{f \circ m \circ n}\}$ の貼り合わせとなる。$(f \circ m)^\ast R \in J_F(Z)$ であることの一意性から $F(m)(y_f) = y_{f \circ m}$ が結論づけられる。
+$S \in J_F(U)$ より、$\{y_f\}$ の一意な貼り合わせ $x \in F(U)$ が存在する。この $x$ が元の $\{x_g\}$ の貼り合わせであることを確認する。任意の $g \in R$ と $w \in g^\ast S$ について、$g \circ w \in S$ である。$F(w)(F(g)(x)) = F(g \circ w)(x) = y_{g \circ w}$ である。一方、$g \in R$ より $id \in (g \circ w)^\ast R$ であり、$y_{g \circ w}$ を $id$ で引き戻すと $x_{g \circ w \circ id} = x_{g \circ w}$ となる。よって $F(w)(F(g)(x)) = x_{g \circ w} = F(w)(x_g)$ が任意の $w \in g^\ast S$ で成り立つ。ここで $J_F$ は（Grothendieck topologyの標準的な性質として）安定性 (GT2) を満たすため $g^\ast S \in J_F(\operatorname{dom}(g))$ であり、貼り合わせの一意性から $F(g)(x) = x_g$ を得る。したがって $R \in J_F(U)$ である。</li>
+</ul>
+以上より $J_F$ は (C1), (C2), (C3) を満たす割り当てである。$J_{Cov}$ は最小の割り当てであるから、$J_{Cov}(U) \subset J_F(U)$ がすべての $U$ で成り立つ。これは、任意の $S \in J_{Cov}(U)$ に対して $F$ が一意な貼り合わせを持つことを意味し、$F$ は $J_{Cov}$ の層である。</p>
+
+<p><strong>(2) $\Rightarrow$ (1) の証明:</strong><br>
+$F$ が $J_{Cov}$ に関して層であると仮定する。任意の $\{f_i\} \in Cov(U)$ と整合的族 $\{s_i\}$ をとる。$J_{Cov}$ の構成規則 (C2) より、$S(\{f_i\}) \in J_{Cov}(U)$ である。
+$S = S(\{f_i\})$ 上の整合的族 $\{x_f\}$ を次のように構成する。$f \in S$ は $f = f_i \circ g$ と書けるため、$x_f = F(g)(s_i)$ と定義する。
+これが分解の選び方によらない well-defined な定義であることを示す。$f = f_i \circ g = f_j \circ h$ と書けたとすると、$\{s_i\}$ が定義 3.6 の意味での整合的族であるという仮定そのものから $F(g)(s_i) = F(h)(s_j)$ が得られるため、定義は well-defined である。
+これが $S$ 上の整合的族になることは、$x_{f \circ k} = F(g \circ k)(s_i) = F(k)(F(g)(s_i)) = F(k)(x_f)$ から明らかである。
+$F$ は $J_{Cov}$ に関する層であるから、一意な $s \in F(U)$ が存在して、すべての $f \in S$ について $F(f)(s) = x_f$ となる。特に $f_i \in S$ については $f_i = f_i \circ id$ であるから $F(f_i)(s) = x_{f_i} = F(id)(s_i) = s_i$ となる。層であるための $s$ の一意性も sieve 上での一意性からただちに導かれる。したがって、$F$ は $Cov$ の意味での層である。証明終。</p>
+</div>
+
+<h2>4. Pretopology と Johnstone's Coverage の関係の全体像</h2>
+
+<p>ファイバー積を持つ圏 $\mathcal{C}$ においては、Grothendieck pretopology と Johnstone's coverage は以下のような明確な包含・一般化の関係を持ちます。</p>
+
+<ol>
+<li><strong>Pretopology ならば Johnstone's coverage である</strong><br>
+$\mathcal{C}$ 上の pretopology $Cov_{pre}$ は、必ず Johnstone の意味の coverage となる。被覆族 $\{f_i \colon U_i \to U\} \in Cov_{pre}(U)$ と射 $g \colon V \to U$ が与えられたとき、pretopology の公理 (PT2) により、ファイバー積を用いた引き戻し族 $\{p_i \colon U_i \times_U V \to V\}$ は $Cov_{pre}(V)$ の被覆族となる。射影 $q_i \colon U_i \times_U V \to U_i$ を用いれば $g \circ p_i = f_i \circ q_i$ が成り立つため、これは Johnstone の被覆の分解条件を厳密に満たす。</li>
+<li><strong>Johnstone's coverage は Pretopology の真の一般化である</strong><br>
+ファイバー積が存在する圏であっても、Johnstone's coverage が必ずしも pretopology になるとは限らない。pretopology は「同型射の族が被覆であること (PT1)」「被覆の合成が被覆になること (PT3)」「厳密なファイバー積による引き戻しが被覆になること (PT2)」を要求する。一方、Johnstone の coverage はこれらを一切要求せず、単に「引き戻し先の対象 $V$ を覆い尽くし、かつ元の被覆に分解できるような被覆族」の存在のみを要求する。</li>
+<li><strong>同じ層の圏を生成する公理系の最小化</strong><br>
+両者は最終的に Grothendieck topology を生成するための「生成元」として機能する。ファイバー積を持つ圏において、層の概念を適切に定義し層の圏を構成するという目的においては、pretopology の推移性や同型射に関する公理は冗長である。Johnstone's coverage は、その目的を達するために純粋に必須な条件のみを抽出した<strong>最小限の被覆の公理系</strong>として機能する。</li>
+</ol>
+
+<h2>5. Coverage からの Grothendieck topology 誘導の抽象化と上方閉包性</h2>
+
+<p>Johnstone の Coverage をはじめとする「被覆の公理系」は、圏上に層の理論を展開するための「生成元（基底）」として機能します。Coverage $T$ から Grothendieck topology $J_T$ を誘導するプロセスは、抽象的には<strong>閉包作用素（closure operator）</strong>の構成と見なすことができます。</p>
+
+<p>具体的には、圏 $\mathcal{C}$ の各対象 $X$ における sieve の集合の冪集合に対する演算として捉えられます。Coverage $T$ が与える被覆族の生成する sieve の集まりを初期値とし、以下の操作を通じて閉包を取ります。</p>
+
+<ul>
+<li><strong>Top-down のアプローチ（共通部分による定義）：</strong> Coverage $T$ の被覆族をすべて含むような Grothendieck topology は複数存在し得ます。それらすべての Grothendieck topology の共通部分をとることで、「$T$ を含む最小の Grothendieck topology $J_T$」を一意に定めます。</li>
+<li><strong>Bottom-up のアプローチ（構成的定義）：</strong> Coverage の被覆族が生成する sieve に対し、「極大 sieve の追加」「任意の射による引き戻し（安定性）」「sieve の合成（推移性）」という Grothendieck topology の3公理を推論規則として繰り返し適用し、これ以上新しい sieve が生成されなくなった極限として $J_T$ を構成します。</li>
+</ul>
+
+<p>この抽象化により、ファイバー積の存在などの圏の具体的な性質に依存せず、任意の被覆概念から標準的な層の要件（Grothendieck topology）をシステマティックに導出することが可能になります。</p>
+
+<h3>Grothendieck topology が常に上方閉であることの証明</h3>
+
+<p>Grothendieck topology の公理のみを用いて、被覆 sieve の集まりが常に上方閉（upward closed）であることを証明します。</p>
+
+<div class="theorem">
+<span class="label">命題 5.1</span>
+$J$ を圏 $\mathcal{C}$ 上の Grothendieck topology とする。$R \in J(X)$ であり、$S$ が $X$ 上の sieve で $R \subseteq S$ を満たすならば、$S \in J(X)$ である。
+</div>
+
+<div class="proof">
+<span class="label">証明</span>
+Grothendieck topology は以下の公理を満たします。
+<ol>
+<li>(GT1) 極大 sieve：極大 sieve $t_X$ は $J(X)$ に属する。</li>
+<li>(GT2) 安定性：$R \in J(X)$ と任意の射 $f \colon Y \to X$ について、$f^\ast R \in J(Y)$ である。</li>
+<li>(GT3) 推移性：$R \in J(X)$ とし、$S$ を $X$ 上の sieve とする。任意の $f \in R$ について $f^\ast S \in J(\operatorname{dom}(f))$ ならば、$S \in J(X)$ である。</li>
+</ol>
+
+仮定より $R \in J(X)$ であり、$R \subseteq S$ です。<br>
+任意の射 $f \colon Y \to X \in R$ をとります。この $f$ による $S$ の引き戻し sieve $f^\ast S$ を考えます。<br>
+引き戻し sieve の定義により、任意の射 $g \colon Z \to Y$ について、
+$$g \in f^\ast S \iff f \circ g \in S$$
+が成り立ちます。
+
+ここで、$f \in R$ であり、$R$ は sieve（右イデアル）であるため、任意の $g$ に対して合成射 $f \circ g \in R$ となります。<br>
+仮定 $R \subseteq S$ より、$f \circ g \in R$ ならば $f \circ g \in S$ です。<br>
+したがって、任意の $g \colon Z \to Y$ が $f^\ast S$ に属することになります。
+
+これは、引き戻し sieve $f^\ast S$ が $Y$ 上のすべての射を含む極大 sieve $t_Y$ に等しいことを意味します（$f^\ast S = t_Y$）。<br>
+公理 (GT1) より、$t_Y \in J(Y)$ です。<br>
+よって、任意の $f \in R$ について $f^\ast S \in J(Y)$ が成り立つことが示されました。<br>
+最後に、公理 (GT3) を適用することにより、$S \in J(X)$ が結論づけられます。証明終。
+</div>
+
+<h3>上方閉な sieves の族が Grothendieck topology を与えるための条件</h3>
+
+<p>各対象 $X \in \operatorname{Ob}(\mathcal{C})$ に対して、すでに「上方閉」である sieve の集まりの族 $\{J(X)\}_{X \in \operatorname{Ob}(\mathcal{C})}$ が与えられたとします。（すなわち、$R \in J(X)$ かつ $R \subseteq S \implies S \in J(X)$ が満たされている状態です。）</p>
+
+<p>この族 $\{J(X)\}$ が圏 $\mathcal{C}$ の Grothendieck topology を与えるための必要十分条件は、以下の3つの条件を満たすことです。</p>
+
+<ul>
+<li><strong>条件1（非空性）：</strong> 各対象 $X$ について、$J(X)$ は空集合ではない。</li>
+<li><strong>条件2（安定性 / Base change）：</strong> 任意の $R \in J(X)$ と、圏 $\mathcal{C}$ の任意の射 $f \colon Y \to X$ に対して、引き戻し $f^\ast R \in J(Y)$ が成り立つ。</li>
+<li><strong>条件3（局所的性質 / 推移性）：</strong> $R \in J(X)$ とし、$S$ を $X$ 上の任意の sieve とする。もし、すべての $f \colon Y \to X \in R$ に対して $f^\ast S \in J(Y)$ が成り立つならば、$S \in J(X)$ である。</li>
+</ul>
+
+<div class="remark">
+<span class="label">上方閉包性がもたらす条件の簡略化について：</span>
+通常の Grothendieck topology の定義 (GT1) では、「極大 sieve $t_X \in J(X)$」を明示的に要求します。しかし、族が上方閉であることを前提とした場合、$J(X)$ が空でさえなければ、そこに含まれるある sieve $R$ を包含する最大の sieve（すなわち極大 sieve $t_X$）は必ず $J(X)$ に含まれることになります。したがって、GT1 の条件は単なる「非空性（条件1）」にまで弱めることができます。
+<br><br>
+一方で、上方閉であるという事実だけでは、「引き戻しに対する不変性（条件2）」や「被覆の合成に対する閉包性（条件3）」を代替することはできないため、これら2つは引き続き独立した条件として要求されます。
+</div>
+
+<h2>6. 参考文献</h2>
+
+<ul>
+<li>Mac Lane, S., &amp; Moerdijk, I. (1992). <i>Sheaves in Geometry and Logic: A First Introduction to Topos Theory</i>. Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4612-0927-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-0927-0</a></li>
+<li>Johnstone, P. T. (2002). <i>Sketches of an Elephant: A Topos Theory Compendium</i>. Oxford University Press. <a href="https://global.oup.com/academic/product/sketches-of-an-elephant-a-topos-theory-compendium-9780198524960" target="_blank">https://global.oup.com/academic/product/sketches-of-an-elephant-a-topos-theory-compendium-9780198524960</a></li>
+</ul>
+
+</body>
+</html>

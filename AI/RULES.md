@@ -29,6 +29,9 @@
 * 空集合は \emptyset ではなく、\varnothing で表せ。
 * 集合の差は \setminus ではなく、\smallsetminus で表せ。
 * 「直感的」「直感」とは書かずに「直観的」「直観」と書け。
+* 圏B,Cは\nathcal{B}, \mathcal{C}と書け。
+* 例えばCHausなどの固有名詞の圏は\mathrm{CHaus}のように書け。
+* canonicalを数式中でcanと略す場合には\mathrm{can}と書け。
 
 ## ルールの適用範囲
 
