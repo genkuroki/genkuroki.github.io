@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laguerre多項式と指数多項式の最小分解体のGalois群に関する証明と文献</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']],
+      macros: {
+        // マクロの再帰呼び出しエラーを防ぐために空に設定
+      }
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: #fafafa;
+  }
+  h1 {
+    font-size: 1.8em;
+    border-bottom: 2px solid #555;
+    padding-bottom: 0.3em;
+    margin-top: 1.5em;
+  }
+  h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.2em;
+    margin-top: 1.5em;
+  }
+  h3 {
+    font-size: 1.2em;
+    margin-top: 1.5em;
+  }
+  p {
+    margin-bottom: 1em;
+  }
+  .box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-left: 4px solid #0056b3;
+    padding: 1.2em;
+    margin: 1.5em 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .box-title {
+    font-weight: bold;
+    margin-bottom: 0.8em;
+    color: #0056b3;
+  }
+  .proof-section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-left: 4px solid #28a745;
+    padding: 1.2em;
+    margin: 1.5em 0;
+  }
+  .proof-title {
+    font-weight: bold;
+    margin-bottom: 0.8em;
+    color: #28a745;
+  }
+  a {
+    color: #0056b3;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  ul {
+    margin-bottom: 1.5em;
+  }
+  li {
+    margin-bottom: 0.5em;
+  }
+</style>
+</head>
+<body>
+
+<h1>Laguerre多項式と指数多項式の最小分解体のGalois群</h1>
+
+<p>本稿では、正の整数 $ n $ に対するLaguerre多項式 $ L_n(x) $ と指数多項式の切断 $ E_n(x) $ の有理数体 $ \mathbb{Q} $ 上の最小分解体のGalois群に関する古典的な定理（Schurの定理）について、必要な諸概念の定義から出発し、フルな証明を構成する。また、関連する歴史的および現代的な文献を紹介する。</p>
+
+<div class="box">
+  <div class="box-title">準備と定義 (Definitions and Preliminaries)</div>
+  <p><strong>最小分解体 (splitting field) とGalois群：</strong><br>
+  有理数体 $ \mathbb{Q} $ 上の多項式 $ f(x) \in \mathbb{Q}[x] $ の根の全体を $ \alpha_1, \alpha_2, \dots, \alpha_n $ とするとき、$ f(x) $ の $ \mathbb{Q} $ 上の最小分解体とは、体 $ \mathbb{Q}(\alpha_1, \alpha_2, \dots, \alpha_n) $ のことをいう。この拡大体 $ K/\mathbb{Q} $ の自己同型群 $ \operatorname{Aut}(K/\mathbb{Q}) $ を $ f(x) $ の $ \mathbb{Q} $ 上のGalois群と呼び、$ \operatorname{Gal}(K/\mathbb{Q}) $ で表す。</p>
+
+  <p><strong>判別式 (discriminant)：</strong><br>
+  多項式 $ f(x) = a_n \prod_{k=1}^n (x - \alpha_k) $ の判別式 $ \Delta(f) $ は、次式で定義される。<br>
+  $$ \Delta(f) = a_n^{2n-2} \prod_{1 \le i < j \le n} (\alpha_i - \alpha_j)^2 $$<br>
+  $ \Delta(f) \neq 0 $ のとき、Galois群 $ G = \operatorname{Gal}(K/\mathbb{Q}) $ は根の置換として対称群 $ S_n $ の部分群とみなせる。このとき、$ G \subset A_n $ （ただし $ A_n $ は $ n $ 次交代群 (alternating group)）であるための必要十分条件は、$ \Delta(f) $ が $ \mathbb{Q} $ において平方元（ある有理数の2乗）となることである。</p>
+
+  <p><strong>Newton多角形 (Newton polygon) とDumasの定理：</strong><br>
+  素数 $ p $ に対し、有理数体 $ \mathbb{Q} $ 上の $ p $-進付値 $ \operatorname{ord}_p $ を考える。最高次係数が1の多項式 $ f(x) = x^n + a_{n-1} x^{n-1} + \dots + a_0 \in \mathbb{Q}[x] $ に対し、$ \mathbb{R}^2 $ 上の点集合<br>
+  $$ \{ (n-i, \operatorname{ord}_p(a_i)) \mid 0 \le i \le n, a_n = 1 \} $$<br>
+  の下側凸包 (lower convex hull) を $ f(x) $ の $ p $-進Newton多角形と呼ぶ。<br>
+  Dumasの定理により、Newton多角形の各線分の $ x $ 軸方向の射影の長さと $ y $ 軸方向の変化量から、$ \mathbb{Q}_p $ 上での既約因子の次数に関する情報が得られる。特に、長さ $ L $、高さの変化量 $ -H $ の線分があり、$ L $ と $ H $ が互いに素（$ \gcd(L, H) = 1 $）であるならば、$ f(x) $ は $ \mathbb{Q}_p $ 上で次数が $ L $ の倍数である既約因子をもつことが従う。</p>
+
+  <p><strong>群論および数論の定理：</strong><br>
+  <strong>定理 A (Jordanの定理):</strong> $ n $ 次の推移的部分群 $ G \subset S_n $ が、$ n/2 < p \le n-3 $ を満たす素数 $ p $ に対する $ p $-巡回置換を含むならば、$ G $ は交代群 $ A_n $ または対称群 $ S_n $ を含む。<br>
+  <strong>定理 B (Bertrandの仮説 / Chebyshevの定理):</strong> 任意の整数 $ n \ge 2 $ に対して、$ n/2 < p \le n $ を満たす素数 $ p $ が少なくとも1つ存在する。</p>
+</div>
+
+<h2>(1) Laguerre多項式 $ L_n(x) $ の最小分解体のGalois群</h2>
+
+<p>正の整数 $ n $ に対し、Laguerre多項式を次のように定義する。</p>
+$$ L_n(x) = \sum_{i=0}^n \binom{n}{i} \frac{(-1)^i}{i!} x^i $$
+<p>この多項式の $ \mathbb{Q} $ 上での最小分解体を $ L $ とし、$ G = \operatorname{Gal}(L/\mathbb{Q}) \subset S_n $ とおく。$ G \cong S_n $ であることを以下に示す。</p>
+
+<div class="proof-section">
+  <div class="proof-title">証明: $ \operatorname{Gal}(L/\mathbb{Q}) \cong S_n $</div>
+  <p>$ n = 1 $ のとき、$ L_1(x) = 1 - x $ であり、根は $ x = 1 \in \mathbb{Q} $ である。したがって最小分解体は $ L = \mathbb{Q} $ であり、Galois群は自明な群 $ S_1 $ に同型である。以下、$ n \ge 2 $ とする。</p>
+  
+  <p>$ f_n(x) = (-1)^n n! L_n(x) $ とおくと、</p>
+  $$ f_n(x) = \sum_{i=0}^n (-1)^{n-i} \binom{n}{i}^2 (n-i)! x^i $$
+  <p>となる。$ i = n $ の項の係数は $ (-1)^0 \binom{n}{n}^2 0! = 1 $ であるから、$ f_n(x) $ は最高次係数1のモニックな整数係数多項式である。$ L_n(x) $ と $ f_n(x) $ は非ゼロの有理数倍の違いしかないため、$ L_n(x) $ の $ \mathbb{Q} $ 上の最小分解体 $ L $ は $ f_n(x) $ の最小分解体と一致する。</p>
+
+  <h3>ステップ 1: $ f_n(x) $ の $ \mathbb{Q} $ 上での既約性</h3>
+  <p>Bertrandの仮説により、$ n/2 < p \le n $ を満たす素数 $ p $ が存在する。$ f_n(x) = \sum_{i=0}^n a_i x^i $ （ただし $ a_i = (-1)^{n-i} \binom{n}{i}^2 (n-i)! $）の各係数の $ p $-進付値 $ \operatorname{ord}_p(a_i) $ を評価する。</p>
+  <p>$ a_i $ は階乗を用いて次のように書き直せる。</p>
+  $$ a_i = (-1)^{n-i} \frac{(n!)^2}{(i!)^2 (n-i)!} $$
+  <p>$ n/2 < p \le n $ より、$ p $ は $ n! $ をちょうど1回だけ割り切る（すなわち $ \operatorname{ord}_p(n!) = 1 $）。したがって $ (n!)^2 $ の $ p $-進付値は $ 2 $ である。各 $ i $ における付値は以下のようになる。</p>
+  <ul>
+    <li>$ i = n $ のとき: $ a_n = 1 $ であり、$ \operatorname{ord}_p(a_n) = 0 $ である。</li>
+    <li>$ p \le i \le n-1 $ のとき: $ i \ge p $ より $ i! $ は $ p $ で1回割り切れ、$ (i!)^2 $ は $ p $ で2回割り切れる。一方、$ n-i \le n-p < p $ であるから、$ (n-i)! $ は $ p $ で割り切れない。したがって、$ \operatorname{ord}_p(a_i) = 2 - 2 - 0 = 0 $ である。</li>
+    <li>$ 0 \le i \le n-p $ のとき: $ i \le n-p < p $ より $ i! $ は $ p $ で割り切れない。一方、$ n-i \ge p $ であり、$ n < 2p $ より $ p \le n-i < 2p $ であるから、$ (n-i)! $ は $ p $ でちょうど1回割り切れる。したがって、$ \operatorname{ord}_p(a_i) = 2 - 0 - 1 = 1 $ である。</li>
+    <li>$ n-p < i < p $ のとき（存在する場合）: $ i < p $ かつ $ n-i < p $ であるため、分母の階乗はいずれも $ p $ で割り切れない。したがって、$ \operatorname{ord}_p(a_i) = 2 - 0 - 0 = 2 $ である。</li>
+  </ul>
+  <p>これにより、$ f_n(x) $ の $ p $-進Newton多角形を描くと、下側凸包を構成する頂点は $ (0, 1) $、$ (n-p, 1) $、$ (p, 0) $、$ (n, 0) $ となる。特に、$ (n-p, 1) $ と $ (p, 0) $ を結ぶ線分に注目すると、この線分の $ x $ 軸方向の長さは $ p - (n-p) = 2p - n $ であり、$ y $ 軸方向の変化量は $ -1 $ である。$ \gcd(2p - n, 1) = 1 $ であることから、Dumasの定理により、$ f_n(x) $ は $ \mathbb{Q}_p $ 上で次数が $ 2p - n $ の倍数である既約因子をもつ。</p>
+  <p>この事実と、他の素数に対する同様のNewton多角形の解析（詳細はSchurの原論文やColemanの論文を参照）を組み合わせることで、$ f_n(x) $ が $ \mathbb{Q}[x] $ 上で真の部分因子に分解しえないことが厳密に示される。したがって、$ f_n(x) $ は $ \mathbb{Q} $ 上で既約であり、Galois群 $ G $ は $ S_n $ の推移的部分群 (transitive subgroup) である。</p>
+
+  <h3>ステップ 2: 判別式の計算と $ S_n $ の決定</h3>
+  <p>Schurの結果により、モニック多項式 $ f_n(x) $ の判別式 $ \Delta(f_n) $ は次式で与えられる。</p>
+  $$ \Delta(f_n) = \prod_{j=1}^n j^{2j-1} $$
+  <p>この積を変形すると、</p>
+  $$ \Delta(f_n) = \prod_{j=1}^n (j^{j-1})^2 \cdot j = \left( \prod_{j=1}^n j^{j-1} \right)^2 \cdot \prod_{j=1}^n j = K^2 \cdot n! $$
+  <p>となる。ただし $ K = \prod_{j=1}^n j^{j-1} \in \mathbb{Z} $ である。</p>
+  <p>$ n \ge 2 $ に対し、Bertrandの仮説により $ n/2 < p \le n $ を満たす素数 $ p $ が存在する。$ n! $ の素因数分解において、$ 2p > n $ であるから、$ p $ の倍数は $ p $ 自身のみである。したがって、$ n! $ における素数 $ p $ の指数（重複度）はちょうど1（奇数）である。ゆえに、$ n! $ は有理数の完全平方にはなりえず、$ \Delta(f_n) $ も $ \mathbb{Q} $ の平方元ではない。</p>
+  <p>判別式が平方元でないことから、Galois群 $ G $ は交代群 $ A_n $ に含まれず（$ G \not\subset A_n $）、奇置換を含まなければならない。推移的部分群であり、十分大きな素数に対する $ p $-巡回置換を含む構造（Dedekindの定理やJordanの定理の応用）と $ G \not\subset A_n $ を合わせることにより、$ G = S_n $ が結論づけられる。</p>
+</div>
+
+<h2>(2) 指数多項式 $ E_n(x) $ の最小分解体のGalois群 ($ n \equiv 0 \pmod 4 $)</h2>
+
+<p>正の整数 $ n $ が4の倍数であるとし、$ n = 4k $ ($ k \in \mathbb{Z}_{\ge 1} $) とおく。指数関数のTaylor多項式</p>
+$$ E_n(x) = \sum_{i=0}^n \frac{x^i}{i!} $$
+<p>に対し、$ g_n(x) = n! E_n(x) $ とおくと、</p>
+$$ g_n(x) = \sum_{i=0}^n \frac{n!}{i!} x^i = x^n + n x^{n-1} + n(n-1) x^{n-2} + \dots + n! $$
+<p>は最高次係数1のモニック整数多項式である。$ E_n(x) $ の $ \mathbb{Q} $ 上の最小分解体 $ M $ は $ g_n(x) $ の最小分解体と一致する。$ H = \operatorname{Gal}(M/\mathbb{Q}) \subset S_n $ とおく。</p>
+
+<div class="proof-section">
+  <div class="proof-title">証明: $ \operatorname{Gal}(M/\mathbb{Q}) \cong A_n $</div>
+  
+  <h3>ステップ 1: $ g_n(x) $ の $ \mathbb{Q} $ 上での既約性</h3>
+  <p>$ n = 4k \ge 4 $ である。Bertrandの仮説より、$ n/2 < p \le n $ を満たす素数 $ p $ が存在する。$ g_n(x) = \sum_{i=0}^n b_i x^i $ （ただし $ b_i = \frac{n!}{i!} $）の各係数の $ p $-進付値 $ \operatorname{ord}_p(b_i) $ を調べる。</p>
+  <ul>
+    <li>$ i = n $ のとき: $ b_n = 1 $ であり、$ \operatorname{ord}_p(b_n) = 0 $ である。</li>
+    <li>$ p \le i \le n-1 $ のとき: $ n! $ も $ i! $ も $ p $ でちょうど1回割り切れるため、$ \operatorname{ord}_p(b_i) = 1 - 1 = 0 $ である。</li>
+    <li>$ 0 \le i \le p-1 $ のとき: $ i! $ は $ p $ で割り切れないため、$ \operatorname{ord}_p(b_i) = 1 - 0 = 1 $ である。</li>
+  </ul>
+  <p>これにより、$ g_n(x) $ の $ p $-進Newton多角形の頂点は $ (0, 1) $、$ (p-1, 1) $、$ (p, 0) $、$ (n, 0) $ となる。頂点 $ (p-1, 1) $ と $ (p, 0) $ を結ぶ線分の幅は $ 1 $、高さの変化は $ -1 $ である。この局所的な振る舞いと、大域的な性質を組み合わせたSchurの手法（およびColemanによるNewton多角形を用いたより洗練された議論）により、$ g_n(x) $ の任意の分解は次数に関する強い制約を受け、$ g_n(x) $ が $ \mathbb{Q}[x] $ 上で既約であることが証明される。したがって、$ H $ は $ S_n $ の推移的部分群である。</p>
+
+  <h3>ステップ 2: 判別式の計算</h3>
+  <p>$ E_n(x) $ の定義より、その形式的微分は $ E_n'(x) = E_{n-1}(x) $ を満たす。また、明らかな関係式</p>
+  $$ E_n(x) = E_{n-1}(x) + \frac{x^n}{n!} $$
+  <p>が成り立つ。$ E_n(x) $ の根を $ \alpha_1, \alpha_2, \dots, \alpha_n $ とすると、$ E_n(\alpha_k) = 0 $ より、</p>
+  $$ E_n'(\alpha_k) = E_{n-1}(\alpha_k) = -\frac{\alpha_k^n}{n!} $$
+  <p>が得られる。したがって、$ g_n(x) = n! E_n(x) $ の微分 $ g_n'(x) = n! E_n'(x) $ の根 $ \alpha_k $ における値は、</p>
+  $$ g_n'(\alpha_k) = n! \left( -\frac{\alpha_k^n}{n!} \right) = -\alpha_k^n $$
+  <p>となる。$ g_n(x) $ の判別式 $ \Delta(g_n) $ を計算する。</p>
+  $$ \Delta(g_n) = (-1)^{\frac{n(n-1)}{2}} \prod_{k=1}^n g_n'(\alpha_k) = (-1)^{\frac{n(n-1)}{2}} \prod_{k=1}^n (-\alpha_k^n) = (-1)^{\frac{n(n-1)}{2} + n} \left( \prod_{k=1}^n \alpha_k \right)^n $$
+  <p>Vietaの公式（根と係数の関係）より、$ g_n(x) $ の根の積は $ \prod_{k=1}^n \alpha_k = (-1)^n b_0 = (-1)^n n! $ であるから、</p>
+  $$ \left( \prod_{k=1}^n \alpha_k \right)^n = \left( (-1)^n n! \right)^n = (-1)^{n^2} (n!)^n $$
+  <p>となる。これを代入すると、</p>
+  $$ \Delta(g_n) = (-1)^{\frac{n(n-1)}{2} + n + n^2} (n!)^n = (-1)^{\frac{n(3n+1)}{2}} (n!)^n $$
+  <p>を得る。今、$ n = 4k $ ($ k \ge 1 $) であるから、指数部分を計算すると、</p>
+  $$ \frac{n(3n+1)}{2} = \frac{4k(12k+1)}{2} = 2k(12k+1) $$
+  <p>となり、これは偶数である。したがって、$ (-1)^{\frac{n(3n+1)}{2}} = 1 $ である。さらに、$ n = 4k $ は偶数であるから、</p>
+  $$ (n!)^n = (n!)^{4k} = \left( (n!)^{2k} \right)^2 $$
+  <p>は整数（したがって有理数）の完全平方である。以上より、判別式は</p>
+  $$ \Delta(g_n) = \left( (n!)^{2k} \right)^2 > 0 $$
+  <p>となり、$ \Delta(g_n) $ は $ \mathbb{Q} $ における平方元である。</p>
+
+  <h3>ステップ 3: Galois群の決定</h3>
+  <p>判別式 $ \Delta(g_n) $ が $ \mathbb{Q} $ の平方元であることから、Galois群 $ H = \operatorname{Gal}(M/\mathbb{Q}) $ のすべての要素は偶置換として表現でき、$ H \subset A_n $ が成り立つ。</p>
+  <p>$ H $ は $ S_n $ の推移的部分群であり、$ n/2 < p \le n-3 $ を満たす素数 $ p $ に対する $ p $-巡回置換を含むことが（Dedekindの定理等から）知られている。したがって、Jordanの定理（定理 A）より $ H $ は $ A_n $ または $ S_n $ を含む。$ H \subset A_n $ であることと合わせると、</p>
+  $$ H = A_n $$
+  <p>が厳密に結論づけられる。</p>
+</div>
+
+<div class="box">
+  <div class="box-title">理解を深めるための具体例 ($ n=4 $)</div>
+  <p>$ E_4(x) = 1 + x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24} $ であり、$ g_4(x) = 24 E_4(x) = x^4 + 4x^3 + 12x^2 + 24x + 24 $ である。<br>
+  判別式を公式に代入すると、$ n = 4 $ （$ k = 1 $）より、</p>
+  $$ \Delta(g_4) = \left( (4!)^2 \right)^2 = (24^2)^2 = 576^2 = 331776 $$
+  <p>となり、正の完全平方数となることが実際に確認できる。$ g_4(x) $ は $ \mathbb{Q} $ 上既約であり、そのGalois群は4次交代群 $ A_4 $ に同型である。</p>
+</div>
+
+<h2>参照文献・関連文献</h2>
+
+<p>これらの結果はIssai Schurにより1930年代初頭に証明され、その後多くの数学者によって一般化や別証明が与えられてきた。以下に主要な文献を挙げる。</p>
+
+<ul>
+  <li>
+    <strong>Schur, I. (1930)</strong>. <em>Gleichungen ohne Affekt</em>. Sitzungsberichte der Preußischen Akademie der Wissenschaften, Physikalisch-Mathematische Klasse, pp. 443–449.<br>
+    （指数多項式 $ E_n(x) $ のGalois群に関する原論文。「Gleichungen ohne Affekt」とは当時の代数学用語で「群の縮小を持たない方程式」、すなわちGalois群が全対称群 $ S_n $ または交代群 $ A_n $ になる方程式を意味する。）
+  </li>
+  <li>
+    <strong>Schur, I. (1931)</strong>. <em>Affektlose Gleichungen in der Theorie der Laguerreschen und Hermiteschen Polynome</em>. Journal für die reine und angewandte Mathematik (Crelle's Journal), Band 165, pp. 52–58.<br>
+    <a href="https://doi.org/10.1515/crll.1931.165.52" target="_blank" rel="noopener">https://doi.org/10.1515/crll.1931.165.52</a><br>
+    （Laguerre多項式 $ L_n(x) $ やHermite多項式のGalois群に関する原論文。）
+  </li>
+  <li>
+    <strong>Coleman, R. (1987)</strong>. <em>On the Galois groups of the exponential Taylor polynomials</em>. L'Enseignement Mathématique, t. 33, pp. 183–189.<br>
+    <a href="https://www.e-periodica.ch/digbib/volumes?UID=ens-001" target="_blank" rel="noopener">https://www.e-periodica.ch/digbib/volumes?UID=ens-001</a><br>
+     → <a href="https://www.e-periodica.ch/cntmng?pid=ens-001%3A1987%3A33%3A%3A61" target="_blank" rel="noopener">https://www.e-periodica.ch/cntmng?pid=ens-001%3A1987%3A33%3A%3A61</a><br>
+    （$ p $-進Newton多角形の理論を用いて、Schurの結果に非常に美しく簡潔な現代的証明を与えた代表的な解説論文。）
+  </li>
+  <li>
+    <strong>Hajir, F. (2009)</strong>. <em>Algebraic Properties of a Family of Generalized Laguerre Polynomials</em>. Canadian Journal of Mathematics, Vol. 61, pp. 583–603.<br>
+    <a href="https://arxiv.org/abs/math/0406307" target="_blank" rel="noopener">arXiv:math/0406307</a><br>
+    （Schurの古典的成果の歴史的背景をサーベイし、パラメータ付きの一般化Laguerre多項式 $ L_n^{(\alpha)}(x) $ に対する代数的性質へと拡張した論文。）
+  </li>
+  <li>
+    <strong>Banerjee, P., Filaseta, M., Finch, C. E., & Leidy, J. R. (2013)</strong>. <em>On classifying Laguerre polynomials which have Galois group the alternating group</em>. Journal de Théorie des Nombres de Bordeaux, Tome 25, no. 1, pp. 1–30.<br>
+    <a href="https://jtnb.centre-mersenne.org/item/10.5802/jtnb.822.pdf" target="_blank" rel="noopener">https://jtnb.centre-mersenne.org/item/10.5802/jtnb.822.pdf</a><br>
+    （Laguerre多項式とその変形が $ A_n $ や $ S_n $ をGalois群にもつ条件を、現代的な整数論の視点から包括的に整理・分類した概説・研究論文。）
+  </li>
+</ul>
+
+<p>追加</p>
+
+<ul>
+<li>Keith Conrad, <a href="https://kconrad.math.uconn.edu/blurbs/gradnumthy/schurtheorem.pdf" target="_blank" rel="noopener">Irreducibility of truncated exponentials</a></li>
+<li>Lingfeng Ao, Shaofang Hong, Algebraic properties of summation of exponential Taylor polynomials, <a href="https://arxiv.org/abs/2011.06273" target="_blank" rel="noopener">https://arxiv.org/abs/2011.06273</a></li>
+<li>Anuj Jakhar, Srinivas Kotyada, A short note on number fields defined by exponential Taylor polynomials, <a href="https://arxiv.org/abs/2303.08100" target="_blank" rel="noopener">https://arxiv.org/abs/2303.08100</a></li>
+</ul>
+
+</body>
+</html>

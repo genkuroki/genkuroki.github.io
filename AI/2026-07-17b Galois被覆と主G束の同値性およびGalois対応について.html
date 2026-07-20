@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Galois被覆と主G束の同値性およびGalois対応について</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                macros: {
+                    varnothing: '\\emptyset'
+                }
+            },
+            options: {
+                ignoreHtmlClass: "tex2jax_ignore",
+                processHtmlClass: "tex2jax_process"
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #111;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 2em;
+        }
+        .theorem {
+            background-color: #f9f9f9;
+            border-left: 4px solid #333;
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        .proof {
+            margin: 20px 0;
+            padding-left: 20px;
+            border-left: 2px dashed #aaa;
+        }
+        .definition {
+            background-color: #eef7fa;
+            border-left: 4px solid #0066cc;
+            padding: 10px 20px;
+            margin: 20px 0;
+        }
+        .remark {
+            margin: 20px 0;
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Galois被覆と主G束の同値性およびGalois対応について</h1>
+
+    <h2>1. はじめに</h2>
+    <p>
+        本稿では、トポロジーにおいて現れる「Galois被覆 (Galois covering)」と、微分幾何学やゲージ理論において現れる「主 $G$ 束 (principal $G$-bundle)」の関係について、これまでの議論を統合し、数学的に厳密かつself-containedな解説を行います。
+        一言で言えば、Galois被覆とは、構造群 $G$ が離散位相群である場合の主 $G$ 束のことです。両者は本質的に同じ幾何学的構造を指していますが、歴史的な背景や、対象とする「群」が連続であるか離散であるかによって呼び分けられています。
+    </p>
+
+    <h2>2. 概念の比較と対応表</h2>
+    <p>
+        位相幾何学の視点と微分幾何学の視点による対応を以下の表にまとめます。
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>特徴</th>
+                <th>Galois被覆 ($p: Y \to X$)</th>
+                <th>主 $G$ 束 ($p: P \to X$)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>ファイバー</strong></td>
+                <td>離散空間（点の集まり）</td>
+                <td>多様体などの連続空間（例: $S^1$, $SU(2)$）</td>
+            </tr>
+            <tr>
+                <td><strong>作用する群 $G$</strong></td>
+                <td>被覆変換群 $\mathrm{Aut}(Y/X)$</td>
+                <td>構造群（位相群やLie群など）</td>
+            </tr>
+            <tr>
+                <td><strong>群の位相</strong></td>
+                <td>離散位相</td>
+                <td>連続な位相（多様体の構造を持つなど）</td>
+            </tr>
+            <tr>
+                <td><strong>ファイバーへの作用</strong></td>
+                <td>自由かつ推移的 (free and transitive)</td>
+                <td>自由かつ推移的 (free and transitive)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>3. 基礎概念の厳密な定義</h2>
+    <p>
+        数学的な議論を明晰にするために、集合と写像の言葉を用いて基本概念を定義する。以下の記述はすべて「だ・である」調で統一する。
+    </p>
+
+    <div class="definition">
+        <strong>定義 3.1 (被覆空間)</strong><br>
+        $X$ , $Y$ を位相空間とする。全射連続写像 $p: Y \to X$ が被覆空間 (covering space) であるとは、任意の $x \in X$ に対して、ある開近傍 $U \subset X$ が存在し、$p^{-1}(U)$ が互いに素な開集合の族 $\{V_i\}_{i \in I}$ の和集合として表され、各 $i \in I$ について制限写像 $p|_{V_i}: V_i \to U$ が同相写像となることである。このとき、 $U$ を均等被覆される開集合と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <strong>定義 3.2 (Galois被覆 / 正規被覆)</strong><br>
+        被覆空間 $p: Y \to X$ において、$Y$ から $Y$ への同相写像 $f: Y \to Y$ であって $p \circ f = p$ を満たすもの全体からなる群を被覆変換群と呼び、 $\mathrm{Aut}(Y/X)$ で表す。
+        被覆空間 $p: Y \to X$ がGalois被覆 (Galois covering) であるとは、任意の $x \in X$ に対して、ファイバー $p^{-1}(x)$ 上に被覆変換群 $\mathrm{Aut}(Y/X)$ が推移的 (transitive) に作用することである。すなわち、任意の $y_1, y_2 \in p^{-1}(x)$ に対して、ある $f \in \mathrm{Aut}(Y/X)$ が存在して $f(y_1) = y_2$ となることである。
+    </div>
+
+    <div class="definition">
+        <strong>定義 3.3 (主 $G$ 束)</strong><br>
+        $G$ を位相群、$X$ , $P$ を位相空間とする。全射連続写像 $p: P \to X$ が構造群 $G$ を持つ主 $G$ 束 (principal $G$-bundle) であるとは、以下の条件を満たすことである。
+        <ol>
+            <li>群 $G$ が空間 $P$ に対して右から連続的に作用している。すなわち、連続写像 $P \times G \to P$ ; $(u, g) \mapsto u \cdot g$ が存在する。</li>
+            <li>作用は各ファイバーを保つ。すなわち、任意の $u \in P$ および $g \in G$ について $p(u \cdot g) = p(u)$ である。</li>
+            <li>局所自明化 (local trivialization) が存在する。すなわち、任意の $x \in X$ に対して、ある開近傍 $U \subset X$ と同相写像 $\phi: p^{-1}(U) \to U \times G$ が存在し、任意の $u \in p^{-1}(U)$ と $g \in G$ に対して $\phi(u) = (p(u), h)$ と書けるとき、 $\phi(u \cdot g) = (p(u), hg)$ を満たす。</li>
+        </ol>
+    </div>
+
+    <h2>4. 離散群の主束としてのGalois被覆</h2>
+
+    <p>
+        位相群 $G$ に離散位相を入れた場合、上記の主束の局所自明化の条件は、被覆空間における均等被覆の条件と完全に一致する。このことを厳密に証明する。
+    </p>
+
+    <div class="theorem">
+        <strong>定理 4.1</strong><br>
+        位相空間 $X$ , $P$ は連結かつ局所弧状連結であるとする。 $G$ を離散位相を持つ群とする。このとき、$p: P \to X$ が主 $G$ 束であることと、$p: P \to X$ が被覆変換群 $G$ を持つGalois被覆であることは同値である。
+    </div>
+
+    <div class="proof">
+        <strong>証明.</strong><br>
+        <p>
+            まず、$p: P \to X$ が主 $G$ 束であると仮定する。定義より、各 $x \in X$ は開近傍 $U \subset X$ を持ち、同相写像 $\phi: p^{-1}(U) \to U \times G$ が存在する。群 $G$ は離散位相を持つため、直積空間 $U \times G$ は位相空間として $\coprod_{g \in G} (U \times \{g\})$ と分解される。
+            ここで、$V_g = \phi^{-1}(U \times \{g\})$ とおくと、$V_g$ は $p^{-1}(U)$ の開集合であり、$p^{-1}(U) = \coprod_{g \in G} V_g$ となる。
+            射影 $\text{proj}_1 \circ \phi = p$ であるため、各 $p|_{V_g}: V_g \to U$ は同相写像である。したがって、$p: P \to X$ は被覆空間である。
+        </p>
+        <p>
+            次に、群 $G$ の元 $h \in G$ による右作用 $R_h: P \to P$ ; $u \mapsto u \cdot h$ を考える。局所自明化の条件より、$\phi(u \cdot h) = (p(u), g h)$ (ただし $\phi(u) = (p(u), g)$) であり、これはファイバーを保つ同相写像である。よって、$R_h \in \mathrm{Aut}(P/X)$ である。
+            各ファイバー $p^{-1}(x)$ において、点 $\phi^{-1}(x, e)$ (ここで $e$ は $G$ の単位元) から任意の点 $\phi^{-1}(x, g)$ へは、元 $g$ による右作用によって移るため、作用は推移的である。よって $p: P \to X$ はGalois被覆である。
+        </p>
+        <p>
+            逆に、$p: P \to X$ がGalois被覆であり、被覆変換群を $G = \mathrm{Aut}(P/X)$ と仮定する。Galois被覆の定義より、任意のファイバー上で $G$ は自由かつ推移的に作用する。
+            $X$ の任意の点 $x$ の均等被覆される開近傍を $U$ とし、$p^{-1}(U) = \coprod_{i \in I} V_i$ とする。ある $V_{i_0}$ を選び、$V_{i_0}$ から $U$ への同相写像の逆写像を $s: U \to V_{i_0}$ とする。
+            $U \times G \to p^{-1}(U)$ を $(y, g) \mapsto g \cdot s(y)$ と定めると、これが同相写像となる。これを逆にして局所自明化を得る。したがって、$P \to X$ は離散群 $G$ を構造群とする主 $G$ 束である。
+        </p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <h2>5. Galois対応の定式化</h2>
+
+    <p>
+        主 $G$ 束の言葉を用いると、被覆空間の理論におけるGalois対応 (Galois correspondence) は、「構造群 $G$ の部分群 $H$」と「中間的なファイバー束」の間の美しい対応関係として記述される。
+        $G$ を位相群（ここでは離散群と想定してもよいが、一般の位相群でも成り立つ）、$p: P \to X$ を主 $G$ 束とする。
+    </p>
+
+    <div class="definition">
+        <strong>定義 5.1 (中間空間と同伴束)</strong><br>
+        $G$ の部分群を $H \subset G$ とする。群 $G$ は $P$ に自由に作用しているため、その部分群 $H$ も $P$ に自由に作用する。この $H$ の作用による商空間 (軌道空間) を $P/H$ と表す。
+        等質空間 $G/H$ （左剰余類の集合）をファイバーとし、$G$ の自然な左作用を備えた同伴束 (associated bundle) $P \times_G (G/H)$ は、自然に商空間 $P/H$ と同相になる。
+    </div>
+
+    <p>
+        商空間への自然な射影により、以下の射影の列が得られる。
+        $$ P \xrightarrow{\ q\ } P/H \xrightarrow{\ r\ } X $$
+        ここで $p = r \circ q$ である。この分解について、以下のGalois対応の基本定理が成り立つ。
+    </p>
+
+    <div class="theorem">
+        <strong>定理 5.2 (主束の視点によるGalois対応)</strong><br>
+        主 $G$ 束 $p: P \to X$ と、構造群 $G$ の閉部分群 $H \subset G$ に対して、以下の性質が成り立つ。
+        <ol>
+            <li>上段の射影 $q: P \to P/H$ は、構造群を $H$ とする主 $H$ 束である。</li>
+            <li>下段の射影 $r: P/H \to X$ は、ファイバーを $G/H$ とするファイバー束である。</li>
+            <li>部分群 $H$ が $G$ の正規部分群 ($H \triangleleft G$) である場合に限り、等質空間 $G/H$ は位相群の構造を持ち、下段の射影 $r: P/H \to X$ は剰余群 $G/H$ を構造群とする主 $G/H$ 束となる。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <strong>証明.</strong><br>
+        <p>
+            <strong>主張1の証明:</strong>
+            $P$ への $H$ の作用は、$G$ の作用の制限であるため自由である。商写像 $q: P \to P/H$ に対して局所自明化を構成する。
+            $x \in X$ の近傍 $U \subset X$ 上で $P$ は局所自明化 $p^{-1}(U) \cong U \times G$ を持つ。
+            この局所自明化において、$H$ の作用は第二成分への右からの積として作用する。すなわち、$(y, g) \cdot h = (y, gh)$ である。
+            したがって、部分群 $H$ による商をとると、$q(p^{-1}(U)) \cong U \times (G/H)$ となる。
+            $P \to P/H$ の局所自明化は、$U \times G \to U \times (G/H)$ によって与えられる。位相群 $G$ において、部分群 $H$ による射影 $G \to G/H$ は主 $H$ 束であることが知られているため、各点ごとに局所断面をとり、$q: P \to P/H$ が主 $H$ 束であることが従う。
+        </p>
+        <p>
+            <strong>主張2および3の証明:</strong>
+            上記で見た通り、$r^{-1}(U) = q(p^{-1}(U)) \cong U \times (G/H)$ であるため、$r: P/H \to X$ はファイバーを $G/H$ とするファイバー束である。
+            次に、$H$ が正規部分群 ($H \triangleleft G$) であると仮定する。このとき、$G/H$ は剰余群の構造を持つ。
+            $P/H$ に対する群 $G/H$ の右作用を次のように定義する。
+            $[u] \in P/H$ （ただし $u \in P$ ）および $[g] \in G/H$ に対して、
+            $$ [u] \cdot [g] = [u \cdot g] $$
+            と定める。この作用が well-defined であることを示す。
+            $u_1 \sim u_2$ すなわちある $h \in H$ について $u_2 = u_1 \cdot h$ とし、$g_1 \sim g_2$ すなわちある $h' \in H$ について $g_2 = h' g_1$ （$H$ が正規部分群であるため左剰余類と右剰余類は一致する。より正確には $g_2 = g_1 h''$ となる $h'' \in H$ が存在する）とする。
+            $$ u_2 \cdot g_2 = (u_1 \cdot h) \cdot (g_1 h'') = u_1 \cdot (h g_1 h'') $$
+            $H$ が正規部分群であるため、$h g_1 = g_1 \tilde{h}$ となる $\tilde{h} \in H$ が存在する。
+            $$ u_2 \cdot g_2 = u_1 \cdot (g_1 \tilde{h} h'') = (u_1 \cdot g_1) \cdot (\tilde{h} h'') $$
+            $\tilde{h} h'' \in H$ であるため、$[u_2 \cdot g_2] = [u_1 \cdot g_1]$ となり、作用は well-defined である。
+            ファイバー上での自由かつ推移的な作用も明らかであり、局所自明化も $r^{-1}(U) \cong U \times (G/H)$ により与えられるため、$r: P/H \to X$ は主 $G/H$ 束となる。
+        </p>
+        <div class="qed">証明終</div>
+    </div>
+
+    <div class="remark">
+        <strong>普遍被覆との関係の直観的な補足</strong><br>
+        もし元の主 $G$ 束の全空間 $P$ が単連結 (simply connected、すなわち穴がない空間) である場合、 $P$ は $X$ の普遍被覆空間 (universal covering space) となります。
+        このとき、主束の構造群 $G$ は、底空間 $X$ の基本群 $\pi_1(X)$ と同型になります。このケースにおいて上記のGalois対応を考えたものが、代数トポロジーの教科書で最も標準的に扱われる「基本群の部分群と中間被覆空間のGalois対応」そのものです。
+    </div>
+
+    <h2>6. 参考文献</h2>
+    <ul>
+        <li>Hatcher, A. (2002). <i>Algebraic Topology</i>. Cambridge University Press.[cite: 1] 参照元: <a href="https://pi.math.cornell.edu/~hatcher/AT/ATpage.html" target="_blank">https://pi.math.cornell.edu/~hatcher/AT/ATpage.html</a></li>
+        <li>nLab (2024). <i>principal bundle</i>.[cite: 1] 参照元: <a href="https://ncatlab.org/nlab/show/principal+bundle" target="_blank">https://ncatlab.org/nlab/show/principal+bundle</a></li>
+    </ul>
+
+</body>
+</html>
