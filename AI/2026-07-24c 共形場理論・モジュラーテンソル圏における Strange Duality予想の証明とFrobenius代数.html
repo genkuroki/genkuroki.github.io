@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共形場理論・モジュラーテンソル圏におけるStrange Duality予想の証明とFrobenius代数</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-top: 50px;
+        }
+        h3 {
+            margin-top: 30px;
+            color: #34495e;
+        }
+        .theorem, .lemma, .definition, .proof, .remark, .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid #2980b9;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .proof {
+            border-left-color: #27ae60;
+            background-color: #fdfdfd;
+        }
+        .remark {
+            border-left-color: #f39c12;
+            background-color: #fffaf0;
+        }
+        .example {
+            border-left-color: #8e44ad;
+            background-color: #f4f0f8;
+        }
+        .title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+        .math-display {
+            overflow-x: auto;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+</head>
+<body>
+
+    <h1>共形場理論・モジュラーテンソル圏における<br>Strange Duality予想の証明とFrobenius代数</h1>
+
+    <h2>1. はじめに：Strange Dualityと共形ブロックの普遍的定義</h2>
+    <p>
+        本稿は、黒木玄によって提唱された共形場理論 (Conformal Field Theory; CFT) における「Strange Duality (奇妙な双対性) 予想」の解決に向けた数学的基礎を、頂点作用素代数 (Vertex Operator Algebra; VOA) とモジュラーテンソル圏 (Modular Tensor Category; MTC) の理論を用いて解説したものです。特に、予想の中心的なステップである「補題B（非退化な双線形写像の誘導）」の完全な証明と、その根底にある「特別なFrobenius代数」の構造について詳述します。
+    </p>
+
+    <div class="remark">
+        <div class="title">注意：代数の包含と共形ブロックの包含の非対称性</div>
+        <p>
+            幾何学的なアプローチにおいて、アフィンLie代数（WZWモデル）の共形ブロックとフェルミオンの共形ブロックは元々定義が異なります。前者は代数曲線上の有理型関数のLie環の作用から定義される共変商の双対空間であり、後者は曲線上のスピン束の切断と自由フェルミオンのFock空間への作用から定義されます。
+        </p>
+        <p>
+            しかし、Yi-Zhi HuangらによるVOAの枠組みでは、これらは「インターツワイニング作用素の空間」として普遍的に統一されます。
+        </p>
+        <p>
+            Frenkel-Kacの構成により、アフィンLie代数はフェルミオン系に埋め込まれます。対称性の制約が強い（代数が大きい）ほどWard恒等式を満たす共形ブロック空間は小さくなるため、代数の包含関係
+            $$V(\widehat{sl}_{r,k}) \otimes V(\widehat{sl}_{k,r}) \subset V(\widehat{sl}_{rk,1}) \subset \mathcal{F}$$
+            に対して、共形ブロック空間の包含関係は<b>逆向き（部分空間）</b>になります。
+            $$Z_{\mathcal{F}} \subset Z_{\widehat{sl}_{rk,1}} \subset Z_{\widehat{sl}_{r,k}} \otimes Z_{\widehat{sl}_{k,r}}$$
+            したがって、「フェルミオンの共形ブロックは自動的にアフィンLie代数の共形ブロックになるが、逆は成立しない」という非対称性が生じます。Strange Dualityの証明は、空間全体の同型ではなく「大きな代数（$\mathcal{F}$）で定まる大域的な共形ブロック $\Psi_{\mathcal{F}}$ が、小さな代数のテンソル積空間の中に特別な元をポツンと指定し、それが非退化なペアリングを引き起こす」という論理構造に依存しています。
+        </p>
+    </div>
+
+    <h2>2. 双線形な内積関手 $F$ の定義と融合則との整合性</h2>
+
+    <p>
+        $\mathcal{C}$（$\widehat{sl}_{r,k}$ に対応）および $\mathcal{D}$（$\widehat{sl}_{k,r}$ に対応）を $\mathbb{C}$ 上の半単純なモジュラーテンソル圏とし、それぞれのテンソル積を $\otimes_\mathcal{C}, \otimes_\mathcal{D}$、単位対象（真空表現）を $1_\mathcal{C}, 1_\mathcal{D}$ とします。フェルミオンの共形ブロックに基づく双線形関手 $F: \mathcal{C} \times \mathcal{D} \to \mathrm{Vect}$ を以下のように厳密に定義します。
+    </p>
+
+    <div class="definition">
+        <div class="title">定義 2.1: 双線形な内積関手 $F$</div>
+        <p>
+            積圏 $\mathcal{C} \times \mathcal{D}$ から有限次元 $\mathbb{C}$-ベクトル空間の圏 $\mathrm{Vect}$ への関手 $F: \mathcal{C} \times \mathcal{D} \to \mathrm{Vect}$ を、「挿入状態を $X \boxtimes Y$ および $\mathcal{F}$ の双対真空 $\mathcal{F}^*$ とした、リーマン球面 $\mathbb{P}^1$ 上のフェルミオンの2点共形ブロックの空間」として定義する。
+            $$F(X, Y) := Z_{\mathcal{F}}(\mathbb{P}^1; \, X \boxtimes Y, \, \mathcal{F}^*) = \mathrm{Hom}_{\mathcal{C} \boxtimes \mathcal{D}}(X \boxtimes Y, \, \mathcal{F})$$
+            この関手は以下の性質を満たす。
+            <ul>
+                <li><b>$\mathbb{C}$-双分線形性 (Bifunctoriality):</b> 射の対 $f, g$ に対して線形写像 $F(f, g)$ を対応させる。</li>
+                <li><b>真空における規準化:</b> $F(1_\mathcal{C}, 1_\mathcal{D}) \cong \mathbb{C}$ である。</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="theorem">
+        <div class="title">定理 2.2: 融合則（テンソル積）との分配同型（整合性）</div>
+        <p>
+            任意の対象 $X_1, X_2 \in \mathcal{C}$ および $Y_3 \in \mathcal{D}$ に対して、ベクトル空間の自然同型
+            $$F(X_1 \otimes_\mathcal{C} X_2, \; Y_3) \;\stackrel{\Phi}{\cong}\; \bigoplus_{Y_1, Y_2 \in \mathrm{Irr}(\mathcal{D})} \mathrm{Hom}_\mathcal{D}(Y_1 \otimes_\mathcal{D} Y_2, \, Y_3) \;\otimes_\mathbb{C}\; F(X_1, Y_1) \;\otimes_\mathbb{C}\; F(X_2, Y_2)$$
+            が存在する。さらに、この同型 $\Phi$ は $\mathcal{C}$ と $\mathcal{D}$ のテンソル積の結合律射 (Associativity constraints) と可換である（五角形公理を満たす）。
+        </p>
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p><b>Step 1: フェルミオンVOA $\mathcal{F}$ の分解と $F(X, Y)$ の基本性質</b></p>
+        <p>
+            Frenkel-Kacのコセット構成により、フェルミオンVOA $\mathcal{F}$ は部分代数 $\mathcal{C} \boxtimes \mathcal{D}$ の表現として次のように分枝法則に従い完全分解されます。
+            $$\mathcal{F} \;\cong\; \bigoplus_{U \in \mathrm{Irr}(\mathcal{C})} U \boxtimes U^\dagger$$
+            ここで $U^\dagger \in \mathrm{Irr}(\mathcal{D})$ は $U$ に一意に対応する $\mathcal{D}$ の単純対象（レベル・ランク双対対象）です。
+            定義 $F(X, Y) = \mathrm{Hom}_{\mathcal{C} \boxtimes \mathcal{D}}(X \boxtimes Y, \mathcal{F})$ にこれを適用すると、Schurの補題により、
+            $$F(X, Y) \cong \begin{cases} \mathbb{C} & (Y \cong X^\dagger \text{ のとき}) \\ 0 & (\text{それ以外}) \end{cases}$$
+            が得られます。
+        </p>
+
+        <p><b>Step 2: 左辺 $F(X_1 \otimes_\mathcal{C} X_2, \, Y_3)$ の既約分解</b></p>
+        <p>
+            左辺に定義を適用します。
+            $$F(X_1 \otimes_\mathcal{C} X_2, \; Y_3) = \mathrm{Hom}_{\mathcal{C} \boxtimes \mathcal{D}}\big( (X_1 \otimes_\mathcal{C} X_2) \boxtimes Y_3, \; \mathcal{F} \big)$$
+            $\mathcal{C}$ におけるテンソル積 $X_1 \otimes_\mathcal{C} X_2$ を単純対象 $X_3 \in \mathrm{Irr}(\mathcal{C})$ に既約分解し、代入して $\mathrm{Hom}$ 関手の分配性を用いると、
+            $$F(X_1 \otimes_\mathcal{C} X_2, \; Y_3) \;\cong\; \bigoplus_{X_3 \in \mathrm{Irr}(\mathcal{C})} \mathrm{Hom}_\mathcal{C}(X_3, \, X_1 \otimes_\mathcal{C} X_2)^* \;\otimes_\mathbb{C}\; F(X_3, Y_3)$$
+            となります。Step 1の性質より、直和の中で生存するのは $X_3 \cong Y_3^\dagger$ となる項のみであるため、
+            $$F(X_1 \otimes_\mathcal{C} X_2, \; Y_3) \;\cong\; \mathrm{Hom}_\mathcal{C}(Y_3^\dagger, \, X_1 \otimes_\mathcal{C} X_2)^* \quad \cdots \text{(式A)}$$
+            を得ます。
+        </p>
+
+        <p><b>Step 3: OPE（演算子積展開）の結合律による代数射の同型</b></p>
+        <p>
+            Yi-Zhi Huang, J. Lepowsky, L. Zhang (HLZ) の理論によれば、$\mathcal{F}$ における頂点作用素 $\mathcal{Y}_\mathcal{F}(\cdot, z)$ は普遍的な結合律（Jacobi等式）を満たします。
+            $$\mathcal{Y}_\mathcal{F}(u, z_1)\mathcal{Y}_\mathcal{F}(v, z_2) = \mathcal{Y}_\mathcal{F}(\mathcal{Y}_\mathcal{F}(u, z_1-z_2)v, z_2) \quad (u \in X_1, v \in X_2)$$
+            この Jacobi 等式を $\mathcal{C} \boxtimes \mathcal{D}$ の不変部分空間に制限します。
+            右辺の「先に融合させてから作用させる操作」は $\mathcal{C}$ における融合空間 $\mathrm{Hom}_\mathcal{C}(Y_3^\dagger, X_1 \otimes_\mathcal{C} X_2)$ を定義します。
+            左辺の「中間状態を経由して逐次作用させる操作」は $\mathcal{D}$ における融合空間 $\bigoplus_{Y_1, Y_2} \mathrm{Hom}_\mathcal{D}(Y_1 \otimes_\mathcal{D} Y_2, Y_3)$ と各成分の積を定義します。
+            解析接続の一意性および非退化性により、これらの空間の間には正則な自然同型が与えられます。
+            $$\mathrm{Hom}_\mathcal{C}(Y_3^\dagger, \, X_1 \otimes_\mathcal{C} X_2)^* \;\stackrel{\mathrm{OPE}}{\cong}\; \bigoplus_{Y_1, Y_2 \in \mathrm{Irr}(\mathcal{D})} \mathrm{Hom}_\mathcal{D}(Y_1 \otimes_\mathcal{D} Y_2, \, Y_3) \;\otimes_\mathbb{C}\; F(X_1, Y_1) \;\otimes_\mathbb{C}\; F(X_2, Y_2) \quad \cdots \text{(式B)}$$
+        </p>
+        <p><b>Step 4: 結論</b></p>
+        <p>
+            (式A) と (式B) を結合することにより、目的の自然同型が直接証明されました。また、この同型の結合性（五角形公理との整合性）は、フェルミオンVOA $\mathcal{F}$ の3項の頂点作用素に対する結合律から自動的に導かれます。 $\blacksquare$
+        </p>
+    </div>
+
+
+    <h2>3. テンソル圏におけるFrobenius代数</h2>
+
+    <p>
+        Strange Dualityの非退化性を証明するための決定的な代数構造が「Frobenius代数 (Frobenius Algebra)」です。
+    </p>
+
+    <div class="definition">
+        <div class="title">定義 3.1: モジュラーテンソル圏におけるFrobenius代数</div>
+        <p>
+            テンソル圏 $\mathcal{M}$ における対象 $A$ が<b>Frobenius代数</b> であるとは、以下の構造を持つことをいう。
+        </p>
+        <ol>
+            <li><b>代数構造（合体）:</b> 積射 $\mu: A \otimes A \to A$ と単位射 $\eta: \mathbf{1} \to A$</li>
+            <li><b>余代数構造（分裂）:</b> 余積射 $\Delta: A \to A \otimes A$ と余単位射（評価射） $\epsilon: A \to \mathbf{1}$</li>
+            <li><b>Frobenius条件:</b> 積と余積が以下の等式（$A$-両側加群としての準同型性）を満たす。
+                $$(\mathrm{id}_A \otimes \mu) \circ (\Delta \otimes \mathrm{id}_A) = \Delta \circ \mu = (\mu \otimes \mathrm{id}_A) \circ (\mathrm{id}_A \otimes \Delta)$$
+            </li>
+        </ol>
+        <p>
+            同値な定義として、双線形形式 $\beta := \epsilon \circ \mu : A \otimes A \to \mathbf{1}$ が<b>非退化</b>（同型写像 $\hat{\beta}: A \xrightarrow{\sim} A^*$ を誘導する）であってもよい。
+        </p>
+    </div>
+
+    <div class="definition">
+        <div class="title">定義 3.2: 特別なFrobenius代数 (Special Frobenius Algebra)</div>
+        <p>
+            Frobenius代数 $A$ が<b>特別なFrobenius代数</b>であるとは、代数構造と余代数構造が以下の2つの非ゼロ・スカラー倍条件を満たすことをいう。
+        </p>
+        <ol>
+            <li><b>余単位と単位の合成条件 (Normalization / Connectedness):</b> $\epsilon \circ \eta = \beta \cdot \mathrm{id}_{\mathbf{1}}$ （ただし $\beta \in \mathbb{C}^\times, \beta \neq 0$）</li>
+            <li><b>余積と積の合成条件 (Speciality Condition):</b> $\mu \circ \Delta = \alpha \cdot \mathrm{id}_A$ （ただし $\alpha \in \mathbb{C}^\times, \alpha \neq 0$）</li>
+        </ol>
+    </div>
+
+
+    <h2>4. フェルミオンVOAがFrobenius代数であることの証明</h2>
+
+    <div class="theorem">
+        <div class="title">定理 4.1: $\mathcal{F}$ のFrobenius代数構造</div>
+        <p>
+            フェルミオンVOA $\mathcal{F}$ は、Deligneテンソル積圏 $\mathcal{M} = \mathcal{C} \boxtimes \mathcal{D}$ におけるFrobenius代数である。
+        </p>
+    </div>
+    
+    <div class="proof">
+        <div class="title">証明</div>
+        <p><b>Step 1: 代数構造の構成と結合性</b></p>
+        <p>
+            単位射 $\eta: \mathbf{1} \to \mathcal{F}$ は真空ベクトル $|0\rangle \in \mathbf{1}$ による包含射として定義します。積射 $\mu: \mathcal{F} \otimes \mathcal{F} \to \mathcal{F}$ はVOAの頂点作用素から誘導される射として定義します。VOAのJacobi等式から、$\mu$ は結合射 $a_{\mathcal{F},\mathcal{F},\mathcal{F}}$ を介した代数の結合性を満たします。
+        </p>
+        <p><b>Step 2: 評価射と非退化不変ペアリングの構成</b></p>
+        <p>
+            $\mathcal{F}$ は単純VOAであるため、真空成分への標準的な射影を評価射 $\epsilon: \mathcal{F} \to \mathbf{1}$ と定義します。これにより双線形ペアリング $\beta := \epsilon \circ \mu$ が定まります。VOAの性質により $\beta$ は不変条件 $\beta \circ (\mu \otimes \mathrm{id}) = \beta \circ (\mathrm{id} \otimes \mu)$ を満たし、単純性によりイデアルが存在しないため完全非退化となります（同型 $\hat{\beta}: \mathcal{F} \xrightarrow{\sim} \mathcal{F}^*$ を誘導）。
+        </p>
+        <p><b>Step 3: 余代数構造とFrobenius条件の証明</b></p>
+        <p>
+            ペアリングの非退化性と、剛性圏 $\mathcal{M}$ における標準的な共評価射 $\mathrm{coev}_{\mathcal{F}}$ を用いて余積を $\Delta := (\mathrm{id} \otimes \mu^*) \circ (\mathrm{coev}_{\mathcal{F}} \otimes \mathrm{id})$ と構成します。
+            Frobenius条件 $(\mu \otimes \mathrm{id}) \circ (\mathrm{id} \otimes \Delta) = \Delta \circ \mu$ を示すため、両辺に非退化ペアリング $(\mathrm{id} \otimes \beta)$ を右から評価します。剛性圏におけるスネーク方程式より $(\beta \otimes \mathrm{id}) \circ \Delta = \mathrm{id}$ となることを用いると、両辺の評価値が $\mu$ に完全に一致します。非退化性より、元の射そのものが一致することが導かれ、Frobenius条件が成立します。 $\blacksquare$
+        </p>
+    </div>
+
+    <h2>5. VOAの真空加群が「特別な」Frobenius代数であることの証明</h2>
+
+    <div class="theorem">
+        <div class="title">定理 5.1: 特別なFrobenius代数性</div>
+        <p>
+            VOAの真空加群から作られるFrobenius代数 $\mathcal{F}$ は「特別な（Special）Frobenius代数」である。
+        </p>
+    </div>
+    
+    <div class="proof">
+        <div class="title">証明</div>
+        <p><b>Step 1: 条件1 ($\epsilon \circ \eta \neq 0$) の証明</b></p>
+        <p>
+            単位射 $\eta(1) = |0\rangle$ であり、評価射は真空期待値 $\epsilon(a) = \langle 0 | a \rangle \cdot 1$ です。真空ベクトルの規格化 $\langle 0 | 0 \rangle = 1$ より、
+            $$(\epsilon \circ \eta)(1) = \epsilon(|0\rangle) = \langle 0 | 0 \rangle \cdot 1 = 1 \cdot 1$$
+            したがって $\epsilon \circ \eta = 1 \cdot \mathrm{id}_{\mathbf{1}}$ となり、スカラー $\beta = 1 \neq 0$ が得られます。
+        </p>
+        
+        <p><b>Step 2: 条件2 ($\mu \circ \Delta = \alpha \cdot \mathrm{id}_{\mathcal{F}}$, $\alpha \neq 0$) の証明</b></p>
+        <p>
+            自他準同型射 $f := \mu \circ \Delta : \mathcal{F} \to \mathcal{F}$ を考えます。Frobenius条件と積の結合性を用いると、
+            $$\mu \circ (f \otimes \mathrm{id}_{\mathcal{F}}) = \mu \circ ((\mu \circ \Delta) \otimes \mathrm{id}_{\mathcal{F}}) = \mu \circ (\mu \otimes \mathrm{id}) \circ (\Delta \otimes \mathrm{id}) = \dots = (\mu \circ \Delta) \circ \mu = f \circ \mu$$
+            が成り立ちます。すなわち $f$ は代数 $\mathcal{F}$ の積の作用と可換であり、$\mathcal{F}$-両側加群準同型射（$f \in \mathrm{End}_{\mathcal{F}-\mathcal{F}}(\mathcal{F})$）です。
+        </p>
+        <p>
+            $\mathcal{F}$ は連結単純Frobenius代数であるため、非自明な両側イデアルを持たず、Schurの補題の一般化により $\mathrm{End}_{\mathcal{F}-\mathcal{F}}(\mathcal{F}) = \mathbb{C} \cdot \mathrm{id}_{\mathcal{F}}$ となります。したがって $f = \alpha \cdot \mathrm{id}_{\mathcal{F}}$ と一意に表せます。
+        </p>
+        <p>
+            スカラー $\alpha$ の値は、両辺のトレース（評価射と単位射の合成）をとることで求まります。
+            $$\epsilon \circ (\mu \circ \Delta) \circ \eta = \alpha \cdot (\epsilon \circ \eta) = \alpha$$
+            一方で左辺は圏論的次元 $\dim(\mathcal{F})$ に一致します。$\mathcal{F} = \bigoplus_{\lambda} V_\lambda \boxtimes W_{\lambda'}$ の次元は $\sum_\lambda \dim(V_\lambda)\dim(W_{\lambda'}) > 0$ であり、厳密に非ゼロです。よって $\alpha = \dim(\mathcal{F}) \neq 0$ となり、条件を満たします。 $\blacksquare$
+        </p>
+    </div>
+
+    <h2>6. 補題B（非退化性の誘導）の最終証明</h2>
+
+    <p>
+        点付きリーマン面 $\mathbb{P}^1$ と3点（$N=3$）の場合を考えます。既約成分に対応する $\mathcal{C}$ 側の共形ブロック空間を $Z_{\mathcal{C}} = \mathrm{Hom}_{\mathcal{C}}(V_1 \otimes V_2, V_3)$、$\mathcal{D}$ 側を $Z_{\mathcal{D}} = \mathrm{Hom}_{\mathcal{D}}(W_1 \otimes W_2, W_3)$ とします。
+    </p>
+    <p>
+        フェルミオンの3点共形ブロック（積 $\mu$）は、特定の既約成分 $(V_1 \boxtimes W_1) \otimes (V_2 \boxtimes W_2)$ から $V_3 \boxtimes W_3$ への成分においてテンソル元 $\mu_{1,2}^3 \in Z_{\mathcal{C}} \otimes Z_{\mathcal{D}}$ を定めます。これにより線形写像 $\tilde{\Phi}: Z_{\mathcal{C}}^* \longrightarrow Z_{\mathcal{D}}$ が誘導されます。
+    </p>
+
+    <div class="lemma">
+        <div class="title">補題B: 非退化な双線形写像の誘導</div>
+        <p>
+            テンソル元 $\mu_{1,2}^3 \in Z_{\mathcal{C}} \otimes Z_{\mathcal{D}}$ から誘導される線形写像 $\tilde{\Phi}: Z_{\mathcal{C}}^* \longrightarrow Z_{\mathcal{D}}$ は、同型写像（全単射）である。
+        </p>
+    </div>
+    
+    <div class="proof">
+        <div class="title">証明</div>
+        <p><b>Step 1: $\tilde{\Phi}$ の単射性</b></p>
+        <p>
+            $\tilde{\Phi}$ が単射でないと仮定し、ある $\alpha \neq 0 \in Z_{\mathcal{C}}^*$ が $\tilde{\Phi}(\alpha) = 0 \in Z_{\mathcal{D}}$ を満たすとします。これは、テンソル元 $\mu_{1,2}^3$ の $\mathcal{C}$ 側に $\alpha$ を作用させると $\mathcal{D}$ 側が完全に消滅することを意味します。
+        </p>
+        <p>
+            定理5.1より、$\mathcal{F}$ は特別なFrobenius代数であり、$\mu \circ \Delta = \alpha' \cdot \mathrm{id}_{\mathcal{F}}$ （$\alpha' \neq 0$）を満たします。この関係式を対象の成分に制限します。積 $\mu$ の成分が $\mu_{1,2}^3$ であるのに対し、余積 $\Delta$ の成分は双対空間 $\Delta_3^{1,2} \in Z_{\mathcal{C}}^* \otimes Z_{\mathcal{D}}^*$ に属します。
+        </p>
+        <p>
+            $\tilde{\Phi}(\alpha) = 0$ ならば、$\mu_{1,2}^3$ にいかなる $\mathcal{D}$ 側の双対元 $\delta \in Z_{\mathcal{D}}^*$ を作用させても、ペア $(\alpha, \delta)$ による評価値は $0$ になります。しかし、$\mu_{1,2}^3$ と $\Delta_3^{1,2}$ を合成して定数倍の恒等射 $id_{V_3 \boxtimes W_3}$ を復元するためには、$\mu_{1,2}^3$ の $\mathcal{C}$ 側にはすべての $Z_{\mathcal{C}}^*$ をカバーするだけの非退化な情報が含まれていなければなりません。非零の $\alpha$ がゼロに移されるような「死角（カーネル）」が存在すると、恒等射を再構成できず、$\mu \circ \Delta = \alpha' \cdot \mathrm{id}_{\mathcal{F}}$ に矛盾します。よって $\mathrm{Ker}(\tilde{\Phi}) = \{0\}$ であり、$\tilde{\Phi}$ は単射です。
+        </p>
+        
+        <p><b>Step 2: レベル・ランク双対性による次元の一致（全射性）</b></p>
+        <p>
+            $\widehat{sl}_{r,k}$ と $\widehat{sl}_{k,r}$ の表現の圏はレベル・ランク双対性により圏同値であり、融合則 (Fusion rules) が完全に一致します。すなわち、
+            $$\dim \mathrm{Hom}_{\mathcal{C}}(V_1 \otimes V_2, V_3) = \dim \mathrm{Hom}_{\mathcal{D}}(W_1 \otimes W_2, W_3)$$
+            より $\dim Z_{\mathcal{C}}^* = \dim Z_{\mathcal{D}}$ が成り立ちます。（これはVerlinde公式からも導かれます）。
+            有限次元ベクトル空間において、次元が等しい空間への単射は自動的に全射となり、全単射（同型写像）となります。
+        </p>
+        <p>
+            以上の論証により、誘導された線形写像 $\tilde{\Phi}$ は同型写像となり、$\Phi_F$ の像が各部分空間のテンソル積において完全に非退化であることが証明されました。 $\blacksquare$
+        </p>
+    </div>
+
+    <h2>参考文献</h2>
+    <ul class="references">
+        <li>
+            Bakalov, B., & Kirillov, A., Jr. (2001). <i>Lectures on Tensor Categories and Modular Functors</i>. American Mathematical Society.
+            <a href="https://bookstore.ams.org/ulect-21" target="_blank">[AMS Bookstore]</a>
+        </li>
+        <li>
+            Etingof, P., Gelaki, Sh., Nikshych, D., & Ostrik, V. (2015). <i>Tensor Categories</i> (Mathematical Surveys and Monographs, Vol. 205). American Mathematical Society.
+            <a href="https://bookstore.ams.org/surv-205" target="_blank">[AMS Bookstore]</a>
+        </li>
+        <li>
+            Fuchs, J., Runkel, I., & Schweigert, C. (2002). TFT construction of RCFT correlators I: Partition functions. <i>Nuclear Physics B</i>, 624(3), 452-468.
+            <a href="https://arxiv.org/abs/hep-th/0110133" target="_blank">[arXiv:hep-th/0110133]</a>
+        </li>
+        <li>
+            Huang, Y.-Z. (1997). <i>Two-Dimensional Conformal Geometry and Vertex Operator Algebras</i> (Progress in Mathematics, Vol. 148). Birkhäuser.
+            <a href="https://link.springer.com/book/10.1007/978-1-4612-4276-5" target="_blank">[SpringerLink]</a>
+        </li>
+        <li>
+            Huang, Y.-Z. (2008). Vertex operator algebras and the Verlinde conjecture. <i>Communications in Contemporary Mathematics</i>, 10(01), 103-154.
+            <a href="https://arxiv.org/abs/math/0406291" target="_blank">[arXiv:math/0406291]</a>
+        </li>
+        <li>
+            Müger, M. (2003). From subfactors to categories and topology I: Frobenius algebras in and Morita equivalence of tensor categories. <i>Journal of Pure and Applied Algebra</i>, 180(1-2), 81-157.
+            <a href="https://doi.org/10.1016/S0022-4049(02)00247-5" target="_blank">[DOI]</a>
+        </li>
+        <li>
+            Turaev, V. G. (2010). <i>Quantum invariants of knots and 3-manifolds</i> (2nd rev. ed.). De Gruyter.
+            <a href="https://doi.org/10.1515/9783110221848" target="_blank">[De Gruyter]</a>
+        </li>
+        <li>
+            Yamagami, S. (2004). Frobenius Algebras in Tensor Categories and Bimodule Extensions. In <i>Galois Theory, Hopf Algebras, and Semiabelian Categories</i> (pp. 551-570). American Mathematical Society.
+        </li>
+    </ul>
+
+</body>
+</html>

@@ -42,6 +42,7 @@
 * 例えばCHausなどの固有名詞の圏は\mathrm{CHaus}のように書け。
 * canonicalを数式中でcanと略す場合には\mathrm{can}と書け。
 * completedは「完備化された」と訳せ。
+* braidingは「ブレイディング」と訳せ。
 
 ## ルールの適用範囲
 
