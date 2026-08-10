@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完全不連結・超不連結コンパクトHausdorff空間とStone双対性</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .theorem, .definition, .lemma, .proposition, .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid #2980b9;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        .proof {
+            background-color: #ffffff;
+            border: 1px solid #ecf0f1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+        }
+        ul {
+            margin-bottom: 15px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+    <h1>完全不連結・超不連結コンパクトHausdorff空間とStone双対性</h1>
+
+    <p>位相空間論および束論において、空間の「不連結性」の度合いを測る概念として完全不連結性と超不連結性(extremally disconnected)がある。本稿では、完全不連結コンパクトHausdorff空間（Stone空間）と超不連結コンパクトHausdorff空間について、その定義と重要な性質を証明付きで詳細に解説する。さらに、これらと完備Bool代数との関係、および圏論における「Stone双対性」について自己完結的（self-contained）にまとめる。</p>
+
+    <h2>1. 準備と基本概念</h2>
+
+    <p>まず、本稿で用いる基本的な位相空間論の概念を厳密に定義する。</p>
+
+    <div class="definition">
+        <strong>定義 1.1 (clopen集合)</strong><br>
+        位相空間 $X$ の部分集合 $A$ が開集合でありかつ閉集合でもあるとき、 $A$ を clopen 集合と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.2 (連結成分)</strong><br>
+        位相空間 $X$ の点 $x$ を含む最大の連結部分集合を、 $x$ の連結成分 (connected component) と呼ぶ。連結成分は常に閉集合である。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.3 (0次元空間)</strong><br>
+        位相空間 $X$ の clopen 集合全体が $X$ の開基底をなすとき、 $X$ は0次元 (zero-dimensional) であるという。すなわち、任意の開集合 $U$ と $x \in U$ に対して、ある clopen 集合 $V$ が存在して $x \in V \subset U$ を満たすことである。
+    </div>
+
+    <h2>2. 完全不連結コンパクトHausdorff空間と点の分離</h2>
+
+    <p>空間の各点がどれだけ互いに分離されているかを測る概念として、完全不連結性と全分離性がある。これらは一般の空間では異なる概念であるが、コンパクトHausdorff空間においては0次元性も含めてすべて同値となる。</p>
+
+    <div class="definition">
+        <strong>定義 2.1 (完全不連結空間と全分離空間)</strong><br>
+        <ul>
+            <li>位相空間 $X$ が完全不連結 (totally disconnected) であるとは、 $X$ の各連結成分が1点のみからなることである。</li>
+            <li>位相空間 $X$ が全分離 (totally separated) であるとは、任意の相異なる2点 $x, y \in X$ に対して、ある clopen 集合 $U$ が存在して $x \in U$ かつ $y \notin U$ を満たすことである。</li>
+        </ul>
+    </div>
+
+    <div class="theorem">
+        <strong>定理 2.2 (完全不連結性と0次元性の同値性)</strong><br>
+        $X$ をコンパクトHausdorff空間とする。このとき、以下の3つの条件は互いに同値である。
+        <ol>
+            <li> $X$ は完全不連結である。</li>
+            <li> $X$ は全分離である。</li>
+            <li> $X$ は0次元である。</li>
+        </ol>
+        このような空間を Stone 空間 (Stone space) とも呼ぶ。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>(3) $\implies$ (2) の証明:</strong><br>
+        $X$ が0次元であると仮定し、 $X$ の相異なる任意の2点 $x, y$ をとる。 $X$ は Hausdorff 空間であるから、ある開集合 $U$ が存在して $x \in U$ かつ $y \notin U$ を満たす。 $X$ は0次元であるから、 $x \in V \subset U$ となる clopen 集合 $V$ が存在する。 $y \notin U$ であり $V \subset U$ であるから $y \notin V$ である。したがって、 $V$ は $x$ と $y$ を分離する clopen 集合であり、 $X$ は全分離である。</p>
+
+        <p><strong>(2) $\implies$ (1) の証明:</strong><br>
+        $X$ が全分離であると仮定する。 $X$ のある連結成分 $C$ が2つ以上の点を含むと仮定し、その相異なる2点を $x, y$ とする。全分離性の仮定より、 $x \in U$ かつ $y \notin U$ となる clopen 集合 $U$ がとれる。このとき、 $U \cap C$ と $(X \smallsetminus U) \cap C$ はともに空でない（それぞれ $x$ と $y$ を含む） $C$ の開集合であり、互いに素で、その和集合は $C$ 全体となる。これは部分空間 $C$ が連結であることに矛盾する。したがって、各連結成分は1点のみからなり、 $X$ は完全不連結である。</p>
+
+        <p><strong>(1) $\implies$ (3) の証明:</strong><br>
+        $X$ が完全不連結であると仮定し、 $X$ が0次元であることを示す。任意の点 $x \in X$ に対し、 $C_x$ を「 $x$ を含むすべての clopen 集合の共通部分」とする。 $C_x$ は閉集合の共通部分であるから閉集合である。我々は $C_x = \{x\}$ であることを示す。</p>
+        <p> $X$ における $x$ の連結成分を $K_x$ とする。定義より $K_x \subset C_x$ である。もし $C_x$ が非連結であると仮定すると、ある閉集合 $A, B$ が存在して、 $C_x = A \cup B$ かつ $A \cap B = \varnothing$ となる。 $X$ はコンパクトHausdorff空間であるから正規空間 (normal space) である。したがって、互いに素な閉集合 $A, B$ を分離する互いに素な開集合 $U, V$ が存在する（すなわち $A \subset U$ 、 $B \subset V$ 、 $U \cap V = \varnothing$ ）。</p>
+        <p> $C_x \subset U \cup V$ であるから、 $X \smallsetminus (U \cup V)$ は $C_x$ と交わらない閉集合である。 $C_x$ は $x$ を含む clopen 集合の族の共通部分であり、 $X$ はコンパクトであるから、有限交叉性 (finite intersection property) を用いる。 $x$ を含む clopen 集合の族を $\{W_i\}_{i \in I}$ とすると、 $\bigcap_{i \in I} W_i = C_x$ である。 $\left(\bigcap_{i \in I} W_i\right) \cap (X \smallsetminus (U \cup V)) = \varnothing$ であり、 $X \smallsetminus (U \cup V)$ はコンパクトであるから、ある有限部分集合 $J \subset I$ が存在して $\bigcap_{j \in J} W_j \subset U \cup V$ となる。</p>
+        <p> $W = \bigcap_{j \in J} W_j$ とおくと、 $W$ は有限個の clopen 集合の共通部分であるから clopen 集合であり、 $x \in W$ である。ここで、 $W \cap U$ が $X$ において clopen 集合であることを示す。 $W$ は $U \cup V$ に含まれており、 $U$ と $V$ は互いに素な開集合である。したがって $W \cap U = W \smallsetminus V$ と書ける。 $W$ は閉集合であり、 $V$ は開集合であるから、 $W \smallsetminus V$ は閉集合である。一方で $W$ は開集合であり $U$ も開集合であるから、 $W \cap U$ は開集合でもある。ゆえに $W \cap U$ は clopen 集合である。</p>
+        <p> $x$ は $A$ か $B$ のいずれかに属する。一般性を失わず $x \in A$ とすると、 $x \in W \cap U$ である。 $W \cap U$ は $x$ を含む clopen 集合であるから、定義より $C_x \subset W \cap U$ となる。しかし $C_x = A \cup B$ であり、 $B \subset V$ かつ $U \cap V = \varnothing$ であるから、 $C_x \subset U$ は $B = \varnothing$ を意味する。これは $C_x$ が非連結であるという仮定に矛盾する。したがって $C_x$ は連結であり、 $C_x$ は $x$ の連結成分 $K_x$ に等しい。 $X$ は完全不連結であるから、連結成分は $\{x\}$ のみであり、 $C_x = \{x\}$ が示された。</p>
+        <p>最後に、 $X$ が0次元であることを示す。任意の開集合 $O$ と $x \in O$ をとる。 $X \smallsetminus O$ は閉集合であり、 $C_x = \{x\}$ であるから、 $C_x \cap (X \smallsetminus O) = \varnothing$ である。再び有限交叉性を用いると、ある $x$ を含む有限個の clopen 集合 $W_1, \dots, W_n$ が存在して、 $\left(\bigcap_{k=1}^n W_k\right) \cap (X \smallsetminus O) = \varnothing$ となる。 $O_x = \bigcap_{k=1}^n W_k$ とおけば、 $O_x$ は clopen 集合であり、 $x \in O_x \subset O$ を満たす。よって $X$ は0次元である。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <div class="example">
+        <strong>例 2.3 (Cantor集合)</strong><br>
+        Cantor集合は、完全不連結コンパクトHausdorff空間の代表的な例である。直積位相を備えた空間 $\{0, 1\}^{\mathbb{N}}$ （ただし $\{0, 1\}$ は離散位相 (discrete topology) を持つ）は、Tychonoff の定理によりコンパクトであり、明らかに Hausdorff かつ完全不連結（したがって0次元）である。
+    </div>
+
+    <h2>3. 超不連結コンパクトHausdorff空間</h2>
+
+    <p>完全不連結性よりもさらに強い不連結性の条件として、超不連結性 (extremally disconnectedness) がある。これは空間の局所的な点の分離ではなく、大域的な開集合の閉包の振る舞いに関する性質である。</p>
+
+    <div class="definition">
+        <strong>定義 3.1 (超不連結空間)</strong><br>
+        位相空間 $X$ が超不連結 (extremally disconnected) であるとは、 $X$ の任意の開集合 $U$ に対して、その閉包 $\overline{U}$ が開集合となることである。超不連結コンパクトHausdorff空間は Stonean 空間 (Stonean space) とも呼ばれる。
+    </div>
+
+    <div class="theorem">
+        <strong>定理 3.2 (超不連結性の特徴づけ)</strong><br>
+        $X$ をコンパクトHausdorff空間とする。このとき、 $X$ が超不連結であることと、 $X$ の任意の互いに素な開集合 $U, V$ に対して $\overline{U} \cap \overline{V} = \varnothing$ が成り立つことは同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>超不連結性 $\implies$ 閉包が交わらないことの証明:</strong><br>
+        $X$ が超不連結であると仮定し、 $U, V$ を $U \cap V = \varnothing$ なる任意の開集合とする。 $U \cap V = \varnothing$ より、 $V \subset X \smallsetminus U$ である。 $X \smallsetminus U$ は閉集合であるから、閉包の最小性により $\overline{V} \subset X \smallsetminus U$ となる。すなわち、 $U \cap \overline{V} = \varnothing$ である。この関係から、 $U \subset X \smallsetminus \overline{V}$ となる。</p>
+        <p>ここで $X$ は超不連結であるから、開集合 $V$ の閉包 $\overline{V}$ は開集合である。したがって $X \smallsetminus \overline{V}$ は閉集合となる。再び閉包の最小性を用いると、 $\overline{U} \subset X \smallsetminus \overline{V}$ となる。これは $\overline{U} \cap \overline{V} = \varnothing$ を意味する。</p>
+
+        <p><strong>閉包が交わらないこと $\implies$ 超不連結性の証明:</strong><br>
+        逆に、任意の互いに素な開集合 $U, V$ に対して $\overline{U} \cap \overline{V} = \varnothing$ が成り立つと仮定し、 $X$ が超不連結であることを示す。任意の開集合 $U$ をとる。 $V = X \smallsetminus \overline{U}$ とおく。 $V$ は閉集合 $\overline{U}$ の補集合であるから開集合である。定義より $U \cap V = \varnothing$ であるため、仮定より $\overline{U} \cap \overline{V} = \varnothing$ となる。</p>
+        <p>ここで、 $U \cup V = U \cup (X \smallsetminus \overline{U})$ の閉包を考える。任意の空でない開集合 $W$ をとったとき、もし $W \cap U = \varnothing$ ならば $W \subset X \smallsetminus \overline{U} = V$ となるため、 $W \cap V \neq \varnothing$ である。したがって任意の開集合は $U$ または $V$ と交わるため、 $U \cup V$ は $X$ において稠密である。ゆえに $\overline{U \cup V} = X$ である。</p>
+        <p>一方で $\overline{U \cup V} = \overline{U} \cup \overline{V}$ であるから、 $X = \overline{U} \cup \overline{V}$ が成り立つ。したがって、 $X$ は互いに素な閉集合 $\overline{U}$ と $\overline{V}$ の和集合として表される。互いに素な閉集合の補集合は互いに他方を含む開集合となるため、 $\overline{U} = X \smallsetminus \overline{V}$ は開集合となる。ゆえに任意の開集合の閉包が開集合となり、 $X$ は超不連結である。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <div class="theorem">
+        <strong>定理 3.3 (超不連結性と完全不連結性の関係)</strong><br>
+        任意の超不連結 Hausdorff 空間 $X$ は、完全不連結である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p> $X$ の任意の相異なる2点 $x, y$ をとる。 $X$ は Hausdorff 空間であるから、ある互いに素な開集合 $U, V$ が存在して $x \in U$ かつ $y \in V$ となる。 $X$ は超不連結であるから、 $U$ の閉包 $\overline{U}$ は開集合である。また定義により閉包は閉集合でもあり、したがって $\overline{U}$ は clopen 集合である。</p>
+        <p> $U \cap V = \varnothing$ であるから $V \subset X \smallsetminus U$ であり、 $X \smallsetminus U$ は閉集合であるから $\overline{V} \subset X \smallsetminus U$ となる。よって $U \cap \overline{V} = \varnothing$ であり、対称性から $\overline{U} \cap V = \varnothing$ である。 $y \in V$ であるから $y \notin \overline{U}$ となる。</p>
+        <p>したがって、 $\overline{U}$ は $x$ を含み $y$ を含まない clopen 集合である。定理2.2の証明と同様の議論により、任意の相異なる2点が clopen 集合によって分離されるため、各連結成分は1点からなり、 $X$ は完全不連結である。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <div class="example">
+        <strong>例 3.4 (超不連結空間の例と非例)</strong><br>
+        無限離散空間の Stone-Cech コンパクト化は、超不連結コンパクトHausdorff空間の重要な例である。 $D$ を無限離散空間とし、その Stone-Cech コンパクト化を $\beta D$ とする。 $D$ の部分集合全体がなす束 $2^D$ は完備Bool代数であり、後述する定理によりその Stone 空間と同相な $\beta D$ は超不連結となる。<br>
+        一方で、例2.3で挙げた Cantor 集合 $C$ は完全不連結であるが、超不連結ではない。 $C$ は孤立点を持たないため、互いに素な開集合 $U, V$ であって、ともに $C$ において稠密となるものが存在する。このとき $\overline{U} \cap \overline{V} = C \cap C = C \neq \varnothing$ となり、定理3.2の条件を満たさないからである。
+    </div>
+
+    <p><strong>注意 (局所的特徴づけの不可能性):</strong> 「任意の互いに異なる点 $x, y$ に対して〜となる」という形式の条件は部分空間に遺伝する（hereditary）性質を持つ。しかし、超不連結性は部分空間に一般には遺伝しない大域的な性質であるため、点同士の分離公理のような局所的な形式で超不連結性を特徴づけることは原理的に不可能である。</p>
+
+    <h2>4. Bool代数と完備性</h2>
+
+    <p>位相空間の clopen 集合全体は、自然に代数的な構造を持つ。この構造は Bool 代数と呼ばれる。</p>
+
+    <div class="definition">
+        <strong>定義 4.1 (Bool代数と準同型写像)</strong><br>
+        集合 $B$ に、結び (join) $\lor$ 、交わり (meet) $\land$ 、補元 (complement) $\lnot$ の3つの演算と、最小元 $0$ 、最大元 $1$ が定まっており、分配的かつ相補的な束の公理を満たすとき、 $(B, \lor, \land, \lnot, 0, 1)$ を Bool代数 (Boolean algebra) と呼ぶ。 $B$ には $a \le b \iff a \land b = a$ によって半順序 $\le$ が自然に定義される。<br>
+        2つのBool代数の間の写像 $f: A \to B$ が、 $\lor, \land, 0, 1$ を保存するとき、準同型写像 (homomorphism) と呼ぶ。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 4.2 (補元の保存と逆写像の準同型性)</strong><br>
+        (1) Bool代数の準同型写像 $f: A \to B$ は、任意の $x \in A$ に対して $f(\lnot x) = \lnot f(x)$ を満たす。<br>
+        (2) 準同型写像 $f$ が全単射（すなわち同型写像）であるとき、その逆写像 $f^{-1}: B \to A$ もまたBool代数の準同型写像である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>(1) の証明:</strong> $B$ において、任意の元 $y \in B$ の補元は、関係式 $y \lor z = 1$ かつ $y \land z = 0$ を満たす元 $z \in B$ として一意に定まる。 $A$ における補元の定義より、 $x \lor \lnot x = 1$ かつ $x \land \lnot x = 0$ である。 $f$ は準同型写像であるから、結びと最大元を保存し $f(x) \lor f(\lnot x) = f(x \lor \lnot x) = f(1) = 1$ となる。同様に交わりと最小元も保存し $f(x) \land f(\lnot x) = f(0) = 0$ となる。補元の一意性により、 $f(\lnot x) = \lnot f(x)$ である。</p>
+        <p><strong>(2) の証明:</strong> $f$ は全単射であるから、任意の $u, v \in B$ に対して、 $x = f^{-1}(u), y = f^{-1}(v)$ が一意に存在する。 $f(x \lor y) = f(x) \lor f(y) = u \lor v$ の両辺に $f^{-1}$ を適用すると、 $f^{-1}(u \lor v) = x \lor y = f^{-1}(u) \lor f^{-1}(v)$ となる。交わり、最小元、最大元についても同様に保存されるため、 $f^{-1}$ は準同型写像である。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <div class="definition">
+        <strong>定義 4.3 (完備Bool代数)</strong><br>
+        Bool代数 $B$ の任意の部分集合 $S \subset B$ に対して、 $B$ における $S$ の最小上界（上限、 $\sup S$ ）が存在するとき、 $B$ は完備 (complete) であるという。
+    </div>
+
+    <p>位相空間 $X$ に対して、 $X$ のすべての clopen 集合からなる族 $\text{Clop}(X)$ は、 $\lor = \cup$ 、 $\land = \cap$ 、 $\lnot A = X \smallsetminus A$ 、 $0 = \varnothing$ 、 $1 = X$ とすることで Bool代数となる。</p>
+
+    <div class="theorem">
+        <strong>定理 4.4 (超不連結性と完備性の同値性)</strong><br>
+        $X$ を完全不連結コンパクトHausdorff空間とする。このとき、 $X$ が超不連結であることと、Bool代数 $\text{Clop}(X)$ が完備であることは同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>超不連結性 $\implies$ 完備性の証明:</strong><br>
+        $X$ が超不連結であると仮定し、 $\text{Clop}(X)$ の任意の部分集合を $\mathcal{A}$ とする。 $\mathcal{A}$ は clopen 集合の族であるから、その和集合 $U = \bigcup \mathcal{A}$ は $X$ の開集合である。 $X$ は超不連結であるから、定義により開集合 $U$ の閉包 $\overline{U}$ は開集合となる。閉包は常に閉集合であるから、 $\overline{U}$ は clopen 集合となり、 $\overline{U} \in \text{Clop}(X)$ である。</p>
+        <p>第一に、任意の $A \in \mathcal{A}$ に対して $A \subset \bigcup \mathcal{A} = U \subset \overline{U}$ であるため、 $\overline{U}$ は $\mathcal{A}$ の上界である。第二に、 $B \in \text{Clop}(X)$ を $\mathcal{A}$ の任意の上界とすると、 $U = \bigcup \mathcal{A} \subset B$ が成り立つ。 $B$ は閉集合でもあるため、閉包をとることで $\overline{U} \subset \overline{B} = B$ となる。したがって $\overline{U}$ は $\mathcal{A}$ の最小の上界であり、 $\sup \mathcal{A} = \overline{U}$ が存在する。ゆえに $\text{Clop}(X)$ は完備である。</p>
+
+        <p><strong>完備性 $\implies$ 超不連結性の証明:</strong><br>
+        逆に、 $\text{Clop}(X)$ が完備であると仮定する。 $X$ の任意の開集合 $U$ をとる。 $X$ は完全不連結コンパクトHausdorff空間（0次元空間）であるため、開集合 $U$ はある clopen 集合の族 $\mathcal{A} \subset \text{Clop}(X)$ の和集合として表される（ $U = \bigcup \mathcal{A}$ ）。</p>
+        <p> $\text{Clop}(X)$ は完備であるから、 $\mathcal{A}$ の上限 $V = \sup \mathcal{A} \in \text{Clop}(X)$ が存在する。我々は $V = \overline{U}$ であることを示す。上限の定義より、任意の $A \in \mathcal{A}$ に対して $A \subset V$ であるから $U = \bigcup \mathcal{A} \subset V$ となる。 $V$ は閉集合であるから $\overline{U} \subset \overline{V} = V$ を得る。</p>
+        <p>次に、 $V \subset \overline{U}$ を背理法によって示す。もし $V \subset \overline{U}$ でないと仮定すると、 $V \smallsetminus \overline{U}$ は空でない開集合である。 $X$ は0次元であるから、この中に空でない clopen 集合 $W \subset V \smallsetminus \overline{U}$ が存在する。 $V' = V \smallsetminus W$ とおくと、 $V'$ も clopen 集合である。 $W \subset V \smallsetminus \overline{U}$ より $W \cap U = \varnothing$ であるため、すべての $A \in \mathcal{A}$ に対して $A \cap W = \varnothing$ 、すなわち $A \subset V \smallsetminus W = V'$ が成り立つ。これは $V'$ が $\mathcal{A}$ の上界であることを意味する。しかし $W \neq \varnothing$ より $V' \subsetneq V$ であり、これは $V$ が「最小の」上界であることに矛盾する。したがって $V = \overline{U}$ が示された。 $V$ は clopen 集合であるから $\overline{U}$ は開集合であり、 $X$ は超不連結である。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <h2>5. Stoneの表現定理</h2>
+
+    <p>任意の Bool代数 $B$ に対して、ある完全不連結コンパクトHausdorff空間 $S(B)$ が一意に存在し、 $B \cong \text{Clop}(S(B))$ となる。これを Marshall Stone による Stoneの表現定理 と呼ぶ。証明のためにフィルターの概念を導入する。</p>
+
+    <div class="definition">
+        <strong>定義 5.1 (フィルターと超フィルター)</strong><br>
+        Bool代数 $B$ の空でない部分集合 $F \subset B$ が以下の条件を満たすとき、 $F$ を $B$ のフィルター (filter) と呼ぶ。
+        <ol>
+            <li> $0 \notin F$ である。</li>
+            <li> $a, b \in F$ ならば、 $a \land b \in F$ である。</li>
+            <li> $a \in F$ かつ $a \le b$ ならば、 $b \in F$ である。</li>
+        </ol>
+        包含関係 $\subset$ に関して極大であるフィルターを超フィルター (ultrafilter) と呼ぶ。超フィルター $F$ は、任意の $a \in B$ に対して「 $a \in F$ または $\lnot a \in F$ のいずれか一方が必ず成り立つ」という性質を持つ。
+    </div>
+
+    <div class="lemma">
+        <strong>補題 5.2 (超フィルターの存在)</strong><br>
+        有限交叉性（任意の有限部分集合 $\{a_1, \dots, a_n\}$ に対して $a_1 \land \dots \land a_n \neq 0$ となる性質）を持つ $B$ の任意の部分集合 $S$ に対して、 $S \subset F$ を満たす $B$ の超フィルター $F$ が存在する。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p> $S$ を含む $B$ のフィルター全体の集合を $\mathcal{P}$ とし、包含関係 $\subset$ で順序を入れる。 $F_0 = \{ x \in B \mid \text{ある } a_1, \dots, a_n \in S \text{ が存在して } a_1 \land \dots \land a_n \le x \}$ と定義すると、有限交叉性より $0 \notin F_0$ となり、 $F_0$ は $S$ を含む最小のフィルターであるから $\mathcal{P}$ は空ではない。 $\mathcal{P}$ 内の任意の全順序部分集合（チェイン） $\mathcal{C}$ に対して、 $F^* = \bigcup \mathcal{C}$ はフィルターの公理を満たし、 $\mathcal{C}$ の上界となる。Zorn の補題により、 $\mathcal{P}$ には極大元が存在し、これが求める超フィルターである。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <div class="definition">
+        <strong>定義 5.3 (Stone 空間)</strong><br>
+        Bool代数 $B$ の超フィルター全体の集合を $S(B)$ とする。各 $a \in B$ に対して、 $s(a) = \{ F \in S(B) \mid a \in F \}$ と定義する。族 $\mathcal{B} = \{ s(a) \mid a \in B \}$ を開基底とする位相を備えた空間 $S(B)$ を、 $B$ の Stone 空間 (Stone space) と呼ぶ。
+    </div>
+
+    <p>写像 $s$ は $s(0) = \varnothing$ 、 $s(1) = S(B)$ 、 $s(a \land b) = s(a) \cap s(b)$ 、 $s(a \lor b) = s(a) \cup s(b)$ 、 $s(\lnot a) = S(B) \smallsetminus s(a)$ を満たす。特にすべての $a \in B$ について $s(a)$ は clopen 集合である。</p>
+
+    <div class="theorem">
+        <strong>定理 5.4 (Stoneの表現定理)</strong><br>
+        任意の Bool代数 $B$ について、その Stone 空間 $S(B)$ は完全不連結コンパクトHausdorff空間である。また、写像 $s: B \to \text{Clop}(S(B))$ は、Bool代数としての同型写像となる。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong>ステップ1 (Hausdorff性):</strong> 相異なる超フィルター $F, G \in S(B)$ をとる。一般性を失わず、ある $a \in B$ について $a \in F$ かつ $a \notin G$ （すなわち $\lnot a \in G$ ）とする。このとき $F \in s(a)$ かつ $G \in s(\lnot a)$ であり、 $s(a) \cap s(\lnot a) = s(0) = \varnothing$ より $F$ と $G$ は互いに素な開集合で分離される。</p>
+        
+        <p><strong>ステップ2 (コンパクト性):</strong> $S(B)$ の任意の開被覆をとる。 $\mathcal{B}$ は開基底であるから、部分集合 $I \subset B$ を用いて $\mathcal{U} = \{ s(a) \mid a \in I \}$ が被覆になっていると仮定してよい。有限部分被覆を持たないと仮定すると、任意の有限部分集合 $\{a_1, \dots, a_n\} \subset I$ に対して $S(B) \neq \bigcup_{k=1}^n s(a_k)$ である。De Morganの法則より $\bigcap_{k=1}^n s(\lnot a_k) = s(\lnot a_1 \land \dots \land \lnot a_n) \neq \varnothing$ となり、 $\lnot a_1 \land \dots \land \lnot a_n \neq 0$ を得る。すなわち $S = \{ \lnot a \mid a \in I \}$ は有限交叉性を持つ。補題5.2より $S$ を含む超フィルター $F^*$ が存在する。すべての $a \in I$ について $\lnot a \in F^*$ 、すなわち $a \notin F^*$ となるため、 $F^*$ は $\mathcal{U}$ のどの開集合にも含まれず被覆の仮定に矛盾する。ゆえにコンパクトである。</p>
+        
+        <p><strong>ステップ3 (完全不連結性):</strong> 空間の構成より $S(B)$ の開基底は clopen 集合からなるため0次元である。定理2.2より、これは完全不連結コンパクトHausdorff空間であることを意味する。</p>
+        
+        <p><strong>ステップ4 ( $s$ の単射性):</strong> $a, b \in B$ を $a \neq b$ とする。 $a \not\le b$ と仮定すると $a \land \lnot b \neq 0$ である。単集合 $\{ a \land \lnot b \}$ は有限交叉性を持つため、これを含む超フィルター $F$ が存在する。 $a \in F$ かつ $\lnot b \in F$ となり、 $F \in s(a)$ かつ $F \notin s(b)$ となるため $s(a) \neq s(b)$ である。</p>
+        
+        <p><strong>ステップ5 ( $s$ の全射性):</strong> $U \in \text{Clop}(S(B))$ をとる。 $U$ は開集合より $U = \bigcup_{i \in \Lambda} s(a_i)$ と書ける。 $U$ は閉集合でありコンパクト空間の部分閉集合としてコンパクトであるため、有限部分被覆を持ち $U = \bigcup_{k=1}^m s(a_{i_k}) = s(a_{i_1} \lor \dots \lor a_{i_m})$ となる。 $a = a_{i_1} \lor \dots \lor a_{i_m}$ とおけば $s(a) = U$ であり全射である。</p>
+        
+        <p>以上より、 $S(B)$ は完全不連結コンパクトHausdorff空間であり、 $s$ は同型写像である。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <h2>6. 圏論的な定式化：Stone双対性</h2>
+
+    <p>Stone の表現定理は、圏論の言葉を用いることで「Bool代数の圏と Stone空間の圏の間の反変圏同値 (contravariant equivalence of categories)」として定式化される。</p>
+
+    <div class="definition">
+        <strong>定義 6.1 (圏 $\mathbf{Bool}$ と $\mathbf{Stone}$)</strong><br>
+        <ul>
+            <li>圏 $\mathbf{Bool}$ : Bool代数を対象とし、Bool代数の準同型写像を射とする圏。</li>
+            <li>圏 $\mathbf{Stone}$ : 完全不連結コンパクトHausdorff空間を対象とし、連続写像を射とする圏。</li>
+        </ul>
+    </div>
+
+    <p>反変関手 $C: \mathbf{Stone} \to \mathbf{Bool}$ を、 $C(X) = \text{Clop}(X)$ 、および連続写像 $f: X \to Y$ に対して $C(f): C(Y) \to C(X)$ を $C(f)(U) = f^{-1}(U)$ と定義する。 $f$ は連続であるため $f^{-1}(U)$ は clopen 集合となり、 $C(f)$ はwell-definedな準同型写像である。</p>
+
+    <p>反変関手 $S: \mathbf{Bool} \to \mathbf{Stone}$ を、 $S(B)$ を $B$ のStone空間、および準同型 $h: A \to B$ に対して $S(h): S(B) \to S(A)$ を $S(h)(F) = h^{-1}(F)$ と定義する。 $h^{-1}(F)$ は超フィルターの性質を満たし、逆像の計算により $S(h)^{-1}(s_A(a)) = s_B(h(a))$ となるため $S(h)$ は連続写像である。</p>
+
+    <div class="theorem">
+        <strong>定理 6.2 (Stone双対性)</strong><br>
+        関手 $C \circ S: \mathbf{Bool} \to \mathbf{Bool}$ は $\mathbf{Bool}$ 上の恒等関手と自然同型 (naturally isomorphic) であり、関手 $S \circ C: \mathbf{Stone} \to \mathbf{Stone}$ は $\mathbf{Stone}$ 上の恒等関手と自然同型である。したがって $\mathbf{Bool}^{op}$ と $\mathbf{Stone}$ は圏同値である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <p><strong> $C \circ S \cong \text{Id}_{\mathbf{Bool}}$ の証明:</strong><br>
+        各Bool代数 $B$ に対して、写像 $\eta_B: B \to C(S(B))$ を $\eta_B(a) = s(a)$ で定義する。定理5.4より $\eta_B$ は同型写像である。これが自然であること、すなわち任意の準同型 $h: A \to B$ に対して $C(S(h)) \circ \eta_A = \eta_B \circ h$ が成り立つことを示す。任意の $a \in A$ について左辺は $C(S(h))(s_A(a)) = S(h)^{-1}(s_A(a)) = s_B(h(a))$ となり、右辺は $\eta_B(h(a)) = s_B(h(a))$ となるため一致する。</p>
+
+        <p><strong> $S \circ C \cong \text{Id}_{\mathbf{Stone}}$ の証明:</strong><br>
+        各 Stone空間 $X$ に対して、写像 $\varepsilon_X: X \to S(C(X))$ を $\varepsilon_X(x) = \{ U \in \text{Clop}(X) \mid x \in U \}$ で定義する。 $\varepsilon_X(x)$ が極大フィルターであること（ $x$ が任意の $U$ と $X \smallsetminus U$ のいずれか一方に必ず属するため）は明らかである。</p>
+        <p> $\varepsilon_X$ の単射性: $x \neq y$ ならば $x$ と $y$ を分離する clopen 集合 $U$ が存在し（定理2.2）、 $U \in \varepsilon_X(x)$ かつ $U \notin \varepsilon_X(y)$ より従う。<br>
+        $\varepsilon_X$ の全射性: 任意の超フィルター $\mathcal{F} \in S(C(X))$ は有限交叉性を持つ閉集合族であり、コンパクト性より $\bigcap \mathcal{F} \neq \varnothing$ となる。 $x \in \bigcap \mathcal{F}$ をとれば $\mathcal{F} \subset \varepsilon_X(x)$ となり、極大性から一致する。<br>
+        連続性: 基本開集合 $s(U)$ に対して $\varepsilon_X^{-1}(s(U)) = \{ x \in X \mid U \in \varepsilon_X(x) \} = U$ であり、 $U$ は開集合であるため連続である。コンパクトHausdorff空間間の全単射連続写像は同相写像である。</p>
+        <p>自然性の確認: 任意の連続写像 $f: X \to Y$ に対して、 $S(C(f)) \circ \varepsilon_X = \varepsilon_Y \circ f$ を確認する。左辺を $x \in X$ で評価すると $C(f)^{-1}(\varepsilon_X(x)) = \{ V \in \text{Clop}(Y) \mid f^{-1}(V) \in \varepsilon_X(x) \} = \{ V \in \text{Clop}(Y) \mid f(x) \in V \} = \varepsilon_Y(f(x))$ となり右辺と一致する。</p>
+        <p>以上により圏同値性が示された。</p>
+        <div class="qed">$\blacksquare$</div>
+    </div>
+
+    <h2>7. 参考文献</h2>
+    <ul>
+        <li>Johnstone, P. T. (1982). <em>Stone Spaces</em>. Cambridge University Press. [<a href="https://www.cambridge.org/gb/universitypress/subjects/mathematics/logic-categories-and-sets/stone-spaces" target="_blank">Link</a>]</li>
+        <li>Engelking, R. (1989). <em>General Topology</em>. Heldermann Verlag. [<a href="https://www.heldermann.de/SSPM/SSPM06/sspm06.htm" target="_blank">Link</a>]</li>
+        <li>nLab contributors. "Stone duality". <em>nLab</em>. [<a href="https://ncatlab.org/nlab/show/Stone+duality" target="_blank">Link</a>]</li>
+        <li>Wikipedia contributors. "Stone's representation theorem". <em>Wikipedia, The Free Encyclopedia</em>. [<a href="https://en.wikipedia.org/wiki/Stone%27s_representation_theorem" target="_blank">Link</a>]</li>
+    </ul>
+
+</body>
+</html>

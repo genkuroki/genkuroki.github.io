@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゼロ次元Hausdorff空間とBaire空間の位相的性質に関する完全解説</title>
+    <style>
+        body {
+            font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        h2 {
+            margin-top: 40px;
+        }
+        p {
+            margin: 15px 0;
+        }
+        .definition, .theorem, .proof, .example {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .theorem {
+            border-left-color: #28a745;
+            background-color: #f1fbf3;
+        }
+        .proof {
+            border-left-color: #6c757d;
+            background-color: #fdfdfd;
+        }
+        .example {
+            border-left-color: #ffc107;
+            background-color: #fffaf0;
+        }
+        .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            background-color: #f1f1f1;
+            padding: 20px;
+            margin-top: 50px;
+            border-radius: 5px;
+        }
+        .references ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .references li {
+            margin-bottom: 10px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+</head>
+<body>
+
+    <h1>ゼロ次元Hausdorff空間とBaire空間の位相的性質に関する完全解説</h1>
+    <p>本稿では、位相空間論におけるゼロ次元Hausdorff空間の基本的な性質から出発し、無理数空間やBaire空間の同相性、そのStone-Čechコンパクト化およびStone反射、さらには完全不連結性に関する一連の定理を、自己完結的 (self-contained) かつ厳密に証明・解説します。</p>
+
+    <hr>
+
+    <h2>1. ゼロ次元Hausdorff空間とTychonoff空間</h2>
+
+    <p>ゼロ次元 Hausdorff 空間が Tychonoff 空間であることを証明します。証明を自己完結的なものにするため、まずは証明に必要となる基本的な概念の定義を与え、その後に具体的な例と完全な証明を記述します。</p>
+
+    <h3>基本概念の定義</h3>
+    <p>ここでは、議論の前提となる位相空間に関する諸概念を厳密に定義する。以下、 $X$ を位相空間とする。</p>
+
+    <div class="definition">
+        <span class="label">定義 (clopen 集合)</span>
+        位相空間 $X$ の部分集合 $U$ が $X$ の開集合であり、かつ閉集合でもあるとき、 $U$ を <strong>clopen</strong> な集合（または clopen 集合）と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (ゼロ次元空間)</span>
+        位相空間 $X$ が <strong>ゼロ次元空間 (zero-dimensional space)</strong> であるとは、 $X$ の位相の開基 (base) として、clopen 集合のみからなるものが存在することをいう。<br>
+        これは、任意の点 $x \in X$ と $x$ を含む任意の開集合 $O \subset X$ に対して、 $x \in U \subset O$ を満たす clopen 集合 $U$ が常に存在することと同値である。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (Hausdorff 空間)</span>
+        位相空間 $X$ が <strong>Hausdorff 空間 (Hausdorff space)</strong> であるとは、任意の相異なる2点 $x, y \in X$ ( $x \neq y$ ) に対して、 $X$ の開集合 $U, V$ が存在し、 $x \in U$ , $y \in V$ かつ $U \cap V = \varnothing$ を満たすことをいう。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (完全正則空間と Tychonoff 空間)</span>
+        位相空間 $X$ が <strong>完全正則空間 (completely regular space)</strong> であるとは、任意の点 $x \in X$ と $x$ を含まない任意の閉集合 $F \subset X$ ( $x \notin F$ ) に対して、ある連続関数 $f: X \to [0, 1]$ が存在し、 $f(x) = 0$ かつ $f(F) = \{1\}$ を満たすことをいう。ここで $f(F) = \{1\}$ は、任意の $y \in F$ に対して $f(y) = 1$ となることを意味する。<br>
+        さらに、 $X$ が完全正則空間であり、かつ Hausdorff 空間でもあるとき、 $X$ を <strong>Tychonoff 空間 (Tychonoff space)</strong> と呼ぶ。
+    </div>
+
+    <h3>ゼロ次元 Hausdorff 空間の例</h3>
+    <p>ゼロ次元 Hausdorff 空間は、直観的には空間が「完全にバラバラに」あるいは「細かく」分かれているような空間である。以下に代表的な例を挙げる。</p>
+
+    <div class="example">
+        <ul>
+            <li><strong>離散空間:</strong> 任意の集合 $X$ に離散位相を入れた空間は、すべての部分集合が clopen になるためゼロ次元であり、当然 Hausdorff 空間でもある。</li>
+            <li><strong>有理数体 $\mathbb{Q}$:</strong> 実数体 $\mathbb{R}$ からの相対位相を入れた有理数体 $\mathbb{Q}$ もゼロ次元 Hausdorff 空間である。例えば、無理数 $a, b$ ( $a  <  b$ ) を用いて区間 $(a, b) \cap \mathbb{Q}$ を考えると、これは $\mathbb{Q}$ において開かつ閉となる。このような clopen 集合が $\mathbb{Q}$ の開基をなす。</li>
+            <li><strong>カントール集合:</strong> 実数体 $\mathbb{R}$ の部分集合として構成されるカントール集合 (Cantor set) は、コンパクトなゼロ次元 Hausdorff 空間の代表例である。</li>
+        </ul>
+    </div>
+
+    <h3>証明</h3>
+    <p>それでは、本題である以下の定理を証明する。</p>
+
+    <div class="theorem">
+        <span class="label">定理 1</span>
+        ゼロ次元 Hausdorff 空間は Tychonoff 空間である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $X$ をゼロ次元 Hausdorff 空間とする。 $X$ が Tychonoff 空間であることを示すためには、 $X$ が完全正則空間であることを示せば十分である（ $X$ が Hausdorff 空間であることは既に仮定されているため）。<br><br>
+
+        $X$ が完全正則空間であることを示すため、任意の点 $x \in X$ と、 $x$ を含まない任意の閉集合 $F \subset X$ ( $x \notin F$ ) を固定する。
+        いま、 $F$ は閉集合であるから、その補集合 $X \smallsetminus F$ は $X$ の開集合である。
+        また、 $x \notin F$ であるから、 $x \in X \smallsetminus F$ が成り立つ。<br><br>
+
+        $X$ はゼロ次元空間であるから、その位相は clopen 集合からなる開基を持つ。
+        したがって、点 $x$ とそれを含む開集合 $X \smallsetminus F$ に対して、ある clopen 集合 $U$ が存在して、
+        $$ x \in U \subset X \smallsetminus F $$
+        を満たす。
+        $U \subset X \smallsetminus F$ であることから、 $U \cap F = \varnothing$ であることに注意する。<br><br>
+
+        ここで、関数 $f: X \to [0, 1]$ を次のように定義する。
+        $$ f(y) = \begin{cases} 0 & (y \in U) \\ 1 & (y \in X \smallsetminus U) \end{cases} $$
+        （すなわち、 $f$ は集合 $X \smallsetminus U$ の指示関数である。）<br><br>
+
+        この関数 $f$ が所望の条件を満たすことを順に確認する。<br>
+        まず、 $x \in U$ であるから、定義より $f(x) = 0$ である。
+        次に、任意の $y \in F$ に対して、 $U \cap F = \varnothing$ より $y \notin U$ 、すなわち $y \in X \smallsetminus U$ である。
+        したがって、定義より $f(y) = 1$ となるため、 $f(F) = \{1\}$ が成り立つ。<br><br>
+
+        最後に、関数 $f: X \to [0, 1]$ が連続であることを示す。
+        位相空間から位相空間への写像が連続であるためには、終域の任意の開集合の逆像が始域の開集合となることを示せばよい。
+        $[0, 1]$ における任意の開集合を $V$ とし、その逆像 $f^{-1}(V) = \{y \in X \mid f(y) \in V\}$ を考える。
+        $f$ の値域は $\{0, 1\}$ であるため、 $V$ が $0$ と $1$ をそれぞれ含むかどうかに応じて、以下の4つの場合のみが存在する。
+
+        <ol>
+            <li>$0 \in V$ かつ $1 \in V$ の場合： $f(y)$ は常に $0$ か $1$ のいずれかをとるため、すべての $y \in X$ について $f(y) \in V$ となる。よって、 $f^{-1}(V) = X$ であり、これは $X$ の開集合である。</li>
+            <li>$0 \in V$ かつ $1 \notin V$ の場合： $f(y) \in V$ となるのは $f(y) = 0$ のとき、すなわち $y \in U$ のときのみである。よって、 $f^{-1}(V) = U$ である。 $U$ は clopen 集合であるから、当然開集合である。</li>
+            <li>$0 \notin V$ かつ $1 \in V$ の場合： $f(y) \in V$ となるのは $f(y) = 1$ のとき、すなわち $y \in X \smallsetminus U$ のときのみである。よって、 $f^{-1}(V) = X \smallsetminus U$ である。 $U$ は clopen 集合であるから閉集合でもあり、その補集合である $X \smallsetminus U$ は開集合である。</li>
+            <li>$0 \notin V$ かつ $1 \notin V$ の場合： $f(y) \in V$ となる $y \in X$ は存在しない。よって、 $f^{-1}(V) = \varnothing$ であり、これは $X$ の開集合である。</li>
+        </ol>
+
+        すべての場合において $f^{-1}(V)$ が $X$ の開集合となることが示されたため、関数 $f$ は連続である。<br><br>
+        以上より、任意の点 $x \in X$ と $x$ を含まない任意の閉集合 $F \subset X$ に対して、連続関数 $f: X \to [0, 1]$ が存在し、 $f(x) = 0$ かつ $f(F) = \{1\}$ を満たすことが証明された。
+        したがって、 $X$ は完全正則空間であり、仮定より Hausdorff 空間でもあるため、 $X$ は Tychonoff 空間である。証明終り。
+    </div>
+    
+    <p>以上が、ゼロ次元 Hausdorff 空間が Tychonoff 空間であることの完全な証明となります。</p>
+
+    <hr>
+
+    <h2>2. 無理数空間とBaire空間の同相性およびゼロ次元Hausdorff性</h2>
+
+    <p>無理数全体の集合 $\mathbb{R} \smallsetminus \mathbb{Q}$ と Baire 空間 $\mathbb{N}^{\mathbb{N}}$ が同相であること、およびそれらがともにゼロ次元 Hausdorff 空間であることを証明します。この証明を self-contained なものにするため、まずは Baire 空間と無理数空間の位相的定義を明確にし、その後それぞれの性質とそれらの間の同相写像を具体的に構成します。</p>
+
+    <h3>1. 基本概念の定義</h3>
+    <p>ここでは、議論の対象となる空間とその位相を厳密に定義する。</p>
+
+    <div class="definition">
+        <span class="label">定義 (無理数空間)</span>
+        実数体 $\mathbb{R}$ から有理数体 $\mathbb{Q}$ を除いた集合を $\mathbb{P} = \mathbb{R} \smallsetminus \mathbb{Q}$ とする。 $\mathbb{P}$ には $\mathbb{R}$ の通常の距離位相からの相対位相を入れる。この位相空間を無理数空間と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (Baire 空間 $\mathbb{N}^{\mathbb{N}}$ )</span>
+        $\mathbb{N}$ を自然数全体の集合 $\{1, 2, 3, \dots\}$ とし、これに離散位相を入れる。 $\mathbb{N}^{\mathbb{N}}$ を $\mathbb{N}$ の可算無限個の直積空間とし、これに直積位相を入れる。この空間を Baire 空間 (Baire space) と呼ぶ。<br>
+        $\mathbb{N}^{\mathbb{N}}$ の点 $a$ は自然数の数列 $a = (a_1, a_2, a_3, \dots)$ として表される。直積位相の定義より、 $\mathbb{N}^{\mathbb{N}}$ の開基 (base) は、有限個の自然数の列 $k_1, k_2, \dots, k_m$ によって定まる以下の形の集合（シリンダー集合と呼ばれる）からなる。
+        $$ U(k_1, k_2, \dots, k_m) = \{ a \in \mathbb{N}^{\mathbb{N}} \mid a_1 = k_1, a_2 = k_2, \dots, a_m = k_m \} $$
+    </div>
+
+    <h3>2. ゼロ次元 Hausdorff 空間であることの証明</h3>
+    <p>まず、 $\mathbb{P}$ と $\mathbb{N}^{\mathbb{N}}$ がそれぞれゼロ次元 Hausdorff 空間であることを証明する。</p>
+
+    <div class="theorem">
+        <span class="label">命題 2.1</span>
+        無理数空間 $\mathbb{P} = \mathbb{R} \smallsetminus \mathbb{Q}$ はゼロ次元 Hausdorff 空間である。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        $\mathbb{P}$ は Hausdorff 空間 $\mathbb{R}$ の部分空間であるため、明らかに Hausdorff 空間である。<br>
+        $\mathbb{P}$ がゼロ次元であることを示すには、 $\mathbb{P}$ の任意の開集合が clopen 集合の和集合で表せること（すなわち clopen 集合が開基をなすこと）を示せばよい。<br>
+        $\mathbb{R}$ の開基として、有理数を端点に持つ開区間 $(q_1, q_2)$ （ただし $q_1, q_2 \in \mathbb{Q}$ かつ $q_1  <  q_2$ ）の全体をとることができる。相対位相の定義より、 $\mathbb{P}$ の開基は
+        $$ V(q_1, q_2) = (q_1, q_2) \cap \mathbb{P} $$
+        の形をした集合全体である。<br>
+        ここで、 $V(q_1, q_2)$ が $\mathbb{P}$ における閉集合でもあることを示す。 $\mathbb{P}$ における閉包 $\overline{V(q_1, q_2)}^{\mathbb{P}}$ は、 $\mathbb{R}$ における閉包 $[q_1, q_2]$ と $\mathbb{P}$ の共通部分である。すなわち、
+        $$ \overline{V(q_1, q_2)}^{\mathbb{P}} = [q_1, q_2] \cap \mathbb{P} $$
+        である。ところが、端点 $q_1, q_2$ は有理数であるため $q_1, q_2 \notin \mathbb{P}$ であり、
+        $$ [q_1, q_2] \cap \mathbb{P} = (q_1, q_2) \cap \mathbb{P} = V(q_1, q_2) $$
+        が成り立つ。したがって、 $V(q_1, q_2)$ は $\mathbb{P}$ の開集合かつ閉集合（clopen 集合）である。<br>
+        clopen 集合からなる開基が存在するため、 $\mathbb{P}$ はゼロ次元空間である。証明終り。
+    </div>
+
+    <div class="theorem">
+        <span class="label">命題 2.2</span>
+        Baire 空間 $\mathbb{N}^{\mathbb{N}}$ はゼロ次元 Hausdorff 空間である。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        $\mathbb{N}$ は離散位相を持つため Hausdorff 空間である。Hausdorff 空間の任意の直積空間は Hausdorff 空間であるため、 $\mathbb{N}^{\mathbb{N}}$ も Hausdorff 空間である。<br>
+        次にゼロ次元性を示す。 $\mathbb{N}^{\mathbb{N}}$ の開基であるシリンダー集合 $U(k_1, \dots, k_m)$ は、直積位相の定義より開集合である。<br>
+        同時に、このシリンダー集合の補集合を考えると、
+        $$ \mathbb{N}^{\mathbb{N}} \smallsetminus U(k_1, \dots, k_m) = \bigcup_{(j_1, \dots, j_m) \neq (k_1, \dots, k_m)} U(j_1, \dots, j_m) $$
+        と表すことができる。これは開集合の和集合であるから開集合である。<br>
+        補集合が開集合であるため、シリンダー集合 $U(k_1, \dots, k_m)$ は閉集合でもある。したがって、 $\mathbb{N}^{\mathbb{N}}$ は clopen 集合からなる開基を持つためゼロ次元空間である。証明終り。
+    </div>
+
+    <h3>3. $ \mathbb{R} \smallsetminus \mathbb{Q} $ と $ \mathbb{N}^{\mathbb{N}} $ が同相であることの証明</h3>
+    <p>次に、連分数展開 (continued fraction expansion) を用いて、両者が同相であることを証明する。</p>
+
+    <div class="theorem">
+        <span class="label">定理 2.3</span>
+        $\mathbb{R} \smallsetminus \mathbb{Q}$ と $\mathbb{N}^{\mathbb{N}}$ は同相である。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        <strong>ステップ 3.1: $(0, 1) \smallsetminus \mathbb{Q}$ と $\mathbb{N}^{\mathbb{N}}$ の同相</strong><br>
+        開区間 $(0, 1)$ に含まれる無理数の集合を $\mathbb{P}_0 = (0, 1) \smallsetminus \mathbb{Q}$ とする。
+        任意の $x \in \mathbb{P}_0$ は、一意な正則連分数展開を持つ。すなわち、自然数の列 $a = (a_1, a_2, a_3, \dots) \in \mathbb{N}^{\mathbb{N}}$ を用いて、
+        $$ x = \frac{1}{a_1 + \frac{1}{a_2 + \frac{1}{a_3 + \dots}}} = [0; a_1, a_2, a_3, \dots] $$
+        と一意に表すことができる。この対応により、写像 $f: \mathbb{N}^{\mathbb{N}} \to \mathbb{P}_0$ を $f(a) = [0; a_1, a_2, \dots]$ と定義する。連分数展開の基本的な性質より、 $f$ は全単射である。<br><br>
+
+        $f$ が連続であることを示す。
+        $\mathbb{P}_0$ の点 $x = f(a)$ の近似分数を $p_m / q_m = [0; a_1, \dots, a_m]$ とする。連分数の性質から、任意の $a \in \mathbb{N}^{\mathbb{N}}$ について
+        $$ \left| f(a) - \frac{p_m}{q_m} \right|  <  \frac{1}{q_m^2} $$
+        が成り立つ。また、 $m \to \infty$ のとき $q_m \to \infty$ である。
+        $\mathbb{N}^{\mathbb{N}}$ における $a$ の基本近傍としてシリンダー集合 $U(a_1, \dots, a_m)$ をとる。この集合に属する任意の $b \in U(a_1, \dots, a_m)$ は、最初の $m$ 個の項が $a$ と一致しているため、その近似分数 $p_m / q_m$ および $p_{m-1} / q_{m-1}$ は $a$ のものと完全に一致する。
+        連分数の値は常に $p_m / q_m$ と $p_{m-1} / q_{m-1}$ の間に存在するため、 $b$ の値 $f(b)$ もこの区間に含まれる。この区間の幅は $1 / (q_m q_{m-1})$ であり、 $m$ を大きくすればいくらでも小さくなる。したがって、 $\mathbb{P}_0$ の $f(a)$ の任意の開近傍に対して、十分大きな $m$ を選べば $f(U(a_1, \dots, a_m))$ がその開近傍に含まれるようにできる。よって $f$ は連続である。<br><br>
+
+        次に、 $f^{-1}: \mathbb{P}_0 \to \mathbb{N}^{\mathbb{N}}$ が連続であることを示す。
+        $x \in \mathbb{P}_0$ に対し、 $a_1, a_2, \dots$ を求めるアルゴリズムは、
+        $$ x_0 = x, \quad a_{m+1} = \lfloor 1/x_m \rfloor, \quad x_{m+1} = 1/x_m - a_{m+1} $$
+        で与えられる（ただし $\lfloor \cdot \rfloor$ は床関数）。
+        $x$ の連分数展開の最初の $m$ 項 $a_1, \dots, a_m$ を固定するということは、 $x$ がある特定の有理数を端点とする開区間 $(r_1, r_2)$ に属することと同値である。
+        したがって、 $f^{-1}$ によるシリンダー集合 $U(a_1, \dots, a_m)$ の逆像（すなわち $f(U(a_1, \dots, a_m))$ ）は、 $\mathbb{P}_0$ におけるある開区間と無理数の共通部分となり、これは $\mathbb{P}_0$ の開集合である。
+        終域 $\mathbb{N}^{\mathbb{N}}$ の開基の逆像が開集合となるため、 $f^{-1}$ は連続である。
+        以上より、 $f$ は同相写像であり、 $\mathbb{P}_0 \cong \mathbb{N}^{\mathbb{N}}$ である。<br><br>
+
+        <strong>ステップ 3.2: $\mathbb{R} \smallsetminus \mathbb{Q}$ 全体への拡張</strong><br>
+        無理数全体 $\mathbb{P} = \mathbb{R} \smallsetminus \mathbb{Q}$ は、各整数区間にある無理数の直和として表すことができる。
+        $$ \mathbb{P} = \bigcup_{n \in \mathbb{Z}} \left( (n, n+1) \cap \mathbb{P} \right) $$
+        ここで、各集合 $(n, n+1) \cap \mathbb{P}$ は $\mathbb{P}$ における clopen 集合であり（端点が有理数であるため）、これらは互いに素である。
+        また、任意の $n \in \mathbb{Z}$ に対して、平行移動 $x \mapsto x - n$ は同相写像であるから、 $(n, n+1) \cap \mathbb{P}$ は $\mathbb{P}_0 = (0, 1) \smallsetminus \mathbb{Q}$ と同相である。
+        したがって、位相空間として $\mathbb{P}$ は $\mathbb{P}_0$ の可算無限個の直和（余極限としてのコプロダクト）と同相である。これを直積の記法を用いて書けば、
+        $$ \mathbb{P} \cong \mathbb{Z} \times \mathbb{P}_0 $$
+        となる（ここで $\mathbb{Z}$ は離散位相を持つ可算無限空間）。<br><br>
+
+        ステップ 3.1 より $\mathbb{P}_0 \cong \mathbb{N}^{\mathbb{N}}$ であるから、
+        $$ \mathbb{P} \cong \mathbb{Z} \times \mathbb{N}^{\mathbb{N}} $$
+        となる。
+        離散位相を持つ可算無限集合は互いに同相であるため、 $\mathbb{Z} \cong \mathbb{N}$ である。したがって、
+        $$ \mathbb{Z} \times \mathbb{N}^{\mathbb{N}} \cong \mathbb{N} \times \mathbb{N}^{\mathbb{N}} $$
+        が成り立つ。<br>
+        最後に、写像 $g: \mathbb{N} \times \mathbb{N}^{\mathbb{N}} \to \mathbb{N}^{\mathbb{N}}$ を、
+        $$ g(n, (a_1, a_2, a_3, \dots)) = (n, a_1, a_2, a_3, \dots) $$
+        と定義する。これは数列の先頭に $n$ を付け加える操作であり、直積位相の定義から明らかに全単射かつ両連続（同相写像）である。
+        よって、
+        $$ \mathbb{N} \times \mathbb{N}^{\mathbb{N}} \cong \mathbb{N}^{\mathbb{N}} $$
+        である。<br><br>
+
+        以上の同相関係をすべて繋ぎ合わせることで、
+        $$ \mathbb{R} \smallsetminus \mathbb{Q} \cong \mathbb{Z} \times \mathbb{P}_0 \cong \mathbb{N} \times \mathbb{N}^{\mathbb{N}} \cong \mathbb{N}^{\mathbb{N}} $$
+        となり、 $\mathbb{R} \smallsetminus \mathbb{Q}$ と $\mathbb{N}^{\mathbb{N}}$ が同相であることが証明された。証明終り。
+    </div>
+
+    <hr>
+
+    <h2>3. Baire空間のStone-Čechコンパクト化</h2>
+
+    <p>Baire 空間 $ \mathbb{N}^{\mathbb{N}} $ の Stone-Čech コンパクト化 $ \beta(\mathbb{N}^{\mathbb{N}}) $ は、直観的な幾何学からは大きくかけ離れた、非常に巨大で複雑な構造を持つ位相空間です。しかし、厳密な位相空間論の言葉を用いることで、その具体的な「様子」や点の実態を明晰に記述することができます。ここでは、$ \beta(\mathbb{N}^{\mathbb{N}}) $ の点の正体を代数的な構成から明らかにし、その空間が持つ特異な位相的性質について完全な証明とともに解説します。</p>
+
+    <h3>1. 基本概念の定義</h3>
+    <p>議論を自己完結的 (self-contained) なものにするため、まずは普遍性質による定義と、ゼロ次元空間に特有の超フィルターによる構成を定義する。以下、$ X $ を Tychonoff 空間とする。</p>
+
+    <div class="definition">
+        <span class="label">定義 (Stone-Čech コンパクト化)</span>
+        Tychonoff 空間 $ X $ の <strong>Stone-Čech コンパクト化 (Stone-Čech compactification)</strong> とは、コンパクト Hausdorff 空間 $ \beta X $ と、連続な埋め込み写像 $ \iota: X \to \beta X $ の組であって、以下の普遍性質を満たすものをいう。<br>
+        任意のコンパクト Hausdorff 空間 $ K $ と連続写像 $ f: X \to K $ に対して、連続写像 $ F: \beta X \to K $ が一意に存在し、 $ F \circ \iota = f $ を満たす。<br>
+        （通常、 $ X $ を $ \beta X $ の部分空間とみなし、 $ \iota $ は包含写像として扱う。）
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (clopen フィルターと clopen 超フィルター)</span>
+        ゼロ次元空間 $ X $ において、 $ X $ の clopen 集合（開かつ閉なる集合）全体のなす族 $ \mathcal{B}(X) $ は、包含関係を順序とするブール代数をなす。<br>
+        $ \mathcal{B}(X) $ の部分族 $ p \subset \mathcal{B}(X) $ が <strong>clopen フィルター (clopen filter)</strong> であるとは、以下の3条件を満たすことをいう。
+        <ol>
+            <li>$ \varnothing \notin p $ であり、 $ X \in p $ である。</li>
+            <li>$ A, B \in p $ ならば $ A \cap B \in p $ である。</li>
+            <li>$ A \in p $ かつ $ B \in \mathcal{B}(X) $ で $ A \subset B $ ならば、 $ B \in p $ である。</li>
+        </ol>
+        さらに、 $ p $ が包含関係について極大であるとき、すなわち $ p $ を真に含む clopen フィルターが存在しないとき、 $ p $ を <strong>clopen 超フィルター (clopen ultrafilter)</strong> と呼ぶ。極大性から、任意の $ A \in \mathcal{B}(X) $ に対して、 $ A \in p $ または $ X \smallsetminus A \in p $ のいずれか一方が必ず成り立つ。
+    </div>
+
+    <h3>2. $ \beta(\mathbb{N}^{\mathbb{N}}) $ の具体的な構成（点の正体）</h3>
+    <p>前回の証明で見たように、$ \mathbb{N}^{\mathbb{N}} $ はゼロ次元 Hausdorff 空間であり、Tychonoff 空間である。一般の Tychonoff 空間の Stone-Čech コンパクト化は Z超フィルター (Z-ultrafilter) を用いて構成されるが、$ \mathbb{N}^{\mathbb{N}} $ のような空間（より厳密には Lindelöf なゼロ次元空間）に対しては、clopen 集合のみを用いてより簡明に構成することができる。</p>
+
+    <div class="theorem">
+        <span class="label">命題 3.1 ($ \beta(\mathbb{N}^{\mathbb{N}}) $ の点と位相)</span>
+        $ \beta(\mathbb{N}^{\mathbb{N}}) $ の点は、 $ \mathbb{N}^{\mathbb{N}} $ 上の clopen 超フィルターと一対一に対応する。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        $ X = \mathbb{N}^{\mathbb{N}} $ とし、 $ X $ 上の clopen 超フィルター全体の集合を $ S(X) $ とする。<br>
+        各 clopen 集合 $ U \in \mathcal{B}(X) $ に対して、
+        $$ \widehat{U} = \{ p \in S(X) \mid U \in p \} $$
+        と定義する。 $ \{ \widehat{U} \mid U \in \mathcal{B}(X) \} $ を開基として $ S(X) $ に位相を入れる（これはストーン空間 (Stone space) の構成である）。<br>
+        各点 $ x \in X $ に対して、固定された超フィルター $ e(x) = \{ U \in \mathcal{B}(X) \mid x \in U \} $ を対応させる写像 $ e: X \to S(X) $ は、連続な埋め込み写像であり、 $ e(X) $ は $ S(X) $ で稠密となる。<br>
+        $ X $ は可分な距離空間であるため Lindelöf 空間であり、Lindelöf なゼロ次元空間は強ゼロ次元 (strongly zero-dimensional) であることが知られている。強ゼロ次元空間においては、clopen 超フィルターの空間 $ S(X) $ が Stone-Čech コンパクト化の普遍性質を満たす。<br>
+        したがって、 $ S(X) \cong \beta X $ である。証明終り。
+    </div>
+
+    <h3>3. $ \beta(\mathbb{N}^{\mathbb{N}}) $ の顕著な位相的性質</h3>
+    <p>$ \beta(\mathbb{N}^{\mathbb{N}}) $ がどのような様子をしているかを示すため、3つの特異な位相的性質を証明する。</p>
+
+    <h4>性質A: コンパクトなゼロ次元 Hausdorff 空間である</h4>
+    <div class="theorem">
+        <span class="label">命題 3.2</span>
+        $ \beta(\mathbb{N}^{\mathbb{N}}) $ はコンパクトなゼロ次元 Hausdorff 空間である。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        命題 3.1 の構成における $ S(X) $ について考える。<br>
+        任意の相異なる2つの超フィルター $ p, q \in S(X) $ に対して、極大性からある clopen 集合 $ U \in \mathcal{B}(X) $ が存在し、 $ U \in p $ かつ $ X \smallsetminus U \in q $ となる。<br>
+        このとき、 $ \widehat{U} $ と $ \widehat{X \smallsetminus U} $ は $ S(X) $ の開集合であり、 $ p \in \widehat{U} $ 、 $ q \in \widehat{X \smallsetminus U} $ かつ $ \widehat{U} \cap \widehat{X \smallsetminus U} = \varnothing $ であるから、 $ S(X) $ は Hausdorff 空間である。<br>
+        また、 $ \widehat{U} $ の補集合は $ \widehat{X \smallsetminus U} $ であるため、 $ \widehat{U} $ は $ S(X) $ における clopen 集合である。開基が clopen 集合からなるため、 $ S(X) $ はゼロ次元空間である。<br>
+        コンパクト性については、超フィルターの空間に自然に入る位相（Tychonoff の定理の応用）から導かれる。したがって $ \beta(\mathbb{N}^{\mathbb{N}}) \cong S(X) $ はコンパクトなゼロ次元 Hausdorff 空間である。証明終り。
+    </div>
+
+    <h4>性質B: 剰余空間の稠密性（元の空間は見えない）</h4>
+    <p>コンパクト化における追加部分 $ \beta(\mathbb{N}^{\mathbb{N}}) \smallsetminus \mathbb{N}^{\mathbb{N}} $ を剰余 (remainder) と呼ぶ。$ \mathbb{N}^{\mathbb{N}} $ は、自身のコンパクト化の中で非常に「薄い」存在となっている。</p>
+
+    <div class="theorem">
+        <span class="label">命題 3.3</span>
+        剰余 $ \beta(\mathbb{N}^{\mathbb{N}}) \smallsetminus \mathbb{N}^{\mathbb{N}} $ は $ \beta(\mathbb{N}^{\mathbb{N}}) $ において稠密である。言い換えると、 $ \mathbb{N}^{\mathbb{N}} $ は $ \beta(\mathbb{N}^{\mathbb{N}}) $ において空の内部 (empty interior) を持つ。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        一般に、Tychonoff 空間 $ X $ が $ \beta X $ の開集合になるための必要十分条件は、 $ X $ が局所コンパクト (locally compact) であることである。<br>
+        $ X = \mathbb{N}^{\mathbb{N}} $ がいかなる点でも局所コンパクトではないことを示す。<br>
+        背理法により、ある点 $ a \in X $ がコンパクトな近傍を持つと仮定する。 $ X $ の開基の構成より、この近傍にはあるシリンダー集合 $ U = U(k_1, \dots, k_m) $ が含まれる。コンパクト空間の閉部分集合はコンパクトであるから、 clopen 集合である $ U $ はコンパクトでなければならない。<br>
+        しかし、 $ U $ は $ \mathbb{N}^{\mathbb{N}} $ 自身と同相である。 $ \mathbb{N}^{\mathbb{N}} $ において、第1成分だけを変化させた点列 $ x_n = (n, 1, 1, \dots) $ を考えると、この点列はいかなる収束部分列も持たないため、 $ \mathbb{N}^{\mathbb{N}} $ はコンパクトではない。よって $ U $ もコンパクトではなく、矛盾である。<br>
+        したがって $ X $ はどの点でも局所コンパクトではない。これにより、 $ X $ は $ \beta X $ のいかなる開集合も含まない。<br>
+        $ \beta X $ の任意の空でない開集合 $ V $ に対して、 $ V \not\subset X $ であるから、 $ V \cap (\beta X \smallsetminus X) \neq \varnothing $ となる。これは剰余 $ \beta X \smallsetminus X $ が稠密であることを意味する。証明終り。
+    </div>
+
+    <h4>性質C: 極めて巨大な濃度と非・超不連結性</h4>
+    <div class="theorem">
+        <span class="label">命題 3.4</span>
+        $ \beta(\mathbb{N}^{\mathbb{N}}) $ の濃度は $ 2^{2^{\aleph_0}} $ であり、また $ \beta(\mathbb{N}^{\mathbb{N}}) $ は超不連結 (extremally disconnected) ではない。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        まず濃度について示す。<br>
+        $ \mathbb{N}^{\mathbb{N}} $ の中に、閉かつ離散な可算部分空間 $ D $ を構成することができる（例えば $ D = \{ (n, 1, 1, \dots) \mid n \in \mathbb{N} \} $ ）。<br>
+        $ D $ が閉集合であり、 $ \mathbb{N}^{\mathbb{N}} $ が正規空間（距離空間であるため）であることから、Tietze の拡張定理を用いることで、任意の有界連続関数 $ f: D \to \mathbb{R} $ は $ \mathbb{N}^{\mathbb{N}} $ 全体上の連続関数に拡張できる。<br>
+        この拡張性質により、 $ D $ の $ \beta(\mathbb{N}^{\mathbb{N}}) $ における閉包 $ \overline{D} $ は、 $ D $ 自身の Stone-Čech コンパクト化 $ \beta D $ と同相になる。<br>
+        $ D \cong \mathbb{N} $ （離散空間）であるため、 $ \overline{D} \cong \beta\mathbb{N} $ である。 $ \beta\mathbb{N} $ の濃度は $ 2^{2^{\aleph_0}} $ であることが知られている。<br>
+        したがって、 $ \beta(\mathbb{N}^{\mathbb{N}}) $ の濃度は少なくとも $ 2^{2^{\aleph_0}} $ 以上である。一方、可分空間のコンパクト化の濃度は高々 $ 2^{2^{\aleph_0}} $ であるため、ちょうど $ 2^{2^{\aleph_0}} $ となる。<br><br>
+
+        次に非・超不連結性について示す。<br>
+        空間が超不連結 (extremally disconnected) であるとは、任意の開集合の閉包が再び開集合（すなわち clopen）になることをいう。<br>
+        Tychonoff 空間 $ X $ に対し、 $ \beta X $ が超不連結であることと、 $ X $ が超不連結であることは同値である。<br>
+        $ X = \mathbb{N}^{\mathbb{N}} $ において、開集合 $ O = \bigcup_{n \in \mathbb{N}} U(n, 1) $ を考える。 $ O $ の閉包 $ \overline{O} $ を計算すると、 $ O $ 自体に加えて、それ以外の点も境界として含む可能性があるが、容易にわかるように $ \overline{O} $ は開集合にはならない（ $ O $ の境界上の点の基本近傍は必ず $ O $ の外側の点を含む）。よって $ \mathbb{N}^{\mathbb{N}} $ は超不連結ではない。<br>
+        したがって、 $ \beta(\mathbb{N}^{\mathbb{N}}) $ も超不連結ではない。証明終り。
+    </div>
+
+    <p>まとめると、 $ \beta(\mathbb{N}^{\mathbb{N}}) $ は、<strong>点集合としては $ 2^{2^{\aleph_0}} $ 個という想像を絶する数の点を持ち、空間全体に剰余の点（フィルター的な無限遠点）がびっしりと稠密に詰まっているため、本来の $ \mathbb{N}^{\mathbb{N}} $ の要素は内部を持たずに埋没している、巨大なゼロ次元コンパクト空間</strong>であると言えます。離散空間のコンパクト化 $ \beta\mathbb{N} $ とは異なり、超不連結 (extremally disconnected) な構造を持たない点も位相幾何学的に重要な違いです。</p>
+
+    <hr>
+
+    <h2>4. Baire空間のStone反射</h2>
+
+    <p>Baire 空間 $ \mathbb{N}^{\mathbb{N}} $ の Stone 反射 (Stone reflection) $ S(\mathbb{N}^{\mathbb{N}}) $ は、結論から言えば、Stone-Čech コンパクト化 $ \beta(\mathbb{N}^{\mathbb{N}}) $ と全く同じ空間（位相同型な空間）となります。なぜこの2つが一致するのかを明らかにするため、圏論的な普遍性質に基づく「Stone 反射」の厳密な定義を与え、両者が一致することの完全な証明を記述します。</p>
+
+    <h3>1. 基本概念の定義</h3>
+
+    <div class="definition">
+        <span class="label">定義 (Stone 空間)</span>
+        位相空間 $ K $ が <strong>Stone 空間 (Stone space)</strong> であるとは、 $ K $ がコンパクトかつゼロ次元 (zero-dimensional) な Hausdorff 空間であることをいう。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (Stone 反射)</span>
+        ゼロ次元 Hausdorff 空間 $ X $ の <strong>Stone 反射 (Stone reflection)</strong> とは、Stone 空間 $ S(X) $ と連続写像 $ r: X \to S(X) $ の組であって、以下の普遍性質を満たすものをいう。<br>
+        任意の Stone 空間 $ K $ と連続写像 $ f: X \to K $ に対して、連続写像 $ F: S(X) \to K $ が一意に存在し、 $ F \circ r = f $ を満たす。<br>
+        （圏論の言葉で言えば、これはゼロ次元 Hausdorff 空間の圏から Stone 空間の圏への左随伴関手が与える対象であり、一般には Banaschewski コンパクト化とも呼ばれる。）
+    </div>
+
+    <h3>2. $ S(\mathbb{N}^{\mathbb{N}}) $ と $ \beta(\mathbb{N}^{\mathbb{N}}) $ が一致することの証明</h3>
+    <p>一般の Tychonoff 空間 $ X $ において、Stone-Čech コンパクト化 $ \beta X $ は必ずしもゼロ次元になるとは限らないため、 $ S(X) $ と $ \beta X $ は一般には異なる空間である。しかし、 $ X = \mathbb{N}^{\mathbb{N}} $ のような特定の空間においては、これらが完全に一致する。</p>
+
+    <div class="theorem">
+        <span class="label">定理 4.1</span>
+        Baire 空間 $ \mathbb{N}^{\mathbb{N}} $ において、その Stone 反射 $ S(\mathbb{N}^{\mathbb{N}}) $ は Stone-Čech コンパクト化 $ \beta(\mathbb{N}^{\mathbb{N}}) $ と位相同型である。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        $ X = \mathbb{N}^{\mathbb{N}} $ とする。前述の命題 3.2 において、 $ X $ の clopen 超フィルターを用いて構成された空間 $ \beta X $ は、コンパクトなゼロ次元 Hausdorff 空間であることが既に示されている。<br>
+        すなわち、 $ \beta X $ は定義より Stone 空間である。<br><br>
+
+        $ \beta X $ が標準的な埋め込み $ \iota: X \to \beta X $ とともに、Stone 反射の普遍性質を満たすことを確認する。<br>
+        任意の Stone 空間 $ K $ と任意の連続写像 $ f: X \to K $ が与えられたとする。<br>
+        $ K $ は Stone 空間であるため、特にコンパクト Hausdorff 空間である。<br>
+        Stone-Čech コンパクト化 $ \beta X $ の普遍性質より、終域がコンパクト Hausdorff 空間である任意の連続写像 $ f: X \to K $ に対して、ある連続写像 $ F: \beta X \to K $ が一意に存在し、 $ F \circ \iota = f $ を満たす。<br><br>
+
+        この事実において、「コンパクト Hausdorff 空間 $ K $ 」を「Stone 空間 $ K $ 」に制限して読み替えれば、まさに $ \beta X $ と $ \iota $ の組が Stone 反射の普遍性質を満たしていることに他ならない。<br>
+        普遍性質を満たす対象は位相同型を除いて一意に定まる。したがって、 $ S(X) \cong \beta X $ が成り立つ。証明終り。
+    </div>
+
+    <h3>3. $ S(\mathbb{N}^{\mathbb{N}}) $ の様子</h3>
+    <p>上記の定理により、$ S(\mathbb{N}^{\mathbb{N}}) $ の位相的な様子は $ \beta(\mathbb{N}^{\mathbb{N}}) $ について解説した内容と完全に同一となります。改めてその著しい特徴を列挙します。</p>
+    <ul>
+        <li><strong>極大フィルターによる構成:</strong> $ S(\mathbb{N}^{\mathbb{N}}) $ の各点は、$ \mathbb{N}^{\mathbb{N}} $ 上の clopen 超フィルター（細分化されていく clopen 集合の極限的な行き先）と一対一に対応します。</li>
+        <li><strong>巨大な濃度:</strong> 空間全体の濃度は $ 2^{2^{\aleph_0}} $ という極めて巨大なものになります。</li>
+        <li><strong>元の空間の埋没:</strong> 追加された無限遠点の集合（剰余空間 $ S(\mathbb{N}^{\mathbb{N}}) \smallsetminus \mathbb{N}^{\mathbb{N}} $）が空間全体で稠密であり、元の空間 $ \mathbb{N}^{\mathbb{N}} $ は内部を持たない（empty interior）非常に「薄い」部分空間として埋め込まれています。</li>
+        <li><strong>非・超不連結性:</strong> 極めて巨大なゼロ次元空間ですが、超不連結 (extremally disconnected) ではないという特有の位相的複雑さを持っています。</li>
+    </ul>
+
+    <hr>
+
+    <h2>5. ゼロ次元Hausdorff空間と完全不連結性</h2>
+
+    <p>結論から言いますと、コンパクトなゼロ次元 Hausdorff 空間は完全不連結 (totally disconnected) です。実のところ、コンパクト性の仮定すら必要なく、任意のゼロ次元 Hausdorff 空間は完全不連結となります。</p>
+
+    <h3>基本概念の定義</h3>
+    <p>以下、 $ X $ を位相空間とする。</p>
+
+    <div class="definition">
+        <span class="label">定義 (連結空間と非連結空間)</span>
+        位相空間 $ X $ が <strong>非連結 (disconnected)</strong> であるとは、空ではない2つの開集合 $ U, V \subset X $ が存在し、 $ U \cap V = \varnothing $ かつ $ U \cup V = X $ を満たすことをいう。<br>
+        位相空間 $ X $ が非連結ではないとき、 $ X $ を <strong>連結 (connected)</strong> であるという。<br>
+        部分空間 $ A \subset X $ が連結であるとは、 $ A $ に相対位相を入れた位相空間が連結であることをいう。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (完全不連結空間)</span>
+        位相空間 $ X $ が <strong>完全不連結 (totally disconnected)</strong> であるとは、 $ X $ の連結な部分集合が空集合または1点のみからなる集合に限られることをいう。すなわち、任意の相異なる2点 $ x, y \in X $ に対して、それらを同時に含むような連結部分集合が存在しないことを意味する。
+    </div>
+
+    <h3>ゼロ次元 Hausdorff 空間の完全不連結性の証明</h3>
+
+    <div class="theorem">
+        <span class="label">定理 5.1</span>
+        ゼロ次元 Hausdorff 空間は完全不連結 (totally disconnected) である。したがって、コンパクトなゼロ次元 Hausdorff 空間も完全不連結である。
+    </div>
+    <div class="proof">
+        <span class="label">証明</span>
+        $ X $ をゼロ次元 Hausdorff 空間とする。 $ X $ が完全不連結であることを示すためには、 $ X $ の任意の連結な部分集合 $ A \subset X $ が、高々1点からなることを示せばよい。<br><br>
+
+        背理法で証明する。ある連結な部分集合 $ A \subset X $ が存在し、 $ A $ が少なくとも2つの相異なる点 $ x, y \in A $ ( $ x \neq y $ ) を含むと仮定する。<br><br>
+
+        $ X $ は Hausdorff 空間であるため、相異なる2点 $ x, y $ に対して、互いに素な開集合 $ O_x, O_y \subset X $ が存在し、 $ x \in O_x $ かつ $ y \in O_y $ を満たす。<br>
+        特に、 $ O_x \cap O_y = \varnothing $ であり $ y \in O_y $ であるから、 $ y \notin O_x $ である。<br><br>
+
+        次に、 $ X $ がゼロ次元空間であるという仮定を用いる。点 $ x $ は開集合 $ O_x $ に含まれるため、ゼロ次元空間の定義より、ある clopen 集合 $ U \subset X $ が存在し、
+        $$ x \in U \subset O_x $$
+        を満たす。<br>
+        $ U \subset O_x $ であり、かつ $ y \notin O_x $ であることから、 $ y \notin U $ である。<br><br>
+
+        ここで、部分集合 $ A $ における相対位相を考える。 $ A $ の部分集合 $ U_A $ および $ W_A $ を次のように定義する。
+        $$ U_A = U \cap A $$
+        $$ W_A = (X \smallsetminus U) \cap A $$
+
+        $ U $ は $ X $ における clopen 集合（開集合かつ閉集合）であるため、その補集合 $ X \smallsetminus U $ も $ X $ における clopen 集合である。<br>
+        相対位相の定義より、 $ U_A $ および $ W_A $ はともに $ A $ における開集合である（ $ X $ における閉集合と $ A $ の共通部分でもあるため、 $ A $ における clopen 集合でもある）。<br><br>
+
+        これらの集合について以下のことが成り立つ。
+        <ol>
+            <li>$ x \in U $ かつ $ x \in A $ であるから、 $ x \in U_A $ となり、 $ U_A \neq \varnothing $ である。</li>
+            <li>$ y \notin U $ であるから $ y \in X \smallsetminus U $ であり、かつ $ y \in A $ であるから、 $ y \in W_A $ となり、 $ W_A \neq \varnothing $ である。</li>
+            <li>$ U \cap (X \smallsetminus U) = \varnothing $ であるから、 $ U_A \cap W_A = \varnothing $ である。</li>
+            <li>$ U \cup (X \smallsetminus U) = X $ であるから、 $ U_A \cup W_A = A $ である。</li>
+        </ol>
+
+        これは、 $ A $ が空でない2つの互いに素な開集合 $ U_A $ と $ W_A $ の和集合として表されることを意味し、 $ A $ が非連結であることを示している。<br>
+        しかし、これは $ A $ が連結であるという仮定に矛盾する。<br><br>
+
+        したがって、 $ X $ の任意の連結な部分集合 $ A $ は高々1点からなる。ゆえに、 $ X $ は完全不連結 (totally disconnected) である。証明終り。
+    </div>
+
+    <h3>解説と補足</h3>
+    <p>上記の定理から、コンパクト性の有無にかかわらず、ゼロ次元 Hausdorff 空間は常に完全不連結であることがわかります。前回の文脈で登場したカントール集合や無理数空間 $ \mathbb{P} $、Baire 空間 $ \mathbb{N}^{\mathbb{N}} $、そしてその Stone-Čech コンパクト化 $ \beta(\mathbb{N}^{\mathbb{N}}) $ などは、すべてゼロ次元 Hausdorff 空間であるため、当然ながら完全不連結な空間の代表例となります。</p>
+    <p>ちなみに、コンパクト Hausdorff 空間に限定した場合、この命題の「逆」も成立することが知られています。すなわち、「コンパクト Hausdorff 空間において、ゼロ次元であることと完全不連結であることは同値である」という定理が存在します。一般の位相空間では「完全不連結だがゼロ次元ではない空間（例：Erdős空間など）」が存在するため、この見事な同値性はコンパクト空間などの特定の条件が揃った際にのみ発揮される強力な性質です。</p>
+
+    <div class="references">
+        <h3>参考文献</h3>
+        <ul>
+            <li>Engelking, R. (1989). <i>General Topology</i>. Heldermann Verlag. (<a href="https://encyclopediaofmath.org/wiki/General_topology" target="_blank" rel="noopener noreferrer">Encyclopedia of Mathematics - General Topology</a>)</li>
+            <li>Kechris, A. S. (1995). <i>Classical Descriptive Set Theory</i>. Springer-Verlag. (<a href="https://link.springer.com/book/10.1007/978-1-4612-4190-4" target="_blank" rel="noopener noreferrer">Springer Link</a>)</li>
+            <li>Walker, R. C. (1974). <i>The Stone-Čech Compactification</i>. Springer-Verlag. (<a href="https://link.springer.com/book/10.1007/978-3-642-61935-9" target="_blank" rel="noopener noreferrer">Springer Link</a>)</li>
+            <li>Willard, S. (2004). <i>General Topology</i>. Dover Publications. (<a href="https://store.doverpublications.com/products/9780486434797" target="_blank" rel="noopener noreferrer">Dover Publications</a>)</li>
+        </ul>
+    </div>
+
+</body>
+</html>

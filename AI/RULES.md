@@ -9,7 +9,8 @@
 
 ## 数式出力に関するルール
 
-数式区切り記号 $ の外側（日本語との境界）には必ず半角スペースを空け、かつルール通り $ の内側（数式本体との間）には一切スペースを入れない。
+* 数式区切り記号 $ の外側（日本語との境界）には必ず半角スペースを空け、かつ、$ の内側（数式本体との間）には一切スペースを入れない。例えば $ abc $ としてはいけない。 $abc$ のスタイルにせよ。
+* 数式中の記号 "<", ">" の両側にスペースを挿入する。" < ", " > "と書く。
 
 ## チャット内での出力フォーマット・数式に関する追加ルール
 
@@ -24,7 +25,7 @@
 * 証明全体を1つの段落に詰め込んだりせずに、適切に複数の段落に分解せよ。
 * 数学的な命題や証明や例は「ですます調」ではなく、「だである調」で書け。インフォーマルな注意や解説は「ですます調」でもよい。
 * 「日本語での述語 (英語での述語)」の形式で書く場合には、英語での述語の部分の単語の頭文字は固有名詞の場合を除いて小文字にせよ。例えば「局所コンパクト (Locally Compact)」とは書かずに「局所コンパクト (locally compact)」と書け。
-* 固有名詞は片仮名表示にせずに元の綴りで書け。例えば「ハウスドルフ」とは書かずに「Hausdorff」と書け。
+* 固有名詞は片仮名表示にせずに元の綴りで書け。例えば「ハウスドルフ」とは書かずに「Hausdorff」と書け。「ドリーニュ」とは書かずに「Deligne」と書け。
 * well-definedは片仮名で書かずにそのままwell-definedと書け。
 * clopenを片仮名で書く場合にはクロープンと書け。しかし、原則としてclopenはそのままclopenと書け。
 * extremally disconnected は「超不連結」と訳せ。標準的になっていない翻訳なので適宜「超不連結(extremally disconnected)」のように書け。
@@ -32,7 +33,13 @@
 * 圏に関する事柄においてlimitは「極限」と訳し、colimitは「余極限」と訳せ。
 * joint surjectionは「結合全射」と訳し、jointly surjectiveは「結合的に全射」と訳せ。
 * effectively epimorphicは「有効エピ」と訳し、effectively jointly epimorphicは「結合的に有効エピ」と訳せ。
+* epimorphismは「エピ射」と訳し、monomorphismは「モノ射」と訳せ。
+* epimorphicは「エピ」と訳し、monomirphicは「モノ」と訳せ。
 * 圏論用語のfully faithfulは「充満忠実」と訳せ。
+* condensed mathematicsは「凝縮数学」と訳せ。
+* 圏論の文脈では、injective objectは「入射的対象」と訳し、injective cogeneratorは「入射的余生成子」と訳せ。
+* has enough injectivesは「十分に入射的対象を持つ」と訳せ。
+* special adjoint functor theoremは「特殊随伴関手定理」と訳せ。
 * 英語では必須のハイフンは日本語訳では不必要であることに注意せよ。例えば"Z-ultrafilter"を「Z-超フィルター」と翻訳せずに「Z超フィルター」と翻訳せよ。ただし、翻訳の結果、ハイフンの両側が英数字になる場合にはハイフンをそのまま残せ。例えば"p-Banach space"を「p Banach空間」と翻訳せずに「p-Banach空間」と翻訳せよ。
 * 集合の包含関係を⊆ではなく⊂で表せ。
 * 空集合は \emptyset ではなく、\varnothing で表せ。
@@ -42,7 +49,7 @@
 * 例えばCHausなどの固有名詞の圏は\mathrm{CHaus}のように書け。
 * canonicalを数式中でcanと略す場合には\mathrm{can}と書け。
 * completedは「完備化された」と訳せ。
-* braidingは「ブレイディング」と訳せ。
+* braidingは「ブレイディング」と訳せ。beaidとbraidedは「組紐」と訳せ。
 
 ## ルールの適用範囲
 

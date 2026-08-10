@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>カントール空間、ベール空間、および関連する位相空間の構造に関する完全な解説</title>
+<style>
+  body {
+    font-family: serif;
+    line-height: 1.7;
+    margin: 40px auto;
+    max-width: 960px;
+    padding: 0 20px;
+    color: #222;
+    background-color: #fff;
+  }
+  h1, h2, h3 {
+    color: #111;
+  }
+  h1 {
+    text-align: center;
+    border-bottom: 3px double #333;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+  }
+  h2 {
+    border-bottom: 1px solid #888;
+    padding-bottom: 5px;
+    margin-top: 45px;
+  }
+  h3 {
+    margin-top: 25px;
+  }
+  p {
+    text-align: justify;
+    text-indent: 1em;
+  }
+  p.no-indent {
+    text-indent: 0;
+  }
+  .definition, .theorem, .lemma, .proof, .example {
+    margin: 25px 0;
+    padding: 18px 20px;
+    background-color: #fcfcfc;
+    border: 1px solid #e0e0e0;
+    border-left: 5px solid #333;
+    border-radius: 2px;
+  }
+  .theorem {
+    border-left-color: #2b547e;
+  }
+  .lemma {
+    border-left-color: #4b6f96;
+  }
+  .proof {
+    background-color: #ffffff;
+    border-left: 3px solid #888;
+  }
+  .proof::before {
+    content: "【証明】";
+    font-weight: bold;
+  }
+  .proof::after {
+    content: " Q.E.D.";
+    float: right;
+    font-weight: bold;
+  }
+  .references {
+    margin-top: 60px;
+    border-top: 2px solid #333;
+    padding-top: 20px;
+  }
+  .references ul {
+    list-style-type: square;
+    padding-left: 20px;
+  }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    },
+    chtml: {
+      displayAlign: 'center'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>カントール空間、ベール空間、および関連する位相空間の構造に関する完全な解説</h1>
+
+<p class="no-indent">本稿では、記述集合論や位相空間論において基本となる「カントール空間」および「ベール空間」の位相的性質、ならびにそれらと同相になる代数的・構造的空間（形式的冪級数環、形式的ローラン級数環、辞書式順序空間）に関するすべての数学的結果を厳密かつ自己完結的 (self-contained) に証明する。</p>
+
+<h2>1. 準備：離散空間の可算直積と超距離構造</h2>
+
+<div class="definition">
+  <strong>定義 1.1 (直積空間とシリンダー集合).</strong><br>
+  $A$ を空でない可算集合とし、$A$ に離散位相 (discrete topology) を与える。集合 $X = A^\mathbb{N}$ は $A$ の元からなる無限数列 $x = (x_0, x_1, x_2, \dots)$ 全体の集合である。この $X$ に直積位相 (product topology) を与える。<br>
+  $n \in \mathbb{N}$ および有限列 $a_0, a_1, \dots, a_{n-1} \in A$ に対して、以下のように定義される集合 $U(a_0, \dots, a_{n-1})$ を<strong>シリンダー集合 (cylinder set)</strong> と呼ぶ。
+  $$ U(a_0, \dots, a_{n-1}) = \{ x \in X \mid 0 \le \forall i  <  n \text{ について } x_i = a_i \} $$
+  シリンダー集合全体の族は $X$ の開基 (basis) をなす。
+</div>
+
+<div class="definition">
+  <strong>定義 1.2 (標準的超距離).</strong><br>
+  $X = A^\mathbb{N}$ 上の距離関数 $d \colon X \times X \to \mathbb{R}_{\ge 0}$ を以下のように定める。$x = (x_n)_{n \in \mathbb{N}}$ および $y = (y_n)_{n \in \mathbb{N}}$ に対し、$x = y$ のときは $d(x, y) = 0$ とし、$x \neq y$ のときは $k = \min \{ n \in \mathbb{N} \mid x_n \neq y_n \}$ として
+  $$ d(x, y) = 2^{-k} $$
+  と定義する。
+</div>
+
+<div class="lemma">
+  <strong>補題 1.3.</strong> 定義 1.2 で与えられた $d$ は強三角不等式を満たす超距離 (ultrametric) であり、 $d$ が誘導する位相は直積位相と完全に一致する。
+</div>
+<div class="proof">
+  強三角不等式 $d(x, z) \le \max \{ d(x, y), d(y, z) \}$ を示す。$x = z$ の場合は自明である。$x \neq z$ とし、$d(x, z) = 2^{-k}$ とおく。すなわち、$x$ と $z$ は最初の $k$ 個の座標が一致し、第 $k$ 座標で $x_k \neq z_k$ となる。任意の $y \in X$ をとるとき、$y_k$ は $x_k$ と異なるか、$z_k$ と異なるかの少なくとも一方を満たす。前者の場合は $d(x, y) \ge 2^{-k}$ であり、後者の場合は $d(y, z) \ge 2^{-k}$ である。いずれにせよ $\max \{ d(x, y), d(y, z) \} \ge 2^{-k} = d(x, z)$ が成立する。<br>
+  また、中心 $x \in X$、半径 $r = 2^{-n+1}$ の開球 $B_r(x) = \{ y \in X \mid d(x, y)  <  r \}$ を考えると、これは $d(x, y) \le 2^{-n}$ と同値であり、すなわち最初の $n$ 個の座標が一致する集合 $U(x_0, \dots, x_{n-1})$ に他ならない。球全体が開基をなすことより、$d$ による位相と直積位相は一致する。
+</div>
+
+<div class="lemma">
+  <strong>補題 1.4.</strong> 任意のシリンダー集合 $V = U(a_0, \dots, a_{n-1})$ は clopen（開かつ閉）な集合である。
+</div>
+<div class="proof">
+  定義より $V$ は開集合である。その補集合を考えると、
+  $$ X \smallsetminus V = \bigcup \{ U(b_0, \dots, b_{n-1}) \mid (b_0, \dots, b_{n-1}) \in A^n \smallsetminus \{(a_0, \dots, a_{n-1})\} \} $$
+  と表される。開集合の任意の和集合は開集合であるから、$X \smallsetminus V$ は開集合である。したがって $V$ は閉集合でもある。
+</div>
+
+<h2>2. カントール空間 $2^\mathbb{N}$ の位相的性質</h2>
+
+<p class="no-indent">集合 $2 = \{0, 1\}$ に離散位相を与えたときの可算直積空間 $2^\mathbb{N}$ を<strong>カントール空間 (Cantor space)</strong> と呼ぶ。</p>
+
+<div class="theorem">
+  <strong>定理 2.1 (Polish 性).</strong> カントール空間 $2^\mathbb{N}$ は Polish 空間（可分かつ完備距離化可能な位相空間）である。
+</div>
+<div class="proof">
+  補題 1.3 より $2^\mathbb{N}$ は超距離 $d$ によって距離化可能である。<br>
+  <strong>完備性：</strong> $2^\mathbb{N}$ 内のコーシー列 $(x^{(m)})_{m \in \mathbb{N}}$ をとる。任意の $k \in \mathbb{N}$ に対して、ある $M \in \mathbb{N}$ が存在し、$m, l \ge M$ ならば $d(x^{(m)}, x^{(l)}) \le 2^{-k}$ となる。これは $m, l \ge M$ において各列の最初の $k$ 個の座標が完全に一致することを意味する。したがって、各 $n \in \mathbb{N}$ に対して座標列 $(x^{(m)}_n)_{m \in \mathbb{N}}$ は最終的に一定の値 $x_n \in \{0, 1\}$ に収束する。数列 $x = (x_n)_{n \in \mathbb{N}} \in 2^\mathbb{N}$ を定めると、$x^{(m)}$ は距離 $d$ において $x$ に収束する。よって完備である。<br>
+  <strong>可分性：</strong> 最終的にすべて $0$ となる数列全体の集合 $D = \{ x \in 2^\mathbb{N} \mid \exists N, \forall n \ge N, x_n = 0 \}$ を考える。$D = \bigcup_{N=0}^\infty \{ x \in 2^\mathbb{N} \mid \forall n \ge N, x_n = 0 \}$ であり、各成分集合は有限集合 $\{0, 1\}^N$ と同型であるから、$D$ は可算和集合として可算集合である。任意の $y \in 2^\mathbb{N}$ と任意のシリンダー近傍 $U(y_0, \dots, y_{n-1})$ に対し、$z = (y_0, \dots, y_{n-1}, 0, 0, \dots) \in D \cap U(y_0, \dots, y_{n-1})$ が存在する。よって $D$ は稠密であり、$2^\mathbb{N}$ は可分である。
+</div>
+
+<div class="theorem">
+  <strong>定理 2.2 (零次元性と完全不連結性).</strong> カントール空間 $2^\mathbb{N}$ は零次元 (zero-dimensional) であり、完全不連結 (totally disconnected) である。
+</div>
+<div class="proof">
+  シリンダー集合全体の族は clopen 集合からなる開基をなすため、$2^\mathbb{N}$ は定義により零次元である。<br>
+  一般に、コンパクト Hausdorff 空間 $Y$ において、完全不連結であることと零次元であることは同値である。以下にその証明を与える。<br>
+  $Y$ をコンパクト Hausdorff 空間とし、完全不連結であると仮定する。任意の $y \in Y$ とその任意の開近傍 $U$ をとる。$A = Y \smallsetminus U$ は閉集合であり、コンパクト空間の閉部分集合としてコンパクトである。$y$ の準成分 (quasi-component) $Q_y$（$y$ を含むすべての clopen 集合の共通部分）を考えると、コンパクト Hausdorff 空間においては $Q_y$ は $y$ の連結成分と一致する。$Y$ は完全不連結であるから $Q_y = \{y\}$ である。したがって、任意の $z \in A$ に対して $z \notin Q_y$ であり、$y \in C_z$ かつ $z \notin C_z$ となる clopen 集合 $C_z$ が存在する。$\{ Y \smallsetminus C_z \}_{z \in A}$ は $A$ の開被覆となる。$A$ のコンパクト性より、有限部分被覆 $\{ Y \smallsetminus C_{z_i} \}_{i=1}^m$ が存在する。$C = \bigcap_{i=1}^m C_{z_i}$ とおくと、$C$ は有限個の clopen 集合の交わりであるから clopen であり、$y \in C$ かつ $C \cap A = \varnothing$（すなわち $C \subset U$）を満たす。以上より、$y$ の clopen な近傍基が存在するので $Y$ は零次元である。
+</div>
+
+<div class="theorem">
+  <strong>定理 2.3 (孤立点の非存在とコンパクト性).</strong> カントール空間 $2^\mathbb{N}$ は孤立点を持たず、コンパクトである。
+</div>
+<div class="proof">
+  <strong>孤立点の非存在：</strong> 任意の $x \in 2^\mathbb{N}$ とその任意の基本開近傍 $V = U(x_0, \dots, x_{n-1})$ をとる。点 $y \in 2^\mathbb{N}$ を、$i < n$ で $y_i = x_i$、$y_n = 1 - x_n$、$i  >  n$ で $y_i = x_i$ と定義すると、$y \in V$ かつ $y \neq x$ である。したがって $\{x\}$ は開集合になり得ず、孤立点は存在しない。<br>
+  <strong>コンパクト性：</strong> 離散空間 $\{0, 1\}$ は有限集合であるからコンパクトである。Tychonoff の定理により、コンパクト空間の任意個の直積はコンパクトであるため、$2^\mathbb{N}$ はコンパクトである。
+</div>
+
+<div class="theorem">
+  <strong>定理 2.4 (カントール集合との同相).</strong> カントール空間 $2^\mathbb{N}$ は、標準的な 1 次元カントール集合 $C \subset [0, 1]$ と同相である。
+</div>
+<div class="proof">
+  写像 $f \colon 2^\mathbb{N} \to C$ を
+  $$ f(x) = \sum_{n=0}^\infty \frac{2 x_n}{3^{n+1}} $$
+  と定義する。3進展開の性質より、$f$ は $2^\mathbb{N}$ から $C$ への全単射である。<br>
+  $f$ の連続性を示す。任意の $\varepsilon  >  0$ に対し、$3^{-N}  <  \varepsilon$ となる $N \in \mathbb{N}$ をとる。$d(x, y) \le 2^{-N}$ ならば、 $x$ と $y$ の最初の $N$ 個の座標は一致する。このとき、
+  $$ |f(x) - f(y)| = \left| \sum_{n=N}^\infty \frac{2 (x_n - y_n)}{3^{n+1}} \right| \le \sum_{n=N}^\infty \frac{2}{3^{n+1}} = \frac{1}{3^N}  <  \varepsilon $$
+  となり、$f$ は連続である。コンパクト空間 $2^\mathbb{N}$ から Hausdorff 空間 $C$ への連続全単射は同相写像であるため、$f$ は同相写像である。
+</div>
+
+<h2>3. ベール空間 $\mathbb{N}^\mathbb{N}$ の位相的性質</h2>
+
+<p class="no-indent">自然数全体 $\mathbb{N} = \{0, 1, 2, \dots\}$ に離散位相を与えた可算直積空間 $\mathbb{N}^\mathbb{N}$ を<strong>ベール空間 (Baire space)</strong> と呼ぶ。</p>
+
+<div class="theorem">
+  <strong>定理 3.1.</strong> ベール空間 $\mathbb{N}^\mathbb{N}$ は Polish 空間であり、零次元である。
+</div>
+<div class="proof">
+  定理 2.1 と同様に、離散空間 $\mathbb{N}$ の可算直積として完備距離化可能であり、最終的に $0$ となる整数列全体の集合が可算稠密となるため Polish である。また、シリンダー集合が clopen 開基となるため零次元である。
+</div>
+
+<div class="theorem">
+  <strong>定理 3.2.</strong> ベール空間 $\mathbb{N}^\mathbb{N}$ はどの点においても局所コンパクト (locally compact) でない。
+</div>
+<div class="proof">
+  ある点 $x \in \mathbb{N}^\mathbb{N}$ がコンパクトな近傍 $K$ を持つと仮定して矛盾を導く。
+  開基の定義より、$x \in V \subset K$ となるシリンダー集合 $V = U(x_0, \dots, x_{n-1})$ が存在する。$V$ は closed であるから、コンパクト集合 $K$ の閉部分集合として $V$ もコンパクトでなければならない。<br>
+  ここで、$V$ 内の点列 $(y^{(k)})_{k \in \mathbb{N}}$ を次のように構成する：
+  $$ y^{(k)}_i = \begin{cases} x_i & (i  <  n \text{ のとき}) \\ k & (i = n \text{ のとき}) \\ 0 & (i  >  n \text{ のとき}) \end{cases} $$
+  各 $y^{(k)}$ は最初の $n$ 個の座標が $x$ と一致するため $y^{(k)} \in V$ である。しかし、相異なる $k \neq l$ に対し、$y^{(k)}$ と $y^{(l)}$ は第 $n$ 座標が異なるため、$d(y^{(k)}, y^{(l)}) = 2^{-n}$ となる。したがって、点列 $(y^{(k)})$ のいかなる部分列もコーシー列にならず、収束部分列を持たない。これは距離空間 $V$ のコンパクト性に矛盾する。ゆえに、どの点も局所コンパクトでない。
+</div>
+
+<div class="theorem">
+  <strong>定理 3.3.</strong> ベール空間 $\mathbb{N}^\mathbb{N}$ において「孤立点が存在しない」という性質は、「どの点も局所コンパクトでない」という性質から直接導かれる。
+</div>
+<div class="proof">
+  対偶「孤立点が存在すれば、ある点で局所コンパクトになる」を示す。
+  $x \in \mathbb{N}^\mathbb{N}$ が孤立点であると仮定する。このとき 1 点集合 $\{x\}$ は開集合である。また $\{x\}$ は有限集合であるからコンパクトである。したがって $\{x\}$ は $x$ のコンパクトな開近傍となり、空間は $x$ において局所コンパクトとなる。対偶が示されたので、どの点も局所コンパクトでない空間には孤立点が存在しない。
+</div>
+
+<div class="theorem">
+  <strong>定理 3.4 (無理数全体との同相).</strong> ベール空間 $\mathbb{N}^\mathbb{N}$ は、無理数全体の空間 $\mathbb{R} \smallsetminus \mathbb{Q}$ と同相である。
+</div>
+<div class="proof">
+  以下の 3 段階に分けて証明する。<br>
+  <strong>段階 1: $\mathbb{N}^\mathbb{N} \cong (\mathbb{N}_{>0})^\mathbb{N}$</strong><br>
+  $\mathbb{N}$ と $\mathbb{N}_{>0} = \{1, 2, 3, \dots\}$ はともに可算無限離散空間であるから、全単射 $j \colon \mathbb{N} \to \mathbb{N}_{>0}$（例えば $j(n) = n + 1$）は同相写像である。各座標に $j$ を適用する写像 $J((x_n)) = (j(x_n))$ は同相写像 $\mathbb{N}^\mathbb{N} \to (\mathbb{N}_{>0})^\mathbb{N}$ を与える。<br>
+  <strong>段階 2: $\mathbb{R} \smallsetminus \mathbb{Q} \cong (0, 1) \smallsetminus \mathbb{Q}$</strong><br>
+  写像 $h \colon \mathbb{R} \to (-1, 1)$ を $h(x) = \frac{x}{1+|x|}$ と定めると、これは同相写像であり、$x \in \mathbb{Q} \iff h(x) \in \mathbb{Q}$ を満たす。さらに affine 変換 $k(t) = \frac{t+1}{2}$ を合成した $k \circ h \colon \mathbb{R} \to (0, 1)$ も同相写像であり有理数性を保存する。制限により $\mathbb{R} \smallsetminus \mathbb{Q} \cong (0, 1) \smallsetminus \mathbb{Q}$ を得る。<br>
+  <strong>段階 3: $(\mathbb{N}_{>0})^\mathbb{N} \cong (0, 1) \smallsetminus \mathbb{Q}$</strong><br>
+  $(0, 1)$ 内の任意の無理数 $x$ は、正整数列 $(a_0, a_1, a_2, \dots) \in (\mathbb{N}_{>0})^\mathbb{N}$ を用いて一意に無限連分数展開される：
+  $$ x = \cfrac{1}{a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2 + \ddots}}} $$
+  この対応を $\phi \colon (\mathbb{N}_{>0})^\mathbb{N} \to (0, 1) \smallsetminus \mathbb{Q}$ とする。連分数の第 $n$ 近似分数を $p_n / q_n$ とすると、初めの $n$ 項 $(a_0, \dots, a_{n-1})$ を固定したシリンダー集合の像は、$p_{n-1}/q_{n-1}$ と $(p_{n-1} + p_{n-2})/(q_{n-1} + q_{n-2})$ を端点とする開区間内の無理数全体と一致する。これらの開区間は $(0, 1) \smallsetminus \mathbb{Q}$ の相対位相の開基をなすため、全単射 $\phi$ は開基を開基に写す。ゆえに $\phi$ は同相写像である。<br>
+  段階 1〜3 を合成することにより、$\mathbb{N}^\mathbb{N} \cong \mathbb{R} \smallsetminus \mathbb{Q}$ が得られる。
+</div>
+
+<h2>4. 形式的冪級数環 $\mathbb{Z}[[T]]$ の極限位相とベール空間</h2>
+
+<div class="definition">
+  <strong>定義 4.1 (逆極限位相).</strong><br>
+  1 変数形式的冪級数環 $\mathbb{Z}[[T]]$ の元は $f(T) = \sum_{i=0}^\infty a_i T^i$ ($a_i \in \mathbb{Z}$) と表される。各 $n \in \mathbb{N}_{>0}$ に対し、剰余環 $R_n = \mathbb{Z}[T]/(T^n)$ に離散位相を与え、自然な射影 $\pi_{m,n} \colon R_m \to R_n$ ($m \ge n$) からなる逆系の極限 $\lim_{\leftarrow} R_n$ を考える。全単射 $\mathbb{Z}[[T]] \to \lim_{\leftarrow} R_n$ を通じて $\mathbb{Z}[[T]]$ に誘導される位相を $T$ 進位相と呼ぶ。この位相の開基は、$g \in R_n$ に対する剰余類 $g + T^n \mathbb{Z}[[T]]$ 全体である。
+</div>
+
+<div class="theorem">
+  <strong>定理 4.2.</strong> 逆極限位相を与えた形式的冪級数環 $\mathbb{Z}[[T]]$ はベール空間 $\mathbb{N}^\mathbb{N}$ と同相である。
+</div>
+<div class="proof">
+  証明を 2 つの同相関係に分ける。<br>
+  <strong>(1) $\mathbb{Z}[[T]] \cong \mathbb{Z}^\mathbb{N}$ の証明：</strong><br>
+  写像 $\Phi \colon \mathbb{Z}[[T]] \to \mathbb{Z}^\mathbb{N}$ を $\Phi(\sum_{i=0}^\infty a_i T^i) = (a_0, a_1, a_2, \dots)$ と定義する。形式的冪級数はその係数列により一意に決まるため $\Phi$ は全単射である。
+  $\mathbb{Z}^\mathbb{N}$ の開基をなすシリンダー集合 $U(c_0, \dots, c_{n-1})$ に対し、その $\Phi$ による逆像は
+  $$ \Phi^{-1}(U(c_0, \dots, c_{n-1})) = \{ f \in \mathbb{Z}[[T]] \mid f(T) \equiv \sum_{i=0}^{n-1} c_i T^i \pmod{T^n} \} = g + T^n \mathbb{Z}[[T]] $$
+  （ただし $g = \sum_{i=0}^{n-1} c_i T^i$）となる。これは $\mathbb{Z}[[T]]$ の開基そのものであるから、$\Phi$ は開基を開基に移す全単射であり、同相写像である。<br>
+  <strong>(2) $\mathbb{Z}^\mathbb{N} \cong \mathbb{N}^\mathbb{N}$ の証明：</strong><br>
+  写像 $h \colon \mathbb{Z} \to \mathbb{N}$ を
+  $$ h(x) = \begin{cases} 2x & (x \ge 0 \text{ のとき}) \\ -2x - 1 & (x  <  0 \text{ のとき}) \end{cases} $$
+  と定義すると、$h$ は離散空間同士の全単射同相写像である。各座標ごとに $h$ を適用する写像 $H \colon \mathbb{Z}^\mathbb{N} \to \mathbb{N}^\mathbb{N}$、$H(x_0, x_1, \dots) = (h(x_0), h(x_1), \dots)$ を定めると、直積位相の定義より $H$ は全単射同相写像となる。<br>
+  合成 $H \circ \Phi \colon \mathbb{Z}[[T]] \to \mathbb{N}^\mathbb{N}$ により同相性が示された。
+</div>
+
+<h2>5. 形式的ローラン級数環 $\mathbb{Z}((T))$ とベール空間</h2>
+
+<div class="definition">
+  <strong>定義 5.1 (ローラン級数環と $T$ 進超距離).</strong><br>
+  $\mathbb{Z}((T)) = \bigcup_{m=0}^\infty T^{-m} \mathbb{Z}[[T]]$ は $f(T) = \sum_{n=-m}^\infty a_n T^n$ ($a_n \in \mathbb{Z}$) の形の一意な表示を持つ。
+  $f \neq 0$ に対し $\mathrm{ord}(f) = \min \{ n \in \mathbb{Z} \mid a_n \neq 0 \}$ とし、$\mathrm{ord}(0) = \infty$ とおく。距離を $d(f, g) = 2^{-\mathrm{ord}(f-g)}$ で定めると、これは超距離となる。
+</div>
+
+<div class="theorem">
+  <strong>定理 5.2.</strong> 形式的ローラン級数環 $\mathbb{Z}((T))$ はベール空間 $\mathbb{N}^\mathbb{N}$ と同相である。
+</div>
+<div class="proof">
+  空間の clopen 分割を行って証明する。<br>
+  $W_0 = \{ f \in \mathbb{Z}((T)) \mid \mathrm{ord}(f) \ge 0 \} = \mathbb{Z}[[T]]$ とおく。<br>
+  <strong>補題 5.2.1:</strong> $W_0$ は $\mathbb{Z}((T))$ の clopen 部分集合であり、$W_0 \cong \mathbb{N}^\mathbb{N}$ である。<br>
+  （証明）$W_0 = \{ f \mid d(f, 0) \le 1 \}$ である。任意の $f \in W_0$ に対し $B_1(f) \subset W_0$ となるため開集合である。また $g \notin W_0$ ならば $r = d(g, 0)  >  1$ であり、超距離の性質より $B_r(g) \cap W_0 = \varnothing$ となるので補集合も開集合である。よって $W_0$ は clopen である。相対位相は $\mathbb{Z}[[T]]$ の $T$ 進位相と一致するため、定理 4.2 より $W_0 \cong \mathbb{N}^\mathbb{N}$ である。<br>
+  <strong>補題 5.2.2:</strong> 補集合 $U = \mathbb{Z}((T)) \smallsetminus W_0$ について、$U \cong \mathbb{N}^\mathbb{N}$ である。<br>
+  （証明）$U = \bigsqcup_{k=1}^\infty V_{-k}$ と分解する。ただし $V_{-k} = \{ f \in \mathbb{Z}((T)) \mid \mathrm{ord}(f) = -k \}$ である。超距離空間において中心からの距離が一定の集合は clopen であるため、各 $V_{-k}$ は clopen である。
+  $f \in V_{-k}$ は $f(T) = \sum_{n=-k}^\infty a_n T^n$ ($a_{-k} \neq 0$) と書ける。写像 $\Psi_k \colon V_{-k} \to (\mathbb{Z} \smallsetminus \{0\}) \times \mathbb{Z}^\mathbb{N}$ を
+  $$ \Psi_k \left( \sum_{n=-k}^\infty a_n T^n \right) = (a_{-k}, (a_{-k+1}, a_{-k+2}, \dots)) $$
+  と定めると $\Psi_k$ は同相写像である。$\mathbb{Z} \smallsetminus \{0\} \cong \mathbb{N}$ および $\mathbb{Z}^\mathbb{N} \cong \mathbb{N}^\mathbb{N}$ より、$V_{-k} \cong \mathbb{N} \times \mathbb{N}^\mathbb{N} \cong \mathbb{N}^\mathbb{N}$ である。
+  位相和の性質から $U \cong \bigoplus_{k=1}^\infty \mathbb{N}^\mathbb{N} \cong \mathbb{N} \times \mathbb{N}^\mathbb{N} \cong \mathbb{N}^\mathbb{N}$ を得る。<br>
+  <strong>全体空間の結合：</strong><br>
+  $\mathbb{Z}((T)) = W_0 \sqcup U \cong \mathbb{N}^\mathbb{N} \oplus \mathbb{N}^\mathbb{N} \cong \{0, 1\} \times \mathbb{N}^\mathbb{N}$ である。
+  写像 $g \colon \{0, 1\} \times \mathbb{N}^\mathbb{N} \to \mathbb{N}^\mathbb{N}$ を
+  $$ g(0, (x_0, x_1, x_2, \dots)) = (2 x_0, x_1, x_2, \dots) $$
+  $$ g(1, (x_0, x_1, x_2, \dots)) = (2 x_0 + 1, x_1, x_2, \dots) $$
+  と定義すると、$g$ は全単射であり、シリンダー集合を開基に写し合うため同相写像である。
+  したがって、$\mathbb{Z}((T)) \cong \mathbb{N}^\mathbb{N}$ である。
+</div>
+
+<h2>6. 直積位相空間 $X = \{0,1\}^\mathbb{N}$ と順序位相空間 $Y = \{0,1\}^\mathbb{N}$ の同相性</h2>
+
+<p class="no-indent">集合 $A = \{0, 1\}$ に対し、$X$ を直積位相を与えた位相空間 $\{0, 1\}^\mathbb{N}$ とし、$Y$ を辞書式順序による順序位相を与えた位相空間 $\{0, 1\}^\mathbb{N}$ とする。</p>
+
+<div class="definition">
+  <strong>定義 6.1 (辞書式順序と順序位相).</strong><br>
+  $x, y \in \{0, 1\}^\mathbb{N}$ ($x \neq y$) に対し、$k = \min \{ n \in \mathbb{N} \mid x_n \neq y_n \}$ とするとき、$x_k = 0$ かつ $y_k = 1$ ならば $x  <  y$ と定める。
+  順序位相の準開基は、任意の $a \in \{0, 1\}^\mathbb{N}$ に対する開半直線 $L(a) = \{ x \mid x  <  a \}$ および $R(a) = \{ x \mid x  >  a \}$ である。
+</div>
+
+<div class="theorem">
+  <strong>定理 6.2.</strong> 恒等写像 $\mathrm{id} \colon X \to Y$ は同相写像である。
+</div>
+
+<p class="no-indent">本定理について、開基の対応を直接示す方法（証明 1）と、コンパクト性および Hausdorff 性を経由する方法（証明 2）の 2 通りの完全な証明を与える。</p>
+
+<div class="proof">
+  <strong>証明 1（開基の直接対応による証明）：</strong><br>
+  <strong>(i) $\mathrm{id} \colon X \to Y$ の連続性：</strong><br>
+  $Y$ の準開基 $R(a) = \{ x \mid x  >  a \}$ の $\mathrm{id}$ による逆像（集合として $R(a)$ 自身）が $X$ で開集合であることを示す。
+  任意な $x \in R(a)$ をとると $x  >  a$ である。$k = \min \{ n \mid x_n \neq a_n \}$ とおくと $x_k = 1, a_k = 0$ である。
+  $X$ の基本開集合 $V = U(x_0, \dots, x_k)$ をとる。任意の $y \in V$ について、$i  <  k$ では $y_i = x_i = a_i$ であり、$y_k = x_k = 1  >  0 = a_k$ となるため、$y  >  a$ すなわち $y \in R(a)$ である。
+  ゆえに $x \in V \subset R(a)$ となり、$R(a)$ は $X$ の開集合である。同様に $L(a)$ も $X$ の開集合となるため、$\mathrm{id}$ は連続である。<br><br>
+  <strong>(ii) $\mathrm{id}^{-1} \colon Y \to X$ の連続性：</strong><br>
+  $X$ の任意の基本開集合 $C = U(c_0, \dots, c_{n-1})$ が $Y$ で開集合であることを示す。
+  $u, v \in \{0, 1\}^\mathbb{N}$ を次のように定める：
+  $$ u_i = \begin{cases} c_i & (i  <  n \text{ のとき}) \\ 0 & (i \ge n \text{ のとき}) \end{cases}, \quad v_i = \begin{cases} c_i & (i  <  n \text{ のとき}) \\ 1 & (i \ge n \text{ のとき}) \end{cases} $$
+  このとき $C = [u, v] = \{ x \in \{0, 1\}^\mathbb{N} \mid u \le x \le v \}$ であることを確認する。実際、$x \in C$ ならば明らかに $u \le x \le v$ である。逆に $x \notin C$ とすると、$x_j \neq c_j$ となる最小の $j  <  n$ が存在する。$x_j = 0$ ($c_j = 1$) ならば $x  <  u$ であり、$x_j = 1$ ($c_j = 0$) ならば $x  >  v$ となるため $x \notin [u, v]$ である。<br>
+  区間 $[u, v] = \{ x \mid u \le x \} \cap \{ x \mid x \le v \}$ が $Y$ で開であることを示すため、$\{ x \mid u \le x \}$ と $\{ x \mid x \le v \}$ が開であることを示す。<br>
+  ・<strong>下限 $u$ について：</strong> $u = (0, 0, \dots)$ ならば $\{ x \mid u \le x \} = Y$ （全空間）で開である。
+  $u \neq (0, 0, \dots)$ のとき、$i \ge n$ では $u_i = 0$ であるから、$u_k = 1$ となる最大のインデックス $k$ は $k  <  n$ に存在する。
+  数列 $u' \in \{0, 1\}^\mathbb{N}$ を次のように定義する：
+  $$ u'_i = \begin{cases} u_i & (i  <  k \text{ のとき}) \\ 0 & (i = k \text{ のとき}) \\ 1 & (i  >  k \text{ のとき}) \end{cases} $$
+  ここで $u'  <  u$ である。さらに $u'  <  z  <  u$ を満たす $z$ が存在しないことを背理法で示す。
+  仮にそのような $z$ が存在したとする。$u'  <  z$ より、両者が初めて異なるインデックスを $m$ とすると $u'_m = 0, z_m = 1$ である。<br>
+  1) $m  <  k$ の場合：$i  <  k$ では $u_i = u'_i$ であるから、$i  <  m$ で $z_i = u'_i = u_i$ かつ $z_m = 1  >  0 = u'_m = u_m$ となり、$z  >  u$ となって矛盾する。<br>
+  2) $m = k$ の場合：$i  <  k$ で $z_i = u'_i = u_i$ であり、$z_k = 1 = u_k$ となる。$i  >  k$ において $u_i = 0$ であるから、どのような $z$ であっても $z \ge u$ となり $z  <  u$ に矛盾する。<br>
+  3) $m  >  k$ の場合：$u'_m = 0$ となり得るのは定義より $m \le k$ の場合のみである（$i  >  k$ では $u'_i = 1$）。したがってこの場合は起こり得ない。<br>
+  直間の元が存在しないため、$\{ x \mid u \le x \} = \{ x \mid u'  <  x \} = R(u')$ となり、これは $Y$ の開集合である。<br>
+  ・<strong>上限 $v$ について：</strong> $v = (1, 1, \dots)$ ならば $\{ x \mid x \le v \} = Y$ で開である。
+  $v \neq (1, 1, \dots)$ のとき、$i \ge n$ で $v_i = 1$ より、$v_m = 0$ となる最大のインデックス $m$ は $m  <  n$ に存在する。
+  数列 $v' \in \{0, 1\}^\mathbb{N}$ を
+  $$ v'_i = \begin{cases} v_i & (i  <  m \text{ のとき}) \\ 1 & (i = m \text{ のとき}) \\ 0 & (i  >  m \text{ のとき}) \end{cases} $$
+  と定義すると、$v  <  v'$ であり、$v  <  z  <  v'$ なる $z$ は存在しない。したがって $\{ x \mid x \le v \} = \{ x \mid x  <  v' \} = L(v')$ となり、$Y$ の開集合である。<br>
+  以上より $C = [u, v] = R(u') \cap L(v')$ は $Y$ の 2 つの開集合の交わりであるから $Y$ で開集合である。よって $\mathrm{id}^{-1}$ は連続であり、$\mathrm{id}$ は同相写像である。
+</div>
+
+<div class="proof">
+  <strong>証明 2（コンパクト性と Hausdorff 性による証明）：</strong><br>
+  <strong>(1) $X$ のコンパクト性：</strong> 定理 2.3 より、$X = \{0, 1\}^\mathbb{N}$ は Tychonoff の定理によりコンパクト空間である。<br>
+  <strong>(2) $Y$ の Hausdorff 性：</strong> 相異なる 2 点 $x, y \in Y$ をとる。一般性を失わず $x  <  y$ とする。<br>
+  ・<em>場合 1:</em> $x  <  z  <  y$ となる $z \in Y$ が存在する場合。<br>
+  $U = L(z) = \{ w \in Y \mid w  <  z \}$ および $V = R(z) = \{ w \in Y \mid w  >  z \}$ とおくと、$U, V$ は $Y$ の開集合であり、$x \in U, y \in V$ かつ $U \cap V = \varnothing$ を満たす。<br>
+  ・<em>場合 2:</em> $x  <  z  <  y$ となる $z \in Y$ が存在しない場合。<br>
+  $U = L(y) = \{ w \in Y \mid w  <  y \}$ および $V = R(x) = \{ w \in Y \mid w  >  x \}$ とおくと、$U, V$ は $Y$ の開集合であり、$x \in U, y \in V$ である。共通部分は $U \cap V = \{ w \in Y \mid x  <  w  <  y \} = \varnothing$ である。<br>
+  いずれの場合も分離開集合が存在するため、$Y$ は Hausdorff 空間である。<br>
+  <strong>(3) 同相性の結語：</strong> 証明 1 (i) で示した通り、恒等写像 $\mathrm{id} \colon X \to Y$ は連続である。
+  「コンパクト空間から Hausdorff 空間への連続な全単射は同相写像である」という位相空間論の基本定理を適用する。
+  実際、$X$ の任意の閉集合 $K$ はコンパクト空間の閉部分集合としてコンパクトであり、連続像 $\mathrm{id}(K)$ も $Y$ でコンパクトである。$Y$ は Hausdorff であるから $\mathrm{id}(K)$ は $Y$ の閉集合となる。したがって $\mathrm{id}$ は閉写像であり、全単射連続閉写像であるから同相写像である。
+</div>
+
+<div class="references">
+  <h3>参考文献</h3>
+  <ul>
+    <li>Kechris, A. S. <i>Classical Descriptive Set Theory</i>, Graduate Texts in Mathematics, Vol. 156, Springer-Verlag, 1995. <a href="https://doi.org/10.1007/978-1-4612-4190-4" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/978-1-4612-4190-4</a></li>
+    <li>Munkres, J. R. <i>Topology</i>, 2nd Edition, Prentice Hall, 2000. <a href="https://en.wikipedia.org/wiki/Topology_(book)" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Topology_(book)</a></li>
+    <li>Willard, S. <i>General Topology</i>, Dover Publications, 2004. <a href="https://store.doverpublications.com/products/9780486434797" target="_blank" rel="noopener noreferrer">Dover Publications</a></li>
+  </ul>
+</div>
+
+</body>
+</html>

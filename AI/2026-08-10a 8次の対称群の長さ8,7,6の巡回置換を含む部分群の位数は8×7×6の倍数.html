@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>8次の対称群の長さ8,7,6の巡回置換を含む部分群の位数は8×7×6の倍数</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<style>
+  body { font-family: sans-serif; line-height: 1.6; max-width: 900px; margin: 20px auto; padding: 20px; color: rgb(51, 51, 51); }
+  h1, h2, h3 { color: rgb(44, 62, 80); border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 5px; }
+  .math-def { background-color: rgb(232, 248, 245); padding: 15px; border-left: 4px solid rgb(26, 188, 156); margin-bottom: 20px; }
+  .math-thm { background-color: rgb(254, 249, 231); padding: 15px; border-left: 4px solid rgb(241, 196, 15); margin-bottom: 20px; }
+  .math-proof { background-color: rgb(253, 254, 254); padding: 15px; border: 1px solid rgb(238, 238, 238); border-left: 4px solid rgb(189, 195, 199); margin-bottom: 20px; }
+  .math-ex { background-color: rgb(244, 246, 247); padding: 15px; border-left: 4px solid rgb(127, 140, 141); margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<h1>8次の対称群の長さ8,7,6の巡回置換を含む部分群の位数は8×7×6の倍数</h1>
+
+<h2>1. 概念の定義と具体例</h2>
+
+<div class="math-def">
+<strong>定義 (群作用, group action)</strong><br>
+有限群 $G$ が空でない有限集合 $X$ ($X \neq \varnothing$) に作用する (act) とは、写像 $G \times X \to X$ (要素 $(g, x)$ の像を $gx$ と書く) が存在し、以下の2つの条件を満たすことである。<br>
+1. 任意の $x \in X$ に対して $ex = x$ (ただし $e$ は $G$ の単位元)。<br>
+2. 任意の $g, h \in G$ と $x \in X$ に対して $(gh)x = g(hx)$ が成り立つ。<br>
+この写像は well-defined でなければならない。
+</div>
+
+<div class="math-def">
+<strong>定義 (軌道と安定化群)</strong><br>
+群 $G$ が集合 $X$ に作用しているとする。ある $x \in X$ に対して、$G$ の作用によって $x$ が移り得る先の集合<br>
+$$ Gx = \{ gx \mid g \in G \} $$<br>
+を $x$ の軌道 (orbit) と呼ぶ。<br>
+また、$x$ を固定するような $G$ の元全体からなる集合<br>
+$$ G_x = \{ g \in G \mid gx = x \} $$<br>
+は $G$ の部分群となり、これを $x$ の安定化群 (stabilizer) と呼ぶ。同様に、複数の元 $x_1, \dots, x_m \in X$ をすべて同時に固定する元の集合を $G_{x_1, \dots, x_m}$ と書き、これも $G$ の部分群となる。
+</div>
+
+<div class="math-def">
+<strong>定義 (推移的, transitive)</strong><br>
+群 $G$ の $X$ への作用が推移的 (transitive) であるとは、任意の $x, y \in X$ に対して、ある $g \in G$ が存在して $gx = y$ となることである。このとき、任意の $x \in X$ について軌道は全体に一致し、$Gx = X$ となる。
+</div>
+
+<div class="math-def">
+<strong>定義 ($k$重推移的, $k$-transitive)</strong><br>
+自然数 $k \ge 1$ とする。集合 $X$ (ただし $|X| \ge k$) に作用する群 $G$ が $k$重推移的 ($k$-transitive) であるとは、$X$ から相異なる $k$ 個の元を選んで作った任意の順列 $(x_1, \dots, x_k)$ と $(y_1, \dots, y_k)$ に対して、ある $g \in G$ が存在し、すべての $i \in \{1, \dots, k\}$ について $gx_i = y_i$ が成り立つことである。
+</div>
+
+<div class="math-ex">
+<strong>例 (軌道と安定化群の具体例)</strong><br>
+対称群 $S_3$ が集合 $X = \{1, 2, 3\}$ に自然に作用しているとする。<br>
+元 $1 \in X$ の安定化群 $(S_3)_1$ は $1$ を固定する置換の集まりであり、$(S_3)_1 = \{ (1), (2 \ 3) \}$ となる。したがって $|(S_3)_1| = 2$ である。<br>
+また $1$ の軌道は $S_3 \cdot 1 = \{1, 2, 3\} = X$ であり、その要素数は $3$ である。<br>
+群全体の位数 $|S_3| = 6$ であるため、$6 = 3 \times 2$ となり、以下で述べる軌道・安定化群定理を満たしていることが確認できる。
+</div>
+
+<h2>2. 重要な定理と補題</h2>
+
+<div class="math-thm">
+<strong>定理 (軌道・安定化群定理, orbit-stabilizer theorem)</strong><br>
+有限群 $G$ が有限集合 $X$ に作用しているとき、任意の $x \in X$ について以下の等式が成り立つ。<br>
+$$ |G| = |Gx| \cdot |G_x| $$<br>
+特に、$G$ が $X$ 上で推移的に作用している場合は $|Gx| = |X|$ となるため、$|G| = |X| \cdot |G_x|$ が成立する。
+</div>
+
+<div class="math-thm">
+<strong>補題1 (推移性と安定化群の共役)</strong><br>
+群 $G$ が集合 $X$ 上で推移的に作用しているとする。このとき任意の $x, y \in X$ に対して安定化群 $G_x$ と $G_y$ は共役となる。すなわち、ある $g \in G$ が存在して $G_y = g G_x g^{-1}$ が成り立つ。<br>
+<br>
+<strong>証明:</strong><br>
+$G$ は推移的であるため、$gx = y$ となる $g \in G$ が存在する。任意の $h \in G_x$ に対して、$g h g^{-1} y = g h x = g x = y$ となるため、$g G_x g^{-1} \subset G_y$ である。逆包含関係も $g^{-1} y = x$ を用いることで同様に示されるため、$G_y = g G_x g^{-1}$ を得る。
+</div>
+
+<div class="math-thm">
+<strong>補題2 (多重推移性の判定)</strong><br>
+群 $G$ が $X$ に作用しているとする。群 $G$ が $k$重推移的 ( $k > 1$ ) であるための必要十分条件は、$G$ が $X$ 上で推移的であり、かつ任意の $x \in X$ について安定化群 $G_x$ が $X \smallsetminus \{x\}$ 上で $(k-1)$重推移的となることである。<br>
+<br>
+<strong>証明:</strong><br>
+$G$ が $k$重推移的ならば推移的であることは明らかである。また、任意の $x$ を固定したとき、残りの $k-1$ 個の元の組を自由に動かせるため $G_x$ は $X \smallsetminus \{x\}$ 上で $(k-1)$重推移的となる。<br>
+逆に $G$ が推移的であり、ある特定の $a \in X$ の安定化群 $G_a$ が $X \smallsetminus \{a\}$ 上で $(k-1)$重推移的であるとする。補題1より任意の $x \in X$ の安定化群 $G_x$ は $G_a$ と共役であるため、$G_x$ も $X \smallsetminus \{x\}$ 上で $(k-1)$重推移的となる。これらを組み合わせることで、$X$ から選んだ任意の相異なる $k$ 個の元の組を別の組へ移す置換を構成できるため、$G$ は $k$重推移的となる。
+</div>
+
+<h2>3. 主定理の完全な証明</h2>
+
+<div class="math-proof">
+<strong>定理</strong><br>
+8次の置換群 $S_8$ の部分群 $H$ が長さ8, 7, 6の巡回置換を含むならば、その位数 $|H|$ は $8 \times 7 \times 6$ で割り切れる。<br>
+<br>
+<strong>証明:</strong><br>
+$S_8$ が自然に作用する集合を $X = \{1, 2, 3, 4, 5, 6, 7, 8\}$ とする。条件を満たす部分群を $H \subset S_8$ とおく。<br>
+<br>
+<strong>ステップ1: $H$ は $X$ 上で推移的である</strong><br>
+仮定より、群 $H$ は長さ8の巡回置換 $\sigma_8$ を含む。<br>
+$\sigma_8$ は $X$ の8つの要素すべてを一つのサイクルとして巡回させるため、$\sigma_8$ が生成する巡回群 $\langle \sigma_8 \rangle$ は $X$ 上で推移的に作用する。<br>
+$\langle \sigma_8 \rangle \subset H$ であるから、群 $H$ の $X$ への作用も当然に推移的である。<br>
+<br>
+<strong>ステップ2: $H$ は $X$ 上で2重推移的である</strong><br>
+仮定より、群 $H$ は長さ7の巡回置換 $\sigma_7$ を含む。<br>
+$\sigma_7$ は $X$ のうち7つの元を巡回させ、残りの1つの元を固定する。固定される元を $a \in X$ とおく。<br>
+$\sigma_7 a = a$ であるため、$\sigma_7$ は $a$ の安定化群 $H_a$ に属する。<br>
+$\sigma_7$ は差集合 $X \smallsetminus \{a\}$ の上では長さ7の巡回置換として作用するため、$\langle \sigma_7 \rangle$ は $X \smallsetminus \{a\}$ 上で推移的である。<br>
+ゆえに、部分群 $H_a$ も $X \smallsetminus \{a\}$ 上で推移的である。<br>
+ステップ1で $H$ が推移的であることが示されており、かつ $H_a$ が $X \smallsetminus \{a\}$ 上で推移的 (すなわち1重推移的) であるため、補題2により群 $H$ は $X$ 上で2重推移的である。<br>
+<br>
+<strong>ステップ3: $H$ は $X$ 上で3重推移的である</strong><br>
+仮定より、群 $H$ は長さ6の巡回置換 $\sigma_6$ を含む。<br>
+$\sigma_6$ は $X$ のうち6つの元を巡回させ、残りの2つの元を固定する。固定される相異なる2元を $b, c \in X$ とおく。<br>
+$\sigma_6 b = b$ かつ $\sigma_6 c = c$ であるため、$\sigma_6$ は $b$ と $c$ の共通の安定化群 $H_{b, c} = H_b \cap H_c$ に属する。<br>
+$\sigma_6$ は差集合 $X \smallsetminus \{b, c\}$ の上では長さ6の巡回置換として作用するため、$\langle \sigma_6 \rangle$ は $X \smallsetminus \{b, c\}$ 上で推移的である。<br>
+ゆえに、部分群 $H_{b, c}$ も $X \smallsetminus \{b, c\}$ 上で推移的である。<br>
+ステップ2で $H$ が2重推移的であることが示されている。2重推移的な群においては、任意の2点の組から別の2点の組へ移す元が存在するため、任意の相異なる2点に対する安定化群はすべて互いに共役となる。<br>
+したがって、ある特定の組 $(b, c)$ の安定化群 $H_{b, c}$ が残りの集合 $X \smallsetminus \{b, c\}$ 上で推移的であれば、任意の相異なる2元 $x, y \in X$ に対する安定化群 $H_{x, y}$ も $X \smallsetminus \{x, y\}$ 上で推移的となる。<br>
+群 $H$ が推移的であり、1点安定化群 $H_x$ が推移的 ($H$ が2重推移的)、そして2点安定化群 $H_{x, y}$ が推移的であるため、補題2を繰り返し適用することにより群 $H$ は $X$ 上で3重推移的であることが結論づけられる。<br>
+<br>
+<strong>ステップ4: 軌道・安定化群定理を用いた位数の計算</strong><br>
+群 $H$ は $X$ 上で推移的であるから、ある固定した $x \in X$ に対して軌道・安定化群定理を適用すると<br>
+$$ |H| = |X| \cdot |H_x| = 8 \cdot |H_x| $$<br>
+が成り立つ。<br>
+次に、群 $H$ が2重推移的であるため、安定化群 $H_x$ は $X \smallsetminus \{x\}$ 上で推移的である。ある固定した $y \in X \smallsetminus \{x\}$ に対して同様に軌道・安定化群定理を適用すると<br>
+$$ |H_x| = |X \smallsetminus \{x\}| \cdot |H_{x, y}| = 7 \cdot |H_{x, y}| $$<br>
+が成り立つ。<br>
+さらに、群 $H$ が3重推移的であるため、安定化群 $H_{x, y}$ は $X \smallsetminus \{x, y\}$ 上で推移的である。ある固定した $w \in X \smallsetminus \{x, y\}$ に対して定理を適用すると<br>
+$$ |H_{x, y}| = |X \smallsetminus \{x, y\}| \cdot |H_{x, y, w}| = 6 \cdot |H_{x, y, w}| $$<br>
+が成り立つ。<br>
+これらの式を順番に代入すると、群 $H$ の位数は<br>
+$$ |H| = 8 \times 7 \times 6 \times |H_{x, y, w}| $$<br>
+と表される。<br>
+安定化群 $H_{x, y, w}$ は有限群 $H$ の部分群であるため、その位数 $|H_{x, y, w}|$ は正の整数 (自然数) である。<br>
+以上より、条件を満たす部分群 $H$ の位数は $8 \times 7 \times 6$ で割り切れることが完全に証明された。
+</div>
+
+<h2>4. 参考文献</h2>
+<ul>
+  <li>Thomas W. Hungerford, <i>Algebra</i>, Springer. (群作用、軌道・安定化群定理、対称群の性質に関する標準的な教科書。<a href="https://link.springer.com/book/10.1007/978-1-4612-6101-8" target="_blank">Springer公式</a>)</li>
+  <li>David S. Dummit and Richard M. Foote, <i>Abstract Algebra</i>, Wiley. (群の多重推移性や安定化群の性質に関する詳細な議論。<a href="https://www.wiley.com/en-us/Abstract+Algebra%2C+3rd+Edition-p-9780471433347" target="_blank">Wiley公式</a>)</li>
+</ul>
+
+</body>
+</html>

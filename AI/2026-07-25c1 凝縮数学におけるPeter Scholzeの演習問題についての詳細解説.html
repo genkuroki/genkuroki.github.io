@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>凝縮数学における ℓ²(ℕ)/ℓ¹(ℕ) と Peter Scholze の演習問題についての詳細解説</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #fcfcfc;
+  }
+  h1, h2, h3 {
+    font-family: "Noto Sans JP", sans-serif;
+    color: #2c3e50;
+  }
+  h1 {
+    text-align: center;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 10px;
+  }
+  h2 {
+    border-bottom: 1px solid #bdc3c7;
+    margin-top: 2rem;
+  }
+  .definition, .proposition, .theorem {
+    background-color: #f0f7f4;
+    border-left: 5px solid #27ae60;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  .proof {
+    background-color: #fdfefe;
+    border-left: 5px solid #bdc3c7;
+    padding: 15px;
+    margin: 20px 0;
+    font-style: normal;
+  }
+  .remark {
+    background-color: #fff9e6;
+    border-left: 5px solid #f1c40f;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  code {
+    background-color: #ecf0f1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .references {
+    margin-top: 3rem;
+    background-color: #eee;
+    padding: 20px;
+    border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<h1>凝縮数学における $\ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ と Peter Scholze の演習問題についての詳細解説</h1>
+
+<div class="remark">
+  <strong>概要:</strong> 本稿は、Dustin Clausen と Peter Scholze によって提唱された「凝縮数学 (condensed mathematics)」の文脈においてしばしば言及される商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ に関する議論をまとめたものである。この話題は Scholze 自身による Math Stack Exchange での書き込みが発端となっており、公式な論文等の形では詳細な証明が公開されていない。本稿では、チャットでの対話に基づき、位相空間論における問題点と凝縮数学による解決策を概観し、さらに Scholze が提示した「楽しい演習問題」に対する自己完結的 (self-contained) かつ完全な証明を与える。
+</div>
+
+<h2>1. 議論の背景と出典</h2>
+
+<p>
+YouTube 等で公開されている凝縮数学の解説において、しばしば商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ の例が登場する。この具体例は、従来の位相空間 (topological space) の概念の限界を示し、凝縮集合 (condensed set) の有用性を対比させるための非常に直観的 (intuitive) な例として知られている。
+</p>
+
+<p>
+この話題の初出かつ原典にあたる文献は、学術雑誌の論文や書籍ではなく、<strong>Peter Scholze 自身による Math Stack Exchange での回答</strong>である。
+</p>
+<ul>
+  <li><strong>サイト:</strong> Math Stack Exchange</li>
+  <li><strong>質問タイトル:</strong> Examples of the difference between Topological Spaces and Condensed Sets</li>
+  <li><strong>回答者:</strong> Peter Scholze</li>
+  <li><strong>投稿日:</strong> 2021年7月15日</li>
+</ul>
+
+<h2>2. 基本概念の定義と包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$</h2>
+
+<p>
+議論の前提となる関数解析 (functional analysis) の基本的な対象である数列空間 (sequence space) について定義し、それらの包含関係を証明する。
+</p>
+
+<div class="definition">
+  <strong>定義 1 ($\ell^p$ 空間)</strong><br>
+  $1 \le p  <  \infty$ を満たす実数 $p$ に対して、実数列 (real sequence) $x = (x_n)_{n \in \mathbb{N}}$ であって、無限級数 $\sum_{n=1}^\infty |x_n|^p$ が収束するもののなす集合を $\ell^p(\mathbb{N})$ と定義する。すなわち、以下のように表される。
+  $$ \ell^p(\mathbb{N}) = \left\{ (x_n)_{n \in \mathbb{N}} \mid \sum_{n=1}^\infty |x_n|^p  <  \infty \right\} $$
+  特に、$p=1$ の場合を絶対収束数列の空間 $\ell^1(\mathbb{N})$ と呼び、ノルムを $\|x\|_1 = \sum_{n=1}^\infty |x_n|$ で定める。$p=2$ の場合を2乗和収束数列の空間 $\ell^2(\mathbb{N})$ と呼び、ノルムを $\|x\|_2 = \left( \sum_{n=1}^\infty |x_n|^2 \right)^{1/2}$ で定める。これらは完備 (complete) なノルム空間、すなわち Banach空間 (Banach space) となる。
+</div>
+
+<p>
+理解に役立つ例として、数列 $x = (1/n)_{n \in \mathbb{N}}$ を考える。調和級数 $\sum_{n=1}^\infty 1/n$ は発散するため $x \notin \ell^1(\mathbb{N})$ であるが、$\sum_{n=1}^\infty 1/n^2 = \pi^2 / 6  <  \infty$ であるため $x \in \ell^2(\mathbb{N})$ となる。この事実は $\ell^1(\mathbb{N})$ と $\ell^2(\mathbb{N})$ が異なる空間であることを示している。
+次に、一般的な包含関係を証明する。
+</p>
+
+<div class="proposition">
+  <strong>命題 2.1</strong><br>
+  包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$ が成り立つ。
+</div>
+
+<div class="proof">
+  <strong>証明:</strong><br>
+  任意の実数列 $x = (x_n)_{n \in \mathbb{N}} \in \ell^1(\mathbb{N})$ をとる。定義より、無限級数 $\sum_{n=1}^\infty |x_n|$ は収束して有限の値を持つ。<br><br>
+  無限級数が収束するための必要条件により、数列 $(x_n)_{n \in \mathbb{N}}$ の各項は $n \to \infty$ とともに $0$ に収束する。すなわち、極限 (limit) $\lim_{n \to \infty} x_n = 0$ が成り立つ。<br><br>
+  極限の定義から、$\epsilon = 1$ に対してある自然数 $N \in \mathbb{N}$ が存在し、$n \ge N$ を満たす任意の自然数 $n$ に対して $|x_n|  <  1$ が成り立つ。<br><br>
+  実数の基本的な性質として、$0 \le |x_n|  <  1$ を満たすとき、この不等式の両辺に正の数あるいは $0$ である $|x_n|$ を掛けることで、不等式 $|x_n|^2 \le |x_n|$ が得られる。<br><br>
+  この不等式を用いて、数列の2乗和の部分和 (partial sum) を評価する。任意の整数 $M  >  N$ に対して、各項での不等式を足し合わせることで以下の不等式が成り立つ。
+  $$ \sum_{n=N}^M |x_n|^2 \le \sum_{n=N}^M |x_n| $$
+  仮定より元々の級数 $\sum_{n=1}^\infty |x_n|$ は収束するため、その尾部 (tail) である $\sum_{n=N}^\infty |x_n|$ も有限の値を持つ。正項級数に関する比較判定法 (comparison test) により、上から抑えられている左辺の無限級数 $\sum_{n=N}^\infty |x_n|^2$ も収束する。<br><br>
+  さらに、級数の最初の有限個の項の和 $\sum_{n=1}^{N-1} |x_n|^2$ は有限個の実数の和であるため、当然ながら有限の値である。したがって、全体としての無限級数 $\sum_{n=1}^\infty |x_n|^2$ は以下のように有限の値と有限の値の和に分解できるため、これも収束する。
+  $$ \sum_{n=1}^\infty |x_n|^2 = \sum_{n=1}^{N-1} |x_n|^2 + \sum_{n=N}^\infty |x_n|^2  <  \infty $$
+  以上により、無限級数 $\sum_{n=1}^\infty |x_n|^2$ が収束することが示されたため、$x \in \ell^2(\mathbb{N})$ である。任意の $x \in \ell^1(\mathbb{N})$ が $x \in \ell^2(\mathbb{N})$ を満たすため、包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$ が成り立つ。証明終。
+</div>
+
+<h2>3. 位相空間における商位相の問題点と凝縮数学による解決</h2>
+
+<p>
+Banach空間の包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$ が確認できたため、自然な商ベクトル空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ を考えることができる。しかし、ここに<strong>位相空間 (topological space) の概念の限界</strong>が現れる。
+</p>
+
+<p>
+$\ell^2(\mathbb{N})$ に通常のノルム位相を入れ、商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ に商位相 (quotient topology) を導入するとする。商写像を $\pi : \ell^2(\mathbb{N}) \to \ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ と置く。商位相の定義により、$U \subset \ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ が開集合 (open set) であることと、$\pi^{-1}(U)$ が $\ell^2(\mathbb{N})$ の開集合であることは同値である。<br>
+もし $U$ が空集合 $\varnothing$ でない場合、ある点を含むため、その逆像 $\pi^{-1}(U)$ は少なくとも一つの $\ell^1(\mathbb{N})$ の剰余類（平行移動された $\ell^1(\mathbb{N})$）を完全に含む。ここで、有限個の非ゼロ項を持つ数列の集合（有限台の数列の集合）は $\ell^1(\mathbb{N})$ に含まれ、かつ $\ell^2(\mathbb{N})$ において稠密 (dense) である。部分空間が稠密であるならば、それを平行移動したものも稠密である。したがって、$\pi^{-1}(U)$ は $\ell^2(\mathbb{N})$ における稠密な部分集合を含む開集合となるため、必然的に $\pi^{-1}(U) = \ell^2(\mathbb{N})$ 全体となってしまう。<br>
+結果として、商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ の開集合は空集合 $\varnothing$ と全体空間のみとなる。すなわち、<strong>密着位相 (indiscrete topology)</strong> になってしまうのである。位相線型空間 (topological vector space) としての構造は完全に潰れ、単なる抽象的なベクトル空間以上の情報を持たなくなってしまう。
+</p>
+
+<p>
+Scholze らは、この問題を解決するために<strong>凝縮数学 (condensed mathematics)</strong> を用いることを提唱した。
+</p>
+
+<div class="definition">
+  <strong>定義 2 (凝縮集合)</strong><br>
+  超不連結 (extremally disconnected) な compact Hausdorff空間 (compact Hausdorff space) のなす圏 (category) を $\text{ExtrDisc}$ とする。ここで、位相空間が超不連結であるとは、任意の開集合の閉包が再び開集合 (すなわち clopen であること) を満たすことをいう。<br>
+  凝縮集合 (condensed set) とは、関手 (functor) $X : \text{ExtrDisc}^{\text{op}} \to \text{Set}$ であって、有限素な和 (finite disjoint union) を積 (product) に写し、かつ全射 (surjection) に対して sheaf (層) の公理を満たすもののことである。<br>
+  任意の位相空間 $T$ は、$S \mapsto C(S, T)$ （$S$ から $T$ への連続写像の集合）によって凝縮集合 $\underline{T}$ を自然に定める。位相空間の間の連続写像は凝縮集合の間の射を誘導する。<br>
+  凝縮 $\mathbb{R}$ ベクトル空間 (condensed $\mathbb{R}$-vector space) の圏は完全なアーベル圏 (abelian category) をなす。
+</div>
+
+<p>
+凝縮 $\mathbb{R}$ ベクトル空間の圏がアーベル圏であることは極めて重要である。これにより、通常のアーベル群や加群の圏と同じように、任意の射に対して核 (kernel) や余核 (cokernel) が well-defined に存在し、商対象 $\underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ も豊かで非自明な構造を保ったまま存在できるのである（これは liquid $\mathbb{R}$-vector space の理論へと繋がる）。
+</p>
+
+<h2>4. Peter Scholze の演習問題とその完全な証明</h2>
+
+<p>
+Scholze は Stack Exchange の回答の最後において、凝縮数学の世界では商空間 $\underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ がいかに非自明な対象であるかを示す「楽しい演習問題 (fun exercise)」を提示した。それは、一見すると非線型 (non-linear) である関数 $x \mapsto x \log |x|$ が、凝縮 $\mathbb{R}$ ベクトル空間の間の「線型な射」を誘導するという驚くべき事実である。
+</p>
+<p>
+この証明については、インターネット上の他のウェブページや公式文献に明記されているものは見当たらず、実解析の標準的な不等式評価を用いてゼロから構成する必要がある。以下にその自己完結的な完全な証明を記述する。
+</p>
+
+<div class="theorem">
+  <strong>定理 4.1 (Scholze の演習問題)</strong><br>
+  写像 $F : \ell^1(\mathbb{N}) \to \ell^2(\mathbb{N})$ を $x = (x_n) \mapsto (x_n \log |x_n|)$ （ただし $0 \log 0 = 0$ とする）によって定める。このとき $F$ はノルム位相に関して連続 (continuous) である。さらに、この $F$ が誘導する凝縮集合の射 $\underline{F} : \underline{\ell^1(\mathbb{N})} \to \underline{\ell^2(\mathbb{N})}$ と自然な商写像 $\pi : \underline{\ell^2(\mathbb{N})} \to \underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ の合成 $\pi \circ \underline{F}$ は、凝縮 $\mathbb{R}$ ベクトル空間の間の非自明な線型写像 (linear map) を定める。
+</div>
+
+<div class="proof">
+  <strong>証明:</strong><br>
+  実関数 $f: \mathbb{R} \to \mathbb{R}$ を $t \neq 0$ のとき $f(t) = t \log |t|$ 、$t=0$ のとき $f(0) = 0$ と定義する。極限 $\lim_{t \to 0} t \log |t| = 0$ により、$f$ は $\mathbb{R}$ 全体で連続である。<br><br>
+
+  <strong>ステップ 1: $F$ が well-defined であること。</strong><br>
+  $x = (x_n) \in \ell^1(\mathbb{N})$ とする。極限 $\lim_{t \to 0} t (\log |t|)^2 = 0$ であるから、ある定数 $C  >  0$ と $\delta  >  0$ が存在して、$|t|  <  \delta$ ならば $|f(t)|^2 = |t|^2 (\log|t|)^2 \le C |t|$ が成り立つ。$x \in \ell^1(\mathbb{N})$ より $x_n \to 0$ であるから、ある $N \in \mathbb{N}$ が存在して、$n  >  N$ ならば $|x_n|  <  \delta$ となる。したがって、この尾部について
+  $$ \sum_{n=N+1}^\infty |f(x_n)|^2 \le C \sum_{n=N+1}^\infty |x_n|  <  \infty $$
+  となる。最初の $N$ 項の和は有限個の実数の和であるから当然有限である。よって $\sum_{n=1}^\infty |f(x_n)|^2  <  \infty$ であり、$F(x) \in \ell^2(\mathbb{N})$ が成り立つ。すなわち $F : \ell^1(\mathbb{N}) \to \ell^2(\mathbb{N})$ は写像として well-defined である。<br><br>
+
+  <strong>ステップ 2: $F$ の連続性。</strong><br>
+  $\ell^1(\mathbb{N})$ の点列 $x^{(k)}$ が $k \to \infty$ で $x \in \ell^1(\mathbb{N})$ に収束するとする。任意の $\epsilon  >  0$ をとる。$x^{(k)}$ は $\ell^1(\mathbb{N})$ におけるノルム収束列であるため、一様可積分性 (uniform integrability) に類似した尾部の一様評価が成り立つ。すなわち、ある $N \in \mathbb{N}$ が存在して、すべての $k$ について 
+  $$ \sum_{n > N} |x_n^{(k)}|  <  \frac{\epsilon}{4C} \quad \text{および} \quad \sum_{n > N} |x_n|  <  \frac{\epsilon}{4C} $$
+  を満たすようにできる。この $N$ を固定した上で、さらに $k$ を十分大きくとれば、すべての $n  >  N$ に対して $|x_n^{(k)}|  <  \delta$ かつ $|x_n|  <  \delta$ が成り立つようにできる（ここで $\delta$ と $C$ はステップ1で選んだ定数である）。<br>
+  このとき、尾部における差の2乗和は次のように評価できる。
+  $$ \sum_{n > N} |f(x_n^{(k)}) - f(x_n)|^2 \le 2 \sum_{n > N} (|f(x_n^{(k)})|^2 + |f(x_n)|^2) \le 2C \sum_{n > N} (|x_n^{(k)}| + |x_n|)  <  2C \left( \frac{\epsilon}{4C} + \frac{\epsilon}{4C} \right) = \epsilon $$
+  一方で、$1 \le n \le N$ の有限個の $n$ については、$f$ の連続性と各座標ごとの収束 $x_n^{(k)} \to x_n$ により、十分大きな $k$ に対して $\sum_{n=1}^N |f(x_n^{(k)}) - f(x_n)|^2  <  \epsilon$ とできる。<br>
+  したがって、十分大きな $k$ に対して $\|F(x^{(k)}) - F(x)\|_2^2  <  2\epsilon$ となり、$F$ は通常のノルム位相に関して連続写像である。連続写像は関手性により、凝縮集合の射 $\underline{F} : \underline{\ell^1(\mathbb{N})} \to \underline{\ell^2(\mathbb{N})}$ を well-defined に誘導する。<br><br>
+
+  <strong>ステップ 3: モジュロ $\ell^1(\mathbb{N})$ での加法性。</strong><br>
+  2変数関数 $g(u, v) = f(u+v) - f(u) - f(v)$ を考える。任意の $c  >  0$ に対して、
+  $$ g(cu, cv) = (cu+cv)\log(c|u+v|) - cu\log(c|u|) - cv\log(c|v|) $$
+  $$ = c(u+v)(\log c + \log|u+v|) - cu(\log c + \log|u|) - cv(\log c + \log|v|) $$
+  $$ = c(f(u+v) - f(u) - f(v)) + c\log c (u+v - u - v) = c g(u, v) $$
+  が成り立つ。有界閉集合 (compact set) である $K = \{(u, v) \in \mathbb{R}^2 \mid |u| + |v| = 1\}$ 上で $g$ は連続であるため最大値を持つ。その絶対値の最大値を $M  >  0$ と置く。<br>
+  任意の $(x, y) \neq (0,0)$ に対して、$c = |x| + |y|  >  0$ とし、$u = x/c$、$v = y/c$ とすると $(u, v) \in K$ である。ゆえに、
+  $$ |g(x, y)| = |g(cu, cv)| = c |g(u, v)| \le M c = M(|x| + |y|) $$
+  がすべての $(x, y) \in \mathbb{R}^2$ で成り立つ（$(0,0)$ のときは自明）。<br>
+  $x, y \in \ell^1(\mathbb{N})$ とすると、各項について $|g(x_n, y_n)| \le M(|x_n| + |y_n|)$ が成り立つため、
+  $$ \sum_{n=1}^\infty |g(x_n, y_n)| \le M (\|x\|_1 + \|y\|_1)  <  \infty $$
+  となる。これは数列 $F(x+y) - F(x) - F(y)$ が $\ell^1(\mathbb{N})$ に属することを意味する。したがって、商空間 $\underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ においては $F(x+y) \equiv F(x) + F(y)$ となる。<br><br>
+
+  <strong>ステップ 4: モジュロ $\ell^1(\mathbb{N})$ でのスカラー倍。</strong><br>
+  $c \in \mathbb{R}$ と $x \in \ell^1(\mathbb{N})$ に対して、
+  $$ f(cx) = cx \log|cx| = c(x \log|x|) + cx \log|c| = c f(x) + (c \log|c|) x $$
+  である（$c=0$ または $x=0$ のときは自明に $0$ となる）。<br>
+  ここで $x \in \ell^1(\mathbb{N})$ であり、$c \log|c|$ は単なる定数であるから、定数倍された数列 $(c \log|c|) x$ も $\ell^1(\mathbb{N})$ に属する。よって $F(cx) - c F(x) \in \ell^1(\mathbb{N})$ である。商空間においては $F(cx) \equiv c F(x)$ となる。<br>
+  ステップ 3 と 4 により、非線型な位相空間の連続写像 $F$ が誘導する射 $\underline{F}$ を商対象へ射影した $\pi \circ \underline{F}$ は、凝縮 $\mathbb{R}$ ベクトル空間の圏において完全な線型写像 (linear map) となることが示された。<br><br>
+
+  <strong>ステップ 5: 非自明性。</strong><br>
+  最後に、この写像 $\pi \circ \underline{F}$ が零写像 (zero map) でないことを示す。そのためには $x \in \ell^1(\mathbb{N})$ であって $F(x) \notin \ell^1(\mathbb{N})$ となる例を一つ構成すれば十分である。<br>
+  $n \ge 2$ に対して数列 $x_n = \frac{1}{n (\log n)^2}$ を考える。積分判定法により $\sum_{n=2}^\infty \frac{1}{n (\log n)^2}  <  \infty$ であるから、$x = (x_n)_{n \ge 2} \in \ell^1(\mathbb{N})$ である。（添字の開始が1ずれることは空間の性質に影響しない。）<br>
+  一方で、$f(x_n)$ を計算すると、
+  $$ f(x_n) = \frac{1}{n (\log n)^2} \log \left( \frac{1}{n (\log n)^2} \right) = \frac{-\log n - 2 \log \log n}{n (\log n)^2} $$
+  となる。十分大きな $n$ において、$\log n + 2 \log \log n  >  \frac{1}{2} \log n$ が成り立つため、
+  $$ |f(x_n)|  >  \frac{\frac{1}{2} \log n}{n (\log n)^2} = \frac{1}{2 n \log n} $$
+  となる。調和級数の変形として、積分判定法により $\sum_{n=2}^\infty \frac{1}{n \log n} = \infty$ となることはよく知られている。したがって、比較判定法により $\sum_{n=2}^\infty |f(x_n)| = \infty$ となる。<br>
+  ゆえに $F(x) \notin \ell^1(\mathbb{N})$ であり、商空間において $F(x)$ のクラスは $0$ ではない。すなわち $\pi \circ \underline{F}$ は非自明である。<br>
+  以上により、全ての証明が完結する。証明終。
+</div>
+
+<div class="references">
+  <h3>参考文献</h3>
+  <ol>
+    <li>
+      Peter Scholze (2021). 
+      <em>Examples of the difference between Topological Spaces and Condensed Sets</em>. 
+      Math Stack Exchange. 
+      <a href="https://math.stackexchange.com/questions/4044728/examples-of-the-difference-between-topological-spaces-and-condensed-sets" target="_blank" rel="noopener noreferrer">https://math.stackexchange.com/questions/4044728/examples-of-the-difference-between-topological-spaces-and-condensed-sets</a> 
+      (2021年7月15日閲覧)
+    </li>
+  </ol>
+</div>
+
+</body>
+</html>

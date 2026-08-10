@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>式 1 - 2r cos θ + r^2 の数学的構造と多角的な応用</title>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #2d3748;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background-color: #f7fafc;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1a365d;
+            border-bottom: 3px solid #3182ce;
+            padding-bottom: 12px;
+            margin-top: 0;
+            font-size: 2em;
+        }
+        h2 {
+            color: #2b6cb0;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            font-size: 1.5em;
+        }
+        h3 {
+            color: #2d3748;
+            margin-top: 30px;
+            font-size: 1.2em;
+        }
+        .definition, .proposition, .example, .proof, .remark {
+            padding: 18px 22px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        .definition {
+            background-color: #ebf8ff;
+            border-left: 5px solid #3182ce;
+        }
+        .proposition {
+            background-color: #f0fff4;
+            border-left: 5px solid #38a169;
+        }
+        .example {
+            background-color: #fffaf0;
+            border-left: 5px solid #dd6b20;
+        }
+        .proof {
+            background-color: #f7fafc;
+            border-left: 5px solid #718096;
+            border: 1px solid #e2e8f0;
+            border-left-width: 5px;
+        }
+        .remark {
+            background-color: #faf5ff;
+            border-left: 5px solid #805ad5;
+        }
+        .title-block {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background-color: #edf2f7;
+            border-radius: 8px;
+        }
+        .title-block h1 {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 10px;
+        }
+        .meta-info {
+            color: #718096;
+            font-size: 0.95em;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 40px 0;
+        }
+        a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references ol {
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="title-block">
+        <h1>式 $1 - 2r \cos \theta + r^2$ の数学的構造とその多角的な応用</h1>
+        <div class="meta-info">
+            幾何学、複素解析、調和解析、直交多項式論における基礎と厳密な証明
+        </div>
+    </div>
+
+    <p>
+        数学において、$1 - 2r \cos \theta + r^2$ という二項二次形式に似た構造を持つ代数式は、一見すると初等的な三角関数の計算式に見える。しかし、この式は幾何学における距離の基本公式から出発し、複素解析における基底項、偏微分方程式の境界値問題を解く核関数、さらには物理学や数値解析で多用される直交多項式の母関数に至るまで、極めて多岐にわたる数学分野で中心的な役割を果たしている。
+    </p>
+
+    <p>
+        本稿では、この式がどのような文脈で現れ、どのような数学的意義を持つのかについて、必要な基本概念の定義、具体的な数値例、および論理的ギャップのない完全な証明を付して包括的に解説する。
+    </p>
+
+    <hr>
+
+    <h2>1. 幾何学における登場：ユークリッド距離と余弦定理</h2>
+
+    <p>
+        最も直観的かつ根源的な登場場面は、2次元ユークリッド空間 $\mathbb{R}^2$ における2点間の距離の計算である。
+    </p>
+
+    <div class="definition">
+        <strong>定義 1.1（直交座標系と極座標系）</strong><br>
+        2次元ユークリッド空間 $\mathbb{R}^2$ において、原点を $O$ とする。任意の点 $P \in \mathbb{R}^2$ の直交座標 (Cartesian coordinates) を $(x, y)$ とするとき、原点 $O$ からの距離 $r = \sqrt{x^2 + y^2}$ と、$x$ 軸の正の向きからの回転角 $\theta \in \mathbb{R}$ の組 $(r, \theta)$ を点 $P$ の極座標 (polar coordinates) と呼ぶ。直交座標と極座標の間には以下の関係式が成り立つ：
+        $$x = r \cos \theta, \quad y = r \sin \theta$$
+    </div>
+
+    <div class="proposition">
+        <strong>命題 1.1（2点間の距離の2乗）</strong><br>
+        極座標で $(1, 0)$ と表される点 $A$ と、極座標で $(r, \theta)$ と表される点 $B$ の間のユークリッド距離を $d(A, B)$ とする。このとき、距離の2乗は次式で与えられる：
+        $$d(A, B)^2 = 1 - 2r \cos \theta + r^2$$
+    </div>
+
+    <div class="proof">
+        <strong>証明</strong><br>
+        点 $A$ および点 $B$ の直交座標表示を求める。
+        点 $A$ は極座標 $(1, 0)$ であるから、直交座標では $(1 \cdot \cos 0, 1 \cdot \sin 0) = (1, 0)$ となる。
+        点 $B$ は極座標 $(r, \theta)$ であるから、直交座標では $(r \cos \theta, r \sin \theta)$ となる。
+
+        2次元ユークリッド空間における2点間の距離の定義より、距離の2乗 $d(A, B)^2$ は各成分の差の2乗の和に等しい：
+        $$d(A, B)^2 = (r \cos \theta - 1)^2 + (r \sin \theta - 0)^2$$
+
+        上式の右辺を展開する：
+        $$(r \cos \theta - 1)^2 = r^2 \cos^2 \theta - 2r \cos \theta + 1$$
+        $$(r \sin \theta - 0)^2 = r^2 \sin^2 \theta$$
+
+        これらを足し合わせると、以下を得る：
+        $$d(A, B)^2 = r^2 \cos^2 \theta - 2r \cos \theta + 1 + r^2 \sin^2 \theta$$
+
+        $r^2$ を含む項をまとめ、ピタゴラスの基本等式 $\cos^2 \theta + \sin^2 \theta = 1$ を適用する：
+        $$d(A, B)^2 = r^2 (\cos^2 \theta + \sin^2 \theta) - 2r \cos \theta + 1 = r^2 \cdot 1 - 2r \cos \theta + 1 = 1 - 2r \cos \theta + r^2$$
+
+        したがって、距離の2乗が $1 - 2r \cos \theta + r^2$ に等しいことが示された。（証明終）
+    </div>
+
+    <div class="example">
+        <strong>例 1.1（単位円上の2点間の距離）</strong><br>
+        特に $r = 1$ の場合を考える。これは単位円周 $S^1$ 上の2点 $A(1, 0)$ と $B(1, \theta)$ の距離を表す。
+        このとき距離の2乗は、
+        $$d(A, B)^2 = 1 - 2 \cos \theta + 1 = 2(1 - \cos \theta)$$
+        となる。半角の公式 $\sin^2\left(\frac{\theta}{2}\right) = \frac{1 - \cos \theta}{2}$ を用いると、
+        $$d(A, B)^2 = 4 \sin^2\left(\frac{\theta}{2}\right)$$
+        となり、距離自体は $d(A, B) = 2 \left| \sin\left(\frac{\theta}{2}\right) \right|$ という初等幾何学的に知られた弦の長さの公式に一致する。
+    </div>
+
+    <hr>
+
+    <h2>2. 複素解析における登場：絶対値の分解と複素等比級数</h2>
+
+    <p>
+        複素解析学において、平面 $\mathbb{R}^2$ は複素数体 $\mathbb{C}$ と同型視される。このとき、幾何学的な距離の計算は複素数の絶対値の計算として定式化される。
+    </p>
+
+    <div class="definition">
+        <strong>定義 2.1（複素数の指数表示と Eulerの公式）</strong><br>
+        複素数 $z \in \mathbb{C}$ は、実部 $x \in \mathbb{R}$ と虚部 $y \in \mathbb{R}$ を用いて $z = x + iy$ （$i$ は虚数単位 $i^2 = -1$）と表される。
+        Eulerの公式 (Euler's formula) $e^{i\theta} = \cos \theta + i \sin \theta$ を用いると、複素数 $z$ は極形式 $z = r e^{i\theta}$ （ただし $r = |z| \ge 0$, $\theta \in \mathbb{R}$）で表示される。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 2.1（複素差分の模長と級数和）</strong><br>
+        $z = r e^{i\theta} \in \mathbb{C}$ とする。
+        <ol>
+            <li>$|1 - z|^2 = 1 - 2r \cos \theta + r^2$ が成り立つ。</li>
+            <li>$|r|  <  1$ のとき、複素等比級数 $\sum_{n=0}^{\infty} z^n$ は絶対収束し、実部について以下の等式が成り立つ：
+                $$\sum_{n=0}^{\infty} r^n \cos(n\theta) = \frac{1 - r \cos \theta}{1 - 2r \cos \theta + r^2}$$
+            </li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <strong>証明</strong><br>
+        まず主張 1 を証明する。
+        複素数 $w = a + ib$ の絶対値の2乗の定義 $|w|^2 = w \bar{w}$（$\bar{w}$ は共役複素数）を用いる。
+        $z = r (\cos \theta + i \sin \theta)$ であるから、
+        $$1 - z = (1 - r \cos \theta) - i r \sin \theta$$
+        となる。したがって、その絶対値の2乗は実部と虚部の2乗の和として計算できる：
+        $$|1 - z|^2 = (1 - r \cos \theta)^2 + (-r \sin \theta)^2 = 1 - 2r \cos \theta + r^2 \cos^2 \theta + r^2 \sin^2 \theta$$
+        $$\cos^2 \theta + \sin^2 \theta = 1 \text{ より、} |1 - z|^2 = 1 - 2r \cos \theta + r^2$$
+        が得られる。
+
+        次に主張 2 を証明する。
+        $|z| = |r e^{i\theta}| = |r|  <  1$ であるため、無限等比級数 $\sum_{n=0}^{\infty} z^n$ は収束し、その和は $\frac{1}{1 - z}$ である。
+        この和の分母を有理化するために、分母と分子に共役複素数 $1 - \bar{z}$ を乗じる：
+        $$\frac{1}{1 - z} = \frac{1 - \bar{z}}{(1 - z)(1 - \bar{z})} = \frac{1 - \bar{z}}{|1 - z|^2}$$
+
+        ここで分子は $1 - \bar{z} = 1 - r e^{-i\theta} = (1 - r \cos \theta) + i r \sin \theta$ であり、分母は主張 1 より $|1 - z|^2 = 1 - 2r \cos \theta + r^2$ である。
+        したがって、
+        $$\frac{1}{1 - z} = \frac{1 - r \cos \theta}{1 - 2r \cos \theta + r^2} + i \frac{r \sin \theta}{1 - 2r \cos \theta + r^2}$$
+        となる。
+
+        一方、De Moivreの定理または指数法則より $z^n = (r e^{i\theta})^n = r^n e^{in\theta} = r^n (\cos(n\theta) + i \sin(n\theta))$ であるから、
+        $$\sum_{n=0}^{\infty} z^n = \sum_{n=0}^{\infty} r^n \cos(n\theta) + i \sum_{n=0}^{\infty} r^n \sin(n\theta)$$
+        となる。両辺の実部を比較することにより、
+        $$\sum_{n=0}^{\infty} r^n \cos(n\theta) = \frac{1 - r \cos \theta}{1 - 2r \cos \theta + r^2}$$
+        が得られる。（証明終）
+    </div>
+
+    <div class="example">
+        <strong>例 2.1（具体的な数値における検証）</strong><br>
+        $r = \frac{1}{2}$, $\theta = \frac{\pi}{3}$ とする。
+        このとき $\cos\left(\frac{\pi}{3}\right) = \frac{1}{2}$ である。
+        分母の式を直接計算すると、
+        $$1 - 2\left(\frac{1}{2}\right)\left(\frac{1}{2}\right) + \left(\frac{1}{2}\right)^2 = 1 - \frac{1}{2} + \frac{1}{4} = \frac{3}{4}$$
+        となる。
+        一方、複素数 $z = \frac{1}{2} e^{i\pi/3} = \frac{1}{4} + i \frac{\sqrt{3}}{4}$ であり、
+        $$1 - z = \frac{3}{4} - i \frac{\sqrt{3}}{4}$$
+        $$|1 - z|^2 = \left(\frac{3}{4}\right)^2 + \left(-\frac{\sqrt{3}}{4}\right)^2 = \frac{9}{16} + \frac{3}{16} = \frac{12}{16} = \frac{3}{4}$$
+        となり、完全に一致することが確認できる。
+    </div>
+
+    <hr>
+
+    <h2>3. 調和解析・偏微分方程式における登場：円盤上の Poisson核</h2>
+
+    <p>
+        偏微分方程式論において、単位円盤内の Laplace方程式の解（調和関数）を境界上の値から構成する際に現れる核関数（Kernel）の分母として、本式は不可欠な役割を担う。
+    </p>
+
+    <div class="definition">
+        <strong>定義 3.1（調和関数と Dirichlet問題）</strong><br>
+        開集合 $\Omega \subset \mathbb{R}^2$ 上で定義された2階連続可微分関数 $u \in C^2(\Omega)$ が Laplace方程式
+        $$\Delta u = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0$$
+        を満たすとき、$u$ を $\Omega$ 上の調和関数 (harmonic function) と呼ぶ。
+        単位円盤 $D = \{ (x, y) \in \mathbb{R}^2 \mid x^2 + y^2  <  1 \}$ の境界 $\partial D = S^1$ 上で与えられた連続関数 $f(\theta)$ に対し、$D$ 上で調和かつ $\partial D$ 上で $f$ に一致する関数 $u$ を求める問題を Dirichlet問題 (Dirichlet problem) と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <strong>定義 3.2（Poisson核）</strong><br>
+        $0 \le r  <  1$ および $\theta \in \mathbb{R}$ に対して、Poisson核 (Poisson kernel) $P_r(\theta)$ は以下の Fourier級数として定義される：
+        $$P_r(\theta) = \sum_{n=-\infty}^{\infty} r^{|n|} e^{in\theta}$$
+    </div>
+
+    <div class="proposition">
+        <strong>命題 3.1（Poisson核の閉じた形式）</strong><br>
+        任意の $0 \le r  <  1$ および $\theta \in \mathbb{R}$ に対し、Poisson核 $P_r(\theta)$ は以下の閉じた表示を持つ：
+        $$P_r(\theta) = \frac{1 - r^2}{1 - 2r \cos \theta + r^2}$$
+    </div>
+
+    <div class="proof">
+        <strong>証明</strong><br>
+        定義式における両側無限級数を、$n = 0$ の項、$n  >  0$ の部分、および $n  <  0$ の部分の3つに分解する：
+        $$P_r(\theta) = 1 + \sum_{n=1}^{\infty} r^n e^{in\theta} + \sum_{n=1}^{\infty} r^n e^{-in\theta}$$
+
+        $0 \le r  <  1$ より、$|r e^{i\theta}| = r  <  1$ かつ $|r e^{-i\theta}| = r  <  1$ である。
+        したがって、2つの無限等比級数はともに絶対収束し、和の公式を適用できる：
+        $$\sum_{n=1}^{\infty} r^n e^{in\theta} = \frac{r e^{i\theta}}{1 - r e^{i\theta}}$$
+        $$\sum_{n=1}^{\infty} r^n e^{-in\theta} = \frac{r e^{-i\theta}}{1 - r e^{-i\theta}}$$
+
+        これらを $P_r(\theta)$ に代入して整理する：
+        $$P_r(\theta) = 1 + \left( \frac{r e^{i\theta}}{1 - r e^{i\theta}} + \frac{r e^{-i\theta}}{1 - r e^{-i\theta}} \right)$$
+
+        括弧内の2つの分数式を通分する。分母の積は、
+        $$(1 - r e^{i\theta})(1 - r e^{-i\theta}) = 1 - r (e^{i\theta} + e^{-i\theta}) + r^2 e^0$$
+        Eulerの公式より $e^{i\theta} + e^{-i\theta} = 2 \cos \theta$ であるから、分母は precisely
+        $$1 - 2r \cos \theta + r^2$$
+        となる。
+
+        一方、分子の和は以下のようになる：
+        $$r e^{i\theta}(1 - r e^{-i\theta}) + r e^{-i\theta}(1 - r e^{i\theta}) = r e^{i\theta} - r^2 + r e^{-i\theta} - r^2 = r(e^{i\theta} + e^{-i\theta}) - 2r^2 = 2r \cos \theta - 2r^2$$
+
+        したがって、通分された括弧内の式は、
+        $$\frac{2r \cos \theta - 2r^2}{1 - 2r \cos \theta + r^2}$$
+        となる。
+
+        これに首位項の $1$ を加える：
+        $$P_r(\theta) = 1 + \frac{2r \cos \theta - 2r^2}{1 - 2r \cos \theta + r^2} = \frac{(1 - 2r \cos \theta + r^2) + (2r \cos \theta - 2r^2)}{1 - 2r \cos \theta + r^2} = \frac{1 - r^2}{1 - 2r \cos \theta + r^2}$$
+
+        よって、目的の式が導出された。（証明終）
+    </div>
+
+    <div class="remark">
+        <strong>注意 3.1（Dirichlet問題の解の表現）</strong><br>
+        この Poisson核を用いると、単位円盤上の Dirichlet問題の解は Poisson積分公式 (Poisson integral formula)
+        $$u(r, \theta) = \frac{1}{2\pi} \int_{-\pi}^{\pi} P_r(\theta - \varphi) f(\varphi) d\varphi = \frac{1}{2\pi} \int_{-\pi}^{\pi} \frac{1 - r^2}{1 - 2r \cos(\theta - \varphi) + r^2} f(\varphi) d\varphi$$
+        として解かれる。ここでも分母に $1 - 2r \cos(\theta - \varphi) + r^2$ が本質的に現れている。
+    </div>
+
+    <hr>
+
+    <h2>4. 直交多項式論における登場：Chebyshev多項式の母関数</h2>
+
+    <p>
+        代数学や数値解析において重要な役割を果たす直交多項式系 (orthogonal polynomials) の母関数 (generating function) の分母としても、本式と同値な形が現れる。
+    </p>
+
+    <div class="definition">
+        <strong>定義 4.1（第二種 Chebyshev多項式）</strong><br>
+        第二種 Chebyshev多項式 (Chebyshev polynomials of the second kind) $U_n(x)$ （$n = 0, 1, 2, \dots$）は、以下の漸化式および初期条件によって定義される多項式系列である：
+        <ul>
+            <li>初期条件：$U_0(x) = 1, \quad U_1(x) = 2x$</li>
+            <li>漸化式：$U_{n+1}(x) = 2x U_n(x) - U_{n-1}(x) \quad (n \ge 1)$</li>
+        </ul>
+        角度変数 $\theta$ を用いて $x = \cos \theta$ と置くとき、$U_n(\cos \theta) = \frac{\sin((n+1)\theta)}{\sin \theta}$ という表示を持つ。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 4.1（第二種 Chebyshev多項式の母関数）</strong><br>
+        第二種 Chebyshev多項式の母関数 $F(x, t) = \sum_{n=0}^{\infty} U_n(x) t^n$ は、$|t|  <  1$ において閉じた式
+        $$F(x, t) = \frac{1}{1 - 2xt + t^2}$$
+        で与えられる。ここで $x = \cos \theta$, $t = r$ と置換すると、分母は $1 - 2r \cos \theta + r^2$ となる。
+    </div>
+
+    <div class="proof">
+        <strong>証明</strong><br>
+        形式的冪級数 (formal power series) $F(x, t) = \sum_{n=0}^{\infty} U_n(x) t^n$ を考える。
+        初項と第1項を分離すると、
+        $$F(x, t) = U_0(x) + U_1(x) t + \sum_{n=2}^{\infty} U_n(x) t^n = 1 + 2xt + \sum_{n=2}^{\infty} U_n(x) t^n$$
+        となる。
+
+        和のインデックスを $n = k + 1$ （すなわち $k = n - 1$）とずらすことにより、
+        $$\sum_{n=2}^{\infty} U_n(x) t^n = \sum_{k=1}^{\infty} U_{k+1}(x) t^{k+1}$$
+        ここで漸化式 $U_{k+1}(x) = 2x U_k(x) - U_{k-1}(x)$ を代入する：
+        $$\sum_{k=1}^{\infty} U_{k+1}(x) t^{k+1} = \sum_{k=1}^{\infty} (2x U_k(x) - U_{k-1}(x)) t^{k+1} = 2xt \sum_{k=1}^{\infty} U_k(x) t^k - t^2 \sum_{k=1}^{\infty} U_{k-1}(x) t^{k-1}$$
+
+        それぞれの級数を $F(x, t)$ を用いて書き換える：
+        $$\sum_{k=1}^{\infty} U_k(x) t^k = F(x, t) - U_0(x) = F(x, t) - 1$$
+        $$\sum_{k=1}^{\infty} U_{k-1}(x) t^{k-1} = \sum_{m=0}^{\infty} U_m(x) t^m = F(x, t)$$
+
+        これらを元の式に代入する：
+        $$F(x, t) = 1 + 2xt + 2xt (F(x, t) - 1) - t^2 F(x, t)$$
+        右辺を展開して整理する：
+        $$F(x, t) = 1 + 2xt + 2xt F(x, t) - 2xt - t^2 F(x, t) = 1 + (2xt - t^2) F(x, t)$$
+
+        $F(x, t)$ を含む項を左辺に移項する：
+        $$F(x, t) - (2xt - t^2) F(x, t) = 1 \implies F(x, t)(1 - 2xt + t^2) = 1$$
+
+        したがって、
+        $$F(x, t) = \frac{1}{1 - 2xt + t^2}$$
+        が得られる。$x = \cos \theta$, $t = r$ と置けば、分母は $1 - 2r \cos \theta + r^2$ となる。（証明終）
+    </div>
+
+    <div class="example">
+        <strong>例 4.1（具体的な多項式の展開の確認）</strong><br>
+        分母 $\frac{1}{1 - 2xt + t^2}$ を $t$ について 0 のまわりで Taylor展開（マクローリン展開）してみる。
+        $y = 2xt - t^2$ とおくと、$\frac{1}{1 - y} = 1 + y + y^2 + y^3 + \dots$ であるから、
+        \begin{align*}
+        \frac{1}{1 - (2xt - t^2)} &= 1 + (2xt - t^2) + (2xt - t^2)^2 + (2xt - t^2)^3 + \dots \\
+        &= 1 + 2xt - t^2 + (4x^2 t^2 - 4x t^3 + t^4) + (8x^3 t^3 - \dots) + \dots
+        \end{align*}
+        $t$ の次数ごとに項をまとめると、
+        <ul>
+            <li>$t^0$ の係数： $1 = U_0(x)$</li>
+            <li>$t^1$ の係数： $2x = U_1(x)$</li>
+            <li>$t^2$ の係数： $-1 + 4x^2 = 4x^2 - 1 = U_2(x)$</li>
+            <li>$t^3$ の係数： $-4x + 8x^3 = 8x^3 - 4x = U_3(x)$</li>
+        </ul>
+        となり、定義から導かれる第二種 Chebyshev多項式と完全に一致することが確認できる。
+    </div>
+
+    <div class="remark">
+        <strong>注意 4.1（Legendre多項式との関連）</strong><br>
+        静電気学や天体物理学における多極子展開 (multipole expansion) で現れる Legendre多項式 (Legendre polynomials) $P_n(x)$ の母関数は、
+        $$\frac{1}{\sqrt{1 - 2xt + t^2}} = \sum_{n=0}^{\infty} P_n(x) t^n$$
+        であり、本式の平方根が分母に現れる構造を持つ。これも3次元空間における2点間距離の逆数 $\frac{1}{\|\mathbf{r} - \mathbf{r}'\|}$ に由来するものである。
+    </div>
+
+    <hr>
+
+    <h2>5. 総合的考察</h2>
+
+    <p>
+        以上の展開をまとめると、式 $1 - 2r \cos \theta + r^2$ は単なる特定の計算結果ではなく、以下の普遍的な数学的ループを結びつけていることが理解できる：
+    </p>
+
+    <ul>
+        <li><strong>幾何的直観：</strong> 2次元ユークリッド空間における2点間距離の自乗（余弦定理）。</li>
+        <li><strong>複素構造：</strong> 複素平面における点 $1$ と点 $z = r e^{i\theta}$ の距離 $|1 - z|^2 = (1 - z)(1 - \bar{z})$。</li>
+        <li><strong>調和構造：</strong> 円盤上の Laplace方程式の境界値問題（Dirichlet問題）を解く積分核の分母。</li>
+        <li><strong>代数構造：</strong> Chebyshev多項式や Legendre多項式といった直交多項式系の母関数の生成母体。</li>
+    </ul>
+
+    <p>
+        このように、初等幾何から幾重もの理論的発展を経て高度な解析学・代数学に結びつく点に、数学における構造の美しさと普遍性が端的に表れている。
+    </p>
+
+    <hr>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ol>
+            <li>
+                Ahlfors, L. V. (1979). <em>Complex Analysis: An Introduction to the Theory of Analytic Functions of One Complex Variable</em> (3rd ed.). McGraw-Hill.
+                <a href="https://www.mheducation.com/" target="_blank" rel="noopener">https://www.mheducation.com/</a>
+            </li>
+            <li>
+                Evans, L. C. (2010). <em>Partial Differential Equations</em> (2nd ed.). American Mathematical Society.
+                <a href="https://bookstore.ams.org/gsm-19-r" target="_blank" rel="noopener">https://bookstore.ams.org/gsm-19-r</a>
+            </li>
+            <li>
+                Rudin, W. (1987). <em>Real and Complex Analysis</em> (3rd ed.). McGraw-Hill.
+                <a href="https://www.mheducation.com/" target="_blank" rel="noopener">https://www.mheducation.com/</a>
+            </li>
+            <li>
+                Weisstein, E. W. "Poisson Kernel." From <em>MathWorld</em>--A Wolfram Web Resource.
+                <a href="https://mathworld.wolfram.com/PoissonKernel.html" target="_blank" rel="noopener">https://mathworld.wolfram.com/PoissonKernel.html</a>
+            </li>
+            <li>
+                Weisstein, E. W. "Chebyshev Polynomial of the Second Kind." From <em>MathWorld</em>--A Wolfram Web Resource.
+                <a href="https://mathworld.wolfram.com/ChebyshevPolynomialoftheSecondKind.html" target="_blank" rel="noopener">https://mathworld.wolfram.com/ChebyshevPolynomialoftheSecondKind.html</a>
+            </li>
+        </ol>
+    </div>
+
+</div>
+</body>
+</html>

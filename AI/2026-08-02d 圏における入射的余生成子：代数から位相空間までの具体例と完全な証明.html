@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圏における入射的余生成子：代数から位相空間までの具体例と完全な証明</title>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']]
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: serif;
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+  }
+  h1, h2, h3 {
+    color: #0056b3;
+  }
+  h1 { border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
+  h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 40px; }
+  .definition, .proposition, .lemma, .remark {
+    background-color: #f9f9f9;
+    border-left: 4px solid #0056b3;
+    padding: 10px 15px;
+    margin: 15px 0;
+  }
+  .proof {
+    margin: 15px 0;
+    padding-left: 15px;
+  }
+  .proof::before {
+    content: "証明. ";
+    font-weight: bold;
+  }
+  .qed {
+    text-align: right;
+  }
+  a {
+    color: #0056b3;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<h1>圏における入射的余生成子：代数から位相空間までの具体例と完全な証明</h1>
+
+<p>本稿では、圏論における基本的な概念である「入射的対象」と「余生成子」について解説し、その両方の性質を兼ね備えた「入射的余生成子」の具体例を証明付きで網羅的に紹介する。初学者にも理解しやすいように、各定義を振り返りながら、自己完結 (self-contained) な説明を心がけている。集合の圏や代数的な圏にとどまらず、位相空間の様々な充満部分圏における深い結果（Tietzeの拡張定理やUrysohnの補題との対応）についても完全な証明を与える。</p>
+
+<h2>1. 基本概念の定義</h2>
+
+<p>対象 $\mathcal{C}$ を圏とする。</p>
+
+<div class="definition">
+  <strong>定義 (単射)</strong><br>
+  圏 $\mathcal{C}$ の射 $f \colon A \to B$ が単射 (monomorphism) であるとは、任意の対象 $X \in \mathcal{C}$ と任意の並行な射 $g, h \colon X \to A$ に対して、 $f \circ g = f \circ h$ ならば $g = h$ が成り立つことである。
+</div>
+
+<div class="definition">
+  <strong>定義 (入射的対象)</strong><br>
+  圏 $\mathcal{C}$ の対象 $I$ が入射的 (injective) であるとは、任意の単射 $f \colon A \to B$ と任意の射 $g \colon A \to I$ に対して、ある射 $h \colon B \to I$ が存在して $h \circ f = g$ を満たすことである。
+</div>
+
+<div class="definition">
+  <strong>定義 (余生成子)</strong><br>
+  圏 $\mathcal{C}$ の対象 $I$ が余生成子 (cogenerator) であるとは、任意の対象 $A, B \in \mathcal{C}$ と並行な射 $f, g \colon A \to B$ で $f \neq g$ であるものに対して、ある射 $h \colon B \to I$ が存在して $h \circ f \neq h \circ g$ を満たすことである。アーベル圏などの零射を持つ圏においては、任意の対象 $A \neq 0$ に対して非零射 $h \colon A \to I$ が存在することと同値になる。
+</div>
+
+<p>入射的余生成子 (injective cogenerator) とは、入射的対象であり、かつ余生成子であるような対象のことである。これは圏において、対象を「Iへの射の族」によって完全に分離・表現できることを保証する極めて強力な対象である。</p>
+
+<h2>2. 集合と代数系の圏における例</h2>
+
+<h3>2.1 集合の圏 $\mathbf{Set}$</h3>
+<p>最初の例として、集合の圏 $\mathbf{Set}$ を考える。この圏において、単射は単射写像 (injective map) と一致する。</p>
+
+<div class="proposition">
+  <strong>命題 1</strong><br>
+  集合の圏 $\mathbf{Set}$ において、 $2$ 点集合 $I = \{0, 1\}$ は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $I = \{0, 1\}$ が入射的であることを示す。 $f \colon A \to B$ を単射写像とし、 $g \colon A \to I$ を任意の写像とする。拡張となる写像 $h \colon B \to I$ を次のように構成する。任意の $x \in B$ に対して、 $x \in f(A)$ （すなわち $x = f(a)$ となる $a \in A$ が存在）である場合、 $f$ は単射であるためそのような $a$ は一意に定まる。このとき、 $h(x) = g(a)$ と定義する。一方、 $x \in B \smallsetminus f(A)$ である場合、 $h(x) = 0$ と定義する。このように定義された $h \colon B \to I$ は任意の $a \in A$ に対して $h(f(a)) = g(a)$ を満たすため、 $h \circ f = g$ が成り立つ。よって、 $I$ は入射的である。</p>
+  <p>次に、 $I = \{0, 1\}$ が余生成子であることを示す。 $A, B$ を任意の集合とし、 $f, g \colon A \to B$ を $f \neq g$ を満たす異なる写像とする。 $f \neq g$ であるため、ある $a \in A$ が存在して $f(a) \neq g(a)$ が成り立つ。ここで、写像 $h \colon B \to I$ を次のように定義する。 $h(f(a)) = 1$ とし、それ以外のすべての $x \in B \smallsetminus \{f(a)\}$ に対しては $h(x) = 0$ とする。すると、 $h(f(a)) = 1$ であり、 $f(a) \neq g(a)$ より $g(a) \in B \smallsetminus \{f(a)\}$ であるから $h(g(a)) = 0$ となる。したがって $h(f(a)) \neq h(g(a))$ であり、 $h \circ f \neq h \circ g$ が示された。以上より、 $I = \{0, 1\}$ は余生成子でもある。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>2.2 点付き集合の圏 $\mathbf{Set}_*$</h3>
+<div class="definition">
+  <strong>定義 (点付き集合の圏)</strong><br>
+  対象は $(X, x_0)$ （ただし $X$ は空でない集合であり、 $x_0 \in X$ はその特定の元である基点）の組である。射 $f \colon (X, x_0) \to (Y, y_0)$ は、 $f(x_0) = y_0$ を満たす写像である。この圏を $\mathbf{Set}_*$ と書く。単射は単射 (injective) な写像と一致する。
+</div>
+
+<div class="proposition">
+  <strong>命題 2</strong><br>
+  点付き集合の圏 $\mathbf{Set}_*$ において、 $I = \{0, 1\}$ とし、 $0$ を基点とした対象 $(I, 0)$ は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $(I, 0)$ が入射的であることを示す。 $f \colon (A, a_0) \to (B, b_0)$ を単射とし、 $g \colon (A, a_0) \to (I, 0)$ を任意の射とする。拡張となる写像 $h \colon B \to I$ を次のように構成する。任意の $x \in B$ について、 $x \in f(A)$ の場合は $h(x) = g(a)$ （ $f(a)=x$ なる唯一の $a$ ）とする。一方、 $x \in B \smallsetminus f(A)$ の場合は $h(x) = 0$ とする。基点については、 $f(a_0) = b_0$ であるため、 $h(b_0) = h(f(a_0)) = g(a_0) = 0$ となり、 $h$ は基点を保つ射 $h \colon (B, b_0) \to (I, 0)$ となる。定義より $h \circ f = g$ を満たすため、 $(I, 0)$ は入射的対象である。</p>
+  <p>次に、 $(I, 0)$ が余生成子であることを示す。 $(A, a_0)$ と $(B, b_0)$ を任意の対象とし、 $f, g \colon (A, a_0) \to (B, b_0)$ を $f \neq g$ を満たす異なる射とする。 $f \neq g$ より、ある $a \in A$ が存在して $f(a) \neq g(a)$ となる。 $f(a)$ と $g(a)$ の少なくとも一方は基点 $b_0$ と異なる。一般性を失わず、 $f(a) \neq b_0$ と仮定する。ここで、射 $h \colon (B, b_0) \to (I, 0)$ を次のように定義する。 $h(f(a)) = 1$ とし、それ以外のすべての $x \in B \smallsetminus \{f(a)\}$ に対しては $h(x) = 0$ とする。仮定より $f(a) \neq b_0$ であるため、 $h(b_0) = 0$ となり $h$ は基点を保つ。また、 $h(f(a)) = 1$ であり、 $f(a) \neq g(a)$ より $h(g(a)) = 0$ となる。したがって $h(f(a)) \neq h(g(a))$ であり、 $h \circ f \neq h \circ g$ が示された。よって $(I, 0)$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>2.3 集合族の圏 $\mathbf{Set}^S$</h3>
+<div class="definition">
+  <strong>定義 ( $S$ を添字とする集合族の圏)</strong><br>
+  集合 $S$ を固定する。対象は $S$ で添字付けられた集合の族 $(X_s)_{s \in S}$ である。射 $f \colon (X_s)_{s \in S} \to (Y_s)_{s \in S}$ は、写像の族 $(f_s \colon X_s \to Y_s)_{s \in S}$ である。圏を $\mathbf{Set}^S$ と書く。単射は各 $s \in S$ で単射な写像となる族である。
+</div>
+
+<div class="proposition">
+  <strong>命題 3</strong><br>
+  圏 $\mathbf{Set}^S$ において、すべての $s \in S$ について $I_s = \{0, 1\}$ となる集合族 $I = (I_s)_{s \in S}$ は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $I$ が入射的であることを示す。 $u \colon A \to B$ を $\mathbf{Set}^S$ における単射とし、 $v \colon A \to I$ を任意の射とする。これらはそれぞれ、各 $s \in S$ における単射な写像 $u_s \colon A_s \to B_s$ と写像 $v_s \colon A_s \to \{0, 1\}$ の族として与えられる。集合の圏 $\mathbf{Set}$ において $\{0, 1\}$ は入射的対象であるため、各 $s \in S$ に対して写像 $w_s \colon B_s \to \{0, 1\}$ が存在して $w_s \circ u_s = v_s$ を満たす。この族 $(w_s)_{s \in S}$ は圏 $\mathbf{Set}^S$ における射 $w \colon B \to I$ を定め、 $w \circ u = v$ を満たす。よって $I$ は入射的である。</p>
+  <p>次に、 $I$ が余生成子であることを示す。並行な異なる射 $f, g \colon A \to B$ をとる。ある $s \in S$ が存在して $f_s \neq g_s$ であるため、さらにある $a \in A_s$ が存在して $f_s(a) \neq g_s(a)$ となる。 $\mathbf{Set}$ において $\{0, 1\}$ は余生成子であるため、写像 $p \colon B_s \to \{0, 1\}$ が存在して $p(f_s(a)) \neq p(g_s(a))$ となる。ここで、射 $h \colon B \to I$ を次のように構成する。添字 $s$ においては成分を $h_s = p$ とし、それ以外の $t \in S \smallsetminus \{s\}$ においては任意の $x \in B_t$ に対して $h_t(x) = 0$ とする。このとき、 $h_s(f_s(a)) \neq h_s(g_s(a))$ であるため族全体としても $h \circ f \neq h \circ g$ となる。よって $I$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>2.4 $G$ 集合の圏 $G\mathbf{\text{-}Set}$</h3>
+<div class="definition">
+  <strong>定義 ( $G$ 集合)</strong><br>
+  $G$ を群とする。 $G$ 集合 $X$ とは、集合 $X$ と左からの群作用 $G \times X \to X$ （ $(g, x) \mapsto g \cdot x$ と書き、 $e \cdot x = x$ および $(g_1 g_2) \cdot x = g_1 \cdot (g_2 \cdot x)$ を満たす）の組である。射 $f \colon X \to Y$ は $f(g \cdot x) = g \cdot f(x)$ を満たす同変写像 (equivariant map) である。圏を $G\mathbf{\text{-}Set}$ と書く。
+</div>
+
+<div class="proposition">
+  <strong>命題 4</strong><br>
+  $I = \{0, 1\}^G$ を $G$ から $\{0, 1\}$ への写像全体の集合とし、これに左からの群作用を $(g \cdot \phi)(x) = \phi(x g)$ で定めた $G$ 集合を考える。この $I$ は $G\mathbf{\text{-}Set}$ における入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、群作用が well-defined な左作用であることを確認する。単位元 $e \in G$ について、 $(e \cdot \phi)(x) = \phi(x e) = \phi(x)$ より $e \cdot \phi = \phi$ である。また $g_1, g_2 \in G$ に対して、 $((g_1 g_2) \cdot \phi)(x) = \phi(x (g_1 g_2)) = \phi((x g_1) g_2) = (g_2 \cdot \phi)(x g_1) = (g_1 \cdot (g_2 \cdot \phi))(x)$ となるため、 $(g_1 g_2) \cdot \phi = g_1 \cdot (g_2 \cdot \phi)$ が成り立つ。よって左作用である。</p>
+  <p>次に入射性を証明する。 $G\mathbf{\text{-}Set}$ における任意の $G$ 集合 $A$ に対して、集合の圏 $\mathbf{Set}$ における射の集合との間に自然な全単射 $\Phi \colon \mathrm{Hom}_G(A, I) \to \mathrm{Hom}_{\mathbf{Set}}(A, \{0, 1\})$ が存在する。具体的には、 $f \in \mathrm{Hom}_G(A, I)$ に対して $\Phi(f)(a) = f(a)(e)$ と定める。その逆写像 $\Psi$ は、 $p \in \mathrm{Hom}_{\mathbf{Set}}(A, \{0, 1\})$ に対して $\Psi(p)(a)(g) = p(g \cdot a)$ で与えられる。実際、 $\Psi(p)$ が同変写像であることは、 $\Psi(p)(g_1 \cdot a)(x) = p(x \cdot (g_1 \cdot a)) = p((x g_1) \cdot a) = \Psi(p)(a)(x g_1) = (g_1 \cdot \Psi(p)(a))(x)$ より確かめられる。単射な同変写像 $u \colon A \to B$ と同変写像 $v \colon A \to I$ をとる。全単射 $\Phi$ を通じて、集合としての写像 $\Phi(v) \colon A \to \{0, 1\}$ が得られる。集合の圏 $\mathbf{Set}$ において $\{0, 1\}$ は入射的対象であるため、集合としての写像 $w \colon B \to \{0, 1\}$ が存在して $w \circ u = \Phi(v)$ を満たす。ここで $h = \Psi(w) \colon B \to I$ を考えると、これは $G$ 集合の同変写像であり、任意の $a \in A$ と $g \in G$ に対して<br>
+  $$ h(u(a))(g) = \Psi(w)(u(a))(g) = w(g \cdot u(a)) = w(u(g \cdot a)) = \Phi(v)(g \cdot a) = v(g \cdot a)(e) = (g \cdot v(a))(e) = v(a)(e g) = v(a)(g) $$<br>
+  となる。よって $h \circ u = v$ が成り立ち、 $I$ は入射的である。</p>
+  <p>最後に、 $I$ が余生成子であることを示す。並行な異なる同変写像 $f_1, f_2 \colon A \to B$ をとる。ある $a \in A$ が存在して $f_1(a) \neq f_2(a)$ となる。集合の圏において $\{0, 1\}$ は余生成子であるため、写像 $p \colon B \to \{0, 1\}$ が存在して $p(f_1(a)) \neq p(f_2(a))$ となる。この $p$ から作られる同変写像 $h = \Psi(p) \colon B \to I$ を考える。単位元 $e \in G$ における値を評価すると、 $h(f_1(a))(e) = p(e \cdot f_1(a)) = p(f_1(a))$ であり、同様に $h(f_2(a))(e) = p(f_2(a))$ となる。したがって $h(f_1(a))(e) \neq h(f_2(a))(e)$ なので $h(f_1(a)) \neq h(f_2(a))$ であり、 $h \circ f_1 \neq h \circ f_2$ が成り立つ。よって $I$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>2.5 体上のベクトル空間の圏 $\mathbf{Vect}_k$</h3>
+<p>体 $k$ 上のベクトル空間の圏 $\mathbf{Vect}_k$ を考える。この圏の単射は、単射であるような線形写像と一致する。</p>
+
+<div class="proposition">
+  <strong>命題 5</strong><br>
+  体 $k$ 上のベクトル空間の圏 $\mathbf{Vect}_k$ において、 $1$ 次元ベクトル空間である $k$ 自身は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $k$ が入射的であることを示す。 $f \colon A \to B$ を単射線形写像とし、 $g \colon A \to k$ を任意の線形写像とする。 $f$ を通じて $A$ を $B$ の部分空間と同一視する。線形代数学の基本的な結果（基底の拡張定理）により、部分空間 $f(A)$ の補空間 $C \subset B$ が存在して、 $B = f(A) \oplus C$ と直和分解される。任意の $x \in B$ は $x = f(a) + c$ （ただし $a \in A, c \in C$ ）と一意に表すことができる。そこで、線形写像 $h \colon B \to k$ を $h(x) = g(a)$ によって定義する。このとき、任意の $a \in A$ に対して $x = f(a) + 0$ であるから、 $h(f(a)) = g(a)$ となり、 $h \circ f = g$ を満たす。よって、 $k$ は入射的である。</p>
+  <p>次に、 $k$ が余生成子であることを示す。 $f, g \colon A \to B$ を $f \neq g$ を満たす線形写像とする。ある $a \in A$ が存在して $f(a) \neq g(a)$ 、すなわち $b = f(a) - g(a) \neq 0$ となる。 $b \in B$ は非零ベクトルであるから、 $b$ を含む $B$ の基底を選ぶことができる。この基底において、 $b$ の係数を取り出す写像（双対基底の元）を考える。すなわち、線形写像 $h \colon B \to k$ であって、 $h(b) = 1$ を満たすものを構成できる。このとき、 $h(f(a) - g(a)) = h(b) = 1 \neq 0$ であるため、線形性から $h(f(a)) \neq h(g(a))$ が得られる。したがって $h \circ f \neq h \circ g$ であり、 $k$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>2.6 次数付きベクトル空間の圏 $\mathbf{GrVect}_k$</h3>
+<div class="definition">
+  <strong>定義 (次数付きベクトル空間)</strong><br>
+  体 $k$ 上の次数付きベクトル空間 $V$ は、ベクトル空間の族 $(V_n)_{n \in \mathbb{Z}}$ の直和 $V = \bigoplus_{n \in \mathbb{Z}} V_n$ である。射 $f \colon V \to W$ は次数を保つ線形写像、すなわち各 $n \in \mathbb{Z}$ に対して線形写像 $f_n \colon V_n \to W_n$ を与える族である。圏を $\mathbf{GrVect}_k$ と書く。
+</div>
+
+<div class="proposition">
+  <strong>命題 6</strong><br>
+  $\mathbf{GrVect}_k$ において、各次数 $n \in \mathbb{Z}$ について $I_n = k$ となる次数付きベクトル空間 $I = \bigoplus_{n \in \mathbb{Z}} k$ は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $I$ が入射的であることを示す。 $f \colon A \to B$ を単射とし、 $g \colon A \to I$ を任意の射とする。これは各次数 $n \in \mathbb{Z}$ における単射な線形写像 $f_n \colon A_n \to B_n$ と線形写像 $g_n \colon A_n \to k$ の族として与えられる。通常のベクトル空間の圏 $\mathbf{Vect}_k$ において $k$ は入射的対象であるため、各 $n$ について線形写像 $h_n \colon B_n \to k$ が存在して $h_n \circ f_n = g_n$ を満たす。この族 $(h_n)_{n \in \mathbb{Z}}$ は次数を保つ線形写像 $h \colon B \to I$ を定め、 $h \circ f = g$ を満たす。よって $I$ は入射的である。</p>
+  <p>次に、 $I$ が余生成子であることを示す。並行な異なる射 $u, v \colon A \to B$ をとる。ある次数 $m \in \mathbb{Z}$ と $a \in A_m$ が存在して $u_m(a) \neq v_m(a)$ 、すなわち $b = u_m(a) - v_m(a) \neq 0$ となる。 $\mathbf{Vect}_k$ において $k$ は余生成子であるため、線形写像 $\phi \colon B_m \to k$ であって $\phi(b) \neq 0$ を満たすものが存在する。ここで、射 $h \colon B \to I$ を次のように構成する。次数 $m$ においては成分を $h_m = \phi$ とし、それ以外の次数 $n \in \mathbb{Z} \smallsetminus \{m\}$ においては $h_n = 0$ (零写像) とする。このとき $h_m(u_m(a)) - h_m(v_m(a)) = \phi(b) \neq 0$ であるため、 $h \circ u \neq h \circ v$ となる。よって $I$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>2.7 アーベル群の圏 $\mathbf{Ab}$</h3>
+<p>アーベル群の圏 $\mathbf{Ab}$ を考える。ここでは加群の一般論に通じる例として可除群 (divisible group) が重要になる。</p>
+
+<div class="definition">
+  <strong>定義 (可除群)</strong><br>
+  アーベル群 $D$ が可除群であるとは、任意の $x \in D$ と任意の $0$ でない整数 $n$ に対して、ある $y \in D$ が存在して $ny = x$ を満たすことである。
+</div>
+
+<div class="lemma">
+  <strong>補題 7 (Baerの判定法)</strong><br>
+  環 $R$ 上の左加群の圏 $R\mathbf{\text{-}Mod}$ において、対象 $I$ が入射的であるための必要十分条件は、任意の左イデアル $J \subset R$ と任意の準同型 $f \colon J \to I$ に対して、ある準同型 $h \colon R \to I$ が存在して $h|_J = f$ となることである。
+</div>
+<div class="proof">
+  <p>必要性は定義から明らかである。十分性を示す。 $A \subset B$ を左 $R$ 加群の包含関係とし、 $g \colon A \to I$ を準同型とする。拡張の全体からなる集合 $\mathcal{P} = \{ (C, h_C) \mid A \subset C \subset B, h_C \colon C \to I, h_C|_A = g \}$ を考える。 $\mathcal{P}$ に半順序を $C \subset C'$ かつ $h_{C'}|_C = h_C$ のとき $(C, h_C) \le (C', h_{C'})$ として入れる。Zornの補題により、極大元 $(M, h_M)$ が存在する。 $M = B$ であれば証明は終わる。 $M \neq B$ と仮定し、 $b \in B \smallsetminus M$ をとる。 $J = \{ r \in R \mid rb \in M \}$ は $R$ の左イデアルである。写像 $f \colon J \to I$ を $f(r) = h_M(rb)$ で定めると、これは $R$ 準同型である。仮定より、 $f$ は $h \colon R \to I$ に拡張できる。 $M' = M + Rb \subset B$ とし、 $h_{M'} \colon M' \to I$ を $h_{M'}(m + rb) = h_M(m) + h(r)$ で定義する。これが well-defined であることを確認する。 $m_1 + r_1 b = m_2 + r_2 b$ ならば $(r_1 - r_2)b = m_2 - m_1 \in M$ である。ゆえに $r_1 - r_2 \in J$ であり、 $h(r_1 - r_2) = f(r_1 - r_2) = h_M((r_1 - r_2)b) = h_M(m_2 - m_1)$ となる。したがって $h_M(m_1) + h(r_1) = h_M(m_2) + h(r_2)$ となり well-defined である。これは $(M, h_M)$ の極大性に矛盾する。よって $M = B$ であり、 $I$ は入射的である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<div class="proposition">
+  <strong>命題 8</strong><br>
+  アーベル群の圏 $\mathbf{Ab}$ において、 $\mathbb{Q} / \mathbb{Z}$ は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>アーベル群の圏 $\mathbf{Ab}$ は $\mathbb{Z}\mathbf{\text{-}Mod}$ と同一視できる。まず、 $\mathbb{Q}/\mathbb{Z}$ が入射的であることを Baerの判定法を用いて示す。 $\mathbb{Z}$ の任意のイデアルは単項イデアルであり、ある整数 $n \ge 0$ を用いて $n\mathbb{Z}$ と書ける。 $n = 0$ の場合は自明である。 $n  >  0$ とする。準同型 $f \colon n\mathbb{Z} \to \mathbb{Q}/\mathbb{Z}$ は $f(n) = x \in \mathbb{Q}/\mathbb{Z}$ によって決定される。 $\mathbb{Q}/\mathbb{Z}$ は可除群であるため、 $ny = x$ を満たす $y \in \mathbb{Q}/\mathbb{Z}$ が存在する。そこで、準同型 $h \colon \mathbb{Z} \to \mathbb{Q}/\mathbb{Z}$ を $h(1) = y$ として定義する。任意の $nk \in n\mathbb{Z}$ に対して、 $h(nk) = nk \cdot h(1) = nk y = k x = k f(n) = f(nk)$ となるため、 $h$ は $f$ の拡張である。Baerの判定法により、 $\mathbb{Q}/\mathbb{Z}$ は入射的である。</p>
+  <p>次に、 $\mathbb{Q}/\mathbb{Z}$ が余生成子であることを示す。 $\mathbf{Ab}$ において、任意の対象 $A$ の任意の非零元 $a \in A$ に対して、 $g(a) \neq 0$ となる準同型 $g \colon A \to \mathbb{Q}/\mathbb{Z}$ が存在することを示せば十分である。 $a$ の生成する部分群 $\langle a \rangle \subset A$ を考える。もし $a$ の位数が有限 $m  >  0$ であるなら、 $\langle a \rangle$ は $\mathbb{Z}/m\mathbb{Z}$ と同型である。このとき、準同型 $g_0 \colon \langle a \rangle \to \mathbb{Q}/\mathbb{Z}$ を $g_0(a) = \frac{1}{m} + \mathbb{Z}$ と定めれば、 $g_0(a) \neq 0$ である。もし $a$ の位数が無限であるなら、 $\langle a \rangle$ は $\mathbb{Z}$ と同型である。このとき、準同型 $g_0 \colon \langle a \rangle \to \mathbb{Q}/\mathbb{Z}$ を $g_0(a) = \frac{1}{2} + \mathbb{Z}$ と定めれば、やはり $g_0(a) \neq 0$ である。 $\mathbb{Q}/\mathbb{Z}$ はすでに入射的であることが示されているため、部分群 $\langle a \rangle$ 上の準同型 $g_0$ は $A$ 全体の準同型 $g \colon A \to \mathbb{Q}/\mathbb{Z}$ に拡張できる。このとき $g(a) = g_0(a) \neq 0$ を満たす。よって、 $\mathbb{Q}/\mathbb{Z}$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>2.8 環上の加群の圏 $R\mathbf{\text{-}Mod}$</h3>
+<p>任意の単位元を持つ環 $R$ 上の左加群の圏 $R\mathbf{\text{-}Mod}$ の例を挙げる。 $\mathbf{Ab}$ の例を利用することで一般の加群に対しても入射的余生成子を構成できる。</p>
+
+<div class="proposition">
+  <strong>命題 9</strong><br>
+  単位元を持つ環 $R$ に対して、 $D = \mathbb{Q}/\mathbb{Z}$ とおく。このとき、 $I = \mathrm{Hom}_{\mathbb{Z}}(R, D)$ に自然な左 $R$ 加群の構造を入れたものは、 $R\mathbf{\text{-}Mod}$ における入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $I = \mathrm{Hom}_{\mathbb{Z}}(R, D)$ の左 $R$ 加群構造を定義する。 $f \in I$ と $r \in R$ に対して、新たな準同型 $r f \in I$ を、任意の $x \in R$ に対して $(r f)(x) = f(xr)$ と定義する。これが左 $R$ 加群の公理を満たすことは容易に確認できる。</p>
+  <p>次に、 $I$ が入射的であることを示す。任意の左 $R$ 加群 $A$ に対して、自然な同型<br>
+  $$ \mathrm{Hom}_R(A, I) = \mathrm{Hom}_R(A, \mathrm{Hom}_{\mathbb{Z}}(R, D)) \cong \mathrm{Hom}_{\mathbb{Z}}(A, D) $$<br>
+  が存在する。同型写像 $\Phi \colon \mathrm{Hom}_R(A, I) \to \mathrm{Hom}_{\mathbb{Z}}(A, D)$ は $\Phi(\phi)(a) = \phi(a)(1_R)$ で与えられ、その逆写像 $\Psi \colon \mathrm{Hom}_{\mathbb{Z}}(A, D) \to \mathrm{Hom}_R(A, I)$ は $\Psi(\psi)(a)(r) = \psi(ra)$ で与えられる。 $R\mathbf{\text{-}Mod}$ における任意の単射 $i \colon A \to B$ をとる。任意の $R$ 準同型 $g \colon A \to I$ が与えられたとする。同型 $\Phi$ により、アーベル群の準同型 $\Phi(g) \colon A \to D$ が得られる。命題 8 より $D$ は $\mathbf{Ab}$ における入射的対象であり、 $i$ はアーベル群としての単射でもあるため、拡張となる $\mathbb{Z}$ 準同型 $\tilde{g} \colon B \to D$ で $\tilde{g} \circ i = \Phi(g)$ を満たすものが存在する。ここで、同型 $\Psi$ を用いて $\tilde{g}$ に対応する $R$ 準同型 $h = \Psi(\tilde{g}) \colon B \to I$ を得る。任意の $a \in A$ と $r \in R$ に対して、<br>
+  $$ (h \circ i)(a)(r) = h(i(a))(r) = \Psi(\tilde{g})(i(a))(r) = \tilde{g}(r i(a)) = \tilde{g}(i(ra)) = \Phi(g)(ra) = g(ra)(1_R) = (rg(a))(1_R) = g(a)(r \cdot 1_R) = g(a)(r) $$<br>
+  となるため、 $h \circ i = g$ が成り立つ。よって、 $I$ は入射的である。</p>
+  <p>最後に、 $I$ が余生成子であることを示す。 $A$ を任意の非零の左 $R$ 加群とし、 $a \in A$ を非零元とする。命題 8 より $D$ は $\mathbf{Ab}$ の余生成子であるから、ある $\mathbb{Z}$ 準同型 $\psi \colon A \to D$ が存在して $\psi(a) \neq 0$ となる。先ほどの同型 $\Psi$ を用いて、 $R$ 準同型 $f = \Psi(\psi) \colon A \to I$ を構成する。このとき、 $f(a) \in I$ の $1_R$ における値は、定義により $f(a)(1_R) = \Psi(\psi)(a)(1_R) = \psi(1_R a) = \psi(a) \neq 0$ である。したがって $f(a)$ は $I$ の零元ではなく、 $f \colon A \to I$ は非零準同型となる。よって、 $I = \mathrm{Hom}_{\mathbb{Z}}(R, \mathbb{Q}/\mathbb{Z})$ は $R\mathbf{\text{-}Mod}$ の余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h2>3. 位相空間の圏における例</h2>
+
+<p>位相空間の圏 $\mathbf{Top}$ やその部分圏では、純粋な圏論的単射 (monomorphism) が単なる「単射連続写像」となることが多く、これをそのまま用いると拡張条件が厳しすぎて余生成子を持つことが困難になる。そのため、標準的には入射性を<strong>部分空間としての埋め込み（正則単射, regular monomorphism に相当）</strong>や<strong>閉部分空間への埋め込み</strong>に対して定義する。</p>
+
+<h3>3.1 $T_0$ 空間の圏におけるSierpinski空間</h3>
+<div class="definition">
+  <strong>定義 ($T_0$ 空間の圏 $\mathbf{T_0}$)</strong><br>
+  位相空間 $X$ が $T_0$ 空間であるとは、任意の異なる $2$ 点 $x, y \in X$ に対して、一方を含み他方を含まない開集合が存在することである。 $T_0$ 空間を対象とし、連続写像を射とする $\mathbf{Top}$ の充満部分圏を $\mathbf{T_0}$ と書く。
+</div>
+
+<div class="definition">
+  <strong>定義 (Sierpinski空間)</strong><br>
+  集合 $S = \{0, 1\}$ 上に、開集合系として $\mathcal{O}_S = \{\varnothing, \{1\}, \{0, 1\}\}$ を与えた位相空間をSierpinski空間と呼び、 $S$ で表す。
+</div>
+
+<div class="proposition">
+  <strong>命題 10</strong><br>
+  圏 $\mathbf{T_0}$ において、Sierpinski空間 $S$ は埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $S$ が埋め込みに関して入射的であることを示す。 $f \colon A \to B$ を $\mathbf{T_0}$ における位相的な埋め込みとし、 $g \colon A \to S$ を任意の連続写像とする。 $S$ の開集合 $\{1\}$ の $g$ による逆像を $U = g^{-1}(1)$ とおく。 $g$ は連続であるため、 $U$ は $A$ の開集合である。 $f$ は埋め込みであるため、相対位相の定義から、 $B$ のある開集合 $V \subset B$ が存在して $f^{-1}(V) = U$ を満たす。ここで、写像 $h \colon B \to S$ を次のように定義する。 $x \in V$ ならば $h(x) = 1$ とし、 $x \in B \smallsetminus V$ ならば $h(x) = 0$ とする。 $h^{-1}(1) = V$ であり、 $V$ は $B$ の開集合であるから、 $h$ は連続写像である。任意の $a \in A$ について、 $h(f(a)) = 1 \iff f(a) \in V \iff a \in f^{-1}(V) = U \iff g(a) = 1$ が成り立つ。値域は $\{0, 1\}$ しかないため、これは任意の $a \in A$ に対して $h(f(a)) = g(a)$ であることを意味し、 $h \circ f = g$ が成り立つ。よって、 $S$ は入射的である。</p>
+  <p>次に、 $S$ が余生成子であることを示す。 $X$ を任意の $T_0$ 空間とし、 $x, y \in X$ を $x \neq y$ であるような異なる $2$ 点とする。 $T_0$ 空間の定義より、一般性を失わず、 $x$ を含み $y$ を含まない開集合 $U \subset X$ が存在すると仮定してよい。写像 $p \colon X \to S$ を、 $z \in U$ ならば $p(z) = 1$ 、 $z \in X \smallsetminus U$ ならば $p(z) = 0$ によって定義する。 $p^{-1}(1) = U$ は $X$ の開集合であるため、 $p$ は連続写像である。このとき、 $p(x) = 1$ かつ $p(y) = 0$ であるため、 $p(x) \neq p(y)$ となる。したがって、任意の異なる $2$ 点を分離する連続写像が存在するため、 $S$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>3.2 $T_0$ Alexandroff空間の圏 $\mathbf{Alex_0}$</h3>
+<div class="definition">
+  <strong>定義 ( $T_0$ Alexandroff空間の圏 $\mathbf{Alex_0}$)</strong><br>
+  位相空間 $X$ がAlexandroff空間であるとは、 $X$ の任意の（無限個であってもよい）開集合の族の共通部分が常に開集合になることである。 $T_0$ 空間かつAlexandroff空間であるものを対象とする $\mathbf{Top}$ の充満部分圏を $\mathbf{Alex_0}$ と書く。
+</div>
+
+<div class="proposition">
+  <strong>命題 11</strong><br>
+  圏 $\mathbf{Alex_0}$ において、Sierpinski空間 $S$ は埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>$\mathbf{Alex_0}$ は $\mathbf{T_0}$ の充満部分圏であり、 $S$ は有限空間であるため自明にAlexandroff空間であり $S \in \mathbf{Alex_0}$ である。任意のAlexandroff空間の部分空間は再びAlexandroff空間になる。したがって、 $\mathbf{Alex_0}$ における埋め込み $f \colon A \to B$ は、単に $\mathbf{T_0}$ における対象同士の埋め込みに他ならない。よって、命題 10 で構成した拡張連続写像 $h \colon B \to S$ や、点を分離する連続写像 $p \colon X \to S$ は、対象が $\mathbf{Alex_0}$ に属しているというだけで構成手順は全く同一のまま成立する。ゆえに、 $S$ は $\mathbf{Alex_0}$ においても入射的余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>3.3 Sober空間の圏 $\mathbf{Sob}$</h3>
+<div class="definition">
+  <strong>定義 (Sober空間)</strong><br>
+  位相空間の閉集合 $C$ が既約 (irreducible) であるとは、 $C = C_1 \cup C_2$ を満たす閉集合 $C_1, C_2$ が存在すれば、必ず $C = C_1$ または $C = C_2$ となることである。位相空間 $X$ がSober空間 (sober space) であるとは、任意の空でない既約閉集合 $C \subset X$ に対して、ある一意な点 $x \in X$ が存在して $C = \overline{\{x\}}$ （ $x$ の閉包）と表せることである。この点 $x$ を $C$ の生成点 (generic point) と呼ぶ。Sober空間を対象とし、連続写像を射とする $\mathbf{Top}$ の充満部分圏を $\mathbf{Sob}$ と書く。
+</div>
+
+<div class="proposition">
+  <strong>命題 12</strong><br>
+  圏 $\mathbf{Sob}$ において、Sierpinski空間 $S$ は位相的な埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、Sierpinski空間 $S = \{0, 1\}$ がSober空間であることを確認する。 $S$ の閉集合は $\varnothing, \{0\}, \{0, 1\}$ である。空でない既約閉集合は $\{0\}$ と $\{0, 1\}$ の2つのみである。 $\{0\}$ は点 $0$ の閉包であり、 $\{0, 1\}$ は点 $1$ の閉包である。それぞれの生成点 $0, 1$ は一意であるため、 $S \in \mathbf{Sob}$ である。</p>
+  <p>次に、 $S$ が埋め込みに関して入射的であることを示す。命題 10 の証明と同様に、埋め込み $f \colon A \to B$ と連続写像 $g \colon A \to S$ に対して、 $B$ の開集合 $V$ を用いて $h \colon B \to S$ を構成できる。 $B \in \mathbf{Sob}$ かつ $S \in \mathbf{Sob}$ であるため、 $h$ は $\mathbf{Sob}$ の射としての拡張を与えており、 $S$ は入射的である。</p>
+  <p>最後に、 $S$ が余生成子であることを示す。一般に、すべてのSober空間は $T_0$ 空間である。なぜなら、任意の $x \neq y$ について $\overline{\{x\}} = \overline{\{y\}}$ と仮定すると、生成点の一意性に矛盾するため、閉包が異なり、位相的に分離可能となるからである。よって $X$ を任意のSober空間とし、 $x \neq y$ を満たす異なる $2$ 点をとれば、 $\mathbf{T_0}$ の場合（命題 10）と同様に $x$ を含み $y$ を含まない開集合を用いて $p \colon X \to S$ を構成し分離できる。したがって $S$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>3.4 $T_4$ 空間の圏における閉区間 $[0, 1]$</h3>
+<p>ここから、射のクラスを<strong>閉埋め込み (closed embedding)</strong> に限定した例を見る。これにより強力な拡張定理が利用可能となる。</p>
+
+<div class="definition">
+  <strong>定義 ($T_4$ 空間)</strong><br>
+  位相空間 $X$ が正規空間 (normal space) であるとは、交わらない任意の2つの閉集合 $C_1, C_2 \subset X$ に対して、 $C_1 \subset U_1$ かつ $C_2 \subset U_2$ かつ $U_1 \cap U_2 = \varnothing$ を満たす開集合 $U_1, U_2$ が存在することである。 $T_1$ 空間であり、かつ正規空間であるものを $T_4$ 空間 ( $T_4$ space ) と呼ぶ。 $T_4$ 空間を対象とし、連続写像を射とする $\mathbf{Top}$ の充満部分圏を $\mathbf{T_4}$ と書く。
+</div>
+
+<div class="proposition">
+  <strong>命題 13</strong><br>
+  圏 $\mathbf{T_4}$ において、閉区間 $[0, 1]$ は閉埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>まず、 $[0, 1] \in \mathbf{T_4}$ であることを確認する。通常の距離空間はすべて正規 $T_1$ 空間であるため、閉区間 $[0, 1]$ は $T_4$ 空間である。</p>
+  <p>次に、 $[0, 1]$ が閉埋め込みに関して入射的であることを示す。 $f \colon A \to B$ を $\mathbf{T_4}$ における閉埋め込みとし、 $g \colon A \to [0, 1]$ を任意の連続写像とする。 $B$ は正規空間であり、 $f$ は閉埋め込みであるため、部分空間 $f(A)$ は $B$ の閉集合である。ここで、Tietzeの拡張定理を適用する。 $f(A)$ 上の連続写像 $g \circ f^{-1} \colon f(A) \to [0, 1]$ に対して同定理を用いることで、連続写像 $h \colon B \to [0, 1]$ が存在して、任意の $a \in A$ について $h(f(a)) = g(a)$ を満たすようにできる。すなわち $h \circ f = g$ が成り立ち、 $[0, 1]$ は閉埋め込みに関して入射的である。</p>
+  <p>最後に、 $[0, 1]$ が余生成子であることを示す。 $X, Y \in \mathbf{T_4}$ とし、 $u, v \colon X \to Y$ を $u \neq v$ を満たす異なる連続写像とする。仮定より、ある $x \in X$ が存在して $u(x) \neq v(x)$ となる。 $Y$ は $T_4$ 空間であるため、完全正則空間でもある。また $Y$ は $T_1$ 空間であるから、 $1$ 点集合 $\{v(x)\}$ は閉集合である。点 $u(x)$ と閉集合 $\{v(x)\}$ は交わらないため、Urysohnの補題より、連続写像 $p \colon Y \to [0, 1]$ が存在して、 $p(u(x)) = 1$ かつ $p(v(x)) = 0$ を満たすように構成できる。このとき $p(u(x)) \neq p(v(x))$ であるため、 $p \circ u \neq p \circ v$ が成り立つ。したがって、 $[0, 1]$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>3.5 Tychonoff空間の圏 $\mathbf{Tych}$</h3>
+<div class="definition">
+  <strong>定義 (Tychonoff空間)</strong><br>
+  位相空間 $X$ がTychonoff空間 (Tychonoff space) または完全正則Hausdorff空間 (completely regular Hausdorff space) であるとは、 $X$ が $T_1$ 空間であり、かつ、任意の閉集合 $F \subset X$ と $x \notin F$ である任意の点 $x \in X$ に対して、連続写像 $f \colon X \to [0, 1]$ が存在して $f(x) = 1$ かつ $f(F) = \{0\}$ を満たすことである。これらを対象とし連続写像を射とする $\mathbf{Top}$ の充満部分圏を $\mathbf{Tych}$ と書く。
+</div>
+
+<div class="definition">
+  <strong>定義 ( $C$-埋め込み)</strong><br>
+  位相空間 $B$ の部分空間 $A$ への位相的な埋め込み $i \colon A \to B$ が $C$-埋め込み ( $C$-embedding ) であるとは、任意の連続写像 $g \colon A \to \mathbb{R}$ に対して、ある連続写像 $h \colon B \to \mathbb{R}$ が存在して $h \circ i = g$ を満たすことである。
+</div>
+
+<div class="proposition">
+  <strong>命題 14</strong><br>
+  Tychonoff空間の圏 $\mathbf{Tych}$ において、実数直線 $\mathbb{R}$ は $C$-埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>$\mathbb{R}$ は距離空間であるため明らかにTychonoff空間であり、 $\mathbf{Tych}$ の対象である。</p>
+  <p>まず、 $\mathbb{R}$ が $C$-埋め込みに関して入射的であることを示す。 $f \colon A \to B$ を $\mathbf{Tych}$ における $C$-埋め込みとし、 $g \colon A \to \mathbb{R}$ を任意の連続写像とする。 $C$-埋め込みの定義そのものにより、連続写像 $h \colon B \to \mathbb{R}$ が存在して $h \circ f = g$ を満たす。 $B, \mathbb{R} \in \mathbf{Tych}$ であるため、 $h$ は $\mathbf{Tych}$ における射の拡張を与えており、 $\mathbb{R}$ は入射的対象である。</p>
+  <p>次に、 $\mathbb{R}$ が余生成子であることを示す。 $X$ を任意のTychonoff空間とし、 $x, y \in X$ を $x \neq y$ を満たす異なる $2$ 点とする。 $X$ は $T_1$ 空間であるため、 $1$ 点集合 $\{y\}$ は閉集合である。 $x \notin \{y\}$ であるから、Tychonoff空間の定義より、連続写像 $p_0 \colon X \to [0, 1]$ が存在して、 $p_0(x) = 1$ かつ $p_0(y) = 0$ を満たす。閉区間 $[0, 1]$ は実数直線 $\mathbb{R}$ の部分空間であるため、自然な包含写像 $\iota \colon [0, 1] \to \mathbb{R}$ を合成することで、連続写像 $p = \iota \circ p_0 \colon X \to \mathbb{R}$ を得る。このとき $p(x) = 1 \neq 0 = p(y)$ となるため、 $p$ は異なる $2$ 点を分離する。したがって、任意の異なる射を分離できるため $\mathbb{R}$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>3.6 完全正規空間の圏 $\mathbf{PerfNorm}$</h3>
+<div class="definition">
+  <strong>定義 (完全正規空間)</strong><br>
+  位相空間 $X$ が完全正規空間 (perfectly normal space) であるとは、 $X$ が正規空間（ $T_4$ 空間）であり、かつ $X$ の任意の閉集合が $G_\delta$ 集合（可算個の開集合の共通部分）として表されることである。完全正規空間を対象とし、連続写像を射とする $\mathbf{Top}$ の充満部分圏を $\mathbf{PerfNorm}$ と書く。すべての距離化可能空間は完全正規空間である。
+</div>
+
+<div class="proposition">
+  <strong>命題 15</strong><br>
+  圏 $\mathbf{PerfNorm}$ において、閉区間 $[0, 1]$ は閉埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>$[0, 1]$ は距離空間であるため完全正規空間であり、 $\mathbf{PerfNorm}$ の対象である。</p>
+  <p>まず、 $[0, 1]$ が閉埋め込みに関して入射的であることを示す。 $f \colon A \to B$ を $\mathbf{PerfNorm}$ における閉埋め込みとし、 $g \colon A \to [0, 1]$ を任意の連続写像とする。 $B$ は完全正規空間であるから、特に正規空間である。Tietzeの拡張定理より、正規空間の閉部分集合上で定義された連続写像は空間全体へ拡張できるため、連続写像 $h \colon B \to [0, 1]$ が存在して $h \circ f = g$ を満たす。この拡張が $\mathbf{PerfNorm}$ の枠組みに留まるためには、対象 $A$ が実際に $\mathbf{PerfNorm}$ に属している必要がある。 $B$ の閉部分集合である $f(A)$ が完全正規空間となることを確認する。 $f(A)$ は正規空間の閉部分集合であるため正規空間である。また、 $f(A)$ 内の任意の閉集合 $F$ をとると、 $f(A)$ が $B$ で閉であるため $F$ は $B$ においても閉集合である。 $B$ は完全正規空間であるため、 $F = \bigcap_{n=1}^\infty U_n$ を満たす $B$ の開集合系 $(U_n)_{n \in \mathbb{N}}$ が存在する。このとき、 $F = F \cap f(A) = \bigcap_{n=1}^\infty (U_n \cap f(A))$ と書け、各 $U_n \cap f(A)$ は $f(A)$ の相対位相における開集合であるため、 $F$ は $f(A)$ における $G_\delta$ 集合である。よって $f(A)$ （すなわち $A$ ）は完全正規空間となり、 $\mathbf{PerfNorm}$ における拡張が保証されたため $[0, 1]$ は入射的対象である。</p>
+  <p>最後に、 $[0, 1]$ が余生成子であることを示す。 $X$ を任意の完全正規空間とし、 $x \neq y$ を満たす $x, y \in X$ をとる。 $X$ は $T_4$ 空間であるため、特に完全正則である。点 $x$ と閉集合 $\{y\}$ を分離する Urysohnの補題より、連続写像 $p \colon X \to [0, 1]$ が存在して $p(x) = 1$ かつ $p(y) = 0$ となる。よって $p(x) \neq p(y)$ であり、 $[0, 1]$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>3.7 ゼロ次元Tychonoff空間の圏 $\mathbf{ZDim}$</h3>
+<div class="definition">
+  <strong>定義 (ゼロ次元Tychonoff空間とクロープン拡張的埋め込み)</strong><br>
+  位相空間 $X$ がゼロ次元 (zero-dimensional) Tychonoff空間であるとは、 $X$ が $T_1$ 空間であり、かつ開集合であり閉集合でもある集合（clopen集合）からなる開基を持つことである。これらを対象とする $\mathbf{Top}$ の充満部分圏を $\mathbf{ZDim}$ と書く。また、位相空間の埋め込み $f \colon A \to B$ がクロープン拡張的埋め込み (clopen-extending embedding) であるとは、 $A$ の任意のclopen集合 $U$ に対して、 $B$ のあるclopen集合 $V$ が存在して $f^{-1}(V) = U$ を満たすことである。
+</div>
+
+<div class="proposition">
+  <strong>命題 16</strong><br>
+  圏 $\mathbf{ZDim}$ において、 $2$ 点離散空間 $D_2 = \{0, 1\}$ はクロープン拡張的埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>$D_2$ は離散空間であるため、ゼロ次元Tychonoff空間である。</p>
+  <p>まず、 $D_2$ が入射的であることを示す。 $f \colon A \to B$ を $\mathbf{ZDim}$ におけるクロープン拡張的埋め込みとし、 $g \colon A \to D_2$ を任意の連続写像とする。 $D_2$ の部分集合 $\{1\}$ はclopen集合であるため、 $g$ の連続性より $U = g^{-1}(1)$ は $A$ のclopen集合である。 $f$ はクロープン拡張的埋め込みであるため、 $B$ のあるclopen集合 $V$ が存在して $f^{-1}(V) = U$ となる。写像 $h \colon B \to D_2$ を、 $x \in V$ ならば $h(x) = 1$ 、 $x \in B \smallsetminus V$ ならば $h(x) = 0$ によって定義する。 $V$ および $B \smallsetminus V$ はともに $B$ の開集合であるため、 $h$ は連続写像である。任意の $a \in A$ について、 $h(f(a)) = 1 \iff f(a) \in V \iff a \in f^{-1}(V) = U \iff g(a) = 1$ が成り立つ。値域は $\{0, 1\}$ のみであるため、 $h \circ f = g$ が成り立つ。よって $D_2$ は入射的である。</p>
+  <p>次に、 $D_2$ が余生成子であることを示す。 $X \in \mathbf{ZDim}$ とし、 $x \neq y$ を満たす $X$ の異なる $2$ 点をとる。 $X$ は $T_1$ 空間であるため、 $\{y\}$ は閉集合であり $X \smallsetminus \{y\}$ は $x$ を含む開集合である。 $X$ はclopen集合からなる開基を持つため、 $x \in W \subset X \smallsetminus \{y\}$ を満たすclopen集合 $W$ が存在する。これより $x \in W$ かつ $y \notin W$ である。写像 $p \colon X \to D_2$ を、 $z \in W$ ならば $p(z) = 1$ 、 $z \in X \smallsetminus W$ ならば $p(z) = 0$ によって定義する。 $W$ はclopen集合であるため $p$ は連続写像であり、 $p(x) = 1 \neq 0 = p(y)$ を満たす。したがって $D_2$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h2>4. 距離化可能空間の圏における例</h2>
+
+<p>最後に、「距離化可能」という強力な条件を付加した圏を考える。これらの圏では、空間のクラス自体が優れているため、単射が自然に閉埋め込みとなる。</p>
+
+<h3>4.1 距離化可能コンパクトHausdorff空間 $\mathbf{MetCHaus}$</h3>
+<div class="proposition">
+  <strong>命題 17</strong><br>
+  対象を距離化可能かつコンパクトなHausdorff空間とし、射を連続写像とする圏 $\mathbf{MetCHaus}$ において、閉区間 $[0, 1]$ は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>閉区間 $[0, 1]$ は通常の距離関数により距離化可能であり、コンパクトHausdorff空間であるため、 $\mathbf{MetCHaus}$ の対象である。</p>
+  <p>まず、 $[0, 1]$ が入射的であることを示す。 $\mathbf{MetCHaus}$ における単射 $f \colon A \to B$ をとる。圏論的な単射は集合としての単射連続写像と一致する。 $A$ はコンパクト空間であり、 $B$ はHausdorff空間であるため、単射連続写像 $f$ は位相同型な像 $f(A)$ への同相写像を与え、さらに $f(A)$ は $B$ の閉集合となる。すなわち、 $f$ は位相的な閉埋め込みである。 $g \colon A \to [0, 1]$ を任意の連続写像とする。 $B$ は距離化可能空間であるため、特に正規空間（ $T_4$ 空間）である。Tietzeの拡張定理より、正規空間 $B$ の閉部分集合 $f(A)$ 上で定義された実数値連続写像は $B$ 全体に拡張できる。したがって、連続写像 $h \colon B \to [0, 1]$ が存在して $h \circ f = g$ を満たす。よって $[0, 1]$ は入射的である。</p>
+  <p>次に、 $[0, 1]$ が余生成子であることを示す。 $X \in \mathbf{MetCHaus}$ の異なる $2$ 点 $x, y \in X$ をとる。 $X$ は距離化可能空間（したがって正規空間）かつ $T_1$ 空間であるため、点 $x$ と閉集合 $\{y\}$ を分離する Urysohnの補題が適用できる。すなわち、連続写像 $p \colon X \to [0, 1]$ が存在して $p(x) = 1$ かつ $p(y) = 0$ となる。任意の異なる射を分離できるため、 $[0, 1]$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>4.2 距離化可能Stone空間 $\mathbf{MetStone}$</h3>
+<div class="proposition">
+  <strong>命題 18</strong><br>
+  対象を距離化可能かつ完全不連結なコンパクトHausdorff空間とし、射を連続写像とする圏 $\mathbf{MetStone}$ において、 $2$ 点離散空間 $\{0, 1\}$ は入射的余生成子である。
+</div>
+<div class="proof">
+  <p>$\{0, 1\}$ は有限離散空間であるため、距離化可能であり、完全不連結なコンパクトHausdorff空間である。したがって $\mathbf{MetStone}$ の対象である。</p>
+  <p>まず、 $\{0, 1\}$ が入射的であることを示す。命題 17 と同様に、 $\mathbf{MetStone}$ における単射 $f \colon A \to B$ は閉埋め込みである。任意の連続写像 $g \colon A \to \{0, 1\}$ が与えられたとする。 $g$ は $A$ の clopen 分割を与える。ここで、Stone空間（完全不連結コンパクトHausdorff空間）は必ず強ゼロ次元 (strongly zero-dimensional) であるという位相空間論の事実を用いる。強ゼロ次元空間においては、任意の閉部分集合上の連続な有限離散空間への写像は、空間全体への連続写像に拡張できる。 $B$ はStone空間であるため強ゼロ次元であり、閉部分集合 $f(A)$ 上の写像は全体へ拡張可能である。ゆえに、連続写像 $h \colon B \to \{0, 1\}$ が存在して $h \circ f = g$ を満たす。よって $\{0, 1\}$ は入射的である。</p>
+  <p>次に、 $\{0, 1\}$ が余生成子であることを示す。 $X \in \mathbf{MetStone}$ の異なる $2$ 点 $x, y \in X$ をとる。 $X$ は完全不連結コンパクトHausdorff空間であるため、異なる $2$ 点を分離する clopen 集合が存在する。すなわち、 $x \in U$ かつ $y \notin U$ を満たす clopen 集合 $U \subset X$ がとれる。写像 $p \colon X \to \{0, 1\}$ を $z \in U$ ならば $1$ 、 $z \in X \smallsetminus U$ ならば $0$ として定義すると、 $U$ が clopen であることから $p$ は連続写像である。 $p(x) = 1 \neq 0 = p(y)$ であるため、 $\{0, 1\}$ は余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h3>4.3 一般の距離化可能空間 $\mathbf{MetTop}$</h3>
+<div class="proposition">
+  <strong>命題 19</strong><br>
+  対象を距離化可能空間全体とし、射を連続写像とする圏 $\mathbf{MetTop}$ を考える。この圏における単射のクラスとして、像が閉集合となる位相的な閉埋め込みを採用する。このとき、閉区間 $[0, 1]$ は閉埋め込みに関する入射的余生成子である。
+</div>
+<div class="proof">
+  <p>閉区間 $[0, 1]$ は通常の距離により距離化可能であるため、 $\mathbf{MetTop}$ の対象である。</p>
+  <p>まず、 $[0, 1]$ が閉埋め込みに関して入射的であることを示す。 $f \colon A \to B$ を $\mathbf{MetTop}$ における閉埋め込みとし、 $g \colon A \to [0, 1]$ を任意の連続写像とする。対象 $B$ は距離化可能空間である。すべての距離化可能空間は完全正規空間であり、したがって特に正規空間である。 $f(A)$ は正規空間 $B$ の閉部分集合であるため、 Tietzeの拡張定理により、 $f(A)$ 上の実数値連続写像は $B$ 全体に拡張できる。ゆえに、連続写像 $h \colon B \to [0, 1]$ が存在して $h \circ f = g$ を満たす。よって $[0, 1]$ は閉埋め込みに関して入射的である。</p>
+  <p>次に、 $[0, 1]$ が余生成子であることを示す。 $X$ を任意の距離化可能空間とし、異なる $2$ 点 $x, y \in X$ をとる。 $X$ は完全正規空間であるため、当然ながら完全正則空間でもある。したがって Urysohnの補題が適用でき、点 $x$ と閉集合 $\{y\}$ を分離する連続写像 $p \colon X \to [0, 1]$ で $p(x) = 1$ かつ $p(y) = 0$ を満たすものが存在する。よって $[0, 1]$ は異なる点（射）を分離でき、余生成子である。</p>
+  <div class="qed">$\square$</div>
+</div>
+
+<h2>参考文献</h2>
+<ul>
+  <li>Mac Lane, S. <em>Categories for the Working Mathematician</em>, Springer-Verlag.</li>
+  <li>Adámek, J., Herrlich, H., Strecker, G. E. <em>Abstract and Concrete Categories: The Joy of Cats</em>. <a href="http://katmat.math.uni-bremen.de/acc/acc.pdf" target="_blank" rel="noopener noreferrer">http://katmat.math.uni-bremen.de/acc/acc.pdf</a></li>
+  <li>Engelking, R. <em>General Topology</em>, Heldermann Verlag.</li>
+</ul>
+
+</body>
+</html>

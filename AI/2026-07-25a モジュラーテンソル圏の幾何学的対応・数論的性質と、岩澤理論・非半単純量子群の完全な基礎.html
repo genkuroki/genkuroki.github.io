@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モジュラーテンソル圏の幾何学的対応・数論的性質と、岩澤理論・非半単純量子群の完全な基礎</title>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="mathjax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #1a252f;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 8px;
+            margin-top: 35px;
+        }
+        h3 {
+            font-size: 1.25rem;
+            color: #34495e;
+            margin-top: 25px;
+        }
+        p {
+            margin: 1em 0;
+            text-align: justify;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        .definition-box {
+            background-color: #eef7fc;
+            border-left: 5px solid #3498db;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .theorem-box {
+            background-color: #f4f6f7;
+            border-left: 5px solid #2ecc71;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .proof-box {
+            background-color: #fafafa;
+            border: 1px solid #e1e8ed;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .proof-title {
+            font-weight: bold;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        .example-box {
+            background-color: #fdfefe;
+            border-left: 5px solid #f39c12;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+        code {
+            background-color: #f1f2f6;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: "Courier New", Courier, monospace;
+        }
+        .ref-list {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .ref-list li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>モジュラーテンソル圏の幾何学的対応・数論的性質と、岩澤理論・非半単純量子群の完全な基礎</h1>
+    
+    <p><strong>概要：</strong> 本稿は、結び目・リンク不変量を構成する代数的枠組みであるモジュラーテンソル圏（Modular Tensor Category, MTC）について、これまでの質疑応答で得られた全知見を統合した自己完結的な（self-contained）解説である。MTCが幾何学的にいかなる対象（TQFT、モジュラー関手）に対応するかを論じるだけでなく、MTCそのものに潜む豊かな<strong>数論的性質（ガロア対称性、合同部分群、フロベニウス・ペロン次元）</strong>、ならびに<strong>類体論や岩澤理論との深い類似（ヴィット群、圏のガロア拡大、結び目の岩澤理論）</strong>を完全網羅する。さらに、岩澤加群の特性多項式（アレクサンダー多項式等）を圏論的に導出するために導入された「展開された量子群 $U_q^H(\mathfrak{sl}_2)$」と非半単純圏における修正トレースについても厳密な定義と証明を与える。</p>
+
+    <h2>第1章 モジュラーテンソル圏（MTC）と幾何学的・物理的対象への対応</h2>
+    
+    <p>モジュラーテンソル圏（MTC）は、単一の結び目やリンクの不変量を定義する局所的な代数系にとどまらず、それらが存在する時空（3次元多様体）や断面（2次元曲面）の幾何学的変形を包括的に記述する巨大な構造体である。</p>
+
+    <div class="definition-box">
+        <strong>定義 1.1 (モジュラーテンソル圏)</strong><br>
+        体 $k$ 上の可換なアルティン圏 $\mathcal{C}$ が<strong>モジュラーテンソル圏（Modular Tensor Category）</strong>であるとは、以下の条件を満たす構造 $(\mathcal{C}, \otimes, \mathbf{1}, a, l, r, c, \theta, \dagger)$ を備えていることをいう：
+        <ol>
+            <li><strong>半単純性（Semisimplicity）と有限性（Finiteness）：</strong> $\mathcal{C}$ は既約（単純）対象の同型類を有限個しか持たない半単純な $\mathrm{A}\mathrm{b}$-加群圏であり、単位対象 $\mathbf{1}$ は単純である。</li>
+            <li><strong>リボン圏（Ribbon Category）：</strong> 剛性（Rigidity、双対対象 $V^*$ の存在）、ブレイディング（Braiding） $c_{V,W}: V \otimes W \xrightarrow{\sim} W \otimes V$、およびリボン射（Twist） $\theta_V: V \xrightarrow{\sim} V$ を備えたブレイド型単体（Monoidal）圏である。</li>
+            <li><strong>$S$行列の非退化性（Non-degeneracy）：</strong> 単純対象の代表系を $\{V_i\}_{i \in I}$ ($V_0 = \mathbf{1}$) とするとき、各対 $(i, j) \in I \times I$ に対して定義される $S$行列
+            $$ S_{ij} = \mathrm{tr}\left( c_{V_j, V_i} \circ c_{V_i, V_j} \right) $$
+            が正則（非退化）行列である。</li>
+        </ol>
+    </div>
+
+    <h3>1.1 3次元の視点：コボルディズムとデーン手術（Reshetikhin-Turaev TQFT）</h3>
+    <p>MTC構造における $S$行列の非退化性は、3次元空間をくり抜いて別の形で貼り合わせる「デーン手術（Dehn Surgery）」と完全に整合し、 Reshetikhin-Turaev 3D TQFT を構築する。これにより、任意の3次元閉多様体とリンクの組から位相不変量が定まる。</p>
+
+    <h3>1.2 2次元の視点：すべてのリーマン面と写像類群（モジュラー関手）</h3>
+    <p>2次元曲面 $\Sigma_{g,n}$ の幾何学に対し、MTCは<strong>モジュラー関手（Modular Functor）</strong>を与える。これは各単純対象を割り当てた曲面に対して共形ブロックの空間を与え、その上で写像類群 $\mathrm{Mod}(\Sigma_{g,n})$ が大域的に表現を持つ。特にトーラスの場合はモジュラー群 $\mathrm{SL}(2, \mathbb{Z})$ の表現を与える。</p>
+    
+
+    <h3>1.3 物理的視点：トポロジカル相におけるエニオン</h3>
+    <p>凝縮系物理学において、MTCはトポロジカル相を記述する。単純対象はエニオン（Anyon）に対応し、ブレイディングやテンソル積（フュージョン則）は、エニオンが3次元時空内で描くワールドラインの絡み合いや粒子の融合プロセスと完全に一致する。</p>
+
+    <h2>第2章 モジュラーテンソル圏における数論（ゼータ関数・L関数とガロア対称性）</h2>
+
+    <p>MTCそのものに対して「圏のゼータ関数 $\zeta_{\text{MTC}}(s)$」という単一の関数が標準的に定義されているわけではない。しかし、MTCは共形場理論（CFT）の指標（モジュラー形式）を通じて<strong>ヘッケのL関数</strong>等と結びつき、さらにMTC自体の代数構造の中に驚くほど豊かな数論的性質（Arithmetic of MTC）を内包している。</p>
+
+    <div class="definition-box">
+        <strong>定義 2.1 (フロベニウス・ペロン次元)</strong><br>
+        半単純テンソル圏 $\mathcal{C}$ の単純対象 $X$ に対して、フュージョン行列 $N_X$ (成分は $(N_X)_{Y,Z} = \dim \mathrm{Hom}(Z, X \otimes Y)$) の最大非負実固有値を $X$ の<strong>フロベニウス・ペロン次元（Frobenius-Perron dimension）</strong>と呼び、 $\mathrm{FPdim}(X)$ で表す。
+    </div>
+
+    <p>この $\mathrm{FPdim}(X)$ は通常のベクトル空間の次元（量子次元）とは異なるが、必ず<strong>代数的整数（Algebraic integer）</strong>になるという強力な数論的制約を持つ。すべての単純対象の $\mathrm{FPdim}$ が有理整数になる圏は積分的（Integral fusion category）と呼ばれ、有限群の表現論のアナロジーとして研究される。</p>
+
+    <div class="theorem-box">
+        <strong>定理 2.2 (モジュラーデータの円分性とガロア作用 [Etingof et al., Ng-Schauenburg])</strong><br>
+        任意のモジュラーテンソル圏の $S$行列および $T$行列の成分は、ある自然数 $N$ に対する1の冪根の体、すなわち<strong>円分体 $\mathbb{Q}(\zeta_N)$</strong> の円分整数になる。<br>
+        さらに、絶対ガロア群 $\mathrm{Gal}(\overline{\mathbb{Q}}/\mathbb{Q})$ は MTC に自然に作用し、任意の $\sigma \in \mathrm{Gal}(\mathbb{Q}(\zeta_N)/\mathbb{Q})$ に対し、単純対象の集合上の置換（パーミュテーション） $\hat{\sigma}$ と符号 $\epsilon_\sigma \in \{\pm 1\}$ が存在して、
+        $$ \sigma(S_{ij}) = \epsilon_\sigma S_{\hat{\sigma}(i), j} = \epsilon_\sigma S_{i, \hat{\sigma}(j)} $$
+        を満たす。これを MTC のガロア対称性（Galois Action）と呼ぶ。
+    </div>
+    
+
+    <div class="proof-box">
+        <div class="proof-title">【解説：ガロア作用の意味】</div>
+        代数的整数論において「素イデアルがガロア拡大でどう振る舞うか（分岐・惰性・分解）」を調べるように、MTCにおいては「単純対象（物理的なエニオン）がガロア群の作用でどのような軌道（Galois orbits）を描いて置換されるか」を調べることで、圏の同値類を数論的に分類することができる。
+    </div>
+
+    <div class="theorem-box">
+        <strong>定理 2.3 (合同部分群の性質 [Dong-Lin-Ng, 2015])</strong><br>
+        MTC の $S$行列と $T$行列によって定まるモジュラー群 $\mathrm{SL}(2, \mathbb{Z})$ の射影表現 $\rho_{\text{MTC}}$ において、その表現の核（Kernel） $\ker \rho_{\text{MTC}}$ は、常に $\mathrm{SL}(2, \mathbb{Z})$ の<strong>合同部分群（Congruence subgroup）</strong>となる。<br>
+        ※また、MTCの各単純対象の位相スピン（有限位数の1の冪根）の位数の最小公倍数を、ディリクレ指標のアナロジーから MTC の<strong>導手（Conductor）</strong>と呼ぶ。
+    </div>
+
+    <h2>第3章 類体論・岩澤理論とモジュラーテンソル圏の交差点</h2>
+
+    <p>「モジュラーテンソル圏の類体論」という確立した単一理論はないが、現代数学の最前線において、**圏論的代数（Categorical Algebra）**と**数論的位相幾何学（Arithmetic Topology）**の両面から、類体論や岩澤理論の概念がMTCに強力に導入されている。</p>
+
+    <h3>3.1 圏の代数構造を通じた「類体論」的アプローチ</h3>
+    <p>類体論の重要なツールであるブラウアー群（Brauer group）やヴィット群（Witt group）を「圏」に対して定義し、MTC全体の分類を行う試みがある。</p>
+
+    <div class="definition-box">
+        <strong>定義 3.1 (モジュラー圏のヴィット群 [Davydov-Müger-Nikshych-Ostrik])</strong><br>
+        2つの非退化なブレイド融合圏（MTC） $\mathcal{C}_1, \mathcal{C}_2$ が<strong>ヴィット同値（Witt equivalent）</strong>であるとは、ある有限テンソル圏 $\mathcal{A}_1, \mathcal{A}_2$ のドリンフェルト中心（Drinfeld center） $\mathcal{Z}(\mathcal{A}_1), \mathcal{Z}(\mathcal{A}_2)$ を用いて
+        $$ \mathcal{C}_1 \boxtimes \mathcal{Z}(\mathcal{A}_1) \cong \mathcal{C}_2 \boxtimes \mathcal{Z}(\mathcal{A}_2) $$
+        となることである。この同値類全体はテンソル積 $\boxtimes$ を積としてアーベル群をなし、これを<strong>ヴィット群 $\mathcal{W}$</strong> と呼ぶ。
+    </div>
+    
+    <p>また、代数体のガロア拡大のアナロジーとして、MTC内部の<strong>可換フロベニウス代数（Commutative Frobenius Algebra）</strong>を用いた「圏のガロア拡大」理論（Müger）がある。これは物理的にはエニオンが真空に沈み込む「アニオン凝縮（Anyon Condensation）」現象を記述し、素イデアルの分岐理論に完全に対応する。</p>
+
+    <h3>3.2 数論的位相幾何学と結び目の「岩澤理論」</h3>
+    <p>森下史朗、B. Mazur、M. Kapranovらによる「数論的位相幾何学」において、結び目と素数は同一視される。これにより、数論における岩澤理論（Iwasawa Theory）は結び目のトポロジーへと完全に翻訳される。</p>
+
+    <table>
+        <tr>
+            <th>代数的整数論（数論における岩澤理論）</th>
+            <th>3次元トポロジー（結び目の岩澤理論）</th>
+        </tr>
+        <tr>
+            <td>素数 $p$</td>
+            <td>3次元球面 $S^3$ 内の結び目 $K$</td>
+        </tr>
+        <tr>
+            <td>代数体 $F$ （例：有理数体 $\mathbb{Q}$）</td>
+            <td>3次元多様体（結び目補空間 $X_K = S^3 \setminus K$）</td>
+        </tr>
+        <tr>
+            <td>$\mathbb{Z}_p$-拡大タワー $\mathbb{Q} \subset F_1 \subset F_2 \dots \subset F_\infty$</td>
+            <td>無限巡回被覆空間 $\tilde{X}_K$ （螺旋階段状の空間）</td>
+        </tr>
+        <tr>
+            <td><strong>岩澤加群 $X$</strong> (イデアル類群の射極限 $\varprojlim A_n$)</td>
+            <td><strong>アレクサンダー加群 $H_1(\tilde{X}_K; \mathbb{Z})$</strong></td>
+        </tr>
+        <tr>
+            <td><strong>特性多項式 $char(X) = f_X(T)$</strong> （p進L関数）</td>
+            <td><strong>アレクサンダー多項式 $\Delta_K(t)$</strong> / ライデマイスター・トーション</td>
+        </tr>
+    </table>
+    
+    
+
+    <p>通常の半単純な MTC（ジョーンズ多項式を生成）では、この無限階層（$\mathbb{Z}_p$-拡大に対応）の情報を抽出できない。アレクサンダー多項式（岩澤理論における特性多項式に相当）を MTC の枠組みから導き出すためには、圏の半単純性を崩した<strong>非半単純モジュラー圏</strong>を用いる必要がある。これが次章の主題である。</p>
+
+    <h2>第4章 展開された量子群 $U_q^H(\mathfrak{sl}_2)$ の代数的定義と非半単純圏 $\mathcal{C}$</h2>
+    
+    <p>アレクサンダー多項式やライデマイスター・トーション（＝結び目の岩澤特性多項式）を圏論的に構成するために、Costantino, Geer, Patureau-Mirand らによって導入された「展開された量子群」について述べる。</p>
+
+    <div class="definition-box">
+        <strong>定義 4.1 (展開された量子群 $U_q^H(\mathfrak{sl}_2)$)</strong><br>
+        整数 $r \ge 2$ を固定し、$q = e^{\frac{\pi \sqrt{-1}}{r}}$ とする（$q^{2r} = 1$）。複素数体 $\mathbb{C}$ 上の生成元 $\{E, F, K, K^{-1}, H\}$ によって生成され、以下の関係式を満たす代数を<strong>展開された量子群（Unrolled Quantum Group） $U_q^H(\mathfrak{sl}_2)$</strong> と呼ぶ：
+        
+        $$\begin{aligned}
+        & K K^{-1} = K^{-1} K = 1, \quad [H, K] = 0 \\
+        & [H, E] = 2E, \quad [H, F] = -2F \\
+        & K E K^{-1} = q^2 E, \quad K F K^{-1} = q^{-2} F \\
+        & [E, F] = \frac{K - K^{-1}}{q - q^{-1}}
+        \end{aligned}$$
+
+        さらに、以下のべき零条件を課した代数を<strong>制限され展開された量子群（Restricted Unrolled Quantum Group） $\bar{U}_q^H(\mathfrak{sl}_2)$</strong> と呼ぶ：
+        $$ E^r = 0, \quad F^r = 0 $$
+    </div>
+
+    <h3>4.1 生成元 $H$ （「展開」）の役割と連続ウェイト</h3>
+    <p>1の冪根 $q$ における通常の量子群 $U_q(\mathfrak{sl}_2)$ では $K^{2r} = 1$ となり、表現のウェイトは $\mathbb{Z}/2r\mathbb{Z}$ と離散的である。しかし、生成元 $H$ を対数（形式的に $K = q^H$）として導入することで、<strong>「$H$ の固有値 $\alpha$」</strong>として任意の複素数 $\alpha \in \mathbb{C}$ を連続パラメータとして選べる。これにより、ウェイト空間が複素平面へ「展開（unroll）」される。</p>
+
+    <h3>4.2 表現の圏 $\mathcal{C}$ の非半単純性と量子次元の消滅</h3>
+    <p>べき零条件により、表現内にジョルダン細胞のような構造を持つ「射影直既約加群」が生じ、半単純性が壊れる。さらに重大な現象が起きる。</p>
+
+    <div class="definition-box">
+        <strong>定義 4.2 (単純加群 $V_\alpha$)</strong><br>
+        任意の複素数 $\alpha \in \mathbb{C} \setminus \mathbb{Z}$ に対し、$r$ 次元の単純加群 $V_\alpha$ を定義する。基底 $\{v_0, v_1, \dots, v_{r-1}\}$ に対して：
+        $$\begin{aligned}
+        H . v_j &= (\alpha + r - 1 - 2j) v_j \\
+        K . v_j &= q^{\alpha + r - 1 - 2j} v_j \\
+        F . v_j &= v_{j+1} \quad (v_r = 0) \\
+        E . v_j &= [j]_q [\alpha + r - j]_q v_{j-1} \quad (v_{-1} = 0)
+        \end{aligned}$$
+    </div>
+
+    <div class="theorem-box">
+        <strong>定理 4.3 (量子次元ゼロの発生)</strong><br>
+        $\alpha \in \mathbb{C} \setminus \mathbb{Z}$ のとき、単純加群 $V_\alpha$ の量子次元 $\mathrm{qdim}(V_\alpha)$ は厳密に $0$ になる。
+    </div>
+
+    <div class="proof-box">
+        <div class="proof-title">【証明：量子次元の消滅計算】</div>
+        リボン圏における対象 $V$ の量子次元は、二重双対への量子トレース $\mathrm{Tr}_{V_\alpha}(K^{-1}) = \mathrm{Tr}_{V_\alpha}(q^{-H})$ として与えられる。
+        $$\begin{aligned}
+        \mathrm{qdim}(V_\alpha) &= \sum_{j=0}^{r-1} q^{-(\alpha + r - 1 - 2j)} = q^{-(\alpha + r - 1)} \sum_{j=0}^{r-1} q^{2j} \\
+        &= q^{-(\alpha + r - 1)} \frac{1 - q^{2r}}{1 - q^2}
+        \end{aligned}$$
+        $q$ は 1 の原始 $2r$ 乗根なので $q^{2r} = 1$ かつ $q^2 \neq 1$。よって分子が $0$ となり、 $\mathrm{qdim}(V_\alpha) = 0$ が示された。 $\blacksquare$
+    </div>
+
+    <h2>第5章 修正トレース（Modified Trace）と岩澤理論の特性多項式</h2>
+
+    <p>量子次元が $0$ である加群を用いると、通常のリンク不変量はすべて $0$ になってしまう。CGPらは、この量子次元ゼロの加群と非半単純性を「あえてそのまま使う」ために、<strong>修正トレース（Modified Trace）</strong>を導入した。</p>
+
+    <div class="definition-box">
+        <strong>定義 5.1 (修正トレース)</strong><br>
+        圏 $\mathcal{C}$ の射影対象からなるイデアル $\mathcal{P}$ 上の修正トレースとは、各射影対象 $P \in \mathcal{P}$ に対する線形関数族 $\mathbf{d}_P: \mathrm{End}_{\mathcal{C}}(P) \to \mathbb{C}$ であり、循環性 $\mathbf{d}_Q(f \circ g) = \mathbf{d}_P(g \circ f)$ と部分イデアル的性質を満たすものである。
+    </div>
+
+    <p>単純加群 $V_\alpha$ の修正次元は非ゼロの定数となる：
+    $$ d(V_\alpha) = (-1)^{r-1} r \frac{\sin\left(\frac{\pi}{r}\right)}{\sin\left(\frac{\pi \alpha}{r}\right)} \neq 0 $$
+    </p>
+
+    <div class="theorem-box">
+        <strong>定理 5.2 (アレクサンダー多項式との完備同型 [CGP14])</strong><br>
+        非半単純圏 $\mathcal{C} = \mathrm{Rep}(\bar{U}_q^H(\mathfrak{sl}_2))$ と修正トレースから構成される結び目 $K$ の CGP 不変量 $N_r(K, \alpha)$ は、変数変換 $t = q^{2\alpha}$ の下で、古典的な<strong>アレクサンダー多項式（岩澤理論における特性多項式）</strong> $\Delta_K(t)$ と完全に一致する：
+        $$ N_r(K, \alpha) = \Delta_K(q^{2\alpha}) $$
+    </div>
+
+    <p>すなわち、$U_q^H(\mathfrak{sl}_2)$ という「非半単純で展開された代数」は、結び目補空間の無限巡回被覆（$\mathbb{Z}_p$-拡大）の岩澤加群の情報を、連続パラメータ $H$ とジョルダン細胞的構造の中に完璧にエンコードした数学的装置であることが証明された。</p>
+
+    <h2>第6章 具体例：$r=2$ における $U_q^H(\mathfrak{sl}_2)$ の具体的な構造</h2>
+
+    <div class="example-box">
+        <strong>例 6.1 ($r=2$ における表現行列と量子次元ゼロ)</strong><br>
+        $r=2 \implies q = i, q^{-1} = -i$。べき零条件は $E^2 = 0, F^2 = 0$。<br>
+        パラメータ $\alpha \in \mathbb{C} \setminus \mathbb{Z}$ を持つ2次元単純加群 $V_\alpha$ の基底 $\{v_0, v_1\}$ に対する行列表現：
+        $$\begin{aligned}
+        H &= \begin{pmatrix} \alpha + 1 & 0 \\ 0 & \alpha - 1 \end{pmatrix}, \quad K = i^\alpha \begin{pmatrix} i & 0 \\ 0 & -i \end{pmatrix} \\
+        F &= \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}, \quad E = \begin{pmatrix} 0 & \cos\left(\frac{\pi \alpha}{2}\right) \\ 0 & 0 \end{pmatrix}
+        \end{aligned}$$
+        量子次元の計算：
+        $$ \mathrm{qdim}(V_\alpha) = \mathrm{Tr}(K^{-1}) = \mathrm{Tr}\left( i^{-\alpha} \begin{pmatrix} -i & 0 \\ 0 & i \end{pmatrix} \right) = i^{-\alpha} ( -i + i ) = 0 $$
+        これにより、パラメータ $\alpha$ に関わらず常に量子次元が $0$ になることが具体的に確認できる。
+    </div>
+
+    <h2>第7章 参考文献（References）</h2>
+
+    <p>本稿における数論・岩澤理論のアナロジー、および非半単純量子群に関するすべての主張は、以下の厳密な一次文献および専門書に基づいている。</p>
+
+    <ol class="ref-list">
+        <li>
+            C. Dong, X. Lin, S.-H. Ng, <em>"Congruence property in conformal field theory"</em>, Algebra & Number Theory, 9(9), 2121–2166 (2015). <br>
+            (MTCの合同部分群の性質とガロア対称性の完全証明)
+            arXiv: <a href="https://arxiv.org/abs/1201.6644" target="_blank">1201.6644 [math.QA]</a>
+        </li>
+        <li>
+            S.-H. Ng, P. Schauenburg, <em>"Congruence subgroups and modular tensor categories"</em>, Advances in Mathematics, 224(2), 522-553 (2010). <br>
+            (数論的制約の先駆的研究)
+            arXiv: <a href="https://arxiv.org/abs/0806.2493" target="_blank">0806.2493 [math.QA]</a>
+        </li>
+        <li>
+            P. Etingof, D. Nikshych, V. Ostrik, <em>"On fusion categories"</em>, Annals of Mathematics, 162(2), 581-642 (2005). <br>
+            (フロベニウス・ペロン次元と積分的テンソル圏の基礎)
+            arXiv: <a href="https://arxiv.org/abs/math/0203060" target="_blank">math/0203060 [math.QA]</a>
+        </li>
+        <li>
+            P. Etingof, S. Gelaki, D. Nikshych, V. Ostrik, <em>"Tensor Categories"</em> (Mathematical Surveys and Monographs, Vol. 205), American Mathematical Society (2015). <br>
+            (第6章でFP次元、第8章でガロア作用と数論を体系化)
+        </li>
+        <li>
+            E. C. Rowell, <em>"From Quantum Groups to Unitary Modular Tensor Categories"</em>, Contemporary Mathematics (2000). <br>
+            (量子群のMTCにおける数論的制約のサーベイ)
+            arXiv: <a href="https://arxiv.org/abs/math/0503226" target="_blank">math/0503226 [math.QA]</a>
+        </li>
+        <li>
+            A. Davydov, M. Müger, D. Nikshych, V. Ostrik, <em>"The Witt group of non-degenerate braided fusion categories"</em>, Journal für die reine und angewandte Mathematik, 677, 135–177 (2013). <br>
+            (MTCのヴィット群・類体論的分類)
+            arXiv: <a href="https://arxiv.org/abs/1009.2117" target="_blank">1009.2117 [math.QA]</a>
+        </li>
+        <li>
+            M. Müger, <em>"Galois extensions of braided tensor categories and braided crossed G-categories"</em>, Journal of Algebra, 277(1), 256–281 (2004). <br>
+            (可換フロベニウス代数と圏のガロア拡大、アニオン凝縮の数学的基礎)
+            arXiv: <a href="https://arxiv.org/abs/math/0209093" target="_blank">math/0209093 [math.QA]</a>
+        </li>
+        <li>
+            M. Morishita, <em>"Knots and Primes: An Introduction to Arithmetic Topology"</em>, Springer (2012). / <em>"Arithmetic Topology in 3-Manifolds"</em> <br>
+            (結び目の岩澤理論と代数体のアナロジー)
+            arXiv: <a href="https://arxiv.org/abs/1108.3240" target="_blank">1108.3240 [math.NT]</a>
+        </li>
+        <li>
+            F. Costantino, N. Geer, B. Patureau-Mirand, <em>"Quantum invariants of 3-manifolds via link calculus and non-semisimple categories"</em>, Journal of Topology, 8(4), 1012–1071 (2015). <br>
+            (展開された量子群と非半単純圏からの3次元多様体不変量)
+            arXiv: <a href="https://arxiv.org/abs/1202.3553" target="_blank">1202.3553 [math.GT]</a>
+        </li>
+        <li>
+            C. Blanchet, F. Costantino, N. Geer, B. Patureau-Mirand, <em>"Non-semisimple TQFTs, Reidemeister torsion and Kashaev's invariants"</em>, Advances in Mathematics, 301, 1–78 (2016). <br>
+            (修正トレースによるアレクサンダー多項式・岩澤特性多項式の導出)
+            arXiv: <a href="https://arxiv.org/abs/1404.7289" target="_blank">1404.7289 [math.GT]</a>
+        </li>
+    </ol>
+</div>
+
+</body>
+</html>

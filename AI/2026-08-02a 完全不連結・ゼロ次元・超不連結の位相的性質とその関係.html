@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完全不連結・ゼロ次元・超不連結の位相的性質とその関係</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 20px;
+            color: #333;
+        }
+        h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
+        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 40px; }
+        h3 { margin-top: 30px; }
+        .theorem, .lemma, .definition, .example {
+            border-left: 4px solid #007BFF;
+            background-color: #f9f9f9;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        .proof {
+            border-left: 4px solid #28a745;
+            padding: 10px 15px;
+            margin: 20px 0;
+            background-color: #fdfdfd;
+        }
+        .proof-title { font-weight: bold; margin-bottom: 10px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        th { background-color: #f0f0f0; }
+        .reference { background-color: #e9ecef; padding: 15px; border-radius: 5px; margin-top: 40px; }
+        .reference a { color: #007BFF; text-decoration: none; }
+        .reference a:hover { text-decoration: underline; }
+    </style>
+    <!-- MathJax Configuration -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+    <h1>完全不連結・ゼロ次元・超不連結の位相的性質とその関係</h1>
+
+    <p>本稿では、位相空間論において空間が「どれくらいバラバラに分離されているか」を測る3つの主要な概念である「完全不連結 (totally disconnected)」、「ゼロ次元 (zero-dimensional)」、「超不連結 (extremally disconnected)」について、その定義と分離公理に基づく論理的包含関係、および分離公理への影響を厳密に解説する。</p>
+
+    <h2>1. 基本概念の準備</h2>
+    <p>まず、主役となる概念を厳密に定義するために、位相空間論の基本事項を定義する。本稿において、空間はすべて位相空間を指す。</p>
+
+    <div class="definition">
+        <strong>定義 (連結と連結成分)</strong><br>
+        位相空間 $X$ が連結 (connected) であるとは、$X$ が2つの互いに素な空でない開集合の和集合として表せないことである。すなわち、$X = U \cup V$ かつ $U \cap V = \varnothing$ を満たす開集合 $U, V \subset X$ が存在しないことである。<br>
+        位相空間 $X$ の部分集合 $C$ は、相対位相に関して連結であるときに連結な部分集合とよばれる。空間 $X$ の各点 $x$ に対し、$x$ を含む最大の連結部分集合を $x$ の連結成分 (connected component) という。
+    </div>
+
+    <div class="definition">
+        <strong>定義 (clopen 集合と開基)</strong><br>
+        位相空間 $X$ の部分集合 $A$ が開集合であり、かつ閉集合でもあるとき、$A$ を clopen とよぶ。<br>
+        位相空間 $X$ の開集合の族 $\mathcal{B}$ が開基 (basis) であるとは、$X$ の任意の開集合が $\mathcal{B}$ のいくつかの元の和集合として表せることである。これは、任意の開集合 $U \subset X$ と任意の点 $x \in U$ に対して、ある $B \in \mathcal{B}$ が存在して $x \in B \subset U$ が成り立つことと同値である。
+    </div>
+
+    <div class="definition">
+        <strong>定義 (分離公理： $T_0$, $T_1$, $T_2$, 正則空間, 完全正則空間, Tychonoff 空間)</strong>
+        <ul>
+            <li><strong> $T_0$ 空間 ($T_0$-space):</strong> 任意の相異なる2点 $x, y \in X$ に対して、$x$ を含み $y$ を含まない開集合、または $y$ を含み $x$ を含まない開集合が存在する空間。</li>
+            <li><strong> $T_1$ 空間 ($T_1$-space):</strong> 任意の相異なる2点 $x, y \in X$ に対して、$x$ を含み $y$ を含まない開集合が存在し、かつ $y$ を含み $x$ を含まない開集合も存在する空間。</li>
+            <li><strong> $T_2$ 空間 (Hausdorff space):</strong> 任意の相異なる2点 $x, y \in X$ に対して、互いに素な開集合 $U, V \subset X$ が存在して $x \in U$ かつ $y \in V$ が成り立つ空間。</li>
+            <li><strong>正則空間 (regular space / $T_3$ 空間):</strong> $T_1$ 空間であり、かつ任意の点 $x \in X$ と $x$ を含まない任意の閉集合 $F \subset X$ に対して、互いに素な開集合 $U, V \subset X$ が存在して $x \in U$ かつ $F \subset V$ が成り立つ空間。これは、任意の点 $x \in X$ と $x$ の任意の開近傍 $W$ に対して、ある開集合 $U$ が存在して $x \in U \subset \overline{U} \subset W$ が成り立つことと同値である。</li>
+            <li><strong>完全正則空間 (completely regular space):</strong> 任意の点 $x \in X$ と $x$ を含まない任意の閉集合 $F \subset X$ に対して、ある連続関数 $f: X \to [0, 1]$ が存在して、$f(x) = 0$ かつ任意の $y \in F$ に対して $f(y) = 1$ が成り立つ空間。</li>
+            <li><strong>Tychonoff 空間 (Tychonoff space):</strong> $T_1$ 空間であり、かつ完全正則空間である空間。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <strong>定義 (局所コンパクトと擬連結成分)</strong><br>
+        位相空間 $X$ がコンパクト (compact) であるとは、$X$ の任意の開被覆が有限部分被覆を持つことである。<br>
+        位相空間 $X$ が局所コンパクト (locally compact) であるとは、$X$ の任意の点 $x$ に対して、あるコンパクトな部分集合 $K \subset X$ と開集合 $U \subset X$ が存在して $x \in U \subset K$ が成り立つことである。<br>
+        また、位相空間 $X$ において、点 $x$ を含むすべての clopen 集合の共通部分を、$x$ の擬連結成分 (quasicomponent) とよぶ。
+    </div>
+
+    <h2>2. 3つの主概念の定義</h2>
+
+    <div class="definition">
+        <strong>定義 (完全不連結)</strong><br>
+        位相空間 $X$ が完全不連結 (totally disconnected) であるとは、$X$ の任意の連結成分がただ1つの点からなることである。これは、長さが2以上の連結部分集合が存在しないことと同義である。
+    </div>
+
+    <div class="definition">
+        <strong>定義 (ゼロ次元)</strong><br>
+        位相空間 $X$ がゼロ次元 (zero-dimensional) であるとは、$X$ の clopen な部分集合全体からなる族が $X$ の開基をなすことである。すなわち、任意の開集合 $U \subset X$ と $x \in U$ に対して、ある clopen 集合 $V \subset X$ が存在して $x \in V \subset U$ を満たすことである。
+    </div>
+
+    <div class="definition">
+        <strong>定義 (超不連結)</strong><br>
+        位相空間 $X$ が超不連結 (extremally disconnected) であるとは、$X$ の任意の開集合 $U$ に対して、その閉包 $\overline{U}$ が開集合になることである。直観的には「開集合の境界が太くならない」ほど空間が極端に断絶している状態を表す。
+    </div>
+
+    <h2>3. 分離公理ごとの条件間の関係</h2>
+    <p>これらの概念の間には、空間が満たす分離公理の強さに応じて、以下のような論理的包含関係が成り立つ。</p>
+
+<table>
+        <tr>
+            <th>分離公理の強さ</th>
+            <th>超不連結 $\implies$ ゼロ次元</th>
+            <th>ゼロ次元 $\implies$ 完全不連結</th>
+            <th>完全不連結 $\implies$ ゼロ次元</th>
+        </tr>
+        <tr>
+            <td>なし (例: 密着空間)</td>
+            <td>偽</td>
+            <td><strong>偽</strong></td>
+            <td>偽</td>
+        </tr>
+        <tr>
+            <td> $T_0$ 空間</td>
+            <td>偽</td>
+            <td><strong>真</strong></td>
+            <td>偽</td>
+        </tr>
+        <tr>
+            <td> $T_2$ 空間</td>
+            <td>偽</td>
+            <td><strong>真</strong></td>
+            <td>偽</td>
+        </tr>
+        <tr>
+            <td>正則空間 ( $T_3$ )</td>
+            <td><strong>真</strong></td>
+            <td><strong>真</strong></td>
+            <td>偽</td>
+        </tr>
+        <tr>
+            <td>Tychonoff 空間</td>
+            <td><strong>真</strong></td>
+            <td><strong>真</strong></td>
+            <td>偽</td>
+        </tr>
+        <tr>
+            <td>局所コンパクト Hausdorff</td>
+            <td><strong>真</strong></td>
+            <td><strong>真</strong></td>
+            <td><strong>真</strong></td>
+        </tr>
+    </table>
+
+    <h3>3.1. ゼロ次元から完全不連結へ ( $T_0$ 空間の仮定)</h3>
+    <div class="theorem">
+        <strong>定理 1</strong><br>
+        位相空間 $X$ がゼロ次元 (zero-dimensional) な $T_0$ 空間であるならば、$X$ は完全不連結 (totally disconnected) である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ をゼロ次元な $T_0$ 空間とする。$X$ が完全不連結であることを示すためには、$X$ の任意の部分集合 $C$ について、$C$ が2つ以上の点を含むならば $C$ は連結ではないことを示せばよい。<br>
+        $C \subset X$ を相異なる2点 $x, y$ を含む部分集合とする。<br>
+        $X$ は $T_0$ 空間であるため、一般性を失うことなく、$x$ を含み $y$ を含まない開集合 $U \subset X$ が存在すると仮定してよい。<br>
+        $X$ はゼロ次元であるから、clopen な部分集合からなる開基を持つ。したがって、$x \in U$ に対して、ある clopen 集合 $V \subset X$ が存在して、$x \in V \subset U$ が成り立つ。<br>
+        ここで、部分集合 $C$ を2つの集合 $C_1 = V \cap C$ と $C_2 = (X \smallsetminus V) \cap C$ に分割する。<br>
+        $V$ は $X$ において clopen であるため、$V$ も $X \smallsetminus V$ も $X$ の開集合である。したがって、$C_1$ と $C_2$ は部分空間 $C$ の相対位相においてともに開集合である。<br>
+        さらに、$x \in V$ かつ $x \in C$ より $x \in C_1$ であるから、$C_1$ は空ではない。また、$V \subset U$ であり $y \notin U$ であるから $y \notin V$ となる。よって $y \in X \smallsetminus V$ かつ $y \in C$ より $y \in C_2$ となり、$C_2$ も空ではない。<br>
+        構成より $C_1 \cup C_2 = C$ であり、$C_1 \cap C_2 = \varnothing$ である。<br>
+        以上より、$C$ は相対位相における2つの互いに素な空でない開集合 $C_1$ と $C_2$ の和集合として表されるため、非連結である。<br>
+        したがって、$X$ の任意の連結部分集合は高々1つの点しか持たないため、$X$ は完全不連結である。
+        (証明終)
+    </div>
+
+    <h3>3.2. 超不連結からゼロ次元へ (正則空間の仮定)</h3>
+    <div class="theorem">
+        <strong>定理 2</strong><br>
+        位相空間 $X$ が超不連結 (extremally disconnected) な正則空間 (regular space) であるならば、$X$ はゼロ次元 (zero-dimensional) である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ を超不連結な正則空間とする。$X$ がゼロ次元であることを示すためには、任意の点 $x \in X$ と $x$ を含む任意の開集合 $U \subset X$ に対して、$x \in V \subset U$ となる clopen 集合 $V$ が存在することを示せばよい。<br>
+        点 $x \in X$ と、$x$ を含む開集合 $U$ を任意にとる。<br>
+        $X$ は正則空間であるため、点 $x$ と開近傍 $U$ に対して、ある開集合 $W \subset X$ が存在して、$x \in W \subset \overline{W} \subset U$ が成り立つ。<br>
+        ここで、$X$ が超不連結であるという仮定を用いる。開集合 $W$ に対して、その閉包 $\overline{W}$ は定義より $X$ の開集合となる。<br>
+        一方、任意の集合の閉包は閉集合であるから、$\overline{W}$ は $X$ の閉集合でもある。<br>
+        したがって、$V = \overline{W}$ とおくと、$V$ は $X$ の開集合かつ閉集合、すなわち clopen 集合である。<br>
+        このとき、$x \in W \subset \overline{W} = V$ であり、かつ $V = \overline{W} \subset U$ であるから、$x \in V \subset U$ が成り立つ。<br>
+        よって、$X$ の clopen な部分集合全体は開基をなし、$X$ はゼロ次元である。
+        (証明終)
+    </div>
+
+    <h3>3.3. 超不連結から完全不連結へ ( $T_2$ 空間の仮定)</h3>
+    <div class="theorem">
+        <strong>定理 3</strong><br>
+        位相空間 $X$ が $T_2$ 空間かつ超不連結 (extremally disconnected) であるならば、$X$ は完全不連結 (totally disconnected) である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ を $T_2$ 空間かつ超不連結な空間とする。<br>
+        任意の相異なる2点 $x, y \in X$ に対して、$X$ は $T_2$ 空間であるから、互いに素な開集合 $U, V$ が存在して $x \in U$ かつ $y \in V$ を満たす。<br>
+        $U \cap V = \varnothing$ より、$U \subset X \smallsetminus V$ である。$V$ は開集合であるから $X \smallsetminus V$ は閉集合であり、閉包の最小性より $\overline{U} \subset X \smallsetminus V$ が成り立つ。したがって $\overline{U} \cap V = \varnothing$ である。<br>
+        ここで $X$ は超不連結であるため、開集合 $U$ の閉包 $\overline{U}$ は開集合でもある。閉包は常に閉集合であるから、$\overline{U}$ は clopen 集合となる。<br>
+        $x \in U \subset \overline{U}$ より $x \in \overline{U}$ であり、$\overline{U} \cap V = \varnothing$ かつ $y \in V$ より $y \notin \overline{U}$ である。<br>
+        任意の相異なる2点が clopen 集合により分離されるため、$X$ の任意の連結成分は1点のみからなり、$X$ は完全不連結である。
+        (証明終)
+    </div>
+
+    <h2>4. 逆が成り立たない反例</h2>
+    <p>上記の定理の逆は一般には成り立たない。ここでは代表的な反例を提示し証明する。</p>
+
+    <h3>4.1. 完全不連結であるがゼロ次元でない空間 (Erdős space)</h3>
+    <div class="definition">
+        <strong>定義 (Erdős space)</strong><br>
+        有理数の数列であって、自乗和が収束するもの全体からなる集合 $X$ を Erdős space とよぶ。すなわち、Hilbert 空間 $\ell^2$ の部分空間として次のように定義される。
+        $$
+        X = \left\{ (x_i)_{i=1}^\infty \in \ell^2 \;\middle|\; \forall i \in \mathbb{N}, x_i \in \mathbb{Q} \right\}
+        $$
+        この空間には、$\ell^2$ ノルムから誘導される距離 $d(x, y) = \sqrt{\sum_{i=1}^\infty (x_i - y_i)^2}$ による位相を与える。距離空間であるため $T_2$ 空間を満たす。
+    </div>
+    
+    <div class="theorem">
+        <strong>定理 4</strong><br>
+        Erdős space $X$ は完全不連結 (totally disconnected) である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ から相異なる2点 $a, b$ を任意にとる。<br>
+        $a \neq b$ であるため、ある添え字 $i$ が存在して $a_i \neq b_i$ となる。一般性を失うことなく $a_i  <  b_i$ と仮定してよい。<br>
+        ここで、$a_i$ と $b_i$ の間にある無理数 $z$ を1つ選ぶ（すなわち $a_i  <  z  <  b_i$）。<br>
+        空間 $X$ の部分集合 $U, V$ を次のように定める。
+        $$
+        U = \{ x \in X \mid x_i  <  z \}
+        $$
+        $$
+        V = \{ x \in X \mid x_i  >  z \}
+        $$
+        各 $x \in X$ の第 $i$ 成分 $x_i$ は有理数であるため、$x_i = z$ となることはない。したがって、$X = U \cup V$ であり、$U \cap V = \varnothing$ である。<br>
+        写像 $X \to \mathbb{R} \ (x \mapsto x_i)$ は距離の定義より連続であるため、$U$ と $V$ は $X$ の開集合である。<br>
+        ゆえに $U$ は開集合かつ閉集合（clopen 集合）であり、$a \in U$ かつ $b \notin U$ を満たす。<br>
+        任意の相異なる2点が clopen 集合によって分離される（totally separated である）ため、1点より多くの点を含む部分集合は連結になり得ず、したがって $X$ は完全不連結である。
+        (証明終)
+    </div>
+
+    <div class="theorem">
+        <strong>定理 5</strong><br>
+        Erdős space $X$ はゼロ次元 (zero-dimensional) ではない。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ がゼロ次元であると仮定して矛盾を導く。<br>
+        原点 $0 = (0, 0, \dots) \in X$ を考える。$X$ の閉単位球を $B = \{ x \in X \mid \|x\|_2 \le 1 \}$ とおく。<br>
+        $X$ がゼロ次元であるならば、原点 $0$ の開近傍であって $B$ に含まれるような clopen 集合 $U$ が存在するはずである。<br>
+        この $U$ に対して、以下の手順で有理数の数列 $(a_k)_{k=1}^\infty$ を帰納的に構成する。<br><br>
+        $k=1$ のとき、集合 $I_1 = \{ t \in \mathbb{Q} \mid (t, 0, 0, \dots) \in U \}$ を考える。$0 \in U$ より $0 \in I_1$ であり、また $U \subset B$ より $t^2 \le 1$ であるため、$I_1$ は有界である。$U$ が $X$ で clopen であることから、$I_1$ は $\mathbb{Q}$ において clopen となる。$I_1$ は $\mathbb{Q}$ の空でない有界な clopen 集合であるため、その実数における上限 $S_1 = \sup I_1$ は無理数となる（もし有理数であれば、開集合か閉集合の性質に反する）。<br>
+        $S_1$ が無理数であることから、 $I_1$ に属する有理数 $a_1$ と、$I_1$ に属さない有理数 $b_1$ を、ともに $S_1$ に十分近くなるように（距離が $1$ 未満になるように）選ぶことができる。<br><br>
+        同様にして第 $k$ 段階において、$x^{(k-1)} = (a_1, \dots, a_{k-1}, 0, \dots) \in U$ が得られているとする。<br>
+        集合 $I_k = \{ t \in \mathbb{Q} \mid (a_1, \dots, a_{k-1}, t, 0, \dots) \in U \}$ を考える。$0 \in I_k$ であり、また $t^2 + \sum_{i=1}^{k-1} a_i^2 \le 1$ となるため $I_k$ は有界な clopen 集合である。<br>
+        上限 $S_k = \sup I_k$ は無理数となるため、$I_k$ に属する有理数 $a_k$ と属さない有理数 $b_k$ を、$|a_k - b_k|  <  1/k$ となるように選ぶことができる。<br>
+        これにより、$x^{(k)} = (a_1, \dots, a_k, 0, \dots)$ は $U$ に属し、$y^{(k)} = (a_1, \dots, a_{k-1}, b_k, 0, \dots)$ は $U$ に属さない。<br><br>
+        この構成により得られた点 $x = (a_1, a_2, \dots)$ を考える。<br>
+        各 $k$ について $x^{(k)} \in U \subset B$ であるから $\sum_{i=1}^k a_i^2 \le 1$ であり、ゆえに $\sum_{i=1}^\infty a_i^2 \le 1$ となるため $x \in X$ である。<br>
+        $d(x^{(k)}, x)^2 = \sum_{i=k+1}^\infty a_i^2 \to 0$ であるため、$x^{(k)}$ は $X$ において $x$ に収束する。$U$ は閉集合であるため、$x \in U$ である。<br>
+        一方で、$d(x^{(k)}, y^{(k)}) = |a_k - b_k|  <  1/k$ であるため、$d(y^{(k)}, x) \le d(y^{(k)}, x^{(k)}) + d(x^{(k)}, x) \to 0$ となり、$y^{(k)}$ も $x$ に収束する。$X \smallsetminus U$ は閉集合であり、$y^{(k)} \in X \smallsetminus U$ であるため、$x \in X \smallsetminus U$ となる。<br>
+        これは $x \in U \cap (X \smallsetminus U) = \varnothing$ を意味し、矛盾である。<br>
+        したがって、$X$ はゼロ次元ではない。
+        (証明終)
+    </div>
+
+    <h3>4.2. ゼロ次元であるが超不連結ではない空間</h3>
+    <div class="example">
+        <strong>例 1 (有理数空間)</strong><br>
+        実数の部分空間としての有理数空間 $\mathbb{Q}$ は、距離空間であるため $T_2$ 空間である。<br>
+        任意の点 $x \in \mathbb{Q}$ とその任意の開近傍 $U$ に対して、無理数 $\alpha  >  0$ を十分に小さくとることで、区間 $(x-\alpha, x+\alpha) \cap \mathbb{Q}$ は $x$ を含み $U$ に含まれる clopen 集合となる。よって $\mathbb{Q}$ はゼロ次元である。<br>
+        しかし、開集合 $V = (0, \sqrt{2}) \cap \mathbb{Q}$ を考えると、その閉包は $\overline{V} = [0, \sqrt{2}] \cap \mathbb{Q}$ である。この閉包の端点 $\sqrt{2}$ 付近で $\mathbb{Q}$ において開集合にはならないため、$\mathbb{Q}$ は超不連結ではない。
+    </div>
+
+    <h3>4.3. 超不連結であるがゼロ次元でも完全不連結でもない空間 ( $T_0$, $T_1$ )</h3>
+    <div class="example">
+        <strong>例 2 (Sierpinski 空間) - $T_0$ の場合</strong><br>
+        集合 $X = \{0, 1\}$ に位相 $\tau = \{\varnothing, \{1\}, \{0, 1\}\}$ を与えた Sierpinski 空間を考える。
+        開集合 $\{1\}$ は $1$ を含み $0$ を含まないため、$X$ は $T_0$ 空間である。開集合 $\{1\}$ の閉包は $\{0, 1\}$ であり、これは開集合であるため $X$ は超不連結である。
+        しかし、clopen な集合は $\varnothing$ と $\{0, 1\}$ のみであるため、点 $1$ を含み $\{1\}$ に含まれる clopen 集合は存在せず、ゼロ次元ではない。また連結成分が $\{0, 1\}$ 全体となるため完全不連結でもない。
+    </div>
+    <div class="example">
+        <strong>例 3 (補有限位相) - $T_1$ の場合</strong><br>
+        無限集合 $X$ に補有限位相 (cofinite topology) を与える。
+        任意の相異なる2点 $x, y \in X$ に対し、$X \smallsetminus \{y\}$ は $x$ を含み $y$ を含まない開集合であるから、$X$ は $T_1$ 空間である。
+        任意の空でない開集合 $U$ に対して、その閉包は $X$ 全体となるため、$X$ は超不連結である。
+        一方で、clopen な集合は $\varnothing$ と $X$ のみである。したがって基底を持たずゼロ次元ではなく、連結成分も $X$ 全体となるため完全不連結でもない。
+    </div>
+
+    <h2>5. 局所コンパクト Hausdorff 空間における同値性</h2>
+    <p>完全不連結 $\implies$ ゼロ次元 は一般には成立しないが、「局所コンパクトな Hausdorff 空間」という強力な枠組みの下では成立する。</p>
+
+    <div class="lemma">
+        <strong>補題 1</strong><br>
+        位相空間 $X$ が局所コンパクト (locally compact) な Hausdorff 空間であるならば、任意の点 $x \in X$ とその任意の開近傍 $W \subset X$ に対して、ある開集合 $V \subset X$ が存在して、$x \in V \subset \overline{V} \subset W$ となり、かつその閉包 $\overline{V}$ はコンパクトになる。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ は局所コンパクトであるから、点 $x$ にはコンパクトな近傍 $K$ が存在する。すなわち、ある開集合 $G \subset X$ が存在して $x \in G \subset K$ を満たす。<br>
+        $K$ はコンパクトな Hausdorff 空間であるため、正規空間（したがって正則空間）である。<br>
+        部分空間 $K$ における開集合 $W \cap G$ は $x$ を含む。$K$ の正則性より、ある $K$ の開集合 $V$ が存在して、$x \in V \subset \overline{V}^K \subset W \cap G$ を満たす（ここで $\overline{V}^K$ は $K$ における $V$ の閉包である）。<br>
+        $V$ は $K$ の開集合であり、$V \subset G \subset K$ を満たし、$G$ は $X$ の開集合であるから、$V$ は $X$ においても開集合である。<br>
+        また、$K$ は $X$ の閉集合（Hausdorff 空間のコンパクト部分集合は閉集合）であるため、$K$ における閉包と $X$ における閉包は一致する。よって $\overline{V}^K = \overline{V}$ である。<br>
+        $\overline{V}$ はコンパクト空間 $K$ の閉集合であるから、それ自身もコンパクトである。<br>
+        以上より、$x \in V \subset \overline{V} \subset W$ であり、$\overline{V}$ はコンパクトである。
+        (証明終)
+    </div>
+
+    <div class="lemma">
+        <strong>補題 2</strong><br>
+        位相空間 $K$ がコンパクト (compact) な Hausdorff 空間であるとする。このとき、$K$ の任意の点 $x$ において、$x$ の擬連結成分 $Q_x$ は連結部分集合である。すなわち、コンパクト Hausdorff 空間においては、擬連結成分と連結成分は一致する。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $x \in K$ の擬連結成分を $Q_x$ とする。$Q_x$ は clopen 集合の共通部分であるため、$K$ の閉集合である。<br>
+        $Q_x$ が非連結であると仮定し、矛盾を導く。<br>
+        仮定より、$Q_x = A \cup B$ を満たす互いに素な空でない閉集合 $A, B \subset Q_x$ が存在する。$Q_x$ は $K$ の閉集合であるため、$A$ と $B$ は $K$ においても閉集合である。<br>
+        コンパクト Hausdorff 空間 $K$ は正規空間であるため、互いに素な閉集合 $A, B$ に対して、互いに素な開集合 $U_A, U_B \subset K$ が存在して $A \subset U_A$ かつ $B \subset U_B$ が成り立つ。<br>
+        ここで、$Y = K \smallsetminus (U_A \cup U_B)$ とおくと、$Y$ は $K$ の閉集合であり、したがってコンパクトである。構成より $Y \cap Q_x = \varnothing$ である。<br>
+        任意の $y \in Y$ に対して、$y \notin Q_x$ であるから、擬連結成分の定義より、ある $K$ の clopen 集合 $V_y$ が存在して $x \in V_y$ かつ $y \notin V_y$ を満たす。<br>
+        $K \smallsetminus V_y$ は $y$ を含む開集合であるから、族 $\{ K \smallsetminus V_y \mid y \in Y \}$ はコンパクトな集合 $Y$ の開被覆となる。<br>
+        したがって、有限部分被覆 $\{ K \smallsetminus V_{y_1}, \dots, K \smallsetminus V_{y_n} \}$ が存在する。<br>
+        $V = \bigcap_{i=1}^n V_{y_i}$ とおくと、$V$ は有限個の clopen 集合の共通部分であるから、$K$ の clopen 集合である。さらに $x \in V$ であり、$V \cap Y = \varnothing$ すなわち $V \subset U_A \cup U_B$ が成り立つ。<br>
+        $V$ と $U_A$ は $K$ の開集合であるから、$V \cap U_A$ は $K$ の開集合である。同時に、$V \cap U_A = V \smallsetminus U_B$ と書けるため、$V \cap U_A$ は $K$ の閉集合でもある。<br>
+        ゆえに $V \cap U_A$ は $x$ を含む $K$ の clopen 集合である。<br>
+        擬連結成分の定義より、 $x$ を含む任意の clopen 集合は $Q_x$ を包含するため、$Q_x \subset V \cap U_A$ となる。<br>
+        しかし、これは $B \subset Q_x \subset U_A$ を意味し、$B \subset U_B$ かつ $U_A \cap U_B = \varnothing$ であることと矛盾する。<br>
+        したがって、$Q_x$ は連結である。
+        (証明終)
+    </div>
+
+    <div class="theorem">
+        <strong>定理 6 (局所コンパクト Hausdorff 空間における十分条件)</strong><br>
+        位相空間 $X$ が局所コンパクト (locally compact) な Hausdorff 空間であるとする。このとき、$X$ が完全不連結 (totally disconnected) であるならば、$X$ はゼロ次元 (zero-dimensional) である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        点 $x \in X$ と開近傍 $U$ を任意にとる。<br>
+        補題1より、ある開集合 $G \subset X$ が存在して、$x \in G \subset \overline{G} \subset U$ となり、かつ $\overline{G}$ はコンパクトになる。<br>
+        $K = \overline{G}$ とおく。$K$ はコンパクトな Hausdorff 空間である。<br>
+        $X$ は完全不連結であるため、その部分空間 $K$ も完全不連結である。したがって、$K$ における点 $x$ の連結成分は単元集合 $\{x\}$ のみからなる。<br>
+        補題2より、コンパクト Hausdorff 空間 $K$ においては連結成分と擬連結成分が一致するため、$K$ における $x$ の擬連結成分も $\{x\}$ である。<br>
+        すなわち、$x$ を含む $K$ のすべての clopen 集合の共通部分は $\{x\}$ である。<br>
+        ここで、部分集合の境界 $\partial G = K \smallsetminus G$ を考える。<br>
+        $G$ は $K$ において開集合であるため、$\partial G$ は $K$ の閉集合であり、したがってコンパクトである。また、$x \in G$ であるから $x \notin \partial G$ である。<br>
+        $\partial G$ の任意の点 $y$ に対して、$y \neq x$ であるから擬連結成分の性質より、ある $K$ の clopen 集合 $W_y$ が存在して、$x \in W_y$ かつ $y \notin W_y$ を満たす。<br>
+        集合族 $\{ K \smallsetminus W_y \mid y \in \partial G \}$ はコンパクトな集合 $\partial G$ の開被覆となるため、有限部分被覆 $\{ K \smallsetminus W_{y_1}, \dots, K \smallsetminus W_{y_m} \}$ が存在する。<br>
+        $W = \bigcap_{i=1}^m W_{y_i}$ とおく。<br>
+        $W$ は有限個の clopen 集合の共通部分であるから、$K$ において clopen 集合である。<br>
+        また構成より $x \in W$ であり、$W \cap \partial G = \varnothing$ である。<br>
+        $\partial G = K \smallsetminus G$ であるため、$W \cap \partial G = \varnothing$ は $W \subset G$ を意味する。<br>
+        最後に、この $W$ が $X$ 全体において clopen 集合であることを示す。<br>
+        $W$ は $K$ の開集合であり、かつ $X$ の開集合 $G$ に含まれている。$W = W \cap G$ と書け、$W$ は $K$ の相対位相で開集合だからある $X$ の開集合 $O$ を用いて $W = O \cap K$ と表せる。ゆえに $W = (O \cap K) \cap G = O \cap G$ となり、$W$ は $X$ の2つの開集合の共通部分となるため、$X$ において開集合である。<br>
+        一方で、$W$ は閉集合 $K$ の閉部分集合であるから、$X$ においても閉集合である。<br>
+        したがって、$W$ は $X$ の clopen 集合であり、 $x \in W \subset G \subset K \subset U$ すなわち $x \in W \subset U$ を満たす。<br>
+        ゆえに $X$ の clopen な部分集合全体は開基をなし、$X$ はゼロ次元である。
+        (証明終)
+    </div>
+
+    <h2>6. Tychonoff 空間とゼロ次元・完全不連結性</h2>
+    <p>ゼロ次元 Hausdorff 空間は常に Tychonoff 空間であるが、完全不連結 Hausdorff 空間は Tychonoff 空間になるとは限らない。</p>
+
+    <div class="lemma">
+        <strong>補題 3</strong><br>
+        任意の距離空間は Tychonoff 空間である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $(X, d)$ を距離空間とする。<br>
+        まず、$X$ が $T_1$ 空間であることを示す。任意の相異なる2点 $x, y \in X$ に対して、距離の公理より $d(x, y)  >  0$ である。開球 $B(x, d(x, y)/2)$ は $x$ を含み $y$ を含まない開集合であるから、$X$ は $T_1$ 空間である。<br>
+        次に、$X$ が完全正則空間であることを示す。<br>
+        任意の点 $x \in X$ と、$x$ を含まない任意の閉集合 $F \subset X$ をとる。<br>
+        任意の点 $z \in X$ と部分集合 $A \subset X$ に対して、点と集合の距離を $d(z, A) = \inf_{a \in A} d(z, a)$ で定義する。<br>
+        $x \notin F$ であり、$F$ は閉集合であるため、$d(x, F)  >  0$ である。<br>
+        ここで、関数 $f : X \to \mathbb{R}$ を次のように定義する。
+        $$
+        f(z) = \frac{d(z, x)}{d(z, x) + d(z, F)}
+        $$
+        分母は常に正であり、関数 $f$ は well-defined かつ連続である。<br>
+        $f(x) = 0 / (0 + d(x, F)) = 0$ であり、任意の $y \in F$ に対しては $d(y, F) = 0$ であるため $f(y) = 1$ となる。<br>
+        よって、$X$ は完全正則空間であり、距離空間 $X$ は Tychonoff 空間である。
+        (証明終)
+    </div>
+    
+    <p>この補題により、前述の <strong>Erdős space</strong> は距離空間であるため Tychonoff 空間となる。すなわち「Tychonoff 空間かつ完全不連結であるが、ゼロ次元ではない」という性質を持つことが保証される。</p>
+
+    <div class="theorem">
+        <strong>定理 7 (ゼロ次元 Hausdorff 空間は Tychonoff 空間である)</strong><br>
+        位相空間 $X$ がゼロ次元 (zero-dimensional) な Hausdorff 空間であるならば、$X$ は Tychonoff 空間である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ をゼロ次元かつ Hausdorff ( $T_2$ ) な位相空間とする。$X$ が Tychonoff 空間であることを示すには、$X$ が $T_1$ 空間であり、かつ完全正則空間 (completely regular space) であることを示せばよい。<br>
+        $X$ は Hausdorff 空間であるため、自明に $T_1$ 空間である。したがって、以下では $X$ が完全正則空間であることを示す。<br>
+        完全正則空間の定義より、任意の点 $x \in X$ と、$x$ を含まない任意の閉集合 $F \subset X$ をとる。<br>
+        $X \smallsetminus F$ は $x$ を含む開集合である。$X$ はゼロ次元であるため、clopen 集合による開基を持つ。したがって、ある clopen 集合 $U \subset X$ が存在して、$x \in U \subset X \smallsetminus F$ を満たす。<br>
+        ここで、関数 $f: X \to \mathbb{R}$ を次のように定義する。
+        $$
+        f(y) =
+        \begin{cases}
+        0 & (y \in U) \\
+        1 & (y \in X \smallsetminus U)
+        \end{cases}
+        $$
+        $U$ は clopen 集合であるため、$U$ も $X \smallsetminus U$ も $X$ において開集合である。<br>
+        任意の実数の開集合 $O \subset \mathbb{R}$ に対して、その逆像 $f^{-1}(O)$ は $\varnothing$, $U$, $X \smallsetminus U$, または $X$ のいずれかとなる。これらはすべて $X$ の開集合であるから、$f$ は連続関数である。<br>
+        また、構成より $x \in U$ であるため $f(x) = 0$ である。任意の $y \in F$ に対しては、$U \subset X \smallsetminus F$ より $y \notin U$ すなわち $y \in X \smallsetminus U$ となるため、$f(y) = 1$ である。<br>
+        点と閉集合を実数値連続関数によって分離できたため、$X$ は完全正則空間である。<br>
+        以上より、$X$ は Tychonoff 空間である。
+        (証明終)
+    </div>
+
+    <div class="example">
+        <strong>例 4 (完全不連結 Hausdorff だが正則でない空間の反例)</strong><br>
+        集合 $X = \mathbb{Q}$ とする。$A = \{1/n \mid n \in \mathbb{N}\}$ とおく。<br>
+        $X$ 上の位相 $\tau$ の開基を次のように定める。<br>
+        <ul>
+            <li>$x \neq 0$ のとき、点 $x$ の基本近傍系は通常の距離位相と同じく $\{ (x - \epsilon, x + \epsilon) \cap \mathbb{Q} \mid \epsilon  >  0 \}$ とする。</li>
+            <li>$x = 0$ のとき、点 $0$ の基本近傍系を $\{ U_n(0) \mid n \in \mathbb{N} \}$ とする。ただし $U_n(0) = \left(-\frac{1}{n}, \frac{1}{n}\right) \cap \mathbb{Q} \smallsetminus A$ である。</li>
+        </ul>
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        まず、この空間 $X$ が Hausdorff 空間であることを示す。<br>
+        空間 $X$ の位相 $\tau$ は、通常の $\mathbb{Q}$ の位相（これを $\tau_{eucl}$ とする）よりも細かい（すなわち $\tau_{eucl} \subset \tau$ である）。$\tau_{eucl}$ は Hausdorff 空間であるため、それより細かい位相を持つ $X$ も Hausdorff 空間である。<br><br>
+
+        次に、$X$ が完全不連結 (totally disconnected) であることを示す。<br>
+        $X$ の部分集合 $C$ が $2$ 点以上を含むと仮定する。通常の位相空間 $(\mathbb{Q}, \tau_{eucl})$ においては、任意の $2$ 点以上を含む部分集合は非連結である。<br>
+        ここで、恒等写像 $id: (X, \tau) \to (\mathbb{Q}, \tau_{eucl})$ は、位相が細かい空間から粗い空間への写像であるため連続である。<br>
+        もし $C$ が $(X, \tau)$ において連結であるならば、連続写像による像 $id(C) = C$ も $(\mathbb{Q}, \tau_{eucl})$ において連結にならなければならず、矛盾する。<br>
+        したがって、$X$ のいかなる $2$ 点以上を含む部分集合も非連結であるため、$X$ は完全不連結である。<br><br>
+
+        最後に、$X$ が正則空間 (regular space / $T_3$ ) ではないことを示す（これにより Tychonoff 空間でないことが従う）。<br>
+        集合 $A = \{1/n \mid n \in \mathbb{N}\}$ を考える。$A$ は $X$ において閉集合である。<br>
+        （実際、$X \smallsetminus A$ の任意の点 $x$ は内点である。$x \neq 0$ の場合は通常の開区間を用いて $A$ と交わらない近傍がとれ、$x = 0$ の場合は $U_1(0) \subset X \smallsetminus A$ だからである。）<br>
+        また、定義より $0 \notin A$ である。<br>
+        もし $X$ が正則空間であるならば、$0$ と $A$ を分離する互いに素な開集合 $V, W \in \tau$ が存在し、$0 \in V$ かつ $A \subset W$ が成り立つはずである。<br>
+        $0 \in V$ より、ある $N \in \mathbb{N}$ が存在して $U_N(0) \subset V$ となる。<br>
+        一方 $1/N \in A \subset W$ であり、$1/N \neq 0$ であるため、通常の意味での十分小さな $\epsilon  >  0$ をとることで、開区間 $I = \left(\frac{1}{N} - \epsilon, \frac{1}{N} + \epsilon\right) \cap \mathbb{Q} \subset W$ とできる。<br>
+        ここで、$0  <  \delta  <  \min\left(\epsilon, \frac{1}{N}\right)$ を満たす無理数 $\delta$ を用いて区間を考えれば、$\left(\frac{1}{N} - \delta, \frac{1}{N}\right) \cap \mathbb{Q}$ には無数の有理数が存在する。この区間に含まれる有理数 $r$ を一つ選ぶ。<br>
+        $r  <  1/N$ であるから、$r \in \left(-\frac{1}{N}, \frac{1}{N}\right)$ であり、かつ $A$ の元ではない（ $A$ の元は $1/N$ より大きいか、ちょうど $1/N$ か、$1/(N+1)$ 以下であるため、適切に $r$ を $1/N$ に極めて近く選べば $A$ とは一致しない）。<br>
+        したがって $r \in U_N(0) \subset V$ である。<br>
+        同時に、$r$ は $I$ にも含まれるため、$r \in I \subset W$ である。<br>
+        ゆえに $r \in V \cap W$ となり、$V \cap W = \varnothing$ に矛盾する。<br>
+        したがって $X$ は正則空間ではなく、Tychonoff 空間でもない。<br>
+        (証明終)
+    </div>
+
+    <h2>7. 密着空間における例外 ( $T_0$ の欠落)</h2>
+    <div class="theorem">
+        <strong>定理 8</strong><br>
+        2つ以上の点を持つ密着空間 (indiscrete space) はゼロ次元 (zero-dimensional) であるが、完全不連結 (totally disconnected) ではない。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ を2つ以上の点を持つ集合とし、位相 $\tau = \{\varnothing, X\}$ を与えた密着空間とする。<br>
+        $X$ において、clopen 集合は $\varnothing$ と $X$ のみである。<br>
+        任意の点 $x \in X$ と、$x$ を含む任意の開集合 $U \subset X$ をとる。空でない開集合は $X$ 自身しか存在しないため $U = X$ である。<br>
+        このとき、clopen 集合 $V = X$ をとれば、$x \in V \subset U$ が自明に成り立つ。したがって、$X$ はゼロ次元である。<br>
+        次に、$X$ が非連結であると仮定する。$X$ は2つの互いに素な空でない開集合 $A, B \subset X$ の和集合となるはずだが、空でない開集合は $X$ 自身しか存在しないため $A = X$ かつ $B = X$ となる。これは $A \cap B = \varnothing$ に矛盾する。したがって $X$ は連結である。<br>
+        よって、$X$ 全体が1つの連結成分となるが、仮定より $X$ は2つ以上の点を含むため完全不連結ではない。
+        (証明終)
+    </div>
+
+    <h2>8. 部分空間の遺伝的性質</h2>
+
+    <h3>8.1. 完全不連結空間とゼロ次元空間の部分空間</h3>
+    <div class="theorem">
+        <strong>定理 9</strong><br>
+        位相空間 $X$ が完全不連結 (totally disconnected) またはゼロ次元 (zero-dimensional) であるとき、その任意の部分空間 $A \subset X$ もそれぞれの性質を引き継ぐ。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        <strong>完全不連結性:</strong> $A$ の任意の部分集合 $C$ が相対位相に関して連結であるとする。部分空間 $A$ において連結であるような部分集合 $C$ は、全体空間 $X$ においても連結である。$X$ は完全不連結であるため、$C$ は高々1つの点しか持たない。ゆえに $A$ は完全不連結である。<br><br>
+        <strong>ゼロ次元性:</strong> $A$ の任意の開集合 $U_A$ と $x \in U_A$ ををとる。ある $X$ の開集合 $U$ が存在して $U_A = U \cap A$ と表せる。$X$ はゼロ次元であるため、$x \in V \subset U$ を満たす $X$ の clopen 集合 $V$ が存在する。$V_A = V \cap A$ とおくと、$V_A$ は $A$ における clopen 集合であり、$x \in V_A \subset U_A$ を満たす。ゆえに $A$ はゼロ次元である。
+        (証明終)
+    </div>
+
+    <h3>8.2. 超不連結空間の部分空間</h3>
+    <p>超不連結 (extremally disconnected) な空間の部分空間は、一般には超不連結にはならない。</p>
+    <div class="example">
+        <strong>例 5 (反例)</strong><br>
+        4点集合 $X = \{a, b, c, d\}$ 上に位相 $\tau = \{\varnothing, \{d\}, \{a, d\}, \{b, d\}, \{a, b, d\}, X\}$ を定める。各開集合の閉包はすべて $X$ (開集合) となるため、$X$ は超不連結である。<br>
+        しかし、部分集合 $Y = \{a, b, c\}$ に相対位相を与えると、開集合族は $\sigma = \{\varnothing, \{a\}, \{b\}, \{a, b\}, Y\}$ となる。$Y$ の開集合 $U = \{a\}$ の閉包は $\overline{U}^Y = \{a, c\}$ であるが、これは $\sigma$ に含まれないため開集合ではない。よって $Y$ は超不連結ではない。
+    </div>
+
+    <p>ただし、部分空間が開集合または稠密である場合は遺伝する。</p>
+    
+    <div class="theorem">
+        <strong>定理 10</strong><br>
+        位相空間 $X$ が超不連結 (extremally disconnected) であるならば、$X$ の任意の開部分空間 (open subspace) $Y$ も超不連結である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $Y$ の開集合 $A$ をとる。$Y$ は開集合であるため、$A$ も $X$ の開集合である。$X$ は超不連結であるから、閉包 $\overline{A}^X$ は $X$ において開集合となる。<br>
+        相対位相における閉包は $\overline{A}^Y = \overline{A}^X \cap Y$ であり、これは $X$ の開集合同士の共通部分であるため開集合である。ゆえに $\overline{A}^Y$ は $Y$ において開集合となり、$Y$ は超不連結である。
+        (証明終)
+    </div>
+
+    <div class="lemma">
+        <strong>補題 4</strong><br>
+        位相空間 $X$ において、部分集合 $D \subset X$ が稠密 (dense) であるとする。このとき、$X$ の任意の開集合 $U$ に対して、$\overline{U \cap D}^X = \overline{U}^X$ が成り立つ。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $U \cap D \subset U$ より $\overline{U \cap D}^X \subset \overline{U}^X$ は自明。<br>
+        逆を示す。$x \in \overline{U}^X$ をとる。任意の開近傍 $W$ に対し $W \cap U \neq \varnothing$ である。$W \cap U$ は空でない開集合であり、$D$ は稠密であるから、$(W \cap U) \cap D \neq \varnothing$ すなわち $W \cap (U \cap D) \neq \varnothing$ が成り立つ。よって $x \in \overline{U \cap D}^X$ であり、両者は一致する。
+        (証明終)
+    </div>
+
+    <div class="theorem">
+        <strong>定理 11</strong><br>
+        位相空間 $X$ が超不連結 (extremally disconnected) であるならば、$X$ の任意の稠密部分空間 (dense subspace) $D$ も超不連結である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $D$ の開集合 $A = U \cap D$ ( $U$ は $X$ の開集合 ) をとる。$X$ は超不連結だから $\overline{U}^X$ は開集合である。<br>
+        $D$ における閉包は $\overline{A}^D = \overline{A}^X \cap D = \overline{U \cap D}^X \cap D$ となる。<br>
+        補題4より $\overline{U \cap D}^X = \overline{U}^X$ であるから、$\overline{A}^D = \overline{U}^X \cap D$ となる。<br>
+        $\overline{U}^X$ は $X$ の開集合であるため、$\overline{A}^D$ は相対位相により $D$ の開集合となる。ゆえに $D$ は超不連結である。
+        (証明終)
+    </div>
+
+    <h2>9. 分離公理の「格上げ（Upgrade）」に関する性質</h2>
+    <p>完全不連結性、ゼロ次元性、超不連結性という3つの性質が、空間に元々備わっている分離公理（ $T_0$, $T_1$, $T_2$ ）をどこまで強く「格上げ」するかを整理する。</p>
+
+    <h3>9.1. ゼロ次元性による格上げ（ $T_0 \implies$ Tychonoff 空間 ）</h3>
+    <p>ゼロ次元性は非常に強力な分離能力を持っており、最低限の点の区別（ $T_0$ ）さえあれば、空間全体を完全正則空間（ Tychonoff 空間 ）まで一気に引き上げる。したがって当然 $T_2$ や $T_3$ 以上に格上げされる。</p>
+
+    <div class="theorem">
+        <strong>定理 12 (ゼロ次元性による格上げ)</strong><br>
+        位相空間 $X$ が $T_0$ 空間かつゼロ次元であるならば、$X$ は Hausdorff 空間（ $T_2$ 空間）であり、さらに Tychonoff 空間である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $x, y \in X$ を相異なる任意の2点とする。$X$ は $T_0$ 空間であるため、一般性を失うことなく、$x$ を含み $y$ を含まない開集合 $U$ が存在すると仮定してよい。<br>
+        $X$ はゼロ次元であるため、clopen な開基を持つ。したがって、$x \in U$ に対して、ある clopen 集合 $V$ が存在して $x \in V \subset U$ を満たす。<br>
+        $U$ は $y$ を含まないため、$V$ も $y$ を含まない。ゆえに $y \in X \smallsetminus V$ である。<br>
+        $V$ は clopen であるから、$V$ と $X \smallsetminus V$ はともに開集合である。さらに $V \cap (X \smallsetminus V) = \varnothing$ であり、$x \in V$ かつ $y \in X \smallsetminus V$ が成り立つ。<br>
+        任意の相異なる2点が互いに素な開集合で分離されたため、$X$ は $T_2$ 空間である。<br>
+        また、本稿の定理7で示した通り、ゼロ次元かつ $T_2$ 空間であれば自動的に Tychonoff 空間に格上げされるため、$X$ は Tychonoff 空間（および $T_3$ 空間）となる。
+        (証明終)
+    </div>
+
+    <h3>9.2. 完全不連結性による格上げ（ $T_0 \implies T_1$ ）</h3>
+    <p>完全不連結性は、点の閉包に関する位相的性質を利用することで $T_0$ を $T_1$ まで自動的に引き上げる。しかし、$T_2$ や $T_3$ への格上げ能力は持たない。</p>
+
+    <div class="theorem">
+        <strong>定理 13 (完全不連結性による $T_1$ への格上げ)</strong><br>
+        位相空間 $X$ が $T_0$ 空間かつ完全不連結であるならば、$X$ は $T_1$ 空間である。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明</div>
+        $X$ が $T_1$ 空間であることを示すには、任意の点 $x \in X$ に対して、1点集合 $\{x\}$ が閉集合であること、すなわち $\overline{\{x\}} = \{x\}$ を示せばよい。<br>
+        一般に、位相空間において「連結部分集合の閉包はまた連結になる」という事実がある。1点集合 $\{x\}$ は明らかに連結であるため、その閉包 $\overline{\{x\}}$ も連結部分集合である。<br>
+        ここで $X$ は完全不連結であるため、いかなる連結部分集合も1点より多くを含むことはできない。<br>
+        したがって $\overline{\{x\}}$ は1点のみからなる集合であり、$x \in \overline{\{x\}}$ であるため、$\overline{\{x\}} = \{x\}$ とならざるを得ない。<br>
+        ゆえに、すべての1点集合は閉集合であり、$X$ は $T_1$ 空間である。
+        (証明終)
+    </div>
+
+    <div class="example">
+        <strong>例 6 (完全不連結な $T_1$ 空間だが $T_2$ ではない反例)</strong><br>
+        二つの原点を持つ有理数空間 $X = \mathbb{Q} \cup \{0^*\}$ を考える（ $0^*$ は通常の原点 $0$ のコピー）。<br>
+        $x \neq 0, 0^*$ の近傍は通常の有理数と同じとし、$0$ と $0^*$ の基本近傍系をそれぞれ $U_\epsilon(0) = (-\epsilon, \epsilon) \cap \mathbb{Q}$ 、 $U_\epsilon(0^*) = \left( (-\epsilon, \epsilon) \cap \mathbb{Q} \smallsetminus \{0\} \right) \cup \{0^*\}$ とする。<br>
+        この空間は $T_1$ 空間であり、部分集合の連結性が遺伝しないため完全不連結である。しかし、$0$ と $0^*$ のいかなる開近傍も有理数の稠密性により必ず交わってしまうため、$T_2$ 空間にはならない。
+    </div>
+
+    <p>さらに、前述の<strong>例 4</strong>で示した通り、「完全不連結かつ $T_2$ 空間であるが、正則空間（ $T_3$ ）ではない空間」が存在するため、完全不連結性は $T_2$ を $T_3$ に格上げすることはない。</p>
+
+    <h3>9.3. 超不連結性による格上げ（ 格上げなし ）</h3>
+    <p>超不連結性（開集合の閉包が開集合になること）は、空間の「境界の振る舞い」を規定するものであり、点を分離する能力とは無関係である。そのため、分離公理を一切格上げしない。</p>
+
+    <ul>
+        <li><strong> $T_0 \not\implies T_1$ の反例:</strong> 前述の<strong>例 2 (Sierpinski 空間)</strong>。 $T_0$ かつ超不連結であるが、$T_1$ ではない。</li>
+        <li><strong> $T_1 \not\implies T_2$ の反例:</strong> 前述の<strong>例 3 (補有限位相)</strong>。 $T_1$ かつ超不連結であるが、$T_2$ ではない。</li>
+    </ul>
+
+    <div class="example">
+        <strong>例 7 (超不連結な $T_2$ 空間だが $T_3$ ではない反例)</strong><br>
+        強超フィルター位相 (Strong ultrafilter topology) とよばれる空間。<br>
+        この空間は Hausdorff 空間 ( $T_2$ ) であり、開集合の閉包が開集合となる超不連結性の条件も満たすが、点と閉集合を分離できず正則空間 ( $T_3$ ) にはならない。このことから、超不連結性もまた $T_2$ を $T_3$ へと格上げする力を持たないことがわかる。
+    </div>
+
+    <div class="reference">
+        <strong>引用文献</strong><br>
+        <ul>
+            <li>R. Engelking, <i>General Topology</i>, Heldermann Verlag, 1989. (位相空間論の標準的教科書であり、分離公理、ゼロ次元、完全不連結の基礎的概念が網羅されている)</li>
+            <li>S. Willard, <i>General Topology</i>, Addison-Wesley, 1970. (超不連結空間や部分空間の遺伝的性質に関する詳細な記述を含む)</li>
+            <li>P. Erdős, "The dimension of the rational points in Hilbert space", <i>Annals of Mathematics</i>, Vol. 41, No. 4, pp. 734-736, 1940. <a href="https://doi.org/10.2307/1968770" target="_blank">https://doi.org/10.2307/1968770</a> (Erdős space の原論文)</li>
+            <li>L. A. Steen, J. A. Seebach Jr., <i>Counterexamples in Topology</i>, Dover Publications, 1995. (強超フィルター位相や二つの原点を持つ空間などの反例について)</li>
+        </ul>
+    </div>
+
+</body>
+</html>

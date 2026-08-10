@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コンパクトHausdorff空間とその部分圏における圏論的性質とStone双対性の完全な解説</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    color: #333;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: #fafafa;
+  }
+  h1, h2, h3, h4 {
+    color: #111;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.3em;
+    margin-top: 1.5em;
+  }
+  .content {
+    background-color: #fff;
+    padding: 2em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  .proof {
+    margin: 1em 0;
+    padding: 1em;
+    background-color: #f9f9f9;
+    border-left: 4px solid #777;
+  }
+  .definition, .theorem {
+    margin: 1em 0;
+    padding: 1em;
+    background-color: #eef5f9;
+    border-left: 4px solid #3b82f6;
+  }
+  .example {
+    margin: 1em 0;
+    padding: 1em;
+    background-color: #fdfaf6;
+    border-left: 4px solid #f59e0b;
+  }
+  .references {
+    margin-top: 3em;
+    font-size: 0.9em;
+  }
+  ul, ol {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+</style>
+</head>
+<body>
+<div class="content">
+  <h1>コンパクトHausdorff空間とその部分圏における圏論的性質とStone双対性の完全な解説</h1>
+  
+  <p>コンパクトHausdorff空間とその部分圏における圏論的性質について、順を追って丁寧に解説する[cite: 1]。本稿では、対象とする3つの圏を以下のように定義する。</p>
+
+  <div class="definition">
+    <ul>
+      <li><strong>CHaus</strong>: コンパクトHausdorff空間を対象とし、連続写像を射とする圏。</li>
+      <li><strong>Profin</strong>: 完全不連結 (totally disconnected) コンパクトHausdorff空間を対象とし、連続写像を射とする圏。完全不連結とは、任意の異なる2点に対し、一方を含み他方を含まないような clopen 集合が存在する性質を指す。</li>
+      <li><strong>Extr</strong>: 超不連結 (extremally disconnected) コンパクトHausdorff空間を対象とし、連続写像を射とする圏。超不連結とは、任意の開集合の閉包が開集合になる性質を指す。</li>
+    </ul>
+  </div>
+
+  <p>超不連結なHausdorff空間は完全不連結であるため、包含関係として $\mathrm{Extr} \subset \mathrm{Profin} \subset \mathrm{CHaus}$ が成り立つ。</p>
+
+  <hr>
+
+  <h2>1. モノ、エピとその変種の特徴付け</h2>
+  <p>ここでは、モノ射 (monomorphism) 、正則モノ射 (regular monomorphism) 、有効モノ射 (effective monomorphism) 、およびエピ射 (epimorphism) 、正則エピ射 (regular epimorphism) 、有効エピ射 (effective epimorphism) の特徴付けを与える。</p>
+
+  <h3>1.1 モノ射の類の特徴付け</h3>
+  <div class="theorem">
+    <strong>定理</strong>: $\mathrm{CHaus}$ 、 $\mathrm{Profin}$ 、 $\mathrm{Extr}$ のいずれの圏においても、射 $f: X \to Y$ に対して以下の条件はすべて同値である。
+    <ol>
+      <li>$f$ は単射である。</li>
+      <li>$f$ はモノ射である。</li>
+      <li>$f$ は正則モノ射である。</li>
+      <li>$f$ は有効モノ射である。</li>
+    </ol>
+  </div>
+  <div class="proof">
+    <strong>証明</strong>:<br>
+    (1 $\implies$ 4): $f$ を単射とする。圏論の一般論として、単射であることとそのカーネルペア (kernel pair) $\pi_1, \pi_2: X \times_Y X \to X$ を考えたとき、 $X \times_Y X$ が対角成分 $\Delta_X \subset X \times X$ に一致することは同値である。したがって、 $\pi_1 = \pi_2$ であり、 $f$ は $\pi_1$ と $\pi_2$ のイコライザ (equalizer) となる。したがって $f$ は有効モノ射である。<br>
+    (4 $\implies$ 3): 有効モノ射は自身のカーネルペアのイコライザであるため、定義から直ちに正則モノ射である。<br>
+    (3 $\implies$ 2): 任意の正則モノ射はある2つの射のイコライザであるため、一般の圏論の事実としてモノ射である。<br>
+    (2 $\implies$ 1): $f: X \to Y$ がモノ射であるとする。 $x_1, x_2 \in X$ に対して $f(x_1) = f(x_2)$ であると仮定する。一点空間 $1 = \{*\}$ は $\mathrm{CHaus}$ 、 $\mathrm{Profin}$ 、 $\mathrm{Extr}$ のすべての対象となる（一点空間の開集合の閉包は自明に開集合であるため超不連結でもある）。写像 $g_1, g_2: 1 \to X$ を $g_1(*) = x_1$ 、 $g_2(*) = x_2$ と定義する。すると、 $f \circ g_1 = f \circ g_2$ が成り立つ。 $f$ はモノ射であるため $g_1 = g_2$ が従い、したがって $x_1 = x_2$ となる。よって $f$ は単射である。
+  </div>
+
+  <h3>1.2 エピ射の類の特徴付け</h3>
+  <div class="theorem">
+    <strong>定理</strong>: $\mathrm{CHaus}$ および $\mathrm{Profin}$ において、射 $f: X \to Y$ に対して以下の条件はすべて同値である。
+    <ol>
+      <li>$f$ は全射である。</li>
+      <li>$f$ はエピ射である。</li>
+      <li>$f$ は正則エピ射である。</li>
+      <li>$f$ は有効エピ射である。</li>
+    </ol>
+  </div>
+  <div class="proof">
+    <strong>証明</strong>:<br>
+    (1 $\implies$ 4): $f: X \to Y$ を全射な連続写像とする。 $f$ のカーネルペアは位相的プルバック $X \times_Y X = \{ (x_1, x_2) \in X \times X \mid f(x_1) = f(x_2) \}$ であり、自然な射影 $\pi_1, \pi_2: X \times_Y X \to X$ を持つ。 $f$ が $\pi_1, \pi_2$ のコイコライザ (coequalizer) であることを示す。任意の空間 $Z$ と連続写像 $g: X \to Z$ が $g \circ \pi_1 = g \circ \pi_2$ を満たすとする。これは $f(x_1) = f(x_2)$ ならば $g(x_1) = g(x_2)$ であることを意味する。 $f$ は全射であるため、各 $y \in Y$ に対して $f(x) = y$ となる $x \in X$ を選び、 $h(y) = g(x)$ と定義すると、 $h: Y \to Z$ は well-defined な写像となり $h \circ f = g$ を満たす。 $X$ はコンパクトであり $Y$ はHausdorffであるため、全射連続写像 $f$ は商写像 (quotient map) である。商写像の性質より、 $h \circ f$ が連続であることと $h$ が連続であることは同値である。よって $h$ は連続であり、 $f$ は有効エピ射となる。<br>
+    (4 $\implies$ 3 $\implies$ 2): 有効エピ射が正則エピ射であり、正則エピ射がエピ射であることは圏論の一般論である。<br>
+    (2 $\implies$ 1): $f: X \to Y$ がエピ射であるが、全射ではないと仮定する。 $X$ はコンパクト空間であり、 $f$ は連続であるため、像 $f(X)$ はコンパクトである。 $Y$ はHausdorff空間であるため、コンパクト部分集合 $f(X)$ は $Y$ の閉部分集合となる。仮定より $Y \smallsetminus f(X)$ は空でないため、元 $y_0 \in Y \smallsetminus f(X)$ をとる。<br>
+    <ul>
+      <li>$\mathrm{CHaus}$ の場合: Urysohnの補題より、閉集合 $f(X)$ 上で $0$ をとり、点 $y_0$ で $1$ をとる連続写像 $g_1: Y \to [0, 1]$ が存在する。定数関数 $g_2(y) = 0$ とおくと、 $g_1 \circ f = g_2 \circ f$ が成り立つが、 $g_1(y_0) = 1 \neq 0 = g_2(y_0)$ なので $g_1 \neq g_2$ である。これは $f$ がエピ射であることに矛盾する。</li>
+      <li>$\mathrm{Profin}$ の場合: $Y$ は完全不連結であるため、点 $y_0$ と閉集合 $f(X)$ を分離する clopen 集合 $U$ が存在する（すなわち $y_0 \in U$ かつ $U \cap f(X) = \varnothing$ ）。 $U$ の特性関数を $g_1: Y \to \{0, 1\}$ とし、 $g_2: Y \to \{0, 1\}$ を定数関数 $0$ とすると、同様に $g_1 \circ f = g_2 \circ f$ かつ $g_1 \neq g_2$ となり矛盾する。</li>
+    </ul>
+    よって、 $f$ は全射でなければならない。
+  </div>
+  <p><strong>$\mathrm{Extr}$ におけるエピ射についての注意</strong>:<br>
+  $\mathrm{Extr}$ においても同様の証明で全射ならばエピ射であることが従う。しかし、 $\mathrm{Extr}$ は後述するように代数的圏 (完備Bool代数の圏の双対) と同値であり、すべての全射が正則エピ射になるわけではない。 $\mathrm{Extr}$ における正則エピ射は、完備Bool代数の単射準同型の双対として特徴付けられるが、一般に「エピ射 $=$ 全射」であることを強調しておく。</p>
+
+  <hr>
+
+  <h2>2. 有限直積、無限直積、および有限直和</h2>
+  
+  <h3>2.1 直積 (Product)</h3>
+  <div class="theorem">
+    <strong>$\mathrm{CHaus}$ と $\mathrm{Profin}$ における直積</strong>:<br>
+    対象の族 $\{X_i\}_{i \in I}$ （ $I$ は有限または無限の添字集合）に対する $\mathrm{CHaus}$ および $\mathrm{Profin}$ での直積は、集合としての直積空間 $X = \prod_{i \in I} X_i$ に直積位相を入れたものである。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>: Tychonoffの定理により、コンパクト空間の任意の直積はコンパクトである。Hausdorff空間の直積はHausdorffであるため、 $X \in \mathrm{CHaus}$ となる。また、各 $X_i$ が完全不連結である場合、異なる2点 $x, y \in X$ はある座標 $j \in I$ で $x_j \neq y_j$ となる。 $X_j$ は完全不連結であるから $x_j$ を含み $y_j$ を含まない clopen 集合 $U_j \subset X_j$ が存在する。射影 $\pi_j: X \to X_j$ は連続であるため、 $\pi_j^{-1}(U_j)$ は $X$ における clopen 集合であり、 $x$ を含み $y$ を含まない。よって $X$ も完全不連結となり $X \in \mathrm{Profin}$ となる。自然な射影 $\pi_j$ が圏論的直積の普遍性を満たすことは、位相空間の圏での直積の普遍性から直ちに従う。
+  </div>
+
+  <div class="theorem">
+    <strong>$\mathrm{Extr}$ における直積</strong>:<br>
+    $\mathrm{Extr}$ では、空間としての直積は一般に超不連結性を保たない（例えば離散空間のStone-Cechコンパクト化 $\beta \mathbb{N}$ は超不連結だが、 $\beta \mathbb{N} \times \beta \mathbb{N}$ は超不連結ではない）。したがって、 $\mathrm{Extr}$ における直積は、直積空間の射影被覆 (projective cover) として構成される。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>: $\{X_i\}_{i \in I}$ を $\mathrm{Extr}$ の対象の族とする。空間としての直積を $Y = \prod_{i \in I} X_i$ とする。 $Y \in \mathrm{CHaus}$ であるため、後述する Gleasonの定理により、超不連結空間 $X \in \mathrm{Extr}$ と既約な全射 (irreducible surjection) $p: X \to Y$ が一意に存在する。この $X$ と射影の合成 $\pi_j \circ p: X \to X_j$ の組が $\mathrm{Extr}$ における圏論的直積を与える。任意の $Z \in \mathrm{Extr}$ と射の族 $f_i: Z \to X_i$ が与えられたとき、 $Y$ の普遍性から連続写像 $f: Z \to Y$ が一意に存在する。 $Z$ は $\mathrm{Extr}$ の対象（すなわち射影的対象）であり、 $p: X \to Y$ は全射であるため、リフト $\tilde{f}: Z \to X$ で $p \circ \tilde{f} = f$ を満たすものが存在する。 $p$ の既約性からこのリフトは一意であることが示され、直積の普遍性が満たされる。
+  </div>
+
+  <h3>2.2 有限直和 (Coproduct)</h3>
+  <div class="theorem">
+    <strong>定理</strong>: $\mathrm{CHaus}$ 、 $\mathrm{Profin}$ 、 $\mathrm{Extr}$ のいずれの圏においても、有限個の対象 $X_1, \dots, X_n$ の有限直和は、位相空間としての非交和 (disjoint union) $X = X_1 \sqcup \dots \sqcup X_n$ に直和位相を入れたものである。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>: $X$ は有限個のコンパクト空間の和であるためコンパクトであり、有限個のHausdorff空間の和であるためHausdorffである。さらに、各 $X_i$ が開かつ閉な部分空間として埋め込まれる。<br>
+    完全不連結性について: 異なる2点 $x, y \in X$ が同じ $X_i$ に属する場合、 $X_i$ 内での clopen 集合は $X$ 全体でも clopen であるため分離可能である。異なる $X_i, X_j$ に属する場合、 $X_i$ 自身が $X$ の clopen 集合として $x$ を含み $y$ を含まない。よって $X \in \mathrm{Profin}$ である。<br>
+    超不連結性について: $U \subset X$ を開集合とすると、 $U = U_1 \sqcup \dots \sqcup U_n$ （ただし $U_i = U \cap X_i$ は $X_i$ の開集合）と書ける。 $X$ における閉包は $\overline{U} = \overline{U_1} \sqcup \dots \sqcup \overline{U_n}$ となる。各 $X_i$ が超不連結であるため $\overline{U_i}$ は $X_i$ の開集合であり、したがって $\overline{U}$ は $X$ の開集合となる。よって $X \in \mathrm{Extr}$ である。圏論的余極限の普遍性は位相空間の圏のものと一致する。
+  </div>
+
+  <hr>
+
+  <h2>3. プルバックとプッシュアウト</h2>
+
+  <h3>3.1 プルバック (Pullback)</h3>
+  <div class="theorem">
+    <strong>$\mathrm{CHaus}$ と $\mathrm{Profin}$ におけるプルバック</strong>:<br>
+    射 $f: X \to Z$ と $g: Y \to Z$ が与えられたとき、プルバックは直積空間 $X \times Y$ の部分空間 $P = \{ (x, y) \in X \times Y \mid f(x) = g(y) \}$ として構成される。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>: $Z$ はHausdorffであるため、対角成分 $\Delta_Z \subset Z \times Z$ は閉集合である。連続写像 $f \times g: X \times Y \to Z \times Z$ を考えると、 $P = (f \times g)^{-1}(\Delta_Z)$ となるため、 $P$ は $X \times Y$ の閉部分空間である。 $X \times Y$ はコンパクトHausdorff空間なので、その閉部分空間 $P$ もコンパクトHausdorffである。よって $P \in \mathrm{CHaus}$ となる。 $X, Y$ が完全不連結であれば $X \times Y$ も完全不連結であり、その部分空間 $P$ も完全不連結となるため $P \in \mathrm{Profin}$ となる。普遍性は集合論的プルバックの位相が相対位相と一致することから従う。
+  </div>
+  <p><strong>$\mathrm{Extr}$ におけるプルバック</strong>:<br>
+  $\mathrm{Extr}$ では、部分空間をとる操作で超不連結性が保たれないため、 $\mathrm{CHaus}$ のプルバック $P$ をそのまま用いることはできない。直積の場合と同様に、 $\mathrm{CHaus}$ におけるプルバック $P$ の射影被覆 $p: \tilde{P} \to P$ をとることで、 $\mathrm{Extr}$ におけるプルバック $\tilde{P}$ を構成する。普遍性の証明は直積における射影被覆の議論と全く同様に、 $\mathrm{Extr}$ の対象の射影性と既約全射の性質を用いる。</p>
+
+  <h3>3.2 プッシュアウト (Pushout)</h3>
+  <div class="theorem">
+    <strong>$\mathrm{CHaus}$ と $\mathrm{Profin}$ におけるプッシュアウト</strong>:<br>
+    射 $f: Z \to X$ と $g: Z \to Y$ に対するプッシュアウトを構成する。まず、位相空間の圏でのプッシュアウト $W = X \sqcup Y / \sim$ を考える。ここで $\sim$ は $f(z) \sim g(z)$ で生成される同値関係である。しかし、 $W$ は商位相に関してHausdorffになるとは限らない。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>: $\mathrm{CHaus}$ におけるプッシュアウトを得るため、 $W$ からのすべてのコンパクトHausdorff空間への連続写像を用いてHausdorff化を行う。具体的には、 $W$ 上の連続関数環 $C(W)$ によって分離される点を同一視した商空間 $W_{Haus}$ をとる。コンパクト空間の連続写像による像はコンパクトであるため、この $W_{Haus}$ はコンパクトHausdorff空間となり、 $\mathrm{CHaus}$ のプッシュアウトとなる。 $\mathrm{Profin}$ の場合は、 $W$ をさらに完全不連結化する（すなわち $W$ 上の clopen 集合によって分離される同値関係で割る）ことでプッシュアウトが得られる。
+  </div>
+  <p><strong>$\mathrm{Extr}$ におけるプッシュアウト</strong>:<br>
+  $\mathrm{Extr}$ においてプッシュアウトが存在することは、 $\mathrm{Extr}$ が完備Bool代数の圏の双対であり、完備Bool代数の圏が小余極限 (small colimits) を持つことから保証されるが、空間としての具体的な記述は Bool代数のテンソル積の完備化のStone空間となり、極めて抽象的な構成となる。</p>
+
+  <hr>
+
+  <h2>4. レトラクトの定義</h2>
+  
+  <div class="definition">
+    <strong>位相空間論におけるレトラクトの定義</strong>:<br>
+    位相空間 $X$ と、その部分空間 $A \subset X$ を考える。連続写像 $r: X \to A$ が、任意の $a \in A$ に対して $r(a) = a$ を満たすとき、 $r$ を $X$ から $A$ への<strong>レトラクション (retraction)</strong> と呼ぶ。ある空間 $X$ からその部分空間 $A$ へのレトラクションが存在するとき、 $A$ は $X$ の<strong>レトラクト (retract)</strong> であるという。
+  </div>
+  
+  <div class="definition">
+    <strong>圏論におけるレトラクトの一般化された定義</strong>:<br>
+    ある圏 $\mathcal{C}$ において、対象 $A$ が対象 $X$ の<strong>レトラクト (retract)</strong> であるとは、以下の条件を満たす射 $i: A \to X$ と $r: X \to A$ が存在することである。
+    $$r \circ i = \mathrm{id}_A$$
+    ここで $\mathrm{id}_A$ は $A$ 上の恒等射である。このとき、射 $i$ を<strong>断面 (section)</strong> と呼び、射 $r$ を<strong>レトラクション (retraction)</strong> と呼ぶ。
+  </div>
+
+  <div class="example">
+    <strong>基本的な具体例</strong>:
+    <ul>
+      <li><strong>例1 (閉区間のレトラクト)</strong>: 実数直線 $\mathbb{R}$ と、その部分空間である閉区間 $[0, 1] \subset \mathbb{R}$ を考える。連続写像 $r: \mathbb{R} \to [0, 1]$ を、$x  <  0$ のとき $r(x) = 0$、$0 \le x \le 1$ のとき $r(x) = x$、$x  >  1$ のとき $r(x) = 1$ と定義する。この $r$ は連続であり、 $[0, 1]$ の元を一切動かさない。したがって $r$ はレトラクションであり、 $[0, 1]$ は $\mathbb{R}$ のレトラクトである。</li>
+      <li><strong>例2 (一点空間)</strong>: 任意の位相空間 $X$ と、その任意の点 $x_0 \in X$ からなる一点部分空間 $\{x_0\} \subset X$ を考える。 $X$ のすべての点を $x_0$ に写す定数写像 $r(x) = x_0$ は連続であり、 $r(x_0) = x_0$ を満たす。したがって $\{x_0\}$ は常に $X$ のレトラクトとなる。</li>
+      <li><strong>例3 (レトラクトではない例)</strong>: 2次元の閉円板 $D^2 = \{ (x, y) \in \mathbb{R}^2 \mid x^2 + y^2 \le 1 \}$ と、その境界である単位円 $S^1 = \{ (x, y) \in \mathbb{R}^2 \mid x^2 + y^2 = 1 \}$ を考える。 $S^1$ は $D^2$ の部分空間であるが、 $S^1$ は $D^2$ のレトラクト<strong>ではない</strong>。</li>
+    </ul>
+  </div>
+  <div class="proof">
+    <strong>例3の証明</strong>: 背理法で示す。仮に $S^1$ が $D^2$ のレトラクトであるとし、包含写像を $i: S^1 \to D^2$ 、レトラクションを $r: D^2 \to S^1$ と仮定する。圏論的な定義より、以下が成り立つ。
+    $$r \circ i = \mathrm{id}_{S^1}$$
+    ここで、位相空間の圏から群の圏への関手である基本群 $\pi_1$ を適用する。関手の性質から、射の合成と恒等射は保存されるため、誘導された群準同型写像について以下が成り立つ。
+    $$r_* \circ i_* = \mathrm{id}_{\pi_1(S^1)}$$
+    しかし、円周の基本群は整数群 $\pi_1(S^1) = \mathbb{Z}$ であり、可縮な円板の基本群は自明な群 $\pi_1(D^2) = \{0\}$ である。これを代入すると、群準同型の合成として以下の図式を得る。
+    $$\mathbb{Z} \xrightarrow{i_*} \{0\} \xrightarrow{r_*} \mathbb{Z}$$
+    この合成写像 $r_* \circ i_*$ は途中経路に自明な群 $\{0\}$ を経由するため、常に $0$ を返す自明な準同型となる。しかしこれが恒等写像 $\mathrm{id}_{\mathbb{Z}}$ と一致することになり、明らかな矛盾が生じる。よって、 $S^1$ は $D^2$ のレトラクトではない。
+  </div>
+
+  <hr>
+
+  <h2>5. 単射的対象と射影的対象</h2>
+  
+  <div class="definition">
+    圏における<strong>単射的対象 (injective object)</strong> とは、任意のモノ射 $i: A \to B$ と射 $f: A \to X$ に対して、 $f = \tilde{f} \circ i$ を満たす射 $\tilde{f}: B \to X$ が存在する対象 $X$ のことである。<br>
+    <strong>射影的対象 (projective object)</strong> はその双対概念であり、任意のエピ射 (全射) に対してリフトが存在する対象である。圏 $\mathcal{C}$ が<strong>十分に単射的対象を持つ (has enough injectives)</strong> とは、任意の対象 $X$ に対して単射的対象 $I$ とモノ射 $m: X \to I$ が存在することである。<strong>十分に射影的対象を持つ (has enough projectives)</strong> とは、任意の対象 $X$ に対して射影的対象 $P$ とエピ射 $p: P \to X$ が存在することである。
+  </div>
+
+  <h3>5.1 $\mathrm{CHaus}$ が十分に単射的対象を持つことの証明</h3>
+  
+  <p>本証明を論理的に完全に self-contained なものとするため、証明内で用いる位相空間入門における基本定理を以下に明記する。</p>
+  <div class="theorem">
+    <strong>使用する位相空間論の定理群</strong>
+    <ol>
+      <li><strong>一点の閉性</strong>: Hausdorff空間において、一点からなる集合は閉集合である。</li>
+      <li><strong>コンパクトHausdorff空間の正規性</strong>: コンパクトHausdorff空間は正規空間 (normal space) である（すなわち、任意の互いに素な閉集合を互いに素な開集合で分離できる）。</li>
+      <li><strong>Urysohnの補題 (Urysohn's Lemma)</strong>: 正規空間 $X$ の互いに素な閉集合 $A, B$ に対して、連続写像 $f: X \to [0, 1]$ であって $f(A) = \{0\}$ かつ $f(B) = \{1\}$ を満たすものが存在する。</li>
+      <li><strong>Tietzeの拡張定理 (Tietze Extension Theorem)</strong>: 正規空間 $X$ とその閉部分集合 $A \subset X$ に対して、部分空間上の任意の連続写像 $f: A \to [0, 1]$ は、空間全体の連続写像 $\tilde{f}: X \to [0, 1]$ に拡張できる（すなわち $\tilde{f}|_A = f$ となる）。</li>
+      <li><strong>Tychonoffの定理 (Tychonoff's Theorem)</strong>: コンパクト空間の任意の族の直積空間は、直積位相に関してコンパクトである。</li>
+      <li><strong>直積位相の普遍性</strong>: 任意の位相空間 $X$ から直積空間 $\prod_{j \in J} Y_j$ への写像が連続であるための必要十分条件は、各成分への射影との合成がすべて連続となることである。</li>
+    </ol>
+  </div>
+
+  <div class="theorem">
+    <strong>定理</strong>: コンパクトHausdorff空間の圏 $\mathrm{CHaus}$ は十分に単射的対象を持つ。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>: 証明は3つのステップに分けて行う。<br><br>
+    <strong>ステップ1: 閉区間 $[0, 1]$ が $\mathrm{CHaus}$ における単射的対象であること</strong><br>
+    $i: A \to B$ を $\mathrm{CHaus}$ におけるモノ射とし、 $f: A \to [0, 1]$ を連続写像とする。 $\mathrm{CHaus}$ におけるモノ射は単射な連続写像である。 $A$ はコンパクト空間であり、 $B$ はHausdorff空間であるため、連続写像 $i$ による像 $i(A) \subset B$ はコンパクトであり、したがって $B$ の閉部分集合となる。さらに $i$ は単射であるため、 $i$ は $A$ から $i(A)$ への同相写像を与える。<br>
+    これにより、 $f$ を $i(A)$ 上の連続写像 $f \circ i^{-1}: i(A) \to [0, 1]$ と見なすことができる。 $B$ はコンパクトHausdorff空間であるため、定理群2より正規空間である。定理群4のTietzeの拡張定理を適用すると、閉部分集合 $i(A)$ 上の連続写像 $f \circ i^{-1}$ は $B$ 全体の連続写像 $\tilde{f}: B \to [0, 1]$ へと拡張できる。すなわち、 $B$ の任意の元 $b \in i(A)$ に対して $\tilde{f}(b) = f(i^{-1}(b))$ が成り立つ。これは $\tilde{f} \circ i = f$ を意味する。よって $[0, 1]$ は $\mathrm{CHaus}$ の単射的対象である。<br><br>
+    
+    <strong>ステップ2: 単射的対象の直積が単射的対象であること</strong><br>
+    $\{I_j\}_{j \in J}$ を $\mathrm{CHaus}$ の単射的対象の族とし、その直積空間を $I = \prod_{j \in J} I_j$ とする。定理群5のTychonoffの定理より $I$ はコンパクトであり、Hausdorff空間の任意の直積はHausdorff空間であるため $I \in \mathrm{CHaus}$ である。<br>
+    $i: A \to B$ を $\mathrm{CHaus}$ のモノ射、 $f: A \to I$ を連続写像とする。直積空間の自然な射影を $\pi_j: I \to I_j$ とすると、合成 $\pi_j \circ f: A \to I_j$ は連続である。各 $I_j$ は単射的対象であるから、 $\tilde{f}_j \circ i = \pi_j \circ f$ を満たす連続写像 $\tilde{f}_j: B \to I_j$ が存在する。<br>
+    定理群6の直積位相の普遍性により、すべての $j \in J$ について $\pi_j \circ \tilde{f} = \tilde{f}_j$ を満たす連続写像 $\tilde{f}: B \to I$ が一意に存在する。このとき、任意の $j \in J$ について $\pi_j \circ (\tilde{f} \circ i) = (\pi_j \circ \tilde{f}) \circ i = \tilde{f}_j \circ i = \pi_j \circ f$ が成り立つ。直積空間への写像は各成分ごとに一致すれば等しいため、 $\tilde{f} \circ i = f$ が結論づけられる。したがって直積空間 $I$ も単射的対象である。<br>
+    ステップ1とステップ2より、任意の添字集合 $J$ に対する直積空間 (Tychonoff cube) $[0, 1]^J$ は $\mathrm{CHaus}$ の単射的対象であることがわかる。<br><br>
+
+    <strong>ステップ3: 任意の対象 $X$ を単射的対象に埋め込むモノ射の構成</strong><br>
+    任意の対象 $X \in \mathrm{CHaus}$ に対して、 $J$ を $X$ から $[0, 1]$ へのすべての連続写像からなる集合とする（すなわち $J = \mathrm{Hom}_{\mathrm{CHaus}}(X, [0, 1])$ ）。<br>
+    評価写像 $e: X \to [0, 1]^J$ を、任意の $x \in X$ に対して $e(x) = (j(x))_{j \in J}$ と定義する。すなわち、 $e(x)$ の第 $j$ 成分は $j(x)$ である。各成分への射影 $\pi_j \circ e = j$ は連続写像であるため、定理群6の直積位相の普遍性より $e$ 全体も連続写像である。<br>
+    次に、 $e$ が単射であることを示す。 $x, y \in X$ を $x \neq y$ であるような任意の2点とする。定理群1より $\{x\}$ と $\{y\}$ は $X$ の互いに素な閉集合である。 $X$ は定理群2より正規空間であるから、定理群3のUrysohnの補題が適用でき、連続写像 $j: X \to [0, 1]$ であって $j(x) = 0$ かつ $j(y) = 1$ を満たすものが存在する。<br>
+    この連続写像 $j$ は添字集合 $J$ の元である。 $e(x)$ の第 $j$ 成分は $0$ であり、 $e(y)$ の第 $j$ 成分は $1$ であるため、 $e(x) \neq e(y)$ となる。よって $e$ は単射である。単射な連続写像は $\mathrm{CHaus}$ においてモノ射であるため、 $e: X \to [0, 1]^J$ はモノ射である。<br>
+    以上より、 $\mathrm{CHaus}$ の任意の対象 $X$ に対して、単射的対象 $[0, 1]^J$ とモノ射 $e: X \to [0, 1]^J$ が存在することが示された。したがって $\mathrm{CHaus}$ は十分に単射的対象を持つ。
+  </div>
+
+  <p><strong>補足</strong>: $\mathrm{Profin}$ と $\mathrm{Extr}$ における単射的対象は、対象が完全不連結であるため $[0, 1]$ を用いることはできず、代わりに2点離散空間 $2 = \{0, 1\}$ が基本となる。これらの圏における単射的対象はカントール空間 $2^J$ およびそのレトラクトとして特徴付けられる。</p>
+
+  <h3>5.2 $\mathrm{CHaus}$ が十分に射影的対象を持つことの証明</h3>
+
+  <p>証明を論理的に self-contained にするため、用いる重要な性質を明記する。</p>
+  <div class="theorem">
+    <strong>使用する定理と性質</strong>
+    <ol>
+      <li><strong>離散位相の性質</strong>: 離散位相を入れた空間（すべての部分集合が開集合である空間）から任意の位相空間への任意の写像は連続である。</li>
+      <li><strong>Stone-Čechコンパクト化 (Stone-Čech Compactification)</strong>: 任意の完全正則空間（特に離散空間） $D$ に対して、コンパクトHausdorff空間 $\beta D$ と連続写像 $\iota: D \to \beta D$ が存在し、以下の普遍性を満たす。<br>
+      <strong>普遍性</strong>: 任意のコンパクトHausdorff空間 $Y$ と連続写像 $f: D \to Y$ に対して、連続写像 $\tilde{f}: \beta D \to Y$ が一意に存在し、 $\tilde{f} \circ \iota = f$ を満たす。</li>
+      <li><strong>稠密部分集合の一致の定理</strong>: 位相空間 $A$ から Hausdorff空間 $B$ への2つの連続写像 $f, g: A \to B$ について、 $A$ の稠密部分集合上で $f$ と $g$ が一致するならば、 $A$ 全体で $f = g$ が成り立つ。（なお、Stone-Čechコンパクト化において像 $\iota(D)$ は $\beta D$ で稠密である。）</li>
+      <li><strong>選択公理 (Axiom of Choice)</strong>: 任意の全射 $f: A \to B$ に対して、 $f \circ h = \mathrm{id}_B$ を満たす写像 $h: B \to A$ （右逆写像）が存在する。</li>
+    </ol>
+  </div>
+
+  <div class="theorem">
+    <strong>定理</strong>: コンパクトHausdorff空間の圏 $\mathrm{CHaus}$ は十分に射影的対象を持つ。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>: 任意のコンパクトHausdorff空間 $X$ をとる。以下の3つのステップにより、 $X$ への全射をもつ射影的対象を構成する。<br><br>
+    <strong>ステップ1: 離散空間の導入と拡張</strong><br>
+    集合としての $X$ （すなわち $X$ の台集合）に離散位相を入れた位相空間を $X_d$ とする。恒等写像 $i: X_d \to X$ は、各元 $x$ を自分自身に写す写像 $i(x) = x$ である。 $X_d$ は離散空間であるため、性質1より写像 $i$ は連続写像である。また、定義から明らかに $i$ は全射である。<br><br>
+    
+    <strong>ステップ2: Stone-Čechコンパクト化による全射の構成</strong><br>
+    離散空間 $X_d$ のStone-Čechコンパクト化 $\beta X_d$ と、自然な連続写像 $\iota: X_d \to \beta X_d$ を考える。性質2の普遍性において、 $Y = X$ および $f = i$ とおく。すると、連続写像 $p: \beta X_d \to X$ が一意に存在し、 $p \circ \iota = i$ を満たす。<br>
+    任意の $x \in X$ に対して、 $i$ は全射であるから $x = i(x)$ と書ける。したがって $x = p(\iota(x))$ となり、 $x$ は $p$ の像に含まれる。よって $p: \beta X_d \to X$ は全射である。 $\mathrm{CHaus}$ において全射はエピ射であるため、 $p$ はエピ射となる。<br><br>
+
+    <strong>ステップ3: $\beta X_d$ が射影的対象であることの証明</strong><br>
+    一般に、任意の離散空間 $D$ に対して $\beta D$ が射影的対象であることを示す。<br>
+    $\mathrm{CHaus}$ における任意のエピ射（すなわち全射連続写像） $f: Y \to Z$ と、任意の連続写像 $g: \beta D \to Z$ をとる。圏論的射影的対象の定義を満たすためには、 $f \circ \tilde{g} = g$ を満たす連続写像 $\tilde{g}: \beta D \to Y$ の存在を示せばよい。<br>
+    <ol>
+      <li>合成写像 $g \circ \iota: D \to Z$ を考える。</li>
+      <li>各 $d \in D$ に対して、元の写像 $f: Y \to Z$ は全射であるため、 $f(y_d) = g(\iota(d))$ を満たす $y_d \in Y$ が少なくとも1つ存在する。性質4の選択公理を用いることで、各 $d$ に対してそのような $y_d$ を1つずつ選び、写像 $h: D \to Y$ を $h(d) = y_d$ と定義できる。</li>
+      <li>構成より、 $D$ のすべての元 $d$ について $f(h(d)) = g(\iota(d))$ 、すなわち $f \circ h = g \circ \iota$ が成り立つ。</li>
+      <li>$D$ は離散空間であるため、性質1より任意の写像は連続である。したがって $h: D \to Y$ は連続写像である。</li>
+      <li>$Y$ はコンパクトHausdorff空間であるため、性質2のStone-Čechコンパクト化の普遍性により、 $h$ は連続写像 $\tilde{g}: \beta D \to Y$ へと拡張される。すなわち $\tilde{g} \circ \iota = h$ を満たす。</li>
+      <li>2つの連続写像 $f \circ \tilde{g}: \beta D \to Z$ と $g: \beta D \to Z$ を比較する。部分空間 $\iota(D)$ 上において、任意の $d \in D$ に対して、<br>
+      $$ (f \circ \tilde{g})(\iota(d)) = f(\tilde{g}(\iota(d))) = f(h(d)) = g(\iota(d)) $$<br>
+      が成り立つ。すなわち、稠密部分集合 $\iota(D) \subset \beta D$ の上で $f \circ \tilde{g}$ と $g$ は一致する。</li>
+      <li>$Z$ はHausdorff空間であるため、性質3の定理より、 $\beta D$ 全体で $f \circ \tilde{g} = g$ が成り立つ。</li>
+    </ol>
+    以上により、任意の全射 $f$ に対してリフト $\tilde{g}$ が存在することが示されたため、 $\beta D$ （特に $\beta X_d$ ）は $\mathrm{CHaus}$ における射影的対象である。<br>
+    結論として、任意の $X \in \mathrm{CHaus}$ に対して、射影的対象 $\beta X_d$ とエピ射 $p: \beta X_d \to X$ が存在するため、圏 $\mathrm{CHaus}$ は十分に射影的対象を持つ。
+  </div>
+
+  <div class="theorem">
+    <strong>定理 (Gleason)</strong>: $\mathrm{CHaus}$ および $\mathrm{Profin}$ における射影的対象は、まさに $\mathrm{Extr}$ の対象、すなわち超不連結コンパクトHausdorff空間に一致する。
+  </div>
+  <div class="proof">
+    <strong>証明の概要と補足</strong>:<br>
+    $X$ が $\mathrm{CHaus}$ で射影的対象であるならば、 $X$ の開集合 $U$ と $X \smallsetminus \overline{U}$ の直和から $X$ への自然な包含写像は、Stone-Cechコンパクト化の普遍性により、コンパクト空間 $Y = \beta U \sqcup \beta(X \smallsetminus \overline{U})$ から $X$ への全射 $p: Y \to X$ に拡張される。 $X$ の射影性から切断 $s: X \to Y$ が存在し、 $\beta U$ が $Y$ の clopen 集合であることから $s^{-1}(\beta U) = \overline{U}$ が clopen となり、 $X$ が超不連結であることが導かれる。<br>
+    今回の証明で用いた「離散空間のStone-Čechコンパクト化 $\beta D$ 」は、まさに超不連結コンパクトHausdorff空間の典型例である。直観的な言葉で言えば、離散空間 $D$ は開集合の閉包に関する制約が最も緩い空間であり、そのコンパクト化 $\beta D$ は「開集合の閉包が再び開集合になる」という超不連結性の要件を自然に満たす。
+  </div>
+
+  <hr>
+
+  <h2>6. Stone双対性と完備Bool代数</h2>
+  <p>完全不連結コンパクトHausdorff空間の圏 $\mathrm{Profin}$ と、Bool代数の圏 $\mathrm{Bool}$ の間の反変同値性である「Stone双対性 (Stone duality)」について、定義から証明まで詳細に解説する。</p>
+
+  <h3>6.1 Bool代数の圏 $\mathrm{Bool}$ の定義</h3>
+  <div class="definition">
+    <strong>対象の定義</strong>:<br>
+    Bool代数 (Boolean algebra) とは、集合 $B$ に以下の演算と定数が備わった代数系 $(B, \wedge, \vee, \neg, 0, 1)$ である。
+    <ul>
+      <li>2項演算: $\wedge$ (結び、積)、 $\vee$ (交わり、和)</li>
+      <li>単項演算: $\neg$ (補元)</li>
+      <li>定数: $0$ (最小元)、 $1$ (最大元)</li>
+    </ul>
+    これらは以下の公理をすべての $a, b, c \in B$ に対して満たす。
+    <ol>
+      <li><strong>交換律</strong>: $a \wedge b = b \wedge a$, $a \vee b = b \vee a$</li>
+      <li><strong>結合律</strong>: $(a \wedge b) \wedge c = a \wedge (b \wedge c)$, $(a \vee b) \vee c = a \vee (b \vee c)$</li>
+      <li><strong>吸収律</strong>: $a \wedge (a \vee b) = a$, $a \vee (a \wedge b) = a$</li>
+      <li><strong>分配律</strong>: $a \wedge (b \vee c) = (a \wedge b) \vee (a \wedge c)$, $a \vee (b \wedge c) = (a \vee b) \wedge (a \vee c)$</li>
+      <li><strong>補元則</strong>: $a \wedge \neg a = 0$, $a \vee \neg a = 1$</li>
+    </ol>
+  </div>
+  <div class="definition">
+    <strong>射の定義</strong>:<br>
+    Bool代数の間の準同型写像を $\mathrm{Bool}$ の射とする。2つのBool代数 $A, B$ が与えられたとき、写像 $f: A \to B$ が <strong>Bool準同型 (Boolean homomorphism)</strong> であるとは、任意の $x, y \in A$ に対して以下の条件をすべて満たすことである。
+    <ol>
+      <li>$f(x \wedge y) = f(x) \wedge f(y)$</li>
+      <li>$f(x \vee y) = f(x) \vee f(y)$</li>
+      <li>$f(0) = 0$</li>
+      <li>$f(1) = 1$</li>
+    </ol>
+    これらの条件から $f(\neg x) = \neg f(x)$ が自動的に従う。したがって、Bool代数の圏 $\mathrm{Bool}$ は、Bool代数を対象とし、Bool準同型を射とする圏である。
+  </div>
+
+  <h3>6.2 Stone双対性 ( $\mathrm{Profin}$ と $\mathrm{Bool}$ の反変同値)</h3>
+  <p>Stone双対性とは、位相空間の圏 $\mathrm{Profin}$ と、代数系の圏 $\mathrm{Bool}$ が反変同値（すなわち $\mathrm{Profin}^{\mathrm{op}} \cong \mathrm{Bool}$ ）であるという定理である。この同値性を与える2つの反変関手 $C$ と $S$ を構成し、それらが互いに逆となることを証明する。</p>
+
+  <p><strong>空間から代数への関手 $C: \mathrm{Profin}^{\mathrm{op}} \to \mathrm{Bool}$</strong><br>
+  対象 $X \in \mathrm{Profin}$ に対して、 $X$ のすべての clopen 集合の族を $C(X)$ と定義する。 $C(X)$ は、集合の交叉 $\cap$ 、和集合 $\cup$ 、補集合 $X \smallsetminus (\cdot)$ 、空集合 $\varnothing$ 、全体集合 $X$ をそれぞれの演算および定数とみなすことで、Bool代数となる。<br>
+  射 $f: X \to Y$ （連続写像）に対して、 $C(f): C(Y) \to C(X)$ を、 $U \in C(Y)$ に対して $C(f)(U) = f^{-1}(U)$ （逆像）と定義する。連続写像による clopen 集合の逆像は clopen であり、逆像は集合演算を保つため、 $C(f)$ は well-defined なBool準同型である。</p>
+
+  <p><strong>代数から空間への関手 $S: \mathrm{Bool}^{\mathrm{op}} \to \mathrm{Profin}$</strong><br>
+  Bool代数 $\{0, 1\}$ を $2$ と表記する。対象 $B \in \mathrm{Bool}$ に対して、 $B$ のStone空間 $S(B)$ を、すべてのBool準同型 $x: B \to 2$ の集合（すなわち $\mathrm{Hom}_{\mathrm{Bool}}(B, 2)$ ）として定義する。これは $B$ 上の超フィルターの集合と自然に同一視される。<br>
+  位相空間 $2$ に離散位相を入れると、直積空間 $2^B$ はTychonoffの定理によりコンパクトHausdorff空間である。 $S(B)$ は $2^B$ の部分空間として相対位相を入れる。</p>
+
+  <div class="proof">
+    <strong>命題: $S(B) \in \mathrm{Profin}$ の証明</strong><br>
+    $S(B)$ が $2^B$ の閉部分集合であることを示す。Bool準同型の条件は、例えば $a, b \in B$ について $P_{\wedge}(a, b) = \{ x \in 2^B \mid x(a \wedge b) = x(a) \wedge x(b) \}$ などの条件の交叉として書ける。各 $P_{\wedge}(a, b)$ は点への評価写像（連続）による離散空間の点の逆像であるため閉集合である。したがって、これらすべての条件の交叉である $S(B)$ は閉集合である。コンパクト空間の閉部分集合であるため、 $S(B)$ はコンパクトHausdorff空間である。<br>
+    さらに完全不連結性を示す。直積位相の基本開集合は、ある $a \in B$ を用いて $N_a = \{ x \in S(B) \mid x(a) = 1 \}$ と書ける。 $\{1\} \subset 2$ は clopen であるため、連続な評価写像による逆像 $N_a$ も clopen である。異なる $x, y \in S(B)$ に対して、ある $a \in B$ で $x(a) = 1, y(a) = 0$ となる。このとき $N_a$ は $x$ を含み $y$ を含まない clopen 集合である。よって $S(B)$ は完全不連結である。<br>
+    射 $h: A \to B$ （Bool準同型）に対して、 $S(h): S(B) \to S(A)$ を、 $x \in S(B)$ に対して $S(h)(x) = x \circ h$ と定義する。これは各成分への射影を合成する操作であるため、連続写像となる。
+  </div>
+
+  <div class="theorem">
+    <strong>定理</strong>: 任意の $B \in \mathrm{Bool}$ に対し、 $B \cong C(S(B))$ である。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>:<br>
+    写像 $\Phi: B \to C(S(B))$ を $\Phi(a) = N_a = \{ x \in S(B) \mid x(a) = 1 \}$ で定義する。<br>
+    $\Phi$ は演算を保つ。実際、 $x(a \wedge b) = 1 \iff x(a) = 1 \text{ かつ } x(b) = 1$ より $\Phi(a \wedge b) = \Phi(a) \cap \Phi(b)$ となる。補元等も同様である。<br>
+    $\Phi$ が単射であることを示す。 $a \neq b$ とする。対称性より $a \not\le b$ と仮定してよい。このとき $a \wedge \neg b \neq 0$ である。Bool代数におけるZornの補題の帰結（超フィルターの補題）より、 $0$ を含まない任意のフィルターは極大フィルターに拡張できる。したがって、 $a \wedge \neg b$ を真とするBool準同型 $x: B \to 2$ が存在する。このとき $x(a) = 1$ かつ $x(b) = 0$ であり、 $x \in N_a \smallsetminus N_b$ となるため $N_a \neq N_b$ である。<br>
+    $\Phi$ が全射であることを示す。 $S(B)$ の任意の clopen 集合 $U$ をとる。 $U$ は開集合であるため、基本開集合 $N_a$ たちの和集合として表せる。さらに $U$ はコンパクト空間の閉集合なのでコンパクトである。したがって有限個の和集合として $U = N_{a_1} \cup \dots \cup N_{a_k}$ と書ける。Bool準同型の性質から $N_{a_1} \cup \dots \cup N_{a_k} = N_{a_1 \vee \dots \vee a_k}$ となるため、 $c = a_1 \vee \dots \vee a_k \in B$ とおけば $U = \Phi(c)$ となり全射である。
+  </div>
+
+  <div class="theorem">
+    <strong>定理</strong>: 任意の $X \in \mathrm{Profin}$ に対し、 $X \cong S(C(X))$ である。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>:<br>
+    写像 $\Psi: X \to S(C(X))$ を定義する。各 $x \in X$ に対し、 $\Psi(x): C(X) \to 2$ を「 $x \in U$ ならば $1$ 、 $x \notin U$ ならば $0$ 」として定める。これは明らかにBool準同型である。<br>
+    $\Psi$ の連続性: $S(C(X))$ の基本開集合は $N_U = \{ h \in S(C(X)) \mid h(U) = 1 \}$ （ただし $U \in C(X)$）の形である。 $\Psi^{-1}(N_U) = \{ x \in X \mid \Psi(x)(U) = 1 \} = U$ であり、 $U$ は $X$ の clopen （特に開）集合であるため $\Psi$ は連続である。<br>
+    $\Psi$ の単射性: $x \neq y$ とする。 $X$ は完全不連結であるため、 $x$ を含み $y$ を含まない clopen 集合 $U$ が存在する。このとき $\Psi(x)(U) = 1$ かつ $\Psi(y)(U) = 0$ なので $\Psi(x) \neq \Psi(y)$ である。<br>
+    $\Psi$ の全射性: 任意の Bool準同型 $h \in S(C(X))$ をとる。族 $\mathcal{F} = \{ U \in C(X) \mid h(U) = 1 \}$ を考える。 $h$ が $\wedge$ を保ち $h(\varnothing) = 0$ であることから、 $\mathcal{F}$ の任意の有限個の要素の交叉は空ではない（有限交差性）。 $X$ はコンパクトであるため、 $\mathcal{F}$ に属するすべての閉集合 (clopen集合) の交叉 $\bigcap_{U \in \mathcal{F}} U$ は空ではない。この交叉から元 $x$ を一つ選ぶと、任意の $U \in C(X)$ について $h(U) = 1 \implies x \in U$ が成り立つ。これは超フィルターの極大性により $h(U) = 1 \iff x \in U$ を意味し、すなわち $h = \Psi(x)$ である。<br>
+    コンパクト空間からHausdorff空間への連続な全単射は同相写像であるため、 $\Psi$ は位相空間としての同型を与える。
+  </div>
+
+  <h3>6.3 超不連結コンパクトHausdorff空間の圏 $\mathrm{Extr}$ の対応</h3>
+  <p>超不連結 (extremally disconnected) コンパクトHausdorff空間の圏 $\mathrm{Extr}$ は、Stone双対性を通じて <strong>完備Bool代数 (complete Boolean algebra) の圏</strong> に対応する。正確には、 $\mathrm{Extr}^{\mathrm{op}}$ は、対象が完備Bool代数であり、射が（任意の極限を保つとは限らない一般の）Bool準同型であるような $\mathrm{Bool}$ の充満部分圏と同値になる。</p>
+
+  <div class="definition">
+    完備Bool代数とは、その任意の部分集合が上限 (supremum) および下限 (infimum) を持つようなBool代数のことである。
+  </div>
+
+  <div class="theorem">
+    <strong>定理</strong>: $X \in \mathrm{Profin}$ に対して、 $X$ が超不連結であることと、 $C(X)$ が完備Bool代数であることは同値である。
+  </div>
+  <div class="proof">
+    <strong>証明</strong>:<br>
+    $(\implies)$ $X$ を超不連結空間とする。 $C(X)$ の任意の族 $\{ U_i \}_{i \in I}$ をとる。位相空間における和集合 $U = \bigcup_{i \in I} U_i$ は開集合である。 $X$ の超不連結性より、開集合の閉包 $\overline{U}$ は開集合であり、したがって clopen 集合となる。よって $\overline{U} \in C(X)$ である。<br>
+    この $\overline{U}$ が $\{ U_i \}$ の $C(X)$ における上限であることを示す。各 $i$ について $U_i \subset U \subset \overline{U}$ より、 $\overline{U}$ は上界である。次に $W \in C(X)$ を任意の上界とする。任意の $i$ について $U_i \subset W$ であるから $U \subset W$ となる。 $W$ は閉集合であるため、閉包をとっても $\overline{U} \subset W$ が成り立つ。したがって $\overline{U}$ は最小の上界、すなわち上限である。よって $C(X)$ は完備Bool代数である。<br><br>
+    
+    $(\impliedby)$ $C(X)$ を完備Bool代数とする。 $X$ が超不連結であることを示すため、任意の開集合 $V \subset X$ に対して、その閉包 $\overline{V}$ が開集合になることを示せばよい。<br>
+    $X$ は完全不連結であるため、開集合 $V$ はそれに含まれるすべての clopen 集合の和集合として表される。すなわち $V = \bigcup \{ U \in C(X) \mid U \subset V \}$ である。<br>
+    $C(X)$ は完備であるため、族 $\{ U \in C(X) \mid U \subset V \}$ は上限 $W \in C(X)$ を持つ。 $W$ が $\overline{V}$ に一致することを示す。<br>
+    まず、すべての $U \subset V$ に対して $U \subset W$ であり、 $V$ はそれらの和集合であるから $V \subset W$ である。 $W$ は閉集合なので $\overline{V} \subset W$ が成り立つ。<br>
+    背理法として $\overline{V} \neq W$ を仮定する。 $\overline{V} \subset W$ であり $W$ は開集合であるから、差集合 $W \smallsetminus \overline{V}$ は空でない開集合である。 $X$ は完全不連結であるため、この空でない開集合の中には空でない clopen 集合 $Z$ が存在する。すなわち $Z \subset W \smallsetminus \overline{V}$ となる $Z \in C(X)$ ($Z \neq \varnothing$) が取れる。<br>
+    ここで $W' = W \smallsetminus Z$ とおく。 $W, Z$ ともに clopen なので $W'$ も clopen である。任意の $U \subset V$ をとると、 $U \subset V \subset \overline{V}$ であり、 $Z$ は $\overline{V}$ と互いに素であるため $U \subset W'$ となる。これは $W'$ が族 $\{ U \in C(X) \mid U \subset V \}$ の上界であることを意味する。しかし $W' \subsetneq W$ であり、 $W$ が最小の上界であることに矛盾する。<br>
+    したがって $\overline{V} = W$ でなければならない。 $W \in C(X)$ より $W$ は開集合であるため、 $\overline{V}$ も開集合となる。よって $X$ は超不連結である。
+  </div>
+
+  <div class="references">
+    <h3>参考文献</h3>
+    <ul>
+      <li>Mac Lane, S. (1998). <i>Categories for the Working Mathematician</i>. Springer. <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8" target="_blank">[link]</a></li>
+      <li>Johnstone, P. T. (1982). <i>Stone Spaces</i>. Cambridge University Press. <a href="https://www.cambridge.org/core/books/stone-spaces/E8B7504C0F7AAACFBFCABAC3FA3E3E9D" target="_blank">[link]</a></li>
+      <li>Munkres, J. R. (2000). <i>Topology</i>. Prentice Hall.</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一般の位相空間のStone-Čechコンパクト化とStone反射の左随伴性</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']],
+      processEscapes: true,
+      tags: 'ams'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  body { max-width: 1000px; margin: 0 auto; padding: 2.5em; font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; line-height: 1.8; color: #2c3e50; }
+  h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 0.3em; font-size: 1.8em; }
+  h2 { border-bottom: 1px solid #bdc3c7; padding-bottom: 0.2em; margin-top: 2.5em; color: #2980b9; font-size: 1.5em; }
+  h3 { color: #c0392b; margin-top: 1.5em; font-size: 1.2em; }
+  p { margin-bottom: 1em; }
+  ul, ol { margin-bottom: 1em; padding-left: 2em; }
+  .definition, .theorem, .lemma, .proposition, .example { margin: 1.5em 0; padding: 1.5em; border-radius: 5px; }
+  .definition { background-color: #eafaf1; border-left: 5px solid #27ae60; }
+  .theorem { background-color: #ebf5fb; border-left: 5px solid #2980b9; }
+  .lemma { background-color: #f4f6f7; border-left: 5px solid #839192; }
+  .example { background-color: #fef9e7; border-left: 5px solid #f1c40f; }
+  .proof { margin: 1.5em 0; padding: 1.5em; border: 1px solid #d5d8dc; background-color: #fdfefe; border-radius: 5px; }
+  .proof::before { content: "証明."; font-weight: bold; font-style: italic; display: block; margin-bottom: 0.8em; color: #34495e; }
+  .proof::after { content: "■"; display: block; text-align: right; clear: both; color: #34495e; }
+  table { border-collapse: collapse; width: 100%; margin: 1.5em 0; box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
+  th, td { border: 1px solid #d5d8dc; padding: 1em; text-align: left; }
+  th { background-color: #f2f4f4; color: #2c3e50; }
+  button.download-btn { display: block; width: 100%; padding: 1em; margin-top: 3em; font-size: 1.1em; background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+  button.download-btn:hover { background-color: #219150; }
+</style>
+</head>
+<body>
+
+<h1>一般の位相空間のStone-Čechコンパクト化とStone反射の左随伴性</h1>
+<p>本ドキュメントは、位相空間論および圏論における Stone-Čech コンパクト化 $\beta X$ の構成、完全不連結コンパクト Hausdorff 空間（Stone 空間）の圏における単射的対象、および包含関手の左随伴（Stone 反射 $S(X)$）について、チャットで行われたすべての議論・証明・考察を一切の省略なく収録した完全版です。</p>
+
+<h2>1. 一般の位相空間に対する $\beta X$ の構成（Z超フィルターによる構成）</h2>
+<p>一般の位相空間 $X$ に対しても、Z超フィルターを用いた構成は全く同じ手続きで適用可能であり、普遍性を満たす Stone-Čech コンパクト化 $\beta X$ を与える。</p>
+<p>Tychonoff 空間における構成の証明を注意深く見直すと、対象の空間 $X$ の完全正則性（および Hausdorff 性）を必要としたのは、「自然な写像 $c \colon X \to \beta X$ が埋め込みになること（単射性および像への開写像性）」を示す箇所のみである。</p>
+<p>$\beta X$ という空間自体がコンパクト Hausdorff 空間となることや、圏論的な普遍性を満たすことの証明は、 $X$ に対するいかなる分離公理も仮定することなく成立する。この驚くべき事実は、「交わらない2つのゼロ集合 (zero-set) は、元の空間の性質によらず常に連続関数で分離可能である」という補題によって保証される。</p>
+
+<h3>構成</h3>
+<p>$X$ を任意の位相空間とする。連続関数 $f \colon X \to \mathbb{R}$ に対し、 $Z(f) = f^{-1}(0)$ を $X$ のゼロ集合と呼ぶ。 $Z(X)$ を $X$ のゼロ集合全体の族とする。極大なZフィルター（包含関係に関して極大なフィルター）をZ超フィルター (Z-ultrafilter) と呼ぶ。</p>
+<p>$\beta X$ を $X$ 上のZ超フィルター全体の集合とする。各 $Z \in Z(X)$ に対して</p>
+$$ \hat{Z} = \{ p \in \beta X \mid Z \in p \} $$
+<p>と定義し、 $\mathcal{B} = \{ \hat{Z} \mid Z \in Z(X) \}$ を閉基とする位相を $\beta X$ に定める。自然な写像 $c \colon X \to \beta X$ を、各 $x \in X$ に対して $c(x) = p_x = \{ Z \in Z(X) \mid x \in Z \}$ により定義する。 $p_x$ は明らかにZ超フィルターとなる。</p>
+
+<div class="lemma">
+  <strong>補題：ゼロ集合の分離性</strong><br>
+  任意の位相空間 $X$ において、 $Z_1, Z_2 \in Z(X)$ が $Z_1 \cap Z_2 = \varnothing$ を満たすならば、連続関数 $f \colon X \to [0, 1]$ が存在して、 $Z_1 \subset f^{-1}(0)$ かつ $Z_2 \subset f^{-1}(1)$ が成り立つ。
+</div>
+<div class="proof">
+  定義より、ある連続関数 $f_1, f_2 \colon X \to \mathbb{R}$ が存在して $Z_1 = f_1^{-1}(0)$ かつ $Z_2 = f_2^{-1}(0)$ となる。<br>
+  $Z_1 \cap Z_2 = \varnothing$ であるため、任意の $x \in X$ に対して $f_1(x)$ と $f_2(x)$ が同時に $0$ になることはない。すなわち、常に $|f_1(x)| + |f_2(x)|  >  0$ である。<br>
+  そこで、関数 $f \colon X \to \mathbb{R}$ を<br>
+  $$ f(x) = \frac{|f_1(x)|}{|f_1(x)| + |f_2(x)|} $$
+  により定義する。分母は常に正であり、 $|f_1|$ と $|f_2|$ は連続であるから、 $f$ は連続関数である。また、値域は明らかに $[0, 1]$ に含まれる。<br>
+  $x \in Z_1$ ならば $f_1(x) = 0$ であるから $f(x) = 0$ となり、 $Z_1 \subset f^{-1}(0)$ である。<br>
+  $x \in Z_2$ ならば $f_2(x) = 0$ であるから $f(x) = |f_1(x)| / |f_1(x)| = 1$ となり、 $Z_2 \subset f^{-1}(1)$ である。
+</div>
+
+<div class="theorem">
+  <strong>定理</strong><br>
+  上で構成した空間 $\beta X$ はコンパクト Hausdorff 空間であり、連続写像 $c \colon X \to \beta X$ は Stone-Čech コンパクト化の普遍性を満たす。
+</div>
+<div class="proof">
+  <ol>
+    <li><strong> $\beta X$ が Hausdorff 空間であること</strong><br>
+    $p, q \in \beta X$ を $p \neq q$ とする。Z超フィルターの極大性より、ある $Z_1 \in p$ と $Z_2 \in q$ が存在して $Z_1 \cap Z_2 = \varnothing$ となる。<br>
+    前述の補題により、連続関数 $f \colon X \to [0, 1]$ が存在して $Z_1 \subset f^{-1}(0)$ かつ $Z_2 \subset f^{-1}(1)$ となる。<br>
+    $V_1 = f^{-1}([0, 1/2])$ と $V_2 = f^{-1}([1/2, 1])$ はゼロ集合であり、 $V_1 \cup V_2 = X$ である。フィルターの性質から $\hat{V_1} \cup \hat{V_2} = \beta X$ である。<br>
+    $U_1 = \beta X \smallsetminus \hat{V_2}$ と $U_2 = \beta X \smallsetminus \hat{V_1}$ は $\beta X$ の開集合であり、 $U_1 \cap U_2 = \varnothing$ である。<br>
+    ここで $W_1 = f^{-1}([0, 1/3])$ とすると、 $W_1$ はゼロ集合であり $Z_1 \subset W_1 \subset X \smallsetminus V_2$ となる。 $Z_1 \in p$ であるから $W_1 \in p$ となり、 $W_1 \cap V_2 = \varnothing$ より $V_2 \notin p$ である。したがって $p \notin \hat{V_2}$ すなわち $p \in U_1$ である。<br>
+    全く同様に $q \in U_2$ となる。よって $\beta X$ は Hausdorff 空間である。（この証明に $X$ の完全正則性は一切使用していない）</li>
+    <li><strong> $\beta X$ がコンパクト空間であること</strong><br>
+    $\beta X$ の閉基の要素からなる族 $\{ \hat{Z_\lambda} \}_{\lambda \in \Lambda}$ が有限交叉性を持つとする。<br>
+    任意の有限部分集合 $\Lambda_0 \subset \Lambda$ に対して $\bigcap_{\lambda \in \Lambda_0} \hat{Z_\lambda} = \widehat{\bigcap_{\lambda \in \Lambda_0} Z_\lambda} \neq \varnothing$ であるから、 $\bigcap_{\lambda \in \Lambda_0} Z_\lambda \neq \varnothing$ である。<br>
+    したがって族 $\{ Z_\lambda \}_{\lambda \in \Lambda}$ は $X$ 上のあるZフィルターの基となるため、Zorn の補題により、これを含むZ超フィルター $p \in \beta X$ が存在する。<br>
+    任意の $\lambda \in \Lambda$ について $Z_\lambda \in p$ であるから $p \in \hat{Z_\lambda}$ となり、 $p \in \bigcap_{\lambda \in \Lambda} \hat{Z_\lambda} \neq \varnothing$ となる。Alexander の部分開被覆定理により $\beta X$ はコンパクトである。</li>
+    <li><strong>写像 $c$ の連続性</strong><br>
+    $\beta X$ の任意の閉基の元 $\hat{Z}$ に対して、その逆像は<br>
+    $$ c^{-1}(\hat{Z}) = \{ x \in X \mid c(x) \in \hat{Z} \} = \{ x \in X \mid Z \in p_x \} = \{ x \in X \mid x \in Z \} = Z $$<br>
+    となる。ゼロ集合 $Z$ は $X$ において閉集合であるから、 $c$ は連続写像である。<br>
+    （※ $X$ が関数的 Hausdorff 空間でない場合、 $p_x = p_y$ となる相異なる点 $x, y$ が存在し得るため、 $c$ は単射にはならない。）</li>
+    <li><strong>普遍性を満たすこと</strong><br>
+    $K$ をコンパクト Hausdorff 空間、 $g \colon X \to K$ を連続写像とする。<br>
+    任意の $p \in \beta X$ に対し、 $\{ \overline{g(Z)} \mid Z \in p \}$ は $K$ における閉集合族であり有限交叉性を持つ。 $K$ はコンパクトであるから $\bigcap_{Z \in p} \overline{g(Z)} \neq \varnothing$ である。<br>
+    この共通部分が相異なる2点 $y_1, y_2 \in K$ を含むと仮定する。 $K$ はコンパクト Hausdorff 空間であるため完全正則であり、互いに素なゼロ集合 $W_1, W_2 \subset K$ で $y_1 \in W_1^\circ$ かつ $y_2 \in W_2^\circ$ （それぞれ内部を含む）となるものが存在する。<br>
+    $g$ は連続であるから、 $g^{-1}(W_1)$ と $g^{-1}(W_2)$ は $X$ のゼロ集合であり、交わらない。したがって極大性より $p$ は両方を同時に含むことはできない。<br>
+    もし $g^{-1}(W_1) \notin p$ とすると、極大性からある $Z \in p$ が存在して $Z \cap g^{-1}(W_1) = \varnothing$ となる。これは $g(Z) \cap W_1 = \varnothing$ を意味する。 $W_1^\circ$ は $y_1$ の開近傍であるため $y_1 \notin \overline{g(Z)}$ となり、 $y_1 \in \bigcap_{Z \in p} \overline{g(Z)}$ に矛盾する。<br>
+    したがって共通部分はただ1点からなる。この唯一の点を $\tilde{g}(p)$ と定義する。<br>
+    写像 $\tilde{g} \colon \beta X \to K$ はこのように well-defined である。構成法から任意の $x \in X$ について $p_x$ は $Z$ を含むため $\tilde{g}(p_x) \in \overline{g(\{x\})} = \{g(x)\}$ となり、 $\tilde{g} \circ c = g$ を満たす。<br>
+    $\tilde{g}$ の連続性および一意性は、 $c(X)$ が $\beta X$ で稠密であること（空でない基本開集合 $\beta X \smallsetminus \hat{Z}$ は $Z \neq X$ よりある $x \notin Z$ に対して $p_x$ を含むこと）と $K$ の Hausdorff 性から直ちに従う。</li>
+  </ol>
+</div>
+
+<h2>2. 完全不連結コンパクト Hausdorff 空間の圏における単射的対象</h2>
+<p>完全不連結コンパクト Hausdorff 空間（いわゆる Stone 空間）の圏における単射的対象 (injective object) について解説します。</p>
+<p>結論から述べると、この圏における単射的対象は<strong>「カントール立方体 (Cantor cube) $\{0, 1\}^\kappa$ のレトラクト (retract) と同相な空間」</strong>です。これは、Stone 双対性の枠組みにおいては<strong>「射影的 Boole 代数 (projective Boolean algebra) の Stone 空間」</strong>に相当します。</p>
+<p>位相空間論において非常によく似た概念として「超不連結 (extremally disconnected) コンパクト Hausdorff 空間」がありますが、これは圏論における双対概念である<strong>射影的対象 (projective object)</strong> であり、単射的対象ではないことに注意が必要です。</p>
+
+<h3>基本概念の準備</h3>
+<ul>
+  <li><strong>圏 $\mathbf{Stone}$</strong>: 対象をすべての完全不連結コンパクト Hausdorff 空間（Stone 空間）とし、射を連続写像とする圏である。</li>
+  <li><strong>単射射 (monomorphism)</strong>: $\mathbf{Stone}$ における単射射は、単射な連続写像のことである。コンパクト空間から Hausdorff 空間への連続な単射は閉写像となるため、 $\mathbf{Stone}$ における単射射は<strong>閉部分空間への埋め込み (closed embedding)</strong> と同値である。</li>
+  <li><strong>単射的対象 (injective object)</strong>: 圏 $\mathcal{C}$ において対象 $I$ が単射的であるとは、任意の対象 $X, Y$ と単射射 $m \colon X \to Y$ 、および射 $f \colon X \to I$ に対して、射 $\tilde{f} \colon Y \to I$ が存在して $\tilde{f} \circ m = f$ を満たすことである。 $\mathbf{Stone}$ においては、「空間 $X$ の任意の閉部分集合 $A$ から $I$ への連続写像が、常に $X$ 全体から $I$ への連続写像に拡張できる」ことを意味する。</li>
+  <li><strong>カントール立方体 (Cantor cube)</strong>: 離散位相を入れた2点集合 $\{0, 1\}$ の直積位相空間 $\{0, 1\}^\kappa$ のことである（ $\kappa$ は任意の基数）。</li>
+  <li><strong>レトラクト (retract)</strong>: 位相空間 $X$ の部分空間 $A$ が $X$ のレトラクトであるとは、連続な全射 $r \colon X \to A$ であって、任意の $a \in A$ に対して $r(a) = a$ を満たすもの（レトラクション）が存在することである。</li>
+</ul>
+
+<div class="theorem">
+  <strong>定理</strong><br>
+  圏 $\mathbf{Stone}$ における単射的対象は、ある基数 $\kappa$ に対するカントール立方体 $\{0, 1\}^\kappa$ のレトラクトに同相な空間である。
+</div>
+<div class="proof">
+  証明は以下の3つのステップに分けて行う。<br><br>
+  <strong>ステップ1: 2点空間 $\{0, 1\}$ が単射的対象であること</strong><br>
+  $X \in \mathrm{Ob}(\mathbf{Stone})$ とし、 $A \subset X$ を閉部分集合とする。離散空間 $\{0, 1\}$ は $\mathbf{Stone}$ の対象である。<br>
+  連続写像 $f \colon A \to \{0, 1\}$ が与えられたとする。 $U = f^{-1}(1)$ とおくと、 $\{1\}$ は $\{0, 1\}$ で clopen なので、 $U$ は $A$ の相対位相における clopen 集合である。<br>
+  $A$ は $X$ の閉集合であるから、 $U$ と $A \smallsetminus U$ は $X$ 全体から見ても交わらない2つの閉集合である。<br>
+  $X$ は完全不連結コンパクト Hausdorff 空間であるため、開基として clopen 集合からなるものを持つ。これを用いて、交わらない閉集合 $U$ と $A \smallsetminus U$ を clopen 集合で分離できることを示す。<br>
+  $x \in U$ と $y \in A \smallsetminus U$ を任意にとる。 $x \neq y$ であるため、ある clopen 集合 $W_{x,y} \subset X$ が存在して、 $x \in W_{x,y}$ かつ $y \notin W_{x,y}$ が成り立つ。<br>
+  $x$ を固定して族 $\{ X \smallsetminus W_{x,y} \}_{y \in A \smallsetminus U}$ を考えると、これは閉集合 $A \smallsetminus U$ の開被覆となる。 $X$ がコンパクトであるため閉部分集合 $A \smallsetminus U$ もコンパクトであり、有限部分被覆が存在する。それらに対応する点を $y_1, \dots, y_n$ とする。<br>
+  $U_x = \bigcap_{i=1}^n W_{x,y_i}$ とおくと、有限個の clopen 集合の共通部分なので $U_x$ は clopen 集合であり、 $x \in U_x$ かつ $U_x \cap (A \smallsetminus U) = \varnothing$ である。<br>
+  次に、族 $\{ U_x \}_{x \in U}$ を考える。これは閉集合 $U$ の開被覆であるから、同様にコンパクト性により有限部分被覆が存在し、対応する点を $x_1, \dots, x_m$ とする。<br>
+  $V = \bigcup_{j=1}^m U_{x_j}$ とおくと、有限個の clopen 集合の和集合なので $V$ は clopen 集合である。構成より $U \subset V$ であり、各 $U_{x_j}$ は $A \smallsetminus U$ と交わらないため $V \cap (A \smallsetminus U) = \varnothing$ が成り立つ。<br>
+  これらより、 $V \cap A = U$ である。<br>
+  連続写像 $\tilde{f} \colon X \to \{0, 1\}$ を、 $x \in V$ のとき $\tilde{f}(x) = 1$ 、 $x \notin V$ のとき $\tilde{f}(x) = 0$ として定義する。 $V$ が clopen であるため $\tilde{f}$ は連続であり、 $A$ 上で $f$ と一致する。よって $\{0, 1\}$ は単射的対象である。<br><br>
+  <strong>ステップ2: 任意の対象が $\{0, 1\}^\kappa$ に埋め込めること</strong><br>
+  任意の $I \in \mathrm{Ob}(\mathbf{Stone})$ に対し、その clopen 集合全体の族を $\mathcal{B}$ とする。基数を $\kappa = |\mathcal{B}|$ とおく。<br>
+  評価写像 $e \colon I \to \{0, 1\}^\mathcal{B}$ を、任意の $x \in I$ と $B \in \mathcal{B}$ に対して<br>
+  $$ (e(x))_B = \begin{cases} 1 & (x \in B) \\ 0 & (x \notin B) \end{cases} $$<br>
+  により定義する。<br>
+  各 $B$ 成分への射影は clopen 集合 $B$ の指示関数なので連続であり、直積位相の普遍性より $e$ は連続写像である。<br>
+  また、 $I$ の任意の相異なる2点はいずれかの clopen 集合で分離できるため、 $e$ は単射である。 $I$ はコンパクトであり $\{0, 1\}^\mathcal{B}$ は Hausdorff であるため、 $e$ は像 $e(I)$ への同相写像を与える。すなわち $I$ はカントール立方体の閉部分集合として埋め込める。<br><br>
+  <strong>ステップ3: 単射的対象とレトラクトの同値性</strong><br>
+  直積の普遍性から、単射的対象の直積は常に単射的対象である。したがって、 $\{0, 1\}$ の直積である $\{0, 1\}^\kappa$ は単射的対象である。<br>
+  一般に、単射的対象のレトラクトは単射的対象である。実際、 $R$ が単射的対象 $J$ のレトラクトであるとし、 $i \colon R \to J$ を埋め込み、 $r \colon J \to R$ を $r \circ i = \mathrm{id}_R$ なるレトラクションとする。閉埋め込み $A \subset X$ と連続写像 $f \colon A \to R$ に対して、合成 $i \circ f \colon A \to J$ は $J$ の単射性により連続写像 $\tilde{g} \colon X \to J$ に拡張される。このとき $\tilde{f} = r \circ \tilde{g} \colon X \to R$ は $f$ の拡張となる。<br>
+  逆に、 $I \in \mathrm{Ob}(\mathbf{Stone})$ が単射的対象であると仮定する。ステップ2より、 $I$ はある $\{0, 1\}^\kappa$ の閉部分空間 $e(I)$ と同相である。 $I$ の単射性により、閉部分集合 $e(I)$ からの同相写像 $e^{-1} \colon e(I) \to I$ は、空間全体からの連続写像 $r \colon \{0, 1\}^\kappa \to I$ に拡張できる。<br>
+  このとき $r \circ e = \mathrm{id}_I$ が成り立つため、 $I$ は $\{0, 1\}^\kappa$ のレトラクトである。
+</div>
+
+<h3>Stone 双対性からの視点</h3>
+<p>上記の定理は、Stone 双対性 (Stone duality) を用いることで代数的に美しく解釈することができます。</p>
+<p>圏 $\mathbf{Stone}$ は、Boole 代数 (Boolean algebra) の圏 $\mathbf{Bool}$ と双対同値 (dually equivalent) です。この双対性のもとでは、単射な連続写像（単射射）は全射な準同型写像（全射射）に対応するため、以下の対応関係が成り立ちます。</p>
+<ul>
+  <li>$\mathbf{Stone}$ における<strong>単射的対象</strong> $\iff$ $\mathbf{Bool}$ における<strong>射影的対象</strong></li>
+</ul>
+<p>$\mathbf{Bool}$ のような代数系の圏において、射影的対象は「自由代数 (free algebra) のレトラクト」として特徴付けられます。双対性において、 $\kappa$ 個の生成元を持つ自由 Boole 代数に対応する Stone 空間こそが、カントール立方体 $\{0, 1\}^\kappa$ に他なりません。したがって、単射的対象が「$\{0, 1\}^\kappa$ のレトラクト」になるのは、代数的な事実の位相的翻訳として極めて自然な結果だと言えます。</p>
+
+<h2>3. 包含関手 $U \colon \mathbf{Stone} \to \mathbf{Top}$ の左随伴は何か？</h2>
+<p>完全不連結コンパクト Hausdorff 空間（Stone 空間）の圏 $\mathbf{Stone}$ から位相空間の圏 $\mathbf{Top}$ への包含関手 $U \colon \mathbf{Stone} \to \mathbf{Top}$ には左随伴関手が存在する。</p>
+<p>結論から述べると、任意の位相空間 $X$ に対して、その <strong>clopen 集合（開かつ閉である集合）全体のなす Boole 代数の Stone 空間 $S(X)$</strong> を対応させる関手 $S \colon \mathbf{Top} \to \mathbf{Stone}$ が、包含関手 $U$ の左随伴となる。この構成は Banaschewski コンパクト化（あるいは Stone 反射）と呼ばれる。</p>
+
+<h3>基本概念と $S(X)$ の構成</h3>
+<p>任意の位相空間 $X$ に対し、その clopen 集合全体の族を $\mathrm{Clop}(X)$ と表す。これは集合の和、共通部分、補集合の演算により Boole 代数をなす。</p>
+<p>$\mathrm{Clop}(X)$ 上のフィルターとは、以下の条件を満たす空でない部分族 $F \subset \mathrm{Clop}(X)$ のことである。</p>
+<ol>
+  <li>$\varnothing \notin F$ である。</li>
+  <li>$A, B \in F$ ならば $A \cap B \in F$ である。</li>
+  <li>$A \in F$ かつ $A \subset B$ なる $B \in \mathrm{Clop}(X)$ があれば、 $B \in F$ である。</li>
+</ol>
+<p>包含関係に関して極大なフィルターを <strong>超フィルター (ultrafilter)</strong> と呼ぶ。超フィルター $p$ については、任意の $C \in \mathrm{Clop}(X)$ に対して $C \in p$ または $X \smallsetminus C \in p$ のいずれか一方が必ず成り立つという性質がある。</p>
+<p>$S(X)$ を、 $\mathrm{Clop}(X)$ 上の超フィルター全体の集合とする。<br>
+各 $C \in \mathrm{Clop}(X)$ に対して、部分集合 $\hat{C} \subset S(X)$ を<br>
+$$ \hat{C} = \{ p \in S(X) \mid C \in p \} $$<br>
+により定義する。族 $\{ \hat{C} \mid C \in \mathrm{Clop}(X) \}$ を開基とする位相を $S(X)$ に定める。</p>
+
+<h3>$S(X)$ が Stone 空間であることの証明</h3>
+<div class="proof">
+  <strong>1. Hausdorff 性と完全不連結性</strong><br>
+  $p, q \in S(X)$ を $p \neq q$ なる任意の2点とする。超フィルターの極大性より、ある $C \in \mathrm{Clop}(X)$ が存在して $C \in p$ かつ $C \notin q$ となる。<br>
+  $C \notin q$ より、補集合 $X \smallsetminus C \in q$ である。<br>
+  このとき、 $p \in \hat{C}$ であり、 $q \in \widehat{X \smallsetminus C}$ である。<br>
+  超フィルターの性質から $\hat{C} \cap \widehat{X \smallsetminus C} = \varnothing$ であり、 $\hat{C} \cup \widehat{X \smallsetminus C} = S(X)$ が成り立つため、 $\hat{C}$ と $\widehat{X \smallsetminus C}$ は $S(X)$ における clopen 集合である。<br>
+  したがって、任意の相異なる2点は交わらない clopen 集合で分離されるため、 $S(X)$ は完全不連結であり、かつ Hausdorff 空間である。<br><br>
+  <strong>2. コンパクト性</strong><br>
+  $S(X)$ の開被覆で、基本開集合からなる族 $\{ \hat{C_\lambda} \}_{\lambda \in \Lambda}$ をとる。これが有限部分被覆を持たないと仮定する。<br>
+  任意の有限部分集合 $\Lambda_0 \subset \Lambda$ に対して $\bigcup_{\lambda \in \Lambda_0} \hat{C_\lambda} \neq S(X)$ であるため、補集合をとることで $\bigcap_{\lambda \in \Lambda_0} \widehat{X \smallsetminus C_\lambda} \neq \varnothing$ となる。<br>
+  これはすなわち、族 $\{ X \smallsetminus C_\lambda \}_{\lambda \in \Lambda}$ が $\mathrm{Clop}(X)$ において有限交叉性 (finite intersection property) を持つことを意味する。<br>
+  有限交叉性を持つ族は、Zorn の補題によりある超フィルター $p^* \in S(X)$ に拡張できる。<br>
+  任意の $\lambda \in \Lambda$ に対して $X \smallsetminus C_\lambda \in p^*$ であるから、 $C_\lambda \notin p^*$ となり、 $p^* \notin \hat{C_\lambda}$ である。<br>
+  これは $\{ \hat{C_\lambda} \}$ が $S(X)$ の被覆であることに矛盾する。Alexander の部分開被覆定理より $S(X)$ はコンパクトである。<br><br>
+  以上より、 $S(X)$ は完全不連結コンパクト Hausdorff 空間（Stone 空間）である。
+</div>
+
+<h3>左随伴であること（普遍性）の証明</h3>
+<p>関手 $S$ が包含関手 $U$ の左随伴となるためには、自然な写像 $\eta_X \colon X \to U(S(X))$ が存在し、普遍性を満たすことを示せばよい。</p>
+<p>自然な写像 $\eta_X \colon X \to S(X)$ を、各 $x \in X$ に対して<br>
+$$ \eta_X(x) = p_x = \{ C \in \mathrm{Clop}(X) \mid x \in C \} $$<br>
+により定める（ $p_x$ は明らかに超フィルターとなる）。<br>
+任意の基本開集合 $\hat{C}$ の逆像は<br>
+$$ \eta_X^{-1}(\hat{C}) = \{ x \in X \mid C \in p_x \} = \{ x \in X \mid x \in C \} = C $$<br>
+となる。 $C$ は $X$ の開集合であるから、 $\eta_X$ は連続写像である。</p>
+
+<div class="theorem">
+  <strong>定理（普遍性）</strong><br>
+  任意の Stone 空間 $K$ と連続写像 $f \colon X \to K$ に対し、連続写像 $\tilde{f} \colon S(X) \to K$ が一意に存在して、 $\tilde{f} \circ \eta_X = f$ を満たす。
+</div>
+<div class="proof">
+  <strong>（準備：Stone 空間上の超フィルターの収束）</strong><br>
+  任意の Stone 空間 $K$ において、 $\mathrm{Clop}(K)$ 上の任意の超フィルター $q$ は、 $K$ のただ1点に収束することを示す。<br>
+  $q$ の元は $K$ の閉集合であり有限交叉性を持つため、 $K$ のコンパクト性により $\bigcap_{D \in q} D \neq \varnothing$ である。<br>
+  もしこの共通部分が相異なる2点 $y_1, y_2$ を含むとすると、 $K$ の完全不連結性からある $E \in \mathrm{Clop}(K)$ が存在して $y_1 \in E$ かつ $y_2 \notin E$ となる。 $q$ は超フィルターなので $E \in q$ または $K \smallsetminus E \in q$ のいずれかであるが、どちらの場合も $y_1, y_2$ の一方が共通部分に含まれないことになり矛盾する。したがって、共通部分はただ1点からなる。この点を $y_q$ と表す。<br><br>
+  <strong>（ $\tilde{f}$ の構成と連続性）</strong><br>
+  連続写像 $f \colon X \to K$ は、逆像をとることで Boole 代数の準同型 $f^* \colon \mathrm{Clop}(K) \to \mathrm{Clop}(X)$ 、すなわち $f^*(D) = f^{-1}(D)$ を誘導する。<br>
+  任意の $p \in S(X)$ に対して、その引き戻し<br>
+  $$ (f^*)^{-1}(p) = \{ D \in \mathrm{Clop}(K) \mid f^{-1}(D) \in p \} $$<br>
+  は $\mathrm{Clop}(K)$ 上の超フィルターとなる。<br>
+  上記の準備から、この超フィルターは $K$ のただ1点に収束する。この点を $\tilde{f}(p)$ と定義する。<br>
+  $\tilde{f} \colon S(X) \to K$ が連続であることを示す。 $K$ の任意の clopen 集合 $D \in \mathrm{Clop}(K)$ に対して、<br>
+  $$ \tilde{f}^{-1}(D) = \{ p \in S(X) \mid \tilde{f}(p) \in D \} $$<br>
+  を考える。 $\tilde{f}(p)$ の定義により、 $\tilde{f}(p) \in D$ となるのは $D \in (f^*)^{-1}(p)$ のとき、すなわち $f^{-1}(D) \in p$ のときと同値である。したがって<br>
+  $$ \tilde{f}^{-1}(D) = \widehat{f^{-1}(D)} $$<br>
+  となる。 $f^{-1}(D) \in \mathrm{Clop}(X)$ であるから $\widehat{f^{-1}(D)}$ は $S(X)$ の clopen 集合（したがって開集合）であり、 $\tilde{f}$ は連続写像である。<br><br>
+  <strong>（可換性 $\tilde{f} \circ \eta_X = f$ の証明）</strong><br>
+  任意の $x \in X$ をとる。 $p_x = \eta_X(x)$ とすると、<br>
+  $$ (f^*)^{-1}(p_x) = \{ D \in \mathrm{Clop}(K) \mid x \in f^{-1}(D) \} = \{ D \in \mathrm{Clop}(K) \mid f(x) \in D \} $$<br>
+  となる。 $K$ において $f(x)$ を含むすべての clopen 集合の共通部分は $\{f(x)\}$ であるため、この超フィルターが収束する唯一の点は $f(x)$ である。ゆえに $\tilde{f}(\eta_X(x)) = f(x)$ が成り立つ。<br><br>
+  <strong>（一意性の証明）</strong><br>
+  $\eta_X(X)$ が $S(X)$ において稠密であることを示す。 $S(X)$ の任意の空でない基本開集合 $\hat{C}$ （ $C \in \mathrm{Clop}(X)$ ）をとると、 $C \neq \varnothing$ であるためある $x \in C$ が存在する。このとき $C \in p_x$ より $\eta_X(x) \in \hat{C}$ となるため、像 $\eta_X(X)$ は稠密である。<br>
+  Hausdorff 空間 $K$ への2つの連続写像が稠密な部分集合 $\eta_X(X)$ 上で一致するならば、それらは空間全体で一致する。したがって条件を満たす $\tilde{f}$ は一意である。
+</div>
+
+<h3>補足：他の随伴関手との合成による解釈</h3>
+<p>圏論において「左随伴関手の合成は左随伴関手になる」という一般論を用いると、この関手 $S$ は別の視点からも構成できる。</p>
+<p>$\mathbf{Stone}$ はコンパクト Hausdorff 空間の圏 $\mathbf{CHaus}$ の部分圏である。</p>
+<ol>
+  <li>包含関手 $\mathbf{CHaus} \to \mathbf{Top}$ の左随伴は、これまでに述べた <strong>Stone-Čech コンパクト化 $\beta \colon \mathbf{Top} \to \mathbf{CHaus}$</strong> である。</li>
+  <li>包含関手 $\mathbf{Stone} \to \mathbf{CHaus}$ の左随伴は、コンパクト Hausdorff 空間をその <strong>連結成分の空間 (space of connected components)</strong> （位相的には商空間）に送る関手 $\pi_0 \colon \mathbf{CHaus} \to \mathbf{Stone}$ である。</li>
+</ol>
+<p>したがって、これらを合成した関手 $X \mapsto \pi_0(\beta X)$ は、 $\mathbf{Stone} \to \mathbf{Top}$ の包含関手 $U$ の左随伴となる。普遍性による左随伴関手の一意性から、この空間 $\pi_0(\beta X)$ は、上で直接的に構成した clopen 代数の Stone 空間 $S(X)$ と自然に同相になる。</p>
+
+<h2>4. Stone 反射 $S(X)$ の $\{0, 1\}$ の直積の閉集合としての構成</h2>
+<p>位相空間 $X$ の Stone 反射 (Stone reflection) $S(X)$ は、閉区間 $[0, 1]$ の代わりに離散位相を入れた2点空間 $\{0, 1\}$ を用いることで、Stone-Čech コンパクト化 $\beta X$ の Tychonoff 立方体を用いた構成と全く同様のアプローチによって構成することができる。</p>
+<p>この構成法は、直観的にも「連続関数で区別できる点を分離してコンパクト化する」という $\beta X$ のアイデアを、「clopen 集合で区別できる点（すなわち $\{0, 1\}$ への連続関数）のみを用いて分離・コンパクト化する」という形に置き換えたものとして自然に理解できる。</p>
+
+<h3>$S(X)$ のカントール立方体を用いた構成</h3>
+<p>$X$ を任意の位相空間とする。 $\{0, 1\}$ を離散位相を入れた2点空間とする。<br>
+$X$ から $\{0, 1\}$ への連続関数全体の集合を $C = C(X, \{0, 1\})$ とおく。（ $X$ の部分集合が clopen であることと、その指示関数が連続関数 $X \to \{0, 1\}$ となることは同値であるため、 $C$ は本質的に $X$ の clopen 集合全体 $\mathrm{Clop}(X)$ と同一視できる。）</p>
+<p>積位相を入れた直積空間 $T = \{0, 1\}^C$ を考える。この空間 $T$ をカントール立方体 (Cantor cube) と呼ぶ。<br>
+評価写像 $e \colon X \to T$ を、任意の $x \in X$ と $f \in C$ に対して<br>
+$$ (e(x))_f = f(x) $$<br>
+により定義する。<br>
+$S(X)$ を、像 $e(X)$ の $T$ における閉包 $\overline{e(X)}$ と定義する。<br>
+自然な写像 $\eta_X \colon X \to S(X)$ を、 $e$ の終域を $S(X)$ に制限したものとして定める。</p>
+
+<h3>$S(X)$ が Stone 空間であることの証明</h3>
+<div class="proof">
+  <strong>1. カントール立方体 $T$ の性質</strong><br>
+  $\{0, 1\}$ は離散空間であるためコンパクト Hausdorff 空間である。 Tychonoff の定理より、その直積である $T = \{0, 1\}^C$ もコンパクト Hausdorff 空間である。<br>
+  さらに $T$ が完全不連結であることを示す。 $t, s \in T$ を $t \neq s$ なる任意の相異なる2点とする。直積の定義より、ある座標 $f \in C$ が存在して $t_f \neq s_f$ となる。<br>
+  射影 $\pi_f \colon T \to \{0, 1\}$ は連続写像である。 $\{0, 1\}$ において $\{t_f\}$ は clopen 集合であるから、その逆像 $W = \pi_f^{-1}(\{t_f\})$ は $T$ の clopen 集合である。<br>
+  構成から $t \in W$ であり、 $s_f \neq t_f$ であるため $s \notin W$ となる。したがって、任意の相異なる2点が clopen 集合で分離されるため、 $T$ は完全不連結である。<br><br>
+  <strong>2. 閉部分空間 $S(X)$ の性質</strong><br>
+  $S(X)$ はコンパクト Hausdorff 空間 $T$ の閉部分集合であるから、それ自身もコンパクト Hausdorff 空間である。<br>
+  $S(X)$ が完全不連結であることを示す。 $u, v \in S(X)$ を $u \neq v$ なる相異なる2点とする。 $T$ は完全不連結であるため、ある $T$ の clopen 集合 $W \subset T$ が存在して $u \in W$ かつ $v \notin W$ が成り立つ。<br>
+  このとき、部分空間の相対位相において $W \cap S(X)$ は $S(X)$ の clopen 集合である。 $u \in W \cap S(X)$ であり $v \notin W \cap S(X)$ であるため、 $S(X)$ の相異なる2点も clopen 集合で分離される。<br>
+  以上より、 $S(X)$ は完全不連結コンパクト Hausdorff 空間であり、圏 $\mathbf{Stone}$ の対象である。
+</div>
+
+<h3>左随伴であること（普遍性）の証明</h3>
+<div class="theorem">
+  <strong>定理（普遍性）</strong><br>
+  任意の Stone 空間 $K$ と連続写像 $g \colon X \to K$ に対し、連続写像 $\tilde{g} \colon S(X) \to K$ が一意に存在して、 $\tilde{g} \circ \eta_X = g$ を満たす。
+</div>
+<div class="proof">
+  <strong>1. 対象 $K$ のカントール立方体への埋め込み</strong><br>
+  $A = C(K, \{0, 1\})$ を $K$ 上の $\{0, 1\}$ に値をとる連続関数全体の集合とする。<br>
+  評価写像 $\varphi \colon K \to \{0, 1\}^A$ を、任意の $y \in K$ と $h \in A$ に対して $(\varphi(y))_h = h(y)$ により定義する。<br>
+  $\varphi$ が単射であることを示す。 $K$ は完全不連結であるから、任意の $y, z \in K$ ( $y \neq z$ ) に対して $y \in D$ かつ $z \notin D$ となる clopen 集合 $D \subset K$ が存在する。 $D$ の指示関数を $h_D \colon K \to \{0, 1\}$ とすると $h_D \in A$ であり、 $h_D(y) = 1 \neq 0 = h_D(z)$ となる。したがって $(\varphi(y))_{h_D} \neq (\varphi(z))_{h_D}$ となり、 $\varphi$ は単射である。<br>
+  各成分への射影と $\varphi$ の合成は連続であるため $\varphi$ は連続写像である。 $K$ はコンパクト空間であり、 $\{0, 1\}^A$ は Hausdorff 空間であるため、連続な単射 $\varphi$ は像 $\varphi(K)$ への同相写像を与える。さらに $\varphi(K)$ は閉部分集合となる。<br><br>
+  <strong>2. 連続写像 $\Phi \colon T \to \{0, 1\}^A$ の構成</strong><br>
+  任意の $h \in A$ は $K \to \{0, 1\}$ の連続関数であり、 $g \colon X \to K$ は連続であるから、その合成 $h \circ g \colon X \to \{0, 1\}$ は $C = C(X, \{0, 1\})$ の元である。<br>
+  そこで、写像 $\Phi \colon T \to \{0, 1\}^A$ を、任意の $t \in T$ と $h \in A$ に対して<br>
+  $$ (\Phi(t))_h = t_{h \circ g} $$<br>
+  により定義する。<br>
+  $\Phi$ と射影 $\pi_h \colon \{0, 1\}^A \to \{0, 1\}$ の合成は、 $T$ の射影 $\pi_{h \circ g} \colon T \to \{0, 1\}$ に等しい。直積位相の普遍性より $\Phi$ は連続写像である。<br><br>
+  <strong>3. $\tilde{g}$ の定義と可換性の確認</strong><br>
+  任意の $x \in X$ と $h \in A$ に対して、<br>
+  $$ (\Phi(e(x)))_h = (e(x))_{h \circ g} = (h \circ g)(x) = h(g(x)) = (\varphi(g(x)))_h $$<br>
+  が成り立つため、 $T$ から $\{0, 1\}^A$ への写像として $\Phi \circ e = \varphi \circ g$ である。<br>
+  $\Phi$ は連続であるため閉包の包含関係を保つ。したがって、<br>
+  $$ \Phi(S(X)) = \Phi(\overline{e(X)}) \subset \overline{\Phi(e(X))} = \overline{\varphi(g(X))} \subset \overline{\varphi(K)} = \varphi(K) $$<br>
+  が成り立つ（最後の等号は $\varphi(K)$ が閉集合であるため）。<br>
+  $\varphi$ は $K$ から $\varphi(K)$ への同相写像であるから、連続な逆写像 $\varphi^{-1} \colon \varphi(K) \to K$ が存在する。<br>
+  写像 $\tilde{g} \colon S(X) \to K$ を、<br>
+  $$ \tilde{g} = \varphi^{-1} \circ \Phi|_{S(X)} $$<br>
+  により定義する。 $\Phi|_{S(X)}$ の像が $\varphi(K)$ に含まれるため、この写像は well-defined であり、連続写像の合成なので連続である。<br>
+  任意の $x \in X$ に対して、<br>
+  $$ \tilde{g}(\eta_X(x)) = \varphi^{-1}(\Phi(e(x))) = \varphi^{-1}(\varphi(g(x))) = g(x) $$<br>
+  となるため、 $\tilde{g} \circ \eta_X = g$ が成り立つ。<br><br>
+  <strong>4. 一意性の確認</strong><br>
+  像 $\eta_X(X) = e(X)$ は定義により $S(X)$ において稠密である。 $K$ は Hausdorff 空間であるため、稠密な部分集合上で一致する連続写像は空間全体で一意に定まる。したがって $\tilde{g}$ は一意である。
+</div>
+
+<h3>超フィルターによる構成との関係</h3>
+<p>超フィルターを用いた構成と、カントール立方体を用いた構成は、代数的に見れば全く同じ対象を表している。</p>
+<p>カントール立方体 $T = \{0, 1\}^{\mathrm{Clop}(X)}$ の元 $t$ は、各 clopen 集合 $C$ に対して $0$ か $1$ の値を割り当てる写像と見なせる。<br>
+評価写像の像 $e(X)$ においては、 $e(x)$ は点 $x$ を含む clopen 集合に $1$ を、含まないものに $0$ を割り当てる。これはまさに「点 $x$ を含む clopen 集合全体のフィルター」の指示関数である。<br>
+この像の閉包をとる操作 $\overline{e(X)}$ は、位相的には「有限交叉性を持つように矛盾なく $1$ を割り当てる極大な方法」の極限をすべて追加することに他ならない。これは Boole 代数 $\mathrm{Clop}(X)$ 上の超フィルター (ultrafilter) をすべて集めることと完全に同値である。</p>
+
+<h2>5. Stone 反射 $\eta_X \colon X \to S(X)$ が像への同相写像を誘導する条件</h2>
+<p>前回の Stone-Čech コンパクト化 $\beta X$ の議論と非常に美しく対比できる、核心を突いたトピックです。位相空間 $X$ に対する自然な連続写像 $\eta_X \colon X \to S(X)$ が像への同相写像（位相的な埋め込み）となるための必要十分条件は、<strong>「$X$ が $T_0$ 空間であり、かつ clopen 集合（開かつ閉である集合）からなる開基を持つこと」</strong>です。このような位相空間は、一般に<strong>ゼロ次元 Hausdorff 空間 (zero-dimensional Hausdorff space)</strong> と呼ばれます。</p>
+
+<h3>基本概念の定義</h3>
+<ul>
+  <li><strong>clopen 開基を持つ空間:</strong> 位相空間 $X$ の任意の開集合 $U$ と点 $x \in U$ に対して、ある clopen 集合 $C \subset X$ が存在して $x \in C \subset U$ を満たすこと。</li>
+  <li><strong>ゼロ次元 Hausdorff 空間:</strong> clopen 開基を持ち、かつ $T_0$ 空間である位相空間のこと。（clopen 開基を持つ $T_0$ 空間は、自動的に Hausdorff 空間、さらに言えば完全正則な Tychonoff 空間になります）。</li>
+</ul>
+
+<div class="theorem">
+  <strong>定理</strong><br>
+  自然な写像 $\eta_X \colon X \to S(X)$ が像への同相写像（埋め込み）となるための必要十分条件は、 $X$ がゼロ次元 Hausdorff 空間であることである。
+</div>
+<div class="proof">
+  <strong>【必要性の証明】</strong><br>
+  $\eta_X$ が像への同相写像であると仮定する。このとき $X$ は $S(X)$ の部分空間と同相になる。<br>
+  $S(X)$ は完全不連結コンパクト Hausdorff 空間（Stone 空間）であるため、Hausdorff 性を持ち、かつ clopen 集合からなる開基を持つ。<br>
+  部分空間の相対位相の性質から、 $S(X)$ の clopen 集合の $X$ への制限（共通部分）は $X$ の clopen 集合となるため、clopen 集合からなる開基を持つという性質は部分空間にも遺伝する。また、Hausdorff 性も部分空間に遺伝する。<br>
+  したがって、 $X$ は clopen 開基を持つ Hausdorff 空間（ゼロ次元 Hausdorff 空間）である。<br><br>
+  <strong>【十分性の証明】</strong><br>
+  $X$ が clopen 開基を持つ $T_0$ 空間であると仮定する。 $\eta_X$ が単射であることと、像への開写像であることの2点を示す。<br>
+  <ol>
+    <li><strong>単射性について:</strong><br>
+    $x, y \in X$ を $x \neq y$ となる任意の2点とする。 $X$ は $T_0$ 空間であるため、一方は含むが他方は含まないような開集合が存在する。一般性を失わず、 $x \in U$ かつ $y \notin U$ なる開集合 $U$ があるとする。<br>
+    $X$ は clopen 開基を持つため、ある clopen 集合 $C$ が存在して $x \in C \subset U$ となる。<br>
+    このとき $x \in C$ かつ $y \notin C$ である。<br>
+    超フィルターを用いた評価写像の定義から、 $\eta_X(x)$ は $x$ を含む clopen 集合の族であるため $C \in \eta_X(x)$ となるが、 $C \notin \eta_X(y)$ である。したがって $\eta_X(x) \neq \eta_X(y)$ となり、 $\eta_X$ は単射である。</li>
+    <li><strong>像への開写像性について:</strong><br>
+    $\eta_X$ が $X$ から部分空間 $\eta_X(X)$ への開写像であることを示す。<br>
+    $U \subset X$ を任意の開集合とし、 $x \in U$ をとる。<br>
+    clopen 開基の仮定から、ある clopen 集合 $C$ が存在して $x \in C \subset U$ を満たす。<br>
+    $S(X)$ の基本開集合として $\hat{C} = \{ p \in S(X) \mid C \in p \}$ を考える。<br>
+    $\eta_X(X)$ における相対位相での開集合 $W = \hat{C} \cap \eta_X(X)$ をとると、任意の $y \in X$ について<br>
+    $$ \eta_X(y) \in W \iff C \in \eta_X(y) \iff y \in C $$<br>
+    が成り立つ。すなわち $W = \eta_X(C)$ である。<br>
+    $x \in C$ より $\eta_X(x) \in W$ であり、 $C \subset U$ より $W = \eta_X(C) \subset \eta_X(U)$ となる。<br>
+    これは $\eta_X(U)$ の各点 $\eta_X(x)$ に対して、 $\eta_X(X)$ の相対開集合 $W$ がその近傍として $\eta_X(U)$ の中に取れることを意味するため、 $\eta_X(U)$ は $\eta_X(X)$ の相対位相において開集合である。</li>
+  </ol>
+  以上より、 $\eta_X$ は単射かつ像への開写像であるため、像への同相写像（埋め込み）となる。
+</div>
+
+<h3>$\beta X$ との美しい対比</h3>
+<p>この結論は、Stone-Čech コンパクト化における埋め込みの条件と見事な並行関係（パラレル）をなしています。</p>
+<table>
+  <thead>
+    <tr>
+      <th>コンパクト化/反射の対象</th>
+      <th>普遍性を満たす空間の圏</th>
+      <th>埋め込みになるための条件</th>
+      <th>連続関数による分離の解釈</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>$\beta X$</strong></td>
+      <td>コンパクト Hausdorff 空間</td>
+      <td><strong>Tychonoff 空間</strong></td>
+      <td>任意の閉集合と外の点が、 $[0, 1]$ への連続関数で分離できる</td>
+    </tr>
+    <tr>
+      <td><strong>$S(X)$</strong></td>
+      <td>Stone 空間</td>
+      <td><strong>ゼロ次元 Hausdorff 空間</strong></td>
+      <td>任意の閉集合と外の点が、 $\{0, 1\}$ への連続関数（clopen 集合）で分離できる</td>
+    </tr>
+  </tbody>
+</table>
+<p>このように、目的となる圏の「基本となる空間」（区間 $[0, 1]$ か、離散空間 $\{0, 1\}$ か）を変えるだけで、構成の手続きから埋め込みの条件までが全く同じ論理構造で展開されるのが、圏論的位相空間論の非常に面白いところです。</p>
+
+<h2>6. ゼロ次元 Hausdorff 空間の例と完全不連結局所コンパクト空間</h2>
+<p>ゼロ次元 Hausdorff 空間（clopen 集合からなる開基を持つ $T_0$ 空間）は、位相空間論において非常に豊かで重要なクラスを形成します。</p>
+
+<h3>1. ゼロ次元 Hausdorff 空間の例</h3>
+<p>身近な空間から抽象的な空間まで、多くの例が存在します。</p>
+<ul>
+  <li><strong>離散空間 (Discrete spaces):</strong> 自然数 $\mathbb{N}$ や整数 $\mathbb{Z}$ など。任意の点の一点集合が clopen であるため、自明なゼロ次元空間です。</li>
+  <li><strong>有理数の空間 $\mathbb{Q}$ と無理数の空間 $\mathbb{R} \smallsetminus \mathbb{Q}$:</strong> 実数 $\mathbb{R}$ からの相対位相を考えたもの。例えば $\mathbb{Q}$ において、区間 $(-\sqrt{2}, \sqrt{2}) \cap \mathbb{Q}$ は $\sqrt{2}$ が $\mathbb{Q}$ に存在しないため、 $\mathbb{Q}$ の開集合であり同時に閉集合（clopen 集合）になります。</li>
+  <li><strong>カントール集合 (Cantor set):</strong> 閉区間 $[0, 1]$ から中間3分の1を開区間として取り除く操作を無限に繰り返して得られるフラクタル図形です。完全不連結コンパクト Hausdorff 空間（Stone 空間）の代表例です。</li>
+  <li><strong>$p$進数体 $\mathbb{Q}_p$:</strong> 整数論で極めて重要な空間で、 $p$進距離を入れた位相空間としてゼロ次元局所コンパクト Hausdorff 空間になります。</li>
+</ul>
+
+<h3>2. 完全不連結局所コンパクト Hausdorff 空間はゼロ次元か？</h3>
+<p>ご質問の「完全不連結かつ局所コンパクトな Hausdorff 空間はゼロ次元か？」という問いに対する結論は<strong>「YES（真）」</strong>です。</p>
+
+<div class="theorem">
+  <strong>定理</strong><br>
+  完全不連結局所コンパクト Hausdorff 空間は、必ずゼロ次元 Hausdorff 空間である。
+</div>
+<div class="proof">
+  <strong>証明の要点（なぜ成り立つのか）:</strong><br>
+  この定理の鍵は、コンパクト Hausdorff 空間における<strong>「擬連結成分 (quasi-component) と連結成分 (component) が一致する」</strong>という性質にあります。<br>
+  <ol>
+    <li><strong>コンパクト空間での性質:</strong> 一般のコンパクト Hausdorff 空間 $K$ において、ある点 $x$ を含むすべての clopen 集合の共通部分（これを擬連結成分と呼びます）は、 $x$ の連結成分に一致することが知られています。もし $K$ が完全不連結であれば、連結成分は $\{x\}$ のみになるため、「 $x$ を含むすべての clopen 集合の共通部分は $\{x\}$ である」ことになります。</li>
+    <li><strong>局所コンパクト空間への応用:</strong> 空間 $X$ を完全不連結局所コンパクト Hausdorff 空間とし、点 $x \in X$ とその任意の開近傍 $U$ をとります。</li>
+    <li>局所コンパクト性より、 $x$ はコンパクトな閉近傍 $K$ で、 $K \subset U$ となるものを持ちます。</li>
+    <li>$K$ は $X$ の部分空間として完全不連結コンパクト Hausdorff 空間になります。上記の性質から、 $K$ 内で $x$ を含む clopen 集合の共通部分は $\{x\}$ になります。</li>
+    <li>コンパクト性の議論（有限交叉性など）を用いると、 $K$ の境界と交わらないような $x$ の clopen 近傍 $C \subset K$ を見つけることができます。境界と交わらないため、この $C$ は $X$ 全体から見ても clopen 集合になります。</li>
+    <li>結果として $x \in C \subset U$ となる clopen 集合 $C$ が存在し、 $X$ は clopen 開基を持つこと（ゼロ次元であること）が示されます。</li>
+  </ol>
+</div>
+
+<h3>3. 条件を緩められないか？（反例について）</h3>
+<p>「局所コンパクト性」という条件を外して、単なる<strong>「完全不連結 Hausdorff 空間」</strong>としてしまうと、ゼロ次元にはならない（clopen 開基を持たない）反例が存在します。<br>
+位相空間論において、「完全不連結であること（連結成分が1点のみ）」と「完全分離であること / ゼロ次元であること（任意の相異なる点が clopen 集合で分離できる）」は、一般の空間では同値ではありません。</p>
+
+<div class="example">
+  <strong>反例：エルデシュ空間 (Erdős space)</strong><br>
+  数学者ポール・エルデシュにちなんで名付けられた空間 $\mathfrak{E}$ は、ヒルベルト空間 $\ell^2$ の部分空間であり、すべての座標が有理数であるようなベクトル全体の集合として定義されます。<br>
+  <ul>
+    <li><strong>完全不連結性:</strong> $\mathfrak{E}$ は有理数のような「スカスカな」性質を引き継いでおり、完全にバラバラ（完全不連結）です。</li>
+    <li><strong>ゼロ次元ではない:</strong> 驚くべきことに、 $\mathfrak{E}$ の位相次元（被覆次元など）は $1$ になります。すなわち、点を含んで任意に小さくなるような clopen 集合の基底を<strong>持ちません</strong>。</li>
+  </ul>
+</div>
+<p>他の反例としては、平面上の特定の点を工夫して除いた<strong>「クナスター・クラトフスキーの扇 (Knaster-Kuratowski fan)」</strong>（通称：穴あきテント）などがあります。これも完全不連結でありながら、 clopen 集合で空間をうまく切り離すことができず、ゼロ次元になりません。</p>
+
+<p><strong>結論:</strong> 完全不連結な空間において、「点が繋がっていないこと」から直ちに「空間を clopen 集合で綺麗に切り分けられること」を保証するためには、<strong>局所コンパクト性（またはコンパクト性）</strong>という強力な枠組みが不可欠である、というのが位相空間論の面白い現実です。</p>
+
+<button class="download-btn" onclick="downloadHTML()">このHTMLファイルをダウンロードする</button>
+<script>
+  function downloadHTML() {
+    const htmlContent = document.documentElement.outerHTML;
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'stone_compactification_complete.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>

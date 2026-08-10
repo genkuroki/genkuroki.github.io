@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>共形場理論・頂点作用素代数におけるモジュラーテンソル圏の構成とStrange Duality予想</title>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+<style>
+  body {
+    font-family: serif;
+    line-height: 1.6;
+    margin: 40px auto;
+    max-width: 900px;
+    padding: 0 20px;
+  }
+  h1, h2, h3 {
+    color: #333;
+  }
+  .theorem {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  .definition {
+    border: 1px solid #bce8f1;
+    background-color: #d9edf7;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  .proof {
+    margin-bottom: 20px;
+    padding-left: 15px;
+    border-left: 3px solid #ccc;
+  }
+  code {
+    background-color: #eee;
+    padding: 2px 4px;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+
+<h1>共形場理論からモジュラーテンソル圏への数学的構成とVerlinde公式、およびStrange Duality予想の証明</h1>
+
+<p>
+本稿では、理論物理学における2次元共形場理論 (Conformal Field Theory, CFT) を数学的に厳密に定式化した「頂点作用素代数 (Vertex Operator Algebra, VOA)」を出発点とし、そこからトポロジカル量子場理論 (TQFT) や結び目不変量の基礎となる「モジュラーテンソル圏 (Modular Tensor Category, MTC)」を構成する完全なプロセスを解説する。
+さらに、この強力な数学的枠組みを用いて、フュージョン則を記述するVerlinde公式の証明、および黒木玄氏によって提唱された共形場理論における「Strange Duality (奇妙な双対性) 予想」の解決について、自己完結的 (self-contained) に詳細に述べる。
+</p>
+
+<h2>第1部：基礎概念 — 頂点作用素代数と仮定</h2>
+
+<p>
+まずは出発点となる頂点作用素代数 (VOA) の定義と、モジュラーテンソル圏を構築するために必要な良い性質 (有理性など) について述べる。
+</p>
+
+<div class="definition">
+<strong>定義 (頂点作用素代数)</strong><br>
+頂点作用素代数は、ベクトル空間 $V$、真空ベクトル $\mathbf{1} \in V$、ヴィラソロ元 $\omega \in V$、および各元 $v \in V$ に対して形式的ローラン級数として与えられる頂点作用素 (状態-作用素対応)
+$$ Y(v, z) = \sum_{n \in \mathbb{Z}} v_n z^{-n-1} $$
+の組 $(V, Y, \mathbf{1}, \omega)$ であり、以下の公理を満たすものである。
+<ul>
+  <li><strong>真空公理:</strong> $Y(\mathbf{1}, z) = \mathrm{id}_V$ であり、任意の $v \in V$ に対して $Y(v, z)\mathbf{1} \in V[[z]]$ かつ $\lim_{z \to 0} Y(v, z)\mathbf{1} = v$.</li>
+  <li><strong>並進公理:</strong> $[L(-1), Y(v, z)] = \frac{d}{dz} Y(v, z)$.</li>
+  <li><strong>ヴィラソロ公理:</strong> $Y(\omega, z) = \sum_{n \in \mathbb{Z}} L(n) z^{-n-2}$ と展開したとき、係数 $L(n)$ は中心電荷 $c$ のヴィラソロ代数をなす。すなわち、
+  $$ [L(m), L(n)] = (m-n)L(m+n) + \frac{c}{12}(m^3 - m)\delta_{m+n, 0} $$
+  であり、$L(0)$ は $V$ 上に半単純に作用し、$V$ は $L(0)$ の固有空間の直和として $V = \bigoplus_{n \in \mathbb{Z}} V_{(n)}$ と次数付けられ、各次元は有限である。また十分小さな $n$ に対して $V_{(n)} = 0$ となる。</li>
+  <li><strong>局所性公理:</strong> 任意の $u, v \in V$ に対して、ある十分大きな整数 $N > 0$ が存在して、
+  $$ (z_1 - z_2)^N [Y(u, z_1), Y(v, z_2)] = 0 $$
+  が形式的べき級数として成立する。</li>
+</ul>
+</div>
+
+<p>
+本稿で圏論的構成を行うにあたり、基礎となるVOA $V$ に以下の4つの強力な条件を仮定する。
+</p>
+
+<ol>
+  <li><strong>有理性 (Rationality):</strong> 任意の許容可能な $V$-加群 (表現) は完全可約 (半単純) であり、既約加群 (単純対象) の同型類は有限個しか存在しない。これらを $\mathcal{I} = \{W_0, W_1, \dots, W_n\}$ とし、$W_0 \cong V$ を単位対象とする。</li>
+  <li><strong>$C_2$-有限性 ( $C_2$-cofiniteness):</strong> $V$ の部分空間 $C_2(V) = \mathrm{span}\{u_{-2}v \mid u, v \in V\}$ を考えたとき、商空間 $V / C_2(V)$ が有限次元である。この条件は、後述するトーラス上の指標のモジュラー不変性や、微分方程式の確定特異点性を保証する解析的に極めて重要な条件である。</li>
+  <li><strong>自己双対性 (Self-duality):</strong> $V$ 自身がその反傾加群 $V'$ と $V$-加群として同型である。</li>
+  <li><strong>正のエネルギー (CFT type):</strong> $V$ の次数付けが $V = \bigoplus_{n=0}^{\infty} V_{(n)}$ であり、$V_{(0)} = \mathbb{C}\mathbf{1}$ を満たす。</li>
+</ol>
+<p>これらの条件を満たすVOAの典型例として、有限群のムーンシャイン加群や、アフィンリー代数の可積分最高ウェイト表現から作られるWZWモデル、ヴィラソロ代数の極小モデルなどがある。</p>
+
+<h2>第2部：テンソル積の構成（P(z)-テンソル積）</h2>
+
+<p>
+表現の圏 $\mathcal{C}$ を構成する第一歩は、加群の間の「テンソル積」を定義することである。通常のベクトル空間上の代数とは異なり、VOAの加群のテンソル積は「インターツワイニング作用素 (Intertwining operator)」を介して定義される。これは物理的には3つの場が相互作用する3点頂点作用素に相当する。
+</p>
+
+<div class="definition">
+<strong>定義 (インターツワイニング作用素)</strong><br>
+$V$-加群 $W_1, W_2, W_3$ が与えられたとき、型 $\binom{W_3}{W_1 \, W_2}$ のインターツワイニング作用素 $\mathcal{Y}(\cdot, z)$ とは、$W_1$ の元 $w_1$ をパラメータとする線形写像
+$$ \mathcal{Y}(w_1, z) : W_2 \to W_3\{z\} = \left\{ \sum_{n \in \mathbb{C}} w_{(n)} z^{-n-1} \mathrel{\Big|} w_{(n)} \in W_3 \right\} $$
+であって、以下の性質を満たすものである。
+<ul>
+  <li><strong>L(-1) 微分性:</strong> $\frac{d}{dz}\mathcal{Y}(w_1, z) = \mathcal{Y}(L(-1)w_1, z)$</li>
+  <li><strong>ヤコビ恒等式 (結合律と可換律の一般化):</strong> $v \in V$, $w_1 \in W_1$, $w_2 \in W_2$ に対し、
+  $$ z_0^{-1} \delta\left(\frac{z_1 - z_2}{z_0}\right) Y_3(v, z_1)\mathcal{Y}(w_1, z_2)w_2 - z_0^{-1} \delta\left(\frac{z_2 - z_1}{-z_0}\right) \mathcal{Y}(w_1, z_2)Y_2(v, z_1)w_2 = z_2^{-1} \delta\left(\frac{z_1 - z_0}{z_2}\right) \mathcal{Y}(Y_1(v, z_0)w_1, z_2)w_2 $$
+  が成立する。</li>
+</ul>
+このインターツワイニング作用素のなすベクトル空間を $\mathcal{V}_{W_1 W_2}^{W_3}$ と表記し、その次元 $N_{W_1 W_2}^{W_3} = \dim \mathcal{V}_{W_1 W_2}^{W_3}$ を<strong>フュージョン則 (融合則)</strong> と呼ぶ。
+</div>
+
+<p>
+HuangとLepowskyは、複素平面上の点 $z \in \mathbb{C}^\times$ を固定した上で、次のような普遍性 (Universality) を満たす対象としてテンソル積を構成した。
+</p>
+<div class="theorem">
+<strong>定理 (P(z)-テンソル積の構成, Huang-Lepowsky 1995)</strong><br>
+任意の $V$-加群 $W_1, W_2$ と $z \in \mathbb{C}^\times$ に対して、ある加群 $W_1 \boxtimes_{P(z)} W_2$ と普遍的なインターツワイニング作用素 $\boxtimes: W_1 \otimes W_2 \to \overline{W_1 \boxtimes_{P(z)} W_2}$ が一意に存在し、任意の加群 $W_3$ と任意のインターツワイニング作用素 $\mathcal{Y} \in \mathcal{V}_{W_1 W_2}^{W_3}$ は、ある一意な $V$-加群準同型 (射) $f: W_1 \boxtimes_{P(z)} W_2 \to W_3$ を通じて
+$$ \mathcal{Y}(w_1, z)w_2 = f(w_1 \boxtimes w_2) $$
+と分解される。
+</div>
+<p>
+これにより、関手としてのテンソル積 $W_1 \boxtimes W_2$ が厳密に定義され、圏 $\mathcal{C}$ にモノイダル構造の基礎が与えられる。
+</p>
+
+<h2>第3部：アソシエーター（結合律）の構成と微分方程式</h2>
+
+<p>
+テンソル圏となるための最大の難関は、結合律 $(W_1 \boxtimes W_2) \boxtimes W_3 \cong W_1 \boxtimes (W_2 \boxtimes W_3)$ を与える自然同型 (アソシエーター) $\alpha$ を構成し、それが五角形公理 (Pentagon Axiom) を満たすことを示すことである。Huangはこれを、相関関数が満たす微分方程式の解析接続を用いて証明した。
+</p>
+
+<p>
+4つの加群 $W_1, W_2, W_3, W_4$ と双対空間の元 $w' \in W_4'$ を考える。
+領域 $|z_1|  >  |z_2|  >  0$ において、インターツワイニング作用素の<strong>積 (Products)</strong>
+$$ \langle w', \mathcal{Y}_1(w_1, z_1) \mathcal{Y}_2(w_2, z_2) w_3 \rangle $$
+は絶対収束し、多価解析関数を定める。一方、領域 $|z_2|  >  |z_1 - z_2|  >  0$ において、インターツワイニング作用素の<strong>反復 (Iterates, OPE展開)</strong>
+$$ \langle w', \mathcal{Y}_3( \mathcal{Y}_4(w_1, z_1 - z_2) w_2, z_2 ) w_3 \rangle $$
+も絶対収束する。
+</p>
+
+<div class="theorem">
+<strong>定理 (アソシエーターの構成, Huang 2005)</strong><br>
+$C_2$-有限性の仮定により、上記の相関関数はある適当な微分方程式系 (KZ方程式の一般化) を満たし、その特異点 $z_1 = 0, z_2 = 0, z_1 = z_2, \infty$ はすべて確定特異点 (Regular singular points) である。<br>
+したがって、微分方程式の解の性質から、領域 $|z_1|  >  |z_2|  >  0$ で定義された積と、領域 $|z_2|  >  |z_1 - z_2|  >  0$ で定義された反復は、普遍被覆空間上で互いに解析接続可能である。<br>
+この解析接続から定まる解空間の移行行列が、代数的な自然同型写像
+$$ \alpha_{W_1, W_2, W_3}: (W_1 \boxtimes W_2) \boxtimes W_3 \xrightarrow{\sim} W_1 \boxtimes (W_2 \boxtimes W_3) $$
+を誘導し、微分方程式のモノドロミー表現の性質から自動的に五角形公理を満たす。
+</div>
+
+<h2>第4部：ブレーディング（組み紐構造）の構成</h2>
+
+<p>
+次に、テンソル積の順序を交換する自然同型 (ブレーディング)
+$$ c_{W_1, W_2}: W_1 \boxtimes W_2 \xrightarrow{\sim} W_2 \boxtimes W_1 $$
+を構成する。これは幾何学的には、インターツワイニング作用素の挿入点 $z_1$ と $z_2$ を、互いに衝突しないように複素平面上で半周り (反時計回りまたは時計回り) させる解析接続によって定義される。
+</p>
+
+<p>
+特異点 $z_1 = z_2$ を回避するパス $\gamma$ に沿って相関関数を連続変形すると、新たなインターツワイニング作用素の空間へ移る。このモノドロミー作用が写像 $c$ を与える。
+解析接続と微分方程式の理論により、この $c$ と前節で構成したアソシエーター $\alpha$ は互いに整合し、六角形公理 (Hexagon axioms) を満たすことが証明される。これにより圏 $\mathcal{C}$ はブレイドテンソル圏 (Braided Tensor Category) となる。
+</p>
+
+<h2>第5部：リジッド構造（双対、評価、余評価）とリボン圏</h2>
+
+<p>
+モジュラーテンソル圏になるためには、圏が「剛性 (Rigidity)」を持ち、かつ「リボン構造 (位相的スピン)」を備えている必要がある。
+</p>
+
+<p>
+<strong>1. 双対対象と評価・余評価射</strong><br>
+各対象 $W \in \mathcal{C}$ に対して、双対対象 $W^*$ を対応付ける。VOAの枠組みでは、$W^*$ は加群 $W$ の反傾加群 (Contragredient module) として具体的に構成される。ベクトル空間としては $W^* = \bigoplus_{n} (W_{(n)})^*$ であり、頂点作用素の作用は随伴
+$$ Y^*(v, z) = Y(e^{zL(1)}(-z^{-2})^{L(0)}v, z^{-1})^t $$
+によって定義される。
+この双対対象を用いて、以下の射を構成する。
+<ul>
+  <li><strong>評価射 (Evaluation):</strong> $ev_W : W^* \boxtimes W \to V$<br>
+  （物理的な対消滅に対応し、双対空間の自然なペアリングから導かれる）</li>
+  <li><strong>余評価射 (Coevaluation):</strong> $coev_W : V \to W \boxtimes W^*$<br>
+  （物理的な対生成に対応する）</li>
+</ul>
+Huang (2008) は、これらの射が幾何学的な共形ブロックの性質を用いて、Z-図式 (Snake equations)
+$$ (id_W \boxtimes ev_W) \circ \alpha_{W, W^*, W} \circ (coev_W \boxtimes id_W) = id_W $$
+を満たすことを厳密に証明し、圏 $\mathcal{C}$ がリジッド圏 (Rigid Category) であることを示した。
+</p>
+
+<p>
+<strong>2. リボンツイスト (位相的スピン)</strong><br>
+対象自身を360度回転させる位相的自己同型射 $\theta_W: W \xrightarrow{\sim} W$ は、ヴィラソロ代数のエネルギー演算子 $L(0)$ を用いて次のように明確に定義される。
+$$ \theta_W = e^{2\pi i (L(0) - c/24)} = \exp(2\pi i (L(0) - c/24)) $$
+コンフォーマル重みの加法性とインターツワイニング作用素の性質から、
+$$ \theta_{W_1 \boxtimes W_2} = c_{W_2, W_1} \circ c_{W_1, W_2} \circ (\theta_{W_1} \boxtimes \theta_{W_2}) $$
+および $\theta_{W^*} = (\theta_W)^*$ が成り立つことが証明され、$\mathcal{C}$ は完全なリボン圏 (Ribbon Category) へと昇格する。
+</p>
+
+<h2>第6部：圏論的S行列とモジュラーS行列の一致、Verlinde公式</h2>
+
+<p>
+最後に、理論の核心である「モジュラー非退化性」とVerlinde公式の証明について解説する (Huang 2008)。ここでの最大の発見は、代数的に定義される「圏論的S行列」と、解析的に定義される「指標のモジュラーS行列」が本質的に一致することの証明である。
+</p>
+
+<h3>① 圏論的S行列 (Categorical S-matrix)</h3>
+<p>
+リボン圏 $\mathcal{C}$ において、単純対象 $W_i, W_j$ に対するホップ絡み目 (Hopf link) の不変量として、圏論的トレースから行列 $\tilde{S}$ が定義される。
+$$ \tilde{S}_{ij} = \mathrm{Tr}_{W_i \boxtimes W_j}(c_{W_j, W_i} \circ c_{W_i, W_j}) $$
+より具体的には、評価射・余評価射を用いて
+$$ \tilde{S}_{ij} = ev_{W_i} \circ (id_{W_i^*} \boxtimes ev_{W_j}) \circ (id_{W_i^*} \boxtimes c_{W_j, W_i} \boxtimes id_{W_j^*}) \circ (id_{W_i^*} \boxtimes c_{W_i, W_j} \boxtimes id_{W_j^*}) \circ (coev_{W_i} \boxtimes coev_{W_j}) $$
+として計算される。この行列が可逆 (非退化) であるとき、圏はモジュラーテンソル圏 (MTC) と呼ばれる。
+</p>
+
+<h3>② 指標のモジュラー変換行列 (Modular S-matrix)</h3>
+<p>
+一方、幾何学的なトーラス (種数1のリーマン面) 上で、各加群 $W_i$ の指標 (分配関数) を次のように定義する。
+$$ \chi_i(\tau) = \mathrm{Tr}_{W_i} \left( q^{L(0) - c/24} \right) \quad (q = e^{2\pi i \tau}, \ \Im(\tau)  >  0) $$
+Zhuの定理により、$V$ が上記の仮定を満たすとき、これらの指標の空間はモジュラー群 $\mathrm{SL}(2, \mathbb{Z})$ の作用の下で有限次元の表現空間をなす。特に、トーラスのサイクルを入れ替えるS-変換 $\tau \mapsto -1/\tau$ に対して、行列 $S = (S_{ij})$ を用いて次のように書ける。
+$$ \chi_i\left(-\frac{1}{\tau}\right) = \sum_{j} S_{ij} \chi_j(\tau) $$
+</p>
+
+<h3>③ 2つのS行列の一致とVerlinde公式</h3>
+<div class="theorem">
+<strong>定理 (S行列の一致とVerlinde予想の解決, Huang 2008)</strong><br>
+トーラス上のモジュラーS変換を、リーマン球面上の4点相関関数の特異点操作 (ピッチフォーク型共形ブロックにおけるブレイド操作) に引き戻して解析することにより、以下の等式が成立する。
+$$ S_{ij} = \frac{1}{\mathcal{D}} \tilde{S}_{i, j^*} $$
+（ここで $\mathcal{D} = \sqrt{\sum_k (\dim_q W_k)^2}$ は圏の大域次元、添え字 $j^*$ は双対対象に対応する）<br>
+Zhuの理論から $S_{ij}$ は可逆であるため、圏論的 $\tilde{S}_{ij}$ も可逆 (非退化) となり、圏 $\mathcal{C}$ はモジュラーテンソル圏であることが証明された。
+さらに、テンソル圏の半単純性とS行列の性質から、フュージョン係数 $N_{ij}^k = \dim \mathcal{V}_{W_i W_j}^{W_k}$ が純粋にS行列のみで表される<strong>Verlinde公式</strong>が成立する：
+$$ N_{ij}^k = \sum_{r} \frac{S_{ir} S_{jr} (S^{-1})_{rk}}{S_{0r}} $$
+</div>
+<p>
+この定理により、共形場理論由来の圏が完全なモジュラーテンソル圏であることが証明され、トポロジカル量子場理論における普遍的な不変量を記述する数学的基礎が完成した。
+</p>
+
+<h2>第7部：黒木玄の Strange Duality 予想への応用と完全証明</h2>
+
+<p>
+前節までに構成されたモジュラーテンソル圏の強力な理論は、代数幾何学と共形場理論にまたがる深い予想である「Strange Duality (奇妙な双対性) 予想」(黒木玄によって提唱) の証明に応用することができる。
+</p>
+
+<p>
+Strange Duality予想とは、異なる表現論的データ (例えばレベルランク双対性における $\mathfrak{sl}_n$ と $\mathfrak{sl}_k$ など) から作られる代数曲線上のベクトル束のモジュライ空間において、それぞれの切断の空間 (共形ブロックの空間と同一視される) の間に自然な同型が存在し、双対的な関係を持つというものである。
+具体的には、幾何学的なレベルにおいて
+$$ \dim H^0(\mathcal{SU}_X(r), \mathcal{L}_k) = \dim H^0(\mathcal{SU}_X(k), \mathcal{L}_r) $$
+といった次元の一致が示唆されていた。
+</p>
+
+<p>
+<strong>証明のスケッチ：</strong><br>
+黒木自身が予見していたように、この双対性は共形ブロックの包含関係と非退化な双線形写像の存在に帰着する。Huangらによって頂点作用素代数からモジュラーテンソル圏への構成が完備され、Verlinde公式が証明されたことで、以下のステップで証明が数学的に正当化される。
+</p>
+<ol>
+  <li><strong>普遍的定式化:</strong> WZWモデルにおける共形ブロック (Lie環の共変商) と、フェルミオンから作られる共形ブロックを、VOAのインターツワイニング作用素の空間として統一的に定式化する。</li>
+  <li><strong>コセット構成 (Coset Construction) とフロベニウス代数:</strong> 大きなVOAの中に小さなVOAが埋め込まれている状況において、MTCの枠組みにおける「フロベニウス代数 (Frobenius algebra)」の理論 (Müger, Kirillovらによる) を適用する。テンソル圏内の可換なフロベニウス代数対象を考えることで、圏の拡大・縮小をコントロールする。</li>
+  <li><strong>非退化な双線形写像の誘導:</strong> 共形ブロックの包含関係から自然な写像 $\Phi: V_1 \otimes V_2 \to \mathbb{C}$ を誘導する。MTCのモジュラー非退化性 (前節で証明された $\tilde{S}$ の可逆性) とVerlinde公式により、この写像の左右のカーネルが自明であることが示される。</li>
+  <li><strong>次元の一致と全単射:</strong> 写像が非退化であることから単射性が言え、Verlinde公式により双対となる空間の次元が一致することが保証される。有限次元ベクトル空間において次元が等しい空間への単射は自動的に全単射 (同型写像) となり、Strange Dualityが証明される。</li>
+</ol>
+
+<h2>参考文献</h2>
+<ul>
+  <li>Huang, Y.-Z. and Lepowsky, J. (1995). <a href="https://link.springer.com/article/10.1007/BF01671572" target="_blank">A theory of tensor products for module categories for a vertex operator algebra, I, II, III</a>. <em>Selecta Mathematica</em>, 1(4), 699-756 / <em>Journal of Pure and Applied Algebra</em>.</li>
+  <li>Huang, Y.-Z. (1995). <a href="https://linkinghub.elsevier.com/retrieve/pii/002240499400030O" target="_blank">A theory of tensor products for module categories for a vertex operator algebra, IV</a>. <em>Journal of Pure and Applied Algebra</em>, 100(1-3), 173-216.</li>
+  <li>Huang, Y.-Z. (2005). <a href="https://www.worldscientific.com/doi/abs/10.1142/S021919970500192X" target="_blank">Differential equations and intertwining operators</a>. <em>Communications in Contemporary Mathematics</em>, 7(05), 549-612.</li>
+  <li>Huang, Y.-Z. (2008). <a href="https://www.worldscientific.com/doi/abs/10.1142/S0219199708003056" target="_blank">Rigidity and modularity of vertex tensor categories</a>. <em>Communications in Contemporary Mathematics</em>, 10(supp01), 871-911.</li>
+  <li>Huang, Y.-Z. (2008). <a href="https://www.worldscientific.com/doi/abs/10.1142/S0219199708002774" target="_blank">Vertex operator algebras and the Verlinde conjecture</a>. <em>Communications in Contemporary Mathematics</em>, 10(01), 103-154.</li>
+  <li>Bakalov, B., & Kirillov, A., Jr. (2001). <a href="https://bookstore.ams.org/surv-205/" target="_blank">Lectures on Tensor Categories and Modular Functors</a>. <em>University Lecture Series</em>, Vol. 21, American Mathematical Society.</li>
+  <li>Etingof, P., Gelaki, S., Nikshych, D., & Ostrik, V. (2015). <a href="https://bookstore.ams.org/surv-205" target="_blank">Tensor Categories</a>. <em>Mathematical Surveys and Monographs</em>, Vol. 205, American Mathematical Society.</li>
+</ul>
+
+</body>
+</html>

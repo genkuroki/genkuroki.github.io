@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>包含関手達CHaus→Top、Stone→Topの左随伴とCHausにおけるGleason被覆およびCHausとStoneの射影的・単射的対象</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #111;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        .definition, .theorem, .proof, .example {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #f0f8ff;
+            border-left: 5px solid #0066cc;
+        }
+        .theorem {
+            background-color: #fff9e6;
+            border-left: 5px solid #ffcc00;
+        }
+        .proof {
+            background-color: #f9f9f9;
+            border-left: 5px solid #999;
+        }
+        .example {
+            background-color: #f0fff0;
+            border-left: 5px solid #00cc44;
+        }
+        .reference-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .reference-list li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>包含関手達CHaus→Top、Stone→Topの左随伴とCHausにおけるGleason被覆およびCHausとStoneの射影的・単射的対象</h1>
+
+    <p>本稿では、位相空間の圏からより強い条件（コンパクト性、Hausdorff性、完全不連結性、超不連結性など）を持つ空間の圏への包含関手に対する左随伴について、普遍的なコンパクト化や商空間の構成という観点から順を追って解説し、さらに各圏における射影的対象および単射的対象の構造とGleasonカバーについて詳細な証明を与える。</p>
+
+    <h2>0. 基本概念と圏の定義</h2>
+
+    <div class="definition">
+        <strong>定義 (考察対象となる圏):</strong>
+        <ul>
+            <li>$\mathbf{Top}$: 対象をすべての位相空間、射をすべての連続写像とする圏。</li>
+            <li>$\mathbf{CHaus}$: 対象をコンパクトHausdorff空間、射をすべての連続写像とする圏。</li>
+            <li>$\mathbf{Stone}$: 対象を完全不連結 (totally disconnected) コンパクトHausdorff空間、射をすべての連続写像とする圏。この圏の対象をStone空間と呼ぶ。ここで完全不連結とは、任意の相異なる2点に対し、それらを分離するclopen（開かつ閉）集合が存在することを意味する。</li>
+            <li>$\mathbf{Extr}$: 対象を超不連結 (extremally disconnected) コンパクトHausdorff空間、射をすべての連続写像とする圏。ここで超不連結とは、任意の開集合の閉包が再び開集合となることを意味する。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <strong>例と直観的理解:</strong>
+        <p>位相空間の性質の強さは $\mathbf{Top} \supset \mathbf{CHaus} \supset \mathbf{Stone} \supset \mathbf{Extr}$ のように段階的になっている。閉区間 $[0, 1]$ は $\mathbf{CHaus}$ の対象であるが、連結であるため $\mathbf{Stone}$ の対象ではない。Cantor集合はコンパクト、Hausdorff、かつ完全不連結であるため $\mathbf{Stone}$ の対象である。離散空間 $\mathbb{N}$ のStone-Čechコンパクト化 $\beta\mathbb{N}$ は $\mathbf{Extr}$ の対象となる代表的な例である。</p>
+    </div>
+
+    <h2>1. 包含関手 $\mathbf{CHaus} \to \mathbf{Top}$ の左随伴 (Stone-Čechコンパクト化)</h2>
+
+    <p>包含関手 $I: \mathbf{CHaus} \to \mathbf{Top}$ の左随伴 $\beta: \mathbf{Top} \to \mathbf{CHaus}$ は、位相空間 $X$ の <strong>Stone-Čechコンパクト化</strong> と呼ばれる普遍的な空間を与える。この構成にはいくつかのアプローチがあるため、代表的な2つの構成法を解説する。</p>
+
+    <h3>構成法1: $[0, 1]$ の直積を使う方法 (評価写像による埋め込み)</h3>
+
+    <div class="proof">
+        <strong>構成と普遍性の証明:</strong>
+        <p>任意の位相空間 $X \in \mathbf{Top}$ が与えられたとき、$X$ から閉区間 $[0, 1]$ へのすべての連続写像の集合 $C(X, [0, 1])$ を考える。直積空間 $P = [0, 1]^{C(X, [0, 1])}$ は、Tychonoffの定理によりコンパクトHausdorff空間である。</p>
+        <p>各 $x \in X$ に対し、評価写像 $e: X \to P$ を次のように定義する。</p>
+        $$e(x)(f) = f(x) \quad (f \in C(X, [0, 1]))$$
+        <p>$P$ の直積位相の定義により、$e$ が連続であるためには、各座標への射影 $\pi_f: P \to [0, 1]$ との合成 $\pi_f \circ e$ が連続であればよい。任意の $f \in C(X, [0, 1])$ と $x \in X$ に対して $(\pi_f \circ e)(x) = f(x)$ すなわち $\pi_f \circ e = f$ であり、$f$ は連続関数として選ばれているため、$e$ は連続写像である。</p>
+        <p>このとき、$\beta X$ を $P$ における像 $e(X)$ の閉包 $\overline{e(X)}$ として定義する。$\beta X$ はコンパクトHausdorff空間 $P$ の閉部分空間であるため、それ自身もコンパクトHausdorff空間となり、$\beta X \in \mathbf{CHaus}$ である。</p>
+        <p><strong>左随伴としての普遍性の証明:</strong> $K \in \mathbf{CHaus}$ を任意のコンパクトHausdorff空間とし、$g: X \to K$ を連続写像とする。このとき、$g = \tilde{g} \circ e$ を満たす連続写像 $\tilde{g}: \beta X \to K$ が一意に存在することを示す。</p>
+        <p>$K$ はコンパクトHausdorff空間であるため、Urysohnの補題により完全正則 (completely regular) である。したがって、$K$ 上の連続関数 $C(K, [0, 1])$ は $K$ の点と閉集合を分離する。この事実により、自然な評価写像 $\iota: K \to [0, 1]^{C(K, [0, 1])}$ は $K$ をその像 $\iota(K)$ へと同相に写す埋め込みとなる。$K$ はコンパクトであるから、像 $\iota(K)$ は $[0, 1]^{C(K, [0, 1])}$ における閉集合である。</p>
+        <p>ここで、連続写像の間の引き戻しを利用して、直積空間の間の写像 $\Phi: [0, 1]^{C(X, [0, 1])} \to [0, 1]^{C(K, [0, 1])}$ を、各座標 $h \in C(K, [0, 1])$ に対して次のように定義する。</p>
+        $$\pi_h(\Phi(p)) = \pi_{h \circ g}(p) \quad (p \in [0, 1]^{C(X, [0, 1])})$$
+        <p>ここで $h \circ g: X \to [0, 1]$ は連続写像であるから $h \circ g \in C(X, [0, 1])$ であり、右辺は well-defined である。各射影が連続であることから $\Phi$ も連続写像となる。</p>
+        <p>任意の $x \in X$ に対して、</p>
+        $$\pi_h(\Phi(e(x))) = \pi_{h \circ g}(e(x)) = (h \circ g)(x) = h(g(x)) = \pi_h(\iota(g(x)))$$
+        <p>がすべての $h \in C(K, [0, 1])$ で成り立つため、$\Phi \circ e = \iota \circ g$ が得られる。</p>
+        <p>次に $\beta X = \overline{e(X)}$ を $\Phi$ で写した像を考える。$\Phi$ は連続であるから、閉包の像は像の閉包に含まれる。したがって、</p>
+        $$\Phi(\beta X) = \Phi(\overline{e(X)}) \subset \overline{\Phi(e(X))} = \overline{\iota(g(X))} \subset \overline{\iota(K)} = \iota(K)$$
+        <p>となる。これにより、$\Phi$ の $\beta X$ への制限は $\iota(K)$ に値をとる。$\iota$ は $K$ から $\iota(K)$ への同相写像であるから、その逆写像 $\iota^{-1}: \iota(K) \to K$ が連続写像として存在する。そこで、$\tilde{g}: \beta X \to K$ を次のように定義する。</p>
+        $$\tilde{g} = \iota^{-1} \circ (\Phi|_{\beta X})$$
+        <p>この $\tilde{g}$ は連続写像の合成であるため連続であり、任意の $x \in X$ に対して $\tilde{g}(e(x)) = \iota^{-1}(\Phi(e(x))) = \iota^{-1}(\iota(g(x))) = g(x)$ を満たす。したがって $g = \tilde{g} \circ e$ である。</p>
+        <p>一意性について：もし別の連続写像 $g': \beta X \to K$ が $g' \circ e = g$ を満たすならば、$e(X)$ 上で $g'$ と $\tilde{g}$ は一致する。$K$ はHausdorff空間であり、$e(X)$ は $\beta X$ において稠密であるため、稠密な部分集合上で一致する $K$ への連続写像は空間全体で一致しなければならない。ゆえに $g' = \tilde{g}$ である。これが左随伴の普遍性である。</p>
+    </div>
+
+    <h3>構成法2: $C^*(X)$ の極大イデアル (またはZ超フィルター) を使う方法</h3>
+
+    <div class="proof">
+        <strong>構成と解説:</strong>
+        <p>$[0, 1]$ の直積という位相幾何学的な構成に対して、関数環を用いる代数的な構成法が存在する。位相空間 $X$ 上の有界実数値連続関数全体のなす集合を $C^*(X)$ とする。$C^*(X)$ は各点ごとの和と積、および一様ノルム $\|f\| = \sup_{x \in X} |f(x)|$ を入れることで、可換な実バナッハ環（実 $C^*$-代数）となる。</p>
+        <p>$M$ を $C^*(X)$ のすべての（代数的な真の）極大イデアルの集合とする。Gelfand-Naimarkの定理の可換な実数体上の類似により、各極大イデアル $I \in M$ による剰余体 $C^*(X)/I$ は実数体 $\mathbb{R}$ と同型になることが知られている。したがって、各極大イデアル $I$ はある代数準同型 $\phi_I: C^*(X) \to \mathbb{R}$ の核として一意に表される。</p>
+        <p>$M$ に、各 $f \in C^*(X)$ に対する評価写像 $\hat{f}: M \to \mathbb{R}$ （ここで $\hat{f}(I) = \phi_I(f)$ と定義する）がすべて連続となるような最弱の位相（いわゆる弱*位相に相当）を入れる。この位相により $M$ はコンパクトHausdorff空間となる。</p>
+        <p>自然な写像 $e: X \to M$ を、各 $x \in X$ に対して固定点極大イデアル $M_x = \{f \in C^*(X) \mid f(x) = 0\}$ を対応させることで定義する。このとき、$\beta X$ を $M$ そのもの（$X$ が完全正則でない場合は $e(X)$ の閉包）として定義することができる。この空間は構成法1の $\beta X$ と同相であり、同様の普遍性を満たす。この代数的手法は、可換環論と位相空間論の深い双対性を示している。</p>
+    </div>
+
+    <h2>2. 包含関手 $\mathbf{Stone} \to \mathbf{Top}$ の左随伴 (Stone化)</h2>
+
+    <p>包含関手 $J: \mathbf{Stone} \to \mathbf{Top}$ の左随伴 $\beta_0: \mathbf{Top} \to \mathbf{Stone}$ は、位相空間の <strong>Stone化</strong> (Stoneification) や Banach-Stone不連結化などと呼ばれる。これも構成法1と類似のアプローチと、双対性を用いるアプローチがある。</p>
+
+    <h3>構成法1: $\{0, 1\}$ の直積を使う方法</h3>
+
+    <div class="proof">
+        <strong>構成と普遍性の証明:</strong>
+        <p>$\{0, 1\}$ を離散位相を持つ2点空間とする。これは自明に完全不連結コンパクトHausdorff空間である。位相空間 $X \in \mathbf{Top}$ から $\{0, 1\}$ へのすべての連続写像の集合 $C(X, $\{0, 1\}) を考える。この集合の元は、$X$ のすべてのclopen（開かつ閉）集合の特性関数と一対一に対応している。</p>
+        <p>直積空間 $P_0 = \{0, 1\}^{C(X, \{0, 1\})}$ は、Tychonoffの定理によりコンパクトHausdorff空間であり、さらに完全不連結空間の直積は完全不連結であるため、$P_0 \in \mathbf{Stone}$ である。</p>
+        <p>評価写像 $e_0: X \to P_0$ を次のように定義する。</p>
+        $$e_0(x)(f) = f(x) \quad (f \in C(X, \{0, 1\}))$$
+        <p>$\beta_0 X$ を、$P_0$ における像 $e_0(X)$ の閉包 $\overline{e_0(X)}$ として定義する。Stone空間の閉部分空間は再びコンパクトであり、また完全不連結性も遺伝するため、$\beta_0 X \in \mathbf{Stone}$ である。</p>
+        <p><strong>左随伴としての普遍性の証明:</strong> $S \in \mathbf{Stone}$ を任意のStone空間とし、$g: X \to S$ を連続写像とする。$S$ への連続な拡張 $\tilde{g}: \beta_0 X \to S$ が一意に存在することを示す。</p>
+        <p>$S$ は完全不連結コンパクトHausdorff空間であるため、そのclopen集合全体は開基をなし、かつ $S$ の点を完全に分離する。すなわち、$S$ から $\{0, 1\}$ への連続写像全体 $C(S, \{0, 1\})$ を用いて、自然な評価写像 $\iota_0: S \to \{0, 1\}^{C(S, \{0, 1\})}$ を構成すると、これは $S$ をその像 $\iota_0(S)$ へ同相に写す埋め込みとなる。$S$ がコンパクトであるため $\iota_0(S)$ は閉集合である。</p>
+        <p>$\mathbf{CHaus}$ の場合と全く同様の手順で、写像 $\Psi: \{0, 1\}^{C(X, \{0, 1\})} \to \{0, 1\}^{C(S, \{0, 1\})}$ を</p>
+        $$\pi_h(\Psi(p)) = \pi_{h \circ g}(p) \quad (h \in C(S, \{0, 1\}))$$
+        <p>で定義すれば、$\Psi$ は連続であり、$\Psi \circ e_0 = \iota_0 \circ g$ を満たす。$\beta_0 X$ への制限をとることで、像は $\iota_0(S)$ に含まれる。最後に $\iota_0^{-1}$ を合成することで、一意な連続拡張 $\tilde{g} = \iota_0^{-1} \circ (\Psi|_{\beta_0 X}): \beta_0 X \to S$ を得る。稠密性とHausdorff性により一意性も同様に従う。</p>
+    </div>
+
+    <h3>構成法2: Clopen代数に対するStone双対性に基づく方法</h3>
+
+    <div class="proof">
+        <strong>構成と解説:</strong>
+        <p>空間への埋め込みを使わない方法として、Boolean代数を利用する構成法がある。$X$ のすべてのclopen集合の族 $\mathrm{Clop}(X)$ は、集合の和（結び）、共通部分（交わり）、補集合の演算によってBoolean代数をなす。</p>
+        <p>Stoneの表現定理（Stone双対性）によれば、任意のBoolean代数 $B$ に対して、その超フィルター (ultrafilter) 全体からなる空間 $S(B)$ は、自然な位相（Stone位相）を入れることで完全不連結コンパクトHausdorff空間（Stone空間）となる。</p>
+        <p>ここで、$B = \mathrm{Clop}(X)$ とし、$\beta_0 X = S(\mathrm{Clop}(X))$ と定義する。$\beta_0 X$ の位相は、各 $A \in \mathrm{Clop}(X)$ に対して $\hat{A} = \{U \in \beta_0 X \mid A \in U\}$ を開基とする位相である。Boolean代数の性質から、この $\hat{A}$ たちはclopen集合となる。</p>
+        <p>各 $x \in X$ に対して、主超フィルター $U_x = \{A \in \mathrm{Clop}(X) \mid x \in A\}$ を対応させる写像 $e_0: X \to \beta_0 X$ を定義する。任意の $A \in \mathrm{Clop}(X)$ に対して $e_0^{-1}(\hat{A}) = A$ であり、$A$ は $X$ の開集合であるため、$e_0$ は連続である。</p>
+        <p>$S$ が任意のStone空間であり、$g: X \to S$ が連続であるとき、関手的な性質を用いる。逆像写像 $g^{-1}: \mathrm{Clop}(S) \to \mathrm{Clop}(X)$ はBoolean代数の準同型である。Stone双対性により、この代数準同型は双対的に連続写像 $S(g^{-1}): S(\mathrm{Clop}(X)) \to S(\mathrm{Clop}(S))$ を誘導する。$S$ がStone空間であることから自然な同相 $S \cong S(\mathrm{Clop}(S))$ が存在するため、これを合成して $\tilde{g}: \beta_0 X \to S$ を得ることができる。これが求める普遍的な拡張である。</p>
+    </div>
+
+    <h2>3. 包含関手 $\mathbf{Stone} \to \mathbf{CHaus}$ の左随伴</h2>
+
+    <p>包含関手 $\mathbf{Stone} \to \mathbf{CHaus}$ の左随伴 $F: \mathbf{CHaus} \to \mathbf{Stone}$ は、直積などによる埋め込みではなく、コンパクトHausdorff空間をその連結成分（quasicomponent）に潰す商空間の構成となる。</p>
+
+    <div class="proof">
+        <strong>構成と証明:</strong>
+        <p>$K \in \mathbf{CHaus}$ を任意のコンパクトHausdorff空間とする。$K$ 上の同値関係 $\sim$ を次のように定義する。</p>
+        $$x \sim y \iff x \text{ と } y \text{ を分離する } K \text{ のclopen集合が存在しない}$$
+        <p>コンパクトHausdorff空間においては、clopen集合によって分離されないことは、同じ連結成分 (connected component) に属することと同値であることが知られている（一般の空間ではquasicomponentと呼ばれるが、コンパクトHausdorff空間では両者は一致する）。</p>
+        <p><strong>同値関係 $\sim$ が閉であることの証明:</strong><br>
+        任意の $A \in \mathrm{Clop}(K)$ に対し、$K \times K$ の部分集合 $R_A$ を次のように定義する。</p>
+        $$R_A = (A \times A) \cup ((K \smallsetminus A) \times (K \smallsetminus A))$$
+        <p>$A$ がclopenであるため、$K \smallsetminus A$ もclopenであり、直積空間 $K \times K$ において $R_A$ はclopen集合の有限和としてclopen集合となる。同値関係 $\sim$ は、定義により $x$ と $y$ が同じclopen集合に属するか、または共に属さないことと同値であるため、</p>
+        $$\sim = \bigcap_{A \in \mathrm{Clop}(K)} R_A$$
+        <p>と表される。したがって、同値関係 $\sim$ は $K \times K$ における閉集合の共通部分として閉集合となる。</p>
+        <p>$\sim$ がコンパクトHausdorff空間上の閉同値関係であるため、商位相を入れた商空間 $K/{\sim}$ はHausdorff空間となる。商写像 $\pi: K \to K/{\sim}$ は連続な全射であり、$K$ がコンパクトであるため、連続写像による像 $K/{\sim}$ もコンパクトHausdorff空間である。</p>
+        <p>さらに、$K/{\sim}$ が完全不連結であることを示す。$K/{\sim}$ の相異なる2点 $[x] \neq [y]$ をとる。定義により $x \nsim y$ であるから、$K$ において $x$ と $y$ を分離するclopen集合 $A$ が存在する（例えば $x \in A, y \notin A$）。この $A$ は同値関係 $\sim$ に関して飽和している。なぜなら、$a \in A$ かつ $a \sim b$ とすると、$a$ と $b$ は任意のclopen集合で分離されないため、共に $A$ に属さなければならず $b \in A$ となるからである。したがって $\pi^{-1}(\pi(A)) = A$ が成り立つ。商位相の定義から、$\pi^{-1}(\pi(A))$ が $K$ でclopenであることと $\pi(A)$ が $K/{\sim}$ でclopenであることは同値である。ゆえに $\pi(A)$ は $K/{\sim}$ のclopen集合であり、$[x] \in \pi(A)$ かつ $[y] \notin \pi(A)$ を満たすため、$K/{\sim}$ の任意の相異なる点はclopen集合で分離される。したがって $K/{\sim} \in \mathbf{Stone}$ である。</p>
+        <p><strong>普遍性の証明:</strong><br>
+        任意の $S \in \mathbf{Stone}$ と連続写像 $g: K \to S$ を考える。もし $K$ において $x \sim y$ ならば、$g(x) = g(y)$ とならなければならない。なぜなら、仮に $g(x) \neq g(y)$ とすると、$S$ は完全不連結であるため、$g(x)$ と $g(y)$ を分離する $S$ のclopen集合 $B$ が存在する。すると $g^{-1}(B)$ は $K$ のclopen集合であり、$x$ と $y$ を分離してしまうことになり、$x \sim y$ に矛盾するからである。したがって、$g$ は同値関係 $\sim$ を尊重するため、商写像の普遍性により $\tilde{g} \circ \pi = g$ を満たす連続写像 $\tilde{g}: K/{\sim} \to S$ が一意に存在する。これが左随伴を与えている。</p>
+    </div>
+
+    <h2>4. $\mathbf{Extr}$ の包含関手の左随伴に関する非存在について</h2>
+
+    <p>超不連結空間の圏 $\mathbf{Extr}$ から $\mathbf{Top}, \mathbf{CHaus}, \mathbf{Stone}$ への各包含関手についての左随伴を考察する。</p>
+
+    <div class="theorem">
+        <strong>定理:</strong> 包含関手 $I_1: \mathbf{Extr} \to \mathbf{CHaus}$、$I_2: \mathbf{Extr} \to \mathbf{Stone}$、および $I_3: \mathbf{Extr} \to \mathbf{Top}$ はいずれも左随伴を持たない。
+    </div>
+
+    <div class="proof">
+        <strong>証明:</strong>
+        <p>圏論の基本的な事実として、ある関手が左随伴を持つならば、その関手はすべての極限（特に有限直積）を保存しなければならない。したがって、包含関手 $I_1: \mathbf{Extr} \to \mathbf{CHaus}$ が左随伴を持つと仮定して矛盾を導く。</p>
+        <p>もし $I_1$ が左随伴を持つならば、$I_1$ は直積を保存する。すなわち、任意の $E_1, E_2 \in \mathbf{Extr}$ に対して、$\mathbf{Extr}$ における直積 $E_1 \times_{\mathbf{Extr}} E_2$ が存在し、それが $\mathbf{CHaus}$ における直積 $E_1 \times E_2$ と一致しなければならない。言い換えれば、「超不連結コンパクトHausdorff空間の直積は、通常の直積位相において再び超不連結でなければならない」ということになる。しかし、これは一般には偽である。以下に具体的な反例を示す。</p>
+        <p>離散位相を入れた可算無限空間 $\mathbb{N}$ を考える。$\mathbb{N}$ は局所コンパクト (locally compact) 完全正則空間である。そのStone-Čechコンパクト化 $X = \beta \mathbb{N}$ を考える。離散空間のStone-Čechコンパクト化は超不連結コンパクトHausdorff空間になることが知られているため、$X \in \mathbf{Extr}$ である。</p>
+        <p>直積空間 $X \times X$ が超不連結ではないことを示す。部分空間 $\mathbb{N} \times \mathbb{N} \subset X \times X$ の対角集合 $\Delta_{\mathbb{N}} = \{(n, n) \mid n \in \mathbb{N}\}$ を考える。$\mathbb{N}$ は $X$ における開集合であるため、$\mathbb{N} \times \mathbb{N}$ は $X \times X$ における開集合である。また $\mathbb{N} \times \mathbb{N}$ は離散空間であるため、その任意の部分集合は開集合であり、特に $\Delta_{\mathbb{N}}$ は $\mathbb{N} \times \mathbb{N}$ における開集合である。開集合の開部分集合は全体においても開集合であるため、$U = \Delta_{\mathbb{N}}$ は $X \times X$ 全体においても開集合となる。</p>
+        <p>もし $X \times X$ が超不連結であると仮定すると、超不連結性の定義から、開集合 $U$ の $X \times X$ における閉包 $\overline{U}$ は開集合でなければならない。</p>
+        <p>一方、$X \times X$ の全体の対角集合 $\Delta_X = \{(x, x) \mid x \in X\}$ を考える。$X$ はHausdorff空間であるため、$\Delta_X$ は $X \times X$ における閉集合である。明かに $U \subset \Delta_X$ であるから、閉包をとることで $\overline{U} \subset \Delta_X$ が成り立つ。</p>
+        <p>さて、$p \in \beta \mathbb{N} \smallsetminus \mathbb{N}$ を一つ選ぶ。$p$ は $\mathbb{N}$ の集積点であるため、$p \in \overline{\mathbb{N}}$ である。対角集合の性質により、点 $(p, p)$ は $U$ の閉包に含まれる。すなわち $(p, p) \in \overline{U}$ となる。</p>
+        <p>$\overline{U}$ が開集合であると仮定したため、$(p, p)$ の基本開近傍として $W \times V \subset \overline{U}$ となるような $X$ の開集合 $W, V$ が存在する。$(p, p) \in W \times V$ であるから $p \in W$ かつ $p \in V$ である。さらに $W \times V \subset \overline{U} \subset \Delta_X$ が成り立つため、任意の $w \in W$ と $v \in V$ に対して $(w, v) \in \Delta_X$ とならなければならない。これは $w = v$ を意味する。</p>
+        <p>したがって、$W$ と $V$ は全く同じただ一つの元のみからなる集合でなければならない。すなわち $W = V = \{p\}$ であり、$|W| = 1$ である。しかし、$X = \beta \mathbb{N}$ において $p \in \beta \mathbb{N} \smallsetminus \mathbb{N}$ は孤立点ではないため、$p$ の任意の開近傍は無限集合である。これは $|W| = 1$ に矛盾する。</p>
+        <p>この矛盾により、$\overline{U}$ は開集合ではない。したがって $X \times X$ は超不連結ではない。直積を保存しないため、$I_1: \mathbf{Extr} \to \mathbf{CHaus}$ は左随伴を持たない。同様の理由（$\mathbf{Stone}$ や $\mathbf{Top}$ における直積空間の構成が $\mathbf{CHaus}$ と同じであること）により、$I_2: \mathbf{Extr} \to \mathbf{Stone}$ および $I_3: \mathbf{Extr} \to \mathbf{Top}$ も有限直積を保存せず、左随伴を持たない。（証明終）</p>
+    </div>
+
+    <h2>5. Gleasonカバーと $\mathbf{CHaus}$ の射影的対象</h2>
+
+    <p>圏論における射影的対象 (projective object) は、全射に対する持ち上げの性質で定義される。$\mathbf{CHaus}$ における全射（エピ射）は連続な全射である。したがって、対象 $P \in \mathbf{CHaus}$ が射影的であるとは、任意の連続な全射 $f: X \to Y$ と連続写像 $g: P \to Y$ ($X, Y \in \mathbf{CHaus}$) に対し、$f \circ h = g$ を満たす連続写像 $h: P \to X$ が存在することを意味する。</p>
+
+    <div class="theorem">
+        <strong>定理 (Gleason):</strong> $\mathbf{CHaus}$ における射影的対象は、ちょうど超不連結コンパクトHausdorff空間（すなわち $\mathbf{Extr}$ の対象）に一致する。さらに、$\mathbf{CHaus}$ は<strong>十分に射影的対象を持つ (has enough projectives)</strong>。すなわち、任意の $K \in \mathbf{CHaus}$ に対して、射影的対象 $P \in \mathbf{Extr}$ と全射な連続写像 $p: P \to K$ が存在する。この中で極小なものを <strong>Gleasonカバー (Gleason cover)</strong> と呼ぶ。
+    </div>
+
+    <div class="proof">
+        <strong>Gleasonカバーの構成と証明:</strong>
+        <p>任意の $K \in \mathbf{CHaus}$ に対し、そのGleasonカバー $p: P(K) \to K$ を構成する。</p>
+        <p>まず、$K$ の正則開 (regular open) 集合（すなわち、内部の閉包の内部をとると自分自身に一致する開集合 $U = \mathrm{int}(\overline{U})$）の全体を $\mathrm{RO}(K)$ とする。$\mathrm{RO}(K)$ は自然な順序（包含関係）により完備Boolean代数をなすことが知られている。ここで結び (join) と交わり (meet) は次のように定義される。</p>
+        $$ \bigvee_{i} U_i = \mathrm{int}\left(\overline{\bigcup_{i} U_i}\right), \quad \bigwedge_{i} U_i = \mathrm{int}\left(\bigcap_{i} U_i\right) $$
+        <p>完備Boolean代数に対するStone空間 $P(K) = S(\mathrm{RO}(K))$ を考える。Stone双対性において、完備なBoolean代数に対応するStone空間は超不連結となることが知られている（Sikorskiの拡張定理の双対表現）。したがって $P(K) \in \mathbf{Extr}$ である。</p>
+        <p>次に、自然な全射 $p: P(K) \to K$ を定義する。$P(K)$ の点は $\mathrm{RO}(K)$ の超フィルターである。任意の $U \in P(K)$ をとる。超フィルターは有限交差性 (finite intersection property, FIP) を持つ。すなわち、任意の有限個の $V_1, \dots, V_n \in U$ に対して $V_1 \cap \dots \cap V_n \neq \varnothing$ である。したがって、それらの閉包の有限交叉も空ではない。$K$ はコンパクトであるから、全体族の閉包の共通部分も空ではない。</p>
+        $$ \bigcap_{V \in U} \overline{V} \neq \varnothing $$
+        <p>この共通部分がちょうど1点からなることを示す。もし相異なる2点 $x, y$ がこの共通部分に含まれると仮定すると、$K$ はHausdorffであるため、$x \in W_x, y \in W_y$ かつ $W_x \cap W_y = \varnothing$ となる開集合が存在する。正則開集合の性質から、これらを $W_x, W_y \in \mathrm{RO}(K)$ として選ぶことができる。$W_x \cap W_y = \varnothing$ は $\mathrm{RO}(K)$ において $W_x \wedge W_y = 0$（最小元すなわち $\varnothing$）を意味する。超フィルター $U$ の性質により、互いに素な元の両方が $U$ に属することはありえない。さらに、超フィルターの極大性から、$U$ に属するすべての元と交わる元は $U$ 自身に属さなければならないが、$x$ または $y$ をそれぞれ分離する正則開集合を考えると矛盾が生じる。正確には、$\overline{V}$ たちの共通部分が2点以上を含むことは、正則開集合からなる超フィルターの極大性に反する。ゆえに、この共通部分は一意な点 $x \in K$ のみからなる。この $x$ を $p(U)$ と定義する。</p>
+        <p>この写像 $p: P(K) \to K$ は連続であり、また $K$ の任意の点が正則開近傍系から誘導される超フィルターを持つため、全射である。さらに、この $p$ は <strong>完全写像 (irreducible map)</strong> である。すなわち、$P(K)$ の任意の真の閉部分集合 $C \subsetneq P(K)$ に対して $p(C) \neq K$ となる。この極小性により、$p: P(K) \to K$ を $K$ のGleasonカバーと呼ぶ。これにより、任意の $K \in \mathbf{CHaus}$ に対して全射 $P(K) \to K$ を伴う射影的対象 $P(K)$ が構成されたため、$\mathbf{CHaus}$ は十分に射影的対象を持つ。</p>
+        <p>最後に、$\mathbf{CHaus}$ における射影的対象が $\mathbf{Extr}$ に属することを示す。$X \in \mathbf{CHaus}$ を射影的対象とする。そのGleasonカバー $p: P(X) \to X$ を考えると、$p$ は全射である。$X$ が射影的であるという性質から、恒等写像 $\mathrm{id}_X: X \to X$ に対し、切断 $s: X \to P(X)$ （すなわち $p \circ s = \mathrm{id}_X$ を満たす連続写像）が存在する。$s$ は単射であり、$X$ がコンパクトであるため像 $s(X)$ は $P(X)$ の閉集合である。$p(s(X)) = X$ であり、$p$ が完全写像であることから、真の閉集合は全体に写されないため $s(X) = P(X)$ でなければならない。ゆえに $s$ は全単射な同相写像となり、$X \cong P(X)$ が成り立つ。$P(X) \in \mathbf{Extr}$ であったから、$X \in \mathbf{Extr}$ である。</p>
+    </div>
+
+    <h2>6. $\mathbf{CHaus}$ と $\mathbf{Stone}$ の単射的対象</h2>
+
+    <p>射影的対象とは双対的に、圏論における単射的対象 (injective object) を考える。$\mathbf{CHaus}$ や $\mathbf{Stone}$ における単射（モノ射）は、連続な単射（コンパクトHausdorff空間の間の連続な単射は自動的に閉埋め込みとなる）である。したがって、対象 $J$ が単射的であるとは、任意の閉部分空間への埋め込み $i: A \hookrightarrow X$ と連続写像 $f: A \to J$ に対して、$f = \tilde{f} \circ i$ を満たす連続写像 $\tilde{f}: X \to J$ が存在することを意味する。</p>
+
+    <div class="theorem">
+        <strong>定理:</strong>
+        <ol>
+            <li>$\mathbf{CHaus}$ における単射的対象は、Tychonoff立方体 $[0, 1]^\kappa$ のレトラクト (retract) として特徴付けられる。また、$\mathbf{CHaus}$ は十分に単射的対象を持つ。</li>
+            <li>$\mathbf{Stone}$ における単射的対象は、Cantor立方体 $\{0, 1\}^\kappa$ のレトラクトとして特徴付けられる。また、$\mathbf{Stone}$ は十分に単射的対象を持つ。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <strong>証明 (1. $\mathbf{CHaus}$ の場合):</strong>
+        <p>まず、閉区間 $[0, 1]$ が $\mathbf{CHaus}$ において単射的であることを示す。$X \in \mathbf{CHaus}$ をコンパクトHausdorff空間、$A \subset X$ を閉部分空間とする。$A$ もコンパクトHausdorffであり、コンパクトHausdorff空間は正規空間 (normal space) である。したがって、Tietzeの拡張定理により、任意の連続関数 $f: A \to [0, 1]$ は空間全体への連続関数 $\tilde{f}: X \to [0, 1]$ に拡張できる。これはまさに $[0, 1]$ が単射的対象であることを意味する。</p>
+        <p>一般に、任意の圏において単射的対象の直積もまた単射的対象である。したがって、任意の基数 $\kappa$ に対するTychonoff立方体 $[0, 1]^\kappa$ は $\mathbf{CHaus}$ における単射的対象である。さらに、単射的対象のレトラクト（すなわち、$r \circ i = \mathrm{id}_Y$ を満たす埋め込み $i: Y \to J$ と連続全射 $r: J \to Y$ が存在するような空間 $Y$）もまた単射的対象となることが容易に示せるため、$[0, 1]^\kappa$ のレトラクトはすべて単射的対象である。</p>
+        <p>逆に、任意の $K \in \mathbf{CHaus}$ は、$K$ 上のすべての連続関数を用いることで、十分大きなTychonoff立方体 $[0, 1]^\kappa$ の中に閉部分空間として埋め込むことができる（評価写像による埋め込み）。したがって $\mathbf{CHaus}$ は十分に単射的対象を持つ (has enough injectives)。さらに、もし $K$ 自身が単射的対象であれば、この埋め込み $i: K \to [0, 1]^\kappa$ に対し、恒等写像 $K \to K$ を $[0, 1]^\kappa$ 全体へ拡張する連続写像 $r: [0, 1]^\kappa \to K$ が存在し、$r \circ i = \mathrm{id}_K$ となるため、$K$ は $[0, 1]^\kappa$ のレトラクトになる。</p>
+
+        <strong>証明 (2. $\mathbf{Stone}$ の場合):</strong>
+        <p>次に $\mathbf{Stone}$ の場合を考える。まず、2点離散空間 $\{0, 1\}$ が $\mathbf{Stone}$ において単射的対象であることを示す。$X \in \mathbf{Stone}$ をStone空間、$A \subset X$ を閉部分空間とし、$f: A \to \{0, 1\}$ を連続写像とする。$\{0, 1\}$ は離散空間であるため、$f^{-1}(1)$ および $f^{-1}(0)$ は $A$ における互いに素なclopen集合であり、$A = f^{-1}(1) \cup f^{-1}(0)$ を満たす。</p>
+        <p>$A$ は $X$ の閉集合であるため、$f^{-1}(1)$ と $f^{-1}(0)$ は $X$ 全体においても互いに素な閉集合である。$X$ はStone空間であるため、任意の互いに素な閉集合はclopen集合で分離できるという性質（完全不連結性の帰結）を持つ。したがって、$f^{-1}(1) \subset U$ かつ $f^{-1}(0) \cap U = \varnothing$ を満たす $X$ のclopen集合 $U$ が存在する。この $U$ の特性関数 $\tilde{f}: X \to \{0, 1\}$ を考えれば、$\tilde{f}|_A = f$ となり、$\{0, 1\}$ が単射的であることが示された。</p>
+        <p>$\mathbf{CHaus}$ の場合と全く同様に、単射的対象の直積であるCantor立方体 $\{0, 1\}^\kappa$ も単射的対象であり、そのレトラクトも単射的対象となる。さらに、任意の $S \in \mathbf{Stone}$ はclopen集合によって十分に分離されるため、評価写像を通じて $\{0, 1\}^{C(S, \{0, 1\})}$ に埋め込むことができる。ゆえに $\mathbf{Stone}$ は十分に単射的対象を持つ。そして、$S$ が単射的であれば、この埋め込みによるレトラクションが存在するため、$S$ はCantor立方体のレトラクトであると結論付けられる。</p>
+    </div>
+
+    <h2>参考文献</h2>
+    <ul class="reference-list">
+        <li>[1] Engelking, R., <em>General Topology</em>, Heldermann Verlag, 1989. (<a href="https://en.wikipedia.org/wiki/Stone%E2%80%93%C4%8Cech_compactification" target="_blank">Stone-Čech Compactification (Wikipedia)</a>)</li>
+        <li>[2] Johnstone, P. T., <em>Stone Spaces</em>, Cambridge University Press, 1982. (<a href="https://ncatlab.org/nlab/show/Stone+space" target="_blank">Stone space (nLab)</a>)</li>
+        <li>[3] Walker, R. C., <em>The Stone-Cech Compactification</em>, Springer-Verlag, 1974. (<a href="https://ncatlab.org/nlab/show/extremally+disconnected+space" target="_blank">extremally disconnected space (nLab)</a>)</li>
+        <li>[4] Gleason, A. M., "Projective topological spaces", <em>Illinois Journal of Mathematics</em>, vol. 2, no. 4A, pp. 482-489, 1958. (<a href="https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-2/issue-4A/Projective-topological-spaces/10.1215/ijm/1255454110.full" target="_blank">Projective topological spaces (Project Euclid)</a>)</li>
+    </ul>
+
+</body>
+</html>

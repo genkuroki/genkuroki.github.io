@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コンパクトHausdorff空間のGelfand双対性とコンパクト化に関する完全解説</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: serif;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+  }
+  h1, h2, h3 {
+    color: #111;
+  }
+  h1 {
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-top: 40px;
+  }
+  h3 {
+    margin-top: 30px;
+  }
+  .definition, .theorem, .example {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  .proof {
+    margin: 20px 0;
+    padding: 15px 20px;
+    border-left: 4px solid #666;
+    background-color: #fff;
+  }
+  .proof-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  .qed {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  p {
+    margin-bottom: 15px;
+  }
+  ul, ol {
+    margin-bottom: 15px;
+  }
+</style>
+</head>
+<body>
+
+<h1>コンパクトHausdorff空間のGelfand双対性とコンパクト化に関する完全解説</h1>
+
+<p>Gelfand双対性 (Gelfand duality) は、位相空間論と作用素環論を結びつける非常に重要で美しい定理です。この定理は、コンパクトHausdorff空間の圏と、ある種の代数的な対象（単位元を持つ可換C*環）の圏の間に完全な反変同値が存在することを主張します。以下で、双対側の対象と射の厳密な定義を与え、その上でGelfand双対性の定理とその完全な証明を解説します。また、局所コンパクト空間のコンパクト化が、これらの代数的な枠組みの中でどのように完全に特徴づけられるかを解説します。</p>
+
+<h2>1. 圏の対象と射の定義</h2>
+
+<p>コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ と、双対側となる単位元を持つ可換C*環の圏 $\mathbf{cC^*Alg}$ の定義を述べる。</p>
+
+<h3>コンパクトHausdorff空間の圏 $\mathbf{CHaus}$</h3>
+
+<p>対象はコンパクトHausdorff (compact Hausdorff) 空間 $X$ である。<br>
+射は連続写像 $f\colon X\to Y$ である。<br>
+合成は通常の写像の合成であり、恒等射は恒等写像である。</p>
+
+<h3>単位元を持つ可換C*環の圏 $\mathbf{cC^*Alg}$</h3>
+
+<p>双対側の対象を定義するために、まずC*環 (C*-algebra) の定義を順を追って与える。</p>
+
+<div class="definition">
+  <strong>定義 (Banach代数)</strong><br>
+  複素数体 $\mathbb{C}$ 上のノルム空間 $(A, \|\cdot\|)$ が完備であり、かつ積の構造を持つ結合代数 (associative algebra) であって、任意の $a, b\in A$ に対して以下を満たすとき、 $A$ をBanach代数 (Banach algebra) と呼ぶ。
+  $$ \|ab\|\leq \|a\|\|b\| $$
+  さらに $A$ が乗法の単位元 $1_A$ を持ち、 $\|1_A\|=1$ を満たすとき、 $A$ を単位元を持つBanach代数 (unital Banach algebra) と呼ぶ。 $A$ の積が可換であるとき、可換Banach代数 (commutative Banach algebra) と呼ぶ。
+</div>
+
+<div class="definition">
+  <strong>定義 (対合)</strong><br>
+  複素代数 $A$ 上の対合 (involution) とは、写像 $*\colon A\to A$ ( $a\mapsto a^*$ ) であって、任意の $a, b\in A$ と $\lambda\in \mathbb{C}$ に対して以下を満たすものである。
+  <ol>
+    <li>$(a+b)^* = a^*+b^*$</li>
+    <li>$(\lambda a)^* = \overline{\lambda}a^*$</li>
+    <li>$(ab)^* = b^*a^*$</li>
+    <li>$(a^*)^* = a$</li>
+  </ol>
+  対合を持つBanach代数をBanach *-代数 (Banach *-algebra) と呼ぶ。
+</div>
+
+<div class="definition">
+  <strong>定義 (C*環)</strong><br>
+  Banach *-代数 $A$ が、任意の $a\in A$ に対して以下のC*恒等式 (C*-identity) を満たすとき、 $A$ をC*環 (C*-algebra) と呼ぶ。
+  $$ \|a^*a\| = \|a\|^2 $$
+</div>
+
+<p>この解説の主題である双対側の圏 $\mathbf{cC^*Alg}$ は以下のように定義される。<br>
+対象は、単位元を持つ可換C*環 (unital commutative C*-algebra) である。<br>
+射は、単位元を保つ*-準同型 (*-homomorphism) である。すなわち、射 $\phi\colon A\to B$ は線形写像であり、任意の $a, b\in A$ に対して $\phi(ab)=\phi(a)\phi(b)$ 、 $\phi(a^*)=\phi(a)^*$ 、および $\phi(1_A)=1_B$ を満たすものである。</p>
+
+<h2>2. Gelfand双対性の関手</h2>
+
+<p>$\mathbf{CHaus}$ と $\mathbf{cC^*Alg}^{op}$ の間の同値性を与える2つの反変関手 $C$ と $\Sigma$ を構成する。</p>
+
+<h3>関手 $C\colon \mathbf{CHaus}\to \mathbf{cC^*Alg}^{op}$</h3>
+
+<p>コンパクトHausdorff空間 $X$ に対して、 $C(X)$ を $X$ 上の複素数値連続関数全体の集合とする。 $C(X)$ は各点ごとの和と積、スカラー倍により可換代数となる。ノルムを上限ノルム (supremum norm) 
+$$ \|f\|_\infty = \sup_{x\in X}|f(x)| $$
+とし、対合を複素共役 $f^*(x) = \overline{f(x)}$ と定義する。 $X$ がコンパクトであるため上限は有限の値として存在し、 $C(X)$ は完備となる。C*恒等式 $\|f^*f\|_\infty = \sup_{x\in X}|f(x)|^2 = \|f\|_\infty^2$ も満たされる。単位元は定数関数 $1$ である。よって $C(X)$ は単位元を持つ可換C*環である。</p>
+
+<p>連続写像 $\phi\colon X\to Y$ に対して、射 $C(\phi)\colon C(Y)\to C(X)$ を引き戻し $C(\phi)(f) = f\circ\phi$ によって定義する。これは単位元を保つ*-準同型である。これにより $C$ は $\mathbf{CHaus}$ から $\mathbf{cC^*Alg}^{op}$ への well-defined な関手となる。</p>
+
+<h3>関手 $\Sigma\colon \mathbf{cC^*Alg}^{op}\to \mathbf{CHaus}$</h3>
+
+<p>単位元を持つ可換C*環 $A$ に対して、そのGelfandスペクトル (Gelfand spectrum) または指標空間 (character space) と呼ばれる空間 $\Sigma(A)$ を定義する。<br>
+$\Sigma(A)$ は、 $A$ から $\mathbb{C}$ への非ゼロな環準同型（指標と呼ばれる）全体の集合である。
+$$ \Sigma(A) = \{\chi\colon A\to \mathbb{C}\mid \chi\text{は環準同型}, \chi\neq 0\} $$</p>
+
+<p>任意の指標 $\chi\in \Sigma(A)$ は $\chi(1_A)=1$ を満たし、自動的に $\|\chi\|\leq 1$ の連続な線形汎関数となることが知られている（証明は後述）。したがって、 $\Sigma(A)$ は $A$ の双対空間 $A^*$ の単位球の一部とみなせる。 $\Sigma(A)$ には $A^*$ の弱*位相 (weak-* topology) を入れる。弱*位相において、ネット $(\chi_\lambda)$ が $\chi$ に収束するとは、任意の $a\in A$ に対して $\chi_\lambda(a)\to \chi(a)$ が $\mathbb{C}$ で成り立つことである。Banach-Alaogluの定理 (Banach-Alaoglu theorem) により、この位相で $\Sigma(A)$ はコンパクトHausdorff空間となる。</p>
+
+<p>*-準同型 $\psi\colon A\to B$ に対して、連続写像 $\Sigma(\psi)\colon \Sigma(B)\to \Sigma(A)$ を引き戻し $\Sigma(\psi)(\chi) = \chi\circ\psi$ で定義する。これが弱*位相に関して連続であることは容易にわかる。これにより $\Sigma$ は $\mathbf{cC^*Alg}^{op}$ から $\mathbf{CHaus}$ への well-defined な関手となる。</p>
+
+<h2>3. Gelfand双対性の定理とその完全な証明</h2>
+
+<div class="theorem">
+  <strong>定理 (Gelfand双対性)</strong><br>
+  関手 $C$ と $\Sigma$ は、圏 $\mathbf{CHaus}$ と圏 $\mathbf{cC^*Alg}^{op}$ の間の圏同値 (equivalence of categories) を与える。すなわち、自然同型 $X\cong \Sigma(C(X))$ および $A\cong C(\Sigma(A))$ が存在する。
+</div>
+
+<p>これを完全に証明するために、いくつかのステップに分ける。</p>
+
+<div class="proof">
+  <div class="proof-title">ステップ1: 指標とスペクトルの関係の証明</div>
+  <p>単位元を持つBanach代数 $A$ の元 $a\in A$ に対して、そのスペクトル (spectrum) を $\sigma(a) = \{\lambda\in \mathbb{C}\mid a-\lambda 1_A \text{ は可逆でない}\}$ と定義する。また、スペクトル半径 (spectral radius) を $r(a) = \sup \{|\lambda|\mid \lambda\in \sigma(a)\}$ とする。Gelfandのスペクトル半径公式 (Gelfand spectral radius formula) により、 $r(a) = \lim_{n\to\infty}\|a^n\|^{1/n}$ が成り立つ。</p>
+  <p>任意の $\chi\in \Sigma(A)$ と $a\in A$ に対して、 $\chi(a)\in \sigma(a)$ である。なぜなら、もし $a-\chi(a)1_A$ が可逆で逆元 $b$ を持つならば、 $1 = \chi(1_A) = \chi((a-\chi(a)1_A)b) = (\chi(a)-\chi(a))\chi(b) = 0$ となり矛盾するからである。<br>
+  したがって、 $|\chi(a)|\leq r(a)\leq \|a\|$ が成り立つ。これは $\chi$ が有界な線形汎関数であり、 $\|\chi\|\leq 1$ であることを示している。<br>
+  また、 $\Sigma(A)$ は $A^*$ の単位球における弱*閉集合であるため、Banach-Alaogluの定理より $\Sigma(A)$ はコンパクトHausdorff空間である。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">ステップ2: 指標は*-準同型であることの証明</div>
+  <p>可換C*環 $A$ 上の任意の指標 $\chi\in \Sigma(A)$ は自動的に*-準同型になる。すなわち、任意の $a\in A$ に対して $\chi(a^*) = \overline{\chi(a)}$ が成り立つ。</p>
+  <p><strong>証明:</strong><br>
+  $a$ を自己随伴元 (self-adjoint element) 、すなわち $a^*=a$ とする。このとき $\chi(a)\in \mathbb{R}$ であることを示せばよい。<br>
+  $\chi(a) = \alpha+i\beta$ ( $\alpha, \beta\in \mathbb{R}$ ) と仮定する。 $b = a-\alpha 1_A$ と置くと、 $b$ も自己随伴であり、 $\chi(b) = i\beta$ である。<br>
+  任意の $t\in \mathbb{R}$ に対して、 $c = b+it 1_A$ を考える。 $\chi(c) = i(\beta+t)$ である。<br>
+  一方で、C*恒等式より<br>
+  $$ \|c\|^2 = \|c^*c\| = \|(b-it 1_A)(b+it 1_A)\| = \|b^2+t^2 1_A\|\leq \|b^2\|+t^2 $$<br>
+  が成り立つ。<br>
+  $\chi$ の有界性 $|\chi(c)|\leq \|c\|$ より、<br>
+  $$ (\beta+t)^2 = |\chi(c)|^2\leq \|c\|^2\leq \|b^2\|+t^2 $$<br>
+  よって $\beta^2+2\beta t+t^2\leq \|b^2\|+t^2$ となり、整理すると $2\beta t\leq \|b^2\|-\beta^2$ を得る。<br>
+  これが任意の $t\in \mathbb{R}$ で成り立つためには $\beta=0$ でなければならない。<br>
+  よって $\chi(a)\in \mathbb{R}$ である。<br>
+  一般の $x\in A$ に対しては、 $x = a+ib$ ( $a, b$ は自己随伴元) と一意に書ける。<br>
+  $\chi(x^*) = \chi(a-ib) = \chi(a)-i\chi(b) = \overline{\chi(a)+i\chi(b)} = \overline{\chi(x)}$ となり、証明された。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">ステップ3: Gelfand変換 $A\cong C(\Sigma(A))$ の証明</div>
+  <p>各 $a\in A$ に対して、関数 $\Gamma(a)\colon \Sigma(A)\to \mathbb{C}$ を $\Gamma(a)(\chi) = \chi(a)$ で定義する。写像 $\Gamma\colon A\to C(\Sigma(A))$ をGelfand変換 (Gelfand transform) と呼ぶ。</p>
+  <p><strong>定理:</strong> $\Gamma$ は等長的な*-同型写像である。</p>
+  <p><strong>証明:</strong><br>
+  $\Gamma$ が*-準同型であることは、ステップ2および指標の定義から明らかである。<br>
+  等長性、すなわち $\|\Gamma(a)\|_\infty = \|a\|$ を示す。<br>
+  可換C*環 $A$ の自己随伴元 $x$ に対して、 $\|x^2\| = \|x^*x\| = \|x\|^2$ であるから、帰納的に $\|x^{2^n}\| = \|x\|^{2^n}$ が成り立つ。スペクトル半径の公式より、 $r(x) = \lim_{n\to\infty}\|x^{2^n}\|^{1/2^n} = \|x\|$ である。<br>
+  一般の $a\in A$ に対して、 $a^*a$ は自己随伴であるため、 $\|a^*a\| = r(a^*a)$ が成り立つ。<br>
+  一方、 $\Gamma$ が*-準同型であることから、 $\chi(a^*a) = \chi(a^*)\chi(a) = \overline{\chi(a)}\chi(a) = |\chi(a)|^2$ である。<br>
+  可換Banach代数において、元のスペクトルは指標による像と一致する。すなわち $\sigma(a^*a) = \{\chi(a^*a)\mid \chi\in \Sigma(A)\}$ である。<br>
+  よって、 $r(a^*a) = \sup_{\chi\in \Sigma(A)}|\chi(a^*a)| = \sup_{\chi\in \Sigma(A)}|\chi(a)|^2 = \|\Gamma(a)\|_\infty^2$ を得る。<br>
+  C*恒等式 $\|a\|^2 = \|a^*a\|$ を用いると、 $\|a\|^2 = \|\Gamma(a)\|_\infty^2$ となり、等長性が示された。</p>
+  <p>等長性から、 $\Gamma$ は単射であり、その像 $\Gamma(A)$ は $C(\Sigma(A))$ の閉部分集合（したがって閉*-部分環）となる。<br>
+  $\Gamma(A)$ は単位元 $\Gamma(1_A)=1$ を含む。また、異なる $\chi_1, \chi_2\in \Sigma(A)$ に対して、 $\chi_1(a)\neq \chi_2(a)$ となる $a\in A$ が存在するため、 $\Gamma(a)(\chi_1)\neq \Gamma(a)(\chi_2)$ となり、 $\Gamma(A)$ は $\Sigma(A)$ の点を分離する。<br>
+  複素Stone-Weierstrassの定理 (complex Stone-Weierstrass theorem) より、 $\Gamma(A)$ は $C(\Sigma(A))$ において稠密である。<br>
+  $\Gamma(A)$ は閉かつ稠密であるため、 $\Gamma(A) = C(\Sigma(A))$ となり、全射性が示された。<br>
+  したがって、 $\Gamma$ は等長的な*-同型写像である。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">ステップ4: 評価写像 $X\cong \Sigma(C(X))$ の証明</div>
+  <p>空間 $X\in \mathbf{CHaus}$ に対して、写像 $\epsilon\colon X\to \Sigma(C(X))$ を $\epsilon(x)(f) = f(x)$ で定義する。</p>
+  <p><strong>定理:</strong> $\epsilon$ は同相写像である。</p>
+  <p><strong>証明:</strong><br>
+  各 $x\in X$ に対して、 $\epsilon(x)$ は $C(X)$ から $\mathbb{C}$ への評価写像であり、非ゼロな環準同型であるから $\epsilon(x)\in \Sigma(C(X))$ である。</p>
+  <ul>
+    <li><strong>単射性:</strong> $X$ はコンパクトHausdorff空間であるため、Urysohnの補題 (Urysohn's lemma) より点を分離する連続関数が存在する。すなわち $x\neq y$ ならば $f(x)\neq f(y)$ となる $f\in C(X)$ が存在する。これは $\epsilon(x)\neq \epsilon(y)$ を意味し、 $\epsilon$ は単射である。</li>
+    <li><strong>全射性:</strong> 任意の $\chi\in \Sigma(C(X))$ をとる。 $M = \ker(\chi)$ は $C(X)$ の極大イデアルである。もし全ての $x\in X$ に対して、 $f_x(x)\neq 0$ となる $f_x\in M$ が存在したと仮定する。 $f_x$ の連続性より、 $x$ の開近傍 $U_x$ 上で $f_x$ は $0$ にならない。 $X$ はコンパクトであるため、有限個の近傍 $U_{x_1}, \dots, U_{x_n}$ で被覆される。<br>
+    関数 $g = \sum_{k=1}^n f_{x_k}^*f_{x_k} = \sum_{k=1}^n |f_{x_k}|^2$ を考える。 $M$ はイデアルなので $g\in M$ である。しかし、任意の $y\in X$ に対してある $U_{x_k}$ に属するため、 $g(y)  >  0$ となる。<br>
+    したがって $g$ は逆元 $1/g \in C(X)$ を持ち、 $g$ は可逆元となる。これは $g$ が真のイデアル $M$ に属することと矛盾する。<br>
+    よって、ある $x_0\in X$ が存在して、全ての $f\in M$ に対して $f(x_0)=0$ となる。<br>
+    任意の $f\in C(X)$ は $f = (f-\chi(f)1)+\chi(f)1$ と書け、 $f-\chi(f)1\in M$ であるから、 $(f-\chi(f)1)(x_0) = 0$ すなわち $f(x_0) = \chi(f)$ を得る。これは $\chi = \epsilon(x_0)$ を意味し、全射性が示された。</li>
+    <li><strong>連続性:</strong> $X$ 内のネット $x_\lambda$ が $x$ に収束するとする。任意の $f\in C(X)$ について、 $f$ の連続性から $f(x_\lambda)\to f(x)$ 、すなわち $\epsilon(x_\lambda)(f) \to \epsilon(x)(f)$ が成り立つ。これは $\Sigma(C(X))$ の弱*位相の定義そのものであり、 $\epsilon$ は連続である。</li>
+  </ul>
+  <p>$X$ はコンパクトであり、 $\Sigma(C(X))$ はHausdorffであるため、連続な全単射 $\epsilon$ は同相写像となる。</p>
+</div>
+
+<p><strong>結論:</strong><br>
+以上の構成により、任意の $X\in \mathbf{CHaus}$ に対して $X\cong \Sigma(C(X))$ であり、任意の $A\in \mathbf{cC^*Alg}$ に対して $A\cong C(\Sigma(A))$ であることが完全に証明された。これらの同型は対象の取り方に関して自然 (natural) であり、したがって圏 $\mathbf{CHaus}$ と $\mathbf{cC^*Alg}^{op}$ は圏同値である。</p>
+
+<hr>
+
+<h2>4. 局所コンパクト空間のコンパクト化とC*環 (複素数の場合)</h2>
+
+<p>局所コンパクト (locally compact) Hausdorff空間 $X$ の任意のコンパクト化は、Gelfand双対性を通して、$C_0(X)$ を含む $C_b(X)$ の単位元を持つ可換C*部分環と一対一に対応します。</p>
+<p>ここでは $C_0(X)$ は無限遠で $0$ になる連続関数のなすC*環を指します。Stone-Čechコンパクト化は最大のC*部分環である $C_b(X)$ 全体に対応し、一点コンパクト化は最小の単位元を持つC*部分環である $C_{\text{const. at }\infty}(X) = C_0(X) + \mathbb{C}1$ に対応します。その他の任意のコンパクト化も、この2つの「中間」にあるC*部分環によって完全に特徴づけられます。</p>
+
+<p>局所コンパクトHausdorff空間 $X$ について、無限遠で $0$ になる連続関数の空間 $C_0(X)$ を以下のように定義する。<br>
+$$ C_0(X) = \{f\in C(X, \mathbb{C}) \mid \text{任意の } \epsilon  >  0 \text{ に対しコンパクト集合 } K\subset X \text{ が存在し、} \forall x\in X\smallsetminus K, |f(x)|  <  \epsilon\} $$<br>
+これは $C_b(X)$ の閉イデアルとなる。</p>
+
+<div class="definition">
+  <strong>定義 (コンパクト化)</strong><br>
+  局所コンパクトHausdorff空間 $X$ のコンパクト化 (compactification) とは、コンパクトHausdorff空間 $Y$ と、埋め込み（中への同相写像） $\iota\colon X\to Y$ の組 $(Y, \iota)$ であって、 $\iota(X)$ が $Y$ において稠密となるものである。<br>
+  2つのコンパクト化 $(Y_1, \iota_1)$ と $(Y_2, \iota_2)$ は、同相写像 $h\colon Y_1\to Y_2$ が存在して $h\circ\iota_1 = \iota_2$ を満たすとき、同値であるという。
+</div>
+
+<div class="theorem">
+  <strong>定理 (コンパクト化とC*環の対応)</strong><br>
+  局所コンパクトHausdorff空間 $X$ に対して、以下の2つの集合の間には自然な一対一対応が存在する。
+  <ol>
+    <li>$X$ のコンパクト化の同値類の集合。</li>
+    <li>$C_b(X)$ の単位元を持つC*部分環 $A$ であって、 $C_0(X)\subset A$ を満たすものの集合。</li>
+  </ol>
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明: ステップ1 コンパクト化からC*部分環の構成</div>
+  <p>$(Y, \iota)$ を $X$ のコンパクト化とする。<br>
+  写像 $\iota^*\colon C(Y)\to C_b(X)$ を、 $\iota^*(f) = f\circ\iota$ によって定義する。</p>
+  <p>$\iota$ の連続性より $f\circ\iota$ は連続であり、 $Y$ がコンパクトであるため $f$ は有界であり、したがって $f\circ\iota$ も有界である。ゆえに $\iota^*$ は well-defined である。<br>
+  また、 $\iota^*$ が単位元を保つ*-準同型であることは明らかである。<br>
+  さらに、 $\iota(X)$ は $Y$ において稠密であるため、 $f\circ\iota = 0$ ならば連続性より $Y$ 全体で $f=0$ となる。よって $\iota^*$ は単射であり、等長的な*-準同型となる。</p>
+  <p>したがって、像 $A = \iota^*(C(Y))$ は $C_b(X)$ の単位元を持つ閉*-部分環（すなわちC*部分環）である。<br>
+  この $A$ が $C_0(X)\subset A$ を満たすことを示す。</p>
+  <p>$g\in C_0(X)$ を任意にとる。関数 $f\colon Y\to \mathbb{C}$ を次のように定義する。<br>
+  $$ f(y) = \begin{cases} g(x) & (y = \iota(x) \in \iota(X) \text{ のとき}) \\ 0 & (y \in Y\smallsetminus \iota(X) \text{ のとき}) \end{cases} $$<br>
+  この $f$ が $Y$ 上で連続であることを示せば、 $g = \iota^*(f)\in A$ となるため証明が終わる。<br>
+  $X$ は局所コンパクトであるため、稠密な埋め込み像 $\iota(X)$ は $Y$ の開集合である。したがって、 $\iota(X)$ の各点において $f$ は連続である。<br>
+  $y\in Y\smallsetminus \iota(X)$ における連続性を示す。任意の $\epsilon  >  0$ に対して、 $g\in C_0(X)$ の定義より $X$ のコンパクト集合 $K$ が存在し、 $x\in X\smallsetminus K$ ならば $|g(x)|  <  \epsilon$ となる。<br>
+  $\iota$ は連続であるため $\iota(K)$ は $Y$ のコンパクト集合であり、 $Y$ がHausdorffであることから $\iota(K)$ は閉集合である。<br>
+  開集合 $U = Y\smallsetminus \iota(K)$ は、 $y\notin \iota(X)\supset \iota(K)$ であるため、 $y$ の開近傍である。<br>
+  任意の $z\in U$ に対して、 $z\in \iota(X)$ の場合は $z = \iota(x)$ かつ $x\notin K$ であるため $|f(z)| = |g(x)|  <  \epsilon$ となる。 $z\notin \iota(X)$ の場合は $f(z) = 0  <  \epsilon$ である。<br>
+  よって $f$ は $y$ においても連続である。以上により $C_0(X)\subset A$ が示された。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明: ステップ2 C*部分環からコンパクト化の構成</div>
+  <p>逆に、 $A$ を $C_0(X)\subset A$ を満たす $C_b(X)$ の単位元を持つC*部分環とする。<br>
+  Gelfand双対性により、単位元を持つ可換C*環 $A$ に対してコンパクトHausdorff空間 $Y = \Sigma(A)$ （指標空間）が存在し、Gelfand変換 $A \cong C(Y)$ が成り立つ。</p>
+  <p>写像 $\iota\colon X\to Y$ を、各 $x\in X$ に対して評価写像 $\iota(x)(f) = f(x)$ で定義する。<br>
+  $\iota(x)$ は $A$ 上の非ゼロな環準同型であるため、 $\iota(x)\in Y$ は well-defined である。<br>
+  $\iota$ が埋め込みであり、像が稠密であることを示す。</p>
+  <p>まず、像 $\iota(X)$ が $Y$ で稠密であることを背理法で示す。<br>
+  稠密でないと仮定すると、Urysohnの補題 (Urysohn's lemma) より、 $Y$ 上の非ゼロな連続関数 $F\in C(Y)$ であって、閉包 $\overline{\iota(X)}$ 上で $0$ となるものが存在する。<br>
+  Gelfand変換の同型により、 $F$ に対応する $A$ の元 $f$ が存在する。任意の $x\in X$ に対して、 $f(x) = \iota(x)(f) = F(\iota(x)) = 0$ となる。これは $C_b(X)$ の元として $f=0$ であることを意味し、 $F\neq 0$ に矛盾する。したがって $\iota(X)$ は稠密である。</p>
+  <p>次に、 $\iota$ が中への同相写像であることを示す。<br>
+  $C_0(X)$ は $C_b(X)$ のイデアルであるため、 $A$ においてもイデアルとなる。<br>
+  $Y$ の部分集合 $U = \{\chi\in Y \mid \text{ある } f\in C_0(X) \text{ に対して } \chi(f)\neq 0\}$ を考える。各 $\chi(f)\neq 0$ の条件は弱*位相において開であるため、 $U$ は $Y$ の開集合である。<br>
+  $C_0(X)$ のGelfandスペクトルは $X$ 自身と自然に同一視できる（すなわち $\Sigma(C_0(X)) \cong X$ ）。<br>
+  $U$ の元 $\chi$ を $C_0(X)$ に制限する写像 $\chi \mapsto \chi|_{C_0(X)}$ は、 $U$ から $\Sigma(C_0(X))$ への連続な全単射を与えることが、イデアルのスペクトルの一般論から従う。<br>
+  ここで、 $X$ の点 $x$ に対応する $\Sigma(C_0(X))$ の元は $C_0(X)$ 上の評価写像であるが、 $\iota(x)$ を $C_0(X)$ に制限したものはまさにこの評価写像である。<br>
+  すなわち、制限写像 $U\to \Sigma(C_0(X))\cong X$ の逆写像が $\iota$ に他ならない。<br>
+  $U$ と $X$ はともに局所コンパクトHausdorff空間であり、その間の連続な全単射は同相写像となる。<br>
+  したがって、 $\iota$ は $X$ から $Y$ の開集合 $U$ への同相写像であり、所望の埋め込みであることが示された。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明: ステップ3 全単射性の確認</div>
+  <p>ステップ1の構成とステップ2の構成が互いに逆になることは、Gelfand変換の自然性 (naturality) から従う。<br>
+  コンパクト化 $Y$ から作られた $A = \iota^*(C(Y))$ に対して $\Sigma(A)$ を取ると、Gelfand双対性 $Y \cong \Sigma(C(Y))$ と $\iota^*$ が引き起こす同相により、 $\Sigma(A)$ は $Y$ と同相になる。<br>
+  逆にC*部分環 $A$ から作られた $Y = \Sigma(A)$ に対してステップ1を適用すると、Gelfand変換の像として $A$ 自身が復元される。<br>
+  以上により、 $X$ のコンパクト化の同値類と $C_0(X)$ を含む $C_b(X)$ の単位元を持つC*部分環の間の完全な一対一対応が証明された。</p>
+</div>
+
+<hr>
+
+<h2>5. 圏の対象と射の定義 (実Gelfand双対性)</h2>
+
+<p>コンパクトHausdorff空間 $X$ 上の実数値連続関数環 $C(X, \mathbb{R})$ の極大イデアルの集合を考えると、それに適切な位相（ハル・カーネル位相）を入れた空間は元の $X$ と同相になります。<br>
+この事実を出発点として関手 $X \mapsto C(X, \mathbb{R})$ の性質を圏論的に整理すると、これはコンパクトHausdorff空間の圏と、「単位元を持つ可換実C*環」の圏との間の完全な反変同値（実Gelfand双対性）へと拡張されます。</p>
+
+<p>複素C*環の場合のGelfand双対性と並行するように、実数値連続関数のなす空間を純粋に代数・解析的な公理で特徴づけます。ここでは自明な対合（元の複素共役をとる操作が恒等写像になること）を持つ実C*環として定義します。</p>
+
+<h3>単位元を持つ可換実C*環の圏 $\mathbf{cRealC^*Alg}$</h3>
+
+<div class="definition">
+  <strong>定義 (実Banach代数)</strong><br>
+  実数体 $\mathbb{R}$ 上のノルム空間 $(A, \|\cdot\|)$ が完備であり、かつ積の構造を持つ結合代数であって、任意の $a, b \in A$ に対して $\|ab\| \leq \|a\|\|b\|$ を満たすとき、 $A$ を実Banach代数 (real Banach algebra) と呼ぶ。 $\|1_A\| = 1$ となる乗法の単位元 $1_A$ を持つとき、単位元を持つ実Banach代数と呼ぶ。
+</div>
+
+<div class="definition">
+  <strong>定義 (可換実C*環)</strong><br>
+  単位元を持つ可換な実Banach代数 $A$ が、任意の $a \in A$ に対して以下の2つの条件を満たすとき、単位元を持つ可換実C*環 (unital commutative real C*-algebra) と呼ぶ。
+  <ol>
+    <li>$\|a^2\| = \|a\|^2$</li>
+    <li>$1_A + a^2$ は $A$ において可逆である（逆元を持つ）。</li>
+  </ol>
+</div>
+
+<p><strong>注意:</strong> 2つ目の条件は、空間のスペクトルが純粋に実数のみからなることを保証するために不可欠な条件です。もしこの条件がないと、複素数体 $\mathbb{C}$ を実Banach代数とみなしたもの（この場合 $1 + i^2 = 0$ となり可逆でない）が混入してしまいます。</p>
+<p>対象はこの「単位元を持つ可換実C*環」とし、射は単位元を保つ有界な実代数準同型写像とします。</p>
+
+<h2>6. 極大イデアル空間と指標空間の同一視 (実数)</h2>
+
+<p>可換実C*環 $A$ に対して、極大イデアルの集合 $\operatorname{Max}(A)$ と、実指標空間 $\Sigma_{\mathbb{R}}(A)$ の間に自然な同相関係があることを証明します。</p>
+
+<div class="definition">
+  <strong>定義 (実指標空間)</strong><br>
+  $A$ を単位元を持つ可換実C*環とする。 $\Sigma_{\mathbb{R}}(A)$ を、 $A$ から $\mathbb{R}$ への非ゼロな環準同型（指標）全体の集合とする。
+  $$ \Sigma_{\mathbb{R}}(A) = \{\chi \colon A \to \mathbb{R} \mid \chi \text{ は環準同型}, \chi \neq 0\} $$
+</div>
+
+<div class="theorem">
+  <strong>定理 (極大イデアルと指標の全単射)</strong><br>
+  任意の $\chi \in \Sigma_{\mathbb{R}}(A)$ に対して、その核 $\ker(\chi)$ は $A$ の極大イデアルである。逆に、 $A$ の任意の極大イデアル $M$ は、ある一意な $\chi \in \Sigma_{\mathbb{R}}(A)$ の核として表される。
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明:</div>
+  <p>前半は、 $\chi$ が全射であり $A / \ker(\chi) \cong \mathbb{R}$ （体）となることから、 $\ker(\chi)$ が極大イデアルとなるのは環論の基本事実から明らかである。<br>
+  後半を示す。 $M$ を $A$ の極大イデアルとする。 $M$ は閉イデアルとなることがBanach代数の一般論から知られており、剰余環 $A/M$ は単位元を持つ可換な実Banach代数であり、かつ体である。<br>
+  実Banach代数に関するGelfand-Mazurの定理より、完備な実ノルム斜体は $\mathbb{R}$ 、 $\mathbb{C}$ 、四元数体 $\mathbb{H}$ のいずれかに同型である。 $A/M$ は可換であるため、 $\mathbb{R}$ または $\mathbb{C}$ に同型である。<br>
+  ここで、 $A/M \cong \mathbb{C}$ であると仮定して矛盾を導く。もしそうであれば、ある $A/M$ の元 $x$ が存在して $x^2 = -[1_A]$ を満たす。これは、ある $a \in A$ が存在して $[a]^2 + [1_A] = [0]$ 、すなわち $1_A + a^2 \in M$ となることを意味する。<br>
+  しかし、可換実C*環の定義の条件2より、 $1_A + a^2$ は $A$ の可逆元である。真のイデアル $M$ が可逆元を含むことはあり得ないため、矛盾する。<br>
+  したがって $A/M \cong \mathbb{R}$ でなければならない。自然な射影 $A \to A/M \cong \mathbb{R}$ を $\chi$ とおけば、 $\chi \in \Sigma_{\mathbb{R}}(A)$ であり、 $M = \ker(\chi)$ となる。これにより全単射が示された。</p>
+  
+  <p><strong>位相の一致について:</strong><br>
+  極大イデアルの集合 $\operatorname{Max}(A)$ には、部分集合 $S \subset A$ に対して $V(S) = \{M \in \operatorname{Max}(A) \mid S \subset M\}$ を閉集合の基底とするハル・カーネル位相 (hull-kernel topology) またはZariski位相が入ります。<br>
+  上記の全単射の下で、 $S \subset \ker(\chi)$ という条件は「任意の $a \in S$ に対して $\chi(a) = 0$ 」と同値です。これはまさに $\Sigma_{\mathbb{R}}(A)$ に入る弱*位相 (weak-* topology) における閉集合の定義と一致します。したがって、極大イデアル空間と実指標空間は位相空間として完全に同一視できます。</p>
+</div>
+
+<h2>7. 実Gelfand双対性の定理とその完全な証明</h2>
+
+<div class="theorem">
+  <strong>定理 (実Gelfand双対性)</strong><br>
+  コンパクトHausdorff空間の圏 $\mathbf{CHaus}$ と、単位元を持つ可換実C*環の圏 $\mathbf{cRealC^*Alg}^{op}$ は圏同値である。すなわち、自然同型 $X \cong \Sigma_{\mathbb{R}}(C(X, \mathbb{R}))$ および $A \cong C(\Sigma_{\mathbb{R}}(A), \mathbb{R})$ が存在する。
+</div>
+
+<p>この定理を証明するために、以下の3つのステップを踏みます。</p>
+
+<div class="proof">
+  <div class="proof-title">ステップ1: $\Sigma_{\mathbb{R}}(A)$ がコンパクトHausdorff空間であることの証明</div>
+  <p>任意の $a \in A$ と $\chi \in \Sigma_{\mathbb{R}}(A)$ について、 $|\chi(a)| \leq \|a\|$ が成り立つことを背理法で示す。<br>
+  もし $|\chi(a)|  >  \|a\|$ となる $a$ が存在したとする。 $\lambda = \chi(a) \in \mathbb{R}$ とおくと、 $|\lambda|  >  \|a\|$ である。 $b = a / \lambda$ とおくと、 $\|b\|  <  1$ かつ $\chi(b) = 1$ である。<br>
+  $\|b\|  <  1$ であるため、Neumann級数 $c = \sum_{n=0}^{\infty} b^n$ は $A$ 内で絶対収束し、 $c(1_A - b) = (1_A - b)c = 1_A$ が成り立つ。すなわち $1_A - b$ は可逆である。<br>
+  しかし、 $\chi(1_A - b) = \chi(1_A) - \chi(b) = 1 - 1 = 0$ となる。これは指標が可逆元 $1_A - b$ を $0$ に送ることを意味し、 $\chi(c)\chi(1_A - b) = \chi(1_A) = 1$ に矛盾する。<br>
+  ゆえに常に $|\chi(a)| \leq \|a\|$ である。これは $\Sigma_{\mathbb{R}}(A)$ が双対空間 $A^*$ の閉単位球に含まれることを意味する。弱*位相に関して閉であることも容易にわかるため、Banach-Alaogluの定理より $\Sigma_{\mathbb{R}}(A)$ はコンパクトHausdorff空間である。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">ステップ2: Gelfand変換 $A \cong C(\Sigma_{\mathbb{R}}(A), \mathbb{R})$ の証明</div>
+  <p>写像 $\Gamma \colon A \to C(\Sigma_{\mathbb{R}}(A), \mathbb{R})$ を $\Gamma(a)(\chi) = \chi(a)$ で定義する（実Gelfand変換）。</p>
+  <p>$\Gamma$ が実代数準同型であることは明らかである。等長性 $\|\Gamma(a)\|_{\infty} = \|a\|$ を示す。<br>
+  $A$ は $\|x^2\| = \|x\|^2$ を満たすため、帰納的に $\|a^{2^n}\| = \|a\|^{2^n}$ である。実Banach代数におけるスペクトル半径の公式 $r(a) = \lim_{n\to\infty} \|a^n\|^{1/n}$ より、 $r(a) = \|a\|$ が得られる。<br>
+  一方で、実C*環においては商体として $\mathbb{C}$ が現れない（前節の極大イデアルの議論）ため、任意の元 $a \in A$ のスペクトルは実数のみからなる。すなわち、 $\lambda 1_A - a$ が非可逆となるような実数 $\lambda$ の集合を $\sigma_{\mathbb{R}}(a)$ とすると、 $r(a) = \sup \{|\lambda| \mid \lambda \in \sigma_{\mathbb{R}}(a)\}$ となる。<br>
+  $\lambda 1_A - a$ が非可逆であることは、それが何らかの極大イデアル $M = \ker(\chi)$ に含まれることと同値であるため、 $\sigma_{\mathbb{R}}(a) = \{\chi(a) \mid \chi \in \Sigma_{\mathbb{R}}(A)\}$ である。<br>
+  したがって、 $\|\Gamma(a)\|_{\infty} = \sup_{\chi} |\chi(a)| = r(a) = \|a\|$ となり、等長性が示された。</p>
+  <p>等長性より $\Gamma$ は単射であり、像 $\Gamma(A)$ は閉部分代数となる。 $\Gamma(A)$ は定数関数を含み、異なる指標 $\chi_1 \neq \chi_2$ に対して点を分離する。実Stone-Weierstrassの定理より $\Gamma(A)$ は $C(\Sigma_{\mathbb{R}}(A), \mathbb{R})$ において稠密である。閉かつ稠密であるため、全射性が従い、 $\Gamma$ は等長的な同型写像となる。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">ステップ3: 評価写像 $X \cong \Sigma_{\mathbb{R}}(C(X, \mathbb{R}))$ の証明</div>
+  <p>空間 $X \in \mathbf{CHaus}$ に対して、写像 $\epsilon \colon X \to \Sigma_{\mathbb{R}}(C(X, \mathbb{R}))$ を $\epsilon(x)(f) = f(x)$ で定義する。</p>
+  <p>$\epsilon(x)$ は明らかに非ゼロな実環準同型である。<br>
+  <strong>単射性:</strong> $X$ はコンパクトHausdorff空間であるため、実数値のUrysohnの補題により、 $x \neq y$ ならば $f(x) \neq f(y)$ となる実数値連続関数 $f$ が存在する。よって $\epsilon(x) \neq \epsilon(y)$ である。<br>
+  <strong>全射性:</strong> 任意の $\chi \in \Sigma_{\mathbb{R}}(C(X, \mathbb{R}))$ をとる。 $M = \ker(\chi)$ は極大イデアルである。もしすべての $x \in X$ に対して $f_x(x) \neq 0$ となる $f_x \in M$ が存在したとする。 $f_x$ は実数値連続関数なので $f_x(x)^2  >  0$ である。 $X$ のコンパクト性から、有限個の点 $x_1, \dots, x_n$ を選び、関数 $g = \sum_{k=1}^n f_{x_k}^2$ が $X$ 上の至る所で厳密に正の値をとるようにできる。<br>
+  このとき $g$ は逆元 $1/g \in C(X, \mathbb{R})$ を持つため可逆元である。しかし、各 $f_{x_k} \in M$ であり $M$ はイデアルであるため、 $g \in M$ となる。これは真のイデアルが可逆元を含むことになり矛盾する。<br>
+  したがって、ある $x_0 \in X$ が存在して、すべての $f \in M$ に対して $f(x_0) = 0$ となる。これは $M \subset \ker(\epsilon(x_0))$ を意味し、 $M$ の極大性から $M = \ker(\epsilon(x_0))$ 、すなわち $\chi = \epsilon(x_0)$ を得る。<br>
+  <strong>連続性:</strong> $X$ 上のネット $x_\lambda \to x$ に対して、任意の $f$ で $f(x_\lambda) \to f(x)$ となるため、 $\epsilon$ は弱*位相に関して連続である。<br>
+  $X$ はコンパクト、 $\Sigma_{\mathbb{R}}$ はHausdorffであるため、連続な全単射 $\epsilon$ は同相写像となる。</p>
+</div>
+
+<p><strong>結論:</strong><br>
+以上により、実数値関数に基づく $C(X, \mathbb{R})$ は、純粋に代数・解析的な公理で定義される「単位元を持つ可換実C*環」の圏への反変同値へと自然に拡張されることが完全に証明されました。</p>
+
+<hr>
+
+<h2>8. 局所コンパクト空間のコンパクト化と実C*環</h2>
+
+<p>局所コンパクト (locally compact) Hausdorff空間 $X$ に対して、実数値有界連続関数のなす実C*環 $A_b(X)$ はStone-Čechコンパクト化に、無限遠で定数に収束する関数のなす実C*環 $A_{\text{const. at }\infty}(X)$ は一点コンパクト化（Alexandroffコンパクト化）に、実Gelfand双対性を通してそれぞれ対応します。<br>
+そして、 $X$ の「他のすべてのコンパクト化」も、この2つの環の間に存在する「 $A_0(X)$ を含む $A_b(X)$ の単位元を持つ可換実C*部分環」と完全に一対一に対応します。これは複素数の場合と全くパラレルな結果です。</p>
+
+<p>準備として、無限遠で $0$ になる実数値連続関数の空間 $A_0(X)$ を以下のように定義する。<br>
+$$ A_0(X) = \{f \in C(X, \mathbb{R}) \mid \text{任意の } \epsilon  >  0 \text{ に対しコンパクト集合 } K \subset X \text{ が存在し、} \forall x \in X \smallsetminus K, |f(x)|  <  \epsilon\} $$<br>
+これは $A_b(X)$ の閉イデアルとなる。 $A_{\text{const. at }\infty}(X)$ は、 $A_0(X) + \mathbb{R}1$ （ $1$ は定数関数）と表すことができる。</p>
+
+<div class="theorem">
+  <strong>定理 (実C*環とコンパクト化の対応)</strong><br>
+  局所コンパクトHausdorff空間 $X$ に対して、以下の2つの集合の間には自然な一対一対応が存在する。
+  <ol>
+    <li>$X$ のコンパクト化の同値類の集合。</li>
+    <li>$A_b(X)$ の単位元を持つ可換実C*部分環 $A$ であって、 $A_0(X) \subset A$ を満たすものの集合。</li>
+  </ol>
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明: ステップ1 コンパクト化から実C*部分環の構成</div>
+  <p>$(Y, \iota)$ を $X$ のコンパクト化とする。<br>
+  写像 $\iota^* \colon C(Y, \mathbb{R}) \to A_b(X)$ を、 $\iota^*(f) = f \circ \iota$ によって定義する。</p>
+  <p>$\iota$ の連続性より $f \circ \iota$ は連続であり、 $Y$ がコンパクトであるため $f$ は有界、したがって $f \circ \iota$ も有界の実数値関数となる。ゆえに $\iota^*$ は well-defined である。<br>
+  また、 $\iota^*$ は単位元を保つ実代数準同型写像である。 $\iota(X)$ は $Y$ において稠密であるため、 $f \circ \iota = 0$ ならば連続性から $Y$ 全体で $f = 0$ となる。よって $\iota^*$ は単射であり、等長的な実C*環の準同型となる。</p>
+  <p>したがって、像 $A = \iota^*(C(Y, \mathbb{R}))$ は $A_b(X)$ の単位元を持つ閉部分代数（すなわち可換実C*部分環）である。<br>
+  この $A$ が $A_0(X) \subset A$ を満たすことを示す。</p>
+  <p>$g \in A_0(X)$ を任意にとる。関数 $f \colon Y \to \mathbb{R}$ を次のように定義する。<br>
+  $$ f(y) = \begin{cases} g(x) & (y = \iota(x) \in \iota(X) \text{ のとき}) \\ 0 & (y \in Y \smallsetminus \iota(X) \text{ のとき}) \end{cases} $$<br>
+  この $f$ が $Y$ 上で連続であることを示せば、 $g = \iota^*(f) \in A$ となる。<br>
+  $X$ は局所コンパクトであるため、稠密な埋め込み像 $\iota(X)$ は $Y$ の開集合である。したがって、 $\iota(X)$ の各点において $f$ は連続である。<br>
+  $y \in Y \smallsetminus \iota(X)$ における連続性を示す。任意の $\epsilon  >  0$ に対して、 $g \in A_0(X)$ の定義より $X$ のコンパクト集合 $K$ が存在し、 $x \in X \smallsetminus K$ ならば $|g(x)|  <  \epsilon$ となる。<br>
+  $\iota$ は連続であるため $\iota(K)$ は $Y$ のコンパクト集合であり、 $Y$ はHausdorffであるため $\iota(K)$ は閉集合である。<br>
+  開集合 $U = Y \smallsetminus \iota(K)$ を考えると、 $y \notin \iota(X) \supset \iota(K)$ であるため、 $U$ は $y$ の開近傍である。<br>
+  任意の $z \in U$ について、 $z \in \iota(X)$ の場合は $z = \iota(x)$ かつ $x \notin K$ であるため $|f(z)| = |g(x)|  <  \epsilon$ となる。 $z \notin \iota(X)$ の場合は $f(z) = 0  <  \epsilon$ である。<br>
+  よって $f$ は $y$ においても連続である。以上により $A_0(X) \subset A$ が示された。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明: ステップ2 実C*部分環からコンパクト化の構成</div>
+  <p>逆に、 $A$ を $A_0(X) \subset A$ を満たす $A_b(X)$ の単位元を持つ可換実C*部分環とする。<br>
+  実Gelfand双対性により、単位元を持つ可換実C*環 $A$ に対して、コンパクトHausdorff空間 $Y = \Sigma_{\mathbb{R}}(A)$ （実指標空間）が存在し、実Gelfand変換 $\Gamma \colon A \xrightarrow{\cong} C(Y, \mathbb{R})$ が成り立つ。</p>
+  <p>写像 $\iota \colon X \to Y$ を、各 $x \in X$ に対して評価写像 $\iota(x)(f) = f(x)$ で定義する。<br>
+  $\iota(x)$ は $A$ 上の非ゼロな実環準同型であるため、 $\iota(x) \in Y$ は well-defined である。<br>
+  この $\iota$ が埋め込みであり、像が稠密であることを示す。</p>
+  <p>まず、像 $\iota(X)$ が $Y$ で稠密であることを背理法で示す。<br>
+  稠密でないと仮定すると、実Urysohnの補題により、 $Y$ 上の非ゼロな実数値連続関数 $F \in C(Y, \mathbb{R})$ であって、閉包 $\overline{\iota(X)}$ 上で $0$ となるものが存在する。<br>
+  実Gelfand変換の同型により、 $F$ に対応する $A$ の元 $f$ が存在する（すなわち $\Gamma(f) = F$ ）。<br>
+  任意の $x \in X$ に対して、 $f(x) = \iota(x)(f) = \Gamma(f)(\iota(x)) = F(\iota(x)) = 0$ となる。これは $A_b(X)$ の元として $f = 0$ であることを意味し、 $F \neq 0$ に矛盾する。したがって $\iota(X)$ は稠密である。</p>
+  <p>次に、 $\iota$ が中への同相写像であることを示す。<br>
+  $A_0(X)$ は $A_b(X)$ のイデアルであるため、部分環 $A$ においてもイデアルとなる。<br>
+  $Y$ の部分集合 $U = \{\chi \in Y \mid \text{ある } f \in A_0(X) \text{ に対して } \chi(f) \neq 0\}$ を考える。各 $\chi(f) \neq 0$ の条件は弱*位相において開であるため、 $U$ は $Y$ の開集合である。<br>
+  $A_0(X)$ の実Gelfandスペクトル $\Sigma_{\mathbb{R}}(A_0(X))$ は $X$ 自身と自然に同相である。<br>
+  イデアルのスペクトルの一般論から、 $U$ の元 $\chi$ を $A_0(X)$ に制限する写像 $\chi \mapsto \chi|_{A_0(X)}$ は、 $U$ から $\Sigma_{\mathbb{R}}(A_0(X))$ への連続な全単射を与える。<br>
+  ここで、 $X$ の点 $x$ に対応する $\Sigma_{\mathbb{R}}(A_0(X))$ の元は $A_0(X)$ 上の評価写像であるが、 $\iota(x)$ を $A_0(X)$ に制限したものはまさにこの評価写像に他ならない。<br>
+  すなわち、制限写像 $U \to \Sigma_{\mathbb{R}}(A_0(X)) \cong X$ の逆写像が $\iota$ である。<br>
+  $U$ と $X$ はともに局所コンパクトHausdorff空間であり、その間の連続な全単射は同相写像となる。<br>
+  したがって、 $\iota$ は $X$ から $Y$ の開集合 $U$ への同相写像であり、所望の埋め込みであることが示された。</p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明: ステップ3 全単射性の確認</div>
+  <p>ステップ1の構成とステップ2の構成が互いに逆写像の関係にあることは、実Gelfand変換の自然性から従う。<br>
+  コンパクト化 $Y$ から作られた実C*部分環 $A = \iota^*(C(Y, \mathbb{R}))$ に対して $\Sigma_{\mathbb{R}}(A)$ を取ると、実Gelfand双対性 $Y \cong \Sigma_{\mathbb{R}}(C(Y, \mathbb{R}))$ と $\iota^*$ が引き起こす同相により、 $\Sigma_{\mathbb{R}}(A)$ は元の $Y$ と同相になる。<br>
+  逆に実C*部分環 $A$ から作られた $Y = \Sigma_{\mathbb{R}}(A)$ に対してステップ1を適用すると、実Gelfand変換の像として $A$ 自身が正しく復元される。<br>
+  以上により、 $X$ のコンパクト化の同値類と $A_0(X)$ を含む $A_b(X)$ の単位元を持つ可換実C*部分環の間の完全な一対一対応が証明された。</p>
+</div>
+
+<h2>9. 実C*環の部分環の有界性について</h2>
+
+<p>局所コンパクトHausdorff空間 $X$ の任意のコンパクト化に対応する可換実C*環 $A$ は、常に $A_b(X)$ に含まれます。以下に、その理由となる数学的な命題とその完全な証明を与えます。</p>
+
+<div class="theorem">
+  <strong>定理</strong><br>
+  $(Y, \iota)$ を局所コンパクトHausdorff空間 $X$ の任意のコンパクト化とする。このとき、 $Y$ 上の実数値連続関数環 $C(Y, \mathbb{R})$ の $\iota$ による引き戻し $A = \iota^*(C(Y, \mathbb{R}))$ は、有界な実数値連続関数の環 $A_b(X)$ の部分集合となる。
+</div>
+
+<div class="proof">
+  <div class="proof-title">証明:</div>
+  <p>任意の $f \in C(Y, \mathbb{R})$ をとる。<br>
+  $Y$ はコンパクトHausdorff空間であり、 $f$ は $Y$ 上の連続写像である。<br>
+  コンパクト空間の連続写像による像 $f(Y)$ は $\mathbb{R}$ のコンパクト部分集合（すなわち有界閉集合）である。<br>
+  したがって、 $f$ は $Y$ 上で有界である。すなわち、ある実数 $M  >  0$ が存在して、任意の $y \in Y$ に対して以下が成り立つ。<br>
+  $$ |f(y)| \leq M $$</p>
+  <p>引き戻し $\iota^*(f) \colon X \to \mathbb{R}$ は、任意の $x \in X$ に対して $\iota^*(f)(x) = f(\iota(x))$ で定義される。<br>
+  $\iota(x) \in Y$ であるため、先ほどの不等式より<br>
+  $$ |\iota^*(f)(x)| = |f(\iota(x))| \leq M $$<br>
+  がすべての $x \in X$ に対して成立する。<br>
+  これは $\iota^*(f)$ が $X$ 上の有界な実数値連続関数であることを意味し、したがって $\iota^*(f) \in A_b(X)$ である。<br>
+  $f \in C(Y, \mathbb{R})$ は任意にとった元であるため、 $A = \iota^*(C(Y, \mathbb{R})) \subset A_b(X)$ が示された。</p>
+</div>
+
+<p><strong>解説:</strong><br>
+直観的に言えば、コンパクト化 $Y$ は元の空間 $X$ に「無限遠点」を付け加えてコンパクトにした空間です。コンパクト化された空間 $Y$ 上で連続な関数は、付け加えられた境界（無限遠）においても有限の連続な値を持たなければならず、発散することができません。したがって、そのような関数を元の空間 $X$ 上に制限（引き戻し）したものは、必ず有界関数になります。このため、どのようなコンパクト化を考えたとしても、対応する実C*環 $A$ は自動的に $A_b(X)$ の部分環となるのです。</p>
+
+</body>
+</html>

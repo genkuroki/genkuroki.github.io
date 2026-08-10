@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>辞書式順序による順序位相と直積位相の同相性についての証明</title>
+    <!-- MathJax v3 configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .user-prompt {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-left: 5px solid #0066cc;
+            margin-bottom: 30px;
+        }
+        .definition, .theorem, .proof, .example {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #eef8ee;
+            border-left: 5px solid #28a745;
+        }
+        .theorem {
+            background-color: #fff9e6;
+            border-left: 5px solid #ffc107;
+        }
+        .proof {
+            background-color: #fdfdfd;
+            border-left: 5px solid #6c757d;
+        }
+        .example {
+            background-color: #f4f4f4;
+            border-left: 5px solid #17a2b8;
+        }
+        .reference {
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+        .reference ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .reference li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>辞書式順序による順序位相と直積位相の同相性</h1>
+
+    <h2>1. ユーザーからの初期質問</h2>
+    <div class="user-prompt">
+        <p>"3.141592653⋯" のような文字 $a_i \in \{0,1,2,\dots,9\}$ を "$a_0.a_1a_2a_3\dots$" と可算個並べてできる文字列全体の集合を $X$ と書くことにする。</p>
+        <p>$X$ に辞書式順序 $ < $ を入れると "$0.999\dots$" $ < $ "$1.000\dots$" が成立している。</p>
+        <p>$X$ を辞書式順序による順序位相によって位相空間とみなす。</p>
+        <p>$X$ は有限離散空間の直積位相空間 $\{0,1,2,\dots,9\}^{\{0,1,2,3,\dots\}}$ に同相になるか？</p>
+    </div>
+
+    <h2>2. 結論</h2>
+    <p>結論から述べると、辞書式順序から定まる順序位相空間 $X$ は有限離散空間の直積位相空間 $\{0,1,\dots,9\}^{\mathbb{N}_0}$ に同相 (homeomorphic) になる。以下に、基本概念の厳密な定義、直観的 (intuitive) な例、および位相空間論の基本定理を用いた完全な証明を与える。</p>
+
+    <h2>3. 導入と基本概念の定義</h2>
+    <p>まず、問題設定に現れる各概念を厳密に定義する。</p>
+
+    <div class="definition">
+        <strong>定義 1 (空間 $X$ と直積位相):</strong><br>
+        有限集合 $D = \{0, 1, 2, \dots, 9\}$ を考える。この集合 $D$ の各元は単なる「文字」または「数」である。$D$ には、すべての部分集合が開集合となる離散位相 (discrete topology) を与える。<br>
+        非負整数の集合を $\mathbb{N}_0 = \{0, 1, 2, \dots\}$ とする。文字列全体の集合 $X$ は、写像 $x : \mathbb{N}_0 \to D$ 全体の集合、すなわち直積集合 $D^{\mathbb{N}_0}$ と自然に同一視される。<br>
+        各元 $x \in X$ は $x = x_0.x_1x_2\dots$ （ただし $x_i \in D$ ）と表記される。<br>
+        この直積集合 $X$ に、各座標の空間 $D$ （離散位相）からの直積位相 (product topology) を入れた空間を $(X, \tau_P)$ とする。
+    </div>
+
+    <p>直積位相 $\tau_P$ の開基 (base) は、有限個の座標の値を指定して得られるシリンダー集合 (cylinder set) からなる。具体的には、元 $x \in X$ と非負整数 $N \in \mathbb{N}_0$ に対して、以下のように定義される。</p>
+
+    $$
+    C_N(x) = \{ y \in X \mid y_i = x_i \text{ for all } 0 \le i \le N \}
+    $$
+
+    <p>これらのシリンダー集合全体を集めた族が、直積位相 $\tau_P$ の開基となる。すなわち、任意の $\tau_P$ の開集合は、これらのシリンダー集合の和集合として表される。</p>
+
+    <div class="definition">
+        <strong>定義 2 (辞書式順序と順序位相):</strong><br>
+        集合 $X$ 上の辞書式順序 (lexicographical order) $\prec$ を次のように定義する。$x, y \in X$ について、 $x \neq y$ であり、かつ $x_k \neq y_k$ となる最小の非負整数 $k$ について $x_k  <  y_k$ が成り立つとき、 $x \prec y$ と定める。<br>
+        この順序 $\prec$ について、 $X$ は全順序集合となり、最小元 $\bot = 0.000\dots$ と最大元 $\top = 9.999\dots$ を持つ。<br>
+        この全順序 $\prec$ から定まる順序位相 (order topology) を $\tau_O$ とする。
+    </div>
+
+    <p>順序位相 $\tau_O$ は、以下の形をした部分集合全体を開基として生成される位相である。</p>
+    <ul>
+        <li>開区間 $(a, b) = \{ x \in X \mid a \prec x \prec b \}$ （ただし $a \prec b$）</li>
+        <li>半開区間 $[\bot, b) = \{ x \in X \mid x \prec b \}$</li>
+        <li>半開区間 $(a, \top] = \{ x \in X \mid a \prec x \}$</li>
+    </ul>
+
+    <h2>4. 直観的な解説と具体例</h2>
+    <p>証明に入る前に、なぜ順序位相と直積位相が一致するのか、その直観的な理由を解説する。</p>
+
+    <div class="example">
+        <strong>例 (「ジャンプ」の存在):</strong><br>
+        通常の実数の世界（標準位相）においては、 $0.999\dots$ と $1.000\dots$ は同一の実数 $1$ を表す。しかし、単なる文字列の集合としての $X$ においては、これらは全く異なる要素である。<br>
+        辞書式順序の定義から、 $0.999\dots \prec 1.000\dots$ が成り立つ（$k=0$ において $0  <  1$ であるため）。重要なのは、<strong>この2つの元の間には他の元が一切存在しない</strong>ことである。<br>
+        実際、任意の元 $z \in X$ について、 $z_0 = 0$ であれば必ず $z \preceq 0.999\dots$ となり、 $z_0 \ge 1$ であれば $1.000\dots \preceq z$ となる。したがって、 $0.999\dots \prec z \prec 1.000\dots$ を満たす元 $z$ は存在しない。
+    </div>
+
+    <p>このように、間に元が存在しないペアによる「ジャンプ」が存在することがこの空間の決定的な特徴である。ジャンプが存在することによって、順序位相において多くの clopen 集合（開かつ閉である集合）が生成され、結果として直積位相のような完全不連結 (totally disconnected) な空間の位相と一致することになるのである。</p>
+
+    <h2>5. 同相性の完全な証明</h2>
+
+    <p>位相空間 $(X, \tau_P)$ と $(X, \tau_O)$ が同相であることを証明する。証明は以下の3つのステップに分けて行う。</p>
+    <ol>
+        <li>恒等写像 $id : (X, \tau_P) \to (X, \tau_O)$ が連続 (continuous) であること。</li>
+        <li>順序位相空間 $(X, \tau_O)$ が Hausdorff (Hausdorff) 空間であること。</li>
+        <li>直積位相空間 $(X, \tau_P)$ がコンパクト (compact) であること。</li>
+    </ol>
+    <p>これらが示されれば、コンパクト空間から Hausdorff 空間への全単射な連続写像は同相写像になるという一般的な定理により、証明が完了する。</p>
+
+    <div class="proof">
+        <strong>ステップ 1: 恒等写像の連続性の証明</strong><br>
+        恒等写像 $id : (X, \tau_P) \to (X, \tau_O)$ が連続であることを示す。これは、値域の位相 $\tau_O$ の任意の開基の元が、定義域の位相 $\tau_P$ の開集合であることを示すことに帰着される。<br>
+        <br>
+        まず、 $a, b \in X$ (ただし $a \prec b$ ) とし、開区間 $(a, b)$ を考える。この区間に属する任意の元 $x \in (a, b)$ をとる。 $x$ を含むような $\tau_P$ の開集合（具体的にはシリンダー集合）が $(a, b)$ に完全に含まれることを示せばよい。<br>
+        <br>
+        $a \prec x$ であるから、辞書式順序の定義より、ある非負整数 $k$ が存在して、すべての $i  <  k$ について $a_i = x_i$ かつ $a_k  <  x_k$ が成り立つ。<br>
+        同様に $x \prec b$ であるから、ある非負整数 $m$ が存在して、すべての $j  <  m$ について $x_j = b_j$ かつ $x_m  <  b_m$ が成り立つ。<br>
+        <br>
+        ここで $N = \max(k, m)$ とおく。 $x$ の $N$ 桁目までを指定したシリンダー集合 $C_N(x)$ を考える。 $C_N(x) \subset (a, b)$ であることを示す。<br>
+        任意の $y \in C_N(x)$ をとる。定義より、すべての $0 \le i \le N$ について $y_i = x_i$ である。<br>
+        <br>
+        $k \le N$ であるから、 $i  <  k$ ならば $y_i = x_i = a_i$ であり、かつ $y_k = x_k  >  a_k$ となる。したがって、 $a \prec y$ が成り立つ。<br>
+        また $m \le N$ であるから、 $j  <  m$ ならば $y_j = x_j = b_j$ であり、かつ $y_m = x_m  <  b_m$ となる。したがって、 $y \prec b$ が成り立つ。<br>
+        <br>
+        以上より $a \prec y \prec b$ となり、 $y \in (a, b)$ である。ゆえに $C_N(x) \subset (a, b)$ が示された。<br>
+        <br>
+        半開区間 $[\bot, b)$ に $x$ が属する場合も、 $x \prec b$ を満たす非負整数 $m$ を用いて $N = m$ とすれば、同様の議論により $C_N(x) \subset [\bot, b)$ となる。<br>
+        半開区間 $(a, \top]$ に $x$ が属する場合も、 $a \prec x$ を満たす非負整数 $k$ を用いて $N = k$ とすれば、 $C_N(x) \subset (a, \top]$ となる。<br>
+        <br>
+        これにより、 $\tau_O$ の開基の元はすべて $\tau_P$ の開集合（シリンダー集合の和集合）として表されるため、 $\tau_O \subset \tau_P$ が成り立つ。したがって恒等写像 $id$ は連続である。
+    </div>
+
+    <div class="proof">
+        <strong>ステップ 2: $(X, \tau_O)$ が Hausdorff 空間であることの証明</strong><br>
+        位相空間が Hausdorff 空間であるとは、任意の異なる2点に対して、互いに素な開近傍が存在することである。<br>
+        任意の異なる2点 $x, y \in X$ をとる。全順序性より、一般性を失わず $x \prec y$ と仮定する。<br>
+        <br>
+        <strong>ケース 1: 開区間 $(x, y) = \varnothing$ の場合</strong><br>
+        このとき、 $x$ と $y$ は「ジャンプ」の関係にあり、間に元が存在しない。区間 $[\bot, y)$ と $(x, \top]$ を考える。これらは順序位相の開基の元であるため、 $\tau_O$ の開集合である。<br>
+        $x \prec y$ より $x \in [\bot, y)$ であり、 $y \in (x, \top]$ である。さらに、これらが互いに素であることを背理法で示す。<br>
+        仮に $z \in [\bot, y) \cap (x, \top]$ となる元 $z$ が存在すると仮定する。すると $z \in [\bot, y)$ より $z \prec y$ であり、 $z \in (x, \top]$ より $x \prec z$ である。すなわち $x \prec z \prec y$ となり、 $z \in (x, y)$ となるが、これは $(x, y) = \varnothing$ に矛盾する。したがって $[\bot, y) \cap (x, \top] = \varnothing$ であり、これら2つの開集合は $x$ と $y$ を分離する。<br>
+        <br>
+        <strong>ケース 2: 開区間 $(x, y) \neq \varnothing$ の場合</strong><br>
+        この場合、元 $z \in (x, y)$ を一つとることができる。すなわち $x \prec z \prec y$ である。<br>
+        このとき、区間 $[\bot, z)$ と $(z, \top]$ を考える。これらは $\tau_O$ の開集合である。<br>
+        $x \prec z$ より $x \in [\bot, z)$ であり、 $z \prec y$ より $y \in (z, \top]$ である。また、全順序律より任意の元 $w$ は $w \prec z$, $w = z$, $z \prec w$ のいずれか一つのみを満たすため、 $[\bot, z) \cap (z, \top] = \varnothing$ である。<br>
+        <br>
+        いずれのケースにおいても $x$ と $y$ を分離する互いに素な開集合が存在するため、 $(X, \tau_O)$ は Hausdorff 空間である。
+    </div>
+
+    <div class="proof">
+        <strong>ステップ 3: コンパクト性と同相の結論</strong><br>
+        有限集合 $D = \{0, 1, \dots, 9\}$ は離散位相に関して有限空間であるため、コンパクトである。<br>
+        Tychonoff (Tychonoff) の定理によれば、「コンパクト空間の任意の族の直積空間は、直積位相に関してコンパクトである」。したがって、可算個のコンパクト空間 $D$ の直積空間 $(X, \tau_P) = (D^{\mathbb{N}_0}, \tau_P)$ もコンパクト空間である。<br>
+        <br>
+        ここで、位相空間論における重要な基本定理、「コンパクト空間から Hausdorff 空間への全単射な連続写像は同相写像である」を用いる。<br>
+        <br>
+        我々が考えている恒等写像 $id : (X, \tau_P) \to (X, \tau_O)$ は、明らかに全単射 (bijection) である。ステップ1により、この写像は連続である。定義域 $(X, \tau_P)$ はコンパクト空間であり、値域 $(X, \tau_O)$ は Hausdorff 空間である。<br>
+        したがって、上記の定理により恒等写像 $id$ は同相写像 (homeomorphism) となる。恒等写像が同相であるということは、その定義域と値域の位相が完全に一致していること、すなわち $\tau_P = \tau_O$ であることを意味する。<br>
+        <br>
+        以上の完全な証明により、辞書式順序から定まる順序位相と有限離散空間の直積位相は完全に一致することが示された。したがって、文字列全体の集合 $X$ に順序位相を入れた空間は、有限離散空間の直積位相空間 $\{0,1,\dots,9\}^{\mathbb{N}_0}$ に同相になる。
+    </div>
+
+    <h2>6. 参考文献</h2>
+    <div class="reference">
+        <p>位相空間論の基本定理（Tychonoffの定理、コンパクト空間からHausdorff空間への連続全単射が同相写像となることなど）や、順序位相、直積位相に関する詳細な議論については、以下の標準的な文献を参照のこと。</p>
+        <ul>
+            <li>Munkres, J. R. (2000). <i>Topology</i> (2nd ed.). Prentice Hall. <br>
+                <a href="https://books.google.com/books?id=XjoZAQAAIAAJ" target="_blank" rel="noopener noreferrer">Google Booksへのリンク</a></li>
+            <li>Willard, S. (2004). <i>General Topology</i>. Dover Publications. <br>
+                <a href="https://store.doverpublications.com/products/9780486434797" target="_blank" rel="noopener noreferrer">Dover Publicationsへのリンク</a></li>
+            <li>Engelking, R. (1989). <i>General Topology</i> (Revised and completed ed.). Heldermann Verlag.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

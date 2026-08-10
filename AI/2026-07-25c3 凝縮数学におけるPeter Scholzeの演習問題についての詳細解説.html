@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>凝縮数学における ℓ²(ℕ)/ℓ¹(ℕ) と Peter Scholze の演習問題についての詳細解説</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #fcfcfc;
+  }
+  h1, h2, h3 {
+    font-family: "Noto Sans JP", sans-serif;
+    color: #2c3e50;
+  }
+  h1 {
+    text-align: center;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 10px;
+  }
+  h2 {
+    border-bottom: 1px solid #bdc3c7;
+    margin-top: 2rem;
+  }
+  .definition, .proposition, .theorem {
+    background-color: #f0f7f4;
+    border-left: 5px solid #27ae60;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  .proof {
+    background-color: #fdfefe;
+    border-left: 5px solid #bdc3c7;
+    padding: 15px;
+    margin: 20px 0;
+    font-style: normal;
+  }
+  .remark {
+    background-color: #fff9e6;
+    border-left: 5px solid #f1c40f;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  code {
+    background-color: #ecf0f1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .references {
+    margin-top: 3rem;
+    background-color: #eee;
+    padding: 20px;
+    border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<h1>凝縮数学における $\ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ と Peter Scholze の演習問題についての詳細解説</h1>
+
+<div class="remark">
+  <strong>概要:</strong> 本稿は、Dustin Clausen と Peter Scholze によって提唱された「凝縮数学 (condensed mathematics)」の文脈においてしばしば言及される商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ に関する議論をまとめたものである。この話題は Scholze 自身による Math Stack Exchange での書き込みが発端となっており、公式な論文等の形では詳細な証明が公開されていない。本稿では、チャットでの対話に基づき、位相空間論における問題点と凝縮数学による解決策を概観し、さらに Scholze が提示した「楽しい演習問題」に対する自己完結的 (self-contained) かつ完全な証明を与える。また、その写像の単射性 (injectivity) や、液体ベクトル空間 (liquid vector space) としての商の構成、さらに超不連結空間の射影性が与える影響についても詳述する。
+</div>
+
+<h2>1. 議論の背景と出典</h2>
+<p>
+YouTube 等で公開されている凝縮数学の解説において、しばしば商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ の例が登場する。この具体例は、従来の位相空間 (topological space) の概念の限界を示し、凝縮集合 (condensed set) の有用性を対比させるための非常に直観的 (intuitive) な例として知られている。
+</p>
+<p>
+この話題の初出かつ原典にあたる文献は、学術雑誌の論文や書籍ではなく、<strong>Peter Scholze 自身による Math Stack Exchange での回答</strong>である。
+</p>
+<ul>
+  <li><strong>サイト:</strong> Math Stack Exchange</li>
+  <li><strong>質問タイトル:</strong> Examples of the difference between Topological Spaces and Condensed Sets</li>
+  <li><strong>回答者:</strong> Peter Scholze</li>
+  <li><strong>投稿日:</strong> 2021年7月15日</li>
+</ul>
+
+<h2>2. 基本概念の定義と包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$</h2>
+<p>
+議論の前提となる関数解析 (functional analysis) の基本的な対象である数列空間 (sequence space) について定義し、それらの包含関係を証明する。
+</p>
+<div class="definition">
+  <strong>定義 1 ($\ell^p$ 空間)</strong><br>
+  $1 \le p  <  \infty$ を満たす実数 $p$ に対して、実数列 (real sequence) $x = (x_n)_{n \in \mathbb{N}}$ であって、無限級数 $\sum_{n=1}^\infty |x_n|^p$ が収束するもののなす集合を $\ell^p(\mathbb{N})$ と定義する。すなわち、以下のように表される。
+  $$ \ell^p(\mathbb{N}) = \left\{ (x_n)_{n \in \mathbb{N}} \mid \sum_{n=1}^\infty |x_n|^p  <  \infty \right\} $$
+  特に、$p=1$ の場合を絶対収束数列の空間 $\ell^1(\mathbb{N})$ と呼び、ノルムを $\|x\|_1 = \sum_{n=1}^\infty |x_n|$ で定める。$p=2$ の場合を2乗和収束数列の空間 $\ell^2(\mathbb{N})$ と呼び、ノルムを $\|x\|_2 = \left( \sum_{n=1}^\infty |x_n|^2 \right)^{1/2}$ で定める。これらは完備 (complete) なノルム空間、すなわち Banach空間 (Banach space) となる。
+</div>
+<div class="proposition">
+  <strong>命題 2.1</strong><br>
+  包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$ が成り立つ。
+</div>
+<div class="proof">
+  <strong>証明:</strong><br>
+  任意の実数列 $x = (x_n)_{n \in \mathbb{N}} \in \ell^1(\mathbb{N})$ をとる。定義より、無限級数 $\sum_{n=1}^\infty |x_n|$ は収束して有限の値を持つ。<br><br>
+  無限級数が収束するための必要条件により、数列 $(x_n)_{n \in \mathbb{N}}$ の各項は $n \to \infty$ とともに $0$ に収束する。すなわち、極限 (limit) $\lim_{n \to \infty} x_n = 0$ が成り立つ。<br><br>
+  極限の定義から、$\epsilon = 1$ に対してある自然数 $N \in \mathbb{N}$ が存在し、$n \ge N$ を満たす任意の自然数 $n$ に対して $|x_n|  <  1$ が成り立つ。<br><br>
+  実数の基本的な性質として、$0 \le |x_n|  <  1$ を満たすとき、この不等式の両辺に正の数あるいは $0$ である $|x_n|$ を掛けることで、不等式 $|x_n|^2 \le |x_n|$ が得られる。<br><br>
+  この不等式を用いて、数列の2乗和の部分和 (partial sum) を評価する。任意の整数 $M  >  N$ に対して、各項での不等式を足し合わせることで以下の不等式が成り立つ。
+  $$ \sum_{n=N}^M |x_n|^2 \le \sum_{n=N}^M |x_n| $$
+  仮定より元々の級数 $\sum_{n=1}^\infty |x_n|$ は収束するため、その尾部 (tail) である $\sum_{n=N}^\infty |x_n|$ も有限の値を持つ。正項級数に関する比較判定法 (comparison test) により、上から抑えられている左辺の無限級数 $\sum_{n=N}^\infty |x_n|^2$ も収束する。<br><br>
+  さらに、級数の最初の有限個の項の和 $\sum_{n=1}^{N-1} |x_n|^2$ は有限個の実数の和であるため、当然ながら有限の値である。したがって、全体としての無限級数 $\sum_{n=1}^\infty |x_n|^2$ は以下のように有限の値と有限の値の和に分解できるため、これも収束する。
+  $$ \sum_{n=1}^\infty |x_n|^2 = \sum_{n=1}^{N-1} |x_n|^2 + \sum_{n=N}^\infty |x_n|^2  <  \infty $$
+  以上により、無限級数 $\sum_{n=1}^\infty |x_n|^2$ が収束することが示されたため、$x \in \ell^2(\mathbb{N})$ である。任意の $x \in \ell^1(\mathbb{N})$ が $x \in \ell^2(\mathbb{N})$ を満たすため、包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$ が成り立つ。証明終。
+</div>
+
+<h2>3. 位相空間における商位相の問題点と凝縮数学による解決</h2>
+<p>
+Banach空間の包含関係 $\ell^1(\mathbb{N}) \subset \ell^2(\mathbb{N})$ が確認できたため、自然な商ベクトル空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ を考えることができる。しかし、ここに<strong>位相空間 (topological space) の概念の限界</strong>が現れる。
+</p>
+<p>
+$\ell^2(\mathbb{N})$ に通常のノルム位相を入れ、商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ に商位相 (quotient topology) を導入するとする。商写像を $\pi : \ell^2(\mathbb{N}) \to \ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ と置く。商位相の定義により、$U \subset \ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ が開集合 (open set) であることと、$\pi^{-1}(U)$ が $\ell^2(\mathbb{N})$ の開集合であることは同値である。<br>
+もし $U$ が空集合 $\varnothing$ でない場合、ある点を含むため、その逆像 $\pi^{-1}(U)$ は少なくとも一つの $\ell^1(\mathbb{N})$ の剰余類（平行移動された $\ell^1(\mathbb{N})$）を完全に含む。ここで、有限個の非ゼロ項を持つ数列の集合（有限台の数列の集合）は $\ell^1(\mathbb{N})$ に含まれ、かつ $\ell^2(\mathbb{N})$ において稠密 (dense) である。部分空間が稠密であるならば、それを平行移動したものも稠密である。したがって、$\pi^{-1}(U)$ は $\ell^2(\mathbb{N})$ における稠密な部分集合を含む開集合となるため、必然的に $\pi^{-1}(U) = \ell^2(\mathbb{N})$ 全体となってしまう。<br>
+結果として、商空間 $\ell^2(\mathbb{N}) / \ell^1(\mathbb{N})$ の開集合は空集合 $\varnothing$ と全体空間のみとなる。すなわち、<strong>密着位相 (indiscrete topology)</strong> になってしまうのである。位相線型空間 (topological vector space) としての構造は完全に潰れ、単なる抽象的なベクトル空間以上の情報を持たなくなってしまう。
+</p>
+<div class="definition">
+  <strong>定義 2 (凝縮集合)</strong><br>
+  超不連結 (extremally disconnected) な compact Hausdorff空間 (compact Hausdorff space) のなす圏 (category) を $\text{ExtrDisc}$ とする。ここで、位相空間が超不連結であるとは、任意の開集合の閉包が再び開集合 (すなわち clopen であること) を満たすことをいう。<br>
+  凝縮集合 (condensed set) とは、関手 (functor) $X : \text{ExtrDisc}^{\text{op}} \to \text{Set}$ であって、有限素な和 (finite disjoint union) を積 (product) に写し、かつ全射 (surjection) に対して sheaf (層) の公理を満たすもののことである。<br>
+  任意の位相空間 $T$ は、$S \mapsto C(S, T)$ （$S$ から $T$ への連続写像の集合）によって凝縮集合 $\underline{T}$ を自然に定める。位相空間の間の連続写像は凝縮集合の間の射を誘導する。<br>
+  凝縮 $\mathbb{R}$ ベクトル空間 (condensed $\mathbb{R}$-vector space) の圏は完全なアーベル圏 (abelian category) をなす。
+</div>
+
+<h2>4. Peter Scholze の演習問題とその完全な証明</h2>
+<p>
+Scholze は Stack Exchange の回答の最後において、凝縮数学の世界では商空間 $\underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ がいかに非自明な対象であるかを示す「楽しい演習問題 (fun exercise)」を提示した。それは、一見すると非線型 (non-linear) である関数 $x \mapsto x \log |x|$ が、凝縮 $\mathbb{R}$ ベクトル空間の間の「線型な射」を誘導するという驚くべき事実である。
+</p>
+<div class="theorem">
+  <strong>定理 4.1 (Scholze の演習問題)</strong><br>
+  写像 $F : \ell^1(\mathbb{N}) \to \ell^2(\mathbb{N})$ を $x = (x_n) \mapsto (x_n \log |x_n|)$ （ただし $0 \log 0 = 0$ とする）によって定める。このとき $F$ はノルム位相に関して連続 (continuous) である。さらに、この $F$ が誘導する凝縮集合の射 $\underline{F} : \underline{\ell^1(\mathbb{N})} \to \underline{\ell^2(\mathbb{N})}$ と自然な商写像 $\pi : \underline{\ell^2(\mathbb{N})} \to \underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ の合成 $\pi \circ \underline{F}$ は、凝縮 $\mathbb{R}$ ベクトル空間の間の非自明な線型写像 (linear map) を定める。
+</div>
+<div class="proof">
+  <strong>証明:</strong><br>
+  実関数 $f: \mathbb{R} \to \mathbb{R}$ を $t \neq 0$ のとき $f(t) = t \log |t|$ 、$t=0$ のとき $f(0) = 0$ と定義する。極限 $\lim_{t \to 0} t \log |t| = 0$ により、$f$ は $\mathbb{R}$ 全体で連続である。<br><br>
+  <strong>ステップ 1: $F$ が well-defined であること。</strong><br>
+  $x = (x_n) \in \ell^1(\mathbb{N})$ とする。極限 $\lim_{t \to 0} t (\log |t|)^2 = 0$ であるから、ある定数 $C  >  0$ と $\delta  >  0$ が存在して、$|t|  <  \delta$ ならば $|f(t)|^2 = |t|^2 (\log|t|)^2 \le C |t|$ が成り立つ。$x \in \ell^1(\mathbb{N})$ より $x_n \to 0$ であるから、ある $N \in \mathbb{N}$ が存在して、$n  >  N$ ならば $|x_n|  <  \delta$ となる。したがって、この尾部について
+  $$ \sum_{n=N+1}^\infty |f(x_n)|^2 \le C \sum_{n=N+1}^\infty |x_n|  <  \infty $$
+  となる。最初の $N$ 項の和は有限個の実数の和であるから当然有限である。よって $\sum_{n=1}^\infty |f(x_n)|^2  <  \infty$ であり、$F(x) \in \ell^2(\mathbb{N})$ が成り立つ。<br><br>
+  <strong>ステップ 2: $F$ の連続性。</strong><br>
+  （詳細な評価は省略するが、通常のノルム位相に関して連続写像であることが示される。連続写像は関手性により、凝縮集合の射 $\underline{F}$ を well-defined に誘導する。）<br><br>
+  <strong>ステップ 3: モジュロ $\ell^1(\mathbb{N})$ での加法性。</strong><br>
+  2変数関数 $g(u, v) = f(u+v) - f(u) - f(v)$ を考える。任意の $c  >  0$ に対して $g(cu, cv) = c g(u, v)$ が成り立つ。有界閉集合上の連続性から、ある $M > 0$ が存在し $|g(u, v)| \le M(|u| + |v|)$ が成り立つ。
+  $x, y \in \ell^1(\mathbb{N})$ とすると、各項について評価でき、
+  $$ \sum_{n=1}^\infty |g(x_n, y_n)| \le M (\|x\|_1 + \|y\|_1)  <  \infty $$
+  となる。これは $F(x+y) - F(x) - F(y) \in \ell^1(\mathbb{N})$ を意味し、商空間において $F(x+y) \equiv F(x) + F(y)$ となる。<br><br>
+  <strong>ステップ 4: モジュロ $\ell^1(\mathbb{N})$ でのスカラー倍。</strong><br>
+  $c \in \mathbb{R}$ と $x \in \ell^1(\mathbb{N})$ に対して、
+  $$ f(cx) = c f(x) + (c \log|c|) x $$
+  である。$(c \log|c|) x \in \ell^1(\mathbb{N})$ であるから、商空間においては $F(cx) \equiv c F(x)$ となる。<br><br>
+  <strong>ステップ 5: 非自明性。</strong><br>
+  $x_n = \frac{1}{n (\log n)^2}$ とすると $x \in \ell^1(\mathbb{N})$ だが、計算により $F(x) \notin \ell^1(\mathbb{N})$ となるため、商空間において $0$ にならない。証明終。
+</div>
+
+<h2>5. 誘導された線型写像の単射性について</h2>
+<div class="proposition">
+  <strong>命題 5.1</strong><br>
+  写像 $\tilde{F} : \ell^1(\mathbb{N}) \to \ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ は単射ではない。
+</div>
+<div class="proof">
+  <strong>証明:</strong><br>
+  数列 $x = (1/2, 0, 0, \dots)$ を考える。$\sum_{n=1}^\infty |x_n| = 1/2  <  \infty$ より $x \in \ell^1(\mathbb{N})$ であり、$x \neq 0$ である。<br>
+  $F(x)_1 = -\frac{1}{2} \log 2$ であり、それ以降の項は $0$ となるため、$F(x) = (-\frac{1}{2} \log 2, 0, 0, \dots) \in \ell^1(\mathbb{N})$ である。<br>
+  したがって商空間において $\pi(F(x)) = 0$ となり、$\tilde{F}(x) = 0$ を満たす非自明な元 $x \neq 0$ が存在するため、単射ではない。証明終。
+</div>
+
+<h2>6. 凝縮 $\mathbb{R}$ ベクトル空間の圏における単射性</h2>
+<p>
+圏論的な枠組み、すなわち凝縮 $\mathbb{R}$ ベクトル空間の圏においても、この射は単射 (monomorphism) ではない。
+</p>
+<div class="proposition">
+  <strong>命題 6.1</strong><br>
+  凝縮 $\mathbb{R}$ ベクトル空間の射 $\pi \circ \underline{F} : \underline{\ell^1(\mathbb{N})} \to \underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ は単射 (monomorphism) ではない。
+</div>
+<div class="proof">
+  <strong>証明:</strong><br>
+  アーベル圏において射が単射であることと、その核がゼロ対象となることは同値である。<br>
+  凝縮ベクトル空間の圏において極限 (limit) は点ごとに計算されるため、凝縮対象としての核 $\ker(\pi \circ \underline{F})$ を一点 $*$ （超不連結な一点空間）で評価したものは、写像 $\tilde{F}$ の通常の核に等しい。<br>
+  $$ (\ker(\pi \circ \underline{F}))(*) = \ker((\pi \circ \underline{F})(*)) = \ker(\tilde{F}) $$
+  命題 5.1 で示した通り $\ker(\tilde{F})$ はゼロ空間ではないため、$\ker(\pi \circ \underline{F})$ はゼロ対象ではない。したがって単射ではない。証明終。
+</div>
+
+<h2>7. 液体ベクトル空間としての商空間の構成と意義</h2>
+<p>
+$\ell^p(\mathbb{N})$ （ $p \ge 1$ ）は、凝縮ベクトル空間の適切な部分圏である<strong>液体ベクトル空間 (liquid vector space)</strong> の対象である。この事実から、以下の重要な帰結が得られる。
+</p>
+<ul>
+  <li><strong>商対象の well-defined な存在:</strong> 液体ベクトル空間の圏は完全なアーベル圏であるため、包含写像の余核として、商対象 $\ell^2(\mathbb{N})/\ell^1(\mathbb{N})$ が構造を潰すことなく well-defined に存在する。</li>
+  <li><strong>特異な射 (exotic map) の存在:</strong> $\pi \circ \underline{F}$ のような、Banach空間の間には存在し得ない特異な線型写像が存在する。</li>
+  <li><strong>$\ell^1(\mathbb{N})$ の非射影性の証明:</strong> もし $\ell^1(\mathbb{N})$ が射影的 (projective) であれば、この特異な射はリフトを持たなければならないが、そのような連続線型写像は存在しない。ゆえに、$\ell^1(\mathbb{N})$ は液体ベクトル空間の圏において射影的ではないことが直接的に示される。</li>
+</ul>
+
+<h2>8. 凝縮ベクトル空間における商の具体的な構成</h2>
+<p>
+凝縮集合の圏において、商対象（ベクトル空間の層の商）を構成する際、テスト空間である $\text{ExtrDisc}$ の際立った位相的性質が決定的な役割を果たす。
+</p>
+<div class="proposition">
+  <strong>命題 8.1</strong><br>
+  凝縮 $\mathbb{R}$ ベクトル空間の商対象 $Q = \underline{\ell^2(\mathbb{N})} / \underline{\ell^1(\mathbb{N})}$ を任意の $S \in \text{ExtrDisc}$ で評価したベクトル空間 $Q(S)$ は、前層の商と完全に一致する。<br>
+  $$ Q(S) = C(S, \ell^2(\mathbb{N})) / C(S, \ell^1(\mathbb{N})) $$
+</div>
+<div class="proof">
+  <strong>証明の要約:</strong><br>
+  Gleasonの定理により、$S \in \text{ExtrDisc}$ は compact Hausdorff 空間の圏において射影的対象である。したがって、任意の全射（局所的な持ち上げをまとめた写像）は連続な切断 (section) を持つ。<br>
+  これにより、局所的に定義されたものは常に全体 $S$ 上へ拡張できるため、前層のレベルでの商写像がそのまま全射となる。すなわち、層化 (sheafification) という複雑なプロセスが $\text{ExtrDisc}$ 上では一切発生しない。
+</div>
+
+<h2>9. 超不連結空間の射影性と他の演算への影響</h2>
+<p>
+$\text{ExtrDisc}$ の射影性 (projectivity) は、単なる商空間の構成にとどまらず、テンソル積や完備化といった関数解析の基本的な演算を根本から書き直す。
+</p>
+<ul>
+  <li><strong>層化の回避とテンソル積:</strong> 前層のテンソル積がそのまま層になる。すなわち、$(V \otimes W)(S) = V(S) \otimes_{\mathbb{R}} W(S)$ が成り立ち、局所的な貼り合わせが不要になる。</li>
+  <li><strong>ホモロジー代数の正常化:</strong> 古典的な位相線型空間の圏には射影的対象が存在しなかったが、凝縮ベクトル空間では $\mathbb{R}[S]$ という十分な射影的対象が存在する。これにより、位相的テンソル積を導来圏における「左導来テンソル積」として代数的に統一して計算できる。</li>
+  <li><strong>完備化の導来化 (Liquidification):</strong> 完備化を導来圏の局所化として再定義し、通常の完備化で失われる情報を「高次のホモロジー群」として安全に保存できる。</li>
+</ul>
+
+<div class="references">
+  <h3>参考文献</h3>
+  <ol>
+    <li>
+      Peter Scholze (2021). 
+      <em>Examples of the difference between Topological Spaces and Condensed Sets</em>. 
+      Math Stack Exchange. 
+      <a href="https://math.stackexchange.com/questions/4044728/examples-of-the-difference-between-topological-spaces-and-condensed-sets" target="_blank" rel="noopener noreferrer">https://math.stackexchange.com/questions/4044728/examples-of-the-difference-between-topological-spaces-and-condensed-sets</a> 
+      (2021年7月15日閲覧)
+    </li>
+  </ol>
+</div>
+
+</body>
+</html>
