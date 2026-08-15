@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Legendreの定理のq類似とその応用（完全版）</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2em;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+  }
+  h1 { border-bottom: 2px solid #333; padding-bottom: 0.3em; }
+  h2 { border-bottom: 1px solid #ccc; padding-bottom: 0.2em; margin-top: 2.5em; }
+  h3 { color: #555; margin-top: 2em; }
+  p { margin-bottom: 1.2em; }
+  .definition { margin: 1.5em 0; padding: 1em; background-color: #e9f5ff; border-left: 4px solid #007bff; }
+  .definition-title { font-weight: bold; color: #0056b3; margin-bottom: 0.5em; }
+  .theorem { margin: 1.5em 0; padding: 1em; background-color: #eafaf1; border-left: 4px solid #28a745; }
+  .theorem-title { font-weight: bold; color: #155724; margin-bottom: 0.5em; }
+  .lemma { margin: 1.5em 0; padding: 1em; background-color: #fdf5e6; border-left: 4px solid #ff8c00; }
+  .lemma-title { font-weight: bold; color: #8b4500; margin-bottom: 0.5em; }
+  .proof { margin: 1.5em 0; padding: 1em; background-color: #f9f9f9; border-left: 4px solid #6c757d; }
+  .proof-title { font-weight: bold; font-style: italic; color: #495057; margin-bottom: 0.5em; }
+  .example { margin: 1.5em 0; padding: 1em; background-color: #fffdf0; border-left: 4px solid #ffc107; }
+  .example-title { font-weight: bold; color: #856404; margin-bottom: 0.5em; }
+  .remark { margin: 1.5em 0; padding: 1em; background-color: #f8f9fa; border-left: 4px solid #17a2b8; }
+  .remark-title { font-weight: bold; color: #117a8b; margin-bottom: 0.5em; }
+  .references { margin-top: 4em; border-top: 2px solid #333; padding-top: 1em; }
+  .references ol { padding-left: 1.5em; }
+</style>
+</head>
+<body>
+
+<h1>Legendreの定理の$q$類似とその応用</h1>
+
+<p>
+本稿では、整数の素因数分解に関する強力な古典的結果であるルジャンドルの定理 (Legendre's theorem) の $q$類似 ($q$-analog) について解説する。通常の Legendre の定理が整数の素因数分解に関する定理であるのに対し、その $q$類似は多項式環上の円分多項式 (cyclotomic polynomial) による既約分解に関する定理となる。本稿では基礎的な定義から出発し、 $q$二項係数が整数係数多項式となることの証明、素数冪に対する円分多項式の諸性質の証明、さらにそれらを用いて $q$類似からオリジナルの Legendre の定理を導出する過程について、論理的ギャップのない完全な証明を与える。
+</p>
+
+<h2>1. 基礎概念の準備</h2>
+
+<p>
+以下では、変数 (不定元) $q$ を用いた有理数体 $\mathbb{Q}$ 上の多項式環 $\mathbb{Q}[q]$ において議論を行う。証明を self-contained にするため、いくつかの基本的な数学的概念を厳密に定義しておく。
+</p>
+
+<div class="definition">
+  <div class="definition-title">定義 1.1 (床関数)</div>
+  <p>
+  実数 $x$ に対して、 $x$ を超えない最大の整数を $\lfloor x \rfloor$ と表し、これを床関数 (floor function) と呼ぶ。すなわち、 $\lfloor x \rfloor$ は $\lfloor x \rfloor \le x  <  \lfloor x \rfloor + 1$ を満たす唯一の整数である。
+  </p>
+</div>
+
+<div class="definition">
+  <div class="definition-title">定義 1.2 (モニック多項式と既約多項式)</div>
+  <p>
+  多項式環 $\mathbb{Q}[q]$ の元 $f(q)$ について、最高次項の係数が $1$ であるとき、 $f(q)$ をモニック多項式 (monic polynomial) と呼ぶ。また、定数ではない多項式 $f(q)$ が、 $\mathbb{Q}[q]$ 内の $2$ つの定数でない多項式の積として表せないとき、 $f(q)$ を $\mathbb{Q}[q]$ における既約多項式 (irreducible polynomial) と呼ぶ。
+  </p>
+</div>
+
+<div class="definition">
+  <div class="definition-title">定義 1.3 ($q$数と$q$階乗)</div>
+  <p>
+  $0$ 以上の整数 $n$ に対して、 $q$数 ($q$-number) $(n)_q$ を以下のように定める。
+  $$ (n)_q = \frac{q^n - 1}{q - 1} = 1 + q + \cdots + q^{n-1} $$
+  ただし、 $(0)_q = 0$ とする。さらに正の整数 $n$ に対し、 $q$階乗 ($q$-factorial) $(n)_q!$ を以下のように定める。
+  $$ (n)_q! = (1)_q (2)_q \cdots (n)_q = \prod_{k=1}^n (k)_q $$
+  便宜上、 $(0)_q! = 1$ と約束する。なお、 $(n)_q$ を $[n]_q$ と書かないように注意すること。
+  </p>
+</div>
+
+<div class="definition">
+  <div class="definition-title">定義 1.4 (原始 $n$ 乗根と円分多項式)</div>
+  <p>
+  複素数 $\zeta$ が $\zeta^n = 1$ を満たし、かつ $1 \le k  <  n$ なる任意の整数 $k$ に対して $\zeta^k \neq 1$ を満たすとき、 $\zeta$ を $1$ の原始 $n$ 乗根 (primitive $n$-th root of unity) と呼ぶ。具体的には $\zeta_n = e^{2\pi i / n}$ がその一つである。
+  </p>
+  <p>
+  正の整数 $n$ に対し、 $n$ 番目の円分多項式 (cyclotomic polynomial) $\Phi_n(q)$ を以下のように定める。
+  $$ \Phi_n(q) = \prod_{\substack{1 \le k \le n \\ \gcd(k, n) = 1}} (q - \zeta_n^k) $$
+  </p>
+</div>
+
+<p>
+$\Phi_n(q)$ はモニックな整数係数の多項式であり、有理数体 $\mathbb{Q}$ 上の多項式環 $\mathbb{Q}[q]$ において既約多項式となることが知られている。また、多項式 $q^n - 1$ の根はすべて $1$ の $n$ 乗根であり、それらはある約数 $d$ に対する $1$ の原始 $d$ 乗根として一意に分類されるため、 $q^n - 1$ は円分多項式の積として以下のように完全に既約分解される。
+$$ q^n - 1 = \prod_{d \mid n} \Phi_d(q) $$
+この事実を用いると、 $q$数 $(n)_q$ は以下のように既約分解される。
+$$ (n)_q = \frac{q^n - 1}{q - 1} = \frac{\prod_{d \mid n} \Phi_d(q)}{\Phi_1(q)} = \prod_{\substack{d \mid n \\ d \ge 2}} \Phi_d(q) $$
+</p>
+
+<div class="definition">
+  <div class="definition-title">定義 1.5 (多項式の付値)</div>
+  <p>
+  多項式環 $\mathbb{Q}[q]$ は一意分解整域 (unique factorization domain) であるため、素因数分解と同様の性質が成り立つ。任意の $0$ でない多項式 $f(q) \in \mathbb{Q}[q]$ と既約多項式 $P(q) \in \mathbb{Q}[q]$ に対し、 $f(q)$ を割り切る $P(q)$ の最大の冪指数が well-defined に定義できる。これを $\mathrm{ord}_{P(q)}(f(q))$ と表記し、 $P(q)$ に対する $f(q)$ の付値 (valuation) と呼ぶ。
+  </p>
+</div>
+
+<h2>2. Legendre の定理の$q$類似</h2>
+
+<p>
+以上の準備のもとで、 Legendre の定理の $q$類似を定式化し、証明する。
+</p>
+
+<div class="theorem">
+  <div class="theorem-title">定理 2.1 (Legendre の定理の$q$類似)</div>
+  <p>
+  $n$ を正の整数、 $m \ge 2$ を整数とする。このとき、 $q$階乗 $(n)_q!$ を割り切る円分多項式 $\Phi_m(q)$ の最大の冪指数は以下で与えられる。
+  $$ \mathrm{ord}_{\Phi_m(q)}((n)_q!) = \left\lfloor \frac{n}{m} \right\rfloor $$
+  </p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">定理 2.1 の証明</div>
+  <p>
+  多項式環 $\mathbb{Q}[q]$ において付値 $\mathrm{ord}_{\Phi_m(q)}$ を考える。付値の基本性質により、積の付値は付値の和となるため、次が成り立つ。
+  $$ \mathrm{ord}_{\Phi_m(q)}((n)_q!) = \mathrm{ord}_{\Phi_m(q)} \left( \prod_{k=1}^n (k)_q \right) = \sum_{k=1}^n \mathrm{ord}_{\Phi_m(q)}((k)_q) $$
+  </p>
+  <p>
+  先述の円分多項式による分解公式により、各 $k \ge 1$ に対して $(k)_q$ は以下のように書ける。
+  $$ (k)_q = \prod_{\substack{d \mid k \\ d \ge 2}} \Phi_d(q) $$
+  各 $\Phi_d(q)$ は $\mathbb{Q}[q]$ において互いに素な既約多項式である。したがって、多項式 $(k)_q$ が特定の既約多項式 $\Phi_m(q)$ で割り切れるための必要十分条件は、その指標 $m$ が $k$ の約数になること、すなわち $m \mid k$ である。
+  </p>
+  <p>
+  さらに、 $(k)_q$ の既約分解において各 $\Phi_d(q)$ の指数は常に $1$ である。これは多項式 $q^k - 1$ が重根を持たないことに起因する。したがって、 $\Phi_m(q)$ は $(k)_q$ を高々 $1$ 回しか割り切らない。すなわち次が成立する。
+  $$ \mathrm{ord}_{\Phi_m(q)}((k)_q) = \begin{cases} 1 & (m \mid k) \\ 0 & (m \nmid k) \end{cases} $$
+  </p>
+  <p>
+  これを先ほどの和に代入すると、和は次のように書き換えられる。
+  $$ \sum_{k=1}^n \mathrm{ord}_{\Phi_m(q)}((k)_q) = \sum_{\substack{1 \le k \le n \\ m \mid k}} 1 $$
+  この和は、 $1$ から $n$ までの整数のうち $m$ の倍数であるものの個数に他ならない。そのような整数の個数は正確に $\lfloor n / m \rfloor$ 個であるから、結論として次を得る。
+  $$ \mathrm{ord}_{\Phi_m(q)}((n)_q!) = \left\lfloor \frac{n}{m} \right\rfloor $$
+  これで定理が完全に証明された。
+  </p>
+</div>
+
+<div class="remark">
+  <div class="remark-title">直観的な理解と通常の Legendre 定理との違い</div>
+  <p>
+  通常の Legendre の定理では、素数 $p$ に対する $n!$ の付値は以下のように無限和を用いて表される。
+  $$ \mathrm{ord}_p(n!) = \sum_{i=1}^\infty \left\lfloor \frac{n}{p^i} \right\rfloor = \left\lfloor \frac{n}{p} \right\rfloor + \left\lfloor \frac{n}{p^2} \right\rfloor + \cdots $$
+  </p>
+  <p>
+  一見すると、 $q$類似の式は第一項である $\lfloor n/m \rfloor$ のみからなり、無限和の形をしていないため、通常の Legendre の定理とは形が異なるように見える。しかし、これには明確な理由がある。
+  </p>
+  <p>
+  整数における素因数分解では、例えば $k$ が $p^2$ の倍数であるとき、 $k$ は素数 $p$ によって $2$ 回割り切れる。これが $\lfloor n/p^2 \rfloor$ という第 $2$ 項以降を生み出している。
+  一方で $q$数 $(k)_q$ の分解においては、多項式 $q^k - 1$ が複素数体 $\mathbb{C}$ 上で重根を持たないため、既約因子である $\Phi_m(q)$ は必ず $1$ 乗の形でしか現れない。つまり、多項式環の世界では「 $1$ つの因子 $(k)_q$ が同じ素元 $\Phi_m(q)$ を $2$ つ以上含む」という状況が絶対に発生しないのである。
+  この性質により、 $q$類似の Legendre 定理では和の項が $\lfloor n/m \rfloor$ だけで完結する、非常に美しい形となる。
+  </p>
+</div>
+
+<div class="example">
+  <div class="example-title">例 2.2 ( $n=6, m=2$ の場合)</div>
+  <p>
+  具体的な計算を通じて定理の主張を確認する。ここでは $n=6$ 、 $m=2$ の場合を考え、 $\mathrm{ord}_{\Phi_2(q)}((6)_q!)$ を求める。まず、定義より $\Phi_2(q) = q + 1$ である。
+  各 $k \in \{1, 2, 3, 4, 5, 6\}$ に対する $(k)_q$ の既約分解は以下のようになる。
+  </p>
+  <ul>
+    <li>$(1)_q = 1$</li>
+    <li>$(2)_q = q + 1 = \Phi_2(q)$</li>
+    <li>$(3)_q = q^2 + q + 1 = \Phi_3(q)$</li>
+    <li>$(4)_q = (q + 1)(q^2 + 1) = \Phi_2(q)\Phi_4(q)$</li>
+    <li>$(5)_q = q^4 + q^3 + q^2 + q + 1 = \Phi_5(q)$</li>
+    <li>$(6)_q = (q + 1)(q^2 - q + 1)(q^2 + q + 1) = \Phi_2(q)\Phi_3(q)\Phi_6(q)$</li>
+  </ul>
+  <p>
+  これらの積である $(6)_q!$ の中で $\Phi_2(q)$ を因子として持つのは $(2)_q$ と $(4)_q$ と $(6)_q$ の $3$ つであり、それぞれ指数は $1$ である。したがって、これらを掛け合わせた $(6)_q!$ における $\Phi_2(q)$ の指数は $3$ となる。
+  一方で、定理の公式に $n=6, m=2$ を代入すると、次のように完全に一致することが確認できる。
+  $$ \left\lfloor \frac{6}{2} \right\rfloor = 3 $$
+  </p>
+</div>
+
+<h2>3. $q$二項係数の多項式性</h2>
+
+<p>
+Legendre の定理の $q$類似を用いて、 $q$二項係数 ($q$-binomial coefficient) が単なる有理関数ではなく、 $q$ の整数係数多項式になることを証明する。
+</p>
+
+<div class="definition">
+  <div class="definition-title">定義 3.1 ($q$二項係数)</div>
+  <p>
+  $0$ 以上の整数 $n, k$ で $k \le n$ を満たすものに対し、$q$二項係数 $\begin{bmatrix} n \\ k \end{bmatrix}_q$ を以下のように定める。
+  $$ \begin{bmatrix} n \\ k \end{bmatrix}_q = \frac{(n)_q!}{(k)_q! (n-k)_q!} $$
+  </p>
+</div>
+
+<p>
+この定義から明らかなように、$q$二項係数は有理式として定義される。しかし、通常の二項係数が整数になることの $q$類似として、$q$二項係数は変数 $q$ に関する整数係数の多項式となる。これを証明するために、床関数の基本的な性質を一つ準備する。
+</p>
+
+<div class="lemma">
+  <div class="lemma-title">補題 3.2 (床関数の劣加法性)</div>
+  <p>
+  任意の実数 $x, y$ に対して、次が成立する。
+  $$ \lfloor x + y \rfloor \ge \lfloor x \rfloor + \lfloor y \rfloor $$
+  </p>
+</div>
+<div class="proof">
+  <div class="proof-title">補題 3.2 の証明</div>
+  <p>
+  実数 $x, y$ を、整数部分と小数部分に分解して $x = \lfloor x \rfloor + \{x\}$、および $y = \lfloor y \rfloor + \{y\}$ と表す。ここで $\{x\}, \{y\}$ は $0 \le \{x\}  <  1$、$0 \le \{y\}  <  1$ を満たす実数である。これらを足し合わせると次を得る。
+  $$ x + y = \lfloor x \rfloor + \lfloor y \rfloor + \{x\} + \{y\} $$
+  この式の両辺の床関数をとる。$\lfloor x \rfloor$ と $\lfloor y \rfloor$ は整数であるため、床関数の外に出すことができる。
+  $$ \lfloor x + y \rfloor = \lfloor x \rfloor + \lfloor y \rfloor + \lfloor \{x\} + \{y\} \rfloor $$
+  ここで、$\{x\} \ge 0$ かつ $\{y\} \ge 0$ であるため、$\{x\} + \{y\} \ge 0$ である。したがって $\lfloor \{x\} + \{y\} \rfloor \ge 0$ が成立する。これを上の式に適用すると、求める不等式 $\lfloor x + y \rfloor \ge \lfloor x \rfloor + \lfloor y \rfloor$ を得る。
+  </p>
+</div>
+
+<div class="theorem">
+  <div class="theorem-title">定理 3.3 ($q$二項係数の多項式性)</div>
+  <p>
+  $0$ 以上の整数 $n, k$ ($k \le n$) に対して、$q$二項係数 $\begin{bmatrix} n \\ k \end{bmatrix}_q$ は $q$ の整数係数多項式である。すなわち、多項式環 $\mathbb{Z}[q]$ に属する。
+  </p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">定理 3.3 の証明</div>
+  <p>
+  $k = 0$ または $k = n$ のとき、$q$二項係数は $\frac{(n)_q!}{(0)_q! (n)_q!} = 1$ となり、これは明らかに定数多項式として $\mathbb{Z}[q]$ に属する。したがって、以下では $0  <  k  <  n$ と仮定する。
+  </p>
+  <p>
+  $q$二項係みを、有理数体 $\mathbb{Q}$ 上の有理関数体 $\mathbb{Q}(q)$ の元として考える。多項式環 $\mathbb{Q}[q]$ における既約多項式である円分多項式 $\Phi_m(q)$ ($m \ge 2$) について、分母と分子の付値を比較する。
+  Legendreの定理の $q$類似より、分子 $(n)_q!$ の $\Phi_m(q)$ による付値は次のように与えられる。
+  $$ \mathrm{ord}_{\Phi_m(q)}((n)_q!) = \left\lfloor \frac{n}{m} \right\rfloor $$
+  同様に、分母を構成する $(k)_q!$ と $(n-k)_q!$ の $\Phi_m(q)$ による付値はそれぞれ以下のようになる。
+  $$ \mathrm{ord}_{\Phi_m(q)}((k)_q!) = \left\lfloor \frac{k}{m} \right\rfloor $$
+  $$ \mathrm{ord}_{\Phi_m(q)}((n-k)_q!) = \left\lfloor \frac{n-k}{m} \right\rfloor $$
+  付値の性質から、分母全体の $\Phi_m(q)$ による付値はこれら $2$ つの和となる。
+  $$ \mathrm{ord}_{\Phi_m(q)}((k)_q! (n-k)_q!) = \left\lfloor \frac{k}{m} \right\rfloor + \left\lfloor \frac{n-k}{m} \right\rfloor $$
+  </p>
+  <p>
+  ここで、補題 3.2 において $x = \frac{k}{m}$、$y = \frac{n-k}{m}$ とおくと、$x + y = \frac{n}{m}$ となる。補題の不等式を適用すると、次が成立する。
+  $$ \left\lfloor \frac{n}{m} \right\rfloor \ge \left\lfloor \frac{k}{m} \right\rfloor + \left\lfloor \frac{n-k}{m} \right\rfloor $$
+  これはすなわち、任意の整数 $m \ge 2$ に対して次が成立することを意味する。
+  $$ \mathrm{ord}_{\Phi_m(q)}((n)_q!) \ge \mathrm{ord}_{\Phi_m(q)}((k)_q! (n-k)_q!) $$
+  </p>
+  <p>
+  この結果は、$q$二項係数の有理式表示において、分母に含まれる任意の円分多項式 $\Phi_m(q)$ が、分子に少なくとも同じ回数だけ含まれており、完全に約分されることを示している。
+  各 $(l)_q$ の形の多項式は円分多項式の積として完全に分解されるため、分母は円分多項式以外の既約因子を持たない。したがって、約分を行った結果、$q$二項係数は分母を持たない多項式となり、 $\mathbb{Q}[q]$ に属することが示された。
+  </p>
+  <p>
+  最後に、係数が整数であること（ $\mathbb{Z}[q]$ に属すること）を示す。
+  各円分多項式 $\Phi_m(q)$ は、最高次係数が $1$ であるモニックな整数係数多項式である。したがって、それらの積として表される分子の $(n)_q!$ および分母の $(k)_q! (n-k)_q!$ も、共にモニックな整数係数多項式である。
+  モニックな整数係数多項式をモニックな整数係数多項式で割り切った商は、多項式の割り算のアルゴリズムにより、再び整数係数多項式となる。したがって、$q$二項係数は単なる有理数係数多項式にとどまらず、整数係数多項式である。
+  以上により定理は証明された。
+  </p>
+</div>
+
+<div class="example">
+  <div class="example-title">例 3.4 ( $n=4, k=2$ の場合の具体例)</div>
+  <p>
+  定理の主張を直観的に理解するために、具体的な数値で計算してみる。 $n = 4, k = 2$ の場合の $q$二項係数 $\begin{bmatrix} 4 \\ 2 \end{bmatrix}_q$ を考える。定義に従うと、次のようになる。
+  $$ \begin{bmatrix} 4 \\ 2 \end{bmatrix}_q = \frac{(4)_q!}{(2)_q! (2)_q!} = \frac{(1)_q (2)_q (3)_q (4)_q}{(1)_q (2)_q \cdot (1)_q (2)_q} = \frac{(3)_q (4)_q}{(1)_q (2)_q} $$
+  ここで、各 $q$数を円分多項式で既約分解する。
+  </p>
+  <ul>
+    <li>$(1)_q = 1$</li>
+    <li>$(2)_q = \Phi_2(q)$</li>
+    <li>$(3)_q = \Phi_3(q)$</li>
+    <li>$(4)_q = \Phi_2(q)\Phi_4(q)$</li>
+  </ul>
+  <p>
+  これらを代入すると、以下のようになる。
+  $$ \begin{bmatrix} 4 \\ 2 \end{bmatrix}_q = \frac{\Phi_3(q) \cdot \Phi_2(q)\Phi_4(q)}{1 \cdot \Phi_2(q)} $$
+  分母と分子で $\Phi_2(q)$ が見事に約分され、結果として分母が完全に消える。
+  $$ \begin{bmatrix} 4 \\ 2 \end{bmatrix}_q = \Phi_3(q)\Phi_4(q) = (q^2 + q + 1)(q^2 + 1) = q^4 + q^3 + 2q^2 + q + 1 $$
+  このように、分母の各円分多項式は分子に十分な数だけ含まれているため、結果は必ず $q$ の整数係数多項式となる。通常の二項係数 $\binom{4}{2} = 6$ は、この多項式に $q=1$ を代入したもの（ $1+1+2+1+1 = 6$ ）として現れる。
+  </p>
+</div>
+
+<h2>4. 素数冪に対する円分多項式の性質</h2>
+
+<p>
+次節においてオリジナルの Legendre の定理を導出する際に、「 $m$ が素数 $p$ の冪であるとき $\Phi_m(1) = p$ となる」という重要な性質を用いる。ここでは、この事実を自己完結的 (self-contained) に証明するために、素数冪に対する円分多項式の明示的な公式とその諸性質（恒等式、 $x=1$ における値、既約性）について完全な証明を与える。
+</p>
+
+<div class="definition">
+  <div class="definition-title">定義 4.1 (素数に対する円分多項式)</div>
+  <p>
+  素数 $p$ に対して、 $p$ 番目の円分多項式 $\Phi_p(x)$ は以下のように定義される。
+  $$ \Phi_p(x) = \frac{x^p - 1}{x - 1} = x^{p-1} + x^{p-2} + \cdots + x + 1 $$
+  これは多項式 $x^p - 1$ が $1$ の $p$ 乗根すべてを根に持ち、そのうち $x=1$ を除く $p-1$ 個が $1$ の原始 $p$ 乗根であることによる。
+  </p>
+</div>
+
+<div class="theorem">
+  <div class="theorem-title">定理 4.2 ( $\Phi_{p^k}(x)$ の明示的公式)</div>
+  <p>
+  素数 $p$ と正の整数 $k$ に対して、円分多項式 $\Phi_{p^k}(x)$ は次のように与えられる。
+  $$ \Phi_{p^k}(x) = \frac{x^{p^k} - 1}{x^{p^{k-1}} - 1} = \sum_{j=0}^{p-1} x^{j p^{k-1}} = x^{p^{k-1}(p-1)} + x^{p^{k-1}(p-2)} + \cdots + x^{p^{k-1}} + 1 $$
+  </p>
+</div>
+<div class="proof">
+  <div class="proof-title">定理 4.2 の証明</div>
+  <p>
+  一般の正の整数 $n$ について、多項式 $x^n - 1$ は円分多項式の積として $x^n - 1 = \prod_{d \mid n} \Phi_d(x)$ と既約分解される。
+  $n = p^k$ の約数は $1, p, p^2, \dots, p^k$ である。したがって、この分解公式を $n = p^k$ に対して適用すると、次の等式を得る。
+  $$ x^{p^k} - 1 = \prod_{i=0}^k \Phi_{p^i}(x) = \Phi_1(x) \Phi_p(x) \cdots \Phi_{p^{k-1}}(x) \Phi_{p^k}(x) $$
+  一方で、全く同じ分解公式を $n = p^{k-1}$ に対して適用すると、 $p^{k-1}$ の約数は $1, p, \dots, p^{k-1}$ であるから、次の等式を得る。
+  $$ x^{p^{k-1}} - 1 = \prod_{i=0}^{k-1} \Phi_{p^i}(x) = \Phi_1(x) \Phi_p(x) \cdots \Phi_{p^{k-1}}(x) $$
+  この $2$ つの等式を比較すると、 $x^{p^k} - 1$ の分解における $\Phi_{p^k}(x)$ 以外の部分の積が、まさに $x^{p^{k-1}} - 1$ に一致していることがわかる。したがって、代入により次が成り立つ。
+  $$ x^{p^k} - 1 = (x^{p^{k-1}} - 1) \Phi_{p^k}(x) $$
+  多項式環 $\mathbb{Q}[x]$ において $x^{p^{k-1}} - 1 \neq 0$ であるため、両辺をこれで割ることで次式を得る。
+  $$ \Phi_{p^k}(x) = \frac{x^{p^k} - 1}{x^{p^{k-1}} - 1} $$
+  ここで、 $y = x^{p^{k-1}}$ とおくと、右辺の有理式は $\frac{y^p - 1}{y - 1}$ となる。これは等比数列の和の公式の逆演算により、次のように多項式として展開できる。
+  $$ \frac{y^p - 1}{y - 1} = y^{p-1} + y^{p-2} + \cdots + y + 1 = \sum_{j=0}^{p-1} y^j $$
+  最後に $y = x^{p^{k-1}}$ を代入し直すことで、求める公式が得られる。
+  $$ \Phi_{p^k}(x) = \sum_{j=0}^{p-1} \left( x^{p^{k-1}} \right)^j = \sum_{j=0}^{p-1} x^{j p^{k-1}} $$
+  これで定理が証明された。
+  </p>
+</div>
+
+<div class="theorem">
+  <div class="theorem-title">定理 4.3 (恒等式 $\Phi_{p^k}(x) = \Phi_p(x^{p^{k-1}})$)</div>
+  <p>
+  素数 $p$ と正の整数 $k$ に対して、多項式環 $\mathbb{Q}[x]$ において次の恒等式が成立する。
+  $$ \Phi_{p^k}(x) = \Phi_p(x^{p^{k-1}}) $$
+  </p>
+</div>
+<div class="proof">
+  <div class="proof-title">定理 4.3 の証明</div>
+  <p>
+  $k=1$ のときは $\Phi_{p^1}(x) = \Phi_p(x^{p^0}) = \Phi_p(x)$ となり、自明に成立する。したがって以下では $k \ge 2$ とする。
+  定理 4.2 の証明の途中で得られた有理式表示を考える。
+  $$ \Phi_{p^k}(x) = \frac{x^{p^k} - 1}{x^{p^{k-1}} - 1} $$
+  ここで、右辺の分子について指数法則 $(x^a)^b = x^{ab}$ を用いると、 $x^{p^k} = (x^{p^{k-1}})^p$ と書き換えることができる。したがって、右辺は次のように変形できる。
+  $$ \Phi_{p^k}(x) = \frac{(x^{p^{k-1}})^p - 1}{x^{p^{k-1}} - 1} $$
+  この式の形は、定義 4.1 で与えられた $\Phi_p(X) = \frac{X^p - 1}{X - 1}$ において変数 $X$ に単項式 $x^{p^{k-1}}$ を代入したものに他ならない。すなわち、多項式への代入操作として次が厳密に成立する。
+  $$ \frac{(x^{p^{k-1}})^p - 1}{x^{p^{k-1}} - 1} = \Phi_p(x^{p^{k-1}}) $$
+  以上より、左辺と右辺を結びつけることで、求める等式 $\Phi_{p^k}(x) = \Phi_p(x^{p^{k-1}})$ が得られた。
+  </p>
+</div>
+
+<div class="theorem">
+  <div class="theorem-title">定理 4.4 ( $\Phi_{p^k}(1)$ の値)</div>
+  <p>
+  素数 $p$ と正の整数 $k$ に対して、 $\Phi_{p^k}(1) = p$ である。
+  </p>
+</div>
+<div class="proof">
+  <div class="proof-title">定理 4.4 の証明</div>
+  <p>
+  定理 4.2 より、 $\Phi_{p^k}(x)$ は $p$ 個の項からなる多項式として次のように表される。
+  $$ \Phi_{p^k}(x) = \sum_{j=0}^{p-1} x^{j p^{k-1}} $$
+  この等式は変数 $x$ に関する多項式としての恒等式であるため、 $x = 1$ を代入しても成立する。代入すると次のようになる。
+  $$ \Phi_{p^k}(1) = \sum_{j=0}^{p-1} 1^{j p^{k-1}} = \sum_{j=0}^{p-1} 1 $$
+  この和は $1$ を $p$ 回足し合わせるものであるから、その値は $p$ である。したがって $\Phi_{p^k}(1) = p$ が示された。
+  </p>
+</div>
+
+<div class="theorem">
+  <div class="theorem-title">定理 4.5 ( $\Phi_{p^k}(x)$ の既約性)</div>
+  <p>
+  素数 $p$ と正の整数 $k$ に対して、多項式 $\Phi_{p^k}(x)$ は有理数体 $\mathbb{Q}$ 上で既約である。
+  </p>
+</div>
+<div class="proof">
+  <div class="proof-title">定理 4.5 の証明</div>
+  <p>
+  多項式 $f(x)$ が既約であることと、平行移動した多項式 $f(x+1)$ が既約であることは同値である。したがって、 $\Phi_{p^k}(x)$ の代わりに $f(x) = \Phi_{p^k}(x+1)$ が既約であることを示せば十分である。定理 4.2 の公式より、 $f(x)$ は次のように書ける。
+  $$ f(x) = \Phi_{p^k}(x+1) = \frac{(x+1)^{p^k} - 1}{(x+1)^{p^{k-1}} - 1} $$
+  </p>
+  <p>
+  まず、 $f(x)$ の定数項を調べる。定数項は $f(0)$ の値に等しい。
+  $$ f(0) = \Phi_{p^k}(0+1) = \Phi_{p^k}(1) $$
+  定理 4.4 より $\Phi_{p^k}(1) = p$ であるから、 $f(x)$ の定数項は $p$ である。これは素数 $p$ で割り切れ、かつ $p^2$ では割り切れない。
+  </p>
+  <p>
+  次に、最高次以外のすべての係数が $p$ で割り切れることを示す。これを鮮やかに示すため、係数を $p$ を法とする剰余環 (すなわち有限体) $\mathbb{F}_p$ において考える。
+  有限体 $\mathbb{F}_p$ の標数は $p$ であるから、任意の多項式 $A(x), B(x)$ についてフロベニウス自己準同型 (Frobenius endomorphism) による等式 $(A(x) + B(x))^p \equiv A(x)^p + B(x)^p \pmod p$ が成立する。これを帰納的に適用すると、任意の整数 $m \ge 1$ に対して次が成り立つ。
+  $$ (x+1)^{p^m} \equiv x^{p^m} + 1 \pmod p $$
+  この性質を用いて、 $\mathbb{F}_p[x]$ における $f(x)$ の形を計算する。
+  $$ f(x) = \frac{(x+1)^{p^k} - 1}{(x+1)^{p^{k-1}} - 1} \equiv \frac{(x^{p^k} + 1) - 1}{(x^{p^{k-1}} + 1) - 1} \equiv \frac{x^{p^k}}{x^{p^{k-1}}} \equiv x^{p^k - p^{k-1}} \pmod p $$
+  ここで、 $p^k - p^{k-1} = p^{k-1}(p-1)$ は $f(x)$ の本来の次数に等しい。
+  この合同式 $f(x) \equiv x^{p^{k-1}(p-1)} \pmod p$ が意味するのは、 $f(x)$ を展開した際の最高次項以外のすべての項の係数が、 $\mathbb{F}_p$ において $0$ になる、すなわち整数として素数 $p$ の倍数になるということである。
+  </p>
+  <p>
+  以上をまとめると、多項式 $f(x)$ は以下の $3$ つの条件を満たすモニック多項式である。
+  <br>
+  1. 最高次係数は $1$ であり、 $p$ で割り切れない。
+  <br>
+  2. 最高次以外のすべての係数は $p$ で割り切れる。
+  <br>
+  3. 定数項は $p$ であり、 $p^2$ では割り切れない。
+  <br>
+  これらはまさにアイゼンシュタインの判定法 (Eisenstein's criterion) の条件を満たしている。したがって $f(x)$ は $\mathbb{Q}[x]$ 上で既約であり、ゆえに $\Phi_{p^k}(x)$ も $\mathbb{Q}$ 上で既約である。
+  </p>
+</div>
+
+<div class="example">
+  <div class="example-title">例 4.6 (具体例による直観的理解)</div>
+  <p>
+  定理 4.3 の恒等式が意味しているのは、ある素数 $p$ の高い冪 $p^k$ に対する円分多項式は、本質的に $p$ 番目の円分多項式 $\Phi_p(x)$ と同じ形をしており、単に変数が $x$ から $x^{p^{k-1}}$ に間延びしているだけであるということである。
+  </p>
+  <p>
+  <b>(1) $p=2$ の場合</b>
+  <br>
+  $p=2$ のとき、 $\Phi_2(x) = x + 1$ であり、 $p-1 = 1$ であるため項数は常に $2$ 項となる。
+  </p>
+  <ul>
+    <li>$k=1$ : $\Phi_{2^1}(x) = x^{2^0(2-1)} + 1 = x + 1$</li>
+    <li>$k=2$ : $\Phi_{2^2}(x) = x^{2^1(2-1)} + 1 = x^2 + 1$</li>
+    <li>$k=3$ : $\Phi_{2^3}(x) = \Phi_2(x^4) = x^4 + 1$</li>
+  </ul>
+  <p>
+  これらに $x=1$ を代入すると、すべて値は $2$ (すなわち $p$ ) となることが確認できる。また、 $k=3$ の式は実際に $x^8 - 1 = (x^4 - 1)(x^4 + 1)$ における原始 $8$ 乗根の最小多項式と完全に一致する。
+  </p>
+  <p>
+  <b>(2) $p=3, k=2$ の場合</b>
+  <br>
+  $p=3$ のとき、 $\Phi_3(x) = x^2 + x + 1$ である。定理の公式に $p=3, k=2$ を代入すると、 $p^{k-1} = 3^1 = 3$ であるから、次のようになる。
+  $$ \Phi_9(x) = \Phi_3(x^3) = (x^3)^2 + (x^3) + 1 = x^6 + x^3 + 1 $$
+  変数が $x^3$ に置き換わったことで、項と項の間に「隙間」が生まれている様子がはっきりと確認できる。ここに $x=1$ を代入すると、 $1^6 + 1^3 + 1 = 3$ となり、確かに $p$ と一致する。この多項式に $x-1$ を代入した $f(x) = (x-1)^6 + (x-1)^3 + 1 = x^6 - 6x^5 + 15x^4 - 20x^3 + 15x^2 - 3x + 3$ を見ると、最高次以外の係数がすべて $3$ の倍数であり、定数項が $3$ であるため、アイゼンシュタインの判定法が適用できることが直接視認できる。
+  </p>
+</div>
+
+<h2>5. オリジナルの Legendre 定理の導出</h2>
+
+<p>
+最後に、Legendre の定理の $q$類似と、第4節で証明した円分多項式の $x=1$ における値に関する事実を用いることで、素因数分解に関するオリジナルの Legendre の定理を直接導出する。
+</p>
+
+<div class="definition">
+  <div class="definition-title">定義 5.1 (算術の基本定理)</div>
+  <p>
+  任意の $2$ 以上の整数は、素数の積として順序を除いて一意に表される。これを算術の基本定理 (Fundamental Theorem of Arithmetic)、または素因数分解の一意性と呼ぶ。
+  </p>
+</div>
+
+<p>
+第4節の定理 4.4 で証明したように、正の整数 $m$ が単一の素数 $p$ の冪であるとき $\Phi_m(1) = p$ となる。それ以外のとき $\Phi_m(1) = 1$ となる。すなわち、正の整数 $m$ （ $m \ge 2$ ）に対して、 $\Phi_m(1)$ の値は以下のように定まる。
+$$ \Phi_m(1) = \begin{cases} p & (m = p^j, \text{ ただし } p \text{ は素数で } j \ge 1 \text{ のとき}) \\ 1 & (\text{それ以外のとき}) \end{cases} $$
+</p>
+
+<div class="theorem">
+  <div class="theorem-title">定理 5.2 (オリジナルの Legendre の定理)</div>
+  <p>
+  正の整数 $n$ と素数 $p$ に対して、 $n!$ を割り切る $p$ の最大の冪指数 $\mathrm{ord}_p(n!)$ は以下で与えられる。
+  $$ \mathrm{ord}_p(n!) = \sum_{j=1}^\infty \left\lfloor \frac{n}{p^j} \right\rfloor $$
+  </p>
+</div>
+
+<div class="proof">
+  <div class="proof-title">定理 5.2 の証明</div>
+  <p>
+  定理 2.1 （Legendre の定理の $q$類似）から、 $q$階乗 $(n)_q!$ を多項式として既約分解した式を構成する。
+  有理数体上の多項式環 $\mathbb{Q}[q]$ において、 $q$階乗 $(n)_q!$ の円分多項式 $\Phi_m(q)$ による付値は $\mathrm{ord}_{\Phi_m(q)}((n)_q!) = \lfloor n/m \rfloor$ である。
+  各円分多項式 $\Phi_m(q)$ （ $m \ge 2$ ）は $\mathbb{Q}[q]$ における互いに素な既約多項式であり、多項式 $(n)_q!$ の既約因子は円分多項式のみからなる。したがって、 $(n)_q!$ は次のように円分多項式の積として完全に分解される。
+  $$ (n)_q! = \prod_{m=2}^n \Phi_m(q)^{\lfloor \frac{n}{m} \rfloor} $$
+  </p>
+  <p>
+  この等式は変数 $q$ に関する多項式としての恒等式であるため、 $q$ に任意の実数を代入しても等式として成立する。ここで両辺において $q \to 1$ の極限をとる。
+  </p>
+  <p>
+  まず、左辺について考える。各 $q$数 $(k)_q$ は $q \to 1$ の極限において次のように振る舞う。
+  $$ \lim_{q \to 1} (k)_q = \lim_{q \to 1} (1 + q + \cdots + q^{k-1}) = 1 + 1 + \cdots + 1 = k $$
+  したがって、各因子の極限をとることで、左辺の $q \to 1$ における極限は通常の階乗 $n!$ に一致する。
+  $$ \lim_{q \to 1} (n)_q! = 1 \cdot 2 \cdots n = n! $$
+  </p>
+  <p>
+  次に、右辺について考える。多項式に $q=1$ を代入するため、各円分多項式の $q=1$ における値 $\Phi_m(1)$ を評価する。
+  前述の事実を右辺の積に適用する。底が $\Phi_m(1) = 1$ となる項は全体の積に寄与しないため、積は $m$ が素数 $p$ の冪 $p^j$ である項のみを走り、次のように書き換えられる。
+  $$ \prod_{m=2}^n \Phi_m(1)^{\lfloor \frac{n}{m} \rfloor} = \prod_{p \text{: 素数}} \prod_{\substack{j \ge 1 \\ p^j \le n}} p^{\lfloor \frac{n}{p^j} \rfloor} $$
+  ここで、指数法則を用いて同じ素数 $p$ を底とする項をまとめる。
+  $$ \prod_{p \text{: 素数}} \prod_{\substack{j \ge 1 \\ p^j \le n}} p^{\lfloor \frac{n}{p^j} \rfloor} = \prod_{p \text{: 素数}} p^{\sum_{j=1}^\infty \lfloor \frac{n}{p^j} \rfloor} $$
+  なお、最後の式において和の範囲を $j=1$ から $\infty$ まで拡張しているが、 $p^j  >  n$ となる $j$ に対しては常に $\lfloor n/p^j \rfloor = 0$ となるため、和の値に影響を与えない。
+  </p>
+  <p>
+  以上の左辺と右辺の計算結果を等置することで、整数の等式として次を得る。
+  $$ n! = \prod_{p \text{: 素数}} p^{\sum_{j=1}^\infty \lfloor \frac{n}{p^j} \rfloor} $$
+  算術の基本定理（素因数分解の一意性）により、この右辺の素数 $p$ の指数部分は、 $n!$ を割り切る素数 $p$ の最大の冪指数 $\mathrm{ord}_p(n!)$ と正確に一致する。
+  したがって、任意の素数 $p$ に対して次が成立する。
+  $$ \mathrm{ord}_p(n!) = \sum_{j=1}^\infty \left\lfloor \frac{n}{p^j} \right\rfloor $$
+  これでオリジナルの Legendre の定理が証明された。
+  </p>
+</div>
+
+<div class="example">
+  <div class="example-title">例 5.3 (証明のプロセスの例示： $n=6$ の場合)</div>
+  <p>
+  証明のプロセスを $n=6$ の場合を例として具体的にたどる。
+  まず、 Legendre の定理の $q$類似を用いて、 $(6)_q!$ を円分多項式 $\Phi_m(q)$ の積に分解する。
+  各 $m \ge 2$ に対して、 $\Phi_m(q)$ の冪指数は $\lfloor 6/m \rfloor$ で与えられるため、計算すると以下のようになる。
+  </p>
+  <ul>
+    <li>$m=2$ のとき、 $\lfloor 6/2 \rfloor = 3$</li>
+    <li>$m=3$ のとき、 $\lfloor 6/3 \rfloor = 2$</li>
+    <li>$m=4$ のとき、 $\lfloor 6/4 \rfloor = 1$</li>
+    <li>$m=5$ のとき、 $\lfloor 6/5 \rfloor = 1$</li>
+    <li>$m=6$ のとき、 $\lfloor 6/6 \rfloor = 1$</li>
+  </ul>
+  <p>
+  したがって、多項式としての既約分解は次の恒等式となる。
+  $$ (6)_q! = \Phi_2(q)^3 \Phi_3(q)^2 \Phi_4(q)^1 \Phi_5(q)^1 \Phi_6(q)^1 $$
+  </p>
+  <p>
+  次に、この恒等式の両辺において $q \to 1$ の極限をとる。
+  左辺の $q$階乗は通常の階乗に収束するため、 $(6)_1! = 6! = 720$ となる。
+  右辺の各円分多項式の値 $\Phi_m(1)$ を、与えられた事実に基づいて評価する。
+  </p>
+  <ul>
+    <li>$m=2 = 2^1$ のとき、単一の素数 $2$ の冪であるため $\Phi_2(1) = 2$</li>
+    <li>$m=3 = 3^1$ のとき、単一の素数 $3$ の冪であるため $\Phi_3(1) = 3$</li>
+    <li>$m=4 = 2^2$ のとき、単一の素数 $2$ の冪であるため $\Phi_4(1) = 2$</li>
+    <li>$m=5 = 5^1$ のとき、単一の素数 $5$ の冪であるため $\Phi_5(1) = 5$</li>
+    <li>$m=6 = 2 \cdot 3$ のとき、単一の素数の冪ではないため $\Phi_6(1) = 1$</li>
+  </ul>
+  <p>
+  これらを右辺の積に代入すると、以下の整数の等式を得る。
+  $$ 6! = 2^3 \cdot 3^2 \cdot 2^1 \cdot 5^1 \cdot 1^1 $$
+  </p>
+  <p>
+  ここで、同じ素数 $2$ を底とする項を指数法則でまとめると、次のように $6!$ の素因数分解の形になる。
+  $$ 6! = 2^{3+1} \cdot 3^2 \cdot 5^1 = 2^4 \cdot 3^2 \cdot 5^1 $$
+  </p>
+  <p>
+  この結果と、オリジナルの Legendre の定理による各素数 $p$ の冪指数の計算を比較する。
+  </p>
+  <ul>
+    <li>$p=2$ の場合、 $\lfloor 6/2 \rfloor + \lfloor 6/4 \rfloor = 3 + 1 = 4$</li>
+    <li>$p=3$ の場合、 $\lfloor 6/3 \rfloor = 2$</li>
+    <li>$p=5$ の場合、 $\lfloor 6/5 \rfloor = 1$</li>
+  </ul>
+  <p>
+  先ほど円分多項式 $\Phi_2(1)^3$ と $\Phi_4(1)^1$ の積から素数 $2$ の指数 $3+1=4$ が現れたプロセスは、まさに Legendre の定理の無限和において $j=1$ の項 $\lfloor 6/2 \rfloor = 3$ と $j=2$ の項 $\lfloor 6/4 \rfloor = 1$ を足し合わせたことに完全に対応している。
+  このように、 $m$ が素数 $p$ の冪 $p^j$ である項がすべて同じ素数 $p$ を生み出すことで、オリジナルの Legendre の定理に現れる和の各項 $\lfloor n/p^j \rfloor$ が完全に再現されることが具体的に確認できる。
+  </p>
+</div>
+
+<div class="references">
+  <h2>参考文献</h2>
+  <ol>
+    <li>
+      Stanley, R. P. (2011). <i>Enumerative Combinatorics</i> (Vol. 1, 2nd ed.). Cambridge University Press. <a href="https://doi.org/10.1017/CBO9781139058520" target="_blank">https://doi.org/10.1017/CBO9781139058520</a>
+    </li>
+    <li>
+      Dummit, D. S., & Foote, R. M. (2004). <i>Abstract Algebra</i> (3rd ed.). John Wiley & Sons.
+    </li>
+    <li>
+      Andrews, G. E. (1998). <i>The Theory of Partitions</i>. Cambridge University Press. <a href="https://doi.org/10.1017/CBO9780511608650" target="_blank">https://doi.org/10.1017/CBO9780511608650</a>
+    </li>
+  </ol>
+</div>
+
+</body>
+</html>

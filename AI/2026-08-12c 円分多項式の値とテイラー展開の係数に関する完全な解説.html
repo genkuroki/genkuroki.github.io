@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>円分多項式の値とテイラー展開の係数に関する完全な解説</title>
+    <!-- MathJaxの設定：ヘッダーでのマクロ定義は行わず、インライン数式 $ を有効化 -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            color: #333;
+            background-color: #fafafa;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 40px;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #16a085;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .definition, .theorem, .lemma, .proof, .example {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition { border-left: 5px solid #27ae60; }
+        .theorem { border-left: 5px solid #c0392b; }
+        .lemma { border-left: 5px solid #e67e22; }
+        .proof { border-left: 5px solid #3498db; background-color: #f4f9fd; }
+        .example { border-left: 5px solid #8e44ad; }
+        .title { font-weight: bold; margin-bottom: 10px; }
+        .references { margin-top: 50px; padding-top: 20px; border-top: 2px solid #333; }
+        .references li { margin-bottom: 10px; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h1>円分多項式の値とテイラー展開の係数に関する完全な解説</h1>
+
+    <p>本稿では、 $n$ 番目の円分多項式 (cyclotomic polynomial) $\Phi_n(x)$ の $x=1$ における値、および $x=1+t$ を代入した際の $t$ に関する高次項の展開係数について、完全に自己完結 (self-contained) した証明と解説を行う。証明にあたっては、強い帰納法 (strong induction) を用いた直接的な証明と、Möbiusの反転公式 (Möbius inversion formula) を用いた別証明の2つのアプローチを提示する。</p>
+
+    <h2>1. 基礎概念の定義</h2>
+
+    <p>はじめに、以降の議論で必要となる代数学および整数論における基本的な概念を厳密に定義する。証明を自己完結的なものとするため、各種トーシェント関数や形式的べき級数の定義も網羅する。</p>
+
+    <div class="definition">
+        <div class="title">定義 1.1 (原始 $n$ 乗根)</div>
+        <p>正整数 $n$ に対して、複素数 $\zeta$ が方程式 $\zeta^n=1$ を満たし、かつ $1 \le k  <  n$ なる任意の正整数 $k$ に対して $\zeta^k \neq 1$ を満たすとき、 $\zeta$ を原始 $n$ 乗根 (primitive $n$-th root of unity) と呼ぶ。</p>
+        <p>複素数平面において、 $\zeta_k=\exp(2\pi i k/n)$ とおくと、 $\zeta_k$ が原始 $n$ 乗根であることと、 $k$ と $n$ が互いに素 (coprime) であること、すなわち $\gcd(k, n)=1$ であることは同値である。</p>
+    </div>
+
+    <div class="definition">
+        <div class="title">定義 1.2 (円分多項式)</div>
+        <p>正整数 $n$ に対して、全ての原始 $n$ 乗根を根 (root) に持つモニック多項式 (monic polynomial) を $n$ 番目の円分多項式 $\Phi_n(x)$ と定義する。すなわち、以下の式で与えられる。</p>
+        $$ \Phi_n(x)=\prod_{\substack{1 \le k \le n \\ \gcd(k, n)=1}} (x-\exp(2\pi i k/n)) $$
+    </div>
+
+    <div class="definition">
+        <div class="title">定義 1.3 (Möbius関数)</div>
+        <p>正整数 $n$ に対して、Möbius関数 (Möbius function) $\mu(n)$ を以下のように定義する。</p>
+        <ol>
+            <li> $n=1$ のとき、 $\mu(1)=1$ である。</li>
+            <li> $n$ が無平方 (square-free) な整数、すなわち $k$ 個の相異なる素数の積 $n=p_1 p_2 \dots p_k$ として表されるとき、 $\mu(n)=(-1)^k$ である。</li>
+            <li> $n$ がある素数の平方を因数に持つとき、 $\mu(n)=0$ である。</li>
+        </ol>
+        <p>この定義から、互いに素な正整数 $a, b$ に対して $\mu(ab)=\mu(a)\mu(b)$ が成り立つ。すなわち、Möbius関数は乗法的 (multiplicative) である。</p>
+    </div>
+
+    <div class="definition">
+        <div class="title">定義 1.4 (Eulerのトーシェント関数)</div>
+        <p>正整数 $n$ に対して、 $1$ から $n$ までの整数のうち $n$ と互いに素であるものの個数をEulerのトーシェント関数 (Euler's totient function) と呼び、 $\phi(n)$ で表す。</p>
+    </div>
+
+    <div class="definition">
+        <div class="title">定義 1.5 (Jordanのトーシェント関数)</div>
+        <p>正整数 $n$ と $k$ に対して、 $k$ 次のJordanのトーシェント関数 (Jordan totient function) $J_k(n)$ を以下のように定義する。</p>
+        $$ J_k(n) = \sum_{d|n} \mu(n/d) d^k $$
+        <p>この定義において $k=1$ とすると、数論における恒等式 $\phi(n) = \sum_{d|n} \mu(n/d) d$ により、 $J_1(n)$ はEulerのトーシェント関数 $\phi(n)$ に完全に一致する。</p>
+    </div>
+
+    <div class="definition">
+        <div class="title">定義 1.6 (形式的べき級数と対数・指数関数)</div>
+        <p>変数 $t$ に関する無限級数 $\sum_{k=0}^{\infty} a_k t^k$ （係数 $a_k$ は複素数）の全体は、通常の和と積の規則のもとで環をなす。これを形式的べき級数環 (ring of formal power series) と呼ぶ。</p>
+        <p>定数項が $0$ である形式的べき級数 $X(t)$ に対して、形式的対数関数 (formal logarithm) および形式的指数関数 (formal exponential) は以下のように定義され、互いに逆関数の関係にある。</p>
+        $$ \log(1+X(t)) = X(t) - \frac{X(t)^2}{2} + \frac{X(t)^3}{3} - \dots = \sum_{m=1}^{\infty} \frac{(-1)^{m-1}}{m} X(t)^m $$
+        $$ \exp(X(t)) = 1 + X(t) + \frac{X(t)^2}{2!} + \frac{X(t)^3}{3!} + \dots = \sum_{m=0}^{\infty} \frac{1}{m!} X(t)^m $$
+    </div>
+
+    <h2>2. 円分多項式とMöbius関数に関する基本補題</h2>
+
+    <p>円分多項式の値や展開係数を求めるための準備として、重要な4つの補題を証明する。</p>
+
+    <div class="lemma">
+        <div class="title">補題 2.1 (多項式の積への分解)</div>
+        <p>任意の正整数 $n$ に対して、以下の等式が成り立つ。</p>
+        $$ x^n-1=\prod_{d|n} \Phi_d(x) $$
+        <p>ここで、積は $n$ の全ての正の約数 $d$ にわたってとる。</p>
+    </div>
+    
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>方程式 $x^n-1=0$ の根は、 $n$ 個の $n$ 乗根 $\exp(2\pi i k/n)$ （ここで $0 \le k \le n-1$ ）である。</p>
+        <p>各 $n$ 乗根は、ある一意的な $d|n$ に対して原始 $d$ 乗根となる。実際、分数 $k/n$ を既約分数に約分して $a/d$ （ここで $\gcd(a, d)=1$ ）と書けば、 $\exp(2\pi i k/n)=\exp(2\pi i a/d)$ であり、これは原始 $d$ 乗根の定義を満たす。</p>
+        <p>逆に、 $n$ の任意の約数 $d$ に対する任意の原始 $d$ 乗根 $\zeta$ は、 $\zeta^d=1$ を満たす。すると $\zeta^n=(\zeta^d)^{n/d}=1^{n/d}=1$ となるため、これは $n$ 乗根の一つである。</p>
+        <p>したがって、 $x^n-1$ の根全体という集合は、各 $d|n$ に対する原始 $d$ 乗根全体という集合の直和 (disjoint union) に分割される。</p>
+        <p>各根は多項式 $x^n-1$ の単根 (simple root) であるから、因数定理 (factor theorem) を適用することにより、多項式としての等式 $x^n-1=\prod_{d|n} \Phi_d(x)$ を得る。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <div class="lemma">
+        <div class="title">補題 2.2 (素数冪による変数変換)</div>
+        <p>任意の正整数 $m$ 、素数 $p$ 、および整数 $k \ge 1$ に対して、以下の等式が成り立つ。</p>
+        $$ \Phi_m(x^{p^k})=\prod_{j=0}^k \Phi_{p^j m}(x) $$
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>$m$ に関する強い帰納法を用いて証明する。</p>
+        <p>$m=1$ のとき、補題 2.1 より $\Phi_1(x^{p^k})=x^{p^k}-1=\prod_{d|p^k} \Phi_d(x)$ である。 $p^k$ の正の約数は $p^j$ （ここで $0 \le j \le k$ ）に限られるため、これは $\prod_{j=0}^k \Phi_{p^j}(x)$ と等しくなり、等式は成立する。</p>
+        <p>次に $m  >  1$ とし、 $m$ より小さい全ての正整数に対して主張が成り立つと仮定する。補題 2.1 より、左辺の式は $x^{p^k m}-1=\prod_{d|m} \Phi_d(x^{p^k})$ と展開できる。</p>
+        <p>一方、 $p^k m$ の正の約数は、 $m$ の正の約数 $d$ と $p^k$ の正の約数 $p^j$ （ここで $0 \le j \le k$ ）の積 $p^j d$ として一意的に表されるため、</p>
+        $$ x^{p^k m}-1=\prod_{D|p^k m} \Phi_D(x)=\prod_{d|m} \prod_{j=0}^k \Phi_{p^j d}(x) $$
+        <p>と書ける。これら2つの式を等置し、 $\Phi_m$ の項とそれ以外の項に分離すると、</p>
+        $$ \Phi_m(x^{p^k}) \prod_{\substack{d|m \\ d  <  m}} \Phi_d(x^{p^k})=\left( \prod_{j=0}^k \Phi_{p^j m}(x) \right) \prod_{\substack{d|m \\ d  <  m}} \prod_{j=0}^k \Phi_{p^j d}(x) $$
+        <p>となる。</p>
+        <p>帰納法の仮定により、 $d  <  m$ なる各 $d$ について $\Phi_d(x^{p^k})=\prod_{j=0}^k \Phi_{p^j d}(x)$ が成り立つ。多項式環 $\mathbb{C}[x]$ は整域 (integral domain) であるため、両辺から非零の共通因子をキャンセルすることができる。</p>
+        <p>このキャンセルを実行すると、 $\Phi_m(x^{p^k})=\prod_{j=0}^k \Phi_{p^j m}(x)$ を得る。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <div class="lemma">
+        <div class="title">補題 2.3 (Möbius関数の和)</div>
+        <p>任意の正整数 $n$ に対して、 $n$ の全ての正の約数 $d$ にわたるMöbius関数の和は以下のようになる。</p>
+        $$ \sum_{d|n} \mu(d)=\begin{cases} 1 & (n=1 \text{ のとき}) \\ 0 & (n  >  1 \text{ のとき}) \end{cases} $$
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>$n=1$ のときは定義より明らかに $\sum_{d|1} \mu(d)=\mu(1)=1$ である。</p>
+        <p>$n  >  1$ のとき、 $n$ の素因数分解を $n=p_1^{a_1} p_2^{a_2} \dots p_k^{a_k}$ （ここで $k \ge 1$, $a_i \ge 1$ ）とする。和 $\sum_{d|n} \mu(d)$ において、 $\mu(d)$ が $0$ でない値をとるのは、 $d$ が素数 $p_1, \dots, p_k$ の中からいくつかを選んで作られる無平方な約数である場合に限られる。</p>
+        <p>$k$ 個の素因数の中から $j$ 個の素因数を選んで作られる約数の数は二項係数 (binomial coefficient) $\binom{k}{j}$ であり、その各々に対する $\mu$ の値は $(-1)^j$ である。</p>
+        <p>したがって、二項定理 (binomial theorem) により、</p>
+        $$ \sum_{d|n} \mu(d)=\sum_{j=0}^k \binom{k}{j} (-1)^j=(1-1)^k=0 $$
+        <p>となり、補題が示された。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <div class="lemma">
+        <div class="title">補題 2.4 (乗法的なMöbiusの反転公式)</div>
+        <p>数論的関数 (arithmetic function) $F(n)$ と $G(n)$ が、全ての正整数 $n$ に対して以下の関係を満たすとする。</p>
+        $$ F(n)=\prod_{d|n} G(d) $$
+        <p>このとき、以下の反転公式が成り立つ。</p>
+        $$ G(n)=\prod_{d|n} F(n/d)^{\mu(d)} $$
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>仮定の式を右辺の $F(n/d)$ に代入すると、</p>
+        $$ \prod_{d|n} F(n/d)^{\mu(d)}=\prod_{d|n} \left( \prod_{c|(n/d)} G(c) \right)^{\mu(d)} $$
+        <p>となる。ここで、積は $d \cdot c$ が $n$ を割り切るような正整数の組 $(d, c)$ 全てにわたってとられる。積の順序を交換し、先に $c$ についてまとめる形に書き換えると、</p>
+        $$ \prod_{c|n} \prod_{d|(n/c)} G(c)^{\mu(d)}=\prod_{c|n} G(c)^{\sum_{d|(n/c)} \mu(d)} $$
+        <p>となる。</p>
+        <p>補題 2.3 より、内側の和 $\sum_{d|(n/c)} \mu(d)$ は、 $n/c=1$ （すなわち $c=n$ ）のときに $1$ となり、 $n/c  >  1$ （すなわち $c  <  n$ ）のときに $0$ となる。</p>
+        <p>したがって、この巨大な積の中で $c=n$ の項のみが $G(n)^1$ として残り、それ以外の項はすべて $G(c)^0=1$ となる。よって、積全体は $G(n)$ に等しくなり、補題が示された。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <h2>3. 定数項 $\Phi_n(1)$ の決定</h2>
+
+    <p>以上の補題をもとに、 $n$ 番目の円分多項式 $\Phi_n(x)$ の $x=1$ における値を決定する定理を示す。</p>
+
+    <div class="theorem">
+        <div class="title">定理 3.1 ( $\Phi_n(1)$ の値)</div>
+        <p>任意の正整数 $n$ について、 $\Phi_n(1)$ の値は以下の通りである。</p>
+        <ol>
+            <li> $n=1$ のとき、 $\Phi_1(1)=0$</li>
+            <li> $n=p^k$ （ $p$ は素数、 $k \ge 1$ ）のとき、 $\Phi_{p^k}(1)=p$</li>
+            <li> $n$ が2つ以上の相異なる素因数を持つとき、 $\Phi_n(1)=1$</li>
+        </ol>
+    </div>
+
+    <h3>3.1. 帰納法による直接的な証明</h3>
+    
+    <div class="proof">
+        <div class="title">証明1 (強い帰納法による証明)</div>
+        <p>$n$ に関する強い帰納法を用いて、各場合の値を証明しつつ、全ての $n  >  1$ について $\Phi_n(1) \ge 1$ であることを同時に示す。</p>
+        
+        <p><strong>(1) $n=1$ の場合：</strong><br>
+        定義より $\Phi_1(x)=x-1$ である。したがって、 $x=1$ を代入すると $\Phi_1(1)=0$ となる。</p>
+        
+        <p><strong>(2) $n=p^k$ （ $p$ は素数、 $k \ge 1$ ）の場合：</strong><br>
+        補題 2.1 より $x^{p^k}-1=\prod_{d|p^k} \Phi_d(x)=\Phi_{p^k}(x) \prod_{j=0}^{k-1} \Phi_{p^j}(x)$ である。</p>
+        <p>再び補題 2.1 より $\prod_{j=0}^{k-1} \Phi_{p^j}(x)=x^{p^{k-1}}-1$ であるから、</p>
+        $$ \Phi_{p^k}(x)=\frac{x^{p^k}-1}{x^{p^{k-1}}-1} $$
+        <p>となる。右辺の多項式の割り算を実行すると、等比数列の和の公式により、</p>
+        $$ \Phi_{p^k}(x)=1+x^{p^{k-1}}+x^{2p^{k-1}}+\dots+x^{(p-1)p^{k-1}}=\sum_{i=0}^{p-1} x^{i p^{k-1}} $$
+        <p>を得る。この式は多項式としての等式であるから、 $x=1$ を代入して、</p>
+        $$ \Phi_{p^k}(1)=\sum_{i=0}^{p-1} 1=p $$
+        <p>となる。特に $p \ge 2$ であるため、 $\Phi_{p^k}(1) \ge 1$ を満たす。</p>
+        
+        <p><strong>(3) $n$ が2つ以上の相異なる素因数を持つ場合：</strong><br>
+        $n$ はある素数 $p$ 、整数 $k \ge 1$ 、および $p$ と互いに素な整数 $m  >  1$ を用いて $n=p^k m$ と表すことができる。 $n$ よりも小さい全ての整数 $n'  >  1$ について $\Phi_{n'}(1) \ge 1$ であることを帰納法の仮定とする。</p>
+        <p>補題 2.2 より、</p>
+        $$ \Phi_m(x^{p^k})=\prod_{j=0}^k \Phi_{p^j m}(x)=\Phi_{p^k m}(x) \prod_{j=0}^{k-1} \Phi_{p^j m}(x)=\Phi_n(x) \Phi_m(x^{p^{k-1}}) $$
+        <p>が成り立つ。これを $\Phi_n(x)$ について解くと、</p>
+        $$ \Phi_n(x)=\frac{\Phi_m(x^{p^k})}{\Phi_m(x^{p^{k-1}})} $$
+        <p>を得る。ここで $x=1$ を代入すると、 $\Phi_n(1)=\frac{\Phi_m(1)}{\Phi_m(1)}$ となる。</p>
+        <p>$m  >  1$ であり、かつ $m  <  n$ であるため、帰納法の仮定により $\Phi_m(1) \ge 1$ である。したがって $\Phi_m(1) \neq 0$ であり、ゼロ割りは発生しない。よって、 $\Phi_n(1)=1$ である。このときも $\Phi_n(1) \ge 1$ を満たす。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <h3>3.2. Möbiusの反転公式を用いた別証明</h3>
+
+    <div class="proof">
+        <div class="title">証明2 (Möbiusの反転公式による証明)</div>
+        <p>まず $n=1$ の場合は $\Phi_1(1)=0$ である。以下、 $n  >  1$ の場合を考える。</p>
+        <p>多項式の恒等式 $x^n-1=\prod_{d|n} \Phi_d(x)$ の両辺を $x-1=\Phi_1(x)$ で割ると、</p>
+        $$ \frac{x^n-1}{x-1}=\prod_{\substack{d|n \\ d  >  1}} \Phi_d(x) $$
+        <p>を得る。左辺は等比数列の和として $x^{n-1}+x^{n-2}+\dots+1$ と展開できる。この等式は多項式としての等式であるため、両辺に $x=1$ を代入すると、</p>
+        $$ n=\prod_{\substack{d|n \\ d  >  1}} \Phi_d(1) $$
+        <p>となる。ここで、正整数 $n$ に対して数論的関数 $F(n), G(n)$ を次のように定義する。 $F(n)=n$ とし、 $G(1)=1$ 、さらに $n  >  1$ に対しては $G(n)=\Phi_n(1)$ とする。</p>
+        <p>すると、任意の正整数 $n \ge 1$ に対して、</p>
+        $$ \prod_{d|n} G(d)=G(1) \prod_{\substack{d|n \\ d  >  1}} G(d)=1 \cdot \prod_{\substack{d|n \\ d  >  1}} \Phi_d(1)=n=F(n) $$
+        <p>が成り立つことがわかる。（ $n=1$ のときは空積を考慮し $\prod_{d|1} G(d)=G(1)=1=F(1)$ であり成立する。）</p>
+        <p>この関係式に補題 2.4 の乗法的なMöbiusの反転公式を適用すると、</p>
+        $$ G(n)=\prod_{d|n} F(n/d)^{\mu(d)}=\prod_{d|n} (n/d)^{\mu(d)} $$
+        <p>を得る。この積をさらに計算しやすく変形する。 $n  >  1$ であることに注意して補題 2.3 を用いると、</p>
+        $$ \prod_{d|n} (n/d)^{\mu(d)}=n^{\sum_{d|n} \mu(d)} \prod_{d|n} d^{-\mu(d)}=n^0 \prod_{d|n} d^{-\mu(d)}=\prod_{d|n} d^{-\mu(d)} $$
+        <p>となる。約数 $d$ が $n$ のすべての約数を走るとき、 $n/d$ もまた $n$ のすべての約数を重複なく走る。したがって、上式の $d$ を $n/d$ に置き換えても積全体の値は変わらない。</p>
+        $$ G(n)=\prod_{d|n} (n/d)^{-\mu(n/d)}=n^{-\sum_{d|n} \mu(n/d)} \prod_{d|n} d^{\mu(n/d)} $$
+        <p>ここで、約数の順序を反転させて和をとっても結果は同じなので $\sum_{d|n} \mu(n/d)=\sum_{d|n} \mu(d)=0$ である。ゆえに、 $n  >  1$ における $\Phi_n(1)$ の値は、以下の簡潔な公式で与えられる。</p>
+        $$ \Phi_n(1)=G(n)=\prod_{d|n} d^{\mu(n/d)} $$
+        <p>この公式を用いて、(2) と (3) の場合をそれぞれ評価する。</p>
+        
+        <p><strong>場合 (2): $n=p^k$ （ $p$ は素数、 $k \ge 1$ ）のとき：</strong></p>
+        <p>$n$ の約数は $d=p^j$ （ここで $0 \le j \le k$ ）という形をしている。このとき、 $\mu(n/d)=\mu(p^{k-j})$ である。</p>
+        <p>Möbius関数の定義より、これが $0$ でない値をとるのは、 $k-j=0$ （すなわち $j=k$ ）のときと、 $k-j=1$ （すなわち $j=k-1$ ）のときのみである。したがって、積の中で残る項はこれら2つの場合のみとなり、</p>
+        $$ \Phi_{p^k}(1)=(p^k)^{\mu(1)} \cdot (p^{k-1})^{\mu(p)}=(p^k)^1 \cdot (p^{k-1})^{-1}=\frac{p^k}{p^{k-1}}=p $$
+        <p>となる。これで (2) が示された。</p>
+
+        <p><strong>場合 (3): $n$ が2つ以上の相異なる素因数を持つとき：</strong></p>
+        <p>$n$ を $n=p^a m$ と表す。ここで $p$ は $n$ の素因数の一つ、 $a \ge 1$ はその冪指数、 $m$ は $p$ で割り切れない整数である。仮定より $n$ は相異なる2つ以上の素因数を持つため、 $m  >  1$ である。</p>
+        <p>$n$ の任意の約数 $d$ は、 $0 \le j \le a$ なる整数 $j$ と、 $m$ の約数 $c$ を用いて、 $d=p^j c$ と一意的に表すことができる。これを公式に代入すると、</p>
+        $$ \Phi_n(1)=\prod_{c|m} \prod_{j=0}^a (p^j c)^{\mu(p^{a-j} m/c)} $$
+        <p>となる。 $p^{a-j}$ と $m/c$ は互いに素であるため、Möbius関数の乗法性より $\mu(p^{a-j} m/c)=\mu(p^{a-j})\mu(m/c)$ と分解できる。よって、内側の $j$ に関する積は、</p>
+        $$ \prod_{j=0}^a (p^j c)^{\mu(p^{a-j})\mu(m/c)} $$
+        <p>と書ける。場合 (2) のときと同様に、 $\mu(p^{a-j}) \neq 0$ となるのは $j=a$ と $j=a-1$ のときのみである。これら2つの項のみを取り出すと、内側の積は</p>
+        $$ (p^a c)^{\mu(1)\mu(m/c)} \cdot (p^{a-1} c)^{\mu(p)\mu(m/c)}=(p^a c)^{\mu(m/c)} \cdot (p^{a-1} c)^{-\mu(m/c)}=\left( \frac{p^a c}{p^{a-1} c} \right)^{\mu(m/c)}=p^{\mu(m/c)} $$
+        <p>となる。これを元の式に戻して外側の $c$ に関する積を計算すると、</p>
+        $$ \Phi_n(1)=\prod_{c|m} p^{\mu(m/c)}=p^{\sum_{c|m} \mu(m/c)} $$
+        <p>を得る。</p>
+        <p>ここで、 $c$ が $m$ のすべての約数を走るとき、 $m/c$ も $m$ のすべての約数を走るため、指数部分の和は $\sum_{c|m} \mu(c)$ と等しい。 $m  >  1$ であるため、補題 2.3 よりこの和は $0$ である。したがって、 $\Phi_n(1)=p^0=1$ となる。これで (3) も示された。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <h2>4. テイラー展開 $\Phi_n(1+t)$ の高次項の係数</h2>
+
+    <p>次に、 $\Phi_n(x)$ に $x=1+t$ を代入して得られる多項式 $\Phi_n(1+t) = \sum_{k=0}^{\phi(n)} c_k t^k$ の各係数 $c_k$ について考察する。定数項は $c_0 = \Phi_n(1)$ であり、前節で完全に決定された。</p>
+
+    <div class="lemma">
+        <div class="title">補題 4.1 (円分多項式の有理式表示)</div>
+        <p>任意の正整数 $n$ に対して、複素数係数の有理式体 $\mathbb{C}(x)$ において以下の等式が成り立つ。</p>
+        $$ \Phi_n(x) = \prod_{d|n} (x^d-1)^{\mu(n/d)} $$
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>多項式としての恒等式 $x^n-1 = \prod_{d|n} \Phi_d(x)$ を有理式体 $\mathbb{C}(x)$ の非零要素の乗法群 $\mathbb{C}(x)^{\times}$ における等式とみなす。</p>
+        <p>数論的関数 $F(n) = x^n-1$ および $G(n) = \Phi_n(x)$ を定義すると、仮定より $F(n) = \prod_{d|n} G(d)$ を満たす。補題 2.4 で証明した乗法的なMöbiusの反転公式を群 $\mathbb{C}(x)^{\times}$ に対して適用すると、</p>
+        $$ G(n) = \prod_{d|n} F(d)^{\mu(n/d)} $$
+        <p>を得る。これに $F, G$ の定義を代入することで、 $\Phi_n(x) = \prod_{d|n} (x^d-1)^{\mu(n/d)}$ が示された。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <div class="theorem">
+        <div class="title">定理 4.2 (高次項の係数)</div>
+        <p>$\Phi_n(1+t) = \sum_{k=0}^{\phi(n)} c_k t^k$ の展開において、 $1$ 次以上の項の係数 $c_k$ （ $k \ge 1$ ）は以下のようになる。</p>
+        <ol>
+            <li><strong> $n=1$ の場合：</strong> $\Phi_1(1+t)=t$ であるため、 $c_1=1$ であり、 $2$ 次以上の任意の $k \ge 2$ に対して $c_k=0$ である。</li>
+            <li><strong> $n \ge 2$ の場合：</strong> $1$ 次の項の係数 $c_1$ および $2$ 次の項の係数 $c_2$ は、Eulerのトーシェント関数 $\phi(n)$ および 2次のJordanのトーシェント関数 $J_2(n)$ を用いて以下のように明示的に与えられる。
+            $$ c_1 = \Phi_n(1) \frac{\phi(n)}{2} $$
+            $$ c_2 = \Phi_n(1) \left( \frac{J_2(n)}{24} - \frac{\phi(n)}{4} + \frac{\phi(n)^2}{8} \right) $$
+            さらに一般の $k$ 次の項の係数 $c_k$ についても、 $m \le k$ なる $m$ 次のJordanのトーシェント関数 $J_m(n)$ の多項式として系統的に計算することができる。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <div class="title">証明</div>
+        <p>$n=1$ の場合は、 $\Phi_1(x)=x-1$ に $x=1+t$ を代入すれば $\Phi_1(1+t)=t$ となり、定理の(1)の主張は明らかである。</p>
+        <p>以下、 $n \ge 2$ の場合を考える。補題 4.1 の等式に $x=1+t$ を代入する。二項定理により、任意の正整数 $d$ に対して</p>
+        $$ (1+t)^d - 1 = \sum_{k=1}^d \binom{d}{k} t^k = d t \left( 1 + \frac{d-1}{2} t + \frac{(d-1)(d-2)}{6} t^2 + O(t^3) \right) $$
+        <p>と展開できる。ここで、括弧内の形式的べき級数を $f_d(t)$ とおく。すなわち、</p>
+        $$ f_d(t) = 1 + \frac{d-1}{2} t + \frac{(d-1)(d-2)}{6} t^2 + O(t^3) $$
+        <p>である。すると $(1+t)^d-1 = d t f_d(t)$ と書ける。これを補題 4.1 の式に代入すると、</p>
+        $$ \Phi_n(1+t) = \prod_{d|n} \big( d t f_d(t) \big)^{\mu(n/d)} = \left( \prod_{d|n} d^{\mu(n/d)} \right) \left( \prod_{d|n} t^{\mu(n/d)} \right) \left( \prod_{d|n} f_d(t)^{\mu(n/d)} \right) $$
+        <p>となる。</p>
+        <p>1つ目の積は定理 3.1 の証明中で示した通り $\Phi_n(1)$ に等しい。2つ目の積について、 $n \ge 2$ であるから補題 2.3 より $\sum_{d|n} \mu(n/d) = 0$ が成り立つ。したがって、</p>
+        $$ \prod_{d|n} t^{\mu(n/d)} = t^{\sum_{d|n} \mu(n/d)} = t^0 = 1 $$
+        <p>となり、 $t$ の特異性は完全に相殺される。ゆえに、以下の関係式を得る。</p>
+        $$ \frac{\Phi_n(1+t)}{\Phi_n(1)} = \prod_{d|n} f_d(t)^{\mu(n/d)} $$
+        <p>両辺の形式的対数をとる。左辺の定数項は $1$ であり、右辺の各 $f_d(t)$ の定数項も $1$ であるため、形式的べき級数として well-defined である。</p>
+        $$ \log \left( \frac{\Phi_n(1+t)}{\Phi_n(1)} \right) = \sum_{d|n} \mu(n/d) \log f_d(t) $$
+        <p>ここで、 $\log(1+X) = X - \frac{X^2}{2} + O(X^3)$ を用いて $\log f_d(t)$ を $t$ の 2次まで展開する。</p>
+        $$ \begin{aligned} \log f_d(t) &= \log \left( 1 + \left( \frac{d-1}{2} t + \frac{(d-1)(d-2)}{6} t^2 \right) + O(t^3) \right) \\ &= \left( \frac{d-1}{2} t + \frac{(d-1)(d-2)}{6} t^2 \right) - \frac{1}{2} \left( \frac{d-1}{2} t \right)^2 + O(t^3) \\ &= \frac{d-1}{2} t + \left( \frac{(d-1)(d-2)}{6} - \frac{(d-1)^2}{8} \right) t^2 + O(t^3) \\ &= \frac{d-1}{2} t + \frac{4(d-1)(d-2) - 3(d-1)^2}{24} t^2 + O(t^3) \\ &= \frac{d-1}{2} t + \frac{(d-1)(d-5)}{24} t^2 + O(t^3) \end{aligned} $$
+        <p>この展開式を元の対数の和に代入し、 $t$ の次数ごとにまとめる。</p>
+        $$ \log \left( \frac{\Phi_n(1+t)}{\Phi_n(1)} \right) = A_1 t + A_2 t^2 + O(t^3) $$
+        <p>ここで、係数 $A_1, A_2$ は以下のように計算できる。 $n \ge 2$ より $\sum_{d|n} \mu(n/d) = 0$ であることを用いると、</p>
+        $$ \begin{aligned} A_1 &= \sum_{d|n} \mu(n/d) \frac{d-1}{2} \\ &= \frac{1}{2} \sum_{d|n} \mu(n/d) d - \frac{1}{2} \sum_{d|n} \mu(n/d) \\ &= \frac{J_1(n)}{2} - 0 = \frac{\phi(n)}{2} \end{aligned} $$
+        $$ \begin{aligned} A_2 &= \sum_{d|n} \mu(n/d) \frac{d^2 - 6d + 5}{24} \\ &= \frac{1}{24} \sum_{d|n} \mu(n/d) d^2 - \frac{6}{24} \sum_{d|n} \mu(n/d) d + \frac{5}{24} \sum_{d|n} \mu(n/d) \\ &= \frac{J_2(n)}{24} - \frac{6 \phi(n)}{24} + 0 \\ &= \frac{J_2(n)}{24} - \frac{\phi(n)}{4} \end{aligned} $$
+        <p>最後に、形式的指数関数 $\exp(X) = 1 + X + \frac{X^2}{2} + O(X^3)$ を用いて元の多項式に復元する。</p>
+        $$ \begin{aligned} \frac{\Phi_n(1+t)}{\Phi_n(1)} &= \exp \left( A_1 t + A_2 t^2 + O(t^3) \right) \\ &= 1 + \left( A_1 t + A_2 t^2 \right) + \frac{1}{2} \left( A_1 t \right)^2 + O(t^3) \\ &= 1 + A_1 t + \left( A_2 + \frac{A_1^2}{2} \right) t^2 + O(t^3) \end{aligned} $$
+        <p>両辺に $\Phi_n(1)$ を掛けることで、目的の係数 $c_k$ を得る。 $1$ 次の項の係数 $c_1$ は、</p>
+        $$ c_1 = \Phi_n(1) A_1 = \Phi_n(1) \frac{\phi(n)}{2} $$
+        <p>$2$ 次の項の係数 $c_2$ は、</p>
+        $$ c_2 = \Phi_n(1) \left( A_2 + \frac{A_1^2}{2} \right) = \Phi_n(1) \left( \frac{J_2(n)}{24} - \frac{\phi(n)}{4} + \frac{\phi(n)^2}{8} \right) $$
+        <p>となる。一般の $k$ 次の項についても、 $\log f_d(t)$ の $t^k$ の係数が $d$ についての定数項を持たない $k$ 次多項式となるため、 $A_k$ は $J_1(n), \dots, J_k(n)$ の線型結合として表される。これを指数関数で展開することで、 $c_k$ はこれら $J_m(n)$ （ $m \le k$ ）の多項式として完全に決定されることがわかる。</p>
+        <p>（証明終）</p>
+    </div>
+
+    <h2>5. 具体例</h2>
+
+    <p>導出した公式が正しいことを、いくつかの $n$ について実際の多項式展開と比較して確認する[cite: 1]。</p>
+
+    <div class="example">
+        <div class="title">例 5.1 ( $n=3, 4, 6, 15$ の場合)</div>
+        <ul>
+            <li><strong> $n=3$ の場合：</strong><br>
+            定理 3.1 より $\Phi_3(1)=3$ である。 $\phi(3)=2$ 、 $J_2(3) = 3^2(1-1/3^2) = 8$ である。<br>
+            公式に代入すると、 $c_1 = 3 \times \frac{2}{2} = 3$ 、 $c_2 = 3 \times \left( \frac{8}{24} - \frac{2}{4} + \frac{2^2}{8} \right) = 3 \times \left( \frac{1}{3} - \frac{1}{2} + \frac{1}{2} \right) = 1$ となる。<br>
+            実際、 $\Phi_3(x)=x^2+x+1$ に $x=1+t$ を代入すると、 $\Phi_3(1+t) = (1+t)^2+(1+t)+1 = t^2+3t+3$ となり、 $1$ 次の係数 $3$ 、 $2$ 次の係数 $1$ と完全に一致する。</li>
+            
+            <li><strong> $n=4$ の場合：</strong><br>
+            定理 3.1 より $\Phi_4(1)=2$ である。 $\phi(4)=2$ 、 $J_2(4) = 4^2(1-1/2^2) = 12$ である。<br>
+            公式に代入すると、 $c_1 = 2 \times \frac{2}{2} = 2$ 、 $c_2 = 2 \times \left( \frac{12}{24} - \frac{2}{4} + \frac{2^2}{8} \right) = 2 \times \left( \frac{1}{2} - \frac{1}{2} + \frac{1}{2} \right) = 1$ となる。<br>
+            実際、 $\Phi_4(x)=x^2+1$ に対して、 $\Phi_4(1+t) = (1+t)^2+1 = t^2+2t+2$ となり、係数は一致する。</li>
+            
+            <li><strong> $n=6$ の場合：</strong><br>
+            定理 3.1 より $\Phi_6(1)=1$ である。 $\phi(6)=2$ 、 $J_2(6) = 6^2(1-1/2^2)(1-1/3^2) = 24$ である。<br>
+            公式に代入すると、 $c_1 = 1 \times \frac{2}{2} = 1$ 、 $c_2 = 1 \times \left( \frac{24}{24} - \frac{2}{4} + \frac{2^2}{8} \right) = 1 \times \left( 1 - \frac{1}{2} + \frac{1}{2} \right) = 1$ となる。<br>
+            実際、 $\Phi_6(x)=x^2-x+1$ に対して、 $\Phi_6(1+t) = (1+t)^2-(1+t)+1 = t^2+t+1$ となり、係数は一致する。</li>
+
+            <li><strong> $n=15$ の場合：</strong><br>
+            $15=3 \times 5$ と異なる素因数を持つため、定理 3.1 より $\Phi_{15}(1)=1$ である。<br>
+            実際、 $\Phi_{15}(x)=x^8-x^7+x^5-x^4+x^3-x+1$ であり、 $x=1$ を代入し係数の和を計算すると確かに $1-1+1-1+1-1+1 = 1$ になる。</li>
+        </ul>
+    </div>
+
+    <div class="references">
+        <h2>引用文献</h2>
+        <ul>
+            <li>[1] Washington, L. C. (1997). <i>Introduction to Cyclotomic Fields</i> (2nd ed.). Springer. <a href="https://link.springer.com/book/10.1007/978-1-4612-1934-7" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4612-1934-7</a></li>
+            <li>[2] Apostol, T. M. (1976). <i>Introduction to Analytic Number Theory</i>. Springer. <a href="https://link.springer.com/book/10.1007/978-1-4757-5579-4" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4757-5579-4</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>体K上の一般線形群と特殊線形群の正規部分群の分類（完全版）</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 30px 50px;
+    background-color: #faf8f5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+h1 { text-align: center; border-bottom: 2px solid #2980b9; padding-bottom: 15px; color: #2c3e50; }
+h2 { border-bottom: 1px solid #bdc3c7; margin-top: 2.5em; color: #34495e; padding-bottom: 5px; }
+h3 { margin-top: 2em; color: #2c3e50; border-left: 4px solid #2980b9; padding-left: 10px; }
+.theorem { background-color: #e8f4f8; border-left: 5px solid #2980b9; padding: 15px 20px; margin: 20px 0; }
+.theorem-title { font-weight: bold; color: #2980b9; margin-bottom: 10px; }
+.proof { background-color: #fdfdfd; border-left: 5px solid #7f8c8d; padding: 15px 20px; margin: 20px 0; border: 1px dashed #ccc; }
+.proof-title { font-weight: bold; font-style: italic; color: #7f8c8d; margin-bottom: 10px; }
+.definition { background-color: #fcf8e3; border-left: 5px solid #f39c12; padding: 15px 20px; margin: 20px 0; }
+.definition-title { font-weight: bold; color: #e67e22; margin-bottom: 10px; }
+.example { background-color: #f4f6f6; border-left: 5px solid #16a085; padding: 15px 20px; margin: 20px 0; }
+.example-title { font-weight: bold; color: #16a085; margin-bottom: 10px; }
+ul, ol { margin-bottom: 1.5em; padding-left: 25px; }
+li { margin-bottom: 0.5em; }
+a { color: #2980b9; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.math-display { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<h1>体 $K$ 上の一般線形群と特殊線形群の正規部分群の分類</h1>
+
+<h2>1. 序論および基本概念の定義</h2>
+<p>
+本稿では、体 $K$ 上の一般線形群 $GL_n(K)$ および特殊線形群 $SL_n(K)$ の正規部分群 (normal subgroup) の分類について、厳密かつ詳細な解説を行う。ここでは、 $n \ge 2$ の自然数とする。この問題は、射影特殊線形群 $PSL_n(K)$ の単純性 (simplicity) と深く関連しており、群論および線形代数学における古典的かつ重要な結果である。初学者が途中でつまずかないよう、自己完結的な解説を目指し、必要な諸定義と具体例を網羅的に記載する。
+</p>
+
+<div class="definition">
+<div class="definition-title">定義 1.1: 線形群とその部分群に関する基本概念</div>
+<ul>
+<li><strong>一般線形群 (general linear group) $GL_n(K)$</strong>: 体 $K$ の成分を持つ $n \times n$ の可逆行列全体が、行列の乗法に関してなす群である。</li>
+<li><strong>特殊線形群 (special linear group) $SL_n(K)$</strong>: $GL_n(K)$ の元のうち、行列式 (determinant) が1であるもの全体がなす部分群である。</li>
+<li><strong>体の標数 (characteristic)</strong>: 体 $K$ の単位元1を何度足し合わせれば0になるかを示す最小の自然数。存在しない場合は標数0とする。</li>
+<li><strong>中心 (center) $Z(G)$</strong>: 群 $G$ のすべての元と可換な元の全体がなす部分群である。すなわち、 $Z(G) = \{ g \in G \mid \forall x \in G, gx = xg \}$ である。中心は常に正規部分群となる。</li>
+<li><strong>射影一般線形群 $PGL_n(K)$ および 射影特殊線形群 $PSL_n(K)$</strong>: 群をその中心で割った商群である。$PGL_n(K) = GL_n(K) / Z(GL_n(K))$、および $PSL_n(K) = SL_n(K) / Z(SL_n(K))$ と定義される。</li>
+<li><strong>正規部分群 (normal subgroup)</strong>: 群 $G$ の部分群 $N$ が、任意の $g \in G$ に対して $gNg^{-1} \subset N$ を満たすとき、 $N$ を正規部分群と呼び、 $N \lhd G$ と表記する。</li>
+<li><strong>基本行列 (elementary matrix) $B_{ij}(c)$</strong>: $i \neq j$ を満たす添え字の組と、スカラー $c \in K$ に対して、 $B_{ij}(c) = I + c E_{ij}$ と定義される行列である。ここで、 $I$ は単位行列であり、 $E_{ij}$ は $(i, j)$ 成分のみが1で他のすべての成分が0である行列単位である。</li>
+<li><strong>交換子 (commutator)</strong>: 任意の行列 $A, B \in G$ に対して、交換子を $[A, B] = A B A^{-1} B^{-1}$ と定義する。群 $G$ の正規部分群 $N$ に $A$ が属している場合、 $B A^{-1} B^{-1}$ も $N$ に属するため、積 $A (B A^{-1} B^{-1}) = [A, B]$ は必ず $N$ に属する。</li>
+</ul>
+</div>
+
+<div class="example">
+<div class="example-title">例 1.2: 基本行列と交換子の直観的理解</div>
+<p>
+たとえば $3 \times 3$ 行列における基本行列 $B_{12}(c)$ は以下のようになる。直観的には、単位行列の非対角成分を一つだけ変更したものであり、左から掛けると「1行目に2行目の $c$ 倍を加える」という行基本変形を意味する。
+$$ B_{12}(c) = \begin{pmatrix} 1 & c & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix} $$
+この行列の行列式は明らかに1であるため、任意の基本行列は $SL_n(K)$ に属する。<br>
+<strong>交換子の例:</strong> $A = B_{12}(a)$ と $B = B_{23}(b)$ の交換子 $[A, B]$ を計算すると、
+$$ [B_{12}(a), B_{23}(b)] = B_{12}(a)B_{23}(b)B_{12}(-a)B_{23}(-b) = B_{13}(ab) $$
+となる。このように、基本行列同士の交換子から別の基本行列を生成できるという性質が、後の単純性の証明において極めて重要な役割を果たす。
+</p>
+</div>
+
+<h2>2. 主定理と補助定理</h2>
+
+<div class="theorem">
+<div class="theorem-title">定理 1</div>
+<p>
+$n \ge 3$ または ( $n = 2$ かつ体 $K$ の要素数が $|K| > 3$ ) であるとする。このとき、 $SL_n(K)$ の正規部分群 $N$ は、 $N \subset Z(SL_n(K))$ を満たすか、あるいは $N = SL_n(K)$ となる。これは、商群 $PSL_n(K) = SL_n(K) / Z(SL_n(K))$ が単純群 (simple group、自明でない正規部分群を持たない群) であることを意味する。
+</p>
+</div>
+
+<div class="theorem">
+<div class="theorem-title">定理 2</div>
+<p>
+定理 1 と同じ条件のもとで、 $GL_n(K)$ の正規部分群 $N$ は、 $N \subset Z(GL_n(K))$ または $SL_n(K) \subset N$ のいずれかを満たす。
+</p>
+</div>
+
+<p>証明のために、いくつかの補題を用意する。以下、 $G = GL_n(K)$ 、 $S = SL_n(K)$ とする。</p>
+
+<div class="proof">
+<div class="proof-title">補題 1: 中心の決定</div>
+<p>
+<strong>主張:</strong> $Z(G) = \{ c I \mid c \in K^\times \}$ であり、 $Z(S) = \{ c I \mid c \in K^\times, c^n = 1 \}$ である。すなわち、中心の元はスカラー行列に限られる。
+</p>
+<p>
+<strong>証明:</strong> $A = (a_{ij}) \in Z(G)$ とする。 $A$ はすべての基本行列 $B_{kl}(1)$ と可換であるため、 $A B_{kl}(1) = B_{kl}(1) A$ が成り立つ。この式の両辺を展開すると、 $A (I + E_{kl}) = (I + E_{kl}) A$ となり、 $A E_{kl} = E_{kl} A$ を得る。
+</p>
+<p>
+左辺の $A E_{kl}$ の $(i, j)$ 成分は $a_{ik} \delta_{lj}$ であり、右辺の $E_{kl} A$ の $(i, j)$ 成分は $\delta_{ik} a_{lj}$ である（ここで $\delta$ は Kronecker のデルタ）。
+$i = k$ かつ $j \neq l$ の成分を比較すると、 $a_{kk} \delta_{lj} = \delta_{kk} a_{lj}$ より $0 = a_{lj}$ となる。これが任意の $j \neq l$ で成り立つため、 $A$ の非対角成分はすべて0である。
+</p>
+<p>
+次に $i = k$ かつ $j = l$ の成分を比較すると、 $a_{kk} \delta_{ll} = \delta_{kk} a_{ll}$ より $a_{kk} = a_{ll}$ となる。これが任意の $k, l$ で成り立つため、すべての対角成分は等しい。
+よって $A = c I$ の形であることが示された。 $S$ の元についても同様の計算が成り立つため、 $Z(S)$ もスカラー行列からなる。行列式が1であるという条件から $c^n = 1$ が付加される。証明終。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">補題 2: 特殊線形群の生成系</div>
+<p>
+<strong>主張:</strong> $SL_n(K)$ はすべての基本行列 $B_{ij}(c)$ の集合によって生成される。
+</p>
+<p>
+<strong>証明:</strong> 任意の $A \in SL_n(K)$ に対し、ガウスの消去法（基本変形）を用いて基本行列を順次掛けることで、単位行列 $I$ に変形できることを示す。 $A$ の1列目がすべて0となることは行列式が1であることに反するため、ある非零成分 $a_{k1} \neq 0$ が存在する。行の交換も基本行列の積で行えるため（例えば $i$ 行と $j$ 行の交換は $B_{ij}(1) B_{ji}(-1) B_{ij}(1)$ に適切な符号の調整を行って実現できる）、 $a_{11} \neq 0$ と仮定してよい。
+</p>
+<p>
+各 $i \ge 2$ に対して左から $B_{i1}(-a_{i1} a_{11}^{-1})$ を掛けることで、1列目の2行目以降の成分をすべて0にできる。同様の操作を列について再帰的に適用することで、非対角成分をすべて消去し、 $A$ は対角行列 $D = \mathrm{diag}(d_1, \dots, d_n)$ に変形される。基本変形は行列式を保つため $\prod d_m = 1$ である。
+</p>
+<p>
+この対角行列 $D$ は、2つの成分を取り出して $\mathrm{diag}(c, c^{-1}, 1, \dots, 1)$ の形にした行列の積に分解できる。そして、このような形の対角行列は、以下のように基本行列のみの積で表すことができる。
+$$ \begin{pmatrix} c & 0 \\ 0 & c^{-1} \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ c^{-1}-1 & 1 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ c-1 & 1 \end{pmatrix} \begin{pmatrix} 1 & -c^{-1} \\ 0 & 1 \end{pmatrix} $$
+（※上記は $2 \times 2$ ブロックでの表現であり、基本行列の積で書けることの証明の一例である。）
+したがって、任意の $D$、ひいては任意の $A$ は基本行列の積として表される。証明終。
+</p>
+</div>
+
+<h2>3. 定理 1 の証明</h2>
+
+<div class="definition">
+<div class="definition-title">定義 3.1: 固有値と巡回ベクトル</div>
+<ul>
+<li><strong>固有値 (eigenvalue)</strong>: 行列 $A$ に対して $Av = \lambda v$ を満たす非零ベクトル $v$ が存在するとき、スカラー $\lambda \in K$ を固有値と呼ぶ。</li>
+<li><strong>巡回ベクトル (cyclic vector)</strong>: ベクトル空間 $V$ において、あるベクトル $v$ と行列 $A$ に対して、集合 $\{v, Av, A^2v, \dots, A^{n-1}v\}$ が $V$ の基底をなすとき、 $v$ を $A$ に関する巡回ベクトルと呼ぶ。このとき、基底の表現行列は同伴行列 (companion matrix) と呼ばれる特定の形になる。</li>
+</ul>
+</div>
+
+<p>
+群 $S = SL_n(K)$ の正規部分群 $N$ が $N \not\subset Z(S)$ を満たすとする。このとき $N = S$ となることを示す。証明の核は、 $N$ が非自明な基本行列（ $c \neq 0$ なる $B_{ij}(c)$ ）を少なくとも一つ含むことを示すことである。これを $n \ge 3$ の場合と $n = 2$ の場合で分けて証明する。
+</p>
+
+<h3>3.2. $n \ge 3$ の場合</h3>
+<div class="proof">
+<div class="proof-title">ステップ 1: N は自明でない基本行列を含む</div>
+<p>
+$A \in N \smallsetminus Z(S)$ をとる。補題1より $A$ はスカラー行列ではないため、 $K^n$ のある非零ベクトル $u$ に対して、 $u$ と $A u$ は一次独立である。
+$u$ と $A u$ を基底の一部に拡張し、順に $e_1, e_2, \dots, e_n$ とする。この基底変換行列を $P \in GL_n(K)$ とし、必要であれば最後の基底ベクトルをスカラー倍することで $P \in S$ とすることができる。
+$A$ を $P A P^{-1} \in N$ に置き換えることで、 $A e_1 = e_2$ 、すなわち $A$ の1列目が $e_2$ であると仮定してよい。
+</p>
+<p>
+基本行列 $B = B_{12}(1) = I + E_{12} \in S$ をとり、交換子 $C = [A, B] = A B A^{-1} B^{-1}$ を考える。 $N$ は正規部分群であるため、 $C \in N$ である。
+$A B A^{-1} = A (I + E_{12}) A^{-1} = I + A E_{12} A^{-1}$ を計算する。 $A E_{12}$ は2列目が $A$ の1列目（すなわち $e_2$ ）であり、他の列はすべて0の行列である。 $A^{-1}$ の2行目を $y^T = (y_1, \dots, y_n)$ とすると、 $A E_{12} A^{-1} = e_2 y^T$ となる。
+$A^{-1} A = I$ であるから、 $A^{-1}$ の2行目 $y^T$ と $A$ の1列目 $e_2$ の内積は0になるべきである。すなわち $y \cdot e_2 = 0$ となりそうだが、今回は $A^{-1}$ と $A$ の積なので、 $A^{-1}$ の2行目と $A$ の2列目の内積が1、1列目との内積は0である。
+ここで $A e_1 = e_2$ より、 $A$ の1列目は $e_2$ である。したがって $A^{-1} A = I$ の $(2,1)$ 成分を考えると、 $A^{-1}$ の2行目 $y^T$ と $A$ の1列目 $e_2$ の内積が0となる。よって $y_2 = 0$ である。（※以前の証明の記述における $y_2=1$ は誤りであり、正しくは $A^{-1}$ の2行目と $A$ の2列目（ここでは指定されていない）の積が1である。しかし、計算上必要なのは $y_2$ ではなく、形としての $e_2 y^T$ である）
+</p>
+<p>
+よって $A B A^{-1} = I + e_2 y^T$ であり、 $C = (I + e_2 y^T) (I - E_{12}) = I - E_{12} + e_2 y^T - e_2 y_1 e_2^T = I - E_{12} + e_2 y^T - y_1 E_{22}$ となる。
+この $C$ は、 $i \ge 3$ に対して $e_i^T C = e_i^T$ を満たす（なぜなら $E_{12}$ や $E_{22}$、 $e_2$ は3行目以降に影響を与えないため）。
+</p>
+<p>
+次に、 $D = [B_{23}(1), C] = B_{23}(1) C B_{23}(-1) C^{-1} \in N$ を計算する。
+$B_{23}(1) C B_{23}(-1) = (I + E_{23}) C (I - E_{23}) = C - C E_{23} + E_{23} C - E_{23} C E_{23}$ である。
+$e_3^T C = e_3^T$ より $E_{23} C = E_{23}$ である。
+また、 $C E_{23}$ の3列目は $C e_2$ に等しい。計算すると $C e_2 = -e_1 + y_2 e_2 - y_1 e_2 = -e_1 + (y_2 - y_1) e_2$ となるため、 $C E_{23} = -E_{13} + (y_2 - y_1) E_{23}$ である。
+これにより $E_{23} C E_{23} = 0$ となり、 $(I + E_{23}) C (I - E_{23}) = C + E_{13} + (y_1 - y_2 + 1) E_{23}$ が得られる。
+</p>
+<p>
+右から $C^{-1}$ を掛ける際、 $e_3^T C = e_3^T$ より $e_3^T C^{-1} = e_3^T$ となることを用いると、 $E_{13} C^{-1} = E_{13}$ および $E_{23} C^{-1} = E_{23}$ が従う。
+したがって $D = I + E_{13} + \alpha E_{23}$ となる（ここで $\alpha = y_1 - y_2 + 1$ とおいた）。
+</p>
+<p>
+最後に、 $F = [B_{12}(1), D] = B_{12}(1) D B_{12}(-1) D^{-1} \in N$ を計算する。
+展開して整理すると、 $(I + E_{12}) (I + E_{13} + \alpha E_{23}) (I - E_{12}) (I - E_{13} - \alpha E_{23}) = I + \alpha E_{13} = B_{13}(\alpha)$ となる。
+もし $\alpha \neq 0$ ならば、 $F = B_{13}(\alpha) \in N$ は自明でない基本行列である。
+もし $\alpha = 0$ ならば、 $D = I + E_{13} = B_{13}(1) \in N$ が自明でない基本行列となる。
+いずれの場合も、 $N$ は自明でない基本行列を含むことが示された。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">ステップ 2: N はすべての基本行列を含む</div>
+<p>
+ある $B_{ij}(c) \in N$ （ $c \neq 0$ ）が存在するとする。任意の $k \neq l$ と任意の $x \in K$ について、 $B_{kl}(x) \in N$ となることを示す。
+$n \ge 3$ であるから、基底の置換により $e_i \mapsto e_k$ かつ $e_j \mapsto \pm e_l$ となるような、行列式1の変換行列 $P \in S$ を構成できる。この $P$ による共役をとれば、 $P B_{ij}(c) P^{-1} = B_{kl}(\pm c) \in N$ を得る。
+</p>
+<p>
+さらに、対角行列 $H = \mathrm{diag}(d_1, \dots, d_n) \in S$ をとる（ $\prod d_m = 1$ ）。
+共役 $H B_{kl}(\pm c) H^{-1} = B_{kl}(\pm c d_k d_l^{-1})$ を考える。 $n \ge 3$ であるため、 $d_k$ と $d_l$ を、 $\pm c d_k d_l^{-1} = x$ となるように任意に選びつつ、残りの成分で全体の積が1になるように調整できる。
+したがって、任意の基本行列が $N$ に含まれる。補題2より $N = S$ である。
+</p>
+</div>
+
+<h3>3.3. $n = 2$ かつ $|K| > 3$ の場合</h3>
+<div class="proof">
+<div class="proof-title">証明の詳細</div>
+<p>
+$S = SL_2(K)$ の正規部分群 $N \not\subset Z(S)$ について考える。
+$|K| > 3$ の仮定から、 $x^2 \neq 1$ を満たす $x \in K^\times$ が存在する。対角行列 $H = \mathrm{diag}(x, x^{-1}) \in S$ をとる。
+$A \in N \smallsetminus Z(S)$ をとる。
+</p>
+<p>
+<strong>ケース 1: A が K 内に固有値を持つ場合</strong><br>
+$A$ はある上三角行列に共役であり、 $A = \begin{pmatrix} a & b \\ 0 & a^{-1} \end{pmatrix}$ と仮定してよい。
+もし $a \neq \pm 1$ ならば $a \neq a^{-1}$ であり、 $A$ は対角行列 $D = \mathrm{diag}(a, a^{-1})$ に共役であるため、 $D \in N$ と仮定してよい。このとき交換子 $[D, B_{12}(1)] = B_{12}(a^2 - 1) \in N$ を得る。 $a^2 \neq 1$ より、これは自明でない基本行列である。
+もし $a = \pm 1$ ならば、 $A = \pm \begin{pmatrix} 1 & b \\ 0 & 1 \end{pmatrix}$ であり $b \neq 0$ である。標数が2でない場合は $A^2 = B_{12}(2b)$ が、標数が2の場合は $A = B_{12}(b)$ が、それぞれ自明でない基本行列となる。
+</p>
+<p>
+<strong>ケース 2: A が K 内に固有値を持たない場合</strong><br>
+固有値を持たないということは、任意の非零ベクトル $v$ に対して $v$ と $Av$ は一次独立であることを意味する（もし従属なら $Av = \lambda v$ となり固有値を持つことになってしまう）。したがって $A$ は巡回ベクトルを持ち、 $v, Av$ を基底とする表現行列を考えると、同伴行列の形 $A = \begin{pmatrix} 0 & -1 \\ 1 & d \end{pmatrix}$ にできる（行列式が1であることを用いている）。
+$C = [A, H] = A H A^{-1} H^{-1} \in N$ を計算すると、 $C = \begin{pmatrix} x^{-2} & 0 \\ d(1 - x^{-2}) & x^2 \end{pmatrix}$ となる。
+これは対角成分が $x^{-2}$ と $x^2$ の下三角行列である。もし $x^4 \neq 1$ となる $x$ が選べるならば、 $C$ は相異なる固有値（ $x^2$ と $x^{-2}$ ）を持ち対角化可能となるため、ケース1に帰着する。 $x^4 = 1$ となる方程式の解は高々4個であるため、 $|K| > 5$ ならばそのような $x$ が常に存在する。
+</p>
+<p>
+$|K| = 5$ の場合は $K = \mathbb{F}_5$ である。 $x = 2$ を選ぶと $x^2 = 4 \equiv -1 \pmod 5$ となり、 $C = \begin{pmatrix} -1 & 0 \\ 2d & -1 \end{pmatrix}$ となる。
+もし $d \neq 0$ ならば、 $C^2 = \begin{pmatrix} 1 & 0 \\ -4d & 1 \end{pmatrix} = B_{21}(d) \in N$ となり、自明でない基本行列を得る。
+もし $d = 0$ ならば $A = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$ である。 $B = \begin{pmatrix} 1 & 1 \\ -1 & 0 \end{pmatrix} \in S$ を用いて $M = A B A B^{-1} \in N$ を計算すると、 $M = \begin{pmatrix} 4 & 4 \\ 4 & 3 \end{pmatrix}$ となる。この $M$ は $\mathbb{F}_5$ 上でトレース2、行列式1を持ち、固有多項式は $(t-1)^2$ となるため、 $K$ 内に固有値1を持つ。これによりケース1に帰着する。
+</p>
+<p>
+以上より、どの場合でも $N$ は自明でない基本行列を含む。ステップ2と同様の対角行列による共役論法により、すべての基本行列が $N$ に含まれることが示され、 $N = S$ が結論づけられる。証明終。
+</p>
+</div>
+
+<h2>4. 定理 2 の証明</h2>
+<div class="proof">
+<div class="proof-title">証明の詳細</div>
+<p>
+$GL_n(K)$ の正規部分群 $N$ について考える。
+$N \cap S$ は群 $S$ の正規部分群であるため、定理1により $N \cap S \subset Z(S)$ または $N \cap S = S$ のいずれかが成り立つ。
+もし $N \cap S = S$ であれば $S \subset N$ であり、定理の主張を満たす。
+したがって、 $N \cap S \subset Z(S)$ であると仮定し、このとき $N \subset Z(G)$ となることを示せばよい。
+</p>
+<p>
+背理法を用いる。 $N \not\subset Z(G)$ と仮定すると、ある $A \in N \smallsetminus Z(G)$ が存在する。補題1より $A$ はスカラー行列ではない。
+任意の $T \in S$ に対し、交換子 $[A, T] = A T A^{-1} T^{-1}$ を考える。 $N$ は $G$ の正規部分群であるため $[A, T] \in N$ であり、また行列式が1であるため $[A, T] \in S$ である。
+したがって $[A, T] \in N \cap S \subset Z(S)$ となるため、あるスカラー $c \in K$ を用いて $A T A^{-1} T^{-1} = c I$ と書ける。これを変形すると $A T A^{-1} = c T$ となる。
+</p>
+<p>
+両辺の行列式をとると、 $\det(T) = c^n \det(T)$ であり $\det(T) = 1 \neq 0$ より $c^n = 1$ となる。
+ここで $T$ として自明でない基本行列 $T = B_{ij}(1)$ を選ぶ。 $T$ の固有値はすべて1であるため、共役である $A T A^{-1}$ の固有値もすべて1である。一方で $c T$ の固有値はすべて $c$ である。固有値が一致しなければならないため、 $c = 1$ が結論づけられる。
+</p>
+<p>
+ゆえに $[A, T] = I$ 、すなわち $A T = T A$ が任意の基本行列 $T \in S$ に対して成り立つ。補題2により $S$ は基本行列で生成されるため、 $A$ は $S$ のすべての元と可換である。
+補題1の証明と同様の計算を適用することで、 $A$ はスカラー行列でなければならないことが導かれ、これは $A \notin Z(G)$ に矛盾する。
+したがって、 $N \subset Z(G)$ でなければならない。証明終。
+</p>
+</div>
+
+<h2>5. $SL_n(K)$ を含む $GL_n(K)$ の正規部分群の分類</h2>
+<p>
+定理2により、 $GL_n(K)$ の正規部分群 $N$ は、 $N \subset Z(GL_n(K))$ となるか、または $SL_n(K) \subset N$ となることがわかった。後者のケース、すなわち特殊線形群 $SL_n(K)$ を含むような $GL_n(K)$ の部分群の構造は、体 $K$ の乗法群 (multiplicative group) $K^\times = K \smallsetminus \{0\}$ の構造に完全に帰着される。
+</p>
+
+<div class="definition">
+<div class="definition-title">定義 5.1: 準同型と同型定理</div>
+<ul>
+<li><strong>第一同型定理 (first isomorphism theorem)</strong>: 群準同型 (group homomorphism) $f: G \to H$ が与えられたとき、その核 (kernel) $\ker(f) = \{ g \in G \mid f(g) = e_H \}$ は $G$ の正規部分群となり、商群 $G/\ker(f)$ は像 $f(G)$ と同型となる。</li>
+<li><strong>対応定理 (correspondence theorem)</strong>: 群 $G$ とその正規部分群 $K$ が与えられたとき、商群 $G/K$ の部分群全体と、 $G$ の部分群であって $K$ を含むもの全体との間には自然な一対一対応が存在する。さらに、この対応において正規部分群は正規部分群に対応する。</li>
+</ul>
+</div>
+
+<div class="example">
+<div class="example-title">例 5.2: 第一同型定理の直観的な例</div>
+<p>
+実数全体の加法群 $\mathbb{R}$ から、絶対値1の複素数全体の乗法群 $S^1$ への写像 $f(x) = e^{2\pi i x}$ を考える。これは準同型写像である。このとき、$f(x) = 1$ となるのは $x$ が整数のときのみであるため、 $\ker(f) = \mathbb{Z}$ となる。第一同型定理によれば、商群 $\mathbb{R}/\mathbb{Z}$ は像 $S^1$ と同型になる。これは直観的に、直線を整数区間で「丸めて」円周にする操作に対応する。
+</p>
+</div>
+
+<div class="theorem">
+<div class="theorem-title">定理 3</div>
+<p>
+体 $K$ 上の一般線形群 $GL_n(K)$ において、特殊線形群 $SL_n(K)$ を含むような部分群 $N$ はすべて正規部分群である。さらに、そのような正規部分群 $N$ 全体のなす集合と、乗法群 $K^\times$ の部分群 $H$ 全体のなす集合との間には、以下の写像による一対一対応が存在する。
+</p>
+<ol>
+<li> $N \mapsto \det(N) = \{ \det(A) \mid A \in N \}$ </li>
+<li> $H \mapsto \det^{-1}(H) = \{ A \in GL_n(K) \mid \det(A) \in H \}$ </li>
+</ol>
+</div>
+
+<div class="proof">
+<div class="proof-title">定理 3 の証明</div>
+<p>
+まず、行列式写像 $\det : GL_n(K) \to K^\times$ が全射 (surjective) であることを示す。任意の $c \in K^\times$ に対して、対角成分が順に $c, 1, 1, \dots, 1$ であるような対角行列 $D = \mathrm{diag}(c, 1, \dots, 1)$ を考える。明らかに $D \in GL_n(K)$ であり、 $\det(D) = c$ となるため、 $\det$ は全射である。
+</p>
+<p>
+次に、この群準同型 $\det$ の核を考える。定義により $\ker(\det) = \{ A \in GL_n(K) \mid \det(A) = 1 \}$ であるが、これはまさに特殊線形群 $SL_n(K)$ の定義に他ならない。したがって $\ker(\det) = SL_n(K)$ である。
+</p>
+<p>
+ここで第一同型定理を写像 $\det$ に適用する。 $\ker(\det) = SL_n(K)$ であり、像が $K^\times$ 全体であることから、商群 $GL_n(K) / SL_n(K)$ は乗法群 $K^\times$ と同型である。具体的な同型写像は、剰余類 $A \cdot SL_n(K)$ を $\det(A)$ に送る写像によって与えられる。
+</p>
+<p>
+続いて対応定理を用いる。対応定理によれば、 $SL_n(K)$ を含む $GL_n(K)$ の部分群は、商群 $GL_n(K) / SL_n(K)$ の部分群と一対一に対応する。 $GL_n(K) / SL_n(K) \cong K^\times$ であるため、これは $K^\times$ の部分群 $H$ と一対一に対応することを意味する。この対応関係は、引き戻し $N = \det^{-1}(H)$ によって与えられる。
+</p>
+<p>
+最後に、これらの部分群 $N$ がすべて正規部分群となることを示す。乗法群 $K^\times$ は可換群 (abelian group) であるため、その任意の部分群 $H$ は $K^\times$ の正規部分群である。対応定理により、商群の正規部分群の引き戻しである $N = \det^{-1}(H)$ もまた、元の群 $GL_n(K)$ の正規部分群となる。したがって、 $SL_n(K)$ を含む $GL_n(K)$ の部分群は例外なく正規部分群である。証明終。
+</p>
+</div>
+
+<h2>6. 例外的な有限体のケース: $n=2$ かつ $|K|=2, 3$ </h2>
+<p>
+$n=2$ かつ体 $K$ の要素数が $|K|=2$ または $|K|=3$ の場合、群 $GL_2(K)$ および $SL_2(K)$ は有限群となる。これらの場合は定理1, 2の例外であり、対称群 (symmetric group) や交代群 (alternating group) との同型を用いることで完全に分類できる。
+</p>
+
+<div class="definition">
+<div class="definition-title">定義 6.1: 有限群に関する基礎定義</div>
+<ul>
+<li><strong>対称群 $S_n$</strong>: $n$ 個の要素の置換（全単射）全体が合成に関してなす群。</li>
+<li><strong>交代群 $A_n$</strong>: $S_n$ のうち、偶置換（互換の積として偶数個で表される置換）のみからなる正規部分群。</li>
+<li><strong>クラインの四元群 $V_4$</strong>: 位数4の非巡回群であり、$A_4$ の正規部分群となる。</li>
+<li><strong>四元数群 $Q_8$</strong>: 要素 $\{\pm 1, \pm i, \pm j, \pm k\}$ を持ち、$i^2=j^2=k^2=ijk=-1$ の関係式を満たす位数8の非可換群。</li>
+</ul>
+</div>
+
+<h3>6.1. $K = \mathbb{F}_2$ の場合</h3>
+<p>
+体 $\mathbb{F}_2 = \{ 0, 1 \}$ において乗法群は $\mathbb{F}_2^\times = \{ 1 \}$ のみであるため、 $GL_2(\mathbb{F}_2) = SL_2(\mathbb{F}_2)$ が成り立つ。群の位数は $(2^2 - 1)(2^2 - 2) = 6$ である。
+</p>
+<p>
+ベクトル空間 $\mathbb{F}_2^2$ には零ベクトルを除くと3つの非零ベクトル $v_1 = (1, 0)^T, v_2 = (0, 1)^T, v_3 = (1, 1)^T$ が存在する。 $GL_2(\mathbb{F}_2)$ の元はこれら3点の集合 $X = \{ v_1, v_2, v_3 \}$ に忠実に作用するため、 $GL_2(\mathbb{F}_2) \cong S_3$ （3次対称群）となる。
+</p>
+<p>
+$S_3$ の正規部分群は自明な群 $\{ e \}$ 、交代群 $A_3$ 、そして $S_3$ 全体の3つである。したがって $GL_2(\mathbb{F}_2)$ の正規部分群も以下の3つに完全に分類される。
+</p>
+<ol>
+<li> $\{ I \}$ </li>
+<li> $A_3$ に対応する位数3の部分群。</li>
+<li> $GL_2(\mathbb{F}_2)$ 全体。</li>
+</ol>
+
+<h3>6.2. $K = \mathbb{F}_3$ の場合</h3>
+<p>
+体 $\mathbb{F}_3 = \{ 0, 1, 2 \}$ （ $2 \equiv -1$ ）において乗法群は $\mathbb{F}_3^\times = \{ 1, -1 \}$ である。群の位数は $|GL_2(\mathbb{F}_3)| = 48$ 、 $|SL_2(\mathbb{F}_3)| = 24$ である。中心は $Z = \{ I, -I \}$ である。
+</p>
+<p>
+ベクトル空間 $\mathbb{F}_3^2$ における原点を通る1次元部分空間（射影直線 $\mathbb{P}^1(\mathbb{F}_3)$ ）は4本存在する。これらへの作用を考えると、核は中心 $Z$ となるため、射影一般線形群 $PGL_2(\mathbb{F}_3) \cong S_4$ 、射影特殊線形群 $PSL_2(\mathbb{F}_3) \cong A_4$ が得られる。
+</p>
+<p>
+$A_4$ の正規部分群は $\{ e \}, V_4, A_4$ であり、 $S_4$ の正規部分群は $\{ e \}, V_4, A_4, S_4$ である。対応定理および位数計算により、正規部分群は以下のように分類される。
+</p>
+<ul>
+<li><strong> $SL_2(\mathbb{F}_3)$ の正規部分群 (4つ)</strong>: $\{ I \}$ 、中心 $Z$ 、四元数群 $Q_8$ （ $V_4$ の逆像）、そして $SL_2(\mathbb{F}_3)$ 全体。</li>
+<li><strong> $GL_2(\mathbb{F}_3)$ の正規部分群 (5つ)</strong>: $\{ I \}$ 、中心 $Z$ 、四元数群 $Q_8$ 、特殊線形群 $SL_2(\mathbb{F}_3)$ 、そして $GL_2(\mathbb{F}_3)$ 全体。</li>
+</ul>
+
+<h2>7. $GL_2(\mathbb{F}_3)$ の構造に関する詳細</h2>
+
+<div class="definition">
+<div class="definition-title">定義 7.1: 半直積と中心拡大、群の表示</div>
+<ul>
+<li><strong>半直積 (semi-direct product) $N \rtimes H$</strong>: 群 $G$ が正規部分群 $N$ と部分群 $H$ を持ち、$G = NH$ かつ $N \cap H = \{e\}$ を満たすとき、$G$ は $N$ と $H$ の半直積であるという。直積と異なり、$H$ は正規部分群である必要はない。</li>
+<li><strong>中心拡大 (central extension)</strong>: 群 $G$ が、ある群 $A$ と $E$ に対して $1 \to A \to E \to G \to 1$ という完全列を持ち、かつ $A$ が $E$ の中心 $Z(E)$ に含まれるとき、$E$ を $G$ の中心拡大と呼ぶ。</li>
+<li><strong>群の表示 (group presentation) $\langle S \mid R \rangle$</strong>: 群を生成元の集合 $S$ と、それらが満たす関係式の集合 $R$ によって定義する方法。</li>
+</ul>
+</div>
+
+<p>
+$GL_2(\mathbb{F}_3)$ は半直積として $GL_2(\mathbb{F}_3) \cong SL_2(\mathbb{F}_3) \rtimes C_2$ と記述される。また、 $S_4$ の中心拡大または2重被覆群としての構造を持つ。
+</p>
+
+<div class="theorem">
+<div class="theorem-title">定理 4 (生成元と関係式)</div>
+<p>
+群の表示を用いて、群 $GL_2(\mathbb{F}_3)$ は3つの生成元 $a, b, c$ と、以下の6つの関係式によって定義される抽象群 $G$ と同型である。
+</p>
+<ol>
+<li> $a^4 = e$ </li>
+<li> $b^3 = e$ </li>
+<li> $a^2 = (ab)^3$ </li>
+<li> $c^2 = e$ </li>
+<li> $cac = a^{-1}$ </li>
+<li> $cbc = b^{-1}$ </li>
+</ol>
+</div>
+
+<div class="proof">
+<div class="proof-title">定理 4 の証明</div>
+<p>
+まず、抽象群 $G$ の位数が48以下であることを証明する。 $G$ の部分群 $H = \langle a, b \rangle$ を考える。
+関係式 $a^2 = (ab)^3$ より、 $(ab)^3$ は自明に $ab$ と可換であり、かつ $a$ とも可換である（$a \cdot a^2 = a^2 \cdot a$）。したがって $(ab)^3$ は生成元 $a, b$ の両方と可換になり、 $H$ のすべての元と可換となる。ゆえに $a^2 \in Z(H)$ が成り立つ。
+</p>
+<p>
+$H$ の正規部分群 $N = \langle a^2 \rangle$ を考える。 $a^4 = e$ より $|N| \le 2$ である。
+商群 $\bar{H} = H/N$ の位数が高々12であることを示す。 $\bar{H}$ の元を $\bar{x}$ と表記すると、 $\bar{a}^2 = \bar{e}$ 、 $\bar{b}^3 = \bar{e}$ 、 $(\bar{a}\bar{b})^3 = \bar{e}$ が成り立つ。
+部分群 $Y = \{ \bar{e}, \bar{b}, \bar{b}^2 \}$ （位数高々3）による右剰余類の集合 $\Omega = \{ Y, Y\bar{a}, Y\bar{a}\bar{b}, Y\bar{a}\bar{b}^2 \}$ を考える。
+</p>
+<p>
+この $\Omega$ （要素数4）が $\bar{a}$ と $\bar{b}$ の右乗法について閉じていることを確認する（これが示されれば、$\bar{H}$ は $\Omega$ の置換として表現でき、剰余類の数が全体の位数を制限する）。 $\bar{b}$ を右から掛ける操作については、 $Y \bar{b} = Y$ などとなり自明に $\Omega$ 内で循環する。
+$\bar{a}$ を右から掛ける作用について、特に $Y\bar{a}\bar{b} \cdot \bar{a}$ を計算する。
+$(\bar{a}\bar{b})^3 = \bar{e}$ を展開すると $\bar{a}\bar{b}\bar{a}\bar{b}\bar{a}\bar{b} = \bar{e}$ である。両辺に右から $\bar{b}^{-1}\bar{a}^{-1}$ を掛けることで $\bar{a}\bar{b}\bar{a}\bar{b} = \bar{b}^{-1}\bar{a}^{-1} = \bar{b}^2\bar{a}$ を得る（$\bar{b}^3=\bar{e}, \bar{a}^2=\bar{e}$ を使用）。さらに右から $\bar{b}$ を掛けて変形すると $\bar{a}\bar{b}\bar{a} = \bar{b}^2\bar{a}\bar{b}^2$ となる。
+したがって、 $Y\bar{a}\bar{b}\bar{a} = Y\bar{b}^2\bar{a}\bar{b}^2 = Y\bar{a}\bar{b}^2$ である（$Y$ は左から $\bar{b}$ を吸収するため $Y\bar{b}^2 = Y$）。
+同様に逆元を考えることで $Y\bar{a}\bar{b}^2\bar{a} = Y\bar{a}\bar{b}$ が導かれる。
+$\Omega$ は閉じており単位元を含むため、 $\bar{H}$ の任意の元はこの4つの剰余類に属する。よって $|\bar{H}| \le 4 \times 3 = 12$ であり、 $|H| = |\bar{H}| \times |N| \le 12 \times 2 = 24$ となる。
+</p>
+<p>
+$c$ の作用を考えると、 $cac^{-1} = a^{-1} \in H$ かつ $cbc^{-1} = b^{-1} \in H$ より $c$ は $H$ を正規化し、 $G = H \langle c \rangle$ と書ける。 $c^2 = e$ より $|G| \le 24 \times 2 = 48$ である。
+</p>
+<p>
+次に、 $GL_2(\mathbb{F}_3)$ 内で関係式を満たす行列を構成する。以下の行列を考える。
+$$ A = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}, \quad B = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}, \quad C = \begin{pmatrix} -1 & 0 \\ 0 & 1 \end{pmatrix} $$
+</p>
+<p>
+これらの行列は与えられた関係式をすべて満たす（例えば $A^2 = -I$ より $A^4 = I$ 。 $AB = \begin{pmatrix} 0 & -1 \\ 1 & 1 \end{pmatrix}$ であり $(AB)^3 = -I = A^2$ ）。よって $G$ から $\langle A, B, C \rangle$ への全射準同型が存在する。
+$A B^2 A^{-1} = \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}$ と $B$ はすべての基本行列を生成し、これらは $SL_2(\mathbb{F}_3)$ を生成する。さらに $\det(C) = -1$ より、 $\langle A, B, C \rangle$ は $GL_2(\mathbb{F}_3)$ 全体に一致する。 $GL_2(\mathbb{F}_3)$ の位数は48であり、抽象群 $G$ の位数の上限と一致するため、両者は同型である。証明終。
+</p>
+</div>
+
+<h2>参考文献</h2>
+<ul>
+<li> Artin, E. (1957). <em>Geometric Algebra</em>. Interscience Publishers.</li>
+<li> Rotman, J. J. (1995). <em>An Introduction to the Theory of Groups</em> (4th ed.). Springer-Verlag.</li>
+<li> Lang, S. (2002). <em>Algebra</em> (Revised 3rd ed.). Springer-Verlag.</li>
+</ul>
+
+</body>
+</html>

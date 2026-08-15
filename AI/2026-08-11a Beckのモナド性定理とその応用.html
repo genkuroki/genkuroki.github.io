@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Beckのモナド性定理とその応用</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .proof {
+            margin-bottom: 20px;
+        }
+        .proof-title {
+            font-style: italic;
+            font-weight: bold;
+        }
+        .definition {
+            background-color: #f9f9f9;
+            border-left: 4px solid #007BFF;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .theorem {
+            background-color: #f0f8ff;
+            border-left: 4px solid #00008B;
+            padding: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .remark {
+            background-color: #fffacd;
+            border-left: 4px solid #ffd700;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Beckのモナド性定理とその応用</h1>
+
+    <p>
+        本稿では、圏論における極めて重要な定理である「Beckのモナド性定理 (Beck's monadicity theorem)」について、関手 $U \colon C \to D$ とその左随伴関手 $F \colon D \to C$ という一貫した設定のもとで、自己完結的 (self-contained) かつ論理的なギャップのない完全な解説を与える。また、定理の応用例として、位相空間論および代数学の重要な諸結果を概観する。
+    </p>
+
+    <h2>1. 準備と基本概念</h2>
+
+    <p>まずは定理の定式化と証明に必要な圏論の基本概念を、余すところなく定義する。</p>
+
+    <div class="definition">
+        <strong>定義 (随伴 / Adjunction)</strong><br>
+        圏 $C$ と $D$ の間の関手 $U \colon C \to D$ と $F \colon D \to C$ の随伴 $F \dashv U$ ($F$ が $U$ の左随伴、$U$ が $F$ の右随伴) とは、自然変換 $\eta \colon \mathrm{Id}_D \to U \circ F$ (単位 / unit) と $\epsilon \colon F \circ U \to \mathrm{Id}_C$ (余単位 / counit) の組であって、以下の三角恒等式 (triangle identities) を満たすものである。
+        <ul>
+            <li>任意の $X \in D$ について、 $U \epsilon_{F X} \circ \eta_{U F X} = \mathrm{id}_{U F X}$ （関手の言葉で書けば $U \epsilon \circ \eta U = \mathrm{id}_U$）</li>
+            <li>任意の $Y \in C$ について、 $\epsilon_{F U Y} \circ F \eta_{U Y} = \mathrm{id}_{F U Y}$ （関手の言葉で書けば $\epsilon F \circ F \eta = \mathrm{id}_F$）</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <strong>定義 (モナド / Monad)</strong><br>
+        圏 $D$ 上のモナド $(T, \eta, \mu)$ とは、自己関手 $T \colon D \to D$ と自然変換 $\eta \colon \mathrm{Id}_D \to T$ および $\mu \colon T^2 \to T$ の組であって、以下の公理を満たすものである。
+        <ul>
+            <li>結合律 (associativity): $\mu \circ T \mu = \mu \circ \mu T$</li>
+            <li>単位律 (unitality): $\mu \circ T \eta = \mu \circ \eta T = \mathrm{id}_T$</li>
+        </ul>
+    </div>
+
+    <p>右随伴関手 $U \colon C \to D$ と左随伴関手 $F \colon D \to C$ が与えられると、圏 $D$ 上に自然にモナドを構成することができる。以下にその構成と証明を完全に書き下す。</p>
+
+    <div class="theorem">
+        <strong>命題 (随伴から定まるモナド)</strong><br>
+        随伴 $F \dashv U$ ($\eta$ を単位、 $\epsilon$ を余単位とする) が与えられたとき、自己関手 $T \colon D \to D$ を $T = U \circ F$ とし、 $\eta$ を随伴の単位そのもの、 $\mu = U \epsilon F$ （すなわち対象 $X \in D$ に対し成分は $\mu_X = U \epsilon_{F X} \colon U F U F X \to U F X$）とおくと、組 $(T, \eta, \mu)$ は圏 $D$ 上のモナドとなる。
+    </div>
+    
+    <div class="proof">
+        <span class="proof-title">証明.</span><br>
+        結合律を示す。対象 $X \in D$ を任意にとる。構成より $\mu_X \circ T \mu_X = U \epsilon_{F X} \circ U F U \epsilon_{F X}$ である。自然変換 $\epsilon \colon F \circ U \to \mathrm{Id}_C$ の、圏 $C$ の射 $\epsilon_{F X} \colon F U F X \to F X$ に対する自然性 (naturality) により、等式 $\epsilon_{F X} \circ F U \epsilon_{F X} = \epsilon_{F X} \circ \epsilon_{F U F X}$ が成り立つ。この等式の両辺に関手 $U \colon C \to D$ を適用すると $U \epsilon_{F X} \circ U F U \epsilon_{F X} = U \epsilon_{F X} \circ U \epsilon_{F U F X}$ を得る。右辺は $\mu_X \circ \mu_{T X}$ に等しいため、成分ごとに $\mu \circ T \mu = \mu \circ \mu T$ が成り立つ。<br><br>
+        次に単位律を示す。 $\mu_X \circ T \eta_X = U \epsilon_{F X} \circ U F \eta_X$ であるが、これは関手 $U$ を $\epsilon_{F X} \circ F \eta_X$ に適用したものである。随伴の三角恒等式 $\epsilon F \circ F \eta = \mathrm{id}_F$ より $\epsilon_{F X} \circ F \eta_X = \mathrm{id}_{F X}$ であるため、 $U \mathrm{id}_{F X} = \mathrm{id}_{U F X} = \mathrm{id}_{T X}$ を得る。<br>
+        また、 $\mu_X \circ \eta_{T X} = U \epsilon_{F X} \circ \eta_{U F X}$ であるが、随伴の三角恒等式 $U \epsilon \circ \eta U = \mathrm{id}_U$ に $Y = F X \in C$ を代入することで直ちに $\mathrm{id}_{U F X} = \mathrm{id}_{T X}$ を得る。以上より、公理がすべて満たされることが示された。証明終。
+    </div>
+
+    <div class="definition">
+        <strong>定義 ( $T$ 代数とEilenberg-Moore圏)</strong><br>
+        圏 $D$ 上のモナド $(T, \eta, \mu)$ に対し、 $T$ 代数 ( $T$ algebra) とは、圏 $D$ の対象 $X$ と圏 $D$ の射 $h \colon T X \to X$ の組 $(X, h)$ であり、以下の2条件を満たすものである。
+        <ul>
+            <li>結合律: $h \circ T h = h \circ \mu_X$</li>
+            <li>単位律: $h \circ \eta_X = \mathrm{id}_X$</li>
+        </ul>
+        $T$ 代数間の準同型 (homomorphism) $f \colon (X, h) \to (Y, k)$ とは、 $D$ の射 $f \colon X \to Y$ であって $f \circ h = k \circ T f$ を満たすものである。これらの対象と準同型からなる圏をEilenberg-Moore圏 (Eilenberg-Moore category) と呼び、 $D^T$ で表す。
+    </div>
+
+    <div class="definition">
+        <strong>定義 (比較関手とモナド的関手)</strong><br>
+        関手 $U \colon C \to D$ とその左随伴 $F \colon D \to C$ による随伴 $F \dashv U$ があるとき、圏 $C$ の対象 $Y$ に対して射 $U \epsilon_Y \colon U F U Y \to U Y$ （これは $D$ の射である）は $T$ 代数の構造を持つ。これにより、関手 $K \colon C \to D^T$ が対象については $K(Y) = (U Y, U \epsilon_Y)$ 、射 $f \colon Y \to Y'$ については $K(f) = U f$ として well-defined に定まる。これを比較関手 (comparison functor) と呼ぶ。関手 $U \colon C \to D$ がモナド的 (monadic) であるとは、この比較関手 $K$ が圏の同値となることである。
+    </div>
+
+    <div class="definition">
+        <strong>定義 (分裂コイコライザー / Split Coequalizer)</strong><br>
+        圏 $D$ における平行な射の対 $f, g \colon X \rightrightarrows Y$ と射 $e \colon Y \to Z$ の組が分裂コイコライザーであるとは、射 $s \colon Z \to Y$ と $t \colon Y \to X$ が存在し、以下の4つの等式を満たすことである。
+        <ol>
+            <li>$e \circ f = e \circ g$</li>
+            <li>$e \circ s = \mathrm{id}_Z$</li>
+            <li>$f \circ t = \mathrm{id}_Y$</li>
+            <li>$g \circ t = s \circ e$</li>
+        </ol>
+        分裂コイコライザーにおける $e$ は $f, g$ の余極限 (colimit) であるコイコライザーであり、任意の関手によって保存される（絶対コイコライザーである）。
+    </div>
+
+    <div class="definition">
+        <strong>定義 (余極限を生成する / Create Colimits)</strong><br>
+        関手 $U \colon C \to D$ が平行な対 $f, g \colon X \rightrightarrows Y$ （ $X, Y \in C$ ）のコイコライザーを生成するとは、 $D$ において $U f, U g \colon U X \rightrightarrows U Y$ のコイコライザー $e \colon U Y \to Z$ が存在するとき、 $C$ の対象 $\overline{Z}$ と射 $\overline{e} \colon Y \to \overline{Z}$ の組がただ1つ存在して、 $U \overline{Z} = Z$ かつ $U \overline{e} = e$ を満たし、さらに $\overline{e}$ が $C$ における $f, g$ のコイコライザーとなることである。
+    </div>
+
+    <hr>
+
+    <h2>2. Beckのモナド性定理の主張と完全な証明</h2>
+
+    <div class="theorem">
+        <strong>定理 (Beckのモナド性定理 / Beck's monadicity theorem)</strong><br>
+        関手 $U \colon C \to D$ が左随伴関手 $F \colon D \to C$ を持つとする。このとき、関手 $U$ がモナド的である（すなわち比較関手 $K \colon C \to D^T$ が圏の同値である）ための必要十分条件は、関手 $U$ がすべての $U$ 分裂コイコライザー対の余極限を生成することである。<br>
+        ここで、 $U$ 分裂コイコライザー対とは、圏 $D$ において $U f, U g$ が分裂コイコライザーを持つような、圏 $C$ における平行な対 $f, g$ のことである。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span><br>
+        $U \colon C \to D$ の左随伴を $F \colon D \to C$ とし、生成される圏 $D$ 上のモナドを $T = U \circ F$ とする。<br><br>
+
+        <strong>【必要性の証明】</strong><br>
+        比較関手 $K \colon C \to D^T$ が圏の同値であると仮定する。このとき $C \cong D^T$ であり、包含関係として $U \cong U^T \circ K$ （ここで $U^T \colon D^T \to D$ は忘却関手）が成り立つ。圏の同値は存在するすべての極限 (limit) および余極限を生成するため、 $U$ が条件を満たすことを示すには、忘却関手 $U^T \colon D^T \to D$ が $U^T$ 分裂コイコライザー対の余極限を生成することを示せば十分である。<br><br>
+        
+        平行な対 $f, g \colon (X, h) \rightrightarrows (Y, k)$ を $D^T$ の射とする。これらが $D$ において分裂コイコライザー $e \colon Y \to Z$ （分解を与える射を $s \colon Z \to Y$ , $t \colon Y \to X$ とする）を持つと仮定する。モナドの自己関手 $T \colon D \to D$ は分裂コイコライザーを保存するため、 $T e \colon T Y \to T Z$ は $T f, T g$ のコイコライザーである。<br>
+        $f, g$ が $T$ 代数の準同型であることから、圏 $D$ における等式 $e \circ k \circ T f = e \circ f \circ h = e \circ g \circ h = e \circ k \circ T g$ が成り立つ。 $T e$ がコイコライザーであるため、ただ1つの射 $l \colon T Z \to Z$ が存在して $l \circ T e = e \circ k$ を満たす。<br><br>
+        
+        この $D$ の対象と射の組 $(Z, l)$ が $T$ 代数であることを示す。<br>
+        単位律については、 $l \circ \eta_Z \circ e = l \circ T e \circ \eta_Y = e \circ k \circ \eta_Y = e \circ \mathrm{id}_Y = e$ が成り立つ。 $e$ は分裂コイコライザーゆえエピ射（全射）であるから、右からのキャンセルにより $l \circ \eta_Z = \mathrm{id}_Z$ を得る。<br>
+        結合律については、 
+        $$ l \circ \mu_Z \circ T^2 e = l \circ T e \circ \mu_Y = e \circ k \circ \mu_Y = e \circ k \circ T k = l \circ T e \circ T k = l \circ T l \circ T^2 e $$ 
+        が成り立つ。 $T^2 e$ も絶対コイコライザーとしてエピ射であるから、 $l \circ \mu_Z = l \circ T l$ を得る。<br>
+        以上より $(Z, l)$ は well-defined な $T$ 代数であり、定義式 $l \circ T e = e \circ k$ は $e$ が $D^T$ における準同型であることを意味している。<br><br>
+        
+        $D^T$ の対象 $(W, m)$ と準同型 $x \colon (Y, k) \to (W, m)$ が $x \circ f = x \circ g$ を満たすとする。圏 $D$ において $e$ はコイコライザーであるため、ただ1つの射 $y \colon Z \to W$ が存在して $y \circ e = x$ を満たす。この $y$ が準同型であることは、 
+        $$ y \circ l \circ T e = y \circ e \circ k = x \circ k = m \circ T x = m \circ T y \circ T e $$ 
+        と、 $T e$ がエピ射であることから従う。<br>
+        よって $U^T$ は余極限を生成する。これにより必要性が示された。<br><br>
+
+        <strong>【十分性の証明】</strong><br>
+        関手 $U \colon C \to D$ が $U$ 分裂コイコライザー対の余極限を生成すると仮定する。比較関手 $K \colon C \to D^T$ の逆関手 $L \colon D^T \to C$ を構成する。<br><br>
+        
+        任意の $T$ 代数 $(X, h) \in D^T$ に対して、対象 $X$ は圏 $D$ に属する。これを用いて圏 $C$ における平行な対 $\epsilon_{F X}, F h \colon F U F X \rightrightarrows F X$ を考える。<br>
+        これに関手 $U \colon C \to D$ を適用すると、圏 $D$ における平行な対 $U \epsilon_{F X}, U F h \colon U F U F X \rightrightarrows U F X$ を得る。これに対して $D$ の射 $h \colon U F X \to X$ と、分解を与える射 $s = \eta_X \colon X \to U F X$ および $t = \eta_{U F X} \colon U F X \to U F U F X$ をとる。<br>
+        これらの射は以下の等式を満たす。
+        <ol>
+            <li>$h \circ U \epsilon_{F X} = h \circ U F h$ （ $T$ 代数の結合律 $h \circ \mu_X = h \circ T h$ に他ならない）</li>
+            <li>$h \circ \eta_X = \mathrm{id}_X$ （ $T$ 代数の単位律）</li>
+            <li>$U \epsilon_{F X} \circ \eta_{U F X} = \mathrm{id}_{U F X}$ （随伴の三角恒等式）</li>
+            <li>$U F h \circ \eta_{U F X} = \eta_X \circ h$ （ $\eta$ の自然性）</li>
+        </ol>
+        したがって、 $h$ は圏 $D$ における分裂コイコライザーである。<br><br>
+        
+        仮定より関手 $U$ はこのような対の余極限を生成するため、圏 $C$ の対象 $\overline{X}$ と射 $\overline{e} \colon F X \to \overline{X}$ がただ1つ存在して、 $\overline{e}$ は $C$ における $\epsilon_{F X}, F h$ のコイコライザーであり、かつ $U \overline{X} = X$ および $U \overline{e} = h$ を満たす。対象関数を $L(X, h) = \overline{X}$ と定義する。<br><br>
+        
+        準同型 $u \colon (X, h) \to (X', h')$ に対して、 
+        $$ \overline{e'} \circ F u \circ \epsilon_{F X} = \overline{e'} \circ \epsilon_{F X'} \circ F U F u = \overline{e'} \circ F h' \circ F U F u = \overline{e'} \circ F(h' \circ U F u) = \overline{e'} \circ F(u \circ h) = \overline{e'} \circ F u \circ F h $$ 
+        が成り立つ。<br>
+        よって $\overline{e'} \circ F u$ は $\epsilon_{F X}, F h$ をコイコライズする。 $\overline{e}$ の普遍性により、ただ1つの射 $L(u) \colon \overline{X} \to \overline{X'}$ が存在して $L(u) \circ \overline{e} = \overline{e'} \circ F u$ を満たす。これにより $L$ は関手となる。<br><br>
+        
+        次に $K \circ L = \mathrm{Id}_{D^T}$ を示す。<br>
+        $K(L(X, h)) = K(\overline{X}) = (X, U \epsilon_{\overline{X}})$ である。 $\epsilon$ の自然性より $\epsilon_{\overline{X}} \circ F U \overline{e} = \overline{e} \circ \epsilon_{F X}$ である。これに関手 $U$ を適用し、 $U \overline{e} = h$ を用いると $U \epsilon_{\overline{X}} \circ U F h = h \circ U \epsilon_{F X}$ を得る。<br>
+        $h$ は $U \epsilon_{F X}$ と $U F h$ をコイコライズするため、 $U \epsilon_{\overline{X}} \circ U F h = h \circ U F h$ が成り立つ。<br>
+        $D$ の射である $h$ は分裂コイコライザーであり、同じく対をコイコライズする $U \epsilon_{\overline{X}} \colon U F X \to X$ は、コイコライザーの普遍性より $k_2 \circ h = U \epsilon_{\overline{X}}$ を満たす射 $k_2 \colon X \to X$ を一意に定める。同様に $h$ 自身に対して $k_1 \circ h = h$ を満たす $k_1 \colon X \to X$ （すなわち $\mathrm{id}_X$）が定まる。<br>
+        分裂コイコライザーの性質より、一般に $x \circ h = y$ を満たす関係において両辺に $s = \eta_X$ を右から合成すると $x = x \circ \mathrm{id}_X = x \circ h \circ \eta_X = y \circ \eta_X$ となる。<br>
+        これを $k_2 \circ h = U \epsilon_{\overline{X}}$ に適用すると $k_2 = U \epsilon_{\overline{X}} \circ \eta_X$ を得る。ここで $U \overline{X} = X$ であるため、随伴の三角恒等式により $U \epsilon_{\overline{X}} \circ \eta_{U \overline{X}} = \mathrm{id}_X$ 、すなわち $k_2 = \mathrm{id}_X$ である。<br>
+        よって $U \epsilon_{\overline{X}} = h$ であり、 $K(L(X, h)) = (X, h)$ となる。射の対応も一致するため $K \circ L = \mathrm{Id}_{D^T}$ を得る。<br><br>
+        
+        最後に $L \circ K = \mathrm{Id}_C$ を示す。<br>
+        $Y \in C$ に対し、 $K(Y) = (U Y, U \epsilon_Y)$ である。 $L(K(Y))$ は圏 $C$ における対 $\epsilon_{F U Y}, F U \epsilon_Y \colon F U F U Y \rightrightarrows F U Y$ のコイコライザーの余域として定まる。<br>
+        $\epsilon$ の自然性から $\epsilon_Y \circ \epsilon_{F U Y} = \epsilon_Y \circ F U \epsilon_Y$ であるため、 $\epsilon_Y \colon F U Y \to Y$ はこの対をコイコライズする。<br>
+        これに関手 $U$ を適用すると $U \epsilon_Y \colon U F U Y \to U Y$ となり、これは $(U Y, U \epsilon_Y)$ から定まる分裂コイコライザーに他ならない。<br>
+        関手 $U$ はこの対の余極限を生成するため、圏 $C$ におけるコイコライザーは一意に定まり、そのコイコライザーは $\epsilon_Y$ となる。<br>
+        よって $L(K(Y)) = Y$ であり、 $L \circ K = \mathrm{Id}_C$ を得る。<br>
+        以上より、 $K$ は圏の同値となる。証明終。
+    </div>
+
+    <hr>
+
+    <h2>3. 応用例1: コンパクトHausdorff空間の圏 $\mathrm{CHaus}$ と位相空間の圏 $\mathrm{Top}$</h2>
+
+    <p>
+        ここでは、圏 $C = \mathrm{CHaus}$ （コンパクトHausdorff空間の圏）および圏 $D = \mathrm{Top}$ （位相空間の圏）という設定について考察する。
+    </p>
+    <div class="remark">
+        <strong>補足解説: 随伴の方向について</strong><br>
+        $\mathrm{Top}$ から $\mathrm{CHaus}$ への関手が右随伴になるような標準的な随伴は存在しません（包含関手は余極限を保存しないため左随伴にはならず、Stone-Čechコンパクト化は左随伴ですが右随伴ではありません）。そこでモナド性定理を適用する上で最も自然な設定は、包含関手を右随伴関手 $U \colon \mathrm{CHaus} \to \mathrm{Top}$ とし、その左随伴関手 $F \colon \mathrm{Top} \to \mathrm{CHaus}$ をStone-Čechコンパクト化 $\beta$ とする場合です。
+    </div>
+
+    <div class="theorem">
+        <strong>定理 ($\mathrm{CHaus}$ のモナド性)</strong><br>
+        関手 $U \colon \mathrm{CHaus} \to \mathrm{Top}$ をコンパクトHausdorff空間の圏から位相空間の圏への包含関手とし、その左随伴をStone-Čechのコンパクト化 $F = \beta \colon \mathrm{Top} \to \mathrm{CHaus}$ とする。このとき、関手 $U$ はモナド的 (monadic) である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span><br>
+        Beckのモナド性定理を用いる。関手 $U \colon \mathrm{CHaus} \to \mathrm{Top}$ が $U$ 分裂コイコライザー対の余極限を生成することを示せば十分である。<br><br>
+        
+        $f, g \colon X \rightrightarrows Y$ を $\mathrm{CHaus}$ における平行な射の対とする。これらが $\mathrm{Top}$ において分裂コイコライザー $e \colon U Y \to Z$ を持つと仮定する。このとき、 $\mathrm{Top}$ における連続写像 $s \colon Z \to U Y$ と $t \colon U Y \to U X$ が存在し、以下の4つの等式を満たす。
+        <ol>
+            <li>$e \circ U f = e \circ U g$</li>
+            <li>$e \circ s = \mathrm{id}_Z$</li>
+            <li>$U f \circ t = \mathrm{id}_{U Y}$</li>
+            <li>$U g \circ t = s \circ e$</li>
+        </ol>
+        
+        まず、対象 $Z$ が $\mathrm{CHaus}$ に属すること、すなわちコンパクトHausdorff空間であることを示す。<br>
+        等式 $e \circ s = \mathrm{id}_Z$ より、位相空間 $Z$ は連続写像による $U Y$ のレトラクト (retract) である。 $Y$ は $\mathrm{CHaus}$ の対象であるため、 $U Y$ はコンパクトHausdorff空間である。コンパクト空間の連続写像による像はコンパクトであるため、全射である $e$ の像である $Z$ はコンパクトである。また、Hausdorff空間の部分空間はHausdorff空間であり、 $Z$ は単射 $s$ により $U Y$ の部分空間と同相になるため、 $Z$ はHausdorff空間である。したがって、 $Z$ はコンパクトHausdorff空間である。<br><br>
+        
+        関手 $U \colon \mathrm{CHaus} \to \mathrm{Top}$ は $\mathrm{Top}$ の充満部分圏 (full subcategory) への包含関手であるため、 $U \overline{Z} = Z$ を満たす $\mathrm{CHaus}$ の対象 $\overline{Z}$ が（ $Z$ 自身として）一意に存在する。<br>
+        また、 $Y$ および $\overline{Z}$ はともに $\mathrm{CHaus}$ の対象であるため、連続写像 $e \colon U Y \to Z$ に対して、 $U \overline{e} = e$ を満たす $\mathrm{CHaus}$ の射 $\overline{e} \colon Y \to \overline{Z}$ が一意に存在する。<br><br>
+        
+        次に、この $\overline{e}$ が $\mathrm{CHaus}$ における $f, g$ のコイコライザーであることを示す。<br>
+        対象 $W \in \mathrm{CHaus}$ と射 $h \colon Y \to W$ が $h \circ f = h \circ g$ を満たすとする。これに関手 $U$ を適用すると $U h \circ U f = U h \circ U g$ を得る。<br>
+        $e$ は $\mathrm{Top}$ における分裂コイコライザーであるため、特に $\mathrm{Top}$ のコイコライザーである。したがって、唯一の連続写像 $u \colon Z \to U W$ が存在して $u \circ e = U h$ を満たす。<br>
+        $Z$ および $U W$ は $\mathrm{CHaus}$ に属する空間に対応するため、 $U \overline{u} = u$ を満たす $\mathrm{CHaus}$ の射 $\overline{u} \colon \overline{Z} \to W$ が一意に存在する。<br>
+        関手 $U$ を適用すると $U(\overline{u} \circ \overline{e}) = u \circ e = U h$ となる。 $U$ は忠実関手 (faithful functor) であるため、 $\overline{u} \circ \overline{e} = h$ が成り立つ。分解の唯一性も、 $u$ の唯一性と $U$ の充満忠実性から従う。<br><br>
+        
+        以上より、与えられた $U$ 分裂コイコライザー対に対して、 $U$ は $\mathrm{CHaus}$ における余極限を生成する。したがってBeckのモナド性定理より、 $U$ はモナド的である。証明終。
+    </div>
+
+    <h3>モナド $T = U \beta$ の構成と代数の意味</h3>
+    <p>
+        位相空間 $X$ に対して、モナド $T X = U \beta X$ は「 $X$ のStone-Čechコンパクト化を単なる位相空間と見なしたもの」である。
+        <ul>
+            <li><strong>単位 $\eta_X \colon X \to T X$</strong>: 位相空間 $X$ の各点を、そのStone-Čechコンパクト化 $\beta X$ の対応する点へ自然に埋め込む連続写像である。</li>
+            <li><strong>乗法 $\mu_X \colon T^2 X \to T X$</strong>: $T^2 X = U \beta U \beta X$ は「コンパクト化のコンパクト化」である。 $\beta X$ はすでにコンパクトHausdorff空間であるため、そのStone-Čechコンパクト化は元の $\beta X$ と自然に同相になる。 $\mu_X$ はこの自然な同相写像（随伴の余単位 $\epsilon_{\beta X}$）を $\mathrm{Top}$ の射として見なしたものであり、二重のコンパクト化を1つに潰す操作に対応する。</li>
+        </ul>
+        $T$ 代数 $(X, h)$ は、位相空間 $X$ と連続写像 $h \colon U \beta X \to X$ の組である。単位律 $h \circ \eta_X = \mathrm{id}_X$ は、写像 $\eta_X$ による埋め込みに対して $h$ が左逆写像となること、すなわち $X$ が巨大な空間 $\beta X$ の連続なレトラクト（引き込み）であることを意味している。<br>
+        位相空間論において、 $\beta X$ は常にコンパクトHausdorff空間であり、そのレトラクトもまた必ずコンパクトHausdorff空間となる。結合律 $h \circ U \beta h = h \circ \mu_X$ は、この引き込み操作がコンパクト化の普遍性と整合的に定まっていることを保証する。結果として、「Stone-Čechモナドの代数構造を持つこと」と「 $X$ 自身がコンパクトHausdorff空間であること」は完全に等価になり、極めて幾何学的・位相的な対象の圏 $\mathrm{CHaus}$ が純粋に代数的な概念として再定義される。
+    </p>
+
+    <hr>
+
+    <h2>4. 応用例2: 完全不連結コンパクトHausdorff空間の圏 $\mathrm{Stone}$ と位相空間の圏 $\mathrm{Top}$</h2>
+
+    <p>
+        包含関手 $U \colon \mathrm{Stone} \to \mathrm{Top}$ の左随伴関手 $F \colon \mathrm{Top} \to \mathrm{Stone}$ （Stone反射）が存在する。位相空間 $X \in \mathrm{Top}$ に対し、 $X$ のすべての clopen 集合（開かつ閉集合）の族 $\mathrm{Clop}(X)$ を考え、対象 $F X$ を「Boolean代数 $\mathrm{Clop}(X)$ 上のすべての超フィルター (ultrafilter) の集合」とする。 $F X$ には、各 $A \in \mathrm{Clop}(X)$ に対して $O_A = \{ \mathcal{U} \in F X \mid A \in \mathcal{U} \}$ を基本開集合とする位相を入れる。この位相により、 $F X$ は完全不連結なコンパクトHausdorff空間となる。
+    </p>
+
+    <div class="theorem">
+        <strong>命題 ($\mathrm{Top}^T$ の対象の位相的性質)</strong><br>
+        この随伴から定まるモナド $T = U F$ の代数 $(X, h) \in \mathrm{Top}^T$ について、位相空間 $X$ は必ず完全不連結コンパクトHausdorff空間（すなわち $\mathrm{Stone}$ の対象）である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span><br>
+        代数の単位律より $h \circ \eta_X = \mathrm{id}_X$ である。これは連続写像 $h \colon U F X \to X$ による引き込みが存在し、 $X$ が位相空間 $U F X$ のレトラクトであることを意味している。<br><br>
+        まず、 $X$ がコンパクトHausdorff空間であることを示す。構成より $U F X$ はStone空間であるため、コンパクトHausdorff空間である。コンパクト空間の連続写像による像はコンパクトであるため、全射である $h$ の像としての $X$ はコンパクトである。また、Hausdorff空間の部分空間はHausdorff空間であり、 $X$ は単射 $\eta_X$ により $U F X$ の部分空間と同相になるため、 $X$ はHausdorff空間である。<br><br>
+        次に、 $X$ が完全不連結 (totally disconnected) であることを示す。<br>
+        $X$ の任意の相異なる2点 $x, y$ をとる。 $\eta_X$ は単射であるため、 $U F X$ において $\eta_X(x) \neq \eta_X(y)$ である。 $U F X$ は完全不連結であるため、相異なる2点を分離する clopen 集合が存在する。すなわち、 $\eta_X(x) \in C$ かつ $\eta_X(y) \notin C$ を満たすような $U F X$ の clopen 集合 $C$ が存在する。<br>
+        写像 $\eta_X$ は連続であるため、逆像 $A = \eta_X^{-1}(C)$ は $X$ の clopen 集合となる。このとき、 $x \in A$ かつ $y \notin A$ であるため、 $A$ は $x$ と $y$ を分離する。相異なる任意の2点が clopen 集合によって分離されるため、 $X$ は完全不連結である。<br>
+        以上より、 $X$ は完全不連結コンパクトHausdorff空間（すなわち $\mathrm{Stone}$ の対象）である。証明終。
+    </div>
+
+    <h3>モナド $T = U F$ の構成と代数の意味</h3>
+    <p>
+        位相空間 $X$ に対して、モナド $T X = U F X$ は「 $X$ の clopen 集合からなるBoolean代数上の超フィルター全体の集合に、自然な位相を入れて得られる巨大なStone空間（を単なる位相空間と見なしたもの）」である。
+        <ul>
+            <li><strong>単位 $\eta_X \colon X \to T X$</strong>: $X$ の各点 $x$ に対して、「 $x$ を含む $X$ の clopen 集合全体」という単項超フィルター (principal ultrafilter) を対応させる連続写像である。</li>
+            <li><strong>乗法 $\mu_X \colon T^2 X \to T X$</strong>: $T^2 X = U F U F X$ は「超フィルター空間の clopen 集合上の超フィルター空間」である。 $\mu_X$ は、二重に重なった超フィルター構造の極限を計算し、単一の超フィルターに圧縮する写像（余単位 $\epsilon_{F X}$）である。</li>
+        </ul>
+        $T$ 代数 $(X, h)$ における構造写像 $h \colon U F X \to X$ は、 $X$ の clopen 集合の各超フィルターに対して、 $X$ 内の具体的な極限点を1つ割り当てる連続な評価写像である。<br>
+        単位律 $h \circ \eta_X = \mathrm{id}_X$ は、前述の証明の通り $X$ が完全不連結な空間 $U F X$ のレトラクトとなることを要請する。完全不連結な空間を扱う際、開集合でありかつ閉集合でもある clopen 集合の存在が本質的な役割を果たす。この「超フィルターに対して連続かつ矛盾なく極限を割り当てることができる（引き戻せる）」という純粋に代数的な要請だけで、空間のトポロジーが自動的に「完全不連結」かつ「コンパクトHausdorff」という非常に強い分離性を持つことが証明される。
+    </p>
+
+    <hr>
+
+    <h2>5. 代数学と位相空間論におけるその他の重要な応用例</h2>
+
+    <p>
+        Beckのモナド性定理は、ある圏 $C$ が別の圏 $D$ 上のモナドの代数として完全に特徴づけられるか（すなわち代数的であるか）を判定する強力なツールである。ここでは、特に $D = \mathrm{Set}$ （集合の圏）とした場合の代表的な5つの応用例を、モナド構造とその代数が何を意味するのか（self-contained な解説）を含めて詳述する。
+    </p>
+
+    <h3>応用例3: 群の圏 $\mathrm{Grp}$ と集合の圏 $\mathrm{Set}$</h3>
+    <div class="theorem">
+        <strong>定理 (群の圏のモナド性)</strong><br>
+        群の圏 $C = \mathrm{Grp}$ から集合の圏 $D = \mathrm{Set}$ への忘却関手 $U \colon \mathrm{Grp} \to \mathrm{Set}$ と、集合から自由群 (free group) を生成する左随伴関手 $F \colon \mathrm{Set} \to \mathrm{Grp}$ を考える。このとき $U$ はモナド的である。
+    </div>
+    <p>
+        <strong>モナドの構成と代数の意味:</strong><br>
+        集合 $X$ に対して、モナド $T X = U F X$ は「 $X$ の元を生成元とする自由群の台集合」である。つまり、 $T X$ の元は $x_1^{\epsilon_1} x_2^{\epsilon_2} \cdots x_n^{\epsilon_n}$ （各 $x_i \in X$ , $\epsilon_i \in \{1, -1\}$）という既約な「語 (word)」の集まりである。<br>
+        <ul>
+            <li><strong>単位 $\eta_X \colon X \to T X$</strong>: 集合 $X$ の元 $x$ を、長さ1の語 $x^1$ と見なして $T X$ に埋め込む写像。</li>
+            <li><strong>乗法 $\mu_X \colon T^2 X \to T X$</strong>: $T^2 X$ は「語を文字とする語」の集合である。 $\mu_X$ は括弧を外して平坦な1つの語に直す（簡約する）操作に対応する。</li>
+        </ul>
+        $T$ 代数 $(X, h)$ は、集合 $X$ と写像 $h \colon T X \to X$ の組である。この写像 $h$ は、任意の「語」に対して $X$ の特定の元を「評価値（計算結果）」として割り当てる役割を持つ。<br>
+        単位律 $h(\eta_X(x)) = x$ は「1文字の語を評価すると元の文字自身になる」ことを意味する。結合律 $h(\mu_X(W)) = h(T h(W))$ は、「語の語を直接評価した結果」と「部分的な語を先に評価してから全体を評価した結果」が一致することを要求する。この構造により、 $X$ 上に自然な結合的演算と逆元が定まり、 $(X, h)$ はまさに群そのものとなる。
+    </p>
+
+    <h3>応用例4: 加群の圏 $R\text{-}\mathrm{Mod}$ と集合の圏 $\mathrm{Set}$</h3>
+    <div class="theorem">
+        <strong>定理 (加群の圏のモナド性)</strong><br>
+        環 $R$ 上の左加群の圏 $C = R\text{-}\mathrm{Mod}$ から集合の圏 $D = \mathrm{Set}$ への忘却関手 $U \colon R\text{-}\mathrm{Mod} \to \mathrm{Set}$ と、集合を基底とする自由加群を生成する左随伴関手 $F \colon \mathrm{Set} \to R\text{-}\mathrm{Mod}$ を考える。このとき $U$ はモナド的である。
+    </div>
+    <p>
+        <strong>モナドの構成と代数の意味:</strong><br>
+        集合 $X$ に対して、モナド $T X = U F X = \bigoplus_{x \in X} R$ は、「 $X$ の元を基底とする形式的な有限線形結合 $\sum r_i x_i$ （ $r_i \in R, x_i \in X$ ）の集合」である。<br>
+        <ul>
+            <li><strong>単位 $\eta_X \colon X \to T X$</strong>: 元 $x \in X$ を、係数1を持つ項 $1 \cdot x$ に写す。</li>
+            <li><strong>乗法 $\mu_X \colon T^2 X \to T X$</strong>: 「線形結合の線形結合」を展開し、同類項をまとめて通常の「線形結合」に直す操作。</li>
+        </ul>
+        $T$ 代数 $(X, h)$ における構造写像 $h \colon T X \to X$ は、形式的な線形結合 $\sum r_i x_i$ を $X$ の具体的な元として「計算（評価）」する写像である。この $h$ が単位律と結合律を満たすことは、加法とスカラー倍の公理（分配律や結合律など）が満たされることと完全に同値である。特に $R$ が体の場合、ベクトル空間の公理そのものがこのモナドの代数として抽出される。
+    </p>
+
+    <h3>応用例5: 環の圏 $\mathrm{Ring}$ と集合の圏 $\mathrm{Set}$</h3>
+    <div class="theorem">
+        <strong>定理 (環の圏のモナド性)</strong><br>
+        単位元を持つ環の圏 $C = \mathrm{Ring}$ から集合の圏 $D = \mathrm{Set}$ への忘却関手 $U \colon \mathrm{Ring} \to \mathrm{Set}$ と、非可換多項式環（自由環）を生成する左随伴関手 $F \colon \mathrm{Set} \to \mathrm{Ring}$ を考える。このとき $U$ はモナド的である。
+    </div>
+    <p>
+        <strong>モナドの構成と代数の意味:</strong><br>
+        集合 $X$ に対して、モナド $T X = U F X = \mathbb{Z}\langle X \rangle$ は、「 $X$ の元を変数とする整数係数の非可換多項式（自由環）の集合」である。<br>
+        <ul>
+            <li><strong>単位 $\eta_X \colon X \to T X$</strong>: $X$ の元 $x$ を、モニックな1次の単項式 $x$ と見なす。</li>
+            <li><strong>乗法 $\mu_X \colon T^2 X \to T X$</strong>: 「多項式を変数に持つ多項式」を展開し、単一の多項式に整理する（代入操作の形式化）。</li>
+        </ul>
+        $T$ 代数 $(X, h)$ は、与えられた「変数 $X$ の多項式」に対して、変数の値を $X$ 内の元として具体的に代入し計算する写像 $h \colon \mathbb{Z}\langle X \rangle \to X$ を備える。この代入評価が矛盾なく行えるという要請が、環における和と積の公理（可換群構造、積の結合律、分配律）を過不足なく導出する。
+    </p>
+
+    <h3>応用例6: $G$-集合の圏 $G\text{-}\mathrm{Set}$ と集合の圏 $\mathrm{Set}$</h3>
+    <div class="theorem">
+        <strong>定理 ($G$-集合の圏のモナド性)</strong><br>
+        固定された群 $G$ が作用する集合の圏 $C = G\text{-}\mathrm{Set}$ から集合の圏 $D = \mathrm{Set}$ への忘却関手 $U \colon G\text{-}\mathrm{Set} \to \mathrm{Set}$ と、左随伴関手 $F \colon \mathrm{Set} \to G\text{-}\mathrm{Set}$ を考える。このとき $U$ はモナド的である。
+    </div>
+    <p>
+        <strong>モナドの構成と代数の意味:</strong><br>
+        左随伴 $F$ は、集合 $X$ に対して直積 $G \times X$ を対応させ、作用を $G$ 側の乗算として定義する。したがってモナドは $T X = G \times X$ である。<br>
+        <ul>
+            <li><strong>単位 $\eta_X \colon X \to T X$</strong>: 写像 $\eta_X(x) = (e, x)$ （ $e$ は $G$ の単位元）。</li>
+            <li><strong>乗法 $\mu_X \colon T^2 X \to T X$</strong>: $T^2 X = G \times (G \times X)$ である。写像 $\mu_X(g_1, (g_2, x)) = (g_1 g_2, x)$ は、群の積構造を利用してペアをまとめる。</li>
+        </ul>
+        $T$ 代数 $(X, h)$ の構造写像 $h \colon G \times X \to X$ は、元 $(g, x)$ を $X$ のある元に写す。便宜上これを $h(g, x) = g \cdot x$ と書く。代数の単位律 $h \circ \eta_X = \mathrm{id}_X$ は $e \cdot x = x$ を意味し、結合律 $h \circ \mu_X = h \circ T h$ は $(g_1 g_2) \cdot x = g_1 \cdot (g_2 \cdot x)$ を意味する。これはまさに群作用の定義そのものであり、 $G\text{-}\mathrm{Set}$ がモナド的であることが明瞭に確認できる。
+    </p>
+
+    <h3>応用例7: Manesの定理 (コンパクトHausdorff空間 $\mathrm{CHaus}$ と $\mathrm{Set}$)</h3>
+    <div class="theorem">
+        <strong>定理 (Manesの定理 / $\mathrm{CHaus}$ と $\mathrm{Set}$ の関係)</strong><br>
+        コンパクトHausdorff空間の圏 $C = \mathrm{CHaus}$ から集合の圏 $D = \mathrm{Set}$ への忘却関手 $U \colon \mathrm{CHaus} \to \mathrm{Set}$ （位相を完全に忘れる関手）と、離散位相を入れた集合のStone-Čechコンパクト化を与える左随伴関手 $F \colon \mathrm{Set} \to \mathrm{CHaus}$ を考える。このとき $U$ はモナド的である。
+    </div>
+    <p>
+        <strong>モナドの構成と代数の意味:</strong><br>
+        応用例1では $\mathrm{Top}$ 上のモナド性を扱ったが、Manes (1969) は $\mathrm{CHaus}$ が<strong>位相すら持たない単なる集合の圏 $\mathrm{Set}$ 上でもモナド的である</strong>ことを示した。このときのモナド $T = U \circ F$ は「超フィルターモナド (Ultrafilter monad)」と呼ばれる。離散空間 $X$ のStone-Čechコンパクト化は超フィルターの集合と同型になるため、モナドは $T X = \beta X$ （ $X$ 上の超フィルター全体の集合）として定義される。<br>
+        <ul>
+            <li><strong>単位 $\eta_X \colon X \to \beta X$</strong>: $X$ の元 $x$ に対して、 $x$ を含む部分集合全体からなる単項超フィルター (principal ultrafilter) を割り当てる写像。</li>
+            <li><strong>乗法 $\mu_X \colon \beta(\beta X) \to \beta X$</strong>: 「超フィルターの超フィルター」に対して、そのKowalsky極限（包含関係に基づく対角線的な超フィルターの圧縮操作）を与える写像。</li>
+        </ul>
+        $T$ 代数 $(X, h)$ において、写像 $h \colon \beta X \to X$ は各超フィルター $\mathcal{U} \in \beta X$ に対して、 $X$ のある1点 $x$ を割り当てる。これは位相空間論において「超フィルター $\mathcal{U}$ が点 $x$ に収束する」という極限操作の定式化に他ならない。結合律と単位律は、超フィルターの極限が矛盾なく一意に存在することを要求する。位相空間論の基本定理により、「すべての超フィルターが一意の収束点を持つ空間」はコンパクトHausdorff空間と同値であるため、コンパクトHausdorff空間という位相的対象が、集合上の純粋に代数的なモナドの代数として完全に特徴づけられるのである。
+    </p>
+
+    <hr>
+
+    <h2>6. 参考文献</h2>
+    <ul>
+        <li>Mac Lane, S. (1998). <i>Categories for the Working Mathematician</i> (2nd ed.). Springer-Verlag.</li>
+        <li>Barr, M., & Wells, C. (2005). <i>Toposes, Triples and Theories</i>. Reprints in Theory and Applications of Categories, No. 12, 1-288.</li>
+        <li>Manes, E. G. (1969). <i>A triple theoretic construction of compact algebras</i>. Seminar on Triples and Categorical Homology Theory (ETH, Zürich, 1966/67), Springer, Berlin, 91–118.</li>
+        <li>nLab contributors. (n.d.). Monadicity theorem. In <i>nLab</i>.</li>
+    </ul>
+
+</body>
+</html>

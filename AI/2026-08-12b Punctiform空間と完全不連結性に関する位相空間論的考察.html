@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punctiform空間と完全不連結性に関する位相空間論的考察</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2em;
+    color: #333;
+    background-color: #fafafa;
+  }
+  h1 {
+    text-align: center;
+    border-bottom: 2px solid #555;
+    padding-bottom: 0.5em;
+  }
+  h2 {
+    border-bottom: 1px solid #aaa;
+    margin-top: 2em;
+  }
+  h3 {
+    margin-top: 1.5em;
+  }
+  .definition, .theorem, .lemma, .example {
+    margin: 1.5em 0;
+    padding: 1.5em;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .definition {
+    background-color: #e8f4f8;
+    border-left: 5px solid #17a2b8;
+  }
+  .theorem {
+    background-color: #e8f8e8;
+    border-left: 5px solid #28a745;
+  }
+  .lemma {
+    background-color: #fdf5e6;
+    border-left: 5px solid #ffc107;
+  }
+  .example {
+    background-color: #f4f4f4;
+    border-left: 5px solid #6c757d;
+  }
+  .proof {
+    margin: 1em 0;
+    padding: 1em 1.5em;
+    background-color: #fff;
+    border-left: 3px solid #ccc;
+    font-style: normal;
+  }
+  .proof::before {
+    content: "証明.";
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5em;
+  }
+  .qed {
+    text-align: right;
+    font-weight: bold;
+  }
+  .reference {
+    margin-top: 3em;
+    background-color: #fff;
+    padding: 1.5em;
+    border-top: 2px solid #555;
+  }
+  a {
+    color: #0056b3;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<h1>Punctiform空間と完全不連結性に関する位相空間論的考察</h1>
+
+<p>
+本稿では、位相空間論 (general topology) における重要な概念である punctiform 性と完全不連結 (totally disconnected) 性に焦点を当て、それらの性質と関係性について厳密に論じる。とくに「 $\sigma$-punctiform でない可分距離空間は存在するか」という疑問に対し、Bernstein集合を用いた空間の分割論法によって「そのような空間は存在しない（すべての可分距離空間は $2$ つの punctiform 空間の和である）」ことを完全な形で証明する。さらに、punctiform であるが完全不連結ではない空間の具体例を補可算位相を用いて構成する。
+</p>
+
+<h2>1. 基礎概念の定義と $\sigma$-punctiform 性について</h2>
+
+<p>
+まずは議論の前提となる位相空間の基本的な性質について、厳密な定義を与える。
+</p>
+
+<div class="definition">
+  <strong>定義 1.1 (punctiform)</strong><br>
+  位相空間 $X$ が <strong>punctiform</strong> であるとは、 $X$ の部分空間であって、コンパクト (compact) かつ連結 (connected) であり、しかも $2$ 点以上を含むようなものが存在しないことである。換言すれば、 $X$ の任意のコンパクト部分空間の連結成分は、ただ $1$ つの点からなる。
+</div>
+
+<div class="definition">
+  <strong>定義 1.2 ($\sigma$-punctiform)</strong><br>
+  位相空間 $X$ が <strong>$\sigma$-punctiform</strong> であるとは、 $X$ が可算個（有限個を含む）の punctiform な部分空間の和集合として表されることである。すなわち、 $X = \bigcup_{n \in \mathbb{N}} X_n$ と書け、各 $X_n$ が punctiform となることである。
+</div>
+
+<div class="definition">
+  <strong>定義 1.3 (可分距離空間)</strong><br>
+  位相空間 $X$ が <strong>可分距離空間 (separable metric space)</strong> であるとは、 $X$ に距離関数が定義されてその位相が生成されており、かつ $X$ が可算な稠密部分集合 (countable dense subset) を持つことである。可分距離空間は第2可算公理 (second-countable) を満たす。
+</div>
+
+<h2>2. 任意の可分距離空間の分割定理</h2>
+
+<p>
+「 $\sigma$-punctiform でない可分距離空間は存在するか」という問いに対する答えは「否」である。それどころか、任意の可分距離空間は常に $2$ つの punctiform 部分空間の和として完全に分割することができる。この驚くべき事実を示すため、いくつかの補題を用意する。
+</p>
+
+<div class="lemma">
+  <strong>補題 2.1 (連結な距離空間の濃度)</strong><br>
+  $2$ 点以上を含む連結な距離空間の濃度は、連続体の濃度 $\mathfrak{c}$ 以上である。とくに非可算 (uncountable) である。
+</div>
+<div class="proof">
+  $C$ を $2$ 点 $x, y$ ($x \neq y$) を含む連結距離空間とする。点 $x$ を固定し、関数 $f \colon C \to \mathbb{R}$ を $f(z) = d(x, z)$ で定義する。距離関数は連続であるから、 $f$ も連続関数である。 $C$ は連結 (connected) であるため、連続写像による像 $f(C)$ も $\mathbb{R}$ の連結部分集合、すなわち区間となる。<br>
+  $f(x) = d(x, x) = 0$ であり、 $f(y) = d(x, y)  >  0$ であるため、 $f(C)$ は少なくとも閉区間 $[0, d(x, y)]$ を含む。閉区間の濃度は連続体の濃度 $\mathfrak{c}$ であるため、 $C$ の濃度も $\mathfrak{c}$ 以上でなければならない。したがって $C$ は非可算である。
+  <div class="qed">$\blacksquare$</div>
+</div>
+
+<div class="lemma">
+  <strong>補題 2.2 (punctiform の十分条件)</strong><br>
+  距離空間 $A$ が非可算なコンパクト部分空間を含まないならば、 $A$ は punctiform である。
+</div>
+<div class="proof">
+  対偶として、 $A$ が punctiform でないと仮定して矛盾を導く。定義より、 $A$ には $2$ 点以上を含むコンパクト部分空間 $K$ が存在して、不連結ではない。これより、ある $2$ 点以上を含むコンパクトかつ連結な部分空間 $C \subset K \subset A$ が存在する。補題 2.1 より、この $C$ は非可算である。<br>
+  しかし、 $C$ は $A$ のコンパクト部分空間でもあるため、「 $A$ が非可算なコンパクト部分空間を含まない」という前提に矛盾する。したがって $A$ は punctiform である。
+  <div class="qed">$\blacksquare$</div>
+</div>
+
+<div class="lemma">
+  <strong>補題 2.3 (可分距離空間におけるコンパクト部分空間の濃度)</strong><br>
+  可分距離空間 $X$ において、コンパクト部分空間全体の族 $\mathcal{K}$ の濃度は高々 $\mathfrak{c}$ である。
+</div>
+<div class="proof">
+  $X$ は可分距離空間であるため、第2可算 (second-countable) である。すなわち、可算な開基 (countable open base) $\mathcal{B} = \{U_n \mid n \in \mathbb{N}\}$ を持つ。 $X$ の任意の開集合 $O$ は $\mathcal{B}$ のある部分族の和集合として表されるため、 $O = \bigcup_{n \in S} U_n$ となるような $\mathbb{N}$ の部分集合 $S$ が存在する。<br>
+  これにより、開集合から $\mathcal{P}(\mathbb{N})$ への単射が構成できるため、開集合全体の濃度は高々 $2^{\aleph_0} = \mathfrak{c}$ である。閉集合は開集合の補集合であるため、閉集合全体の濃度も高々 $\mathfrak{c}$ である。コンパクト部分空間は Hausdorff 空間である距離空間の部分空間として閉集合であるため、コンパクト部分空間の族 $\mathcal{K}$ の濃度も高々 $\mathfrak{c}$ となる。
+  <div class="qed">$\blacksquare$</div>
+</div>
+
+<div class="lemma">
+  <strong>補題 2.4 (非可算なコンパクト距離空間の濃度)</strong><br>
+  非可算なコンパクト距離空間 $K$ の濃度はちょうど $\mathfrak{c}$ である。
+</div>
+<div class="proof">
+  コンパクト距離空間 $K$ は第2可算である。Cantor-Bendixsonの定理によれば、第2可算空間の任意の閉集合は、完全集合 (perfect set) （孤立点を持たない閉集合）と高々可算な集合の和として一意に表すことができる。<br>
+  $K$ は非可算であるため、この分解において完全集合の部分 $P \subset K$ は空ではない。完備距離空間の空でない完全集合の濃度は少なくとも $\mathfrak{c}$ であることが知られている（Cantor集合の構成と同様にして、各段階で交わらない $2$ つの閉球を選ぶことで $\{0,1\}^{\mathbb{N}}$ から $P$ への単射を構成できる）。<br>
+  一方、補題 2.3 の証明の過程から明らかなように、第2可算空間の部分集合の濃度は高々 $\mathfrak{c}$ である。したがって $K$ の濃度はちょうど $\mathfrak{c}$ である。
+  <div class="qed">$\blacksquare$</div>
+</div>
+
+<div class="theorem">
+  <strong>主定理 2.5</strong><br>
+  任意の可分距離空間 $X$ は、 $2$ つの punctiform 部分空間の和として表すことができる。したがって、 $\sigma$-punctiform でない可分距離空間は存在しない。
+</div>
+<div class="proof">
+  $X$ を任意の可分距離空間とする。 $X$ の部分集合であって、非可算なコンパクト部分空間となっているもの全体の族を $\mathcal{K}$ とする。もし $\mathcal{K} = \varnothing$ であれば、補題 2.2 より $X$ 自身が punctiform となるため、 $X = X \cup \varnothing$ として分割でき、証明は終わる。<br><br>
+  以下、 $\mathcal{K} \neq \varnothing$ の場合を考える。補題 2.3 より $\mathcal{K}$ の濃度は高々 $\mathfrak{c}$ であるから、ある順序数 $\kappa \le \mathfrak{c}$ を用いて $\mathcal{K}$ を整列 (well-order) し、
+  $$ \mathcal{K} = \{ K_\alpha \mid \alpha  <  \kappa \} $$
+  と番号付けることができる。<br><br>
+  超限帰納法 (transfinite induction) を用いて、各順序数 $\alpha  <  \kappa$ に対し、 $2$ つの点 $x_\alpha, y_\alpha \in X$ を以下の条件を満たすように選択していく。
+  <ul>
+    <li>$x_\alpha, y_\alpha \in K_\alpha$</li>
+    <li>$x_\alpha \neq y_\alpha$</li>
+    <li>$x_\alpha, y_\alpha \notin \{ x_\beta, y_\beta \mid \beta  <  \alpha \}$</li>
+  </ul>
+  この選択が常に可能であることを示す。順序数 $\alpha  <  \kappa$ の段階に達したとする。これまでに選ばれた点の集合を $S_\alpha = \{ x_\beta, y_\beta \mid \beta  <  \alpha \}$ とおく。各 $\beta$ について $2$ 個以下の点が選ばれているため、 $S_\alpha$ の濃度は $|S_\alpha| \le 2|\alpha|$ である。ここで $\alpha  <  \kappa \le \mathfrak{c}$ であるから、無限基数の性質より $|S_\alpha|  <  \mathfrak{c}$ が成り立つ。<br>
+  一方で、 $K_\alpha \in \mathcal{K}$ は非可算なコンパクト距離空間であるため、補題 2.4 よりその濃度は $|K_\alpha| = \mathfrak{c}$ である。したがって、 $K_\alpha \smallsetminus S_\alpha$ の濃度は $\mathfrak{c}$ であり、とくにこの差集合は空ではなく、無限個の点を含む。よって、この差集合から相異なる $2$ 点 $x_\alpha$ と $y_\alpha$ を選ぶことが可能である。<br><br>
+  このようにしてすべての $\alpha  <  \kappa$ について点の選択が完了したのち、集合 $A$ と $B$ を次のように定義する。
+  $$ A = \{ x_\alpha \mid \alpha  <  \kappa \} $$
+  $$ B = X \smallsetminus A $$
+  構成により、 $X = A \cup B$ である。次に、 $A$ と $B$ がともに punctiform であることを示す。補題 2.2 より、それぞれが非可算なコンパクト部分空間を含まないことを示せば十分である。<br><br>
+  もし $A$ が非可算なコンパクト部分空間 $K$ を含んだと仮定する。このとき $K \in \mathcal{K}$ であるから、ある $\alpha  <  \kappa$ が存在して $K = K_\alpha$ となる。しかし、構成手順により $y_\alpha \in K_\alpha$ かつ $y_\alpha \notin A$ （ $y_\alpha$ は $x_\beta$ たちとは異なるように選ばれているため）となる。これは $K_\alpha \subset A$ という仮定に矛盾する。したがって、 $A$ は非可算なコンパクト部分空間を含まず、 $A$ は punctiform である。<br><br>
+  同様に、もし $B$ が非可算なコンパクト部分空間 $K$ を含んだと仮定する。同じく $K = K_\alpha$ となる $\alpha  <  \kappa$ が存在するが、構成により $x_\alpha \in K_\alpha$ かつ $x_\alpha \in A$ である。 $A$ と $B$ は互いに素であるため $x_\alpha \notin B$ となり、 $K_\alpha \subset B$ に矛盾する。したがって、 $B$ も非可算なコンパクト部分空間を含まず、 $B$ は punctiform である。<br><br>
+  以上より、任意の可分距離空間 $X$ は $2$ つの punctiform 部分空間 $A$ と $B$ の和として書けるため、 $X$ は常に可算個（この場合は $2$ 個）の punctiform 部分空間の和となり、 $\sigma$-punctiform の定義を満たす。
+  <div class="qed">$\blacksquare$</div>
+</div>
+
+<h2>3. 完全不連結性と punctiform 性の関係</h2>
+
+<p>
+punctiform 空間と似た概念として「完全不連結空間」が存在する。両者の関係性を明らかにするため、まずは完全不連結の定義を与える。
+</p>
+
+<div class="definition">
+  <strong>定義 3.1 (完全不連結)</strong><br>
+  位相空間 $X$ が <strong>完全不連結 (totally disconnected)</strong> であるとは、 $X$ の任意の連結成分 (connected component) がただ $1$ つの点からなることである。言い換えると、 $X$ の部分空間で連結 (connected) なものは、空集合 $\varnothing$ または $1$ 点集合に限られる。
+</div>
+
+<p>
+定義から直観的に推察できるように、完全不連結性は空間全体に対して不連結性を要求する一方、punctiform 性は「コンパクト部分空間」に対してのみその性質を要求する。この関係を以下の定理としてまとめる。
+</p>
+
+<div class="theorem">
+  <strong>定理 3.2 (完全不連結ならば punctiform)</strong><br>
+  位相空間 $X$ が完全不連結であるならば、 $X$ は punctiform である。
+</div>
+<div class="proof">
+  $X$ を完全不連結な位相空間とする。 $X$ が punctiform であることを示すには、 $X$ の任意のコンパクト部分空間 $K$ が、 $2$ 点以上を含む連結な部分空間を持たないことを示せばよい。<br>
+  $C \subset K$ を $K$ の任意の連結な部分空間とする。部分空間の位相の定義より、 $C$ は $X$ 全体から見ても連結な部分空間である。 $X$ は完全不連結であると仮定しているため、 $X$ の任意の連結な部分空間は空集合 $\varnothing$ であるか、あるいはただ $1$ つの点からなる集合でなければならない。<br>
+  したがって、 $C$ も空集合または $1$ 点集合でなければならない。これは、 $K$ が $2$ 点以上を含む連結な部分空間を持たないことを意味している。よって、定義より $X$ は punctiform である。
+  <div class="qed">$\blacksquare$</div>
+</div>
+
+<p>
+しかしながら、定理 3.2 の逆は一般には成り立たない。すなわち、punctiform であるが完全不連結ではない空間が存在する。以下の定理では、補可算位相を用いてその具体例を構成する。
+</p>
+
+<div class="theorem">
+  <strong>定理 3.3 (逆の反例)</strong><br>
+  punctiform であるが、完全不連結ではない位相空間が存在する。
+</div>
+<div class="proof">
+  非可算な濃度を持つ集合 $X$ を一つ固定する（例えば実数全体の集合 $X = \mathbb{R}$ ）。この集合 $X$ に対して、以下のように開集合族 $\mathcal{O}$ を定めて位相を導入する。
+  $$ \mathcal{O} = \{ U \subset X \mid X \smallsetminus U \text{ は高々可算である} \} \cup \{ \varnothing \} $$
+  この位相は補可算位相 (cocountable topology) と呼ばれる。実際、 $\varnothing, X \in \mathcal{O}$ は定義より明らかであり、開集合の任意の和集合および有限個の共通部分が再び $\mathcal{O}$ に属することは、集合の演算と高々可算な集合の性質から直ちに確かめられる。<br><br>
+  <strong>ステップ 1： $X$ は完全不連結ではない</strong><br>
+  まず、 $X$ が連結 (connected) であることを示す。もし $X$ が不連結であると仮定すると、互いに素な $2$ つの空でない開集合 $U, V \in \mathcal{O}$ が存在して $X = U \cup V$ と表される。<br>
+  $U$ と $V$ は空ではないため、定義より $X \smallsetminus U$ および $X \smallsetminus V$ はともに高々可算な集合である。De Morganの法則より、
+  $$ X \smallsetminus (U \cup V) = (X \smallsetminus U) \cap (X \smallsetminus V) $$
+  が成り立つ。左辺は $X \smallsetminus X = \varnothing$ である。一方で、右辺は $2$ つの高々可算な集合の共通部分であるため、やはり高々可算である。<br>
+  ここで、 $U$ と $V$ が互いに素であるという仮定 $U \cap V = \varnothing$ を用いると、
+  $$ X = X \smallsetminus (U \cap V) = (X \smallsetminus U) \cup (X \smallsetminus V) $$
+  となる。右辺は高々可算な集合同士の和集合であるから、高々可算な集合である。しかし、これは $X$ が非可算な集合であるという最初の設定に矛盾する。<br>
+  したがって、 $X$ は不連結になり得ず、連結な位相空間である。 $X$ 自身が連結であり、かつ非可算（当然 $2$ 点以上を含む）であるため、 $X$ の連結成分は $X$ 自身となり、 $1$ 点からなるものではない。よって、 $X$ は完全不連結ではない。<br><br>
+  <strong>ステップ 2： $X$ は punctiform である</strong><br>
+  次に、 $X$ が punctiform であることを示すために、 $X$ の任意のコンパクト部分空間 $K$ が有限集合であることを示す。有限な部分空間は（任意の $1$ 点集合が閉集合であり、さらに部分空間の位相のもとで離散位相となるため）明らかに完全不連結であり、 $2$ 点以上を含む連結な部分空間を持たないからである。<br>
+  $K \subset X$ をコンパクト部分空間とし、 $K$ が無限集合であると仮定して矛盾を導く。 $K$ は無限集合であるため、 $K$ から可算無限個の相異なる点からなる部分集合 $A = \{ x_1, x_2, \dots, x_n, \dots \}$ を取り出すことができる。<br>
+  各 $n \in \mathbb{N}$ に対して、集合 $U_n$ を次のように定義する。
+  $$ U_n = X \smallsetminus (A \smallsetminus \{ x_n \}) $$
+  ここで、 $A \smallsetminus \{ x_n \}$ は可算集合 $A$ の部分集合であるから高々可算である。したがって、その補集合である $U_n$ は開集合となる（すなわち $U_n \in \mathcal{O}$ ）。<br>
+  また、開集合 $U_\infty$ を次のように定義する。
+  $$ U_\infty = X \smallsetminus A $$
+  $A$ は可算集合であるため、これも開集合である。<br>
+  これらからなる開集合の族 $\mathcal{U} = \{ U_n \mid n \in \mathbb{N} \} \cup \{ U_\infty \}$ を考える。 $X$ の任意の点 $x$ について、 $x \notin A$ ならば $x \in U_\infty$ であり、 $x \in A$ ならばある自然数 $m$ について $x = x_m$ となり $x \in U_m$ となる。したがって、 $\mathcal{U}$ は $X$ の開被覆であり、とくに部分空間 $K$ の開被覆にもなる。<br>
+  $K$ はコンパクトであると仮定したため、 $\mathcal{U}$ から有限個の開集合を選んで $K$ を覆うことができる。すなわち、ある有限な部分被覆
+  $$ \{ U_{n_1}, U_{n_2}, \dots, U_{n_k}, U_\infty \} $$
+  が存在する。<br>
+  しかし、構成より各 $U_{n_i}$ は $A$ の元のうち $x_{n_i}$ のみを含み、 $U_\infty$ は $A$ の元を一つも含まない。したがって、この有限部分被覆に含まれる $A$ の元は $x_{n_1}, x_{n_2}, \dots, x_{n_k}$ の有限個のみである。一方で $A$ は可算無限集合であり $A \subset K$ であるため、この有限部分被覆は $A$ のすべての元を覆うことができず、ましてや $K$ 全体を覆うことは不可能である。これは $K$ がコンパクトであることに矛盾する。<br>
+  よって仮定は誤りであり、 $X$ の任意のコンパクト部分空間 $K$ は有限集合でなければならない。これにより、 $X$ が punctiform であることが示された。
+  <div class="qed">$\blacksquare$</div>
+</div>
+
+<div class="reference">
+  <h3>参考文献</h3>
+  <ul>
+    <li>Engelking, R. (1989). <em>General Topology</em>. Heldermann Verlag. （位相空間論の標準的文献であり、punctiform や totally disconnected に関する基本的な議論を含む）<br>
+    URL: <a href="https://en.wikipedia.org/wiki/General_Topology_(book)" target="_blank">https://en.wikipedia.org/wiki/General_Topology_(book)</a></li>
+    <li>Kuratowski, K. (1966). <em>Topology</em>, Volume I. Academic Press. （非可算可分距離空間の部分空間分割などに関する古典的結果の宝庫）<br>
+    URL: <a href="https://en.wikipedia.org/wiki/Kazimierz_Kuratowski" target="_blank">https://en.wikipedia.org/wiki/Kazimierz_Kuratowski</a></li>
+    <li>Willard, S. (2004). <em>General Topology</em>. Dover Publications. （本稿の基礎概念を理解する上で適した教科書）<br>
+    URL: <a href="https://store.doverpublications.com/0486434796.html" target="_blank">https://store.doverpublications.com/0486434796.html</a></li>
+    <li>Wikipedia: Punctiform space<br>
+    URL: <a href="https://en.wikipedia.org/wiki/Punctiform_space" target="_blank">https://en.wikipedia.org/wiki/Punctiform_space</a></li>
+    <li>Wikipedia: Totally disconnected space<br>
+    URL: <a href="https://en.wikipedia.org/wiki/Totally_disconnected_space" target="_blank">https://en.wikipedia.org/wiki/Totally_disconnected_space</a></li>
+  </ul>
+</div>
+
+</body>
+</html>
