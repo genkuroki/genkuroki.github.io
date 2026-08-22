@@ -37,10 +37,10 @@
 * epimorphicは「エピ」と訳し、monomirphicは「モノ」と訳せ。
 * 圏論用語のfully faithfulは「充満忠実」と訳せ。
 * condensed mathematicsは「凝縮数学」と訳せ。
-* 圏論の文脈では、injective objectは「入射的対象」と訳し、injective cogeneratorは「入射的余生成子」と訳せ。
+* 圏論の文脈では、injective objectは「単射的対象」と訳し、injective cogeneratorは「単射的余生成子」と訳せ。
 * has enough injectivesは「十分に入射的対象を持つ」と訳せ。
 * special adjoint functor theoremは「特殊随伴関手定理」と訳せ。
-* totientは「トーシェント」と読むが、片仮名に訳さずにtotientと元の綴りで書け。
+* 「トーティエント」と書くな。totientは「トーシェント」と読むが、片仮名に訳さずにtotientと元の綴りで書け。
 * 英語では必須のハイフンは日本語訳では不必要であることに注意せよ。例えば"Z-ultrafilter"を「Z-超フィルター」と翻訳せずに「Z超フィルター」と翻訳せよ。ただし、翻訳の結果、ハイフンの両側が英数字になる場合にはハイフンをそのまま残せ。例えば"p-Banach space"を「p Banach空間」と翻訳せずに「p-Banach空間」と翻訳せよ。
 * 集合の包含関係を⊆ではなく⊂で表せ。
 * 空集合は \emptyset ではなく、\varnothing で表せ。

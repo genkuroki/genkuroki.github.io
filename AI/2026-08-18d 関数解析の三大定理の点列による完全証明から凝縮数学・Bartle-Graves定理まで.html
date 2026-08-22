@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>関数解析の三大定理の点列による完全証明から凝縮数学・Bartle-Graves定理まで</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3 {
+            color: #2980b9;
+        }
+        h1 {
+            border-bottom: 3px solid #2980b9;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+        h2 {
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 8px;
+            margin-top: 50px;
+        }
+        h3 {
+            margin-top: 30px;
+        }
+        .theorem, .lemma, .proposition, .definition, .example, .proof, .remark {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background-color: #e8f8f5;
+            border-left: 6px solid #1abc9c;
+        }
+        .theorem, .lemma, .proposition {
+            background-color: #ebf5fb;
+            border-left: 6px solid #3498db;
+        }
+        .example {
+            background-color: #fef9e7;
+            border-left: 6px solid #f1c40f;
+        }
+        .proof {
+            background-color: #fdfefe;
+            border-left: 6px solid #95a5a6;
+            border: 1px solid #ecf0f1;
+            border-left-width: 6px;
+        }
+        .remark {
+            background-color: #fdf2e9;
+            border-left: 6px solid #e67e22;
+        }
+        .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .proof > .label {
+            font-style: italic;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .bibliography {
+            background-color: #eaeded;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .bibliography li {
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>関数解析の三大定理の点列による完全証明から凝縮数学・Bartle-Graves定理まで</h1>
+    
+    <p>本稿では、関数解析学の基礎をなす「一様有界性原理」「開写像定理」「閉グラフ定理」について、位相空間論における古典的な Baire のカテゴリー定理をブラックボックスとして経由せず、点列と Banach 空間の完備性のみを用いた直接的で完全な証明を与えます。これにより、これらの定理が「空間の完備性」とどのように結びついているかが初等的に理解できます。</p>
+
+    <p>さらに、これらの定理が近年の「凝縮数学 (condensed mathematics)」および「液状ベクトル空間 (liquid vector space)」の圏論的枠組みにおいて、どのように「アーベル圏における自明な事実」として再編成されるかを自己完結的 (self-contained) に解説します。最後に、これらの議論の核心となる「全射な連続線形写像に対するリフト（持ち上げ）」の存在について、パラコンパクト空間を用いた <strong>Bartle-Graves の定理</strong> の完全な証明を与え、強力な帰結を導きます。省略や簡略化を一切行わず、すべての論理的ステップを丁寧に追うことを目的とします。</p>
+
+    <h2>I. 基礎概念の厳密な定義と例</h2>
+
+    <p>議論の前提となる、関数解析および圏論・位相空間論における基本的な概念を厳密に定義します。</p>
+
+    <div class="definition">
+        <span class="label">定義 (Banach空間と完備性)</span>
+        $X$ を実数体 $\mathbb{R}$ または複素数体 $\mathbb{C}$ 上のベクトル空間とする。 $X$ 上のノルム $\|\cdot\|$ によって定まる距離 $d(x, y) = \|x - y\|$ に関して $X$ が完備 (complete) であるとき、すなわち $X$ 内の任意の Cauchy 列 $(x_n)_{n=1}^\infty$ （任意の $\epsilon  >  0$ に対してある $N \in \mathbb{N}$ が存在し、 $m, n  >  N$ ならば $\|x_m - x_n\|  <  \epsilon$ となるような点列）が、 $X$ 内のある点 $x$ に収束するとき、 $X$ を Banach 空間 (Banach space) と呼ぶ。
+    </div>
+
+    <div class="example">
+        <span class="label">例 (Banach空間とそうでない空間)</span>
+        実数列で、有限個の成分を除いてすべて $0$ となるような数列の全体を $c_{00}$ とする。この $c_{00}$ に上限ノルム $\|x\|_\infty = \sup_{i} |x_i|$ を入れた空間は Banach 空間ではない。なぜなら、列 $x^{(n)} = (1, 1/2, 1/3, \dots, 1/n, 0, 0, \dots)$ は Cauchy 列であるが、その極限は $c_{00}$ には含まれないからである。<br>
+        一方で、 $0$ に収束する実数列の全体 $c_0$ に上限ノルムを入れた空間や、絶対収束する数列の全体 $\ell^1$ にノルム $\|x\|_1 = \sum_{i} |x_i|$ を入れた空間は完備であり、 Banach 空間となる。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (有界線形作用素と開写像)</span>
+        $X$ と $Y$ をノルム空間とする。線形写像 $T \colon X \to Y$ が有界 (bounded) であるとは、ある定数 $C  >  0$ が存在して、任意の $x \in X$ に対して $\|Tx\| \le C\|x\|$ が成り立つことである。これは $T$ が連続 (continuous) であることと同値である。このとき、 $T$ の作用素ノルム (operator norm) を $\|T\| = \sup_{\|x\| \le 1} \|Tx\|$ で定義する。<br>
+        また、 $T$ が開写像 (open mapping) であるとは、 $X$ の任意の開集合 $U$ に対して、その像 $T(U) = \{Tx \mid x \in U\}$ が $Y$ における開集合になることである。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (内部と内点)</span>
+        位相空間 $X$ の部分集合 $A$ に対して、 $A$ に含まれる最大の開集合を $A$ の内部 (interior) と呼び、その要素を内点 (interior point) と呼ぶ。距離空間においては、ある点 $x \in A$ を中心とするある半径 $r  >  0$ の開球 $B_r(x) = \{y \mid d(x, y)  <  r\}$ が $A$ に完全に含まれるとき、 $x$ は $A$ の内点である。内部が空集合であるとき、 $A$ は内点を持たないと言う。
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (アーベル圏)</span>
+        圏 (category) がアーベル圏 (abelian category) であるとは、大まかに言えば、対象の間に射 (morphism) の和が定義され、核 (kernel) と余核 (cokernel) がすべての射に対して存在し、かつ「単射 (核が $0$ である射) かつ全射 (余核が $0$ である射) ならば必ず同型射 (isomorphism) になる」という性質を満たす圏のことである。ベクトル空間の圏やアーベル群の圏はアーベル圏の典型例であるが、Banach 空間の圏はアーベル圏ではない（連続な全単射が連続な逆写像を持つとは限らないため）。
+    </div>
+
+    <h2>II. 点列の議論による一様有界性原理の証明</h2>
+
+    <p>一様有界性原理 (uniform boundedness principle) は Baire のカテゴリー定理を用いて証明されるのが標準的ですが、A. D. Sokal によるスライディング・ハンプ法 (sliding hump method) を用いることで、完備性に基づく点列の議論のみで完全に証明することができます。</p>
+
+    <div class="theorem">
+        <span class="label">定理 (一様有界性原理)</span>
+        $X$ を Banach 空間とし、 $Y$ をノルム空間とする。 $\mathcal{F}$ を $X$ から $Y$ への有界線形作用素の族 (family) とする。もし各 $x \in X$ に対して $\sup_{T \in \mathcal{F}} \|Tx\|  <  \infty$ が成り立つならば、 $\sup_{T \in \mathcal{F}} \|T\|  <  \infty$ である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        対偶を示す。 $\sup_{T \in \mathcal{F}} \|T\| = \infty$ と仮定し、ある $x \in X$ が存在して $\sup_{T \in \mathcal{F}} \|Tx\| = \infty$ となることを示す。各点での有界性の仮定と矛盾しない範囲で、そのような $x$ を級数 $x = \sum_{k=1}^\infty x_k$ の極限として具体的に構成する。
+
+        便宜上、各 $x \in X$ に対して $\sup_{T \in \mathcal{F}} \|Tx\| = M(x)  <  \infty$ と仮定する。この仮定のもとで矛盾を導く。帰納的に、作用素の列 $T_k \in \mathcal{F}$ と点列 $x_k \in X$ を次のように構成する。
+        
+        まず $x_0 = 0 \in X$ とし、 $T_0 \in \mathcal{F}$ を任意に選ぶ。
+        
+        $k \ge 1$ とし、 $x_1, \dots, x_{k-1}$ までが既に構成されたとする。定数 $R_{k-1} = \sum_{j=1}^{k-1} M(x_j)$ とおく。仮定 $\sup_{T \in \mathcal{F}} \|T\| = \infty$ より、作用素のノルムがいくらでも大きいものを選べるため、次を満たす $T_k \in \mathcal{F}$ が存在する。
+        $$\|T_k\|  >  4^k (k + R_{k-1})$$
+        
+        作用素ノルムの定義より、ある $y_k \in X$ が存在して、 $\|y_k\| \le 3^{-k}$ かつ
+        $$\|T_k y_k\|  >  \frac{2}{3} 3^{-k} \|T_k\|$$
+        を満たす。次に $x_k$ を、 $x_k = y_k$ または $x_k = -y_k$ のいずれかとして定義する。
+        $s_{k-1} = \sum_{j=1}^{k-1} x_j$ とおく。ノルムの三角不等式により、
+        $$\|T_k (s_{k-1} + y_k)\| + \|T_k (s_{k-1} - y_k)\| \ge \|T_k(2y_k)\| = 2\|T_k y_k\|$$
+        が成り立つため、 $\|T_k (s_{k-1} + y_k)\|$ と $\|T_k (s_{k-1} - y_k)\|$ の少なくとも一方は $\|T_k y_k\|$ 以上である。そこで、 $s_k = s_{k-1} + x_k$ としたとき、
+        $$\|T_k s_k\| \ge \|T_k y_k\|$$
+        を満たすように符号を選び、 $x_k \in \{y_k, -y_k\}$ を決定する。
+
+        この構成をすべての $k \ge 1$ について行う。各 $k$ について $\|x_k\| = \|y_k\| \le 3^{-k}$ であるから、級数 $\sum_{k=1}^\infty x_k$ は $X$ において絶対収束する。 $X$ は Banach 空間であるため完備であり、この絶対収束する級数はある $x \in X$ に収束する。すなわち $x = \sum_{k=1}^\infty x_k$ である。
+
+        この $x$ について $T_k x$ のノルムを評価する。任意の $k \in \mathbb{N}$ に対して、 $x = s_k + \sum_{j=k+1}^\infty x_j$ と書けるため、
+        $$\|T_k x\| \ge \|T_k s_k\| - \left\| T_k \sum_{j=k+1}^\infty x_j \right\|$$
+        となる。右辺第1項は、構成時の選択より $\|T_k s_k\| \ge \|T_k y_k\|  >  \frac{2}{3} 3^{-k} \|T_k\|$ である。右辺第2項は、 $T_k$ の有界性より、
+        $$\left\| T_k \sum_{j=k+1}^\infty x_j \right\| \le \|T_k\| \sum_{j=k+1}^\infty \|x_j\| \le \|T_k\| \sum_{j=k+1}^\infty 3^{-j} = \|T_k\| \frac{3^{-(k+1)}}{1 - 1/3} = \frac{1}{2} 3^{-k} \|T_k\|$$
+        と評価できる。したがって、これらを組み合わせると、
+        $$\|T_k x\|  >  \frac{2}{3} 3^{-k} \|T_k\| - \frac{1}{2} 3^{-k} \|T_k\| = \frac{1}{6} 3^{-k} \|T_k\|$$
+        を得る。ここで、 $T_k$ の選び方から $\|T_k\|  >  4^k (k + R_{k-1}) \ge 4^k k$ であったから、
+        $$\|T_k x\|  >  \frac{1}{6} 3^{-k} (4^k k) = \frac{k}{6} \left(\frac{4}{3}\right)^k$$
+        となる。 $k \to \infty$ のとき、この右辺は $\infty$ に発散する。したがって $\sup_{k} \|T_k x\| = \infty$ となり、これは各 $x \in X$ に対して $\sup_{T \in \mathcal{F}} \|Tx\|  <  \infty$ であるという最初の仮定に矛盾する。ゆえに、 $\sup_{T \in \mathcal{F}} \|T\|  <  \infty$ でなければならない。（証明終）
+    </div>
+
+    <h2>III. 点列と完備性による開写像定理の直接証明</h2>
+
+    <p>開写像定理 (open mapping theorem) も通常 Baire のカテゴリー定理を用いて証明されますが、完備性を直接用いた点列の議論（入れ子になった球面の構成と、それに続く逐次近似）によって自己完結的に証明することができます。この証明を見ることで、 Baire の定理が内部で行っている位相的な操作が、単なる Cauchy 列の構成に過ぎないことが明確になります。</p>
+
+    <div class="theorem">
+        <span class="label">定理 (開写像定理)</span>
+        $X$ と $Y$ を Banach 空間とする。 $T \colon X \to Y$ が全射な連続線形写像であるならば、 $T$ は開写像である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $T$ が開写像であることを示すには、原点を中心とする開球 $B_r^X(0) = \{x \in X \mid \|x\|  <  r\}$ の像 $T(B_r^X(0))$ が、 $Y$ における原点の近傍を含むことを示せば十分である。線形性により、ある $c  >  0$ が存在して $\overline{T(B_1^X(0))} \supset B_c^Y(0)$ となること（ステップ1）、そしてそこから逐次近似により閉包を外し $T(B_2^X(0)) \supset B_c^Y(0)$ が導かれること（ステップ2）を示せばよい。
+
+        <strong>ステップ 1: 像の閉包が内点を持つこと</strong><br>
+        ある $R  >  0$ に対して $\overline{T(B_R^X(0))}$ が内点を持つことを背理法で示す。すべての $n \in \mathbb{N}$ に対して $\overline{T(B_n^X(0))}$ が内点を持たない（すなわち内部が空である）と仮定し、 $Y$ においてこれらをすべて避けるような Cauchy 列を構成して矛盾を導く。
+        
+        まず $n=1$ について、 $\overline{T(B_1^X(0))}$ は内点を持たないため、 $Y$ 全体を覆うことはできない。したがって、ある $y_1 \in Y$ と $r_1  >  0$ が存在して、閉球 $\overline{B_{r_1}^Y(y_1)}$ は $T(B_1^X(0))$ と交わらないようにできる。ここで $r_1  <  1$ としておく。
+        
+        次に $n=2$ について、 $\overline{T(B_2^X(0))}$ も内点を持たないため、開球 $B_{r_1}^Y(y_1)$ を覆うことはできない。したがって、ある $y_2 \in B_{r_1}^Y(y_1)$ と $r_2  >  0$ が存在して、 $\overline{B_{r_2}^Y(y_2)} \subset B_{r_1}^Y(y_1)$ であり、かつ $\overline{B_{r_2}^Y(y_2)} \cap T(B_2^X(0)) = \emptyset$ を満たすように選べる。ここで $r_2  <  r_1 / 2$ としておく。
+        
+        これを帰納的に繰り返し、各 $k \ge 2$ に対して、 $y_k \in B_{r_{k-1}}^Y(y_{k-1})$ および $0  <  r_k  <  r_{k-1} / 2$ を選び、 $\overline{B_{r_k}^Y(y_k)} \subset B_{r_{k-1}}^Y(y_{k-1})$ かつ $\overline{B_{r_k}^Y(y_k)} \cap T(B_k^X(0)) = \emptyset$ を満たすようにできる。
+        
+        この列 $(y_k)_{k=1}^\infty$ は Cauchy 列である。なぜなら、 $m  >  k$ なる任意の $m$ に対して $y_m \in B_{r_k}^Y(y_k)$ であり、 $\|y_m - y_k\|  <  r_k  <  2^{-k+1}$ となるからである。 $Y$ は Banach 空間であるため完備であり、この列はある $y \in Y$ に収束する。
+        
+        各 $k$ について、 $m \ge k$ ならば $y_m \in \overline{B_{r_k}^Y(y_k)}$ であるから、極限 $y$ も閉集合 $\overline{B_{r_k}^Y(y_k)}$ に属する。構成より $\overline{B_{r_k}^Y(y_k)}$ は $T(B_k^X(0))$ と交わらないため、 $y \notin T(B_k^X(0))$ である。これがすべての $k \in \mathbb{N}$ で成り立つため、 $y \notin \bigcup_{k=1}^\infty T(B_k^X(0)) = T(X)$ となる。これは $T$ が全射であるという仮定に矛盾する。
+        
+        したがって、ある $R  >  0$ について $\overline{T(B_R^X(0))}$ は内点を持つ。すなわち、ある $y_0 \in Y$ と $r  >  0$ が存在して、 $B_r^Y(y_0) \subset \overline{T(B_R^X(0))}$ となる。 
+        
+        任意の $y \in B_r^Y(0)$ をとる。このとき $y_0 + y \in B_r^Y(y_0) \subset \overline{T(B_R^X(0))}$ である。一方、原点を中心とする球の対称性と $T$ の線形性から、 $T(B_R^X(0))$ は原点対称であり、その閉包も原点対称である。ゆえに $y_0 \in \overline{T(B_R^X(0))}$ より $-y_0 \in \overline{T(B_R^X(0))}$ である。
+        $T(B_R^X(0))$ は凸集合であるため、その閉包も凸集合である。したがって、これら2点の凸結合（中点）をとると、
+        $$\frac{(y_0 + y) + (-y_0)}{2} = \frac{y}{2} \in \overline{T(B_R^X(0))}$$
+        となる。これに $2$ を掛ければ、 $y \in 2\overline{T(B_R^X(0))} = \overline{T(B_{2R}^X(0))}$ を得る。
+        ゆえに $B_r^Y(0) \subset \overline{T(B_{2R}^X(0))}$ である。スカラー倍 $c = r / 2R$ を考えれば、 $B_c^Y(0) \subset \overline{T(B_1^X(0))}$ が得られる。
+
+        <strong>ステップ 2: 近似列の構成（閉包を外す）</strong><br>
+        任意の $y \in B_c^Y(0)$ をとる。 $y \in \overline{T(B_1^X(0))}$ であるから、ある $x_1 \in B_1^X(0)$ が存在して $\|y - Tx_1\|  <  c/2$ を満たす。
+        $y - Tx_1 \in B_{c/2}^Y(0)$ であり、線形性から $B_{c/2}^Y(0) \subset \overline{T(B_{1/2}^X(0))}$ であるため、ある $x_2 \in B_{1/2}^X(0)$ が存在して $\|(y - Tx_1) - Tx_2\|  <  c/4$ を満たす。
+        
+        これを帰納的に繰り返し、各 $n$ について $x_n \in B_{1/2^{n-1}}^X(0)$ を選び、
+        $$\|y - \sum_{i=1}^n Tx_i\|  <  \frac{c}{2^n}$$
+        を満たすようにできる。級数 $\sum_{n=1}^\infty x_n$ のノルムの和は $\sum_{n=1}^\infty \|x_n\|  <  \sum_{n=1}^\infty \frac{1}{2^{n-1}} = 2$ となり絶対収束する。 $X$ は完備であるから、極限 $x = \sum_{n=1}^\infty x_n$ が $X$ 内に存在し、ノルムは $\|x\| \le \sum_{n=1}^\infty \|x_n\|  <  2$ 、すなわち $x \in B_2^X(0)$ である。
+        
+        $T$ の連続性より、部分和の極限と $T$ は交換可能であり、
+        $$T(x) = T\left(\lim_{N \to \infty} \sum_{n=1}^N x_n\right) = \lim_{N \to \infty} \sum_{n=1}^N T(x_n)$$
+        となる。構成より $\|y - \sum_{n=1}^N T(x_n)\|  <  c / 2^N$ であり、 $N \to \infty$ のとき右辺は $0$ に収束するため、 $\sum_{n=1}^\infty T(x_n) = y$ である。ゆえに $Tx = y$ であり $y \in T(B_2^X(0))$ となるため、 $B_c^Y(0) \subset T(B_2^X(0))$ が示された。
+        
+        これをスケール変換すれば、 $B_{c/2}^Y(0) \subset T(B_1^X(0))$ となり、原点の近傍が像に含まれるため $T$ は開写像である。（証明終）
+    </div>
+
+    <h2>IV. 開写像定理からの閉グラフ定理の導出</h2>
+
+    <p>前節で自己完結的に得られた開写像定理を用いれば、関数解析のもう一つの重要な定理である閉グラフ定理 (closed graph theorem) は、直積空間上の射影という圏論的な直観に従って極めて容易に導出されます。</p>
+
+    <div class="definition">
+        <span class="label">定義 (グラフと閉作用素)</span>
+        $X$ と $Y$ をノルム空間とし、 $T \colon X \to Y$ を線形写像とする。直積空間 $X \times Y$ の部分集合
+        $$\Gamma(T) = \{(x, Tx) \mid x \in X\}$$
+        を $T$ のグラフ (graph) と呼ぶ。 $X \times Y$ にノルム $\|(x, y)\| = \|x\|_X + \|y\|_Y$ を入れたとき、 $\Gamma(T)$ が $X \times Y$ における閉集合であるならば、 $T$ を閉作用素 (closed operator) と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <span class="label">定理 (閉グラフ定理)</span>
+        $X$ と $Y$ を Banach 空間とし、 $T \colon X \to Y$ を線形写像とする。もし $T$ のグラフ $\Gamma(T)$ が $X \times Y$ において閉集合であるならば、 $T$ は連続（有界）である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $X$ と $Y$ は Banach 空間であるため、直積空間 $X \times Y$ もノルム $\|(x, y)\| = \|x\|_X + \|y\|_Y$ によって完備な Banach 空間となる。仮定より $\Gamma(T)$ は $X \times Y$ の閉部分空間であるため、 $\Gamma(T)$ 自身もその誘導ノルムに関して Banach 空間をなす。
+
+        ここで、射影写像 $\pi_1 \colon \Gamma(T) \to X$ を $\pi_1(x, Tx) = x$ で定義する。
+        $\pi_1$ は明らかに線形写像であり、さらにノルムについて
+        $$\|\pi_1(x, Tx)\|_X = \|x\|_X \le \|x\|_X + \|Tx\|_Y = \|(x, Tx)\|$$
+        が成り立つため有界（連続）である。また、任意の $x \in X$ に対して $(x, Tx) \in \Gamma(T)$ が唯一つ定まるため、 $\pi_1$ は全単射である。
+
+        $\Gamma(T)$ と $X$ はともに完備な Banach 空間であり、 $\pi_1$ は全射な連続線形写像であるから、先ほど証明した開写像定理により $\pi_1$ は開写像である。全単射な開写像の逆写像は連続となるため、逆写像 $\pi_1^{-1} \colon X \to \Gamma(T)$ は有界である。
+        すなわち、ある定数 $C  >  0$ が存在して、任意の $x \in X$ に対して
+        $$\|\pi_1^{-1}(x)\| \le C \|x\|_X$$
+        が成り立つ。 $\pi_1^{-1}(x) = (x, Tx)$ であるから、左辺の $X \times Y$ におけるノルムを展開して
+        $$\|x\|_X + \|Tx\|_Y \le C \|x\|_X$$
+        となり、これを移項すれば $\|Tx\|_Y \le (C - 1) \|x\|_X$ を得る。これは作用素 $T$ が有界（連続）であることを意味している。（証明終）
+    </div>
+
+    <h2>V. 開写像定理における収束列の持ち上げと反例</h2>
+
+    <p>開写像定理によって保証される「開写像であること」の強力な位相的性質として「収束列の持ち上げ (lifting)」があります。ここでは、開写像であれば収束列が持ち上がることを証明し、逆に開写像でない場合（すなわち完備性が欠けている場合など）には持ち上がらない列が存在することを具体的な反例で示します。</p>
+
+    <div class="definition">
+        <span class="label">定義 (収束列の持ち上げ)</span>
+        $T \colon X \to Y$ を全射とする。 $Y$ における収束列 $(y_n)_{n=1}^\infty$ で $\lim_{n \to \infty} y_n = y$ となるものが与えられたとする。このとき、 $X$ における収束列 $(x_n)_{n=1}^\infty$ で $\lim_{n \to \infty} x_n = x$ となるものが存在し、すべての $n \in \mathbb{N}$ について $T(x_n) = y_n$ 、かつ $T(x) = y$ を満たすとき、この収束列 $(y_n)$ は $X$ における収束列に持ち上がる (lift) と言う。
+    </div>
+
+    <div class="lemma">
+        <span class="label">補題 (開写像による原像のノルム評価)</span>
+        $X$ と $Y$ をノルム空間とし、 $T \colon X \to Y$ を全射な連続線形開写像とする。このとき、ある定数 $M  >  0$ が存在して、任意の $y \in Y$ に対して、 $T(x) = y$ かつ $\|x\| \le M\|y\|$ を満たす $x \in X$ が存在する。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $X$ における原点 $0$ を中心とする半径 $1$ の開球を $U_1 = \{x \in X \mid \|x\|  <  1\}$ とする。 $T$ は開写像であるから、開集合 $U_1$ の像 $T(U_1)$ は $Y$ における開集合である。 $0 \in U_1$ であり $T(0) = 0$ であるから、 $T(U_1)$ は $Y$ の原点 $0$ を含む開集合である。したがって、ある $r  >  0$ が存在して、 $Y$ の開球 $V_r = \{y \in Y \mid \|y\|  <  r\}$ が $T(U_1)$ に含まれる。すなわち $V_r \subset T(U_1)$ である。
+
+        任意の $y \in Y \setminus \{0\}$ をとる。 $y' = \frac{r}{2\|y\|} y$ とおくと、ノルムの性質から $\|y'\| = \frac{r}{2\|y\|} \|y\| = \frac{r}{2}  <  r$ となる。したがって $y' \in V_r$ であり、 $V_r \subset T(U_1)$ より $y' \in T(U_1)$ である。像の定義から、ある $x' \in U_1$ が存在して $T(x') = y'$ を満たす。
+        
+        ここで、 $x = \frac{2\|y\|}{r} x'$ とおく。 $T$ の線形性から、
+        $$T(x) = T \left( \frac{2\|y\|}{r} x' \right) = \frac{2\|y\|}{r} T(x') = \frac{2\|y\|}{r} y' = y$$
+        となる。また、 $x$ のノルムは、 $x' \in U_1$ より $\|x'\|  <  1$ であるから、
+        $$\|x\| = \frac{2\|y\|}{r} \|x'\|  <  \frac{2}{r} \|y\|$$
+        と評価できる。 $y = 0$ の場合は $x = 0$ と選べば $T(0) = 0$ かつ $\|0\| \le \frac{2}{r} \|0\|$ を満たす。ゆえに、 $M = \frac{2}{r}$ とおけば、すべての $y \in Y$ に対して条件を満たす $x \in X$ が存在することが示された。（証明終）
+    </div>
+
+    <div class="proposition">
+        <span class="label">命題 (開写像による収束列の持ち上げ)</span>
+        $X$ と $Y$ をノルム空間とし、 $T \colon X \to Y$ を全射な連続線形写像とする。もし $T$ が開写像であるならば、 $Y$ の任意の収束列は $X$ の収束列に持ち上がる。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $Y$ における任意の収束列 $(y_n)_{n=1}^\infty$ をとり、その極限を $y \in Y$ とする。すなわち $\lim_{n \to \infty} y_n = y$ である。 $T$ は全射であるから、 $T(x_\infty) = y$ を満たす $x_\infty \in X$ が少なくとも1つ存在する。これを選ぶ。
+
+        各 $n \in \mathbb{N}$ に対して、 $y_n - y \in Y$ を考える。先の補題により、定数 $M  >  0$ と、各 $n$ に依存する要素 $z_n \in X$ が存在して、
+        $$T(z_n) = y_n - y \quad \text{かつ} \quad \|z_n\| \le M\|y_n - y\|$$
+        を満たす。ここで、 $X$ の列 $(x_n)_{n=1}^\infty$ を $x_n = z_n + x_\infty$ として定義する。 $T$ の線形性より、
+        $$T(x_n) = T(z_n + x_\infty) = T(z_n) + T(x_\infty) = (y_n - y) + y = y_n$$
+        となり、各 $x_n$ は $y_n$ の原像になっている。
+
+        次に、列 $(x_n)$ が $X$ において $x_\infty$ に収束することを示す。ノルムの評価から、
+        $$\|x_n - x_\infty\| = \|z_n\| \le M\|y_n - y\|$$
+        が成り立つ。仮定より $\lim_{n \to \infty} y_n = y$ であるから $\lim_{n \to \infty} \|y_n - y\| = 0$ である。はさみうちの原理により $\lim_{n \to \infty} \|x_n - x_\infty\| = 0$ となり、これは $\lim_{n \to \infty} x_n = x_\infty$ を意味する。以上により、 $Y$ の収束列 $(y_n)$ は $X$ の収束列 $(x_n)$ に持ち上がることが証明された。（証明終）
+    </div>
+
+    <p>逆に、「代数的に全射な連続写像」であっても、位相的な意味での開写像ではない場合には、持ち上がらない列が存在します。開写像定理の結論が成り立たない状況、すなわち完備でないノルム空間を用いて反例を構成します。</p>
+
+    <div class="example">
+        <span class="label">反例: 開写像でない全射による持ち上げの失敗</span>
+        実数列空間 $c_{00}$ を、有限個の成分のみが $0$ でない（ある項以降はすべて $0$ となる）実数列の全体とする。<br>
+        $X$ を空間 $c_{00}$ に $\ell^1$ ノルム $\|x\|_1 = \sum_{i=1}^\infty |x_i|$ を入れたノルム空間とする。<br>
+        $Y$ を空間 $c_{00}$ に $\ell^\infty$ ノルム $\|y\|_\infty = \sup_{i \ge 1} |y_i|$ を入れたノルム空間とする。<br>
+        線形写像 $T \colon X \to Y$ を恒等写像 $T(x) = x$ として定義する。
+    </div>
+    
+    <div class="proof">
+        <span class="label">反例の証明</span>
+        まず $T$ が連続かつ全射であることを示す。
+        任意の $x \in X$ について、数列の各成分の絶対値の最大値は、成分の絶対値の総和を超えることはない。すなわち、
+        $$\|Tx\|_\infty = \|x\|_\infty = \sup_{i \ge 1} |x_i| \le \sum_{i=1}^\infty |x_i| = \|x\|_1$$
+        が成り立つ。これは $\|Tx\|_\infty \le 1 \cdot \|x\|_1$ を意味し、 $T$ は有界（連続）である。定義域と終域が集合として同一の恒等写像であるため、明らかに全単射（したがって全射）である。
+
+        次に、 $T$ が開写像ではないことを示す。
+        もし $T$ が開写像であれば、逆写像 $T^{-1} \colon Y \to X$ も連続でなければならない。
+        各 $k \in \mathbb{N}$ に対して、最初の $k$ 個の成分が $1$ でそれ以降が $0$ である数列 $e^{(k)} = (1, 1, \dots, 1, 0, 0, \dots) \in c_{00}$ を考える。
+        $Y$ におけるノルムは $\|e^{(k)}\|_\infty = 1$ である。
+        一方、 $X$ におけるノルムは $\|T^{-1}(e^{(k)})\|_1 = \|e^{(k)}\|_1 = k$ である。
+        もし $T^{-1}$ が連続であれば、ある定数 $C  >  0$ が存在して $\|T^{-1}y\|_1 \le C\|y\|_\infty$ が成り立つはずであるが、上記より $k \le C \cdot 1$ となり、任意の $k$ に対して定数 $C$ が上界を持つことになり矛盾する。ゆえに $T^{-1}$ は連続ではなく、 $T$ は開写像ではない。
+
+        最後に、 $Y$ において収束するが $X$ に持ち上がらない列を構成する。
+        各 $n \in \mathbb{N}$ に対して、数列 $y^{(n)} \in Y$ を次のように定義する。
+        $$y^{(n)} = \left( \frac{1}{\sqrt{n}}, \dots, \frac{1}{\sqrt{n}}, 0, 0, \dots \right)$$
+        （最初の $n$ 個の成分が $\frac{1}{\sqrt{n}}$ でそれ以降は $0$）。
+        $Y$ における $y^{(n)}$ のノルムは $\|y^{(n)}\|_\infty = \frac{1}{\sqrt{n}}$ であるから、 $n \to \infty$ のとき $\|y^{(n)}\|_\infty \to 0$ となる。すなわち、列 $(y^{(n)})$ は $Y$ において $0$ に収束する。
+
+        この列が $X$ の収束列に持ち上がるかを確認する。 $T$ は全単射であるため、各 $y^{(n)}$ の原像は $x^{(n)} = T^{-1}(y^{(n)}) = y^{(n)}$ と一意に定まる。したがって、持ち上がる列が存在するとすれば、それは $(x^{(n)})_{n=1}^\infty$ しかあり得ない。
+        $X$ における $x^{(n)}$ のノルムを計算すると、
+        $$\|x^{(n)}\|_1 = \sum_{i=1}^n \frac{1}{\sqrt{n}} = n \times \frac{1}{\sqrt{n}} = \sqrt{n}$$
+        となる。 $n \to \infty$ のとき $\|x^{(n)}\|_1 \to \infty$ となるため、列 $(x^{(n)})_{n=1}^\infty$ は $X$ において発散し、いかなる点にも収束しない。
+        以上により、 $Y$ において $0$ に収束する列 $(y^{(n)})$ は、 $X$ におけるいかなる収束列にも持ち上がらないことが証明された。（証明終）
+    </div>
+
+
+    <h2>VI. コンパクトHausdorff空間からの連続写像のリフト</h2>
+
+    <p>Banach 空間のあいだの連続線形写像 $T \colon X \to Y$ とコンパクト Hausdorff 空間 $S$ が与えられたとき、任意の連続写像 $g \colon S \to Y$ に対して、それをリフトする連続写像 $f \colon S \to X$ (すなわち $T \circ f = g$) が存在するかどうかを考えます。結論から言えば、 $T$ が全射であれば存在し、全射でなければ一般には存在しません。</p>
+
+    <div class="proposition">
+        <span class="label">命題 (全射でない場合のリフトの非存在)</span>
+        $T$ が全射でない場合、連続写像 $g \colon S \to Y$ をリフトする $f \colon S \to X$ は一般には存在しない。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $X = \{0\}$ 、 $Y = \mathbb{R}$ とし、それぞれ通常のノルムを入れた Banach 空間とする。 $T \colon X \to Y$ を $T(0) = 0$ で定義される零写像とする。 $T$ は連続線形写像であるが、全射ではない。
+        $S = \{*\}$ を $1$ 点からなるコンパクト Hausdorff 空間とし、連続写像 $g \colon S \to Y$ を $g(*) = 1$ で定義する。
+        もし $T \circ f = g$ を満たす写像 $f \colon S \to X$ が存在したと仮定すると、 $f(*) \in X = \{0\}$ であるから $f(*) = 0$ となる。
+        したがって $T(f(*)) = T(0) = 0$ となるが、一方で $g(*) = 1$ であるため、 $0 = 1$ となり矛盾する。ゆえにリフト $f$ は存在しない。（証明終）
+    </div>
+
+    <div class="definition">
+        <span class="label">定義 (単位の分割)</span>
+        位相空間 $S$ の開被覆 $\{U_i\}_{i \in I}$ に従属する単位の分割 (partition of unity) とは、連続関数族 $\{\varphi_i \colon S \to [0, 1]\}_{i \in I}$ であって、各 $\varphi_i$ が $0$ にならない領域が $U_i$ に含まれ、かつ各点 $t \in S$ において $\sum_{i \in I} \varphi_i(t) = 1$ が成り立つような族のことである。コンパクト Hausdorff 空間やパラコンパクト空間では、任意の開被覆に対してそれに従属する連続な単位の分割が存在する。
+    </div>
+
+    <div class="theorem">
+        <span class="label">定理 (コンパクトHausdorff空間からのリフト)</span>
+        $X$ と $Y$ を Banach 空間とし、 $T \colon X \to Y$ を全射な連続線形写像とする。 $S$ をコンパクト Hausdorff 空間とする。このとき、任意の連続写像 $g \colon S \to Y$ に対して、ある連続写像 $f \colon S \to X$ で $T \circ f = g$ となるものが存在する。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        証明は3つのステップに分けて行う。
+
+        <strong>ステップ 1: 開写像定理によるノルム評価の準備</strong><br>
+        $T \colon X \to Y$ は Banach 空間から Banach 空間への全射連続線形写像であるから、開写像定理より $T$ は開写像である。したがって、ある定数 $M  >  0$ が存在して、任意の $y \in Y$ に対して、 $Tx = y$ かつ $\|x\| \le M\|y\|$ を満たす $x \in X$ が存在する。
+
+        <strong>ステップ 2: 単位の分割を用いた近似リフトの構成</strong><br>
+        任意の連続写像 $g \colon S \to Y$ と任意の $\epsilon  >  0$ に対して、連続写像 $h \colon S \to X$ であって、以下の2条件を満たすものが存在することを示す。<br>
+        (i) 任意の $t \in S$ について $\|g(t) - Th(t)\|  <  \epsilon$<br>
+        (ii) 任意の $t \in S$ について $\|h(t)\| \le M \sup_{s \in S} \|g(s)\|$<br>
+
+        任意の $s \in S$ に対して、 $g(s) \in Y$ である。ステップ 1 の結果より、ある $x_s \in X$ が存在して、 $Tx_s = g(s)$ かつ $\|x_s\| \le M\|g(s)\|$ を満たす。
+        $Tx_s = g(s)$ であるから、 $g(s) - Tx_s = 0$ である。写像 $g$ は連続であるため、各 $s \in S$ に対して $s$ を含むある開集合 $U_s \subset S$ が存在して、任意の $t \in U_s$ に対して $\|g(t) - Tx_s\|  <  \epsilon$ が成り立つ。
+        集合族 $\{U_s \mid s \in S\}$ はコンパクト空間 $S$ の開被覆であるから、有限部分被覆 $\{U_{s_1}, \dots, U_{s_n}\}$ が存在する。
+        コンパクト Hausdorff 空間は正規空間 (normal space) であるから、この有限開被覆に従属する連続な単位の分割 $\{\varphi_1, \dots, \varphi_n\}$ が存在する。すなわち、各 $\varphi_i \colon S \to [0, 1]$ は連続であり、 $\varphi_i(t)  >  0$ となる $t$ は $U_{s_i}$ に属し、かつすべての $t \in S$ に対して $\sum_{i=1}^n \varphi_i(t) = 1$ を満たす。
+        
+        ここで写像 $h \colon S \to X$ を次のように定義する。
+        $$h(t) = \sum_{i=1}^n \varphi_i(t) x_{s_i}$$
+        各 $\varphi_i$ は連続であり、 $X$ はベクトル空間であるから、 $h$ は連続写像である。 $T$ の線形性により、
+        $$Th(t) = \sum_{i=1}^n \varphi_i(t) Tx_{s_i}$$
+        となる。 $\sum_{i=1}^n \varphi_i(t) = 1$ であるため、 $g(t) = \sum_{i=1}^n \varphi_i(t) g(t)$ と書ける。したがって、
+        $$g(t) - Th(t) = \sum_{i=1}^n \varphi_i(t) (g(t) - Tx_{s_i})$$
+        が成り立つ。ノルムの三角不等式により、
+        $$\|g(t) - Th(t)\| \le \sum_{i=1}^n \varphi_i(t) \|g(t) - Tx_{s_i}\|$$
+        を得る。ここで、 $\varphi_i(t)  >  0$ となるような $i$ については $t \in U_{s_i}$ であるため、 $\|g(t) - Tx_{s_i}\|  <  \epsilon$ が成り立つ。ゆえに、
+        $$\|g(t) - Th(t)\|  <  \sum_{i=1}^n \varphi_i(t) \epsilon = \epsilon$$
+        となり、条件 (i) が示された。
+        さらに、 $h(t)$ のノルムを評価する。 $\|x_{s_i}\| \le M\|g(s_i)\| \le M \sup_{s \in S} \|g(s)\|$ であるから、
+        $$\|h(t)\| \le \sum_{i=1}^n \varphi_i(t) \|x_{s_i}\| \le \sum_{i=1}^n \varphi_i(t) M \sup_{s \in S} \|g(s)\| = M \sup_{s \in S} \|g(s)\|$$
+        となり、条件 (ii) も示された。
+
+        <strong>ステップ 3: 帰納的構成と完備性による極限</strong><br>
+        ステップ 2 を用いて、連続写像の列 $h_k \colon S \to X$ と $g_k \colon S \to Y$ を帰納的に構成する。
+        まず $g_0 = g$ とする。
+        $k = 0, 1, 2, \dots$ に対して、帰納的に $h_k$ と $g_{k+1}$ を以下のように定める。
+        ステップ 2 において、対象とする写像を $g_k$ 、誤差を $\epsilon_k = 2^{-(k+1)}$ として適用し、連続写像 $h_k \colon S \to X$ であって次を満たすものを得る。
+        $$\|g_k(t) - Th_k(t)\|  <  \frac{1}{2^{k+1}} \quad (\forall t \in S)$$
+        $$\|h_k(t)\| \le M \sup_{s \in S} \|g_k(s)\| \quad (\forall t \in S)$$
+        そして、次の写像 $g_{k+1} \colon S \to Y$ を
+        $$g_{k+1}(t) = g_k(t) - Th_k(t)$$
+        で定義する。
+        この構成により、すべての $k \ge 0$ に対して $\sup_{t \in S} \|g_{k+1}(t)\| \le 2^{-(k+1)}$ が成り立つ。
+        したがって、 $k \ge 1$ に対しては、 $h_k(t)$ のノルムは以下のように評価できる。
+        $$\|h_k(t)\| \le M \sup_{s \in S} \|g_k(s)\| \le \frac{M}{2^k} \quad (\forall t \in S)$$
+
+        ここで、関数項級数 $\sum_{k=0}^\infty h_k(t)$ を考える。
+        $k \ge 1$ において $\sup_{t \in S} \|h_k(t)\| \le M 2^{-k}$ であり、 $\sum_{k=1}^\infty M 2^{-k}$ は収束する。Weierstrass の M判定法により、この級数は $C(S, X)$ において一様絶対収束する。
+        $X$ は Banach 空間（すなわち完備）であるから、極限
+        $$f(t) = \sum_{k=0}^\infty h_k(t)$$
+        は $S$ から $X$ への連続写像として well-defined である。
+        最後に、 $T \circ f = g$ を確認する。 $T$ は連続線形写像であるから極限と交換することができ、
+        $$Tf(t) = T \left( \sum_{k=0}^\infty h_k(t) \right) = \sum_{k=0}^\infty Th_k(t) = \lim_{N \to \infty} \sum_{k=0}^N Th_k(t)$$
+        となる。構成から $Th_k(t) = g_k(t) - g_{k+1}(t)$ であるため、和をとると中間項が打ち消し合い、
+        $$\sum_{k=0}^N Th_k(t) = \sum_{k=0}^N (g_k(t) - g_{k+1}(t)) = g_0(t) - g_{N+1}(t) = g(t) - g_{N+1}(t)$$
+        となる。 $N \to \infty$ のとき、 $\sup_{t \in S} \|g_{N+1}(t)\| \le 2^{-(N+1)} \to 0$ であるから、
+        $$Tf(t) = \lim_{N \to \infty} (g(t) - g_{N+1}(t)) = g(t)$$
+        がすべての $t \in S$ に対して成り立つ。
+        以上により、 $T \circ f = g$ を満たす連続写像 $f \colon S \to X$ の存在が完全に証明された。（証明終）
+    </div>
+
+    <h2>VII. 凝縮数学による解釈と理論の循環構造</h2>
+
+    <p>近年の Dustin Clausen と Peter Scholze によって提唱された凝縮数学 (condensed mathematics) は、関数解析における位相空間の圏論的欠陥を修正する枠組みです。前述の通り、位相ベクトル空間や Banach 空間の圏はアーベル圏ではありません。アーベル圏であれば「単射かつ全射な射は自動的に同型射 (isomorphism) になる」という性質が成り立ちますが、Banach 空間の圏では代数的な全単射が位相的な同相写像を保証しません。開写像定理や閉グラフ定理は、完備な空間に限ることでこのアーベル圏的な性質を回復させるための定理です。</p>
+
+    <div class="definition">
+        <span class="label">定義 (極端不連結空間と凝縮集合)</span>
+        位相空間 $S$ が極端不連結 (extremally disconnected) であるとは、 $S$ の任意の開集合の閉包が再び開集合になることである。コンパクト Hausdorff 空間の圏において、極端不連結な空間は射影的対象 (projective object) となる。<br>
+        位相空間 $X$ に対応する凝縮集合 (condensed set) $\underline{X}$ とは、極端不連結なコンパクト Hausdorff 空間の圏から集合の圏への反変関手であり、対象 $S$ に対して $\underline{X}(S) = C(S, X)$ （ $S$ から $X$ への連続写像の全体）を割り当てるものである。
+    </div>
+
+    <p>Banach 空間 $X, Y$ を液状ベクトル空間 (liquid vector space) と見なして圏 $\mathrm{Liq}(\mathbb{R})$ に埋め込んだとき、この圏は完全なアーベル圏となります。凝縮ベクトル空間の圏において射 $\underline{T} \colon \underline{X} \to \underline{Y}$ がエピ射 (epimorphism) であるための必要十分条件は、任意の極端不連結なコンパクト Hausdorff 空間 $S$ に対して、関手の評価として得られる写像 $\underline{T}_S \colon \underline{X}(S) \to \underline{Y}(S)$ が全射になることです。</p>
+
+    <div class="theorem">
+        <span class="label">定理 (Banach 空間の全射と凝縮ベクトル空間のエピ射)</span>
+        $X$ と $Y$ を Banach 空間とし、 $T \colon X \to Y$ を全射な連続線形写像とする。このとき、 $T$ が誘導する凝縮ベクトル空間の間の射 $\underline{T} \colon \underline{X} \to \underline{Y}$ は、凝縮ベクトル空間の圏においてエピ射である。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $\underline{T} \colon \underline{X} \to \underline{Y}$ がエピ射であることを示すためには、任意の極端不連結なコンパクト Hausdorff 空間 $S$ に対して、写像 $\underline{T}_S \colon \underline{X}(S) \to \underline{Y}(S)$ が全射であることを示せば十分である。
+
+        任意の $g \in \underline{Y}(S) = C(S, Y)$ をとる。 $S$ は極端不連結なコンパクト Hausdorff 空間である。極端不連結性は特別な位相的性質であるが、 $S$ がコンパクト Hausdorff 空間であるという事実に変わりはない。
+        したがって、前節で証明した定理（コンパクト Hausdorff 空間からのリフト）を適用することができる。
+        定理により、ある連続写像 $f \colon S \to X$ が存在して、 $T \circ f = g$ が成り立つ。
+        この $f$ は $S$ から $X$ への連続写像であるため、 $f \in \underline{X}(S)$ である。
+        $\underline{T}_S$ の定義は、 $f \mapsto T \circ f$ であるから、
+        $$\underline{T}_S(f) = T \circ f = g$$
+        となる。これは、任意の $g \in \underline{Y}(S)$ に対して、それを $\underline{T}_S$ で写像した結果となる $f \in \underline{X}(S)$ が存在することを意味する。
+        ゆえに、各 $S$ に対して $\underline{T}_S$ は全射であり、凝縮ベクトル空間の圏の射 $\underline{T}$ はエピ射である。（証明終）
+    </div>
+
+    <div class="remark">
+        <span class="label">理論の根底に潜む循環構造と極端不連結性の意味</span>
+        上記の定理を見ると、あたかも点列の議論を回避して開写像定理を証明できたように見えます。液状ベクトル空間の圏では、連続な全単射 $T \colon X \to Y$ はエピ射かつモノ射となるため、アーベル圏の性質から自動的に同型射となり、逆写像の連続性（開写像定理）が導かれます。
+        
+        しかし、これは <strong>ゼロからの新しい別証明ではありません</strong>。なぜなら、 $\underline{T}$ がエピ射であることを証明する段階において、前節で見た通り「リフトの構成」が必要となり、その構成自体が開写像定理（または完備性による球面の近似構造）に本質的に依存しているからです。
+
+        また、証明において $S$ が「極端不連結である」という性質は全く使われていませんでした。Banach 空間の場合に限り、完備性と開写像定理による強力な近似構成 (Bartle-Graves の定理) が機能するため、極端不連結性に頼らずとも直接的に大域的リフトが構成できるのです。凝縮数学において「極端不連結空間」をテスト空間として採用する理由は、一般の位相群や位相空間への全射においては大域的なリフトが存在するとは限らず、層の局所的な持ち上げを大域的な持ち上げに貼り合わせるための射影的対象として極端不連結性が必要不可欠になるからです。三大定理は、新しい完全なアーベル圏の中で「射の自明な性質」として見事に再編成 (reorganization) されたと理解すべきです。
+    </div>
+
+    <h2>VIII. Bartle-Graves の定理と任意の位相空間からのリフト</h2>
+
+    <p>Banach 空間の間の全射な連続線形写像 $T \colon X \to Y$ について、無限次元空間では核の位相的な補空間が存在するとは限らないため、線形な右逆写像が存在するとは限りません。しかし、線形性を諦めれば連続な右逆写像が常に存在することを示すのが <strong>Bartle-Graves の定理</strong> です。</p>
+    
+    <div class="definition">
+        <span class="label">定義 (パラコンパクト空間と右逆写像)</span>
+        位相空間 $S$ がパラコンパクト (paracompact) であるとは、 $S$ が Hausdorff 空間であり、かつ $S$ の任意の開被覆が局所有限 (locally finite) な開細分を持つことである。A. H. Stone の定理により、任意の距離空間 (metric space) はパラコンパクトであることが知られている。パラコンパクト空間においては、任意の開被覆に対してそれに従属する連続な単位の分割が存在する。<br>
+        写像 $h \colon Y \to X$ が $T \colon X \to Y$ の右逆写像 (right inverse) であるとは、 $T \circ h = \mathrm{id}_Y$ が成り立つことである。また、 $h$ が正斉次 (positively homogeneous) であるとは、任意の $y \in Y$ と非負の実数 $c \ge 0$ に対して $h(cy) = c h(y)$ が成り立つことである。
+    </div>
+
+    <div class="lemma">
+        <span class="label">補題 (パラコンパクト空間からの近似リフト)</span>
+        $X$ と $Y$ を Banach 空間とし、 $T \colon X \to Y$ を全射な連続線形写像とする。 $S$ をパラコンパクトな Hausdorff 空間とする。任意の連続写像 $g \colon S \to Y$ と任意の $\epsilon  >  0$ に対して、連続写像 $\phi \colon S \to X$ であって以下の2つの条件を満たすものが存在する。<br>
+        (i) 任意の $s \in S$ について $\|g(s) - T\phi(s)\|  <  \epsilon$<br>
+        (ii) 任意の $s \in S$ について $\|\phi(s)\| \le M \sup_{t \in S} \|g(t)\|$<br>
+        （ここで $M$ は $T$ にのみ依存する定数である）
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $T$ は全射な連続線形写像であるから、開写像定理より開写像である。したがって、ある定数 $M  >  0$ が存在して、任意の $y \in Y$ に対して $Tx = y$ かつ $\|x\| \le M\|y\|$ を満たす $x \in X$ が存在する。
+        
+        各 $s \in S$ に対して $g(s) \in Y$ であるから、条件を満たす $x_s \in X$ を一つ選ぶことができる。すなわち $Tx_s = g(s)$ かつ $\|x_s\| \le M\|g(s)\|$ である。写像 $g$ と $T$ は連続であるから、各 $s \in S$ に対して、 $S$ における開近傍 $V_s = \{t \in S \mid \|g(t) - Tx_s\|  <  \epsilon\}$ を定義できる。 $Tx_s = g(s)$ であるため $s \in V_s$ であり、族 $\{V_s \mid s \in S\}$ は $S$ の開被覆となる。
+        
+        $S$ はパラコンパクト空間であるため、この開被覆の局所有限な開細分 $\{U_i \mid i \in I\}$ が存在し、それに従属する連続な単位の分割 $\{\varphi_i \mid i \in I\}$ が存在する。ここで、各 $i \in I$ に対してある $s_i \in S$ が存在し、 $U_i \subset V_{s_i}$ を満たす。各 $\varphi_i \colon S \to [0, 1]$ は連続であり、台 (support) は $U_i$ に含まれ、各 $t \in S$ に対して $\sum_{i \in I} \varphi_i(t) = 1$ を満たす。
+        
+        写像 $\phi \colon S \to X$ を次のように定義する。
+        $$\phi(t) = \sum_{i \in I} \varphi_i(t) x_{s_i}$$
+        局所有限性から、各点 $t \in S$ の近傍において非ゼロとなる $\varphi_i$ は有限個であるため、この和は well-defined であり、 $\phi$ は連続写像となる。
+        
+        ノルムを評価する。 $\sum_{i \in I} \varphi_i(t) = 1$ であるから、 $g(t) = \sum_{i \in I} \varphi_i(t) g(t)$ と書ける。したがって、
+        $$g(t) - T\phi(t) = \sum_{i \in I} \varphi_i(t) (g(t) - Tx_{s_i})$$
+        が成り立つ。 $\varphi_i(t)  >  0$ となるような $i$ については $t \in U_i \subset V_{s_i}$ であるため、 $\|g(t) - Tx_{s_i}\|  <  \epsilon$ である。ゆえに、
+        $$\|g(t) - T\phi(t)\| \le \sum_{i \in I} \varphi_i(t) \|g(t) - Tx_{s_i}\|  <  \sum_{i \in I} \varphi_i(t) \epsilon = \epsilon$$
+        となり、条件 (i) が示された。また、
+        $$\|\phi(t)\| \le \sum_{i \in I} \varphi_i(t) \|x_{s_i}\| \le \sum_{i \in I} \varphi_i(t) M\|g(s_i)\| \le M \sup_{s \in S} \|g(s)\|$$
+        となり、条件 (ii) も示された。（証明終）
+    </div>
+
+    <div class="theorem">
+        <span class="label">定理 (Bartle-Graves の定理)</span>
+        $X$ と $Y$ を Banach 空間とし、 $T \colon X \to Y$ を全射な連続線形写像とする。このとき、 $T$ は連続な右逆写像 $h \colon Y \to X$ を持つ。さらに、定数 $K = 2M  >  0$ が存在して、任意の $y \in Y$ に対して $\|h(y)\| \le K\|y\|$ を満たし、かつ任意の $c \ge 0$ に対して正斉次 $h(cy) = c h(y)$ となるように選ぶことができる。
+    </div>
+
+    <div class="proof">
+        <span class="label">証明</span>
+        $Y$ の単位球面を $S_Y = \{y \in Y \mid \|y\| = 1\}$ とする。 $Y$ は距離空間であるから、 $S_Y$ も距離空間であり、A. H. Stone の定理より $S_Y$ はパラコンパクトな Hausdorff 空間である。
+        
+        帰納的に、連続写像の列 $\phi_k \colon S_Y \to X$ と $g_k \colon S_Y \to Y$ を構成する。
+        まず、 $g_0 \colon S_Y \to Y$ を包含写像 $g_0(y) = y$ とする。このとき $\sup_{y \in S_Y} \|g_0(y)\| = 1$ である。
+        $k = 0, 1, 2, \dots$ に対して、補題を $S = S_Y$ 、写像 $g_k$ 、誤差 $\epsilon = 2^{-(k+1)}$ として適用し、連続写像 $\phi_k \colon S_Y \to X$ を得る。すなわち、
+        $$\|g_k(y) - T\phi_k(y)\|  <  \frac{1}{2^{k+1}} \quad (\forall y \in S_Y)$$
+        $$\|\phi_k(y)\| \le M \sup_{z \in S_Y} \|g_k(z)\| \quad (\forall y \in S_Y)$$
+        を満たす。次に $g_{k+1}(y) = g_k(y) - T\phi_k(y)$ と定義する。
+        
+        この構成により、すべての $k \ge 0$ に対して $\sup_{y \in S_Y} \|g_{k+1}(y)\| \le 2^{-(k+1)}$ が成り立つ。したがって、 $k \ge 1$ に対しては
+        $$\|\phi_k(y)\| \le M \frac{1}{2^k}$$
+        が成り立つ。（ $k=0$ のときは $\|\phi_0(y)\| \le M$ である。）
+        
+        $X$ は Banach 空間であるから、関数項級数 $\sum_{k=0}^\infty \phi_k(y)$ は一様絶対収束する。その極限を $h_0 \colon S_Y \to X$ とおく。
+        $$h_0(y) = \sum_{k=0}^\infty \phi_k(y)$$
+        各 $\phi_k$ は連続であるから、 $h_0$ も連続写像である。 $T$ の連続性と線形性から、極限と $T$ は交換可能であり、
+        $$Th_0(y) = \sum_{k=0}^\infty T\phi_k(y) = \lim_{N \to \infty} \sum_{k=0}^N (g_k(y) - g_{k+1}(y)) = \lim_{N \to \infty} (g_0(y) - g_{N+1}(y)) = g_0(y) = y$$
+        がすべての $y \in S_Y$ に対して成り立つ。また、ノルムは
+        $$\|h_0(y)\| \le \|\phi_0(y)\| + \sum_{k=1}^\infty \|\phi_k(y)\| \le M + \sum_{k=1}^\infty \frac{M}{2^k} = M + M = 2M$$
+        と評価される。
+
+        最後に、この $h_0$ を $Y$ 全体に拡張して $h \colon Y \to X$ を次のように定義する。
+        $$h(y) = \begin{cases} \|y\| h_0\left(\frac{y}{\|y\|}\right) & (y \neq 0) \\ 0 & (y = 0) \end{cases}$$
+        $y \neq 0$ のとき、 $h$ は連続写像の合成とスカラー倍であるから連続である。 $y \to 0$ のとき、
+        $$\|h(y)\| = \|y\| \left\| h_0\left(\frac{y}{\|y\|}\right) \right\| \le 2M \|y\| \to 0$$
+        となるため、 $y=0$ においても連続である。ゆえに $h$ は $Y$ 上の連続写像である。
+        
+        ノルムについては、構成から任意の $y \in Y$ に対して $\|h(y)\| \le 2M\|y\|$ が成り立つ。
+        $T$ の線形性より、 $y \neq 0$ のとき
+        $$T(h(y)) = T\left( \|y\| h_0\left(\frac{y}{\|y\|}\right) \right) = \|y\| T\left( h_0\left(\frac{y}{\|y\|}\right) \right) = \|y\| \frac{y}{\|y\|} = y$$
+        となり、 $T(h(0)) = T(0) = 0$ であるから、 $h$ は $T$ の右逆写像である。
+        
+        また、任意の $c  >  0$ と $y \neq 0$ に対して、
+        $$h(cy) = \|cy\| h_0\left(\frac{cy}{\|cy\|}\right) = c\|y\| h_0\left(\frac{cy}{c\|y\|}\right) = c \|y\| h_0\left(\frac{y}{\|y\|}\right) = c h(y)$$
+        となり、 $c=0$ や $y=0$ の場合も自明に成り立つため、正斉次性が示された。（証明終）
+    </div>
+
+    <div class="remark">
+        <span class="label">リフト定理への応用と強力な帰結</span>
+        Bartle-Graves の定理により連続な右逆写像 $h \colon Y \to X$ が手に入ったのであれば、与えられた任意の位相空間 $S$ と連続写像 $g \colon S \to Y$ に対して、
+        $$f(s) = h(g(s)) \quad (\text{すなわち } f = h \circ g)$$
+        と定義するだけで十分である。 $f$ は連続写像の合成であるから当然連続であり、
+        $$T(f(s)) = T(h(g(s))) = g(s)$$
+        を満たすため、完璧なリフトになっている。
+        この構成方法によれば、リフト先の定義域 $S$ には「コンパクト Hausdorff」や「パラコンパクト」といった位相的な制限が一切不要になる。任意の位相空間 $S$ からの任意の連続写像が、Banach 空間の全射に対しては常にリフトできるという極めて強力な結論が導かれるのである。
+    </div>
+
+    <h2>IX. 参考文献</h2>
+    <div class="bibliography">
+        <ol>
+            <li>Sokal, A. D. "A really simple elementary proof of the uniform boundedness theorem." <i>Amer. Math. Monthly</i> 118 (2011), 450-452. <a href="https://arxiv.org/abs/1005.1585" target="_blank">arXiv:1005.1585</a></li>
+            <li>Clausen, D. and Scholze, P. "Condensed Mathematics" (Lecture Notes). <a href="https://www.math.uni-bonn.de/people/scholze/CondensedMathematics.pdf" target="_blank">PDF Link</a></li>
+            <li>Bartle, R. G. and Graves, L. M. "Mappings between function spaces." <i>Trans. Amer. Math. Soc.</i> 72 (1952), 400-413. <a href="https://doi.org/10.1090/S0002-9947-1952-0046556-9" target="_blank">DOI:10.1090/S0002-9947-1952-0046556-9</a></li>
+        </ol>
+    </div>
+
+</body>
+</html>

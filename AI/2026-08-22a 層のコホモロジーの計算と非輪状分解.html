@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>層のコホモロジーの計算と非輪状分解</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']]
+  },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Noto Serif JP", serif;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    color: #333;
+    background-color: #fdfbf7;
+  }
+  h1 {
+    font-size: 24pt;
+    text-align: center;
+    border-bottom: 2px solid #555;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    font-size: 18pt;
+    color: #2c3e50;
+    margin-top: 40px;
+    border-left: 4px solid #2980b9;
+    padding-left: 10px;
+  }
+  h3 {
+    font-size: 14pt;
+    color: #34495e;
+  }
+  p {
+    margin-bottom: 15px;
+    text-align: justify;
+  }
+  .definition, .theorem, .proof, .example {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 5px;
+  }
+  .definition { border-left: 5px solid #27ae60; }
+  .theorem { border-left: 5px solid #c0392b; }
+  .proof { border-left: 5px solid #7f8c8d; background-color: #f9f9f9; }
+  .example { border-left: 5px solid #8e44ad; }
+  .label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  ul {
+    margin-bottom: 20px;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+  a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .references {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+
+<h1>層のコホモロジーの計算と非輪状分解</h1>
+
+<p>本稿では、位相空間 $X$ 上のAbel群の層 $F$ と、その分解として与えられた完全列から、層のコホモロジーを大域切断の複体のコホモロジーとして計算するための条件とその厳密な証明を網羅的に解説する。直観的に言えば、層のコホモロジーは「局所的には解けるが、大域的には解けない障害」を測るものである。層の完全列は大域切断をとる関手 $\Gamma(X,-)$ を適用すると一般に右完全性を失うが、構成に用いる層が大域的な障害を持たないような性質を備えていれば、その複体からコホモロジーを計算することができる。</p>
+
+<h2>1. 基礎概念の定義と準備</h2>
+
+<p>議論をself-containedにするために、層やコホモロジーに関する基本的な概念を定義する。</p>
+
+<div class="definition">
+<span class="label">定義 1.1 (層と前層)</span><br>
+位相空間 $X$ 上のAbel群の前層 (presheaf) $F$ とは、各開集合 $U \subset X$ に対してAbel群 $F(U)$ を割り当て、包含関係 $V \subset U$ に対して制限写像 $\rho^U_V \colon F(U) \to F(V)$ を備えるデータであり、関手条件（同一開集合への制限は恒等写像であり、制限写像は合成を保つこと）を満たすものをいう。
+前層 $F$ が以下の二つの公理を満たすとき、層 (sheaf) であるという。
+<ul>
+  <li><strong>局所同一性の公理:</strong> 開被覆 $\{U_i\}$ に対して、切断 $s \in F(U)$ が各 $U_i$ 上で $s|_{U_i} = 0$ を満たすならば $s = 0$ である。</li>
+  <li><strong>貼り合わせの公理:</strong> 開被覆 $\{U_i\}$ と各 $U_i$ 上の切断 $s_i \in F(U_i)$ が与えられ、それらが交わり $U_i \cap U_j$ 上で一致するならば、全体 $U$ 上の切断 $s \in F(U)$ であって各 $i$ に対して $s|_{U_i} = s_i$ となるものが一意に存在する。</li>
+</ul>
+</div>
+
+<div class="definition">
+<span class="label">定義 1.2 (茎と完全列)</span><br>
+点 $x \in X$ における層 $F$ の茎 (stalk) $F_x$ とは、$x$ を含む開集合上の切断の帰納極限 (inductive limit) のことである。すなわち、
+$$
+F_x = \lim_{\to, x \in U} F(U)
+$$
+と定義される。Abel群の層の列 $F \to G \to H$ が完全 (exact) であるとは、任意の点 $x \in X$ において、茎のレベルでのAbel群の列 $F_x \to G_x \to H_x$ が完全であることをいう。
+</div>
+
+<div class="definition">
+<span class="label">定義 1.3 (層のコホモロジー)</span><br>
+層 $F$ の大域切断の群を $\Gamma(X, F) = F(X)$ と書く。大域切断関手 $\Gamma(X, -)$ は左完全関手である。この関手の右導来関手 (right derived functor) を層のコホモロジーと呼び、 $H^k(X, F)$ と表す。
+</div>
+
+<h2>2. コホモロジーを計算できる十分条件</h2>
+
+<p>位相空間 $X$ 上のAbel群の層 $F$ に対して、完全列</p>
+$$
+0 \to F \to C^0 \xrightarrow{d^0} C^1 \xrightarrow{d^1} \cdots
+$$
+<p>が与えられているとする（ここで $C^{-1}$ は零層 $\varnothing$ ではなく自明な群からなる零層とする）。このとき、複体 $C^\bullet(X)$ のコホモロジーが $H^k(X,F)$ に同型となるための $C^k$ に関するシンプルな十分条件として、以下のものが挙げられる。これらは下に行くほど条件が弱く（満たしやすく）なるが、いずれも目的を達成するための十分条件である。</p>
+
+<div class="definition">
+<span class="label">条件 1: 単射的 (injective)</span><br>
+層 $C^k$ がAbel群の層の圏において単射的対象であること。すなわち、任意の層の単射 $A \to B$ と射 $A \to C^k$ に対して、それを拡張する射 $B \to C^k$ が存在すること。
+（※層のコホモロジーは通常、単射的層による分解を用いて定義されるため、これは最も基本的な条件である。）
+</div>
+
+<div class="definition">
+<span class="label">条件 2: 脆弱 (flabby)</span><br>
+層 $C^k$ が脆弱層 (flabby sheaf) であること。すなわち、任意の開集合 $U \subset X$ に対して、制限写像 $C^k(X) \to C^k(U)$ が全射であること。これは任意の局所切断が大域切断に延長できることを意味する。
+</div>
+
+<div class="definition">
+<span class="label">条件 3: 軟弱 (soft)</span><br>
+空間 $X$ がパラコンパクト (paracompact) Hausdorff空間であるとき、層 $C^k$ が軟弱層 (soft sheaf) であること。すなわち、任意の閉集合 $Z \subset X$ に対して、制限写像 $C^k(X) \to C^k(Z)$ が全射であること。ここで閉集合上の切断とは、閉集合を含む開集合上の切断の帰納極限 (inductive limit) を指す。
+</div>
+
+<div class="definition">
+<span class="label">条件 4: 細 (fine)</span><br>
+空間 $X$ がパラコンパクト (paracompact) Hausdorff空間であるとき、層 $C^k$ が細層 (fine sheaf) であること。すなわち、空間 $X$ の任意の局所有限な開被覆に対して、それに従属する $C^k$ の自己準同型の単位の分割 (partition of unity) が存在すること。
+</div>
+
+<div class="definition">
+<span class="label">条件 5: 非輪状 (acyclic)</span><br>
+層 $C^k$ が非輪状層 (acyclic sheaf) であること。すなわち、任意の $q \ge 1$ に対して $H^q(X,C^k) = 0$ となること。
+</div>
+
+<p>以上の条件において、<strong>単射的</strong> $\Rightarrow$ <strong>脆弱</strong> $\Rightarrow$ <strong>非輪状</strong> という包含関係が常に成り立つ。また、パラコンパクト (paracompact) Hausdorff空間上では <strong>細</strong> $\Rightarrow$ <strong>軟弱</strong> $\Rightarrow$ <strong>非輪状</strong> も成り立つ。したがって、最も直接的で一般的な十分条件は「各 $C^k$ が<strong>非輪状 (acyclic)</strong> であること」である。</p>
+
+<h2>3. 非輪状分解によるコホモロジー計算の定理と証明</h2>
+
+<p>上記の十分条件のうち、最も一般的である非輪状層による分解（非輪状分解）の場合について、大域切断の複体からコホモロジーが計算できることを完全に証明する。</p>
+
+<div class="theorem">
+<span class="label">定理 3.1 (非輪状分解によるコホモロジーの計算)</span><br>
+位相空間 $X$ 上のAbel群の層の完全列
+$$
+0 \to F \to C^0 \xrightarrow{d^0} C^1 \xrightarrow{d^1} \cdots
+$$
+が与えられているとする。もし各 $C^k$ が非輪状 (acyclic) であるならば、任意の整数 $k \ge 0$ に対して以下の同型が成り立つ。
+$$
+H^k(X,F) \cong \ker(C^k(X) \to C^{k+1}(X)) / \mathrm{im}(C^{k-1}(X) \to C^k(X))
+$$
+ただし、 $C^{-1}$ は零層とし、準同型 $C^{-1}(X) \to C^0(X)$ は零写像とする。
+</div>
+
+<div class="proof">
+<span class="label">証明</span><br>
+<p>各 $k \ge 0$ に対して、微分 $d^k \colon C^k \to C^{k+1}$ の核として層 $Z^k = \ker(d^k) \subset C^k$ を定義する。さらに便宜上 $Z^0 = F$ とする。</p>
+<p>与えられた層の列が完全であることより、任意の $k \ge 1$ に対して $\mathrm{im}(d^{k-1}) = \ker(d^k) = Z^k$ が成り立つ。したがって、各 $k \ge 0$ に対して次の層の短完全列が得られる。</p>
+$$
+0 \to Z^k \to C^k \to Z^{k+1} \to 0
+$$
+<p>この層の短完全列に対して、大域切断関手 $\Gamma(X,-)$ の右導来関手である層のコホモロジーの長完全列を適用すると、以下の完全列を得る。</p>
+$$
+0 \to H^0(X,Z^k) \to H^0(X,C^k) \to H^0(X,Z^{k+1}) \to H^1(X,Z^k) \to H^1(X,C^k) \to \cdots
+$$
+$$
+\cdots \to H^q(X,C^k) \to H^q(X,Z^{k+1}) \to H^{q+1}(X,Z^k) \to H^{q+1}(X,C^k) \to \cdots
+$$
+<p>仮定より $C^k$ は非輪状であるため、すべての $q \ge 1$ に対して $H^q(X,C^k) = 0$ である。</p>
+<p>したがって、長完全列における $q \ge 1$ の部分から、隣接する項が $0$ に挟まれるため、次の同型が得られる。</p>
+$$
+H^q(X,Z^{k+1}) \cong H^{q+1}(X,Z^k) \quad (q \ge 1)
+$$
+<p>また、 $q = 0$ の部分（すなわち長完全列の最初の5項）を考えると、 $H^1(X,C^k) = 0$ であるため、次の列が完全となる。</p>
+$$
+0 \to H^0(X,Z^k) \to H^0(X,C^k) \to H^0(X,Z^{k+1}) \to H^1(X,Z^k) \to 0
+$$
+<p>この完全列から、準同型定理によって以下の同型が導かれる。</p>
+$$
+H^1(X,Z^k) \cong H^0(X,Z^{k+1}) / \mathrm{im}(H^0(X,C^k) \to H^0(X,Z^{k+1}))
+$$
+<p>ここで、大域切断関手の定義から $H^0(X,S) = \Gamma(X,S) = S(X)$ であることに注意する。すると、 $H^0(X,Z^{k+1}) = Z^{k+1}(X)$ であり、これは層の包含関係 $Z^{k+1} = \ker(d^{k+1}) \subset C^{k+1}$ より、</p>
+$$
+Z^{k+1}(X) = \ker(C^{k+1}(X) \xrightarrow{d^{k+1}} C^{k+2}(X))
+$$
+<p>に等しい。また、層の準同型 $C^k \to Z^{k+1}$ は $d^k \colon C^k \to C^{k+1}$ の終域をその像に制限したものであるから、大域切断の誘導写像における像について次が成り立つ。</p>
+$$
+\mathrm{im}(H^0(X,C^k) \to H^0(X,Z^{k+1})) = \mathrm{im}(C^k(X) \xrightarrow{d^k} C^{k+1}(X))
+$$
+<p>したがって、上記の関係式は次のように書き換えられる。</p>
+$$
+H^1(X,Z^k) \cong \ker(C^{k+1}(X) \to C^{k+2}(X)) / \mathrm{im}(C^k(X) \to C^{k+1}(X))
+$$
+<p>これを次元シフト (dimension shifting) という手法を用いて $H^k(X,F)$ と結びつける。 $k \ge 1$ のとき、同型 $H^q(X,Z^{m+1}) \cong H^{q+1}(X,Z^m)$ を繰り返し用いることで次を得る。</p>
+$$
+H^k(X,F) = H^k(X,Z^0) \cong H^{k-1}(X,Z^1) \cong H^{k-2}(X,Z^2) \cong \cdots \cong H^1(X,Z^{k-1})
+$$
+<p>先ほど得た $H^1$ の式において添字 $k$ を $k-1$ に置き換えると、</p>
+$$
+H^1(X,Z^{k-1}) \cong \ker(C^k(X) \to C^{k+1}(X)) / \mathrm{im}(C^{k-1}(X) \to C^k(X))
+$$
+<p>となるため、上の連鎖から $k \ge 1$ における目的の同型が示された。</p>
+<p>最後に $k = 0$ のときを検証する。 $H^0(X,F) = F(X)$ であり、与えられた列 $0 \to F \to C^0 \to C^1$ に左完全関手である大域切断関手 $\Gamma(X,-)$ を適用すると、</p>
+$$
+0 \to F(X) \to C^0(X) \to C^1(X)
+$$
+<p>が完全となる。これにより、</p>
+$$
+H^0(X,F) \cong \ker(C^0(X) \to C^1(X))
+$$
+<p>が得られる。仮定より $C^{-1}$ が零層であることから、 $\mathrm{im}(C^{-1}(X) \to C^0(X)) = 0$ なので、</p>
+$$
+H^0(X,F) \cong \ker(C^0(X) \to C^1(X)) / \mathrm{im}(C^{-1}(X) \to C^0(X))
+$$
+<p>と書くことができ、 $k=0$ の場合も同型式は正当である。以上により、すべての $k \ge 0$ に対して定理が完全に証明された。$\square$</p>
+</div>
+
+<h2>4. 基本概念の理解に役立つ例</h2>
+
+<p>非輪状分解を用いる典型的な例として、多様体上の de Rham の定理が挙げられる。この例は、抽象的な層のコホモロジーが幾何学的な不変量とどのように結びつくかを明確に示す。</p>
+
+<div class="example">
+<span class="label">例 4.1 (de Rham 複体と de Rham の定理)</span><br>
+<p>$X$ を滑らかな多様体 (smooth manifold) とし、 $\mathbb{R}$ を実数を値にとる局所定数関数からなる定数層とする。 $\Omega^k$ を $k$ 次微分形式の層とし、外微分 $d \colon \Omega^k \to \Omega^{k+1}$ を考える。</p>
+<p>Poincaré の補題によれば、任意の点の十分小さな近傍（例えば可縮な近傍）上において、閉微分形式は常に完全微分形式となる。これは層の言葉で言えば、次の de Rham 複体</p>
+$$
+0 \to \mathbb{R} \to \Omega^0 \xrightarrow{d} \Omega^1 \xrightarrow{d} \cdots
+$$
+<p>が茎のレベルで完全であることを意味する。すなわち、これは定数層 $\mathbb{R}$ の層の完全列を与えている。</p>
+<p>滑らかな多様体 $X$ は局所コンパクト (locally compact) かつパラコンパクト (paracompact) Hausdorff空間である。また、微分形式の層 $\Omega^k$ は、滑らかな関数による単位の分割 (partition of unity) を備えているため、<strong>細層 (fine sheaf)</strong> である。定理 3.1の直前の議論により、パラコンパクトHausdorff空間上の細層は非輪状 (acyclic) であることが知られている。</p>
+<p>したがって、 $\Omega^k$ は非輪状分解を与えているため、定理 3.1を適用すると、定数層 $\mathbb{R}$ の層コホモロジーは次のように計算される。</p>
+$$
+H^k(X,\mathbb{R}) \cong \ker(\Omega^k(X) \to \Omega^{k+1}(X)) / \mathrm{im}(\Omega^{k-1}(X) \to \Omega^k(X))
+$$
+<p>この式の右辺において、 $\Omega^k(X)$ は大域的な $k$ 次微分形式のなす空間であり、分子は閉形式 (closed forms) の空間、分母は完全形式 (exact forms) の空間を表している。すなわち、右辺はまさに大域的な微分形式から定義される <strong>de Rham コホモロジー</strong> $H_{dR}^k(X)$ そのものである。</p>
+<p>このことから、定数層の層コホモロジーと de Rham コホモロジーが同型になること、すなわち</p>
+$$
+H^k(X,\mathbb{R}) \cong H_{dR}^k(X)
+$$
+<p>が証明される。これが有名な de Rham の定理である。</p>
+</div>
+
+<h2>5. 参考文献</h2>
+
+<p>本稿の議論および関連する概念の詳細については、以下の文献が参考になる。</p>
+<div class="references">
+<ul>
+  <li>Godement, R., <i>Topologie algébrique et théorie des faisceaux</i>, Hermann, 1958. （層の理論、特に脆弱層や細層によるコホモロジーの計算の古典的な基本文献）</li>
+  <li>Hartshorne, R., <i>Algebraic Geometry</i>, Graduate Texts in Mathematics, No. 52, Springer, 1977. （第III章にて層のコホモロジーと単射的分解・脆弱分解について詳述されている）</li>
+  <li>Warner, F. W., <i>Foundations of Differentiable Manifolds and Lie Groups</i>, Springer, 1983. （de Rhamの定理と細層を用いた層のコホモロジー理論）</li>
+  <li><a href="https://stacks.math.columbia.edu/tag/00R3" target="_blank" rel="noopener noreferrer">The Stacks Project, Tag 00R3: Cohomology of Sheaves</a> （層のコホモロジーに関する現代的で包括的なオンラインリファレンス）</li>
+  <li><a href="https://en.wikipedia.org/wiki/Sheaf_cohomology" target="_blank" rel="noopener noreferrer">Wikipedia: Sheaf cohomology</a> （基本的な定義と直観的な理解のための概要）</li>
+</ul>
+</div>
+
+</body>
+</html>

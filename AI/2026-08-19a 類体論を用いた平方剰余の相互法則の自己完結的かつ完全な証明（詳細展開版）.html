@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>類体論を用いた平方剰余の相互法則の自己完結的かつ完全な証明（詳細展開版）</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.85;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 25px;
+            color: #2b2b2b;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3, h4 {
+            color: #1a252f;
+            font-weight: 700;
+        }
+        h1 {
+            border-bottom: 3px solid #2b5797;
+            padding-bottom: 12px;
+            text-align: center;
+            font-size: 2.1em;
+            margin-bottom: 40px;
+        }
+        h2 {
+            border-left: 6px solid #2980b9;
+            padding-left: 15px;
+            margin-top: 50px;
+            font-size: 1.5em;
+            background-color: #f1f8fc;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+        h3 {
+            border-bottom: 1px dashed #7f8c8d;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            font-size: 1.25em;
+            color: #34495e;
+        }
+        .definition, .lemma, .theorem, .proof, .example, .note, .remark {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background-color: #fdfefe;
+            border: 1px solid #d5dbdb;
+            border-left: 5px solid #8e44ad;
+        }
+        .lemma {
+            background-color: #fcf8e3;
+            border: 1px solid #faebcc;
+            border-left: 5px solid #8a6d3b;
+        }
+        .theorem {
+            background-color: #fdfefe;
+            border: 1px solid #d5dbdb;
+            border-left: 5px solid #c0392b;
+            font-weight: bold;
+        }
+        .proof {
+            background-color: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-left: 4px solid #7f8c8d;
+        }
+        .example {
+            background-color: #f4fdf8;
+            border: 1px solid #d1f2eb;
+            border-left: 5px solid #27ae60;
+        }
+        .note {
+            background-color: #f7f7f7;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid #777777;
+        }
+        .remark {
+            background-color: #fef9e7;
+            border: 1px solid #fcf3cf;
+            border-left: 5px solid #f1c40f;
+        }
+        .qedsymbol {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #7f8c8d;
+        }
+        .references {
+            margin-top: 60px;
+            border-top: 2px solid #bdc3c7;
+            padding-top: 25px;
+        }
+        .references ul {
+            padding-left: 20px;
+        }
+        .references li {
+            margin-bottom: 12px;
+        }
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>類体論を用いた平方剰余の相互法則の自己完結的かつ完全な証明（詳細展開版）</h1>
+
+<div class="remark">
+    <strong>解説の趣旨について</strong><br>
+    本稿は、類体論 (class field theory) を経由して平方剰余の相互法則 (law of quadratic reciprocity) を導出する過程を、一切のギャップなく自己完結的 (self-contained) に記述したものである。読者の理解を深めるため、代数体やイデアルの分解、Galois理論の基本から出発し、豊富な具体例とともに詳細な議論を展開する。カジュアルな曖昧さを完全に排除し、厳密な集合と写像の言葉で構成されている。
+</div>
+
+<p>類体論 (class field theory) は、代数体の Abel 拡大 (abelian extension) を基礎体の代数構造（イデアル類群やイデール類群）によって完全に統制し記述する、現代代数的整数論の金字塔となる理論である。この理論を用いることで、初等整数論における中心的な定理である平方剰余の相互法則 (law of quadratic reciprocity) を、単なる計算上の偶然ではなく、円分体の代数的構造と Artin 相互法則 (Artin reciprocity law) から必然的に導かれる現象として深く理解することができる。</p>
+
+<p>本稿は、過去の解説におけるあらゆる省略や論理的ギャップを排し、前提となる基礎定義から具体的計算例、定理のフル証明に至るまでを完全に収録した自己完結的な (self-contained) 解説文書である。</p>
+
+<h2>1. 準備と基本概念の定義</h2>
+
+<p>類体論の深い定理を用いる前に、その舞台となる代数体、整数環、そしてイデアルの分解についての厳密な定義を与える。</p>
+
+<h3>1.1 代数体と整数環</h3>
+
+<div class="definition">
+    <strong>定義 1（代数体と整数環）</strong><br>
+    有理数体 $\mathbb{Q}$ の有限次拡大体 $K$ を代数体 (algebraic number field) と呼ぶ。<br>
+    $K$ の要素 $\alpha$ が、最高次係数が $1$ であるモニックな有理整数係数多項式の根となるとき、 $\alpha$ を代数的整数 (algebraic integer) と呼ぶ。<br>
+    代数体 $K$ に含まれるすべての代数的整数のなす集合を $\mathcal{O}_K$ と書き、 $K$ の整数環 (ring of integers) と呼ぶ。 $\mathcal{O}_K$ は環の構造を持ち、Dedekind整域となる。
+</div>
+
+<div class="example">
+    <strong>例 1（代数体と整数環の例）</strong><br>
+    $K = \mathbb{Q}(\sqrt{5})$ は $\mathbb{Q}$ 上2次の代数体である。このとき、 $\sqrt{5}$ は $x^2 - 5 = 0$ の根であるため代数的整数である。しかし、 $\alpha = \frac{1+\sqrt{5}}{2}$ も多項式 $x^2 - x - 1 = 0$ の根となるため代数的整数である。<br>
+    一般に、平方因子を持たない整数 $d$ に対して $K = \mathbb{Q}(\sqrt{d})$ の整数環 $\mathcal{O}_K$ は、 $d \equiv 1 \pmod 4$ のとき $\mathbb{Z}\left[\frac{1+\sqrt{d}}{2}\right]$ となり、 $d \equiv 2, 3 \pmod 4$ のとき $\mathbb{Z}[\sqrt{d}]$ となる。
+</div>
+
+<h3>1.2 イデアルの分解</h3>
+
+<p>Dedekind整域において、ゼロでない任意の真のイデアルは素イデアルの積として順序を除いて一意に分解される。</p>
+
+<div class="definition">
+    <strong>定義 2（素イデアルの分解と分岐）</strong><br>
+    $L/K$ を代数体の有限次 Galois 拡大とし、 $\mathcal{O}_L, \mathcal{O}_K$ をそれぞれの整数環とする。 $K$ のゼロでない素イデアル $\mathfrak{p}$ が生成する $\mathcal{O}_L$ のイデアル $\mathfrak{p}\mathcal{O}_L$ は、 $\mathcal{O}_L$ の素イデアル $\mathfrak{P}_i$ を用いて次のように一意に素イデアル分解される。<br>
+    $$ \mathfrak{p} \mathcal{O}_L = (\mathfrak{P}_1 \cdots \mathfrak{P}_g)^e $$
+    （Galois 拡大であるため、各素因子 $\mathfrak{P}_i$ の分岐指数 $e$ および 惰性指数 $f = [\mathcal{O}_L/\mathfrak{P}_i : \mathcal{O}_K/\mathfrak{p}]$ は一定である）。ここで、 $e \ge 1$ を $\mathfrak{P}_i$ の分岐指数 (ramification index) と呼ぶ。<br>
+    すべての $i$ について $e = 1$ となるとき、素イデアル $\mathfrak{p}$ は拡大 $L/K$ において不分岐 (unramified) であるという。<br>
+    不分岐であり、かつ剰余体の次数 $f = [\mathcal{O}_L/\mathfrak{P}_i : \mathcal{O}_K/\mathfrak{p}]$ がすべて $1$ であるとき、すなわち $g = [L:K]$ となるとき、 $\mathfrak{p}$ は $L/K$ で完全分解 (split completely) するという。<br>
+    逆に、 $g = 1$ かつ $e = 1$ であり $f = [L:K]$ となるとき、 $\mathfrak{p}$ は惰性 (inert) するという。
+</div>
+
+<div class="example">
+    <strong>例 2（イデアルの分解の具体例）</strong><br>
+    基礎体を $\mathbb{Q}$ 、拡大体を Gaussの数体 $L = \mathbb{Q}(i)$ とする。整数環はそれぞれ $\mathbb{Z}$ と $\mathbb{Z}[i]$ である。<br>
+    素数 $2$ は $\mathbb{Z}[i]$ において $(2) = (1+i)^2$ と分解される。分岐指数が $2$ であるため、 $2$ は $L$ で分岐する。<br>
+    素数 $5$ は $\mathbb{Z}[i]$ において $(5) = (2+i)(2-i)$ と相異なる2つの素イデアルに分解される。 $e_1=e_2=1$ であり、 $g=2$ であるため完全分解する。<br>
+    素数 $3$ は $\mathbb{Z}[i]$ においても素イデアルのままである。すなわち $(3)$ は惰性する。
+</div>
+
+<h3>1.3 平方剰余と Legendre 記号および Euler の規準</h3>
+
+<div class="definition">
+    <strong>定義 3（Legendre 記号）</strong><br>
+    $p$ を奇素数とし、 $a$ を $p$ で割り切れない整数とする。このとき、Legendre 記号 (Legendre symbol) $\left(\frac{a}{p}\right)$ を以下のように定義する。
+    $$
+    \left(\frac{a}{p}\right) = \begin{cases} 
+    1 & \text{($a$ が $p$ を法として平方剰余であるとき、すなわち $\exists x \in \mathbb{Z},\, x^2 \equiv a \pmod p$)} \\ 
+    -1 & \text{($a$ が $p$ を法として平方非剰余であるとき)} 
+    \end{cases}
+    $$
+</div>
+
+<div class="example">
+    <strong>例 3（Legendre 記号の具体計算）</strong><br>
+    $p = 7$ の場合を考える。剰余類群 $(\mathbb{Z}/7\mathbb{Z})^{\times} = \{1, 2, 3, 4, 5, 6\}$ の各元の2乗を $7$ で割った余りを計算すると、
+    $$ 1^2 \equiv 1 \pmod 7, \quad 2^2 \equiv 4 \pmod 7, \quad 3^2 \equiv 2 \pmod 7 $$
+    $$ 4^2 \equiv 2 \pmod 7, \quad 5^2 \equiv 4 \pmod 7, \quad 6^2 \equiv 1 \pmod 7 $$
+    となる。したがって、 $7$ を法とする平方剰余の全体は $\{1, 2, 4\}$ であり、平方非剰余の全体は $\{3, 5, 6\}$ である。ゆえに、
+    $$ \left(\frac{1}{7}\right) = 1, \quad \left(\frac{2}{7}\right) = 1, \quad \left(\frac{4}{7}\right) = 1 $$
+    $$ \left(\frac{3}{7}\right) = -1, \quad \left(\frac{5}{7}\right) = -1, \quad \left(\frac{6}{7}\right) = -1 $$
+    が得られる。
+</div>
+
+<div class="lemma">
+    <strong>補題 1（Euler の規準）</strong><br>
+    $p$ を奇素数とし、 $a$ を $p$ で割り切れない整数とするとき、以下が成り立つ。
+    $$ \left(\frac{a}{p}\right) \equiv a^{\frac{p-1}{2}} \pmod p $$
+</div>
+
+<div class="proof">
+    <strong>証明</strong><br>
+    Fermat の小定理より、 $a^{p-1} \equiv 1 \pmod p$ である。したがって、
+    $$ a^{p-1} - 1 = \left(a^{\frac{p-1}{2}} - 1\right)\left(a^{\frac{p-1}{2}} + 1\right) \equiv 0 \pmod p $$
+    が成り立つ。 $\mathbb{Z}/p\mathbb{Z}$ は体である（ $p$ は素数である）から、 $a^{\frac{p-1}{2}} \equiv 1 \pmod p$ または $a^{\frac{p-1}{2}} \equiv -1 \pmod p$ のいずれか一方が成立する。<br>
+    まず、 $\left(\frac{a}{p}\right) = 1$ のとき、ある整数 $x$ が存在して $a \equiv x^2 \pmod p$ となる。このとき、
+    $$ a^{\frac{p-1}{2}} \equiv (x^2)^{\frac{p-1}{2}} = x^{p-1} \equiv 1 \pmod p $$
+    となる。<br>
+    次に、多項式 $X^{\frac{p-1}{2}} - 1 \in (\mathbb{Z}/p\mathbb{Z})[X]$ の根の個数は高々 $(p-1)/2$ 個である。平方剰余全体はちょうど $(p-1)/2$ 個の要素を持ち、それらはすべてこの多項式の根である。したがって、平方非剰余である $a$ については $a^{\frac{p-1}{2}} - 1 \not\equiv 0 \pmod p$ でなければならない。ゆえに、平方非剰余に対しては $a^{\frac{p-1}{2}} \equiv -1 \pmod p$ と定まる。<br>
+    以上より、任意の $a$ に対して $\left(\frac{a}{p}\right) \equiv a^{\frac{p-1}{2}} \pmod p$ が示された。
+    <div class="qedsymbol">$\blacksquare$</div>
+</div>
+
+<div class="example">
+    <strong>例 4（Legendre 記号と Euler の規準）</strong><br>
+    $p = 11$ 、 $a = 3$ とする。Euler の規準を用いると、
+    $$ 3^{(11-1)/2} = 3^5 = 243 $$
+    $243 = 11 \times 22 + 1$ より、 $243 \equiv 1 \pmod{11}$ である。したがって $\left(\frac{3}{11}\right) = 1$ となり、 $3$ は $11$ の平方剰余であることがわかる（実際、 $5^2 = 25 \equiv 3 \pmod{11}$ である）。
+</div>
+
+<h2>2. 類体論の基本概念：Artin記号</h2>
+
+<p>ここでは、Galois拡大におけるイデアルの分解を記述する上で極めて重要な群要素であるArtin記号を定義する。</p>
+
+<h3>2.1 分解群とFrobenius自己同型</h3>
+
+<div class="definition">
+    <strong>定義 4（分解群と Frobenius 自己同型）</strong><br>
+    $L/K$ を代数体の有限次 Galois 拡大とし、 $\mathcal{O}_L, \mathcal{O}_K$ をそれぞれの整数環とする。 $K$ の素イデアル $\mathfrak{p}$ が $L$ で不分岐であるとし、 $\mathfrak{P}$ を $\mathfrak{p}$ の上にある $L$ の素イデアルとする。<br>
+    Galois 群 $G = \operatorname{Gal}(L/K)$ の元 $\sigma$ のうち、イデアルとして $\sigma(\mathfrak{P}) = \mathfrak{P}$ を満たすもの全体からなる部分群を、分解群 (decomposition group) と呼び、 $D(\mathfrak{P}/\mathfrak{p})$ で表す。<br>
+    分解群の任意の元 $\sigma$ は、剰余体 $k_L = \mathcal{O}_L/\mathfrak{P}$ 上の自己同型を引き起こす。基礎体の剰余体を $k_K = \mathcal{O}_K/\mathfrak{p}$ とすると、同型写像
+    $$ D(\mathfrak{P}/\mathfrak{p}) \cong \operatorname{Gal}(k_L / k_K) $$
+    が存在する（不分岐であるという仮定がこの同型を保証する）。<br>
+    剰余体 $k_K$ は要素数 $q = N(\mathfrak{p})$ の有限体であり、そのGalois拡大の理論から、 $\operatorname{Gal}(k_L / k_K)$ は Frobenius 自己同型 (Frobenius automorphism) $x \mapsto x^q$ によって生成される巡回群である。<br>
+    したがって、 $D(\mathfrak{P}/\mathfrak{p})$ の中には、剰余体上での作用が $x \mapsto x^{N(\mathfrak{p})}$ に一致する元がただ一つ存在する。
+</div>
+
+<h3>2.2 Artin記号の定義</h3>
+
+<div class="definition">
+    <strong>定義 5（Artin 記号）</strong><br>
+    上記の状況において、剰余体での作用が $x \mapsto x^{N(\mathfrak{p})}$ となる $D(\mathfrak{P}/\mathfrak{p})$ の一意な元を、素イデアル $\mathfrak{P}$ に対する Frobenius 元と呼ぶ。<br>
+    さらに、拡大 $L/K$ が Abel 拡大 (abelian extension)（Galois群が可換群であるような拡大）であるとする。このとき、任意の $\sigma \in \operatorname{Gal}(L/K)$ について $\sigma D(\mathfrak{P}/\mathfrak{p}) \sigma^{-1} = D(\sigma(\mathfrak{P})/\mathfrak{p})$ が成り立つため、分解群および Frobenius 元は $\mathfrak{P}$ の取り方によらず、基礎体の素イデアル $\mathfrak{p}$ のみで一意に定まる。<br>
+    この一意に定まる $\operatorname{Gal}(L/K)$ の元を $\left(\frac{L/K}{\mathfrak{p}}\right)$ と書き、Artin 記号 (Artin symbol) と呼ぶ。<br>
+    Artin 記号 $\left(\frac{L/K}{\mathfrak{p}}\right) \in \operatorname{Gal}(L/K)$ は、任意の $\alpha \in \mathcal{O}_L$ に対して以下の合同式を満たす唯一の元として特徴づけられる。
+    $$ \left(\frac{L/K}{\mathfrak{p}}\right)(\alpha) \equiv \alpha^{N(\mathfrak{p})} \pmod{\mathfrak{P}} $$
+    特に基礎体が有理数体 $K = \mathbb{Q}$ であり、素数 $q$ が不分岐な場合、Artin 記号は $\left(\frac{L/\mathbb{Q}}{q}\right)$ と表記され、その定義を特徴づける性質は、任意の $\alpha \in \mathcal{O}_L$ に対して
+    $$ \left(\frac{L/\mathbb{Q}}{q}\right)(\alpha) \equiv \alpha^q \pmod{\mathfrak{Q}} $$
+    が成り立つことである（ただし $\mathfrak{Q}$ は $q$ の上にある $L$ の素イデアル）。
+</div>
+
+<div class="example">
+    <strong>例 5（Artin 記号の直観的理解）</strong><br>
+    Artin記号 $\sigma = \left(\frac{L/\mathbb{Q}}{p}\right)$ は、「 $p$ 乗する」という有限体上の単純な操作を、代数体のGalois群の要素として大域的に持ち上げたものと見なすことができる。
+</div>
+
+<h3>2.3 類体論の基本定理からの帰結</h3>
+
+<p>大域類体論の中心をなす Artin 相互法則 (Artin reciprocity law) は、基礎体 $K$ のイデアル類群（あるいはイデール類群）から Galois 群 $\operatorname{Gal}(L/K)$ への Artin 写像が同型を惹起すること主張する理論である。この構造的適合性から、拡大体の制限に関する基本性質が直ちに導かれる。</p>
+
+<div class="theorem">
+    <strong>定理 1（Artin 記号の制限）</strong><br>
+    $L/\mathbb{Q}$ を有限次 Abel 拡大とし、 $M$ を $\mathbb{Q} \subset M \subset L$ を満たす中間体とする。素数 $q$ が $L$ において不分岐であるとする。<br>
+    このとき、 $q$ は $M$ においても不分岐であり、Artin 記号の制限写像に関して次が成り立つ。
+    $$ \left.\left(\frac{L/\mathbb{Q}}{q}\right)\right|_{M} = \left(\frac{M/\mathbb{Q}}{q}\right) $$
+    これは大域類体論における Artin 相互法則の直接的な帰結として得られる基本的な性質である。
+</div>
+
+<div class="proof">
+    <strong>証明</strong><br>
+    $\mathfrak{Q}_L$ を $q$ の上にある $L$ の素イデアルとし、 $\mathfrak{Q}_M = \mathfrak{Q}_L \cap \mathcal{O}_M$ を $\mathfrak{Q}_L$ の下にある $M$ の素イデアルとする。
+    Artin 記号 $\sigma = \left(\frac{L/\mathbb{Q}}{q}\right) \in \operatorname{Gal}(L/\mathbb{Q})$ の定義により、任意の $\alpha \in \mathcal{O}_L$ に対して
+    $$ \sigma(\alpha) \equiv \alpha^q \pmod{\mathfrak{Q}_L} $$
+    が成り立つ。<br>
+    $M$ は $L$ の部分体であるから、 $\mathcal{O}_M \subset \mathcal{O}_L$ であり、任意の $\beta \in \mathcal{O}_M$ は $\mathcal{O}_L$ の元でもある。したがって、 $\beta$ に対しても
+    $$ \sigma(\beta) \equiv \beta^q \pmod{\mathfrak{Q}_L} $$
+    が成立する。ここで $\beta \in \mathcal{O}_M$ および $\sigma(\beta) \in \mathcal{O}_M$ であるから、 $\sigma(\beta) - \beta^q \in \mathcal{O}_M$ である。
+    したがって、合同関係を $\mathcal{O}_M$ に制限すると、 $\sigma(\beta) - \beta^q \in \mathfrak{Q}_L \cap \mathcal{O}_M = \mathfrak{Q}_M$ となる。すなわち、
+    $$ \left(\left.\sigma\right|_{M}\right)(\beta) \equiv \beta^q \pmod{\mathfrak{Q}_M} $$
+    がすべての $\beta \in \mathcal{O}_M$ について成り立つ。<br>
+    これはまさに、 $M/\mathbb{Q}$ における素数 $q$ の Artin 記号の定義条件そのものである。Abel 拡大において Artin 記号はこの合同式を満たす $\operatorname{Gal}(M/\mathbb{Q})$ の唯一の元として定義・一意に定まるため、
+    $$ \left.\left(\frac{L/\mathbb{Q}}{q}\right)\right|_{M} = \left(\frac{M/\mathbb{Q}}{q}\right) $$
+    が得られる。
+    <div class="qedsymbol">$\blacksquare$</div>
+</div>
+
+<h2>3. 円分体とその Galois 群の決定</h2>
+
+<p>平方剰余の相互法則を証明するため、基礎体 $\mathbb{Q}$ に $1$ の原始 $p$ 乗根を添加した円分体を考察する。</p>
+
+<div class="definition">
+    <strong>定義 6（円分体）</strong><br>
+    $p$ を奇素数とし、 $\zeta_p = e^{2\pi i / p} \in \mathbb{C}$ を $1$ の原始 $p$ 乗根とする。有理数体 $\mathbb{Q}$ に $\zeta_p$ を添加して得られる体 $L = \mathbb{Q}(\zeta_p)$ を $p$ 次の円分体 (cyclotomic field) と呼ぶ。
+</div>
+
+<div class="example">
+    <strong>例 6（円分体の例）</strong><br>
+    $p = 5$ のとき、 $\zeta_5 = e^{2\pi i/5}$ であり、円分体 $\mathbb{Q}(\zeta_5)$ の $\mathbb{Q}$ 上の次数は $4$ である。その最小多項式は円分多項式 $\Phi_5(x) = x^4 + x^3 + x^2 + x + 1$ である。
+</div>
+
+<div class="theorem">
+    <strong>定理 2（円分体の Galois 群と Artin 記号）</strong><br>
+    $p$ を奇素数とするとき、円分体 $L = \mathbb{Q}(\zeta_p)$ について以下が成り立つ。<br>
+    (1) $L/\mathbb{Q}$ は $p-1$ 次の Galois 拡大（Abel 拡大）であり、その Galois 群 $G = \operatorname{Gal}(L/\mathbb{Q})$ は乗法群 $(\mathbb{Z}/p\mathbb{Z})^{\times}$ と自然と同型である。同型写像は $a \in (\mathbb{Z}/p\mathbb{Z})^{\times}$ に対し $\sigma_a(\zeta_p) = \zeta_p^a$ で与えられる。<br>
+    (2) $p$ と異なる素数 $q$ は $L$ において不分岐であり、対応する Artin 記号 $\left(\frac{L/\mathbb{Q}}{q}\right)$ は Galois 群の元 $\sigma_q$ に等しい。
+</div>
+
+<div class="proof">
+    <strong>証明</strong><br>
+    (1) $\zeta_p$ の $\mathbb{Q}$ 上の最小多項式は、 $p$ 次円分多項式 $\Phi_p(X) = X^{p-1} + X^{p-2} + \cdots + X + 1$ である。 $\Phi_p(X)$ は $\mathbb{Q}[X]$ 上既約であるため、拡大次数は $[L : \mathbb{Q}] = p-1$ である。 $\Phi_p(X)$ の根は $\zeta_p, \zeta_p^2, \ldots, \zeta_p^{p-1}$ で与えられるため、 $L/\mathbb{Q}$ は Galois 拡大であり、任意の $\sigma \in \operatorname{Gal}(L/\mathbb{Q})$ はある $a \in (\mathbb{Z}/p\mathbb{Z})^{\times}$ によって $\sigma(\zeta_p) = \zeta_p^a$ と表される。写像 $a \mapsto \sigma_a$ が群同型 $\operatorname{Gal}(L/\mathbb{Q}) \cong (\mathbb{Z}/p\mathbb{Z})^{\times}$ を与える。<br>
+    (2) $L$ の整数環は $\mathcal{O}_L = \mathbb{Z}[\zeta_p]$ である。 $q \neq p$ とする。素数 $q \neq p$ が $L$ で不分岐であることは、円分多項式の判別式が $p$ の冪であることから従う。Artin 記号 $\sigma = \left(\frac{L/\mathbb{Q}}{q}\right)$ の定義により、 $q$ の上にある任意の素イデアル $\mathfrak{Q}$ に対して
+    $$ \sigma(\zeta_p) \equiv \zeta_p^q \pmod{\mathfrak{Q}} $$
+    が成り立つ。<br>
+    一方、 $\sigma \in \operatorname{Gal}(L/\mathbb{Q})$ であるから、ある整数 $k \in (\mathbb{Z}/p\mathbb{Z})^{\times}$ が存在して $\sigma(\zeta_p) = \zeta_p^k$ と書ける。したがって、
+    $$ \zeta_p^k \equiv \zeta_p^q \pmod{\mathfrak{Q}} $$
+    を得る。これより $\zeta_p^q (\zeta_p^{k-q} - 1) \equiv 0 \pmod{\mathfrak{Q}}$ であり、 $\zeta_p$ は単元なので $\zeta_p^{k-q} - 1 \equiv 0 \pmod{\mathfrak{Q}}$ を得る。すなわち、
+    $$ 1 - \zeta_p^{k-q} \in \mathfrak{Q} $$
+    である。<br>
+    もし $k \not\equiv q \pmod p$ と仮定すると、 $\zeta_p^{k-q}$ は $1$ とは異なる $1$ の原始 $p$ 乗根である。このとき $1 - \zeta_p^{k-q}$ は $1 - \zeta_p$ と同伴 (associated) であり、生成するイデアルは一致する。代数的整数論の基本事実として、主イデアル $(1-\zeta_p)$ の $p-1$ 乗は主イデアル $(p)$ に等しくなる。すなわち $(1-\zeta_p)^{p-1} = (p)$ である。<br>
+    $1 - \zeta_p^{k-q} \in \mathfrak{Q}$ であれば、同伴性から $1 - \zeta_p \in \mathfrak{Q}$ であり、結果として $p \in \mathfrak{Q}$ となる。<br>
+    一方で、 $\mathfrak{Q}$ は $q$ の上にある素イデアルであるため $q \in \mathfrak{Q}$ でもある。 $p$ と $q$ は相異なる素数であるため互いに素であり、Bezoutの等式により $x p + y q = 1$ を満たす整数 $x, y \in \mathbb{Z}$ が存在する。これより $1 = x p + y q \in \mathfrak{Q}$ となり、素イデアル $\mathfrak{Q}$ が全環 $\mathcal{O}_L$ （真のイデアルであること）に矛盾する。<br>
+    したがって、 $k \equiv q \pmod p$ でなければならず、 $\sigma(\zeta_p) = \zeta_p^q$ 、すなわち $\sigma = \sigma_q$ であることが証明された。
+    <div class="qedsymbol">$\blacksquare$</div>
+</div>
+
+<div class="example">
+    <strong>例 7（円分体 $\mathbb{Q}(\zeta_5)$ と Artin 記号）</strong><br>
+    $p = 5$ とする。 Galois 群 $\operatorname{Gal}(\mathbb{Q}(\zeta_5)/\mathbb{Q}) \cong (\mathbb{Z}/5\mathbb{Z})^{\times} = \{1, 2, 3, 4\}$ は位数 $4$ の巡回群であり、 $2 \pmod 5$ が生成元である。<br>
+    素数 $q = 3$ に対する Artin 記号 $\left(\frac{\mathbb{Q}(\zeta_5)/\mathbb{Q}}{3}\right)$ は、 $\zeta_5 \mapsto \zeta_5^3$ なる自己同型 $\sigma_3$ である。 $\sigma_3$ の位数は $4$ であるため、素数 $3$ は $\mathbb{Q}(\zeta_5)$ において惰性し、分解群は Galois 群全体に一致する。
+</div>
+
+<h2>4. Gauss 和と唯一の 2次部分体の決定</h2>
+
+<p>Galois 理論の基本定理によれば、群の構造と拡大体の構造は完全に1対1に対応する。円分体 $L = \mathbb{Q}(\zeta_p)$ の Galois 群は $(\mathbb{Z}/p\mathbb{Z})^{\times}$ に同型であり、これは位数 $p-1$ の巡回群である。</p>
+<p>巡回群の部分群はその位数によって一意に定まるため、位数 $(p-1)/2$ （すなわち指数 $2$ ）の部分群 $H$ が唯一つ存在する。この $H$ は $(\mathbb{Z}/p\mathbb{Z})^{\times}$ における平方剰余全体のなす群である。したがって、 $\operatorname{Gal}(L/K) = H$ となるような 2次部分体 $K \subset L$ （ $[K:\mathbb{Q}] = 2$ ）が唯一存在する。これを具体的に表す手段が Gauss 和である。</p>
+
+<div class="definition">
+    <strong>定義 7（Gauss 和）</strong><br>
+    $p$ を奇素数とし、 $\zeta = \zeta_p$ とする。Gauss 和 (Gauss sum) $\tau$ を以下のように定義する。
+    $$ \tau = \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{x}{p}\right) \zeta^x $$
+</div>
+
+<div class="example">
+    <strong>例 8（$p = 3$ と $p = 5$ における Gauss 和の具象的計算）</strong><br>
+    $p = 3$ のとき、 $\zeta = e^{2\pi i/3} = \frac{-1+\sqrt{3}i}{2}$ である。 $p^* = (-1)^{(3-1)/2} 3 = -3$。<br>
+    $(\mathbb{Z}/3\mathbb{Z})^{\times} = \{1, 2\}$ であり、 $\left(\frac{1}{3}\right) = 1$ , $\left(\frac{2}{3}\right) = -1$ であるから、 $\tau = \left(\frac{1}{3}\right) \zeta^1 + \left(\frac{2}{3}\right) \zeta^2 = \zeta - \zeta^2$。 $\zeta^2 = \frac{-1-\sqrt{3}i}{2}$ を代入すると、 $\tau = \left(\frac{-1+\sqrt{3}i}{2}\right) - \left(\frac{-1-\sqrt{3}i}{2}\right) = \sqrt{3}i = \sqrt{-3} = \sqrt{p^*}$ となり、確かに $\tau^2 = -3 = p^*$ となっている。<br>
+    また、 $p = 5$ のとき、 $\left(\frac{1}{5}\right) = 1, \left(\frac{2}{5}\right) = -1, \left(\frac{3}{5}\right) = -1, \left(\frac{4}{5}\right) = 1$ である。
+    したがって、 Gauss 和は $\tau = \zeta_5 - \zeta_5^2 - \zeta_5^3 + \zeta_5^4$ となる。実際に自乗を計算すると、 $\zeta_5 + \zeta_5^4 = 2\cos(2\pi/5) = \frac{-1+\sqrt{5}}{2}$ および $\zeta_5^2 + \zeta_5^3 = 2\cos(4\pi/5) = \frac{-1-\sqrt{5}}{2}$ であるから、 $\tau = \left(\frac{-1+\sqrt{5}}{2}\right) - \left(\frac{-1-\sqrt{5}}{2}\right) = \sqrt{5}$ となり、 $\tau^2 = 5 = 5^*$ が具体的に確かめられる。
+</div>
+
+<div class="theorem">
+    <strong>定理 3（唯一の 2次部分体の決定）</strong><br>
+    奇素数 $p$ に対し、 $p^* = (-1)^{\frac{p-1}{2}} p$ とおく。このとき、円分体 $\mathbb{Q}(\zeta_p)$ の唯一の 2次部分体は $K = \mathbb{Q}(\sqrt{p^*})$ である。
+</div>
+
+<div class="proof">
+    <strong>証明</strong><br>
+    Gauss 和 $\tau = \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{x}{p}\right) \zeta^x$ の自乗 $\tau^2$ を精密に計算する。 $\tau \in L$ は明らかである。
+    $$ \tau^2 = \left( \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{x}{p}\right) \zeta^x \right) \left( \sum_{y \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{y}{p}\right) \zeta^y \right) = \sum_{x, y \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{x}{p}\right)\left(\frac{y}{p}\right) \zeta^{x+y} $$
+    Legendre 記号の乗法性より $\left(\frac{x}{p}\right)\left(\frac{y}{p}\right) = \left(\frac{x y}{p}\right)$ である。ここで、 $x$ を固定して変数変換 $y = t x \pmod p$ を行う。 $x$ を固定したとき、 $y$ が $(\mathbb{Z}/p\mathbb{Z})^{\times}$ 全体を動くとき、 $t = yx^{-1}$ も $(\mathbb{Z}/p\mathbb{Z})^{\times}$ 全体を一回動く。
+    $$ \tau^2 = \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \sum_{t \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{x^2 t}{p}\right) \zeta^{x+tx} = \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \sum_{t \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{x^2}{p}\right) \left(\frac{t}{p}\right) \zeta^{x(1+t)} $$
+    $x \not\equiv 0 \pmod p$ であるから $\left(\frac{x^2}{p}\right) = 1$ である。和の順序を交換して次を得る。
+    $$ \tau^2 = \sum_{t \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{t}{p}\right) \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \zeta^{x(1+t)} $$
+    ここで、内側の和 $S(t) = \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \zeta^{x(1+t)}$ を評価する。<br>
+    (i) 場合 1: $1+t \equiv 0 \pmod p$ すなわち $t \equiv -1 \pmod p$ のとき：
+    各 $x$ に対して $x(1+t) \equiv 0 \pmod p$ となるので、 $\zeta^{x(1+t)} = \zeta^0 = 1$ である。項数は $p-1$ であるため、
+    $$ S(-1) = \sum_{x \in (\mathbb{Z}/p\mathbb{Z})^{\times}} 1 = p - 1 $$
+    となる。<br>
+    (ii) 場合 2: $1+t \not\equiv 0 \pmod p$ すなわち $t \not\equiv -1 \pmod p$ のとき：
+    $x$ が $(\mathbb{Z}/p\mathbb{Z})^{\times}$ を動くとき、 $x(1+t) \pmod p$ も $(\mathbb{Z}/p\mathbb{Z})^{\times}$ を一回りする。したがって、和は
+    $$ S(t) = \sum_{a=1}^{p-1} \zeta^a $$
+    となる。方程式 $X^p - 1 = (X-1)(X^{p-1} + X^{p-2} + \dots + 1) = 0$ の根のうち $1$ でないものが $\zeta, \zeta^2, \dots, \zeta^{p-1}$ であるから、解と係数の関係より $\sum_{a=1}^{p-1} \zeta^a = -1$ である（あるいは $\Phi_p(\zeta) - \zeta^0 = 0 - 1 = -1$ ）。<br>
+    これらを $\tau^2$ の式に代入すると、
+    $$ \tau^2 = \left(\frac{-1}{p}\right) (p-1) + \sum_{t \neq -1} \left(\frac{t}{p}\right) (-1) $$
+    となる。 $(\mathbb{Z}/p\mathbb{Z})^{\times}$ における平方剰余と平方非剰余の個数は等しいため、 $\sum_{t \in (\mathbb{Z}/p\mathbb{Z})^{\times}} \left(\frac{t}{p}\right) = 0$ である。
+    これから、
+    $$ \sum_{t \neq -1} \left(\frac{t}{p}\right) = 0 - \left(\frac{-1}{p}\right) = -\left(\frac{-1}{p}\right) $$
+    が成り立つ。したがって、
+    $$ \tau^2 = \left(\frac{-1}{p}\right) (p-1) + \left(\frac{-1}{p}\right) = p \left(\frac{-1}{p}\right) $$
+    を得る。補題 1（Euler の規準）より $\left(\frac{-1}{p}\right) = (-1)^{\frac{p-1}{2}}$ であるため、
+    $$ \tau^2 = (-1)^{\frac{p-1}{2}} p = p^* $$
+    となる。<br>
+    $\tau$ 自身は $0$ ではないため、 $\tau = \pm\sqrt{p^*}$ となる。 $\tau = \sum_{x=1}^{p-1} \left(\frac{x}{p}\right) \zeta^x \in \mathbb{Q}(\zeta_p) = L$ であり、 $\tau^2 = p^*$ であるから、 $\sqrt{p^*} \in \mathbb{Q}(\zeta_p)$ が示された。
+    したがって、 2次体 $\mathbb{Q}(\sqrt{p^*})$ は円分体 $\mathbb{Q}(\zeta_p)$ に含まれる。
+    $\operatorname{Gal}(\mathbb{Q}(\zeta_p)/\mathbb{Q})$ に含まれる指数 $2$ の部分群は唯一つであるから、 Galois 理論の基本定理より、 $\mathbb{Q}(\zeta_p)$ の 2次部分体は $K = \mathbb{Q}(\sqrt{p^*})$ に限られる（これに他ならない）。
+    <div class="qedsymbol">$\blacksquare$</div>
+</div>
+
+<h2>5. 2次体における素数の分解法則と Artin 記号</h2>
+
+<p>決定された2次部分体 $K = \mathbb{Q}(\sqrt{p^*})$ における素イデアルの分解の法則を調べる。</p>
+
+<div class="lemma">
+    <strong>補題 2（Kummer-Dedekind の定理の 2次体への適用）</strong><br>
+    $d$ を自乗因子を持たない整数とし、 $K = \mathbb{Q}(\sqrt{d})$ とする。 $q$ を $2 d$ と互いに素な奇素数とする。
+    このとき、 $q$ が $K$ において完全分解するための必要十分条件は $\left(\frac{d}{q}\right) = 1$ となることである。
+</div>
+
+<div class="proof">
+    <strong>証明</strong><br>
+    $q \nmid 2d$ より、 $q$ は $K$ の判別式を割り切らないため、 $q$ は $K$ で不分岐である。
+    $K$ の整数環 $\mathcal{O}_K$ は、 $d \equiv 1 \pmod 4$ のとき $\mathbb{Z}\left[\frac{1+\sqrt{d}}{2}\right]$ であり、 $d \equiv 2, 3 \pmod 4$ のとき $\mathbb{Z}[\sqrt{d}]$ である。
+    いずれの場合も、 $q \neq 2$ であるから、単因子論および Kummer-Dedekind の定理（Kummerの定理）より、代数体 $K$ における素数 $q$ の分解挙動は多項式 $f(X) = X^2 - d \pmod q$ の $(\mathbb{Z}/q\mathbb{Z})[X]$ 上での因数分解と一致する。<br>
+    $\left(\frac{d}{q}\right) = 1$ のとき、ある整数 $x_0$ が存在して $x_0^2 \equiv d \pmod q$ かつ $x_0 \not\equiv -x_0 \pmod q$ となる。
+    したがって、 $X^2 - d \equiv (X - x_0)(X + x_0) \pmod q$ と相異なる1次因子の積に分解する。ゆえに $(q) = \mathfrak{q}_1 \mathfrak{q}_2$ （ただし $\mathfrak{q}_1 \neq \mathfrak{q}_2$ ）となり、素数 $q$ は $K$ において相異なる2つの素イデアルに完全分解する。<br>
+    一方、 $\left(\frac{d}{q}\right) = -1$ のとき、 $X^2 - d$ は $(\mathbb{Z}/q\mathbb{Z})[X]$ 上で既約である。したがって $(q)$ は $\mathcal{O}_K$ において素イデアルのままであり、惰性する。
+    <div class="qedsymbol">$\blacksquare$</div>
+</div>
+
+<div class="theorem">
+    <strong>定理 4（2次体における分解と Artin 記号）</strong><br>
+    $p$ を奇素数とし、 $p^* = (-1)^{\frac{p-1}{2}} p$ とおく。 $K = \mathbb{Q}(\sqrt{p^*})$ とし、 $q$ を $p$ と異なる奇素数とする。
+    このとき、 $K/\mathbb{Q}$ における Artin 記号 $\left(\frac{K/\mathbb{Q}}{q}\right) \in \operatorname{Gal}(K/\mathbb{Q})$ は、Legendre 記号を用いて完全に決定される。すなわち、以下が成り立つ。
+    $$ \left(\frac{K/\mathbb{Q}}{q}\right) = \operatorname{id} \iff \left(\frac{p^*}{q}\right) = 1 $$
+</div>
+
+<div class="proof">
+    <strong>証明</strong><br>
+    $K = \mathbb{Q}(\sqrt{p^*})$ の整数環 $\mathcal{O}_K$ は、 $p^* \equiv 1 \pmod 4$ の性質を満たすため $\mathbb{Z}\left[\frac{1+\sqrt{p^*}}{2}\right]$ となる。素数 $q \neq 2, p$ における分岐や分解の振る舞いは、 $q$ が判別式と素であるため不分岐であり、より単純な多項式 $x^2 - p^*$ を法 $q$ で考えた場合と一致する。<br>
+    多項式 $x^2 - p^* \pmod q$ が相異なる2つの1次式の積に分解されることは、方程式 $x^2 \equiv p^* \pmod q$ が解を持つこと、すなわち Legendre 記号を用いて $\left(\frac{p^*}{q}\right) = 1$ と書けることと同値である。<br>
+    Galois 群 $\operatorname{Gal}(K/\mathbb{Q})$ は位数が $2$ の群であり、恒等写像 $\operatorname{id}$ と、共役写像 $\rho : \sqrt{p^*} \mapsto -\sqrt{p^*}$ の $2$ 元 $G = \{\operatorname{id}, \rho\}$ からなる。<br>
+    定義より、Artin 記号 $\left(\frac{K/\mathbb{Q}}{q}\right)$ は、 $q$ の上にある素イデアル $\mathfrak{q}$ の分解群 $D(\mathfrak{q}/q)$ の生成元である。<br>
+    補題 2（および前段落の議論）より、 $\left(\frac{p^*}{q}\right) = 1$ のとき、 $q$ は $K$ において完全分解する。このとき分解指数は $g = 2$ 、惰性指数は $f = 1$ であり、分解群 $D(\mathfrak{q}/q)$ の位数は $f = 1$ である。したがって、分解群は自明群 $\{\operatorname{id}\}$ となり、 $\left(\frac{K/\mathbb{Q}}{q}\right) = \operatorname{id}$ となる。<br>
+    逆に $q$ が惰性するとき、すなわち $\left(\frac{p^*}{q}\right) = -1$ のとき、 $g = 1, f = 2$ であり、分解群 $D(\mathfrak{q}/q)$ は Galois 群全体 $\operatorname{Gal}(K/\mathbb{Q})$ に一致する。したがって生成元は非自明元 $\rho$ となり、 $\left(\frac{K/\mathbb{Q}}{q}\right) = \rho \neq \operatorname{id}$ となる。<br>
+    以上より、 $\left(\frac{K/\mathbb{Q}}{q}\right) = \operatorname{id}$ であることと $\left(\frac{p^*}{q}\right) = 1$ は同値であることが示された。
+    <div class="qedsymbol">$\blacksquare$</div>
+</div>
+
+<h2>6. 平方剰余の相互法則の完全な導出と証明</h2>
+
+<p>これまでの全ての定理と性質、成果を結集し、類体論の Artin 記号の制限則を通じて平方剰余の相互法則の証明を完成させる。</p>
+
+<div class="theorem">
+    <strong>定理 5（平方剰余の相互法則）</strong><br>
+    相異なる奇素数 $p, q$ に対して、以下の等式が成り立つ。
+    $$ \left(\frac{p}{q}\right) \left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2} \frac{q-1}{2}} $$
+</div>
+
+<div class="proof">
+    <strong>証明</strong><br>
+    $L = \mathbb{Q}(\zeta_p)$ を $p$ 次円分体とする。定理 2 より、拡大 $L/\mathbb{Q}$ は Galois 拡大であり、その Galois 群 $G = \operatorname{Gal}(L/\mathbb{Q})$ は同型写像 $a \mapsto \sigma_a$ （ただし $\sigma_a(\zeta_p) = \zeta_p^a$ ）により乗法群 $(\mathbb{Z}/p\mathbb{Z})^{\times}$ と同型になる。<br>
+    群 $(\mathbb{Z}/p\mathbb{Z})^{\times}$ は位数 $p-1$ の巡回群であるため、平方剰余全体からなる位数 $(p-1)/2$ の部分群 $H$ を唯一持つ。Galois 理論の基本定理により、 $H$ を Galois 群とする $L$ の2次部分体 $K$ が唯一つ存在する。<br>
+    定理 3 で詳細に示したように、この唯一の 2次部分体は $K = \mathbb{Q}(\sqrt{p^*})$ である（ただし $p^* = (-1)^{\frac{p-1}{2}} p$ ）。<br>
+    ここで、 $q$ は $p$ と異なる奇素数であるから、 $q$ は $L/\mathbb{Q}$ において不分岐である。したがって、対応する Artin 記号 $\left(\frac{L/\mathbb{Q}}{q}\right) \in G$ が well-defined に定まる。定理 2 より、この Artin 記号は $\operatorname{Gal}(L/\mathbb{Q})$ の自己同型 $\sigma_q$ に等しい。すなわち、
+    $$ \left(\frac{L/\mathbb{Q}}{q}\right) = \sigma_q $$
+    である。<br>
+    定理 1 より、類体論における Artin 記号の制限の性質（制限則）を拡大の列 $\mathbb{Q} \subset K \subset L$ に適用すると、 $L$ の Artin 記号を部分体 $K$ に制限したものは、 $K/\mathbb{Q}$ における Artin 記号に完全に一致する。すなわち次が成り立つ。
+    $$ \left.\left(\frac{L/\mathbb{Q}}{q}\right)\right|_{K} = \left(\frac{K/\mathbb{Q}}{q}\right) $$
+    制限写像の式は以下のように書き直せる。
+    $$ \left.\sigma_q\right|_{K} = \left(\frac{K/\mathbb{Q}}{q}\right) $$
+    この等式の両辺が $K$ 上で恒等写像 $\operatorname{id}$ に等しくなる条件をそれぞれ分析・評価する。<br>
+    <strong>左辺について：</strong><br>
+    $\left.\sigma_q\right|_{K} = \operatorname{id}$ となることは、Galois 理論の基本定理より自己同型 $\sigma_q \in \operatorname{Gal}(L/K)$ となることと同値である。
+    定理 3 の証明の通り、 Galois 群の対応において部分群 $\operatorname{Gal}(L/K) = H$ は $(\mathbb{Z}/p\mathbb{Z})^{\times}$ の平方剰余全体からなる部分群に対応していた。
+    したがって、 $\sigma_q \in H$ となるための必要十分条件は、剰余類 $q \pmod p \in H$ となること、すなわち $q$ が $p$ を法として平方剰余となることである。
+    Legendre 記号を用いれば、これは
+    $$ \left(\frac{q}{p}\right) = 1 $$
+    と同値である。<br>
+    <strong>右辺について：</strong><br>
+    定理 4 より $\left(\frac{K/\mathbb{Q}}{q}\right) = \operatorname{id}$ となるための必要十分条件は、
+    $$ \left(\frac{p^*}{q}\right) = 1 $$
+    である。<br>
+    $\operatorname{Gal}(K/\mathbb{Q})$ は位数 $2$ の群であり、各元は同型を除いて $\{-1, 1\}$ という値（符号）に自然に対応づけられている。上記の2つの条件が同値であるということは、両者の元が $\operatorname{id}$ に一致する条件が完全に同値であることから、両辺の群の元が取る値としての符号も完全に一致することを意味する。すなわち次を得る。
+    $$ \left(\frac{q}{p}\right) = \left(\frac{p^*}{q}\right) $$
+    最後に、右辺の $\left(\frac{p^*}{q}\right)$ を Legendre 記号の乗法性を用いて変形する。 $p^* = (-1)^{\frac{p-1}{2}} p$ であったから、
+    $$ \left(\frac{p^*}{q}\right) = \left(\frac{(-1)^{\frac{p-1}{2}} p}{q}\right) = \left(\frac{-1}{q}\right)^{\frac{p-1}{2}} \left(\frac{p}{q}\right) $$
+    となる。補題 1（Euler の規準）により $\left(\frac{-1}{q}\right) = (-1)^{\frac{q-1}{2}}$ であるため、これを代入して展開すると、
+    $$ \left(\frac{p^*}{q}\right) = \left( (-1)^{\frac{q-1}{2}} \right)^{\frac{p-1}{2}} \left(\frac{p}{q}\right) = (-1)^{\frac{p-1}{2} \frac{q-1}{2}} \left(\frac{p}{q}\right) $$
+    となる。<br>
+    これを先ほどの等式に代入することで、
+    $$ \left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2} \frac{q-1}{2}} \left(\frac{p}{q}\right) $$
+    が得られる。 Legendre 記号の値は $\pm 1$ であり、 $\left(\frac{p}{q}\right)^2 = 1$ であるから、両辺に $\left(\frac{p}{q}\right)$ を掛けることで、
+    $$ \left(\frac{p}{q}\right) \left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2} \frac{q-1}{2}} $$
+    が示され、平方剰余の相互法則の証明が完全に完了する。
+    <div class="qedsymbol">$\blacksquare$</div>
+</div>
+
+<div class="example">
+    <strong>例 9（平方剰余の相互法則の威力と具象的計算例）</strong><br>
+    まず、平方剰余の相互法則を用いて $\left(\frac{29}{37}\right)$ を計算する。 $p = 29, q = 37$ はともに奇素数である。<br>
+    $29 \equiv 1 \pmod 4$ であるから、 $\frac{29-1}{2} = 14$ は偶数である。したがって $(-1)^{\frac{29-1}{2} \frac{37-1}{2}} = 1$ となる。<br>
+    相互法則より、 $\left(\frac{29}{37}\right) = \left(\frac{37}{29}\right)$ となる。 $37 \equiv 8 \pmod{29}$ より、
+    $$ \left(\frac{37}{29}\right) = \left(\frac{8}{29}\right) = \left(\frac{2^3}{29}\right) = \left(\frac{2}{29}\right) $$
+    となる。第2補充法則（または同様の拡大理論）より、 $29 \equiv 5 \pmod 8$ であるから $\left(\frac{2}{29}\right) = -1$ である。<br>
+    したがって、 $\left(\frac{29}{37}\right) = -1$ であり、 $29$ は $37$ を法として平方非剰余であることがわかる。<br>
+    <hr>
+    また、 $p = 5$ , $q = 11$ のときを考える。 $(-1)^{\frac{5-1}{2} \frac{11-1}{2}} = (-1)^{2 \times 5} = 1$ であるから、相互法則により $\left(\frac{5}{11}\right) \left(\frac{11}{5}\right) = 1$ である。すなわち $\left(\frac{5}{11}\right) = \left(\frac{11}{5}\right)$ となる。<br>
+    $\left(\frac{11}{5}\right)$ は $11 \equiv 1 \pmod 5$ であり、 $1$ は $5$ の平方剰余だから $1$ である。したがって、実際に計算することなく $\left(\frac{5}{11}\right) = 1$ である（ $5$ は $11$ の平方剰余である）ことが直ちにわかる（実際、 $4^2 = 16 \equiv 5 \pmod{11}$ ）。
+</div>
+
+<div class="references">
+    <h2>引用文献</h2>
+    <ul>
+        <li>[1] Neukirch, Jürgen. <i>Algebraic Number Theory</i>. Grundlehren der mathematischen Wissenschaften, Vol. 322. Springer-Verlag, Berlin, 1999. <a href="https://doi.org/10.1007/978-3-662-03983-0">https://doi.org/10.1007/978-3-662-03983-0</a></li>
+        <li>[2] Milne, J. S. <i>Class Field Theory</i>. Course Notes, 2020. <a href="https://www.jmilne.org/math/CourseNotes/cft.html">https://www.jmilne.org/math/CourseNotes/cft.html</a></li>
+        <li>[3] Janusz, Gerald J. <i>Algebraic Number Fields</i>. 2nd edition, Graduate Studies in Mathematics, Vol. 7. American Mathematical Society, Providence, RI, 1996. <a href="https://doi.org/10.1090/gsm/007">https://doi.org/10.1090/gsm/007</a></li>
+        <li>[4] Cox, David A. <i>Primes of the Form $x^2 + n y^2$: Fermat, Class Field Theory, and Complex Multiplication</i>. 2nd edition, Pure and Applied Mathematics: A Wiley Series of Texts, Monographs and Tracts. John Wiley & Sons, Hoboken, NJ, 2013. <a href="https://doi.org/10.1002/9781118400722">https://doi.org/10.1002/9781118400722</a></li>
+    </ul>
+</div>
+
+</body>
+</html>

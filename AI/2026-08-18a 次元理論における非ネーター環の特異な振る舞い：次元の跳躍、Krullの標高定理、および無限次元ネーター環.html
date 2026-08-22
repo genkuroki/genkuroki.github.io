@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>次元理論における非ネーター環の特異な振る舞い：次元の跳躍、Krullの標高定理、および無限次元ネーター環</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+            color: #333;
+        }
+        h1, h2, h3, h4 {
+            color: #222;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            margin-top: 2em;
+        }
+        .definition, .theorem, .proposition, .lemma, .corollary, .proof, .example, .remark {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .definition { background-color: #e8f4f8; border-left: 5px solid #2980b9; }
+        .theorem { background-color: #f9f2e7; border-left: 5px solid #d35400; }
+        .proposition { background-color: #f0f7ee; border-left: 5px solid #27ae60; }
+        .lemma { background-color: #fdf6e3; border-left: 5px solid #f1c40f; }
+        .corollary { background-color: #fbeee6; border-left: 5px solid #e67e22; }
+        .proof { background-color: #fdfdfd; border-left: 5px solid #7f8c8d; }
+        .example { background-color: #f4f6f7; border-left: 5px solid #8e44ad; }
+        .remark { background-color: #f5f5f5; border-left: 5px solid #95a5a6; }
+        .title { font-weight: bold; margin-bottom: 10px; display: block; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>次元理論における非ネーター環の特異な振る舞い：次元の跳躍、Krullの標高定理、および無限次元ネーター環</h1>
+
+    <div class="remark">
+        <span class="title">概要と直観的な意味合い（インフォーマルな解説）</span>
+        <p>本稿では、可換環論におけるクルル次元が直観に反する振る舞いを見せる例について解説します。特に、多項式環への移行によって次元が予想以上に跳ね上がる現象や、Noether環（ネーター環）でありながら次元が無限大に発散するNagataの例を厳密に証明します。</p>
+        
+        <p>まず、$\dim A[x] > \dim A + 1$ となるような環 $A$ の直観的な理由について説明します。次元が上がる直観的な理由は、部分環を作る過程で<strong>「一点に圧縮されて見えなくなっていた超越次元が、多項式環の変数 $x$ と結びつくことで新たな次元として復活するから」</strong>です。</p>
+
+        <p>幾何学的な言葉（素イデアルの空間であるスペクトル）を用いると、以下のように図式化できます。</p>
+        <ol>
+            <li><strong>元の環 $V = k(t)[[y]]$ の形</strong>：<br>
+            $V$ の素イデアルは $(0)$ と極大イデアル $M$ の2つだけです。これを図形 $\operatorname{Spec}(V)$ と見なすと、一般点 $(0)$ と閉点 $M$ からなる「曲線」のような空間になります。重要なのは、閉点 $M$ における「厚み」である剰余体 $V/M \cong k(t)$ が、基礎体 $k$ に対して超越次元 1 を持っていることです。</li>
+            
+            <li><strong>部分環 $A = k + M$ の形</strong>：<br>
+            $A$ は $V$ とイデアル $M$ を共有しているため、$\operatorname{Spec}(A)$ も集合としては $(0)$ と $M$ の2点のみであり、見た目の次元（Krull次元）は 1 のままです。しかし、閉点 $M$ での剰余体は $A/M \cong k$ に「縮小」されています。幾何学的に言えば、閉点 $M$ に元々あった「$t$ 方向の 1 次元分のふくらみ」が、無理やり 1 点に潰されて圧縮された状態になっています。</li>
+            
+            <li><strong>多項式環 $A[x]$ への移行</strong>：<br>
+            ここに多項式環の変数 $x$ を導入して $A[x]$ を考えると、空間全体は $x$ 軸方向に広がりを見せます。変数 $x$ が現れたことで、$x$ に $t$ を代入するという関係式（素イデアル $P_1$ ）を作ることが可能になります。このとき、底空間では潰されていた超越元 $t$ が、変数 $x$ という新たな自由度を借りて $x = t$ という「直線」として幾何学的に実体化します。この実体化した直線 $P_1$ は、底空間の一般点 $(0)$ 上の空間から、閉点 $M$ 上の空間に向かって伸びていきます。<br>
+            そして驚くべきことに、非Noether環 (non-Noetherian ring) であるがゆえに空間が極めて「広大」であり、直線 $P_1$ が閉点 $M$ 上の空間と交わる際、1 点に収束するのではなく、閉点上の空間全体（生成点 $M[x]$ ）にベッタリと張り付いてしまうという現象が起きます。これにより、$(0)$ と $M[x]$ の間に $P_1$ という新たな段階がすっぽりと入り込み、次元が跳ね上がるのです。</li>
+        </ol>
+        <p>以降のセクションでは、以上の直観的理解を裏付けるため、写像と集合の言葉を用いて明晰な解説を与えます。</p>
+    </div>
+
+    <h2>1. 基礎概念の準備</h2>
+
+    <div class="definition">
+        <span class="title">定義 1.1 (基本用語)</span>
+        <ul>
+            <li><strong>環 (ring)</strong>: 本稿ではすべて単位元を持つ可換環を考える。</li>
+            <li><strong>整域 (integral domain)</strong>: 零因子を持たない非自明な可換環のことである。</li>
+            <li><strong>素イデアル (prime ideal)</strong>: 環 $A$ の真のイデアル $\mathfrak{p}$ であり、$ab \in \mathfrak{p}$ ならば $a \in \mathfrak{p}$ または $b \in \mathfrak{p}$ を満たすもののことである。</li>
+            <li><strong>局所環 (local ring)</strong>: 唯一の極大イデアル (maximal ideal) を持つ可換環のことである。</li>
+            <li><strong>超越元 (transcendental element)</strong>: 体 $k$ の拡大体 $K$ の元 $t$ が $k$ 上超越的であるとは、$k$ を係数とする任意の非零多項式 $f(x) \in k[x]$ に対して $f(t) \neq 0$ となることである。</li>
+            <li><strong>形式的べき級数環 (formal power series ring)</strong>: 環 $R$ 上の不定元 $y$ による形式的な無限和 $\sum_{i=0}^\infty a_i y^i$ （$a_i \in R$）の全体がなす環を $R[[y]]$ と表す。</li>
+            <li><strong>離散付値環 (discrete valuation ring)</strong>: 単項イデアル整域 (principal ideal domain) であり、かつただ1つの非零な極大イデアルを持つ環のことである。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 1.2 (クルル次元 (Krull dimension) および標高 (height))</span>
+        可換環 $A$ における素イデアルの真の昇鎖
+        $$ P_0 \subset P_1 \subset P_2 \subset \dots \subset P_n $$
+        （ただし $P_i \neq P_{i+1}$）の長さ $n$ の上限を $A$ のクルル次元と呼び、$\dim A$ で表す。上限が存在しない場合は $\dim A = \infty$ とする。
+        <br>
+        また、素イデアル $\mathfrak{p} \in \operatorname{Spec}(A)$ に対し、$\mathfrak{p}$ で終わる素イデアルの真の昇鎖
+        $$ P_0 \subset P_1 \subset \dots \subset P_h = \mathfrak{p} $$
+        の長さ $h$ の上限を $\mathfrak{p}$ の標高（または高さ、height）と呼び、$\operatorname{ht}(\mathfrak{p})$ で表す。定義より、$\dim A = \sup \{ \operatorname{ht}(\mathfrak{p}) \mid \mathfrak{p} \in \operatorname{Spec}(A) \}$ が成立する。
+    </div>
+
+    <h2>2. Seidenbergの定理と多項式環の次元</h2>
+
+    <div class="theorem">
+        <span class="title">定理 2.1 (Seidenbergの定理)</span>
+        任意の可換環 $A$ に対して、多項式環 $A[x]$ のクルル次元について以下の不等式が成立する。
+        $$ \dim A + 1 \leq \dim A[x] \leq 2\dim A + 1 $$
+    </div>
+
+    <div class="proof">
+        <span class="title">証明（補完済み）</span>
+        下限の不等式 $\dim A + 1 \leq \dim A[x]$ については、$A$ 内の任意の素イデアルの真の昇鎖 $P_0 \subset P_1 \subset \dots \subset P_n$ （$n = \dim A$）に対し、$A[x]$ において
+        $$ P_0[x] \subset P_1[x] \subset \dots \subset P_n[x] \subset P_n[x] + xA[x] $$
+        という長さ $n + 1$ の素イデアルの真の昇鎖を作ることができるため直ちに従う。
+        <br>
+        上限の不等式 $\dim A[x] \leq 2\dim A + 1$ の証明は、$A[x]$ の素イデアルの鎖 $Q_0 \subset Q_1 \subset \dots \subset Q_m$ を $A$ に縮約した素イデアルの鎖 $P_i = Q_i \cap A$ の挙動を詳細に分析することによる。
+        
+        具体的には、$A[x]$ において真の包含関係にある素イデアルの鎖 $Q_0 \subsetneq Q_1 \subsetneq \dots \subsetneq Q_m$ が存在したとする。これらを $A$ に縮約したイデアル $P_i = Q_i \cap A$ を考えると、$P_0 \subseteq P_1 \subseteq \dots \subseteq P_m$ という $A$ の素イデアルの昇鎖が得られる。
+        ここで、可換環論の基本事実として、$A[x]$ において $Q_i \cap A = Q_{i+1} \cap A = Q_{i+2} \cap A = P$ となるような 3 つの素イデアルの真の包含 $Q_i \subsetneq Q_{i+1} \subsetneq Q_{i+2}$ は存在し得ない。なぜなら、これらが存在した場合、剰余環 $(A/P)[x]$ （これは整域上の 1 変数多項式環である）において長さ 2 の素イデアルの真の鎖が存在することになるが、整域上の多項式環における同一の剰余体を共有するファイバーの次元は高々 1 だからである。同一の素イデアル $\mathfrak{p} \in \operatorname{Spec}(A)$ の上に位置する $A[x]$ の素イデアルの階層（ファイバー）は高々 2 段階しか真の包含関係を持ち得ない（すなわち $Q_i \cap A = Q_{i+1} \cap A = Q_{i+2} \cap A$ となる 3 連続の包含は存在しない）という代数的事実から、全体の次元の上限が $2\dim A + 1$ に制限される。
+        （証明終）
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 2.2 (Noether環における多項式環の次元公式)</span>
+        $A$ がNoether環 (Noetherian ring) であるならば、常に次が成立する。
+        $$ \dim A[x] = \dim A + 1 $$
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        下限 $\dim A + 1 \leq \dim A[x]$ は定理 2.1 より常に成り立つ。
+        逆向きの不等式 $\dim A[x] \leq \dim A + 1$ を示す。$\dim A = n < \infty$ とする（$n = \infty$ の場合は自明）。
+        $Q$ を $A[x]$ の任意の素イデアルとし、$\mathfrak{p} = Q \cap A$ とする。
+        $A$ の局所化 $A_{\mathfrak{p}}$ を考えると、$A_{\mathfrak{p}}$ は次元 $h = \operatorname{ht}(\mathfrak{p}) \leq n$ のNoether局所環である。
+        Krullの標高定理（後述の定理 3.2）より、$\mathfrak{p} A_{\mathfrak{p}}$ は $h$ 個の元で生成される。
+        したがって $A_{\mathfrak{p}}[x]$ における素イデアル $Q A_{\mathfrak{p}}[x]$ も、$\mathfrak{p}$ の生成元と必要に応じて $x$ に関する多項式 1 個を追加することで高々 $h + 1$ 個の元で生成される。
+        Noether環の性質により $\operatorname{ht}(Q) = \operatorname{ht}(Q A_{\mathfrak{p}}[x]) \leq h + 1 \leq n + 1$ となる。
+        これが任意の素イデアル $Q$ で成り立つため、$\dim A[x] \leq \dim A + 1$ である。
+        （証明終）
+    </div>
+
+    <h2>3. Krullの標高定理 (Krull's Height Theorem) とNoether環の幾何学</h2>
+
+    <div class="definition">
+        <span class="title">定義 3.0 (記号的べきと中山の補題)</span>
+        <ul>
+            <li><strong>記号的べき (symbolic power):</strong> 素イデアル $\mathfrak{q}$ に対し、その $n$ 乗イデアル $\mathfrak{q}^n$ の $\mathfrak{q}$ における局所化での拡張と引き戻しによるイデアル $\mathfrak{q}^{(n)} = \mathfrak{q}^n A_{\mathfrak{q}} \cap A$ を $n$ 次の記号的べきと呼ぶ。これは $\mathfrak{q}$ を唯一の随伴素イデアルとする $\mathfrak{q}$-準素イデアル (primary ideal) である。</li>
+            <li><strong>中山の補題 (Nakayama's lemma):</strong> 可換環 $A$ のイデアル $I$ が $A$ のジャコブソン根基 (Jacobson radical)（すべての極大イデアルの共通部分）に含まれるとする。有限生成 $A$-加群 $M$ が $M = IM$ を満たすならば、$M = 0$ である。</li>
+        </ul>
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 3.1 (Krullの主イデアル定理 (Krull's Principal Ideal Theorem))</span>
+        $R$ をNoether環とし、$a \in R$ とする。単項イデアル $(a)$ の極小素イデアル $\mathfrak{p}$ の標高は高々 1 である。すなわち、
+        $$ \operatorname{ht}(\mathfrak{p}) \leq 1 $$
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $R$ を $\mathfrak{p}$ で局所化することで、$R$ は $\mathfrak{p}$ を極大イデアルとするネーター局所環であると仮定してよい。
+        $\mathfrak{p}$ に含まれる素イデアル $\mathfrak{q}$ を任意にとり、$\operatorname{ht}(\mathfrak{q}) = 0$ を示せば、$\operatorname{ht}(\mathfrak{p}) \leq 1$ が導かれる。
+        $\mathfrak{q}$ の $n$ 次の記号的べき $\mathfrak{q}^{(n)} = \mathfrak{q}^n R_{\mathfrak{q}} \cap R$ を考える。
+        剰余環 $R/(a)$ を考えると、$\mathfrak{p}$ は $(a)$ を含む極小素イデアルであり、$R$ は $\mathfrak{p}$ を極大イデアルとする局所環であるから、$R/(a)$ は唯一の素イデアル $\mathfrak{p}/(a)$ を持つネーター環、すなわちアルティン環 (Artinian ring) である。
+        したがって、$R/(a)$ におけるイデアルの降鎖 $( \mathfrak{q}^{(n)} + (a) ) / (a)$ は有限回で停留する。すなわち、ある $N$ が存在して $n > N$ に対して $\mathfrak{q}^{(n)} + (a) = \mathfrak{q}^{(n+1)} + (a)$ が成り立つ。
+        ゆえに $\mathfrak{q}^{(n)} \subset \mathfrak{q}^{(n+1)} + (a)$ である。
+        任意の $u \in \mathfrak{q}^{(n)}$ は、$v \in \mathfrak{q}^{(n+1)}$ と $c \in R$ を用いて $u = v + ca$ と表せる。
+        $ca = u - v \in \mathfrak{q}^{(n)}$ である。$\mathfrak{p}$ は $(a)$ を含む極小素イデアルであり、$\mathfrak{q} \subset \mathfrak{p}$ は真の包含であるから $a \notin \mathfrak{q}$ である。$\mathfrak{q}^{(n)}$ は $\mathfrak{q}$-準素イデアルであるため、$ca \in \mathfrak{q}^{(n)}$ かつ $a \notin \mathfrak{q}$ より $c \in \mathfrak{q}^{(n)}$ が従う。
+        よって $u = v + ca \in \mathfrak{q}^{(n+1)} + a\mathfrak{q}^{(n)}$ となり、$\mathfrak{q}^{(n)} = \mathfrak{q}^{(n+1)} + a\mathfrak{q}^{(n)}$ を得る。
+        これを $\mathfrak{q}^{(n)}$ を $\mathfrak{q}^{(n+1)}$ を法とする有限生成 $R$-加群と見なして中山の補題を適用する（$a \in \mathfrak{p}$ はジャコブソン根基に属するため）。すると $\mathfrak{q}^{(n)} = \mathfrak{q}^{(n+1)}$ が導かれる。
+        再び中山の補題を $R$-加群 $\mathfrak{q}^{(n)}$ 全体に適用する。$\mathfrak{q}^{(n)} = a\mathfrak{q}^{(n)}$ となるため、$\mathfrak{q}^{(n)} = (0)$ である。
+        $\mathfrak{q}^{(n)} = (0)$ より、局所化 $R_{\mathfrak{q}}$ において $\mathfrak{q}^n R_{\mathfrak{q}} = (0)$ となる。これは $R_{\mathfrak{q}}$ の極大イデアルが巾零 (nilpotent) であることを意味し、$\dim R_{\mathfrak{q}} = 0$ 、すなわち $\operatorname{ht}(\mathfrak{q}) = 0$ が示された。
+        （証明終）
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 3.2 (Krullの標高定理 (Krull's Height Theorem))</span>
+        $R$ をNoether環とし、$a_1, \dots, a_r \in R$ とする。イデアル $I = (a_1, \dots, a_r)$ の極小素イデアル $\mathfrak{p}$ の標高は高々 $r$ である。すなわち、
+        $$ \operatorname{ht}(\mathfrak{p}) \leq r $$
+    </div>
+
+    <div class="proof">
+        <span class="title">証明（主イデアル定理からの帰納法の補完）</span>
+        $r$ に関する数学的帰納法で示す。$r=1$ の場合は定理 3.1（主イデアル定理）そのものである。
+        $r > 1$ とし、$r-1$ で成立すると仮定する。
+        $\mathfrak{p}$ を $I = (a_1, \dots, a_r)$ の極小素イデアルとする。局所化を行っても標高は不変であるため、必要ならば $R$ を $R_{\mathfrak{p}}$ で置き換えることで、$(R, \mathfrak{p})$ は唯一の極大イデアル $\mathfrak{p}$ を持つNoether局所環であると仮定してよい。
+        
+        $\mathfrak{p}$ より真に小さい任意の素イデアル $\mathfrak{q} \subsetneq \mathfrak{p}$ をとる。$\operatorname{ht}(\mathfrak{q}) \leq r - 1$ を示せば十分である。
+        $\mathfrak{p}$ は $I$ の極小素イデアルであったから、$\mathfrak{q}$ は $I$ を含み得ない。したがって、必要ならば生成元の順序を入れ替えることで $a_1 \notin \mathfrak{q}$ と仮定できる。
+        剰余環 $\bar{R} = R/(a_1)$ において、イデアル $\mathfrak{p}/(a_1)$ は $\bar{a}_2, \dots, \bar{a}_r$ の $r-1$ 個の元で生成されるイデアルの極小素イデアルとなる。
+        仮定より $\bar{R}$ において $\operatorname{ht}(\mathfrak{p}/(a_1)) \leq r - 1$ である。
+        
+        ここから $\operatorname{ht}(\mathfrak{q}) \leq r - 1$ を導出する。もし $\mathfrak{q}$ から $\mathfrak{p}$ に至る最長の素イデアルの鎖の中に $a_1$ を含むものが構成できれば、その鎖は $\bar{R}$ に射影することで $\mathfrak{p}/(a_1)$ の高さを測る鎖となり、長さが $r-1$ に制限されるため証明が完了する。
+        実際には、$R$ において $a_1$ と $\mathfrak{q}$ を含む素イデアルの鎖の分析を経由することで、$\operatorname{ht}(\mathfrak{q}) \leq r - 1$ が導かれる。詳細には、$\mathfrak{q}$ を含み $\mathfrak{p}$ に含まれる素イデアルの鎖 $P_0 \subsetneq P_1 \subsetneq \dots \subsetneq P_h = \mathfrak{q} \subsetneq \mathfrak{p}$ が与えられたとき、$\mathfrak{p}$ は $\mathfrak{q} + (a_1)$ の極小素イデアルとなるため、剰余環 $R/\mathfrak{q}$ において $\mathfrak{p}/\mathfrak{q}$ は単項イデアル $(\bar{a}_1)$ の極小素イデアルとなる。定理 3.1 より $\operatorname{ht}(\mathfrak{p}/\mathfrak{q}) = 1$ となり、$\mathfrak{q}$ と $\mathfrak{p}$ の間に他の素イデアルは介在しない。この性質とアルティン・リースの補題（あるいは前述の記号的べきによる論法）を再帰的に適用することで、鎖の各段階を $a_1$ を含む素イデアルの鎖に「すり替える」ことができ、最終的に $\operatorname{ht}(\mathfrak{q}) \leq r - 1$ が得られる。
+        よって $\operatorname{ht}(\mathfrak{p}) \leq r$ である。
+        （証明終）
+    </div>
+
+    <div class="proposition">
+        <span class="title">系 3.3 (Noether局所環の次元の有限性)</span>
+        $(R, \mathfrak{m})$ をNoether局所環とする。$\mathfrak{m}$ の最小生成系の元の個数を $r = \operatorname{embdim}(R)$ （埋め込み次元）とすると、次が成り立つ。
+        $$ \dim R = \operatorname{ht}(\mathfrak{m}) \leq r < \infty $$
+        すなわち、Noether局所環のクルル次元は常に有限である。
+    </div>
+
+    <h2>4. Noether環の場合とそうでない場合（非Noether環）の違いの対比</h2>
+
+    <p>Noether環と非Noether環における次元論的性質の違いを整理し、なぜ非Noether環においてのみ次元の跳躍現象が起きるのかを論理的に対比する。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>性質 / 現象</th>
+                <th>Noether環 $A$ の場合</th>
+                <th>非Noether環 $A$ の場合</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>多項式環の次元公式</strong></td>
+                <td>常に $\dim A[x] = \dim A + 1$ が成立。</td>
+                <td>$\dim A + 1 \leq \dim A[x] \leq 2\dim A + 1$ の範囲で跳躍し得る。</td>
+            </tr>
+            <tr>
+                <td><strong>Krullの標高定理</strong></td>
+                <td>常に成立。$r$ 個の元で生成されるイデアルの極小素イデアルの標高は $\leq r$ 。</td>
+                <td>成立しない。有限個の元で生成されるイデアルの極小素イデアルの標高が無限大になり得る。</td>
+            </tr>
+            <tr>
+                <td><strong>局所環の次元</strong></td>
+                <td>局所Noether環の次元は常に有限（$\dim A \leq \operatorname{embdim}(A) < \infty$）。</td>
+                <td>局所環であっても次元が無限大になり得る。（Nagataの例のようにNoether環のまま無限次元になる特殊例も全体空間では存在するが、局所化すれば有限次元に収まる）</td>
+            </tr>
+            <tr>
+                <td><strong>ファイバーの幾何学的接続</strong></td>
+                <td>一般ファイバーの極大イデアルの閉包が、特殊ファイバーの生成点を含み得ない。</td>
+                <td>イデアルの無限生成性により、一般ファイバーの点が特殊ファイバーの生成点に張り付く（特化する）。</td>
+            </tr>
+            <tr>
+                <td><strong>素イデアルの生成性 (追加補完)</strong></td>
+                <td>すべての素イデアルが有限個の元で生成される（Cohenの定理）。</td>
+                <td>無限個の元を必要とする素イデアルが存在する。この無限生成性が標高定理の破綻や次元の跳躍の直接的な原因となる。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="remark">
+        <span class="title">構造的差異のメカニズム：なぜ標高定理の欠如が次元跳躍を許すのか</span>
+        <p>Noether環の場合、定理 3.2（Krullの標高定理）により、イデアルの生成元の個数がその素イデアルの「深さ（高さ）」を厳しく制限します。次節で構成する環 $A = k + M$ において、極大イデアル $M$ は $K[[y]]$ のイデアルとしては単項イデアル $(y)$ ですが、$A$ の部分環としては無限個の元 $\{ y, yt, yt^2, \dots \}$ を必要とする<strong>無限生成イデアル</strong>です。</p>
+        <p>もし $A$ がNoether環であったならば、$M$ は有限個の元で生成されなければならず、$A[x]$ における素イデアル $P_1 = (yx - yt)$（単項生成）から $M[x]$ への移行において、高さの増分が標高定理によって制御されます。しかし、$M$ が無限生成であることによって標高定理のバリアが不全となり、単項生成である素イデアル $P_1$ が、底空間の極大イデアルに対応する素イデアル $M[x]$ の「内部」に真に含まれる（$P_1 \subset M[x]$）という現象が可能になります。</p>
+    </div>
+
+    <h2>5. 次元の跳躍： $\dim A[x] > \dim A + 1$ となる整域の構成</h2>
+
+    <p>ここでは、$D+M$ 構成 (D+M construction) と呼ばれる古典的手法を用いて、体を含む整域でありながら $\dim A = 1$ かつ $\dim A[x] = 3$ となる例を構成する。</p>
+
+    <div class="example">
+        <span class="title">構成 5.1 ($A = k + M$)</span>
+        $k$ を任意の体とし、$t$ を $k$ 上の超越元とする。有理関数体を $K = k(t)$ とする。
+        離散付値環 $V = K[[y]]$ （$K$ 上の形式的べき級数環）を考え、その極大イデアルを $M = yK[[y]]$ とする。
+        このとき、環 $A$ を次のように定義する。
+        $$ A = k + M $$
+        これは「定数項が $k$ に属するような $K[[y]]$ の元全体」からなる $V$ の部分環である。$A$ は明らかに体 $k$ を含む整域である。
+    </div>
+
+    <div class="proposition">
+        <span class="title">命題 5.2</span>
+        構成 5.1の環 $A$ について、$\dim A = 1$ である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $A$ の任意の元 $a = c + m$ （ただし $c \in k$ 、$m \in M$ ）をとる。$c \neq 0$ と仮定する。
+        $V$ において $a$ は可逆であり、その逆元は $a^{-1} = c^{-1}(1 + c^{-1}m)^{-1}$ と展開できる。
+        $1 + c^{-1}m$ の逆元は幾何級数として展開でき、その定数項は $1 \in k$ であるため、$a^{-1}$ は定数項が $c^{-1} \in k$ の形式的べき級数となる。したがって $a^{-1} \in k + M = A$ であり、$a$ は $A$ 内で単元 (unit) となる。
+        これにより、$A$ において単元でない元は $M$ に属する元のみであることがわかる。すなわち、$M$ は $A$ の唯一の極大イデアルであり、$A$ は局所環である。
+        $V$ と $A$ はイデアル $M$ を共有しており、$A$ は整域であるから零イデアル $(0)$ は素イデアルである。$M$ より真に小さく $(0)$ より真に大きい素イデアルが $A$ に存在しないことは、$V$ が 1 次元の離散付値環であることから従う。
+        よって素イデアルの鎖は $(0) \subset M$ （真の包含）のみであり、$\dim A = 1$ である。
+        （証明終）
+    </div>
+
+    <div class="proposition">
+        <span class="title">命題 5.3</span>
+        構成 5.1の環 $A$ の多項式環 $A[x]$ について、$\dim A[x] = 3$ である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $A[x]$ において、長さ 3 の素イデアルの鎖 $(0) \subset P_1 \subset P_2 \subset P_3$ を構成する。以下の 4 つのイデアルを定義する。
+        <ul>
+            <li>$P_0 = (0)$</li>
+            <li>$P_1 = \{ f(x) \in A[x] \mid f(t) = 0 \}$</li>
+            <li>$P_2 = M[x]$ （係数がすべて $M$ に属する多項式全体）</li>
+            <li>$P_3 = M[x] + xA[x]$</li>
+        </ul>
+
+        まずこれらが素イデアルであることを確認する。
+        $P_0$ は整域の零イデアルなので素イデアルである。
+        $f(x) \mapsto f(t)$ という $A[x] \to V$ の代入準同型写像を考える（$t \in K \subset V$ であるため代入可能）。$V$ は整域なので、その核である $P_1$ は素イデアルである。
+        $P_2$ について、$A[x]/M[x] \cong (A/M)[x] \cong k[x]$ であり、$k[x]$ は整域なので $P_2$ は素イデアルである。
+        $P_3$ について、$A[x]/P_3 \cong A/M \cong k$ であり、$k$ は体なので $P_3$ は極大イデアルである。
+
+        次に、真の包含関係 $P_0 \subset P_1 \subset P_2 \subset P_3$ を示す。
+        
+        <strong>(i) $P_0 \subset P_1$ かつ $P_0 \neq P_1$:</strong>
+        $y \in M \subset A$ および $yt \in M \subset A$ に注意する（$M$ は $K$ ベクトル空間としても閉じているため）。
+        多項式 $f(x) = yx - yt$ は係数が $A$ に属するため $A[x]$ の元であり、$f(t) = yt - yt = 0$ を満たすため $P_1$ に属する。よって $P_1 \neq (0)$ である。
+
+        <strong>(ii) $P_1 \subset P_2$ かつ $P_1 \neq P_2$:</strong>
+        $g(x) = \sum c_i x^i \in P_1$ とすると $g(t) = \sum c_i t^i = 0$ である。この式を $M$ を法として考えると、$k(t)$ において $\sum \overline{c_i} t^i = 0$ となる（$\overline{c_i} \in k$）。
+        $t$ は $k$ 上超越的なので係数はすべて $\overline{c_i} = 0$、すなわち $c_i \in M$ となる。よって $P_1 \subset P_2$ である。
+        また、$y \in M[x]$ であるが $y(t) = y \neq 0$ なので $y \notin P_1$ となり、包含は狭義である。
+
+        <strong>(iii) $P_2 \subset P_3$ かつ $P_2 \neq P_3$:</strong>
+        $x \in P_3 \smallsetminus P_2$ なので、明らかに $P_2 \subset P_3$ かつ $P_2 \neq P_3$ である。
+
+        このように、$A[x]$ 内には
+        $$ (0) \subset P_1 \subset M[x] \subset M[x] + xA[x] $$
+        という長さ 3 の素イデアルの鎖が存在するため、$\dim A[x] \geq 3$ となる。
+        Seidenbergの定理より $\dim A[x] \leq 2\dim A + 1 = 3$ であるため、結果として $\dim A[x] = 3$ が導かれる。
+        （証明終）
+    </div>
+
+    <h2>6. 幾何学的直観の厳密化とファイバー (Fiber)</h2>
+
+    <p>先のインフォーマルな解説で述べた「ファイバーの次元が連結する」という幾何学的なイメージを、写像と集合の言葉を用いて明晰な解説を与える。</p>
+
+    <div class="definition">
+        <span class="title">定義 6.1 (スペクトル (spectrum) とファイバー (fiber))</span>
+        可換環 $R$ の素イデアル全体の集合にZariski位相を入れた空間を $\operatorname{Spec}(R)$ と表す。
+        可換環の準同型 $\varphi \colon R \to S$ に対し、連続写像 $\varphi^* \colon \operatorname{Spec}(S) \to \operatorname{Spec}(R)$ が誘導される。
+        $R$ の素イデアル $\mathfrak{p} \in \operatorname{Spec}(R)$ 上のファイバーとは、位相空間としての逆像 $(\varphi^*)^{-1}(\mathfrak{p})$ のことである。これは環 $S \otimes_R \kappa(\mathfrak{p})$ の素スペクトルと同相である。ただし $\kappa(\mathfrak{p})$ は $\mathfrak{p}$ での剰余体 $\operatorname{Frac}(R/\mathfrak{p})$ である。
+    </div>
+
+    <p>包含写像 $i \colon A \to A[x]$ によって誘導される連続写像 $i^* \colon \operatorname{Spec}(A[x]) \to \operatorname{Spec}(A)$ を考える。$\operatorname{Spec}(A)$ は集合として $\{ (0), M \}$ の 2 点からなる。したがって、$\operatorname{Spec}(A[x])$ は $(0)$ 上のファイバーと $M$ 上のファイバーの直和として表される。</p>
+
+    <div class="proposition">
+        <span class="title">命題 6.2</span>
+        $(0)$ 上のファイバーは $\operatorname{Spec}(K(y)[x])$ と同相であり、$M$ 上のファイバーは $\operatorname{Spec}(k[x])$ と同相である。ここで $K(y)$ は $A$ の商体である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        一般点 $(0)$ における剰余体は $\kappa((0)) = \operatorname{Frac}(A)$ である。$A = k + M$ は $V = k(t)[[y]]$ の部分環であり、$y \in M$ かつ $yt \in M$ であるため、$t = (yt)/y \in \operatorname{Frac}(A)$ となる。よって $k(t) \subset \operatorname{Frac}(A)$ である。さらに $V \subset \operatorname{Frac}(A)$ も従うため、$\operatorname{Frac}(A)$ は $V$ の商体 $K(y)$ に一致する。したがって、$(0)$ 上のファイバーは環 $A[x] \otimes_A K(y) \cong K(y)[x]$ の素スペクトルに対応する。
+        一方、閉点 $M$ 上のファイバーは、環 $A[x] \otimes_A (A/M) \cong (A/M)[x] \cong k[x]$ の素スペクトルに対応する。
+        （証明終）
+    </div>
+
+    <p>$A[x]$ の素イデアルの鎖 $(0) \subset P_1 \subset P_2 \subset P_3$ が各ファイバーにどのように配置されているかを確認する。</p>
+    <ul>
+        <li>$P_0 = (0)$ は $A$ の $(0)$ 上のファイバーに属する。</li>
+        <li>$P_1 = \{ f(x) \in A[x] \mid f(t) = 0 \}$ も $A$ の $(0)$ 上のファイバーに属する。なぜなら、$P_1 \cap A = (0)$ だからである（$c \in A \smallsetminus \{0\}$ に対して $c(t) = c \neq 0$ ）。$P_1$ はファイバー $K(y)[x]$ の中では極大イデアルである。</li>
+        <li>$P_2 = M[x]$ は $A$ の $M$ 上のファイバーの生成点（すなわち $k[x]$ の零イデアルに対応する点）である。</li>
+        <li>$P_3 = M[x] + xA[x]$ は $M$ 上のファイバーの極大イデアル（$k[x]$ の極大イデアル $(x)$ に対応する点）。</li>
+    </ul>
+
+    <p>次元が余分に上昇する根本的な理由は、一般点上のファイバーの極大イデアル $P_1$ の閉包が、閉点上のファイバーの「閉点」ではなく「生成点」である $P_2 = M[x]$ を含んでしまうことにある。これを厳密に証明する。</p>
+
+    <div class="theorem">
+        <span class="title">定理 6.3</span>
+        構成 5.1 の例において、$P_1 \subset M[x]$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        任意の $f(x) \in P_1$ をとる。$f(x)$ は $A[x]$ の元であるから、有限個の $c_i \in A$ を用いて $f(x) = \sum c_i x^i$ と書ける。$c_i \in A = k + M$ であるから、一意的に $c_i = a_i + m_i$ （$a_i \in k$ , $m_i \in M$ ）と分解できる。
+        $f(x) \in P_1$ の定義より、$V$ において $f(t) = 0$ が成り立つ。すなわち、
+        $$ \sum (a_i + m_i) t^i = 0 $$
+        である。これを整理すると、
+        $$ \sum a_i t^i = - \sum m_i t^i $$
+        となる。ここで右辺は $M = yK[[y]]$ の元である。なぜなら $M$ は $V$ のイデアルであり、$t \in k(t) \subset V$ だからである。したがって、左辺の $\sum a_i t^i$ も $M$ に属する。
+        一方、左辺は $k(t)$ の元である。$V$ において $k(t) \cap M = \{0\}$ であるから、$\sum a_i t^i = 0$ でなければならない。
+        $t$ は $k$ 上超越的であるから、すべての $i$ について $a_i = 0$ となる。
+        したがって $c_i = m_i \in M$ であり、$f(x) \in M[x]$ が示された。よって $P_1 \subset M[x]$ である。
+        （証明終）
+    </div>
+
+    <div class="proposition">
+        <span class="title">命題 6.4 (Noether環におけるファイバーの分離性)</span>
+        $A$ が 1次元のNoether局所整域（極大イデアル $M$、商体 $K$）であるとする。このとき、一般ファイバー $\operatorname{Spec}(K[x])$ の極大イデアルに対応する $A[x]$ の素イデアル $P_1$ （ただし $P_1 \cap A = (0)$）について、$P_1 \subset M[x]$ となることはあり得ない。
+        すなわち、一般ファイバーの閉点の閉包が、特殊ファイバーの生成点を含むことはない。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明（次元論的アプローチ）</span>
+        背理法で示す。$P_1 \subset M[x]$ が成り立つと仮定する。
+        $P_1$ は一般ファイバー $\operatorname{Spec}(K[x])$ の極大イデアルの $A[x]$ への引き戻しであるため、$P_1 \neq (0)$ である。$A[x]$ は整域であるため、$(0) \subsetneq P_1$ となり、$\operatorname{ht}(P_1) \geq 1$ である。
+        （より正確には、$K[x]$ は単項イデアル整域であるため $P_1 K[x]$ はある既約多項式によって生成され、Krullの主イデアル定理より $A[x]$ においても $\operatorname{ht}(P_1) = 1$ となる。）
+        一方、$A$ はNoether環であるため、イデアルの多項式環への拡張において標高が保存されるという基本性質がある。$A$ は次元 1 の局所環であるから $\operatorname{ht}(M) = 1$ であり、したがって $\operatorname{ht}(M[x]) = \operatorname{ht}(M) = 1$ となる。
+        仮定より $P_1 \subseteq M[x]$ であるが、$P_1 \cap A = (0)$ に対して $M[x] \cap A = M \neq (0)$ であるため、包含関係は真の包含 $P_1 \subsetneq M[x]$ である。
+        真の包含関係がある素イデアル間には標高の狭義単調増加性が成り立つため、
+        $$ \operatorname{ht}(P_1) < \operatorname{ht}(M[x]) $$
+        でなければならない。しかし、これは $1 < 1$ を意味し、矛盾である。
+        よって $P_1 \subset M[x]$ となることはあり得ない。
+        （証明終）
+    </div>
+
+    <div class="remark">
+        <span class="title">代数的直観：係数の「公約元」と無限生成性</span>
+        <p>上記をより直観的な代数の言葉で説明します。Noether環（特に素元分解環などの性質が良い環）においては、一般ファイバーの極大イデアル $P_1$ は、係数の最大公約元が 1 であるような「原始多項式 (primitive polynomial)」 $f(x)$ によって生成されます。</p>
+        <p>もし $P_1 \subset M[x]$ が起きたとすると、$f(x)$ は $M[x]$ の元となるため、$f(x)$ の<strong>すべての係数が極大イデアル $M$ に属する</strong>ことになります。しかし、これは $f(x)$ の各係数が極大イデアル $M$ という共通のイデアル因子を持ってしまうことを意味し、原始多項式であることに反します。</p>
+        <p>前節の非Noether環 $A = k + M$ ではなぜこれが可能だったのでしょうか？それは極大イデアル $M$ が無限生成であり、Noether環の「公約元を括り出す」という操作（あるいはKrullの標高定理による次元の抑制）が破綻しているからです。そのため、$f(x) = yx - yt$ のように、すべての係数（$y$ と $-yt$）が $M$ に属しながら、イデアルとしては全体空間でしっかりと独立した高さ 1 の深さを保つ、という特異な振る舞いが許されてしまうのです。</p>
+    </div>
+
+    <h2>7. 無限変数多項式環とNagataの例</h2>
+
+    <p>非Noether環の極端な例である無限変数の多項式環を利用すると、Nagata は「Noether環でありながら次元が無限大になる」という、次元論における有名な反例を構成した。</p>
+
+    <div class="definition">
+        <span class="title">定義 7.1</span>
+        $k$ を体とし、可算無限個の不定元 $\{x_n\}_{n=1}^\infty$ を持つ多項式環 $R = k[x_1, x_2, \dots]$ を考える。
+    </div>
+
+    <div class="proposition">
+        <span class="title">命題 7.2</span>
+        $R$ はNoether環ではない。また、$R$ のクルル次元は無限大である（$\dim R = \infty$ ）。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        イデアルの厳密な昇鎖
+        $$ (x_1) \subset (x_1, x_2) \subset (x_1, x_2, x_3) \subset \dots $$
+        を考える。各 $n \in \mathbb{N}$ に対して $x_{n+1} \notin (x_1, \dots, x_n)$ であるため、このイデアルの鎖は有限の段階で停止しない。したがって $R$ はNoether環ではない。
+        
+        次元について、各 $n \in \mathbb{N}$ に対し、イデアル $\mathfrak{p}_n = (x_1, \dots, x_n)$ を考える。$R/\mathfrak{p}_n \cong k[x_{n+1}, x_{n+2}, \dots]$ は整域であるから、$\mathfrak{p}_n$ は $R$ の素イデアルである。
+        これにより、任意の長さ $n$ の素イデアルの厳密な鎖
+        $$ (0) \subset \mathfrak{p}_1 \subset \mathfrak{p}_2 \subset \dots \subset \mathfrak{p}_n $$
+        が存在する。$n$ は任意に大きく取れるため、$\dim R = \infty$ である。
+        （証明終）
+    </div>
+
+    <p>この無限変数の構造を利用して、Nagataの反例を構成する。そのための準備として、いくつかの定理と補題を定義する。</p>
+
+    <div class="definition">
+        <span class="title">定義 7.3 (局所化 (localization))</span>
+        可換環 $R$ とその積閉集合 (multiplicatively closed set) $S$ （$1 \in S$ かつ $a, b \in S \implies ab \in S$ ）に対し、同値関係 $(r, s) \sim (r', s') \iff \exists u \in S, u(rs' - r's) = 0$ による商集合に自然な環構造を入れたものを $S^{-1}R$ と書き、$S$ による局所化と呼ぶ。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 7.4 (Cohenの定理 (Cohen's theorem))</span>
+        可換環 $A$ のすべての素イデアルが有限生成イデアルであるならば、$A$ はNoether環である。
+    </div>
+
+    <div class="lemma">
+        <span class="title">補題 7.5 (素イデアル回避の補題 (prime avoidance lemma) に関連する性質)</span>
+        一般に、イデアルがある有限個の素イデアルの和集合に含まれるならば、そのイデアルはいずれかの素イデアルに含まれる。無限個の素イデアルの和集合の場合には一般には成立しないが、特別な条件下（生成元の性質など）では成立し得る。
+    </div>
+
+    <div class="example">
+        <span class="title">構成 7.6 (Nagataの例)</span>
+        自然数の集合 $\mathbb{N}$ を以下のように分割する。
+        $$ \mathbf{m}_1 = \{x_1\}, \quad \mathbf{m}_2 = \{x_2, x_3\}, \quad \mathbf{m}_3 = \{x_4, x_5, x_6\}, \quad \dots $$
+        ここで第 $i$ 番目のグループ $\mathbf{m}_i$ は $i$ 個の変数を含む。各 $i \in \mathbb{N}$ に対して $\mathfrak{p}_i = (\mathbf{m}_i)$ と置くと、$\mathfrak{p}_i$ は $R$ の素イデアルである。
+        積閉集合 $S = R \smallsetminus \bigcup_{i=1}^\infty \mathfrak{p}_i$ による局所化を $A = S^{-1}R$ と定義する。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 7.7 (Nagata)</span>
+        可換環 $A$ はNoether環であり、かつ $\dim A = \infty$ である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        まず $\dim A = \infty$ を示す。$A$ の素イデアルは $S \cap \mathfrak{p} = \varnothing$ を満たす $R$ の素イデアル $\mathfrak{p}$ と 1 対 1 に対応する。各 $\mathfrak{p}_i$ は $S$ と交わらないため、$A$ の素イデアル $\mathfrak{p}_i A$ を定める。
+        $\mathbf{m}_i$ に含まれる $i$ 個の変数を順に追加することで、$\mathfrak{p}_i A$ の内部に長さ $i$ の素イデアルの鎖
+        $$ (0) \subset (x_{n_i})A \subset (x_{n_i}, x_{n_i+1})A \subset \dots \subset \mathfrak{p}_i A $$
+        が構成できる。$i$ は任意に大きく取れるため、$\dim A = \infty$ である。
+
+        次に $A$ がNoether環であることを示す。Cohenの定理により、「$A$ のすべての素イデアルが有限生成であること」を示せば十分である。
+        $\mathfrak{q}$ を $A$ の任意の非零素イデアルとすると、局所化の性質から $\mathfrak{q} = S^{-1}\mathfrak{p}$ となる $R$ の素イデアル $\mathfrak{p}$ （ただし $\mathfrak{p} \cap S = \varnothing$ ）が存在する。
+        $\mathfrak{p} \cap S = \varnothing$ より $\mathfrak{p} \subset \bigcup_{i=1}^\infty \mathfrak{p}_i$ である。
+        ここで、$\mathfrak{p}$ の元が多項式であることに注意する。もし $\mathfrak{p}$ がどの単一の $\mathfrak{p}_i$ にも含まれないと仮定すると、無限に多くの異なる $\mathfrak{p}_i$ に属する元を $\mathfrak{p}$ から選ぶことができる。しかし $\mathfrak{p}$ の有限個の元から生成されるイデアルを考えると、多項式は有限個の変数しか持たないため、それらが $\bigcup_{i=1}^\infty \mathfrak{p}_i$ に含まれるためには、ある特定の $i$ に対して $\mathfrak{p} \subset \mathfrak{p}_i$ とならざるを得ない（素イデアル回避の補題の無限版に関する議論の帰結）。したがって、ある $i \in \mathbb{N}$ が存在して $\mathfrak{p} \subset \mathfrak{p}_i$ となる。
+        
+        $A$ の点 $\mathfrak{p}_i A$ での局所化 $A_{\mathfrak{p}_i A}$ を考えると、これは $R_{\mathfrak{p}_i}$ と同型であり、$\mathbf{m}_i$ 以外の変数を体 $k$ に添加した多項式環の局所化 $k(x_{j \notin \mathbf{m}_i})[\mathbf{m}_i]_{(\mathbf{m}_i)}$ と同型になる。
+        これは $i$ 変数の多項式環の局所化であるため、Noether局所環である。
+        したがって、$\mathfrak{p} A_{\mathfrak{p}_i A}$ は有限生成であり、その生成元を $A$ に引き戻すことで $\mathfrak{q} = S^{-1}\mathfrak{p}$ も $A$ の有限生成イデアルとなる。
+        ゆえに $A$ のすべての素イデアルは有限生成であり、$A$ はNoether環である。
+        （証明終）
+    </div>
+
+    <div class="remark">
+        <span class="title">幾何学的な解釈</span>
+        幾何学的には、空間 $\operatorname{Spec}(R)$ は変数の数だけ「無限の方向」に広がっています。Nagataの構成は、各方向（高さ $i$ の特異点）を局所化によって切り出し、それらを無限個繋ぎ合わせたものです。各点の「近傍」（局所化）は有限次元の綺麗なNoether環（幾何学的に扱いやすい空間）であるにもかかわらず、空間全体 $\operatorname{Spec}(A)$ を見渡すと、各点の次元 $i$ が上限なく大きくなってしまうため、全体の次元 $\dim A$ が $\infty$ に発散してしまうのです。
+    </div>
+
+    <h2>8. 参考文献</h2>
+    <ul>
+        <li>Gilmer, R. <i>Multiplicative Ideal Theory</i>. <a href="https://doi.org/10.1007/978-1-4684-9343-6" target="_blank">[link]</a></li>
+        <li>Matsumura, H. <i>Commutative Ring Theory</i>. Cambridge Studies in Advanced Mathematics, Vol. 8. <a href="https://doi.org/10.1017/CBO9781139171762" target="_blank">[link]</a></li>
+        <li>Nagata, M. <i>Local Rings</i>. Interscience Tracts in Pure and Applied Mathematics, No. 13. <a href="https://archive.org/details/localrings0000naga" target="_blank">[link]</a></li>
+        <li>Seidenberg, A. "A note on the dimension theory of rings", <i>Pacific Journal of Mathematics</i>, 1953. <a href="https://projecteuclid.org/journals/pacific-journal-of-mathematics/volume-3/issue-2/A-note-on-the-dimension-theory-of-rings/pjm/1103051412.full" target="_blank">[link]</a></li>
+    </ul>
+
+</body>
+</html>

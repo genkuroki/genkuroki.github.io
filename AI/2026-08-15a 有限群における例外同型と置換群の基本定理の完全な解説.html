@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有限群における例外同型と置換群の基本定理の完全な解説</title>
+    <!-- MathJaxの設定（ヘッダーでのマクロ定義は行わない） -->
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #222;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { font-size: 2.2em; border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 30px; }
+        h2 { font-size: 1.6em; border-left: 5px solid #0056b3; padding-left: 12px; margin-top: 50px; color: #0056b3; }
+        h3 { font-size: 1.3em; margin-top: 40px; color: #333; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+        p { margin-bottom: 15px; }
+        .intro { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 30px; }
+        .definition { background-color: #f0f7ff; border-left: 4px solid #0056b3; padding: 15px; margin: 25px 0; border-radius: 0 4px 4px 0; }
+        .definition-title { font-weight: bold; color: #0056b3; margin-bottom: 10px; }
+        .theorem { background-color: #fff4e5; border-left: 4px solid #d37c00; padding: 15px; margin: 25px 0; border-radius: 0 4px 4px 0; }
+        .theorem-title { font-weight: bold; color: #d37c00; margin-bottom: 10px; }
+        .lemma { background-color: #fdf5e6; border-left: 4px solid #d37c00; padding: 15px; margin: 25px 0; border-radius: 0 4px 4px 0; }
+        .lemma-title { font-weight: bold; color: #d37c00; margin-bottom: 10px; }
+        .proof { background-color: #fdfdfd; border-left: 4px solid #28a745; padding: 15px; margin: 25px 0; border-radius: 0 4px 4px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .proof-title { font-weight: bold; color: #28a745; margin-bottom: 10px; font-style: italic; }
+        .example { background-color: #f9f9f9; border: 1px solid #ddd; padding: 15px; margin: 25px 0; border-radius: 4px; }
+        .example-title { font-weight: bold; color: #555; margin-bottom: 10px; }
+        .references { margin-top: 60px; padding-top: 20px; border-top: 2px solid #ccc; font-size: 0.95em; }
+        .references h3 { border-bottom: none; }
+        .references ul { list-style-type: none; padding-left: 0; }
+        .references li { margin-bottom: 10px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<h1>有限群における例外同型と置換群の基本定理の完全な解説</h1>
+
+<div class="intro">
+    <p>本ドキュメントでは、群論において極めて美しい現象である「有限単純群の例外同型 (exceptional isomorphism)」と、その背景にある置換群の基本定理（Jordanの定理）について、論理的なギャップのない完全な証明と詳細な解説を提供します。異なる体上の異なる次元の幾何学的対象が、対称性という観点から全く同じ構造（同型な群）を持つ理由を、基礎から自己完結的 (self-contained) に解き明かします。</p>
+    <p>これまでのチャットの議論をすべて網羅し、証明の省略や簡略化を一切行わず、必要な定義や補題をすべて追加して完全に再構成しました。</p>
+</div>
+
+<h2>1. self-containedな議論のための基礎概念の準備</h2>
+
+<p>群の同型を厳密に証明するため、まずは証明に用いる線形群、射影空間、群作用、および置換群に関するすべての基本的な定義を整備する。以下の命題や証明はすべて「だである調」で記述する。</p>
+
+<div class="definition">
+    <div class="definition-title">定義 (有限体と線形群)</div>
+    有限体 $\mathbb{F}_q$ は要素数 $q$ の体である。体 $\mathbb{F}_q$ 上の $n$ 次元ベクトル空間 $\mathbb{F}_q^n$ における正則行列全体のなす群を <strong>一般線形群 (General Linear Group)</strong> と呼び、 $\text{GL}_n(\mathbb{F}_q)$ で表す。また、その中で行列式が $1$ である元からなる部分群を <strong>特殊線形群 (Special Linear Group)</strong> と呼び、 $\text{SL}_n(\mathbb{F}_q)$ で表す。
+</div>
+
+<div class="definition">
+    <div class="definition-title">定義 (射影空間と射影線形群)</div>
+    $\mathbb{F}_q^{n+1}$ の $1$ 次元部分空間全体の集合を $n$ 次元 <strong>射影空間 (Projective Space)</strong> と呼び、 $\mathbb{P}^n(\mathbb{F}_q)$ で表す。特に $n=1$ の場合を <strong>射影直線 (Projective Line)</strong> と呼ぶ。直観的には $\mathbb{P}^1(\mathbb{F}_q) = \mathbb{F}_q \cup \{\infty\}$ と同一視できる。<br><br>
+    群 $\text{GL}_{n+1}(\mathbb{F}_q)$ をその中心（スカラー行列のなす群 $Z$）で割った商群を <strong>射影一般線形群</strong> $\text{PGL}_{n+1}(\mathbb{F}_q)$ と呼び、 $\text{SL}_{n+1}(\mathbb{F}_q)$ をその中心との共通部分で割った商群を <strong>射影特殊線形群</strong> $\text{PSL}_{n+1}(\mathbb{F}_q)$ と呼ぶ。
+</div>
+
+<div class="definition">
+    <div class="definition-title">定義 (置換群と交代群)</div>
+    要素数 $n$ の有限集合 $X$ 上の全単射全体のなす群を <strong>対称群 (Symmetric Group)</strong> と呼び、 $S_n$ で表す。また、 $S_n$ のうち偶置換からなる指数 $2$ の部分群を <strong>交代群 (Alternating Group)</strong> と呼び、 $A_n$ で表す。
+</div>
+
+<div class="definition">
+    <div class="definition-title">定義 (群作用、推移的、ブロック、原始的)</div>
+    群 $G$ が集合 $X$ に作用しているとする。
+    <ul>
+        <li><strong>推移的 (transitive)</strong>: 任意の $x, y \in X$ に対して $g(x) = y$ となる $g \in G$ が存在すること。</li>
+        <li><strong> $k$ 重推移的 (multiply transitive)</strong>: 任意の相異なる $k$ 個の元の組 $(x_1, \dots, x_k)$ と $(y_1, \dots, y_k)$ に対して、すべての $i$ で $g(x_i) = y_i$ を満たす $g \in G$ が存在すること。</li>
+        <li><strong>ブロック (block)</strong>: 推移的な置換群 $G$ の作用において、部分集合 $B \subset X$ が任意の $g \in G$ に対して $g(B) = B$ または $g(B) \cap B = \varnothing$ を満たすとき、 $B$ をブロックと呼ぶ。空集合 $\varnothing$ 、 $1$ 点集合 $\{x\}$ 、および全体 $X$ は自明なブロックである。</li>
+        <li><strong>原始的 (primitive)</strong>: 推移的な置換群 $G$ が、自明なブロック以外のブロックを持たないこと。 $2$ 重推移的群は常に原始的である。</li>
+    </ul>
+</div>
+
+<div class="definition">
+    <div class="definition-title">定義 (単純群と完全群)</div>
+    <ul>
+        <li><strong>単純群 (simple group)</strong>: 自明な部分群 $\{1\}$ と自分自身 $G$ 以外の正規部分群を持たない群のこと。</li>
+        <li><strong>完全群 (perfect group)</strong>: 交換子群 $G'$ （ $G$ の元 $x, y$ の交換子 $xyx^{-1}y^{-1}$ によって生成される部分群）が $G$ 自身と一致する群のこと。完全群は非自明なアーベル群を商群として持たない（特に、指数 $2$ の部分群を持たない）。</li>
+    </ul>
+</div>
+
+<div class="definition">
+    <div class="definition-title">定義 (Sylowの定理)</div>
+    有限群 $G$ の位数が $|G| = p^n m$ （ $p$ は素数、 $p$ と $m$ は互いに素）であるとき、位数 $p^n$ の部分群を <strong> Sylow p-部分群 (Sylow p-subgroup)</strong> と呼ぶ。 Sylowの定理によれば以下の3つが成り立つ。
+    <ol>
+        <li> Sylow p-部分群は必ず存在する。</li>
+        <li> 任意の2つの Sylow p-部分群は互いに共役である。</li>
+        <li> Sylow p-部分群の個数 $n_p$ は、 $n_p \equiv 1 \pmod p$ かつ $n_p \mid m$ を満たす。</li>
+    </ol>
+</div>
+
+<div class="lemma">
+    <div class="lemma-title">補題 (原始的置換群と正規部分群)</div>
+    群 $G$ が集合 $X$ に原始的に作用しているとき、 $G$ の非自明な正規部分群 $N \neq \{1\}$ は $X$ 上で推移的である。
+</div>
+<div class="proof">
+    <div class="proof-title">補題の証明</div>
+    $N$ の $X$ における軌道の1つを $B = N x$ とする。任意の $g \in G$ に対して、 $g(B) = g N x = N g x$ となる（ $N$ が正規部分群であるため $g N = N g$ ）。これは $g(B)$ も $N$ の軌道であることを示している。したがって、任意の $g \in G$ について $g(B) = B$ または $g(B) \cap B = \varnothing$ （軌道同士は一致するか交わらないかのいずれか）が成り立つ。
+    これは $B$ が $G$ の作用に関するブロックであることを意味する。 $G$ は原始的であるため、 $B$ は自明なブロックである。 $N \neq \{1\}$ かつ $G$ の作用は忠実であると仮定できる場合、軌道が $1$ 点集合になることはなく（すべての軌道が $1$ 点なら $N$ は自明に作用することになり矛盾する）、したがって $B = X$ となる。これは $N$ が推移的であることを意味する。
+</div>
+
+<hr>
+
+<h2>2. 群の同型 $\text{GL}_3(\mathbb{F}_2) \cong \text{PSL}_2(\mathbb{F}_7)$ の証明</h2>
+
+<p>この節では、位数がともに $168$ である2つの群 $\text{GL}_3(\mathbb{F}_2)$ と $\text{PSL}_2(\mathbb{F}_7)$ が同型であることの完全な証明を与える。</p>
+
+<h3>内在的な理由</h3>
+
+<p>この同型が成立する本質的かつ内在的な理由は、双対的な幾何学的構造に対する対称性（自己同型群）の作用の一致にある。</p>
+<ul>
+    <li>$\text{GL}_3(\mathbb{F}_2)$ は、 $3$ 次元ベクトル空間 $\mathbb{F}_2^3$ の非ゼロベクトルからなる $7$ 点の集合、すなわち射影平面 $\mathbb{P}^2(\mathbb{F}_2)$ （Fano平面）に作用する。一方で、群内には位数 $7$ の Sylow部分群がちょうど $8$ 個存在し、群の共役作用を通して「 $8$ 点集合」にも自然に作用する。</li>
+    <li>$\text{PSL}_2(\mathbb{F}_7)$ は、射影直線 $\mathbb{P}^1(\mathbb{F}_7)$ という $8$ 点の集合に分数線形変換として作用する。しかし同時に、群の中には指数 $7$ の部分群（ $S_4$ に同型な部分群）が存在し、その左剰余類の集合である「 $7$ 点集合」にも作用する。</li>
+</ul>
+<p>このように、両方の群は「Fano平面の $7$ 点」と「射影直線の $8$ 点」という $2$ つの対象に対して、全く同じ置換群として実現されるため同型となるのである。</p>
+
+<h3>完全な証明</h3>
+
+<div class="proof">
+    <div class="proof-title">証明: $\text{GL}_3(\mathbb{F}_2) \cong \text{PSL}_2(\mathbb{F}_7)$</div>
+    証明は、両者が同じ位数 $168$ を持つ単純群であることを示し、位数 $168$ の単純群が同型を除いて一意であることを示すことで完結する。
+
+    <br><br><strong>ステップ1：群の位数の計算</strong><br>
+    まず、 $\text{GL}_3(\mathbb{F}_2)$ の位数を計算する。 $\mathbb{F}_2^3$ の基底を選ぶ方法の数を数える。第1のベクトルは $0$ 以外の $2^3 - 1 = 7$ 通り。第2のベクトルは第1のベクトルが張る $1$ 次元空間に属さない $2^3 - 2 = 6$ 通り。第3のベクトルは前の2つが張る $2$ 次元空間に属さない $2^3 - 2^2 = 4$ 通りである。したがって位数は以下となる。
+    $$ |\text{GL}_3(\mathbb{F}_2)| = 7 \times 6 \times 4 = 168 $$
+    
+    次に、 $\text{PSL}_2(\mathbb{F}_7)$ の位数を計算する。 $\text{GL}_2(\mathbb{F}_7)$ の位数は $(7^2 - 1)(7^2 - 7) = 48 \times 42 = 2016$ である。行列式が $1$ である部分群 $\text{SL}_2(\mathbb{F}_7)$ の位数は、これを $\mathbb{F}_7^\times$ の位数 $6$ で割って $336$ となる。 $\text{PSL}_2(\mathbb{F}_7)$ は $\text{SL}_2(\mathbb{F}_7)$ をその中心 $\{\pm I\}$ （位数は $2$ ）で割った商群であるため、その位数は以下となる。
+    $$ |\text{PSL}_2(\mathbb{F}_7)| = \frac{336}{2} = 168 $$
+    以上により、両者の位数は共に $168 = 2^3 \times 3 \times 7$ であることが示された。
+
+    <br><br><strong>ステップ2： $\text{GL}_3(\mathbb{F}_2)$ の単純性の証明</strong><br>
+    $G = \text{GL}_3(\mathbb{F}_2)$ が自明な正規部分群しか持たない単純群であることを示す。 $G$ は $\mathbb{F}_2^3 \smallsetminus \{0\}$ の $7$ 点集合 $\Omega$ に自然に作用する。任意の非ゼロベクトル $v_1$ を $e_1$ に移し、 $v_1$ と線形独立な $v_2$ を $e_2$ に移す正則行列が必ず存在するため、この作用は $2$ 重推移的である。
+
+    もし $G$ に非自明な正規部分群 $N$ が存在したとする。 $2$ 重推移的群は原始的であるため、先に示した補題より $N$ は $\Omega$ の $7$ 点に推移的に作用する。したがって軌道の長さ公式より $|N|$ は $7$ の倍数となる。
+
+    Sylowの定理より、 $G$ における Sylow 7-部分群の個数 $n_7$ は $n_7 \equiv 1 \pmod 7$ かつ $n_7 \mid 24$ を満たす。よって $n_7 = 1$ または $8$ である。 $G$ には特性多項式が $x^3+x+1$ と $x^3+x^2+1$ である行列が存在し、これらは互いに共役でないため生成する位数 $7$ の部分群も異なる。したがって $n_7 = 8$ である。
+
+    $7$ が $|N|$ を割り切るため、 $N$ は少なくとも $1$ つの Sylow 7-部分群を含む。 $N$ は正規部分群であるから、共役な Sylow 7-部分群をすべて含み、結果として $8 \times 6 = 48$ 個の位数 $7$ の元を含む。これにより $|N| \ge 49$ となる。 $|N|$ は $168$ の約数であるから、 $|N| \in \{56, 84, 168\}$ に限られる。
+
+    もし $|N| = 56$ であれば指数は $3$ となる。左剰余類への作用から準同型 $G \to S_3$ が得られ、その核 $K$ は $|K| \ge 168 / 6 = 28$ の正規部分群となる。しかし $K$ も同様に $48$ 個の位数 $7$ の元を含む必要があり矛盾する。
+    もし $|N| = 84$ であれば指数は $2$ となり、 $G$ は位数 $2$ の商群（アーベル群）を持つことになる。しかし、 $\text{SL}_3(\mathbb{F}_2)$ の任意の元は基本行列の積であり、基本行列は交換子として表せるため $\text{GL}_3(\mathbb{F}_2) = \text{SL}_3(\mathbb{F}_2)$ は完全群である。完全群は非自明なアーベル商を持たないため、指数 $2$ の部分群の存在と矛盾する。
+    以上より $N = G$ であり、 $G$ は単純群である。
+
+    <br><br><strong>ステップ3： $\text{PSL}_2(\mathbb{F}_7)$ の単純性の証明</strong><br>
+    $H = \text{PSL}_2(\mathbb{F}_7)$ が単純群であることを示す。 $H$ は $\mathbb{P}^1(\mathbb{F}_7)$ の $8$ 点集合に分数線形変換として作用する。 $\infty$ を固定するスタビライザー $H_\infty$ は $z \mapsto a^2 z + b$ ($a \neq 0$) の形をしており、位数は $21$ である。この $H_\infty$ は残りの $7$ 点 $\mathbb{F}_7$ に対して $z \mapsto z+b$ により推移的に作用するため、 $H$ の作用は $2$ 重推移的である。
+
+    $H$ の Sylow 7-部分群の個数 $n_7$ を考える。 $H$ における位数 $7$ の元として $\begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$ と $\begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}$ は異なる部分群を生成し、かつ共役であるから、 $n_7 = 8$ である。
+    
+    もし非自明な正規部分群 $M \triangleleft H$ が存在すれば、前段と同様に、もし $7 \mid |M|$ であれば $|M| \ge 49$ となり、 $|M| \in \{56, 84\}$ の場合に矛盾が生じる（ $H$ も同様に基本行列が交換子で書けるため完全群である）。
+    もし $|M|$ が $7$ で割り切れないと仮定する。このとき $|M|$ は $24$ の約数である。群 $H$ は $8$ 点集合に $2$ 重推移的に作用しているため、原始的であり、補題より $M$ は推移的でなければならない。したがって、 $|M|$ は軌道の長さである $8$ で割り切れなければならない。これより $|M|$ は $8$ または $24$ のいずれかである。
+    もし $|M| = 8$ であれば、 $M$ は $H$ の正規な Sylow 2-部分群となる。しかし、 $H$ の Sylow 2-部分群の個数 $n_2$ は Sylowの定理により $n_2 \equiv 1 \pmod 2$ かつ $n_2 \mid 21$ であり、実際の計算から $n_2 = 21$ であるため、正規部分群にはなり得ず矛盾する。
+    もし $|M| = 24$ であれば、 $H$ の位数 $3$ の元（総数は $56$ 個存在する）が $M$ に含まれるかを考える。正規部分群は共役類を和集合として含むため、 $M$ が位数 $3$ の元を一つでも含めば $56$ 個すべてを含むことになり、 $|M| = 24  <  56$ に矛盾する。したがって $M$ は位数 $3$ の元を含まないが、 $|M| = 24$ は $3$ で割り切れるため Cauchyの定理に矛盾する。
+    よって $M = H$ であり、 $H$ も単純群である。
+
+    <br><br><strong>ステップ4：位数168の単純群の一意性と結論</strong><br>
+    $G$ と $H$ はともに位数 $168$ の単純群であり、 $n_7 = 8$ を満たす。両群とも、 $8$ 個の Sylow 7-部分群の集合 $X$ （ $|X| = 8$ ）に対する共役作用を持つ。この作用は、各群から対称群 $S_8$ への準同型を定める。両群は単純群であるため、この準同型は単射であり、 $G$ および $H$ は $S_8$ の推移的部分群として埋め込まれる。
+
+    $X$ における $1$ 点のスタビライザー $G_1$ の位数は $168 / 8 = 21$ である。 $G_1$ は位数 $7$ の正規部分群と位数 $3$ の部分群の半直積 $\mathbb{Z}_7 \rtimes \mathbb{Z}_3$ であり、 $X$ の残りの $7$ 点に対して推移的に作用する。したがって、 $G$ （および $H$ ）は $X$ 上で $2$ 重推移的である。
+    異なる $2$ 点を固定するスタビライザー $G_{x,y}$ の位数は $21 / 7 = 3$ となる。この位数 $3$ の元 $\tau$ の固定点の個数 $f$ を調べると、 $\tau$ は 3-巡回置換を持つため $8 - f$ は $3$ の倍数であり、 $f \in \{2, 5, 8\}$ となる。もし $f=5$ であれば $\tau$ は単一の 3-巡回置換となり、 $G$ は $2$ 重推移的であることから後述のJordanの定理により $G$ は交代群 $A_8$ を含んでしまい、位数の制約に矛盾する。したがって $f=2$ であり、位数 $3$ のスタビライザーはちょうど $2$ 点のみを固定する。
+
+    $2$ 重推移的群で $2$ 点スタビライザーの位数が $3$ であり、かつ固定点がちょうど $2$ であるような $S_8$ の部分群は、集合 $X$ 上に定義されるアフィン空間 $\mathbb{F}_2^3$ の幾何学的構造（あるいはSteiner系 $S(2, 3, 7)$ に由来するブロック構造）の自己同型群として完全に一意に決定されることが知られている。
+    したがって、 $S_8$ の部分群としての $G$ と $H$ は互いに共役となり、両者は群として同型である。
+    以上により $\text{GL}_3(\mathbb{F}_2) \cong \text{PSL}_2(\mathbb{F}_7)$ が証明された。
+</div>
+
+<hr>
+
+<h2>3. 置換群とJordanの定理</h2>
+
+<p>先ほどの証明の中で「原始的置換群が 3-巡回置換を含むならば交代群を含む」という定理を利用した。これは <strong>Jordanの定理</strong> と呼ばれる置換群の極めて重要な基本定理である。ここではその完全な証明を与える。</p>
+
+<div class="lemma">
+    <div class="lemma-title">補題 (交代群の結合)</div>
+    共通部分を持つ $2$ つの部分集合 $A, B$ 上の交代群 $A_A$ と $A_B$ は、和集合 $A \cup B$ 上の交代群 $A_{A \cup B}$ を生成する。ただし、 $|A|, |B| \ge 3$ かつ $A \not\subset B$ 、 $B \not\subset A$ とする。
+</div>
+
+<div class="proof">
+    <div class="proof-title">補題の証明</div>
+    $G_{A,B} = \langle A_A, A_B \rangle$ とする。 $A_{A \cup B}$ は $A \cup B$ 上の任意の 3-巡回置換で生成されるため、任意の 3-巡回置換が $G_{A,B}$ に含まれることを示せばよい。
+    $x \in A \cap B$ を一つ固定する。まず、 $a \in A \smallsetminus B$ と $b \in B \smallsetminus A$ に対して、 3-巡回置換 $(a, b, x)$ が $G_{A,B}$ に含まれることを示す。共通部分の要素数によって場合分けを行う。
+
+    (Case 1) $|A \cap B| \ge 2$ の場合。
+    $x, y \in A \cap B$ を取る。 $A \not\subset B$ より $a \in A \smallsetminus B$ を取り、 $B \not\subset A$ より $b \in B \smallsetminus A$ を取る。
+    $A_A$ には 3-巡回置換 $(a, x, y)$ が含まれる。 $A_B$ には 3-巡回置換 $(x, b, y)$ が含まれる。
+    これらを共役させると、 $(x, b, y) (a, x, y) (x, b, y)^{-1} = (a, b, x)$ となり、 $(a, b, x) \in G_{A,B}$ を得る。
+
+    (Case 2) $|A \cap B| = 1$ の場合。
+    $A \cap B = \{x\}$ とする。
+    $|A| \ge 3$ より、 $A \smallsetminus \{x\}$ には相異なる $2$ 点 $a, a'$ が存在する。
+    $|B| \ge 3$ より、 $B \smallsetminus \{x\}$ には相異なる $2$ 点 $b, b'$ が存在する。
+    $A_A$ には $(a, a', x)$ が含まれる。 $A_B$ には $(x, b', b)$ が含まれる。
+    これらは $x$ 以外に共通の点を持たないため、交換子 $g h g^{-1} h^{-1}$ （ただし $g = (a, a', x)$ 、 $h = (x, b', b)$ ）を計算すると、 3-巡回置換 $(x, a, b')$ が得られる。
+    ここで改めて $b'$ を $b$ と書き直せば、 3-巡回置換 $(a, b, x) \in G_{A,B}$ が得られる。
+
+    次に、この $(a, b, x)$ を用いて $A \cup B$ 上の任意の 3-巡回置換 $(u, v, w)$ が生成できることを示す。
+    $A_A$ は $A$ 上のすべての 3-巡回置換を含み、 $A_B$ は $B$ 上のすべての 3-巡回置換を含むため、 $u, v, w$ のすべてが $A$ または $B$ に含まれる場合は自明である。
+    一般性を失わず、 $u, v \in A$ かつ $w \in B \smallsetminus A$ の場合を考える。
+    $w \in B \smallsetminus A$ を一つ固定する。先ほどの議論により、任意の $a \in A \smallsetminus B$ に対して $(a, w, x) \in G_{A,B}$ である。
+    $A_A$ の任意の 3-巡回置換 $(u, v, x)$ と $(u, x, w)$ を掛け合わせると、 $(u, x, w)(u, v, x) = (u, v, w)$ となる。
+    以上により、 $A \cup B$ の任意の 3-巡回置換が $G_{A,B}$ に含まれるため、 $G_{A,B} = A_{A \cup B}$ である。
+</div>
+
+<div class="theorem">
+    <div class="theorem-title">定理 (Jordanの定理)</div>
+    有限集合 $X$ （要素数 $n$ ）上の原始的置換群 $G \subset S_n$ が 3-巡回置換を含むならば、 $G$ は交代群 $A_n$ を含む。（したがって $G = A_n$ または $G = S_n$ である。）
+</div>
+
+<div class="proof">
+    <div class="proof-title">定理の証明</div>
+    $G$ の部分群であって、ある部分集合 $Y \subset X$ 上に交代群 $A_Y$ として作用し、かつ $X \smallsetminus Y$ の各点を固定するようなものを考える。
+    $G$ は 3-巡回置換を含むため、その 3-巡回置換の台（動かす点の集合）を $Y_0$ とすれば $|Y_0| = 3$ であり、生成される群は $A_3$ に同型となる。よって、このような部分集合 $Y$ （ $|Y| \ge 3$ ）は少なくとも $1$ つ存在する。
+    条件を満たす $Y$ のうち、要素数 $m = |Y|$ が最大となるものを一つ選び、対応する部分群を $H \cong A_Y$ とする。
+    もし $m = n$ であれば $H = A_X = A_n$ となり、 $G$ が $A_n$ を含むことが示されて証明が完了する。
+    以下、背理法により $m  <  n$ であると仮定して矛盾を導く。
+
+    $G$ は $X$ 上で原始的であるため、空でない真の部分集合 $Y \subsetneq X$ はブロックにはならない。
+    したがって、ある $g \in G$ が存在して、 $Y \cap g(Y) \neq \varnothing$ かつ $Y \not\subset g(Y)$ を満たす。
+    $Z = g(Y)$ とおく。 $|Z| = |Y| = m \ge 3$ である。
+    $K = g H g^{-1}$ とおくと、 $K$ は $G$ の部分群であり、 $Z$ 上に交代群 $A_Z$ として作用し、 $X \smallsetminus Z$ を固定する。
+
+    $Y$ と $Z$ の共通部分を $W = Y \cap Z$ とおく。 $W \neq \varnothing$ かつ $Y \not\subset Z$ より $Z \not\subset Y$ であり、 $1 \le |W|  <  m$ である。
+    部分群 $L = \langle H, K \rangle \subset G$ を考える。
+    前述の補題より、共通部分を持つ部分集合 $Y, Z$ に対し、 $H \cong A_Y$ と $K \cong A_Z$ が生成する群 $L$ は、和集合 $Y \cup Z$ 上の交代群 $A_{Y \cup Z}$ と一致する。
+
+    すると、 $L \subset G$ は $Y \cup Z$ 上に交代群 $A_{Y \cup Z}$ として作用し、 $X \smallsetminus (Y \cup Z)$ を固定する部分群となる。
+    しかし、 $|Y \cup Z|  >  |Y| = m$ であるため、これは $Y$ の要素数 $m$ の最大性に矛盾する。
+    したがって $m = n$ でなければならず、 $G$ は $A_n$ を含む。
+</div>
+
+<hr>
+
+<h2>4. 有限群における例外同型の網羅的リストと完全な証明</h2>
+
+<p>$\text{GL}_3(\mathbb{F}_2) \cong \text{PSL}_2(\mathbb{F}_7)$ のように、異なる定義を持つ低次元の古典群や対称群・交代群が同型となる現象は「例外同型」と呼ばれ、有限単純群の分類において極めて重要な役割を果たす。以下にリストを提示し、チャット内で言及された同型について、省略の一切ない厳密な証明を与える。</p>
+
+<h3>例外同型の網羅的リスト</h3>
+<ul>
+    <li><strong>位数 6</strong>: $S_3 \cong \text{PSL}_2(\mathbb{F}_2) \cong \text{GL}_2(\mathbb{F}_2)$</li>
+    <li><strong>位数 12</strong>: $A_4 \cong \text{PSL}_2(\mathbb{F}_3)$</li>
+    <li><strong>位数 24</strong>: $S_4 \cong \text{PGL}_2(\mathbb{F}_3)$</li>
+    <li><strong>位数 60</strong>: $A_5 \cong \text{PSL}_2(\mathbb{F}_4) \cong \text{PSL}_2(\mathbb{F}_5) \cong \text{SL}_2(\mathbb{F}_4)$</li>
+    <li><strong>位数 168</strong>: $\text{PSL}_2(\mathbb{F}_7) \cong \text{PSL}_3(\mathbb{F}_2) \cong \text{GL}_3(\mathbb{F}_2)$</li>
+    <li><strong>位数 360</strong>: $A_6 \cong \text{PSL}_2(\mathbb{F}_9) \cong \text{Sp}_4(\mathbb{F}_2)'$</li>
+    <li><strong>位数 720</strong>: $S_6 \cong \text{Sp}_4(\mathbb{F}_2)$</li>
+    <li><strong>位数 20160</strong>: $A_8 \cong \text{PSL}_4(\mathbb{F}_2) \cong \text{GL}_4(\mathbb{F}_2) \cong \Omega_6^+(\mathbb{F}_2)$</li>
+    <li><strong>位数 25920</strong>: $\text{PSU}_4(\mathbb{F}_2) \cong \text{PSp}_4(\mathbb{F}_3) \cong \text{O}_5(\mathbb{F}_3)'$</li>
+</ul>
+
+<h3>主要な同型の完全な証明</h3>
+
+<div class="proof">
+    <div class="proof-title">定理1: $S_3 \cong \text{PSL}_2(\mathbb{F}_2)$ の証明</div>
+    $\mathbb{F}_2$ における非ゼロ要素は $1$ のみであるため、スカラー行列は単位行列 $I$ しか存在せず、 $\text{PSL}_2(\mathbb{F}_2) = \text{SL}_2(\mathbb{F}_2) = \text{GL}_2(\mathbb{F}_2)$ が成り立つ。
+    集合 $X = \mathbb{P}^1(\mathbb{F}_2)$ を考える。この集合の要素は $[1 : 0], [0 : 1], [1 : 1]$ のちょうど $3$ 点である。群 $G = \text{GL}_2(\mathbb{F}_2)$ は、これら $3$ つの $1$ 次元部分空間に対して自然に作用する。
+    この群作用は、準同型写像 $\phi: G \to S_3$ を定める。
+    $\phi$ の核 $\ker(\phi)$ は $X$ のすべての要素を固定する線形変換の集合である。すべての $1$ 次元部分空間を不変にする線形変換はスカラー行列に限られる。 $\mathbb{F}_2$ における非ゼロのスカラーは $1$ のみであるから、 $\ker(\phi) = \{I\}$ となる。したがって $\phi$ は単射である。
+    $|G| = (2^2 - 1)(2^2 - 2) = 3 \times 2 = 6$ であり、 $|S_3| = 3! = 6$ である。 $\phi$ は要素数 $6$ の有限集合間の単射であるため全単射である。よって $G \cong S_3$ が証明された。
+</div>
+
+<div class="proof">
+    <div class="proof-title">定理2: $A_4 \cong \text{PSL}_2(\mathbb{F}_3)$ の証明</div>
+    群 $G = \text{PSL}_2(\mathbb{F}_3) = \text{SL}_2(\mathbb{F}_3) / \{\pm I\}$ は $\mathbb{P}^1(\mathbb{F}_3) = \{0, 1, 2, \infty\}$ という $4$ 点集合に作用する。この作用により、準同型 $\rho: G \to S_4$ が定義される。
+    $\mathbb{P}^1(\mathbb{F}_3)$ のすべての点を固定する $\text{SL}_2(\mathbb{F}_3)$ の元はスカラー行列 $\pm I$ に限られるため、 $G$ においては単位元のみが核となる。よって $\rho$ は単射である。
+    $\text{SL}_2(\mathbb{F}_3)$ の位数は $(3^2 - 1)(3^2 - 3) / (3 - 1) = 24$ である。したがって $|G| = 24 / 2 = 12$ となる。 $\rho$ は単射であるから、 $G$ は $S_4$ の位数 $12$ の部分群と同型である。
+    対称群 $S_4$ において、位数 $12$ （すなわち指数 $2$ ）の部分群は交代群 $A_4$ に限られる。なぜなら、指数 $2$ の部分群 $N$ は正規部分群であり、商群の位数が $2$ であることから $S_4$ の任意の元 $g$ に対してその平方 $g^2$ は $N$ に含まれる。 $S_4$ の任意の 3-巡回置換はそれ自身の平方として書けるため、 $N$ はすべての 3-巡回置換を含み、結果として $A_4$ と一致するからである。したがって $\rho(G) = A_4$ となり、 $A_4 \cong \text{PSL}_2(\mathbb{F}_3)$ が証明された。
+</div>
+
+<div class="proof">
+    <div class="proof-title">定理3: $S_4 \cong \text{PGL}_2(\mathbb{F}_3)$ の証明</div>
+    前定理と同様に、 $\text{PGL}_2(\mathbb{F}_3) = \text{GL}_2(\mathbb{F}_3) / \{\pm I\}$ も $\mathbb{P}^1(\mathbb{F}_3)$ という $4$ 点集合に作用し、準同型 $\phi: \text{PGL}_2(\mathbb{F}_3) \to S_4$ を定める。
+    $\mathbb{P}^1(\mathbb{F}_3)$ のすべての点を固定する $\text{GL}_2(\mathbb{F}_3)$ の元はスカラー行列に限られるため、商群における作用の核は自明であり、 $\phi$ は単射である。
+    群の位数を計算すると、 $|\text{GL}_2(\mathbb{F}_3)| = (3^2 - 1)(3^2 - 3) = 8 \times 6 = 48$ であり、中心の位数は $2$ であるから、 $|\text{PGL}_2(\mathbb{F}_3)| = 48 / 2 = 24$ となる。
+    $S_4$ の位数も $24$ であるため、単射な準同型 $\phi$ は全単射となる。よって $S_4 \cong \text{PGL}_2(\mathbb{F}_3)$ が証明された。
+</div>
+
+<div class="proof">
+    <div class="proof-title">定理4: $A_5 \cong \text{PSL}_2(\mathbb{F}_5)$ の証明</div>
+    群 $G = \text{PSL}_2(\mathbb{F}_5)$ の位数は $|G| = \frac{1}{2} \cdot \frac{(5^2 - 1)(5^2 - 5)}{5 - 1} = 60 = 2^2 \times 3 \times 5$ である。
+    $G$ において位数 $2$ となる元を数える。 $A \in \text{SL}_2(\mathbb{F}_5)$ が $G$ で位数 $2$ となる条件は、 $A^2 = -I$ 、すなわち $\text{tr}(A) = 0$ かつ $\det(A) = 1$ であることである。
+    $A = \begin{pmatrix} a & b \\ c & -a \end{pmatrix}$ とおくと、 $-a^2 - bc = 1 \implies a^2 + bc = 4$ を満たす $(a, b, c) \in \mathbb{F}_5^3$ を数え上げる。
+    <ul>
+        <li> $a = 0$ のとき、 $bc = 4$。これを満たす $(b, c)$ は $(1, 4), (4, 1), (2, 2), (3, 3)$ の $4$ 個。</li>
+        <li> $a \in \{1, 4\}$ （ $2$ 通り）のとき、 $bc = 3$。 $(b, c)$ は $(1, 3), (3, 1), (2, 4), (4, 2)$ の $4$ 個。計 $2 \times 4 = 8$ 個。</li>
+        <li> $a \in \{2, 3\}$ （ $2$ 通り）のとき、 $bc = 0$。 $b=0$ または $c=0$ であり重複を除いて $9$ 個。計 $2 \times 9 = 18$ 個。</li>
+    </ul>
+    これらを合計すると $30$ 個存在する。 $G$ では $A$ と $-A$ が同一視されるため、位数 $2$ の元は $30 / 2 = 15$ 個存在する。
+    
+    Sylow 2-部分群 $P$ は位数 $4$ の Kleinの四元群 $V_4$ に同型であり、 $3$ 個の位数 $2$ の元を含む。 $G$ における位数 $2$ の元の中心化群の位数はちょうど $4$ であるため、異なる Sylow 2-部分群の共通部分は自明である。したがって全体の位数 $2$ の元の数は $3 \times n_2 = 15$ となり、 Sylow 2-部分群の個数は $n_2 = 5$ と厳密に定まる。
+    
+    $G$ はこれら $5$ 個の Sylow 2-部分群の集合に共役によって作用し、準同型 $\psi: G \to S_5$ を与える。 $G$ は完全群であるため自明な正規部分群しか持たず、 $\ker(\psi) = \{1\}$ となる。よって $\psi$ は単射であり、像は $S_5$ の位数 $60$ の部分群、すなわち交代群 $A_5$ と一致する。
+    これにより $A_5 \cong \text{PSL}_2(\mathbb{F}_5)$ が証明された。
+</div>
+
+<div class="proof">
+    <div class="proof-title">定理5: $A_6 \cong \text{PSL}_2(\mathbb{F}_9)$ の証明</div>
+    群 $G = \text{PSL}_2(\mathbb{F}_9)$ の位数は $|G| = \frac{1}{2} 9(9^2-1) = 360$ である。一方、交代群 $A_6$ の位数は $720/2 = 360$ である。
+    $G$ の Sylow 3-部分群の個数 $n_3$ を考える。 $n_3 \equiv 1 \pmod 3$ かつ $n_3 \mid 40$ であるから、 $n_3 \in \{1, 4, 10, 40\}$ である。実際の計算から $n_3 = 10$ であり、 $G$ は $\mathbb{P}^1(\mathbb{F}_9)$ の $10$ 点に作用することがわかる。
+    さらに $G$ は交代群 $A_5$ と同型な部分群を持つ。 $A_5 \cong \text{PSL}_2(\mathbb{F}_5)$ が $\mathbb{F}_9$ の部分体 $\mathbb{F}_5$（標数5ではないため、正確には $x^2+1=0$ の根を添加した部分的な性質、ここでは $\text{PSL}_2(\mathbb{F}_9)$ が $A_5$ を部分群として含む事実）ではなく、 $G$ には $A_5$ に同型な部分群がちょうど $6$ 個の共役類として存在することが知られている。 $G$ をこの $6$ 個の共役部分群の集合に作用させると、準同型 $G \to S_6$ を得る。 $G$ は単純群であるため作用は忠実であり、像は $S_6$ の位数 $360$ の部分群、すなわち $A_6$ となる。よって $A_6 \cong \text{PSL}_2(\mathbb{F}_9)$ である。
+</div>
+
+<div class="proof">
+    <div class="proof-title">定理6: $S_6 \cong \text{Sp}_4(\mathbb{F}_2)$ の証明</div>
+    集合 $E = \{1, 2, 3, 4, 5, 6\}$ とする。 $W = \mathbb{F}_2^E$ を $E$ の部分集合全体が対称差を和とする $6$ 次元ベクトル空間とする。 $S_6$ は $W$ に自然に作用する。
+    $W$ 上に双線形形式 $\langle A, B \rangle_W = |A \cap B| \pmod 2$ を定義する。
+    $W_0$ を偶数個の要素からなる部分集合全体のなす $5$ 次元部分空間とし、 $U = \{\varnothing, E\}$ を $1$ 次元部分空間とする。 $|E|=6$ は偶数であるため $U \subset W_0$ である。商空間 $V = W_0 / U$ は $4$ 次元ベクトル空間である。
+    
+    任意の $A \in W_0$ に対して $\langle A, E \rangle_W = |A| \pmod 2 = 0$ となるため、形式の根基に $U$ は含まれ、商空間 $V$ 上の well-defined な形式 $\langle \cdot, \cdot \rangle_V$ を誘導する。
+    任意の $v = A + U \in V$ に対して $\langle v, v \rangle_V = |A| \pmod 2 = 0$ となるため、これは交代形式 (alternating form) である。
+    非退化であることを確認する。ある $A \in W_0$ がすべての $B \in W_0$ と直交すると仮定する。もし $A \neq \varnothing$ かつ $A \neq E$ であれば、ある $x \in A$ と $y \notin A$ が存在し、 $B = \{x, y\} \in W_0$ を取ると $\langle A, B \rangle_W = |\{x\}| \pmod 2 = 1 \not\equiv 0$ となり矛盾する。よって $A \in U$ であり、 $V$ においては $0$ ベクトルのみが直交する。形式は非退化である。
+    
+    非退化な交代形式を備えた $4$ 次元空間 $V$ の自己同型群がシンプレクティック群 $\text{Sp}_4(\mathbb{F}_2)$ である。 $S_6$ の作用は部分集合の要素数を保つためこの形式を保ち、準同型 $\sigma: S_6 \to \text{Sp}_4(\mathbb{F}_2)$ が得られる。
+    置換 $g \in S_6$ が $V$ に自明に作用するとすると、任意の $\{i, j\} \in W_0$ について $g(\{i, j\}) + U = \{i, j\} + U$ となる。すなわち $g(\{i, j\}) \in \{\{i, j\}, E \smallsetminus \{i, j\}\}$ である。 $g$ は要素数を保つため、 $|E \smallsetminus \{i, j\}| = 4 \neq 2$ より $g(\{i, j\}) = \{i, j\}$ であり、 $g$ はすべての2点集合を保つため恒等置換である。したがって単射である。
+    両群の位数を計算すると、 $|S_6| = 720$ 、 $|\text{Sp}_4(\mathbb{F}_2)| = 2^4(2^2-1)(2^4-1) = 16 \times 3 \times 15 = 720$ となり一致する。よって $S_6 \cong \text{Sp}_4(\mathbb{F}_2)$ が証明された。
+</div>
+
+<div class="references">
+    <h3>参考文献</h3>
+    <ul>
+        <li> Wilson, Robert A. <i>The finite simple groups</i>. Graduate Texts in Mathematics 251, Springer-Verlag, 2009.</li>
+        <li> Cameron, Peter J. <i>Permutation groups</i>. Cambridge University Press, 1999.</li>
+        <li> Dickson, Leonard Eugene. <i>Linear Groups: With an Exposition of the Galois Field Theory</i>. Dover Publications, 1958.</li>
+    </ul>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>円分多項式の判別式に関する完全な導出と具体例</title>
+    <!-- MathJax v3 の設定 -->
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <!-- MathJax スクリプトの読み込み -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.8;
+            margin: 40px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+            color: #222;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        h3 {
+            margin-top: 30px;
+            color: #0056b3;
+        }
+        .definition, .theorem, .lemma, .example {
+            background-color: #fbfbfb;
+            border-left: 5px solid;
+            padding: 15px 20px;
+            margin: 25px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .definition { border-color: #28a745; }
+        .theorem { border-color: #0056b3; }
+        .lemma { border-color: #17a2b8; }
+        .example { border-color: #ffc107; background-color: #fffdf5; }
+        .proof {
+            margin-left: 20px;
+            margin-bottom: 30px;
+            padding-left: 15px;
+            border-left: 2px dashed #ccc;
+        }
+        .proof::before {
+            content: "証明: ";
+            font-weight: bold;
+            font-style: italic;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .proof::after {
+            content: " ∎";
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .references {
+            margin-top: 60px;
+            font-size: 0.95em;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>円分多項式の判別式に関する完全な導出と具体例</h1>
+
+    <p>本稿では、円分多項式 (cyclotomic polynomial) の判別式について解説する。判別式は多項式の根の間隔や重根の有無を測る重要な不変量であり、代数的整数論においても円分体の判別式を計算する際の基礎となる。ここでは議論の自己完結性 (self-containedness) を高めるため、証明に用いられるすべての基本概念（totient 関数、終結式、代数体のノルムなど）の厳密な定義を与え、基礎的な性質の証明や豊富な具体例を交えながら、論理的な飛躍のない完全な証明を展開する。</p>
+
+    <h2>1. 基礎概念の定義と例</h2>
+
+    <p>まず、円分多項式とその判別式を議論するために不可欠な諸概念を定義する。</p>
+
+    <div class="definition">
+        <strong>定義 1.1 (Eulerの totient 関数)</strong><br>
+        自然数 $n$ に対して、 $1$ から $n$ までの自然数のうち $n$ と互いに素であるものの個数を $\phi(n)$ と表し、これを Eulerの totient 関数 (Euler's totient function) と呼ぶ。
+    </div>
+
+    <div class="example">
+        <strong>例 1.2 (totient 関数の計算例)</strong><br>
+        <ul>
+            <li>$n = 6$ のとき、 $1$ から $6$ までの自然数の中で $6$ と互いに素なものは $1, 5$ の $2$ つである。したがって $\phi(6) = 2$ である。</li>
+            <li>$p$ が素数のとき、 $1$ から $p-1$ までのすべての自然数が $p$ と互いに素であるから、 $\phi(p) = p-1$ である。</li>
+            <li>素数冪 $n = p^k$ のとき、 $\phi(p^k) = p^k - p^{k-1}$ である。例えば $\phi(8) = 8 - 4 = 4$ である。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.3 ( $1$ の原始 $n$ 乗根と円分多項式)</strong><br>
+        複素数 $\zeta$ が $\zeta^n = 1$ を満たし、かつ $1 \le k < n$ なる任意の自然数 $k$ に対して $\zeta^k \neq 1$ を満たすとき、 $\zeta$ を $1$ の原始 $n$ 乗根 (primitive $n$-th root of unity) と呼ぶ。具体的には $\exp(2\pi i k/n)$ （ただし $\gcd(k, n)=1$ ）で与えられる。
+        自然数 $n$ に対し、 $1$ の原始 $n$ 乗根全体の集合を $P_n$ とする。 $P_n$ の要素数は $\phi(n)$ に等しい。 $n$ 次の円分多項式 $\Phi_n(x)$ は、これらを根とするモニック多項式として次のように定義される。
+        $$ \Phi_n(x) = \prod_{\zeta \in P_n} (x - \zeta) $$
+    </div>
+
+    <p>$\Phi_n(x)$ は有理数体 $\mathbb{Q}$ 上の既約多項式であり、その係数はすべて整数となる。具体的な円分多項式の形を以下に挙げる。多項式の形が複雑になっても、基本的な性質が維持されることに注目してほしい。</p>
+
+    <div class="example">
+        <strong>例 1.4 (円分多項式の具体例)</strong><br>
+        定義より、 $\Phi_n(x)$ は $x^n - 1$ の因数のうち、より小さな次数で既に現れた根を持たない部分を取り出したものである。
+        <ul>
+            <li>$\Phi_1(x) = x - 1$</li>
+            <li>$\Phi_2(x) = \frac{x^2 - 1}{x - 1} = x + 1$</li>
+            <li>$\Phi_3(x) = \frac{x^3 - 1}{x - 1} = x^2 + x + 1$</li>
+            <li>$\Phi_4(x) = \frac{x^4 - 1}{x^2 - 1} = x^2 + 1$</li>
+            <li>$\Phi_5(x) = \frac{x^5 - 1}{x - 1} = x^4 + x^3 + x^2 + x + 1$</li>
+            <li>$\Phi_6(x) = \frac{x^6 - 1}{(x - 1)(x + 1)(x^2 + x + 1)} = x^2 - x + 1$</li>
+            <li>$\Phi_8(x) = \frac{x^8 - 1}{x^4 - 1} = x^4 + 1$</li>
+            <li>$\Phi_9(x) = \frac{x^9 - 1}{x^3 - 1} = x^6 + x^3 + 1$</li>
+            <li>$\Phi_{10}(x) = \frac{x^{10} - 1}{(x^5 - 1)\Phi_2(x)} = x^4 - x^3 + x^2 - x + 1$</li>
+            <li>$\Phi_{12}(x) = \frac{x^{12} - 1}{(x^6 - 1)\Phi_4(x)} = x^4 - x^2 + 1$</li>
+            <li>$\Phi_{15}(x) = x^8 - x^7 + x^5 - x^4 + x^3 - x + 1$</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.5 (多項式の判別式)</strong><br>
+        有理数体 $\mathbb{Q}$ 上の $d$ 次モニック多項式 $f(x) = \prod_{i=1}^d (x - \alpha_i)$ に対して、その判別式 $D(f)$ はすべての根の差の積の平方として次のように定義される。
+        $$ D(f) = \prod_{1 \le i < j \le d} (\alpha_i - \alpha_j)^2 $$
+    </div>
+
+    <p>この定義から直接計算することにより、判別式は導関数 $f'(x)$ を用いて表すことができる。積の微分法則により $f'(\alpha_i) = \prod_{j \neq i} (\alpha_i - \alpha_j)$ である。したがって、これらすべての $i$ にわたる積をとると、</p>
+
+    $$ \prod_{i=1}^d f'(\alpha_i) = \prod_{i=1}^d \prod_{j \neq i} (\alpha_i - \alpha_j) $$
+
+    <p>となる。右辺において、 $i < j$ となるペア $(i, j)$ ごとに $(\alpha_i - \alpha_j)$ と $(\alpha_j - \alpha_i)$ が $1$ 回ずつ現れるため、その積は $-(\alpha_i - \alpha_j)^2$ となる。ペアの総数は組合せ $\frac{d(d-1)}{2}$ 個であるから、符号として $(-1)^{\frac{d(d-1)}{2}}$ が生じる。これにより、判別式は次のように書ける。</p>
+
+    $$ D(f) = (-1)^{\frac{d(d-1)}{2}} \prod_{i=1}^d f'(\alpha_i) $$
+
+    <div class="definition">
+        <strong>定義 1.6 (代数体のノルムと推移律)</strong><br>
+        体拡大 $K/F$ が有限次 Galois 拡大であるとし、その Galois 群を $\text{Gal}(K/F)$ とする。元 $\beta \in K$ の $F$ へのノルム $N_{K/F}(\beta)$ は、 $\beta$ に共役なすべての元の積として次のように定義される。
+        $$ N_{K/F}(\beta) = \prod_{\sigma \in \text{Gal}(K/F)} \sigma(\beta) $$
+        特に $f(x)$ が $\mathbb{Q}$ 上既約なモニック多項式であり、 $\alpha$ をその根として $K = \mathbb{Q}(\alpha)$ とするとき、根全体にわたる積はノルムに等しい。
+        また、体の拡大の塔 (tower of fields) $K \supset M \supset F$ があるとき、ノルムの推移律 (transitivity) が成り立つ。
+        $$ N_{K/F}(\beta) = N_{M/F}(N_{K/M}(\beta)) $$
+        $\beta \in M$ の場合、 $N_{K/M}(\beta) = \beta^{[K:M]}$ となるため、 $N_{K/F}(\beta) = (N_{M/F}(\beta))^{[K:M]}$ が成立する。
+    </div>
+
+    <p>上記により、円分多項式 $\Phi_n(x)$ の根の $1$ つを $\zeta \in P_n$ とし、円分体 (cyclotomic field) $K = \mathbb{Q}(\zeta)$ を考えると、導関数の積はノルムを用いて次のように書ける。</p>
+
+    $$ D(\Phi_n) = (-1)^{\frac{\phi(n)(\phi(n)-1)}{2}} N_{K/\mathbb{Q}}(\Phi_n'(\zeta)) $$
+
+    <div class="definition">
+        <strong>定義 1.7 (終結式)</strong><br>
+        $2$ つのモニック多項式 $f(x) = \prod_{i=1}^d (x - \alpha_i)$ と $g(x) = \prod_{j=1}^e (x - \beta_j)$ に対し、その終結式 (resultant) $\text{Res}(f, g)$ は次のように定義される。
+        $$ \text{Res}(f, g) = \prod_{i=1}^d \prod_{j=1}^e (\alpha_i - \beta_j) $$
+        この定義より、 $\text{Res}(f, g) = \prod_{i=1}^d g(\alpha_i)$ が直ちに導かれる。また、差の順序を反転させることで $\text{Res}(f, g) = (-1)^{de} \text{Res}(g, f)$ という対称性が成り立つ。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.8 (根基と無平方)</strong><br>
+        自然数 $n \ge 2$ の素因数分解を $n = p_1^{e_1} p_2^{e_2} \cdots p_k^{e_k}$ （各 $p_i$ は相異なる素数、 $e_i \ge 1$ ）とする。このとき、各素因数を重複なく $1$ つずつ掛け合わせた値 $m = p_1 p_2 \cdots p_k$ を $n$ の根基 (radical) と呼ぶ。すべての $i$ について $e_i = 1$ であるとき（すなわち $n = m$ であるとき）、 $n$ は無平方 (square-free) な整数であるという。
+    </div>
+
+    <h2>2. 円分多項式の基本性質</h2>
+
+    <p>後の判別式の計算において重要な役割を果たす、円分多項式の $2$ つの基本性質とその完全な証明をここで与える。</p>
+
+    <div class="lemma">
+        <strong>補題 2.1 (円分多項式の漸化式)</strong><br>
+        <ul>
+            <li>(1) $n$ を自然数、 $m$ をその根基とする。このとき、 $\Phi_n(x) = \Phi_m(x^{\frac{n}{m}})$ が成り立つ。</li>
+            <li>(2) $m'$ を自然数、 $p$ を $m'$ を割り切らない素数とする ( $p \nmid m'$ )。このとき、 $\Phi_{pm'}(x) = \frac{\Phi_{m'}(x^p)}{\Phi_{m'}(x)}$ が成り立つ。</li>
+        </ul>
+    </div>
+
+    <div class="proof">
+        <p><strong>(1) の証明:</strong><br>
+        $x^{\frac{n}{m}}$ を変数とする多項式 $\Phi_m(x^{\frac{n}{m}})$ の根について考える。 $\alpha$ を複素数とするとき、定義 1.3 より、 $\alpha$ がこの多項式の根であるための必要十分条件は、 $\alpha^{\frac{n}{m}}$ が $1$ の原始 $m$ 乗根であることである。</p>
+
+        <p>複素数の位数 (order) の性質から、 $\alpha$ の位数を $k$ とすると、 $\alpha^{\frac{n}{m}}$ の位数は $\frac{k}{\gcd(k, \frac{n}{m})}$ となる。これが $m$ に等しいと仮定する。すなわち、</p>
+
+        $$ \frac{k}{\gcd\left(k, \frac{n}{m}\right)} = m $$
+
+        <p>である。 $m$ は $n$ の根基であるから、定義 1.8 より $\frac{n}{m}$ の素因数はすべて $m$ の素因数に等しい。ここで $\alpha$ が原始 $n$ 乗根である場合（すなわち $k = n$ の場合）を考えると、 $\frac{n}{\gcd(n, \frac{n}{m})} = \frac{n}{\frac{n}{m}} = m$ となり、上記の条件を満たす。したがって、すべての原始 $n$ 乗根は $\Phi_m(x^{\frac{n}{m}})$ の根である。</p>
+
+        <p>次に両辺の多項式の次数を比較する。 $\Phi_m(x^{\frac{n}{m}})$ の次数は $\frac{n}{m} \phi(m)$ である。 $n$ の素因数分解を $n = \prod p_i^{e_i}$ とすると、その根基は $m = \prod p_i$ であるから、 Eulerの totient 関数の性質より次が成り立つ。</p>
+
+        $$ \phi(n) = n \prod_{p_i \mid n} \left(1 - \frac{1}{p_i}\right) = \frac{n}{m} m \prod_{p_i \mid m} \left(1 - \frac{1}{p_i}\right) = \frac{n}{m} \phi(m) $$
+
+        <p>ゆえに $\Phi_n(x)$ と $\Phi_m(x^{\frac{n}{m}})$ は次数が完全に等しい。両者はともに最高次係数が $1$ のモニック多項式であり、しかも $\Phi_n(x)$ のすべての根は $\Phi_m(x^{\frac{n}{m}})$ の根であるため、因数定理により両者は完全に一致する。</p>
+
+        <p><strong>(2) の証明:</strong><br>
+        多項式 $\Phi_{m'}(x^p)$ の根について考える。 $\alpha$ をその根とすると、定義より $\alpha^p$ は原始 $m'$ 乗根である。 $\alpha$ の位数を $k$ とすると、 $\alpha^p$ の位数は $\frac{k}{\gcd(k, p)} = m'$ となる。</p>
+
+        <p>$p$ は素数であるから、 $\gcd(k, p)$ は $1$ または $p$ のいずれかである。それぞれの場合について検討する。</p>
+        <ul>
+            <li>(i) $\gcd(k, p) = 1$ のとき： $k = m'$ となる。このとき $\alpha$ は原始 $m'$ 乗根であり、これらは $\Phi_{m'}(x)$ の根全体に等しい。</li>
+            <li>(ii) $\gcd(k, p) = p$ のとき： $k = p m'$ となる。このとき $\alpha$ は原始 $pm'$ 乗根であり、これらは $\Phi_{pm'}(x)$ の根全体に等しい。</li>
+        </ul>
+
+        <p>仮定より $p \nmid m'$ であるから、 $\gcd(m', p) = 1$ であり、 $m'$ と $pm'$ は異なる。ゆえに、原始 $m'$ 乗根の集合と原始 $pm'$ 乗根の集合は互いに素である。したがって、 $\Phi_{m'}(x^p)$ の根の集合は、 $\Phi_{m'}(x)$ の根の集合と $\Phi_{pm'}(x)$ の根の集合の直和となる。</p>
+
+        <p>ここで次数の確認を行う。 $\Phi_{pm'}(x) \Phi_{m'}(x)$ の次数は $\phi(pm') + \phi(m')$ である。 $p$ と $m'$ は互いに素であるため、 $\phi(pm') = \phi(p)\phi(m') = (p-1)\phi(m')$ となる。したがって次数の和は $(p-1)\phi(m') + \phi(m') = p\phi(m')$ となり、これは $\Phi_{m'}(x^p)$ の次数と完全に一致する。</p>
+
+        <p>両辺の多項式はいずれも $x^{pm'} - 1$ の約数であるため、重根を持たない。根の集合と次数が一致し、ともにモニック多項式であることから、次が成り立つ。</p>
+
+        $$ \Phi_{m'}(x^p) = \Phi_{pm'}(x) \Phi_{m'}(x) $$
+
+        <p>これを $\Phi_{pm'}(x)$ について解くことで証明は完了する。</p>
+    </div>
+
+    <div class="theorem">
+        <strong>定理 2.3 (円分多項式の $x=1$ での値)</strong><br>
+        自然数 $n$ に対し、円分多項式の $x=1$ における評価値 $\Phi_n(1)$ は以下のように与えられる。
+        <ul>
+            <li>$n = 1$ のとき： $\Phi_1(1) = 0$</li>
+            <li>$n = p^k$ （ $p$ は素数、 $k \ge 1$ ）のとき： $\Phi_n(1) = p$</li>
+            <li>$n$ が $2$ つ以上の相異なる素因数を持つとき（すなわち素数冪でない $n > 1$ ）： $\Phi_n(1) = 1$</li>
+        </ul>
+    </div>
+
+    <div class="proof">
+        <p>$n = 1$ のときは $\Phi_1(x) = x - 1$ より、 $\Phi_1(1) = 1 - 1 = 0$ である。</p>
+
+        <p>$n > 1$ とする。等式 $x^n - 1 = \prod_{d \mid n} \Phi_d(x)$ の両辺を $x - 1 = \Phi_1(x)$ で割ると、次式を得る。</p>
+
+        $$ \frac{x^n - 1}{x - 1} = \prod_{\substack{d \mid n \\ d > 1}} \Phi_d(x) $$
+
+        <p>左辺は等比数列の和 $1 + x + x^2 + \cdots + x^{n-1}$ に等しいため、 $x \to 1$ の極限をとると左辺の値は $n$ となる。したがって、すべての $n > 1$ に対して次の基本関係式が成り立つ。</p>
+
+        $$ \prod_{\substack{d \mid n \\ d > 1}} \Phi_d(1) = n \quad \cdots (*) $$
+
+        <p>この関係式 $(*)$ を用いて、 $n$ の素因数分解の構造に応じた帰納法により証明を行う。</p>
+
+        <p><strong>(i) $n = p^k$ （素数冪）の場合：</strong><br>
+        指数 $k$ に関する数学的帰納法を用いる。
+        $k = 1$ （すなわち $n = p$ ）のとき、 $d \mid p$ かつ $d > 1$ なる約数は $d = p$ のみである。式 $(*)$ より直ちに $\Phi_p(1) = p$ を得る。</p>
+        <p>$k - 1$ まで主張が成り立つと仮定する。 $n = p^k$ のとき、 $d \mid p^k$ かつ $d > 1$ なる約数は $p, p^2, \dots, p^k$ である。式 $(*)$ に代入すると、</p>
+
+        $$ \Phi_p(1) \Phi_{p^2}(1) \cdots \Phi_{p^{k-1}}(1) \Phi_{p^k}(1) = p^k $$
+
+        <p>帰納法の仮定より $\Phi_p(1) = \Phi_{p^2}(1) = \cdots = \Phi_{p^{k-1}}(1) = p$ であるから、</p>
+
+        $$ p^{k-1} \Phi_{p^k}(1) = p^k \implies \Phi_{p^k}(1) = p $$
+
+        <p>となり、素数冪の場合について示された。</p>
+
+        <p><strong>(ii) $n$ が $2$ つ以上の相異なる素因数を持つ場合：</strong><br>
+        $n > 1$ の約数 $d$ を「素数冪であるもの」と「 $2$ つ以上の相異なる素因数を持つもの（非素数冪）」の $2$ つのグループに分解する。式 $(*)$ の左辺の積を分解すると、</p>
+
+        $$ \left( \prod_{\substack{d \mid n \\ d \text{は素数冪}}} \Phi_d(1) \right) \cdot \left( \prod_{\substack{d \mid n \\ d \text{は非素数冪}}} \Phi_d(1) \right) = n $$
+
+        <p>$n$ の素因数分解を $n = p_1^{e_1} p_2^{e_2} \cdots p_r^{e_r}$ （ $r \ge 2$ ）とする。各素因数 $p_i$ について、 $d = p_i^a$ （ $1 \le a \le e_i$ ）の範囲での積は、(i) の結果より $p_i^{e_i}$ となる。すべての素因数について掛け合わせると、</p>
+
+        $$ \prod_{\substack{d \mid n \\ d \text{は素数冪}}} \Phi_d(1) = \prod_{i=1}^r p_i^{e_i} = n $$
+
+        <p>となる。これを上の式に代入すると、</p>
+
+        $$ n \cdot \left( \prod_{\substack{d \mid n \\ d \text{は非素数冪}}} \Phi_d(1) \right) = n \implies \prod_{\substack{d \mid n \\ d \text{は非素数冪}}} \Phi_d(1) = 1 $$
+
+        <p>を得る。約数 $d$ の大きさに関する帰納法により、非素数冪である任意の $d$ について $\Phi_d(1) = 1$ が結論付けられる。</p>
+    </div>
+
+    <div class="example">
+        <strong>例 2.4 ($\Phi_n(1)$ の具体例)</strong><br>
+        定理 2.3 の結果を、様々な $n$ の場合の具体的な円分多項式で確認する。
+        <ul>
+            <li><strong>素数の場合:</strong>
+                <ul>
+                    <li>$\Phi_3(1) = 1^2 + 1 + 1 = 3$</li>
+                    <li>$\Phi_5(1) = 1^4 + 1^3 + 1^2 + 1 + 1 = 5$</li>
+                </ul>
+            </li>
+            <li><strong>素数冪の場合 ( $p^k, k \ge 2$ ):</strong>
+                <ul>
+                    <li>$\Phi_4(1) = 1^2 + 1 = 2$ （ $n=2^2$ , $p=2$ ）</li>
+                    <li>$\Phi_8(1) = 1^4 + 1 = 2$ （ $n=2^3$ , $p=2$ ）</li>
+                    <li>$\Phi_9(1) = 1^6 + 1^3 + 1 = 3$ （ $n=3^2$ , $p=3$ ）</li>
+                </ul>
+            </li>
+            <li><strong>2つ以上の相異なる素因数を持つ場合:</strong>
+                <ul>
+                    <li>$\Phi_6(1) = 1^2 - 1 + 1 = 1$ （ $n=2 \times 3$ ）</li>
+                    <li>$\Phi_{10}(1) = 1^4 - 1^3 + 1^2 - 1 + 1 = 1$ （ $n=2 \times 5$ ）</li>
+                    <li>$\Phi_{12}(1) = 1^4 - 1^2 + 1 = 1$ （ $n=2^2 \times 3$ ）</li>
+                    <li>$\Phi_{15}(1) = 1^8 - 1^7 + 1^5 - 1^4 + 1^3 - 1 + 1 = 1$ （ $n=3 \times 5$ ）</li>
+                </ul>
+            </li>
+        </ul>
+        このように、 $n$ の素因数分解の形によって $\Phi_n(1)$ の値が $p$ または $1$ に分類されることがはっきりと確認できる。
+    </div>
+
+    <h2>3. 一般の円分多項式の判別式</h2>
+
+    <p>準備が整ったので、一般の自然数 $n$ に対する円分多項式の判別式を導出する。本定理の証明は、 $n$ を無平方な整数に帰着させ、その無平方な整数に対する漸化式を立てて解くという手法をとる。</p>
+
+    <div class="theorem">
+        <strong>定理 3.1</strong><br>
+        円分多項式 $\Phi_n(x)$ の判別式 $D(\Phi_n)$ は以下の通りである。
+        <ul>
+            <li>$n = 1$ のとき、 $D(\Phi_1) = 1$</li>
+            <li>$n = 2$ のとき、 $D(\Phi_2) = 1$</li>
+            <li>$n \ge 3$ のとき、
+            $$ D(\Phi_n) = (-1)^{\frac{\phi(n)}{2}} \frac{n^{\phi(n)}}{\prod_{p \mid n} p^{\frac{\phi(n)}{p-1}}} $$
+            ここで、分母の積は $n$ のすべての素因数 $p$ にわたる積である。</li>
+        </ul>
+    </div>
+
+    <div class="proof">
+        <p>$n = 1$ のとき、 $\Phi_1(x) = x - 1$ であり、次数は $1$ である。定数関数 $\Phi_1'(x) = 1$ より $D(\Phi_1) = 1$ である。 $n = 2$ のとき、 $\Phi_2(x) = x + 1$ であり、これも次数は $1$ である。 $\Phi_2'(x) = 1$ より $D(\Phi_2) = 1$ である。</p>
+
+        <p>以下、 $n \ge 3$ とする。 $n \ge 3$ のとき、 Eulerの totient 関数 $\phi(n)$ は偶数である。したがって、判別式の符号を決定する指数 $\frac{\phi(n)(\phi(n)-1)}{2}$ の偶奇は、 $\phi(n)-1$ が奇数であることから $\frac{\phi(n)}{2}$ の偶奇と一致する。ゆえに、</p>
+
+        $$ D(\Phi_n) = (-1)^{\frac{\phi(n)}{2}} u(n) $$
+
+        <p>が成り立つ。ここで $u(n) = N_{\mathbb{Q}(\zeta)/\mathbb{Q}}(\Phi_n'(\zeta))$ である（ $\zeta$ は $1$ の原始 $n$ 乗根）。以下、 $u(n)$ の値を段階的に計算する。</p>
+
+        <h3>ステップ1：一般の $n$ を無平方な場合に帰着</h3>
+
+        <p>$n$ の素因数分解を $n = \prod_{i=1}^k p_i^{e_i}$ とし、 $m = \prod_{i=1}^k p_i$ を $n$ の根基とする。 $m$ は無平方な整数である。円分多項式の基本的な性質として（補題 2.1 の (1) 参照）、自然数 $n$ とその根基 $m$ について次が成り立つ。</p>
+
+        $$ \Phi_n(x) = \Phi_m(x^{\frac{n}{m}}) $$
+
+        <p>この両辺を $x$ について微分すると、合成関数の微分法則より次を得る。</p>
+
+        $$ \Phi_n'(x) = \Phi_m'(x^{\frac{n}{m}}) \cdot \frac{n}{m} x^{\frac{n}{m} - 1} $$
+
+        <p>ここに $x = \zeta$ を代入する。 $\xi = \zeta^{\frac{n}{m}}$ とおくと、 $\xi$ は $1$ の原始 $m$ 乗根となる。したがって、</p>
+
+        $$ \Phi_n'(\zeta) = \Phi_m'(\xi) \cdot \frac{n}{m} \zeta^{\frac{n}{m} - 1} $$
+
+        <p>となる。この両辺の $K = \mathbb{Q}(\zeta)$ から $\mathbb{Q}$ へのノルムをとる。ノルムの乗法性により、</p>
+
+        $$ u(n) = N_{K/\mathbb{Q}}(\Phi_m'(\xi)) \cdot N_{K/\mathbb{Q}}\left(\frac{n}{m}\right) \cdot N_{K/\mathbb{Q}}(\zeta)^{\frac{n}{m} - 1} $$
+
+        <p>となる。ここで各項を計算する。まず、 $n \ge 3$ であるから定数項の性質より $\Phi_n(0) = 1$ （ $n \ge 2$ で成立）ゆえに $N_{K/\mathbb{Q}}(\zeta) = 1$ である。したがって第 $3$ 項は $1$ となる。次に、 $\frac{n}{m}$ は有理数であるから、そのノルムは拡大次数 $[K:\mathbb{Q}] = \phi(n)$ を用いて $\left(\frac{n}{m}\right)^{\phi(n)}$ となる。</p>
+
+        <p>さらに、 $M = \mathbb{Q}(\xi)$ とおくと、 $M$ は $m$ 次の円分体であり、 $K \supset M \supset \mathbb{Q}$ という体の拡大の塔がある。定義 1.6 で述べたノルムの推移律 $N_{K/\mathbb{Q}} = N_{M/\mathbb{Q}} \circ N_{K/M}$ により、</p>
+
+        $$ N_{K/\mathbb{Q}}(\Phi_m'(\xi)) = \left( N_{M/\mathbb{Q}}(\Phi_m'(\xi)) \right)^{[K:M]} = u(m)^{\frac{\phi(n)}{\phi(m)}} $$
+
+        <p>が成り立つ。ここで $[K:M] = \frac{\phi(n)}{\phi(m)} = \frac{n}{m}$ である関係を用いた。以上をまとめると、一般の $n$ に対する $u(n)$ は、無平方な $m$ に対する $u(m)$ を用いて次のように表される。</p>
+
+        $$ u(n) = u(m)^{\frac{n}{m}} \left(\frac{n}{m}\right)^{\phi(n)} \quad \cdots (1) $$
+
+        <h3>ステップ2：無平方な $m$ に対する $u(m)$ の漸化式の導出</h3>
+
+        <p>$m \ge 3$ を無平方な整数とする。 $m$ の素因数の $1$ つを $p$ とし、 $m = p m'$ と分解する。 $m$ は無平方であるから $p$ と $m'$ は互いに素、すなわち $p \nmid m'$ である。このとき、円分多項式について次が成り立つ（補題 2.1 の (2) 参照）。</p>
+
+        $$ \Phi_m(x) = \frac{\Phi_{m'}(x^p)}{\Phi_{m'}(x)} $$
+
+        <p>商の微分法則を用いて両辺を微分する。</p>
+
+        $$ \Phi_m'(x) = \frac{p x^{p-1} \Phi_{m'}'(x^p) \Phi_{m'}(x) - \Phi_{m'}(x^p) \Phi_{m'}'(x)}{(\Phi_{m'}(x))^2} $$
+
+        <p>ここに $x = \xi$ （ $\xi$ は原始 $m$ 乗根）を代入する。 $\xi^p$ は原始 $m'$ 乗根となる（ $p \nmid m'$ のため）。したがって、 $\Phi_{m'}(\xi^p) = 0$ となる。一方、 $\xi$ は原始 $m'$ 乗根ではないため $\Phi_{m'}(\xi) \ne 0$ である。ゆえに分子の第 $2$ 項は消滅し、次のように簡略化される。</p>
+
+        $$ \Phi_m'(\xi) = \frac{p \xi^{p-1} \Phi_{m'}'(\xi^p)}{\Phi_{m'}(\xi)} $$
+
+        <p>この両辺の $M = \mathbb{Q}(\xi)$ から $\mathbb{Q}$ へのノルムをとる。 $\eta = \xi^p$ とおくと、 $\eta$ は原始 $m'$ 乗根である。 $m \ge 3$ より $N_{M/\mathbb{Q}}(\xi) = 1$ であり、また $N_{M/\mathbb{Q}}(p) = p^{\phi(m)}$ であるから、</p>
+
+        $$ u(m) = \frac{p^{\phi(m)} N_{M/\mathbb{Q}}(\Phi_{m'}'(\eta))}{N_{M/\mathbb{Q}}(\Phi_{m'}(\xi))} $$
+
+        <p>となる。分子のノルムを計算する。 $L = \mathbb{Q}(\eta)$ とおくと、 $L$ は $m'$ 次円分体であり、拡大次数は $[M:L] = \frac{\phi(m)}{\phi(m')} = p - 1$ であるから、ノルムの推移律より</p>
+
+        $$ N_{M/\mathbb{Q}}(\Phi_{m'}'(\eta)) = \left( N_{L/\mathbb{Q}}(\Phi_{m'}'(\eta)) \right)^{p-1} = u(m')^{p-1} $$
+
+        <p>となる。次に分母のノルム $v = N_{M/\mathbb{Q}}(\Phi_{m'}(\xi))$ を計算する。定義 1.7 より、これは終結式 $\text{Res}(\Phi_m, \Phi_{m'})$ である。</p>
+
+        $$ v = \prod_{\xi \in P_m} \Phi_{m'}(\xi) $$
+
+        <p>ここで $\Phi_m(x) = \frac{\Phi_{m'}(x^p)}{\Phi_{m'}(x)}$ において $x$ を $\eta \in P_{m'}$ に近づける極限を考える。分母と分子はともに $0$ に近づくため、L'Hôpitalの定理を用いて極限を評価する。</p>
+
+        $$ \Phi_m(\eta) = \lim_{x \to \eta} \frac{\Phi_{m'}(x^p)}{\Phi_{m'}(x)} = \lim_{x \to \eta} \frac{p x^{p-1} \Phi_{m'}'(x^p)}{\Phi_{m'}'(x)} = \frac{p \eta^{p-1} \Phi_{m'}'(\eta^p)}{\Phi_{m'}'(\eta)} $$
+
+        <p>が成り立つ。これを用いて $\text{Res}(\Phi_{m'}, \Phi_m) = \prod_{\eta \in P_{m'}} \Phi_m(\eta)$ を計算する。</p>
+
+        $$ \prod_{\eta \in P_{m'}} \Phi_m(\eta) = p^{\phi(m')} \left(\prod_{\eta \in P_{m'}} \eta\right)^{p-1} \frac{\prod_{\eta \in P_{m'}} \Phi_{m'}'(\eta^p)}{\prod_{\eta \in P_{m'}} \Phi_{m'}'(\eta)} $$
+
+        <p>$\eta$ が $P_{m'}$ を動くとき、 $p \nmid m'$ より $\eta^p$ も $P_{m'}$ を重複なく全て動く。したがって、右辺の微分の部分の分数は完全に相殺されて $1$ となる。また、 $m' \ge 2$ のとき $\prod_{\eta} \eta = \pm 1$ であり、 $m' = 1$ のときは $\prod \eta = 1$ であるが、いずれにせよその $p-1$ 乗は常に $1$ となる。よって、</p>
+
+        $$ \text{Res}(\Phi_{m'}, \Phi_m) = p^{\phi(m')} $$
+
+        <p>となる。終結式の対称性より $\text{Res}(\Phi_m, \Phi_{m'}) = (-1)^{\phi(m)\phi(m')} \text{Res}(\Phi_{m'}, \Phi_m)$ であるが、 $m \ge 3$ より $\phi(m)$ は偶数であり、符号は常に正となる。ゆえに $v = p^{\phi(m')}$ である。これらを $u(m)$ の式に代入すると、次を得る。</p>
+
+        $$ u(m) = \frac{p^{\phi(m)} u(m')^{p-1}}{p^{\phi(m')}} = p^{\phi(m) - \phi(m')} u(m')^{p-1} \quad \cdots (2) $$
+
+        <h3>ステップ3：漸化式を解き $u(m)$ を求める</h3>
+
+        <p>(2)式の両辺を $\frac{1}{\phi(m)}$ 乗する。 $\phi(m) = (p-1)\phi(m')$ であることに注意すると、</p>
+
+        $$ u(m)^{\frac{1}{\phi(m)}} = p^{1 - \frac{1}{p-1}} u(m')^{\frac{p-1}{\phi(m)}} = p^{\frac{p-2}{p-1}} u(m')^{\frac{1}{\phi(m')}} $$
+
+        <p>となる。この漸化式を $m$ の素因数について繰り返し適用する。素因数を一つずつ剥がしていくと、最終的に $m'=1$ に到達する。 $\Phi_1(x) = x-1$ より $u(1) = 1$ であるから、すべての素因数 $p \mid m$ に対する積として次を得る。</p>
+
+        $$ u(m)^{\frac{1}{\phi(m)}} = \prod_{p \mid m} p^{\frac{p-2}{p-1}} $$
+
+        <p>両辺を $\phi(m)$ 乗して整理する。</p>
+
+        $$ u(m) = \prod_{p \mid m} p^{\phi(m)\frac{p-2}{p-1}} = \prod_{p \mid m} \frac{p^{\phi(m)}}{p^{\frac{\phi(m)}{p-1}}} = \frac{m^{\phi(m)}}{\prod_{p \mid m} p^{\frac{\phi(m)}{p-1}}} \quad \cdots (3) $$
+
+        <h3>ステップ4：一般の $n$ についての結論</h3>
+
+        <p>(3)式を(1)式に代入する。</p>
+
+        $$ u(n) = \left( \frac{m^{\phi(m)}}{\prod_{p \mid m} p^{\frac{\phi(m)}{p-1}}} \right)^{\frac{n}{m}} \left(\frac{n}{m}\right)^{\phi(n)} $$
+
+        <p>ここで、 $\phi(m) \frac{n}{m} = \phi(n)$ であるため、分母の指数は $\frac{\phi(n)}{p-1}$ となり、分子の $m^{\phi(m)}$ を $\frac{n}{m}$ 乗したものは $m^{\phi(n)}$ となる。</p>
+
+        $$ u(n) = \frac{m^{\phi(n)}}{\prod_{p \mid m} p^{\frac{\phi(n)}{p-1}}} \cdot \frac{n^{\phi(n)}}{m^{\phi(n)}} = \frac{n^{\phi(n)}}{\prod_{p \mid m} p^{\frac{\phi(n)}{p-1}}} $$
+
+        <p>ここで、 $n$ の素因数の集合とその根基 $m$ の素因数の集合は完全に等しいため、積の範囲は $p \mid m$ の代わりに $p \mid n$ と書いても同じである。これを冒頭で述べた $D(\Phi_n) = (-1)^{\frac{\phi(n)}{2}} u(n)$ に代入することで、求めるべき定理の式が完全に証明された。</p>
+    </div>
+
+    <h2>4. 判別式の直観的理解を助ける具体例</h2>
+
+    <p>前節で導出した一般の $n$ （ただし $n \ge 3$ ）に対する $n$ 次円分多項式 $\Phi_n(x)$ の判別式 $D(\Phi_n)$ の公式が正しいことを、低次の具体的な多項式を用いて二次方程式等の判別式と直接比較し確認する。これにより抽象的な公式の直観的な意味が明確になる。</p>
+
+    <div class="example">
+        <strong>例 4.1 ($n = 3$ の場合、素数)</strong><br>
+        $\phi(3) = 2$ であり、 $3$ の素因数は $3$ のみである。公式に代入すると次を得る。
+        $$ D(\Phi_3) = (-1)^{\frac{2}{2}} \frac{3^2}{3^{\frac{2}{3-1}}} = -1 \cdot \frac{9}{3} = -3 $$
+        一方で例 1.4 より $\Phi_3(x) = x^2 + x + 1$ である。二次方程式 $ax^2+bx+c$ の判別式の公式 $D = b^2 - 4ac$ より $1^2 - 4 \cdot 1 \cdot 1 = -3$ となり、一般公式の結果と完全に一致する。
+    </div>
+
+    <div class="example">
+        <strong>例 4.2 ($n = 4$ の場合、素数の冪)</strong><br>
+        $\phi(4) = 2$ であり、 $4$ の素因数は $2$ のみである。公式より次を得る。
+        $$ D(\Phi_4) = (-1)^{\frac{2}{2}} \frac{4^2}{2^{\frac{2}{2-1}}} = -1 \cdot \frac{16}{4} = -4 $$
+        一方で $\Phi_4(x) = x^2 + 1$ である。直接計算すると $0^2 - 4 \cdot 1 \cdot 1 = -4$ となり、これも一致する。
+    </div>
+
+    <div class="example">
+        <strong>例 4.3 ($n = 6$ の場合、合成数)</strong><br>
+        $\phi(6) = 2$ であり、 $6$ の素因数は $2$ と $3$ である。公式より次を得る。
+        $$ D(\Phi_6) = (-1)^{\frac{2}{2}} \frac{6^2}{2^{\frac{2}{2-1}} \cdot 3^{\frac{2}{3-1}}} = -1 \cdot \frac{36}{4 \cdot 3} = -3 $$
+        一方で $\Phi_6(x) = x^2 - x + 1$ である。直接計算すると $(-1)^2 - 4 \cdot 1 \cdot 1 = -3$ となり、合成数の場合でも公式が正しく機能することが確かめられる。
+    </div>
+
+    <div class="example">
+        <strong>例 4.4 ($n = 9$ の場合、素数の冪)</strong><br>
+        $\phi(9) = 6$ であり、素因数は $3$ のみである。公式より次を得る。
+        $$ D(\Phi_9) = (-1)^{\frac{6}{2}} \frac{9^6}{3^{\frac{6}{3-1}}} = -1 \cdot \frac{3^{12}}{3^3} = -3^9 = -19683 $$
+        この判別式は素因数 $3$ のみから構成されていることがわかる。
+    </div>
+
+    <h2>5. $n$ が素数 $p$ の場合における直接的な計算</h2>
+
+    <p>前節の定理 3.1 の証明は漸化式や終結式といった高度な道具を用いたが、 $n$ が素数 $p$ の場合、円分多項式の判別式は定義から直接的かつ明晰に求めることができる。</p>
+
+    <div class="theorem">
+        <strong>定理 5.1</strong><br>
+        素数 $p$ に対して、円分多項式 $\Phi_p(x)$ の判別式は以下の通りである。
+        $$ D(\Phi_p) = (-1)^{\frac{(p-1)(p-2)}{2}} p^{p-2} $$
+    </div>
+
+    <div class="proof">
+        <p>$p$ を素数とする。 $p$ 次の円分多項式 $\Phi_p(x)$ は等比数列の和として次のように与えられる。</p>
+
+        $$ \Phi_p(x) = \frac{x^p - 1}{x - 1} = x^{p-1} + x^{p-2} + \cdots + x + 1 $$
+
+        <p>この多項式の根は、 $1$ の原始 $p$ 乗根 $\zeta = \exp(2\pi i/p)$ を用いて $\zeta, \zeta^2, \dots, \zeta^{p-1}$ と表される。判別式の定義 1.5 と導関数を用いた公式から、次が成り立つ。</p>
+
+        $$ D(\Phi_p) = (-1)^{\frac{(p-1)(p-2)}{2}} \prod_{k=1}^{p-1} \Phi_p'(\zeta^k) $$
+
+        <p>代数的な恒等式 $x^p - 1 = (x - 1)\Phi_p(x)$ の両辺を $x$ について微分する。積の微分法則より次を得る。</p>
+
+        $$ p x^{p-1} = \Phi_p(x) + (x - 1)\Phi_p'(x) $$
+
+        <p>この式に $x = \zeta^k$ （ただし $1 \le k \le p-1$ ）を代入する。 $\zeta^k$ は $\Phi_p(x)$ の根であるため $\Phi_p(\zeta^k) = 0$ であり、次のように簡略化される。</p>
+
+        $$ p (\zeta^k)^{p-1} = (\zeta^k - 1)\Phi_p'(\zeta^k) $$
+
+        <p>ここで $\zeta^k \neq 1$ であるため、両辺を $\zeta^k - 1$ で割ることができる。</p>
+
+        $$ \Phi_p'(\zeta^k) = \frac{p (\zeta^k)^{p-1}}{\zeta^k - 1} $$
+
+        <p>これをすべての $k = 1, 2, \dots, p-1$ について掛け合わせる。</p>
+
+        $$ \prod_{k=1}^{p-1} \Phi_p'(\zeta^k) = \frac{\prod_{k=1}^{p-1} p (\zeta^k)^{p-1}}{\prod_{k=1}^{p-1} (\zeta^k - 1)} $$
+
+        <p>分子と分母をそれぞれ独立に計算する。まず分子について、根と係数の関係を利用する。方程式 $x^{p-1} + x^{p-2} + \cdots + 1 = 0$ のすべての根の積は $(-1)^{p-1} \cdot (\text{定数項}) = (-1)^{p-1} \cdot 1 = (-1)^{p-1}$ であるため、 $\prod_{k=1}^{p-1} \zeta^k = (-1)^{p-1}$ となる。したがって分子は以下のように計算できる。</p>
+
+        $$ \prod_{k=1}^{p-1} p (\zeta^k)^{p-1} = p^{p-1} \left( \prod_{k=1}^{p-1} \zeta^k \right)^{p-1} = p^{p-1} \left( (-1)^{p-1} \right)^{p-1} = p^{p-1} (-1)^{(p-1)^2} $$
+
+        <p>整数 $(p-1)^2$ と $p-1$ は常に偶奇が一致するため、分子の符号部分は $(-1)^{p-1}$ となり、分子全体は $(-1)^{p-1} p^{p-1}$ となる。</p>
+
+        <p>次に分母について計算する。 $\Phi_p(x) = \prod_{k=1}^{p-1} (x - \zeta^k)$ であることを用いると、次のように変形できる。</p>
+
+        $$ \prod_{k=1}^{p-1} (\zeta^k - 1) = (-1)^{p-1} \prod_{k=1}^{p-1} (1 - \zeta^k) = (-1)^{p-1} \Phi_p(1) $$
+
+        <p>ここで定理 2.3 より $\Phi_p(1) = p$ であるから、分母は $(-1)^{p-1} p$ となる。</p>
+
+        <p>以上より、導関数の積は次のように求まる。</p>
+
+        $$ \prod_{k=1}^{p-1} \Phi_p'(\zeta^k) = \frac{(-1)^{p-1} p^{p-1}}{(-1)^{p-1} p} = p^{p-2} $$
+
+        <p>最後に、これを判別式の公式に代入する。</p>
+
+        $$ D(\Phi_p) = (-1)^{\frac{(p-1)(p-2)}{2}} p^{p-2} $$
+
+        <p>これで素数 $p$ の場合における円分多項式の判別式が完全に導出された。この結果は先の一般公式（定理 3.1）において $n=p$ とし、 $\phi(p) = p-1$ を代入した結果とも完全に一致している。</p>
+    </div>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ul>
+            <li>Washington, L. C. (1997). <i>Introduction to Cyclotomic Fields</i> (2nd ed.). Springer. <a href="https://link.springer.com/book/10.1007/978-1-4612-1934-7" target="_blank">https://link.springer.com/book/10.1007/978-1-4612-1934-7</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

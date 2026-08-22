@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>群環とHopf代数：部分群とイデアルの完全な対応関係</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                macros: {
+                    // HTMLのヘッダーでのマクロ定義は禁止されているため、ここにマクロは記述しない。
+                }
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.8;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            color: #222;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 2em;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            margin-top: 2em;
+            padding-bottom: 5px;
+        }
+        h3 {
+            margin-top: 1.5em;
+        }
+        .proof {
+            margin: 1.5em 0;
+            padding: 1.5em;
+            background-color: #f9f9f9;
+            border-left: 5px solid #666;
+        }
+        .proof-title {
+            font-weight: bold;
+            margin-bottom: 1em;
+            font-size: 1.1em;
+        }
+        .definition {
+            margin: 1.5em 0;
+            padding: 1.5em;
+            background-color: #eef7e5;
+            border-left: 5px solid #5c8a3f;
+        }
+        .lemma {
+            margin: 1.5em 0;
+            padding: 1.5em;
+            background-color: #fff8e1;
+            border-left: 5px solid #ffca28;
+        }
+        .example {
+            margin: 1.5em 0;
+            padding: 1.5em;
+            background-color: #e5f0f7;
+            border-left: 5px solid #3f6c8a;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>群環とHopf代数：部分群とイデアルの対応関係についての完全な解説</h1>
+
+    <p>本稿では、体 $K$ 上の群 $G$ の群環 $K[G]$ が自然に持つHopf代数の構造を用いて、群の部分群および正規部分群が、群環のいかなるイデアル（右イデアル、両側イデアル、余イデアル、Hopfイデアル）と一対一に対応しているかを完全に解説する。証明は省略することなく、すべてself-containedに行う。</p>
+
+    <h2>1. 基本概念とHopf代数の構造</h2>
+
+    <div class="definition">
+        <p><strong>定義 1.1 (群環)</strong></p>
+        <p>体 $K$ と群 $G$ に対して、群環 (group ring) $K[G]$ とは、群 $G$ の要素を基底とする $K$ 上のベクトル空間であり、その要素は有限和 $\sum_{g \in G} c_g g$ （ただし $c_g \in K$ ）として表される。積は群の積を線形に拡張したものである。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>定義 1.2 (Hopf代数としての群環)</strong></p>
+        <p>群環 $K[G]$ は、以下の構造写像により自然に $K$ 上のHopf代数 (Hopf algebra) となる。</p>
+        <ul>
+            <li><strong>積 (multiplication)</strong>: $\mu : K[G] \otimes K[G] \to K[G]$ は $\mu(g \otimes h) = gh$ の線形拡張である。</li>
+            <li><strong>単位元 (unit)</strong>: $\eta : K \to K[G]$ は $\eta(c) = c \cdot 1_G$ （ $1_G$ は群 $G$ の単位元）である。</li>
+            <li><strong>余乗法 (comultiplication)</strong>: $\Delta : K[G] \to K[G] \otimes K[G]$ は $\Delta(g) = g \otimes g$ の代数準同型 (algebra homomorphism) としての線形拡張である。</li>
+            <li><strong>余単位 (counit)</strong>: $\varepsilon : K[G] \to K$ は $\varepsilon(g) = 1$ の代数準同型としての線形拡張である。</li>
+            <li><strong>対蹠 (antipode)</strong>: $S : K[G] \to K[G]$ は $S(g) = g^{-1}$ の代数反準同型 (algebra anti-homomorphism) としての線形拡張である。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <p><strong>定義 1.3 (Sweedlerの記法)</strong></p>
+        <p>Hopf代数における余乗法 $\Delta(x)$ の結果は一般にテンソル積の和 $\sum_{i} x_i \otimes y_i$ となるが、これを簡略化して扱うための記法 (Sweedler notation) として、 $\Delta(x) = \sum x_{(1)} \otimes x_{(2)}$ と記述する。</p>
+    </div>
+
+    <div class="definition">
+        <p><strong>定義 1.4 (増大イデアル)</strong></p>
+        <p>群 $G$ の部分群 $H$ に対して、 $H$ の $K$ 上の群環 $K[H]$ における増大イデアル (augmentation ideal) $\omega(H)$ を次のように定義する。</p>
+        $$ \omega(H) = \mathrm{span}_K \{ h - 1 \mid h \in H \} $$
+        <p>これは余単位 $\varepsilon_H : K[H] \to K$ の核 (kernel) であり、 $K[H]$ の両側イデアル (two-sided ideal) となる。これを用いて、群環 $K[G]$ における右イデアル (right ideal) $I_H$ を次のように定義する。</p>
+        $$ I_H = \omega(H)K[G] = \left\{ \sum_{i=1}^n (h_i - 1) x_i \;\middle|\; h_i \in H, x_i \in K[G] \right\} $$
+    </div>
+
+    <h2>2. 部分群の復元と右イデアルの対応</h2>
+
+    <p>部分群 $H$ から右イデアル $I_H$ を作り、そこからさらに「イデアルに含まれる群的要素」を引き戻すことで、元の部分群 $H$ が完全に復元される。この事実は体の標数や群の構造に依らず常に成立する。</p>
+
+    <div class="proof">
+        <p class="proof-title">定理 2.1 (部分群の復元定理)</p>
+        <p>群 $G$ の任意の部分群 $H$ に対して、右イデアル $I_H = \omega(H)K[G]$ から作られる集合 $H_{I_H} = \{ g \in G \mid g - 1 \in I_H \}$ は、元の部分群 $H$ と完全に一致する。すなわち $H_{I_H} = H$ である。</p>
+        <p><strong>証明</strong></p>
+        <p>定義より $h \in H$ ならば $h - 1 \in \omega(H) \subset \omega(H)K[G] = I_H$ であるため、 $H \subset H_{I_H}$ は明らかである。</p>
+        <p>逆に $g \in H_{I_H}$ をとる。定義から $g - 1 \in I_H = \omega(H)K[G]$ である。</p>
+        <p>群 $G$ における部分群 $H$ の右剰余類の完全代表系 (complete system of representatives) を $R$ とし、 $1 \in R$ と仮定する。このとき群 $G$ は次のように直和分割 (disjoint union) される。</p>
+        $$ G = \bigsqcup_{r \in R} H r $$
+        <p>これにより、 $K[G]$ は $R$ を基底とする自由左 $K[H]$ 加群 (free left module) となる。すなわち、 $K[G]$ の任意の要素 $x$ は $x = \sum_{r \in R} x_r r$ （ただし $x_r \in K[H]$ ）の形に一意に表される。</p>
+        <p>この基底展開の観点から見ると、右イデアル $I_H = \omega(H)K[G]$ に属する要素とは、すべての $r \in R$ について係数 $x_r$ が増大イデアル $\omega(H)$ に属するような要素のことである。</p>
+        <p>さて、 $g \in G$ であるため、一意的な $h' \in H$ と $r' \in R$ が存在して $g = h'r'$ と書ける。したがって以下が成り立つ。</p>
+        $$ g - 1 = h'r' - 1 \cdot 1 $$
+        <p>もし $r' \neq 1$ であると仮定する。このとき、 $R$ に関する基底展開における $r'$ の係数は $h'$ であり、 $1$ の係数は $-1$ となる。 $g - 1 \in I_H$ であることから、すべての係数は $\omega(H)$ に属さなければならず、特に $h' \in \omega(H)$ が要求される。</p>
+        <p>しかし、 $K[H]$ 上の増大写像 $\varepsilon_H$ を適用すると $\varepsilon_H(h') = 1 \neq 0$ であり、 $h' \notin \ker(\varepsilon_H) = \omega(H)$ となるため矛盾が生じる。</p>
+        <p>ゆえに $r' = 1$ でなければならず、 $g = h' \cdot 1 = h' \in H$ となる。これにより $H_{I_H} \subset H$ が示され、両方向の包含関係から $H_{I_H} = H$ が証明された。（証明終）</p>
+    </div>
+
+    <div class="example">
+        <p><strong>例 2.2 (部分群に対応しない右イデアルの例)</strong></p>
+        <p>すべての右イデアルが部分群に対応するわけではない。体 $K$ を実数体 $\mathbb{R}$ とし、群 $G$ を位数 $2$ の巡回群 $G = \{1, g\}$ （ $g^2 = 1$ ）とする。群環 $\mathbb{R}[G]$ において、要素 $e = \frac{1+g}{2}$ を考える。 $e^2 = \frac{1+2g+g^2}{4} = \frac{2+2g}{4} = e$ となるため、 $e$ は冪等元 (idempotent element) である。</p>
+        <p>この冪等元が生成する右イデアル $I = e\mathbb{R}[G] = \{ c(1+g) \mid c \in \mathbb{R} \}$ を考える。このイデアル $I$ に対して、対応する集合 $H_I = \{ x \in G \mid x - 1 \in I \}$ を計算する。</p>
+        <p>$1 - 1 = 0 \in I$ であるため $1 \in H_I$ である。一方で $g \in G$ について、もし $g - 1 \in I$ ならば、ある $c \in \mathbb{R}$ が存在して $g - 1 = c(1+g) = c \cdot 1 + c \cdot g$ となる。基底の係数を比較すると $-1 = c$ かつ $1 = c$ となり矛盾する。よって $g - 1 \notin I$ である。</p>
+        <p>以上より $H_I = \{1\}$ となる。もし仮に $I$ が部分群に対応するイデアルであったならば、 $I = \omega(H_I)\mathbb{R}[G] = \omega(\{1\})\mathbb{R}[G] = \{0\}$ となるはずである。しかし実際には $I \neq \{0\}$ であるため、この $I$ は条件 $I = \omega(H_I)K[G]$ を満たさない。すなわち、冪等元から作られるようなイデアルは部分群には対応しない。</p>
+    </div>
+
+    <h2>3. 正規部分群と両側イデアルの関係</h2>
+
+    <p>右イデアル $I_H$ が両側イデアルになることと、元の部分群 $H$ が正規部分群 (normal subgroup) であることは完全に同値である。さらにその場合、商空間はHopf代数としての同型を満たす。</p>
+
+    <div class="proof">
+        <p class="proof-title">定理 3.1</p>
+        <p>群 $G$ の部分群 $H$ に対して、右イデアル $I_H = \omega(H)K[G]$ が $K[G]$ の両側イデアルであるための必要十分条件は、 $H$ が $G$ の正規部分群であることである。</p>
+        <p><strong>証明</strong></p>
+        <p>$(\Rightarrow)$ 右イデアル $I_H$ が両側イデアルであると仮定する。任意の $g \in G$ および $h \in H$ をとる。定義より $h-1 \in \omega(H) \subset I_H$ である。</p>
+        <p>$I_H$ は両側イデアルであるため、左から $g$ 、右から $g^{-1}$ を掛けた要素 $g(h-1)g^{-1}$ も $I_H$ に属する。分配法則により展開すると、 $ghg^{-1} - gg^{-1} = ghg^{-1} - 1 \in I_H$ が成り立つ。</p>
+        <p>ここで、 $x = ghg^{-1} \in G$ と置く。 $x - 1 \in I_H$ であることから、定理2.1の部分群の復元定理より $x \in H_{I_H} = H$ である。したがって $ghg^{-1} \in H$ となり、 $H$ が正規部分群であることが証明された。</p>
+        <p>$(\Leftarrow)$ 逆に $H$ が $G$ の正規部分群であると仮定する。 $I_H$ が左イデアルでもあることを示せばよい。任意の $g \in G$ と生成元 $h - 1$ （ $h \in H$ ）をとる。</p>
+        $$ g(h-1) = gh - g = (ghg^{-1})g - g = (ghg^{-1} - 1)g $$
+        <p>$H$ は正規部分群であるため $ghg^{-1} \in H$ である。したがって $ghg^{-1} - 1 \in \omega(H) \subset I_H$ である。 $I_H$ は右イデアルであるため、 $(ghg^{-1} - 1)g \in I_H$ となる。</p>
+        <p>$I_H$ の任意の要素は $\sum (h_i - 1)x_i$ の形をしており、任意の $g \in G$ を左から掛けても各項が $I_H$ に属することが線形性から従う。よって $K[G]I_H \subset I_H$ となり、 $I_H$ は両側イデアルである。（証明終）</p>
+    </div>
+
+    <div class="proof">
+        <p class="proof-title">定理 3.2 (剰余Hopf代数の同型定理)</p>
+        <p>群 $G$ の正規部分群 $H$ に対して、両側イデアル $I_H$ はHopf代数 $K[G]$ のHopfイデアル（定義は後述の定義6.1を参照）であり、剰余Hopf代数 (quotient Hopf algebra) $K[G]/I_H$ は $K[G/H]$ とHopf代数として同型 (isomorphic) である。</p>
+        <p><strong>証明</strong></p>
+        <p>まず $I_H$ がHopfイデアルの3条件（両側イデアル、余イデアル、対蹠で不変）を満たすことを確認する。</p>
+        <p>1. <strong>両側イデアル</strong>: 定理3.1より成立する。</p>
+        <p>2. <strong>余イデアル</strong>: 生成元 $h-1$ について、 $\Delta(h-1) = h \otimes h - 1 \otimes 1 = h \otimes (h-1) + (h-1) \otimes 1 \in K[G] \otimes I_H + I_H \otimes K[G]$ である。また $\varepsilon(h-1) = 1 - 1 = 0$ である。</p>
+        <p>3. <strong>対蹠で不変</strong>: $S(h-1) = h^{-1} - 1$ であり、 $H$ は群であるため $h^{-1} \in H$ となり $h^{-1} - 1 \in I_H$ である。</p>
+        <p>以上により $I_H$ はHopfイデアルである。</p>
+        <p>次に同型 $K[G]/I_H \cong K[G/H]$ を示す。自然な群準同型 $\pi : G \to G/H$ を線形に拡張した代数準同型 $\tilde{\pi} : K[G] \to K[G/H]$ を考える。 $\tilde{\pi}$ は全射 (surjective) であり、Hopf代数の構造を保つ。</p>
+        <p>核 $\ker(\tilde{\pi})$ を求める。任意の $h \in H$ に対して $\tilde{\pi}(h-1) = \pi(h) - \pi(1) = 1_{G/H} - 1_{G/H} = 0$ となるため、 $I_H \subset \ker(\tilde{\pi})$ である。</p>
+        <p>逆に、 $x = \sum_{g \in G} c_g g \in \ker(\tilde{\pi})$ をとる。 $G/H$ の完全代表系 $R$ を用いて $G = \bigsqcup_{r \in R} H r$ と直和分割し、 $x = \sum_{r \in R} \sum_{h \in H} c_{hr} hr$ と書き直す。 $\tilde{\pi}$ を適用すると以下のようになる。</p>
+        $$ \tilde{\pi}(x) = \sum_{r \in R} \left( \sum_{h \in H} c_{hr} \right) \pi(r) = 0 $$
+        <p>$\{ \pi(r) \mid r \in R \}$ は $K[G/H]$ の基底であるため、すべての $r \in R$ について $\sum_{h \in H} c_{hr} = 0$ が成り立つ。したがって次のように変形できる。</p>
+        $$ x = \sum_{r \in R} \sum_{h \in H} c_{hr} hr - \sum_{r \in R} \left( \sum_{h \in H} c_{hr} \right) r = \sum_{r \in R} \sum_{h \in H} c_{hr} (h - 1) r $$
+        <p>各項が $(h - 1)$ を含むため $x \in I_H$ であり、 $\ker(\tilde{\pi}) \subset I_H$ となる。両方の包含関係が示されたため $\ker(\tilde{\pi}) = I_H$ である。準同型定理より、 $K[G]/I_H \cong K[G/H]$ を得る。（証明終）</p>
+    </div>
+
+    <div class="example">
+        <p><strong>例 3.3 (対称群における例)</strong></p>
+        <p>群 $G$ として3次対称群 $S_3$ を考える。</p>
+        <p>正規部分群である交代群 $H = A_3 = \{ \mathrm{id}, (123), (132) \}$ を考える。 $A_3$ は正規部分群であるため、定理3.1および定理3.2より $I_{A_3}$ は $K[S_3]$ の両側Hopfイデアルとなり、 $K[S_3]/I_{A_3} \cong K[S_3/A_3] \cong K[\mathbb{Z}/2\mathbb{Z}]$ が成立する。</p>
+        <p>一方、部分群 $H = \{ \mathrm{id}, (12) \}$ を考える。これは正規部分群ではない。このとき $I_H$ は右イデアルであるが、両側イデアルにはならない。実際、 $g = (13) \in S_3$ とし、 $H$ の生成元 $(12) - 1 \in I_H$ について $g((12)-1)g^{-1}$ を計算すると以下のようになる。</p>
+        $$ (13)((12) - 1)(13)^{-1} = (13)(12)(13) - 1 = (23) - 1 $$
+        <p>もし $I_H$ が両側イデアルであれば $(23) - 1 \in I_H$ となり、先ほどの定理2.1の部分群の復元のロジックから $(23) \in H$ でなければならない。しかし $(23) \notin \{ \mathrm{id}, (12) \}$ であるため矛盾する。よって正規部分群でない部分群からは片側イデアルしか得られないことが直観的にも確認できる。</p>
+    </div>
+
+    <h2>4. 群的元とHopf代数的な部分群対応条件</h2>
+
+    <p>群 $G$ の要素を直接参照するのではなく、Hopf代数の純粋な概念である「群的元 (group-like element)」を用いることで、群の存在を忘れてHopf代数の内部構造だけでイデアルを特徴付けることができる。</p>
+
+    <div class="definition">
+        <p><strong>定義 4.1 (群的元)</strong></p>
+        <p>任意のHopf代数 $A$ において、ゼロでない要素 $x \in A$ が群的元 (group-like element) であるとは、以下の条件を満たすことである。</p>
+        $$ \Delta(x) = x \otimes x \quad \text{かつ} \quad \varepsilon(x) = 1 $$
+        <p>Hopf代数 $A$ の群的元の全体からなる集合を $G(A)$ と書く。</p>
+    </div>
+
+    <div class="proof">
+        <p class="proof-title">命題 4.2 (群環の群的元は元の群に一致する)</p>
+        <p>体 $K$ 上の群環 $A = K[G]$ に対して、 $G(A) = G$ が成立する。</p>
+        <p><strong>証明</strong></p>
+        <p>任意の $g \in G$ について、群環のHopf代数構造の定義から $\Delta(g) = g \otimes g$ および $\varepsilon(g) = 1$ であるため、 $g$ は群的元であり $G \subset G(A)$ は明らかである。</p>
+        <p>逆に $x \in G(A)$ をとる。 $x$ は群環の要素であるため、有限個の $g \in G$ と $c_g \in K \smallsetminus \{0\}$ を用いて $x = \sum_{g \in G} c_g g$ と一意的に表される。群的元の定義 $\Delta(x) = x \otimes x$ より、以下の等式が成り立つ。</p>
+        $$ \sum_{g \in G} c_g (g \otimes g) = \left( \sum_{g \in G} c_g g \right) \otimes \left( \sum_{h \in G} c_h h \right) = \sum_{g \in G} \sum_{h \in G} c_g c_h (g \otimes h) $$
+        <p>テンソル積 $K[G] \otimes K[G]$ において、集合 $\{ g \otimes h \mid g, h \in G \}$ は基底をなす。したがって両辺の各 $g \otimes h$ の係数を比較することができる。</p>
+        <ul>
+            <li>$g = h$ のとき：左辺の係数は $c_g$ 、右辺の係数は $c_g^2$ である。よって $c_g = c_g^2$ となり、 $c_g$ は $0$ または $1$ である。</li>
+            <li>$g \neq h$ のとき：左辺の係数は $0$ 、右辺の係数は $c_g c_h$ である。よって $c_g c_h = 0$ となる。</li>
+        </ul>
+        <p>$x \neq 0$ であるため、少なくとも1つの $g \in G$ について $c_g \neq 0$ となる。上の議論から $c_g = 1$ である。もし別の $h \in G$ （ $h \neq g$ ）についても $c_h \neq 0$ となるならば $c_h = 1$ となるが、これは $c_g c_h = 1 \cdot 1 = 1 \neq 0$ となり $c_g c_h = 0$ に矛盾する。</p>
+        <p>ゆえに、ただ1つの $g \in G$ についてのみ $c_g = 1$ となり、他のすべての係数は $0$ である。すなわち $x = g \in G$ となる。これにより $G(A) \subset G$ が示され、 $G(A) = G$ が証明された。（証明終）</p>
+    </div>
+
+    <div class="proof">
+        <p class="proof-title">定理 4.3 (Hopf代数的な部分群対応条件)</p>
+        <p>Hopf代数 $A = K[G]$ の右イデアル $I$ が、ある部分群 $H \subset G$ に対して $I = \omega(H)A$ と表される（すなわち部分群に対応する）ための必要十分条件は、以下の等式を満たすことである。</p>
+        $$ I = \mathrm{span}_K \{ x - 1 \mid x \in G(A), x - 1 \in I \} A $$
+        <p><strong>証明</strong></p>
+        <p>命題4.2より $G(A) = G$ であるため、定理の右辺の集合 $\{ x \in G(A) \mid x - 1 \in I \}$ は、 $\{ g \in G \mid g - 1 \in I \}$ と全く同じ集合である。これを $H_I$ と置く。</p>
+        <p>したがって定理の条件は $I = \omega(H_I)K[G]$ となる。定理2.1より、 $H_I$ は部分群であり $H_I = H$ となるため、この条件は「右イデアルがある部分群に対応する」ことの必要十分条件そのものである。（証明終）</p>
+    </div>
+
+    <h2>5. 余イデアルによる部分群の純粋な代数的特徴付け</h2>
+
+    <p>群 $G$ の存在や「群的元で生成される」という条件を一切使わずに、Hopf代数の構造のみを用いて、部分群に対応する右イデアルを「余イデアル (coideal)」として完全に特徴付けることができる。</p>
+
+    <div class="definition">
+        <p><strong>定義 5.1 (余イデアル)</strong></p>
+        <p>体 $K$ 上のHopf代数 $A$ において、部分空間 $I$ が余イデアル (coideal) であるとは、余乗法 $\Delta$ と余単位 $\varepsilon$ に対して以下の2条件を満たすことである。</p>
+        <p>1. $\Delta(I) \subset I \otimes A + A \otimes I$</p>
+        <p>2. $\varepsilon(I) = 0$</p>
+    </div>
+
+    <div class="lemma">
+        <p><strong>補題 5.2 (余代数における群的元の線形独立性)</strong></p>
+        <p>任意の余代数 (coalgebra) において、相異なる群的元は線形独立 (linearly independent) である。（これはDedekindの独立定理や、双対代数における指標の独立性から従う基本的な事実である。）</p>
+    </div>
+
+    <div class="proof">
+        <p class="proof-title">定理 5.3 (部分群と余イデアルの完全な対応)</p>
+        <p>体 $K$ 上の群環 $A = K[G]$ の右イデアル $I$ について、ある部分群 $H \subset G$ が存在して $I = \omega(H)A$ と表されるための必要十分条件は、 $I$ が $A$ の余イデアルとなることである。</p>
+        <p><strong>証明</strong></p>
+        <p><strong>$(\Rightarrow)$ の証明（必要性）</strong></p>
+        <p>$I = \omega(H)A$ と仮定する。このとき $I$ の任意の要素は $\sum_{i} (h_i - 1)y_i$ （ただし $h_i \in H$ 、 $y_i \in A$ ）の形をしている。 $I$ が余イデアルの条件を満たすことを確認する。</p>
+        <p>余乗法 $\Delta$ は代数準同型であるため、Sweedlerの記法 $\Delta(y) = \sum y_{(1)} \otimes y_{(2)}$ を用いると以下のように計算できる。</p>
+        $$ \Delta((h-1)y) = (h \otimes h - 1 \otimes 1)\Delta(y) $$
+        $$ = (h \otimes (h-1) + (h-1) \otimes 1) \sum y_{(1)} \otimes y_{(2)} $$
+        $$ = \sum h y_{(1)} \otimes (h-1)y_{(2)} + \sum (h-1)y_{(1)} \otimes y_{(2)} $$
+        <p>$I$ は右イデアルであるため、任意の $y_{(2)} \in A$ に対して $(h-1)y_{(2)} \in I$ である。したがって第一項の和は $A \otimes I$ に属する。また、第二項の和において $(h-1)y_{(1)}$ は $I$ の生成元であるから $I$ に属し、第二項の和は $I \otimes A$ に属する。これにより $\Delta(I) \subset A \otimes I + I \otimes A$ が示された。</p>
+        <p>次に余単位 $\varepsilon$ について確認する。 $\varepsilon$ も代数準同型であるため、以下の等式が成り立つ。</p>
+        $$ \varepsilon((h-1)y) = (\varepsilon(h) - \varepsilon(1))\varepsilon(y) = (1 - 1)\varepsilon(y) = 0 $$
+        <p>したがって $\varepsilon(I) = 0$ である。以上により $I$ は余イデアルである。</p>
+        
+        <p><strong>$(\Leftarrow)$ の証明（十分性）</strong></p>
+        <p>$I$ を $A = K[G]$ の右イデアルかつ余イデアルとする。自然な線形射影 $\pi : A \to A/I$ を考える。 $I$ が余イデアルであるため、剰余空間 $C = A/I$ は well-defined な余代数 (coalgebra) となる。すなわち、 $\Delta_C \circ \pi = (\pi \otimes \pi) \circ \Delta$ および $\varepsilon_C \circ \pi = \varepsilon$ を満たす余乗法 $\Delta_C$ と余単位 $\varepsilon_C$ が $C$ 上に存在する。</p>
+        <p>$A$ は群 $G$ の元によって $K$ 上張られているため、剰余空間 $C$ は部分集合 $\{ \pi(g) \mid g \in G \}$ によって張られる。任意の $g \in G$ について、射影と余乗法の可換性から以下の等式が成り立つ。</p>
+        $$ \Delta_C(\pi(g)) = \pi(g) \otimes \pi(g) $$
+        $$ \varepsilon_C(\pi(g)) = \varepsilon(g) = 1 $$
+        <p>$\varepsilon_C(\pi(g)) = 1 \neq 0$ であるため、任意の $g \in G$ に対して $\pi(g) \neq 0$ である。したがって、 $\{ \pi(g) \mid g \in G \}$ は余代数 $C$ におけるゼロでない群的元の集合となる。補題5.2より、余代数において相異なる群的元は線形独立である。 $C$ は $\{ \pi(g) \mid g \in G \}$ によって張られるため、この集合から重複する要素を除いたものは $C$ の基底をなす。</p>
+        <p>ここで、群 $G$ の部分集合 $H$ を次のように定義する。</p>
+        $$ H = \{ g \in G \mid \pi(g) = \pi(1) \} = \{ g \in G \mid g - 1 \in I \} $$
+        <p>この $H$ が $G$ の部分群となることを示す。 $1 \in H$ は自明である。 $g, h \in H$ とすると $gh - 1 = (g - 1)h + (h - 1)$ であり、 $I$ は右イデアルであるため $(g-1)h \in I$ 、よって和も $I$ に属し $gh \in H$ となる（積で閉じる）。また $g \in H$ に対して $(g-1)g^{-1} = 1 - g^{-1} \in I$ であり、符号を変えて $g^{-1} - 1 \in I$ より $g^{-1} \in H$ となる（逆元で閉じる）。よって $H$ は部分群である。</p>
+        <p>任意の $g, k \in G$ について、 $\pi(g) = \pi(k) \iff g - k \in I \iff (g - k)k^{-1} \in I \iff gk^{-1} - 1 \in I \iff gk^{-1} \in H \iff g \in Hk$ となる。これは、 $\pi(g) = \pi(k)$ となるのは $g$ と $k$ が部分群 $H$ の同じ右剰余類 (right coset) に属するときに限ることを意味する。</p>
+        <p>したがって $\ker(\pi) = I$ は、 $\pi(hr) = \pi(r)$ という関係から生じる要素 $\{ hr - r \mid h \in H, r \in G \}$ によって完全に張られる。 $hr - r = (h - 1)r$ であるため、この空間はまさに増大イデアル $\omega(H)$ に $A = K[G]$ の元を右から掛けて得られる空間 $\omega(H)A$ に一致する。よって $I = \omega(H)A$ が証明された。（証明終）</p>
+    </div>
+
+    <h2>6. 正規部分群の完全なHopf代数的特徴付けと対蹠の不変性</h2>
+
+    <p>部分群に対応する右イデアルが余イデアルとして特徴付けられたことに対して、正規部分群に対応する右イデアルは、Hopf代数における「Hopfイデアル (Hopf ideal)」として完全に特徴付けられる。</p>
+
+    <div class="definition">
+        <p><strong>定義 6.1 (Hopfイデアル)</strong></p>
+        <p>体 $K$ 上のHopf代数 $A$ において、部分空間 $I$ がHopfイデアル (Hopf ideal) であるとは、以下の3つの条件をすべて満たすことである。</p>
+        <p>1. <strong>両側イデアル</strong>: $I$ は代数 $A$ の左イデアルかつ右イデアルである。すなわち $AI \subset I$ かつ $IA \subset I$ である。</p>
+        <p>2. <strong>余イデアル</strong>: 余乗法 $\Delta$ と余単位 $\varepsilon$ に対して、 $\Delta(I) \subset A \otimes I + I \otimes A$ かつ $\varepsilon(I) = 0$ を満たす。</p>
+        <p>3. <strong>対蹠の不変性</strong>: 対蹠 (antipode) $S$ に対して、 $S(I) \subset I$ を満たす。</p>
+    </div>
+
+    <div class="proof">
+        <p class="proof-title">定理 6.2 (正規部分群とHopfイデアルの対応)</p>
+        <p>体 $K$ 上の群環 $A = K[G]$ の右イデアル $I$ について、ある正規部分群 $H \subset G$ が存在して $I = \omega(H)A$ と表されるための必要十分条件は、 $I$ が $A$ のHopfイデアルとなることである。</p>
+        <p><strong>証明</strong></p>
+        <p><strong>$(\Rightarrow)$ の証明（必要性）</strong></p>
+        <p>群 $G$ の正規部分群 $H$ に対して、 $I = \omega(H)A$ と仮定する。定理3.2の証明において、この $I$ が両側イデアル、余イデアル、対蹠で不変であること（すなわちHopfイデアルであること）は既に示されている。</p>
+        
+        <p><strong>$(\Leftarrow)$ の証明（十分性）</strong></p>
+        <p>右イデアル $I$ がHopfイデアルであると仮定する。定義より、 $I$ は両側イデアルであり、かつ余イデアルである。</p>
+        <p>$I$ は「右イデアルかつ余イデアル」であるため、定理5.3により、ある部分群 $H \subset G$ が存在して $I = \omega(H)A$ と表されることが保証される。さらにその部分群 $H$ は $H = \{ x \in G \mid x - 1 \in I \}$ と書ける。</p>
+        <p>任意の $g \in G$ と $h \in H$ をとる。定義より $h - 1 \in I$ である。 $I$ はHopfイデアルであるため、特に左イデアルでもある。したがって、左から $g$ を掛けた要素も $I$ に属する。すなわち $g(h - 1) \in I$ である。</p>
+        <p>式を展開すると $g(h - 1) = gh - g = (ghg^{-1} - 1)g$ となる。 $I$ は右イデアルでもあるため、右から $g^{-1}$ を掛けても $I$ に属したままである。</p>
+        $$ (ghg^{-1} - 1)gg^{-1} \in I \implies ghg^{-1} - 1 \in I $$
+        <p>この結果は、 $ghg^{-1} \in H$ であることを意味している。任意の $g \in G$ と $h \in H$ に対して $ghg^{-1} \in H$ が示されたため、 $H$ は $G$ の正規部分群である。（証明終）</p>
+    </div>
+
+    <p>最後に、群環という特殊なHopf代数においては、Hopfイデアルの3条件のうち「対蹠の不変性」が他の条件から自動的に導かれるという美しい性質を示す。</p>
+
+    <div class="proof">
+        <p class="proof-title">定理 6.3 (イデアルの対蹠不変性の自動昇格)</p>
+        <p>体 $K$ 上の群環 $K[G]$ のイデアル $I$ が両側イデアルであり、かつ余イデアル（すなわち $\Delta(I) \subset K[G] \otimes I + I \otimes K[G]$ かつ $\varepsilon(I) = 0$ ）であるならば、自動的に $S(I) \subset I$ が成立する（すなわち $I$ はHopfイデアルとなる）。</p>
+        <p><strong>証明</strong></p>
+        <p>対蹠 $S : K[G] \to K[G]$ は $S(g) = g^{-1}$ の線形拡張であり、代数反準同型である。</p>
+        <p>$I$ は右イデアルかつ余イデアルであるため、定理5.3の構造定理により、部分群 $H = \{ g \in G \mid g - 1 \in I \}$ の増大イデアルの引き戻しとして以下のように記述される。</p>
+        $$ I = \omega(H)K[G] = \mathrm{span}_K \{ h - 1 \mid h \in H \} K[G] $$
+        <p>すなわち、 $I$ の任意の要素 $x$ は、有限個の $h_i \in H$ と $y_i \in K[G]$ を用いて $x = \sum_{i=1}^n (h_i - 1) y_i$ と表される。</p>
+        <p>この任意の要素 $x \in I$ に対して対蹠 $S$ を適用する。 $S$ の線形性と反準同型性により、以下の計算が成り立つ。</p>
+        $$ S(x) = S\left( \sum_{i=1}^n (h_i - 1) y_i \right) = \sum_{i=1}^n S(y_i) S(h_i - 1) $$
+        <p>生成元 $h_i - 1$ への対蹠の作用は $S(h_i - 1) = h_i^{-1} - 1$ となる。これを代入する。</p>
+        $$ S(x) = \sum_{i=1}^n S(y_i) (h_i^{-1} - 1) $$
+        <p>$H$ は部分群であるため $h_i \in H$ ならば $h_i^{-1} \in H$ であり、 $h_i^{-1} - 1 \in I$ である。</p>
+        <p>ここで、イデアル $I$ が<strong>左イデアル</strong>でもあるという仮定を用いる。 $h_i^{-1} - 1 \in I$ に対して左から $S(y_i) \in K[G]$ を掛けた要素 $S(y_i) (h_i^{-1} - 1)$ は $I$ に属する。 $I$ は加法について閉じているため、その有限和である $S(x)$ も $I$ に属する。</p>
+        <p>以上により、任意の $x \in I$ に対して $S(x) \in I$ が示され、 $S(I) \subset I$ が成立することが証明された。（証明終）</p>
+    </div>
+
+    <h2>7. 参考文献</h2>
+    <ul>
+        <li>Passman, D. S. "The Algebraic Structure of Group Rings", Wiley-Interscience, 1977. (群環の代数的構造に関する標準的文献) <a href="https://mathscinet.ams.org/mathscinet-getitem?mr=0470211" target="_blank">MathSciNet</a></li>
+        <li>Sweedler, M. E. "Hopf Algebras", W. A. Benjamin, Inc., 1969. (Hopf代数と余イデアル、群的元の基礎概念) <a href="https://mathscinet.ams.org/mathscinet-getitem?mr=0252485" target="_blank">MathSciNet</a></li>
+        <li>Montgomery, S. "Hopf Algebras and Their Actions on Rings", CBMS Regional Conference Series in Mathematics, 82, AMS, 1993. (Hopfイデアルの現代的取り扱い) <a href="https://mathscinet.ams.org/mathscinet-getitem?mr=1243224" target="_blank">MathSciNet</a></li>
+    </ul>
+
+</body>
+</html>

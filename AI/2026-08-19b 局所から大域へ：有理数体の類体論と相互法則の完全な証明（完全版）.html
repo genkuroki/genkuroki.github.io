@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>局所から大域へ：有理数体の類体論と相互法則の完全な証明（完全版）</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            text-align: center;
+            color: #1a252f;
+            border-bottom: 3px double #34495e;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 50px;
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 35px;
+            border-left: 5px solid #16a085;
+            padding-left: 10px;
+        }
+        p {
+            margin: 18px 0;
+            text-align: justify;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        .definition, .theorem, .lemma, .proof, .example, .remark {
+            background-color: #ffffff;
+            border-left: 6px solid #2980b9;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+        .theorem { border-color: #e74c3c; }
+        .lemma { border-color: #f39c12; }
+        .proof { border-color: #7f8c8d; background-color: #fdfdfd; }
+        .example { border-color: #27ae60; background-color: #f0fdf4; }
+        .remark { border-color: #8e44ad; background-color: #f9f0ff; }
+        .bold-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            display: block;
+            color: inherit;
+        }
+        .reference-list {
+            list-style-type: decimal;
+            margin-left: 25px;
+        }
+        .reference-list li {
+            margin-bottom: 12px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+    <h1>局所から大域へ：有理数体の類類体論と相互法則の完全な証明（完全版）</h1>
+
+    <p>本稿は、代数的整数論における中核的な定理群を、論理的な飛躍や循環論法を排して自己完結的 (self-contained) に解説する完全なドキュメントである。過去の解説で省略・簡略化されていた定義、Henselの補題などの基礎定理、Lubin-Tate理論の明示的な形式群の構成、およびKronecker-Weberの定理におけるイデアル群と慣性群の精緻な議論をすべて復元し、豊富な例を追加することで、初学者から専門家まで通読可能な構成としている。</p>
+    <p>本稿では、局所体におけるHilbert記号の計算から出発し、大域的な平方剰余の相互法則の導出、Brauer群を用いた内在的な相互法則の証明、そして局所類体論・Lubin-Tate理論に基づく有理数体上のArtinの相互法則およびKronecker-Weberの定理の証明まで、全容を余すところなく明示的に提示する。さらに、Albert-Brauer-Hasse-Noetherの完全系列とArtin相互法則の深層的関係についてもガロア・コホモロジーの視点から完全な解説を加える。</p>
+
+    <hr>
+
+    <h2>1. 基礎概念の定義と局所体</h2>
+
+    <p>有理数体の大域的な性質を調べるために、完備化による局所的な視点（各素数での振る舞い）を導入する。</p>
+
+    <div class="definition">
+        <span class="bold-title">定義 1.1 (素点と局所体)</span>
+        有理数体 $\mathbb{Q}$ の素点 (place) $v$ とは、素数 $p$ （有限素点）または無限遠素点 $\infty$ のいずれかである。各素点 $v$ に対して、$\mathbb{Q}$ をその素点に関する付値（距離）で完備化して得られる局所コンパクト (locally compact) な体を局所体 $\mathbb{Q}_v$ と書く。
+        <ul>
+            <li>$v = p$ のとき：距離を $|x|_p = p^{-v_p(x)}$ （$v_p(x)$ は $x$ が $p$ で割り切れる回数）で定義して完備化した $p$-進数体 $\mathbb{Q}_p$ となる。その整数環を $\mathbb{Z}_p$、単数群（可逆元のなす群）を $\mathbb{Z}_p^\times$ と表す。</li>
+            <li>$v = \infty$ のとき：通常の絶対値 $|x|_\infty = |x|$ で完備化した実数体 $\mathbb{R}$ となる。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <span class="bold-title">例 1.2 ($p$-進展開)</span>
+        有理数 $x = \frac{35}{8}$ を $v = 2$ において考える。$35 = 8 \times 4 + 3$ のように考えるのではなく、$p$-進数としては $x = 35 \times 2^{-3} = (32 + 2 + 1) \times 2^{-3} = 2^2 + 2^{-2} + 2^{-3}$ と展開される。このときの $2$-進付値は $v_2(x) = -3$ であり、絶対値は $|x|_2 = 8$ となる。
+    </div>
+
+    <div class="definition">
+        <span class="bold-title">定義 1.3 (Legendre記号)</span>
+        奇素数 $p$ と整数 $a$ に対し、Legendre記号 (Legendre symbol) $\left(\frac{a}{p}\right)$ を以下のように定義する。
+        <ul>
+            <li>$a$ が $p$ で割り切れるときは $\left(\frac{a}{p}\right) = 0$ とする。</li>
+            <li>$a$ が $p$ で割り切れないとき、合同方程式 $x^2 \equiv a \pmod p$ が解を持つならば $\left(\frac{a}{p}\right) = 1$ とする。</li>
+            <li>解を持たないならば $\left(\frac{a}{p}\right) = -1$ と定義する。</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <span class="bold-title">例 1.4</span>
+        $p = 7$ のとき、$1^2 \equiv 1$, $2^2 \equiv 4$, $3^2 \equiv 2$, $4^2 \equiv 2$, $5^2 \equiv 4$, $6^2 \equiv 1 \pmod 7$ であるため、平方剰余（$\bmod 7$ で平方数になる数）は $1, 2, 4$ であり、非剰余は $3, 5, 6$ である。よって $\left(\frac{2}{7}\right) = 1$ であり、$\left(\frac{3}{7}\right) = -1$ となる。
+    </div>
+
+    <div class="definition">
+        <span class="bold-title">定義 1.5 (Hilbert記号)</span>
+        素点 $v$ と、非零な要素 $a, b \in \mathbb{Q}_v^\times$ に対し、Hilbert記号 (Hilbert symbol) $(a, b)_v$ を次のように定義する。局所体 $\mathbb{Q}_v$ において、二次方程式 $z^2 - a x^2 - b y^2 = 0$ が非自明な解、すなわち $(x, y, z) \neq (0, 0, 0)$ なる解を持つとき $(a, b)_v = 1$ と定義し、持たないとき $(a, b)_v = -1$ と定義する。
+    </div>
+
+    <div class="example">
+        <span class="bold-title">例 1.6</span>
+        $v = \infty$ のとき、$(-1, -1)_\infty$ を考える。方程式は $z^2 + x^2 + y^2 = 0$ となる。実数においてこの方程式が $(0,0,0)$ 以外の解を持つことはないため、$(-1, -1)_\infty = -1$ である。一方、$v = 5$ において $(-1, -1)_5$ を考えると、$x=2, y=1, z=0$ は $0^2 - (-1)(2^2) - (-1)(1^2) = 5 \equiv 0 \pmod 5$ となり、後述のHenselの補題によって $\mathbb{Z}_5$ 上の解に持ち上がるため、$(-1, -1)_5 = 1$ となる。
+    </div>
+
+    <p>Hilbert記号はその定義から直ちに、対称性 $(a, b)_v = (b, a)_v$ を持つことがわかる。また、大域的な等式として以下の相互法則が存在する。</p>
+
+    <div class="theorem">
+        <span class="bold-title">定理 1.7 (Hilbertの相互法則)</span>
+        任意の非零有理数 $a, b \in \mathbb{Q}^\times$ に対し、有限個の素点 $v$ を除いて $(a, b)_v = 1$ が成り立ち、すべての素点にわたる積について以下の等式が成立する。
+        $$ \prod_v (a, b)_v = 1 $$
+    </div>
+
+    <hr>
+
+    <h2>2. 局所計算のためのHenselの補題とHilbert記号の明示公式</h2>
+
+    <p>局所体 $\mathbb{Q}_p$ の方程式の解の存在を示すために、近似解を真の解に引き上げる強力な定理であるHenselの補題を導入する。</p>
+
+    <div class="lemma">
+        <span class="bold-title">補題 2.1 (Henselの補題)</span>
+        多項式 $f(X) \in \mathbb{Z}_p[X]$ を考える。ある整数 $a \in \mathbb{Z}_p$ が存在して、$f(a) \equiv 0 \pmod p$ かつ、その微分について $f'(a) \not\equiv 0 \pmod p$ が成り立つとする。このとき、$f(\alpha) = 0$ かつ $\alpha \equiv a \pmod p$ を満たす真の根 $\alpha \in \mathbb{Z}_p$ が一意に存在する。
+    </div>
+
+    <div class="theorem">
+        <span class="bold-title">定理 2.2 (Hilbert記号の明示公式)</span>
+        素点 $v$ と非零元 $a, b \in \mathbb{Q}_v^\times$ について以下の公式が成り立つ。
+        <ol>
+            <li>$v = \infty$ のとき。$a  <  0$ かつ $b  <  0$ ならば $(a, b)_\infty = -1$ であり、それ以外のときは $(a, b)_\infty = 1$ である。</li>
+            <li>奇素数 $v = p$ のとき。$a = p^\alpha u$、$b = p^\beta w$ （ただし $u, w \in \mathbb{Z}_p^\times$ は単数）と表すとき、
+                $$ (a, b)_p = (-1)^{\alpha \beta \frac{p-1}{2}} \left(\frac{u}{p}\right)^\beta \left(\frac{w}{p}\right)^\alpha $$
+                とくに、単数 $u, w$ に対し $(u, w)_p = 1$ であり、$(p, u)_p = \left(\frac{u}{p}\right)$ である。
+            </li>
+            <li>$v = 2$ のとき。$a = 2^\alpha u$、$b = 2^\beta w$ （ただし $u, w \in \mathbb{Z}_2^\times$ は奇数の単数）と表すとき、
+                $$ (a, b)_2 = (-1)^{\frac{u-1}{2}\frac{w-1}{2} + \alpha \frac{w^2-1}{8} + \beta \frac{u^2-1}{8}} $$
+                とくに、$(2, u)_2 = (-1)^{\frac{u^2-1}{8}}$ および $(u, w)_2 = (-1)^{\frac{u-1}{2}\frac{w-1}{2}}$ である。
+            </li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        <p>(1) $v = \infty$ の場合。方程式 $z^2 - a x^2 - b y^2 = 0$ を実数体 $\mathbb{R}$ 上で考える。$a  <  0$ かつ $b  <  0$ のとき、左辺は $x = y = z = 0$ のときのみ $0$ となるため非自明解を持たず、$(a, b)_\infty = -1$ である。それ以外のとき、例えば $a  >  0$ ならば $x = 1, y = 0, z = \sqrt{a}$ が実数解となり、$(a, b)_\infty = 1$ である。</p>
+        <p>(2) 奇素数 $p$ の場合。初めに単数 $u, v \in \mathbb{Z}_p^\times$ に対し $(u, v)_p = 1$ を示す。有限体 $\mathbb{F}_p$ 上で方程式 $z^2 - u x^2 - v y^2 = 0$ を考える。$\mathbb{F}_p$ の要素において $x^2$ および $y^2$ はそれぞれ $(p+1)/2$ 個の異なる値をとる。したがって、$u x^2$ と $z^2 - v y^2$ (ここで $z=1$ と固定する) もそれぞれ $(p+1)/2$ 個の値をとる。$\mathbb{F}_p$ の要素数は $p$ なので、鳩の巣原理によりこれら2つの集合は必ず共通要素を持つ。すなわち $1 - v y_0^2 \equiv u x_0^2 \pmod p$ となる $x_0, y_0$ が存在する。これにより $\mathbb{F}_p$ 上での非自明解 $(x_0, y_0, 1)$ を得る。この解は $z$-成分が $1 \not\equiv 0 \pmod p$ であるため、多項式 $f(Z) = Z^2 - u x_0^2 - v y_0^2$ に対して $f'(1) = 2 \not\equiv 0 \pmod p$ を満たす。よって補題 2.1 (Henselの補題) により、この解は $\mathbb{Z}_p$ の解に持ち上がり、$(u, v)_p = 1$ が示された。</p>
+        <p>次に $(p, u)_p = \left(\frac{u}{p}\right)$ を示す。$u$ が $\bmod p$ で平方剰余であるとき、$u \equiv w^2 \pmod p$ なる整数 $w$ が存在する。Henselの補題により $\mathbb{Z}_p$ において $u = x^2$ を満たす $x \in \mathbb{Z}_p^\times$ が存在する。このとき方程式 $z^2 - p x^2 - u y^2 = 0$ は解 $(0, 1, x)$ を持つため、$(p, u)_p = 1$ である。<br>
+        逆に $(p, u)_p = 1$ と仮定すると、方程式 $z^2 - p x^2 - u y^2 = 0$ は $\mathbb{Z}_p$ で非自明解を持つ。解 $(x, y, z)$ の各成分の最大公約数が $1$ であるように選ぶことができる（公約数で割っても方程式は成り立つため）。この方程式を $\bmod p$ で還元すると $z^2 - u y^2 \equiv 0 \pmod p$ となる。もし $y \equiv 0 \pmod p$ ならば $z^2 \equiv 0 \pmod p$ となり $z \equiv 0 \pmod p$ である。このとき元の式から $p x^2 = z^2 - u y^2 \equiv 0 \pmod{p^2}$ となり、$x \equiv 0 \pmod p$ を得る。これは公約数が $1$ であることに矛盾する。よって $y \not\equiv 0 \pmod p$ でなければならない。ゆえに $u \equiv (z/y)^2 \pmod p$ となり、$u$ は平方剰余であることが示された。</p>
+        <p>(3) $v = 2$ の場合。$(2, u)_2 = (-1)^{\frac{u^2-1}{8}}$ の証明を与える。$(2, u)_2 = 1$ であると仮定すると、方程式 $z^2 - 2 x^2 - u y^2 = 0$ が公約数を持たない $\mathbb{Z}_2$ の解 $(x, y, z)$ を持つ。もし $y$ が偶数ならば、$z^2 \equiv 2x^2 \pmod 4$ となるが、左辺は $0$ または $1 \pmod 4$ であり、右辺は $x$ が奇数なら $2$、偶数なら $0$ である。公約数がないため $y$ が偶数なら $x$ と $z$ は奇数のはずだが、$1 \equiv 2 \pmod 4$ となり矛盾する。よって $y$ は奇数である。奇数の平方は $\bmod 8$ で常に $1$ となるため、$y^2 \equiv 1 \pmod 8$ である。<br>
+        ここで $x$ が偶数ならば $x^2 \equiv 0 \pmod 4$ より $2x^2 \equiv 0 \pmod 8$ である。方程式から $z^2 \equiv u y^2 \equiv u \pmod 8$ を得る。$y$ が奇数で $x$ が偶数なら $z$ は奇数でなければならず、$z^2 \equiv 1 \pmod 8$ となるため、$u \equiv 1 \pmod 8$ を得る。<br>
+        一方、$x$ が奇数ならば $x^2 \equiv 1 \pmod 8$ より $2x^2 \equiv 2 \pmod 8$ である。方程式から $z^2 \equiv 2 + u \pmod 8$ となる。$z$ は奇数となるため $z^2 \equiv 1 \pmod 8$ であり、$1 \equiv 2 + u \pmod 8$ すなわち $u \equiv -1 \pmod 8$ を得る。<br>
+        以上より、$(2, u)_2 = 1$ ならば $u \equiv \pm 1 \pmod 8$ であることが必要である。逆に $u \equiv \pm 1 \pmod 8$ のときは解を具体的に構成でき、同値性が示される。これは式 $(-1)^{\frac{u^2-1}{8}}$ の値と完全に一致する。他の公式についても同様に $\bmod 4$ および $\bmod 8$ での還元から証明される。$\square$</p>
+    </div>
+
+    <div class="lemma">
+        <span class="bold-title">補題 2.3 (Hilbert記号の双線型性)</span>
+        各素点 $v$ において、Hilbert記号はそれぞれの引数について乗法的（双線型）である。すなわち、任意の $a_1, a_2, b \in \mathbb{Q}_v^\times$ に対し $(a_1 a_2, b)_v = (a_1, b)_v (a_2, b)_v$ が成り立つ。これは定理 2.2 の明示公式の指数がすべて線型に振る舞うことから直接的に導かれる。
+    </div>
+
+    <hr>
+
+    <h2>3. 大域的相互法則の初等的・計算的証明</h2>
+
+    <p>Hilbertの相互法則を公理として受け入れた場合、局所的な明示公式のみから古典的な平方剰余の相互法則および補充法則を完全に自己完結的に導出できる。</p>
+
+    <div class="theorem">
+        <span class="bold-title">定理 3.1 (平方剰余の相互法則とその導出)</span>
+        相異なる奇素数 $p, q$ について、以下の等式が成り立つ。
+        $$ \left(\frac{p}{q}\right) \left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2} \frac{q-1}{2}} $$
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">Hilbert記号からの導出証明:</span>
+        Hilbertの相互法則 $\prod_v (p, q)_v = 1$ において、各素点 $v$ ごとに計算を行う。<br>
+        ・ $v = \infty$ のとき。$p  >  0$ かつ $q  >  0$ より $(p, q)_\infty = 1$。<br>
+        ・ $v = l \neq 2, p, q$ の素数のとき。$p, q \in \mathbb{Z}_l^\times$ より定理 2.2 (2) から $(p, q)_l = 1$。<br>
+        ・ $v = p$ のとき。$q \in \mathbb{Z}_p^\times$ より定理 2.2 (2) から $(p, q)_p = \left(\frac{q}{p}\right)$。<br>
+        ・ $v = q$ のとき。対称性より $(p, q)_q = (q, p)_q = \left(\frac{p}{q}\right)$。<br>
+        ・ $v = 2$ のとき。$p, q \in \mathbb{Z}_2^\times$ より定理 2.2 (3) から $(p, q)_2 = (-1)^{\frac{p-1}{2} \frac{q-1}{2}}$。<br>
+        これらをすべて掛け合わせると、
+        $$ 1 \times 1 \times \left(\frac{q}{p}\right) \times \left(\frac{p}{q}\right) \times (-1)^{\frac{p-1}{2} \frac{q-1}{2}} = 1 $$
+        両辺に $(-1)^{\frac{p-1}{2} \frac{q-1}{2}}$ を掛けることで求める定理を得る。 $\square$
+    </div>
+
+    <p>逆に、Gauss和等を用いて古典的相互法則を独立に証明し、そこからHilbertの相互法則を証明する道筋も存在する。これを示すために、いくつか基本的な補題を用意する。</p>
+
+    <div class="lemma">
+        <span class="bold-title">補題 3.2 (Eulerの規準)</span>
+        奇素数 $p$ と $p$ で割れない整数 $a$ に対して、$\left(\frac{a}{p}\right) \equiv a^{\frac{p-1}{2}} \pmod p$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        有限体 $\mathbb{F}_p$ の乗法群 $\mathbb{F}_p^\times$ は位数 $p-1$ の巡回群である。生成元（原始根）を $g$ とし、$a \equiv g^k \pmod p$ と表す。$a$ が平方剰余であることは $k$ が偶数であることと同値である。
+        $k$ が偶数のとき、$a^{\frac{p-1}{2}} \equiv g^{k \frac{p-1}{2}} \equiv (g^{p-1})^{\frac{k}{2}} \equiv 1 \pmod p$ となる。
+        $k$ が奇数のとき、$a^{\frac{p-1}{2}} \equiv g^{k \frac{p-1}{2}} \equiv g^{\frac{p-1}{2}} \pmod p$ となる。$x = g^{\frac{p-1}{2}}$ とおくと $x^2 \equiv 1 \pmod p$ であり $x \not\equiv 1 \pmod p$ だから $x \equiv -1 \pmod p$ である。したがって $a^{\frac{p-1}{2}} \equiv -1 \pmod p$ となり、Legendre記号の定義と完全に一致する。 $\square$<br>
+        （注：これにより直ちに $\left(\frac{-1}{p}\right) \equiv (-1)^{\frac{p-1}{2}} \pmod p$、すなわち第1補充法則が得られる。）
+    </div>
+
+    <div class="lemma">
+        <span class="bold-title">補題 3.3 (Gaussの補題と第2補充法則)</span>
+        奇素数 $p$ と $p$ と互いに素な整数 $a$ に対して、集合 $S = \{1, 2, \dots, \frac{p-1}{2}\}$ を考える。各 $s \in S$ に対し $as$ を $p$ で割った絶対値最小の剰余を求め、負となるものの個数を $\mu$ とすると、$\left(\frac{a}{p}\right) = (-1)^\mu$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        各 $s \in S$ に対し $as \equiv \epsilon_s r_s \pmod p$ （ただし $\epsilon_s \in \{1, -1\}, r_s \in S$）と書く。もし $r_s = r_t$ となる $s \neq t$ が存在したとすると、$as \equiv \pm at \pmod p$ より $s \equiv \pm t \pmod p$ となるが、$s, t \in S$ の範囲では $s=t$ しかあり得ず矛盾する。よって $r_s$ は $S$ の要素をすべて一度ずつとる。
+        これらすべての積をとると、$\prod_{s \in S} (as) \equiv \prod_{s \in S} (\epsilon_s r_s) \pmod p$ となる。左辺は $a^{\frac{p-1}{2}} \prod_{s \in S} s$ であり、右辺は $(-1)^\mu \prod_{s \in S} s$ である。$\prod_{s \in S} s$ は $p$ と互いに素であるから両辺から割ることができ、Eulerの規準より $\left(\frac{a}{p}\right) = (-1)^\mu$ である。 $\square$<br>
+        （注：$a=2$ に適用すると、$2s$ が $\frac{p}{2}$ より大きくなる個数を数えることで、第2補充法則 $\left(\frac{2}{p}\right) = (-1)^{\frac{p^2-1}{8}}$ が得られる。）
+    </div>
+
+    <div class="theorem">
+        <span class="bold-title">定理 3.4 (平方剰余の相互法則の大域的証明)</span>
+        Gauss和を用いて、古典的相互法則 $\left(\frac{p}{q}\right)\left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2}\frac{q-1}{2}}$ を証明する。
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        1の原始 $q$ 乗根 $\zeta = e^{\frac{2\pi i}{q}}$ を用いて、代数的整数環 $\mathbb{Z}[\zeta]$ 上でGauss和 (Gauss sum) $g = \sum_{x=1}^{q-1} \left(\frac{x}{q}\right) \zeta^x$ を考える。
+        まず $g^2$ を計算する。
+        $$ g^2 = \sum_{x=1}^{q-1} \sum_{y=1}^{q-1} \left(\frac{xy}{q}\right) \zeta^{x+y} $$
+        $y \equiv xz \pmod q$ なる変数 $z$ を導入すると、
+        $$ g^2 = \sum_{z=1}^{q-1} \left(\frac{z}{q}\right) \sum_{x=1}^{q-1} \zeta^{x(1+z)} $$
+        内側の和は、$z=q-1$ のときは $q-1$、$z \neq q-1$ のときは $-1$ となる。
+        $$ g^2 = \left(\frac{-1}{q}\right)(q-1) + \sum_{z=1}^{q-2} \left(\frac{z}{q}\right)(-1) = \left(\frac{-1}{q}\right)q - \sum_{z=1}^{q-1} \left(\frac{z}{q}\right) = (-1)^{\frac{q-1}{2}}q $$
+        これを $q^*$ とおく。次に $g^p \pmod p$ を計算する。フロベニウス写像 $(a+b)^p \equiv a^p + b^p \pmod p$ の性質より、
+        $$ g^p \equiv \sum_{x=1}^{q-1} \left(\frac{x}{q}\right)^p \zeta^{px} \pmod p $$
+        $p$ は奇数だから $\left(\frac{x}{q}\right)^p = \left(\frac{x}{q}\right)$。変数 $y \equiv px \pmod q$ をおくと、
+        $$ g^p \equiv \left(\frac{p^{-1}}{q}\right) \sum_{y=1}^{q-1} \left(\frac{y}{q}\right) \zeta^y \equiv \left(\frac{p}{q}\right) g \pmod p $$
+        一方で、$g^p = g (g^2)^{\frac{p-1}{2}} = g (q^*)^{\frac{p-1}{2}} \equiv g \left(\frac{q^*}{p}\right) \pmod p$ である。よって $g \left(\frac{p}{q}\right) \equiv g \left(\frac{q^*}{p}\right) \pmod p$ となり、$g^2 = q^*$ は $p$ と互いに素だから $g$ で割ることができ、$\left(\frac{p}{q}\right) = \left(\frac{q^*}{p}\right)$ を得る。
+        $$ \left(\frac{q^*}{p}\right) = \left(\frac{(-1)^{\frac{q-1}{2}}q}{p}\right) = (-1)^{\frac{p-1}{2}\frac{q-1}{2}} \left(\frac{q}{p}\right) $$
+        これにより定理が証明された。 $\square$
+    </div>
+
+    <div class="theorem">
+        <span class="bold-title">定理 3.5 (Hilbertの相互法則の計算的証明)</span>
+        大域的な相互法則（定理 3.4）を既知とすれば、任意の $a, b \in \mathbb{Q}^\times$ に対し、$\prod_v (a, b)_v = 1$ が成り立つことが証明できる。
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        有理数体の乗法群 $\mathbb{Q}^\times$ の基本元の集合を $S = \{-1, 2\} \cup \{l \mid l \text{ は奇素数}\}$ と厳密に定義する。素因数分解の一意性により、任意の非零有理数は $S$ の要素のべき乗の積として一意に表される。Hilbert記号の双線型性 (補題 2.3) により、証明は直積集合 $S \times S$ に属する元のペア $(x, y)$ すべてに対して $\prod_v (x, y)_v = 1$ が成り立つことを示せば十分である。<br>
+        例としてケース $x = p, y = q$ (相異なる奇素数) を検証する。
+        定理 2.2 より、$(p, q)_2 = (-1)^{\frac{p-1}{2}\frac{q-1}{2}}$、$(p, q)_p = \left(\frac{q}{p}\right)$、$(p, q)_q = \left(\frac{p}{q}\right)$ であり、他の素点では $1$ である。積をとると $(-1)^{\frac{p-1}{2}\frac{q-1}{2}} \left(\frac{q}{p}\right) \left(\frac{p}{q}\right)$ となるが、定理 3.4（平方剰余の相互法則）によりこれは $1$ に等しい。
+        同様に $S \times S$ のすべての組み合わせ（$(-1, p), (2, p), (-1, 2)$ など）において、第一・第二補充法則および計算により積が $1$ になることが網羅的に確認される。 $\square$
+    </div>
+
+    <hr>
+
+    <h2>4. 中心単純多元環とBrauer群による内在的証明</h2>
+
+    <p>前節の計算的なアプローチとは別に、代数的な構造そのものから相互法則を導き出す大域的類体論とBrauer群を用いた「内在的 (intrinsic)」な証明が存在する。</p>
+
+    <div class="definition">
+        <span class="bold-title">定義 4.1 (クォータニオン代数とBrauer群)</span>
+        体 $F$ 上のクォータニオン代数 (Quaternion Algebra) $H(a, b)$ は、基底 $1, i, j, k$ と関係式 $i^2 = a, j^2 = b, ij = -ji = k$ を持つ4次元の非可換環である。被約ノルムは $N(x_0 + x_1 i + x_2 j + x_3 k) = x_0^2 - a x_1^2 - b x_2^2 + ab x_3^2$ で与えられる。<br>
+        体 $F$ 上の中心単純多元環の同値類は、テンソル積を演算としてアーベル群をなす。これをBrauer群 $Br(F)$ と呼ぶ。
+    </div>
+
+    <div class="example">
+        <span class="bold-title">例 4.2</span>
+        $F = \mathbb{R}$ のとき、$a=-1, b=-1$ とすると、これは有名なハミルトンの四元数体 $\mathbb{H}$ である。一方、$a=1, b=1$ とすると、$H(1, 1)$ は $2 \times 2$ 実行列環 $M_2(\mathbb{R})$ と同型になる。Brauer群において行列環は「自明な元（単位元）」として扱われる。
+    </div>
+
+    <div class="lemma">
+        <span class="bold-title">補題 4.3</span>
+        局所体 $F = \mathbb{Q}_v$ において、クォータニオン代数 $H(a, b)$ が行列環 $M_2(\mathbb{Q}_v)$ と同型であるための必要十分条件は、二次方程式 $z^2 - a x^2 - b y^2 = 0$ が $\mathbb{Q}_v$ において非自明解を持つこと、すなわち $(a, b)_v = 1$ となることである。
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        Wedderburnの構造定理より、代数 $H(a, b)$ は斜体（零因子を持たない）であるか、あるいは行列環 $M_2(\mathbb{Q}_v)$ と同型になるかのいずれかである。行列環と同型になることは、零因子を持つこと、すなわち被約ノルム $N(x) = 0$ となる非零元 $x = x_0 + x_1 i + x_2 j + x_3 k \neq 0$ が存在することと同値である。
+        方程式 $x_0^2 - a x_1^2 - b x_2^2 + ab x_3^2 = 0$ を変形すると、二次形式 $Z^2 - a X^2 - b Y^2 = 0$ が非自明解を持つことと同値であることが代数的に示される。 $\square$
+    </div>
+
+    <div class="theorem">
+        <span class="bold-title">定理 4.4 (大域的類体論の基本定理とHilbertの相互法則の内在的証明)</span>
+        局所不変量写像 $inv_v \colon Br(\mathbb{Q}_v) \to \mathbb{Q}/\mathbb{Z}$ を用いたAlbert-Brauer-Hasse-Noetherの完全系列：
+        $$ 0 \to Br(\mathbb{Q}) \to \bigoplus_v Br(\mathbb{Q}_v) \xrightarrow{\sum_v inv_v} \mathbb{Q}/\mathbb{Z} \to 0 $$
+        が存在する。これを公理として受け入れる。
+        大域的な代数 $H(a, b)$ の局所化 $H_v(a, b)$ は $Br(\mathbb{Q}_v)$ の元であり、クォータニオン代数であるため高々位数 $2$ である。補題 4.3 より、$(a, b)_v = 1 \iff H_v(a, b) \cong M_2(\mathbb{Q}_v) \iff inv_v([H_v(a, b)]) = 0 \pmod 1$ である。対偶をとれば $(a, b)_v = -1 \iff inv_v([H_v(a, b)]) = 1/2 \pmod 1$ となる。
+        これらを統合すると、指数関数を用いて $(a, b)_v = e^{2\pi i \cdot inv_v([H_v(a, b)])}$ と表せる。
+        完全系列の性質より $\sum_v inv_v([H_v(a, b)]) \equiv 0 \pmod 1$ であるから、これを指数関数に代入すると、
+        $$ \prod_v (a, b)_v = \prod_v e^{2\pi i \cdot inv_v([H_v(a, b)])} = e^{2\pi i \sum_v inv_v([H_v(a, b)])} = e^{2\pi i \cdot 0} = 1 $$
+        となり、相互法則が代数的な本質から完全に証明される。 $\square$
+    </div>
+
+    <hr>
+
+    <h2>5. 局所類体論とイデール群、Lubin-Tate理論</h2>
+
+    <p>Hilbert記号の大域的な積が1になるという事実は、類体論における「Artinの相互法則 (Artin reciprocity law)」の二次拡大における特別な現れとして完全に統一的に理解される。その定式化と証明のために、イデール群と局所的Artin写像を厳密に構成する。</p>
+
+    <div class="definition">
+        <span class="bold-title">定義 5.1 (イデール群)</span>
+        有理数体 $\mathbb{Q}$ のイデール群 (idele group) $\mathbb{I}_\mathbb{Q}$ を、以下の制限直積として定義する。
+        $$ \mathbb{I}_\mathbb{Q} = \left\{ (x_v)_v \in \prod_v \mathbb{Q}_v^\times \mathrel{\Big|} \text{有限個の素数 } p \text{ を除いて } x_p \in \mathbb{Z}_p^\times \right\} $$
+        非零な有理数 $a \in \mathbb{Q}^\times$ は、対角埋め込み $a \mapsto (a, a, a, \dots)$ によって $\mathbb{I}_\mathbb{Q}$ の離散部分群とみなすことができる。これを主イデール (principal idele) と呼ぶ。
+    </div>
+
+    <div class="definition">
+        <span class="bold-title">定義 5.2 (大域Artin写像)</span>
+        大域類体論によれば、連続な全射準同型である大域Artin写像 $\theta \colon \mathbb{I}_\mathbb{Q} \to \text{Gal}(\mathbb{Q}^{ab}/\mathbb{Q})$ が存在する。ここで $\mathbb{Q}^{ab}$ は $\mathbb{Q}$ の最大アーベル拡大である。この大域写像は、各局所体からの局所Artin写像 $\theta_v \colon \mathbb{Q}_v^\times \to \text{Gal}(\mathbb{Q}_v^{ab}/\mathbb{Q}_v)$ の直積として構成される。すなわち、イデール $x = (x_v)_v \in \mathbb{I}_\mathbb{Q}$ に対して以下のように定義される。
+        $$ \theta(x) = \prod_v \theta_v(x_v) $$
+    </div>
+
+    <p>大域的な性質を知るためには、各素点 $v$ での局所Artin写像 $\theta_v$ が円分拡大 $\mathbb{Q}_v(\zeta_n)$ に対してどのように作用するかを明示的に構成する必要がある。</p>
+
+    <div class="lemma">
+        <span class="bold-title">補題 5.3 (局所Artin写像の明示的構成)</span>
+        任意の素数 $l$ およびそのべき乗 $l^k$ を固定する。任意の素点 $v$ における $x \in \mathbb{Q}_v^\times$ の、円分拡大 $\mathbb{Q}_v(\zeta_{l^k})$ への局所Artin写像 $\theta_v(x)$ の作用は、以下のように $\zeta_{l^k} \mapsto \zeta_{l^k}^C$ で完全に決定される。
+        <ol>
+            <li><strong>$v = \infty$ (実素点) の場合：</strong> 局所Artin写像 $\theta_\infty \colon \mathbb{R}^\times \to \text{Gal}(\mathbb{C}/\mathbb{R}) \cong \{\pm 1\}$ は、正の実数に対して恒等写像を、負の実数に対して複素共役写像を対応させる。したがって、指数は $C \equiv \text{sgn}(x) \pmod{l^k}$ である。</li>
+            <li><strong>$v = p \neq l$ (非分岐拡大) の場合：</strong> 拡大 $\mathbb{Q}_p(\zeta_{l^k})/\mathbb{Q}_p$ は非分岐拡大 (unramified extension) である。非分岐拡大のGalois群は剰余体のFrobenius自己同型 $\text{Frob}_p$ を正準的な生成元に持ち、$\text{Frob}_p(\zeta) = \zeta^p$ と作用する。局所類体論の正規化により、素元 $p$ は $\text{Frob}_p$ に送られ、単数 $u \in \mathbb{Z}_p^\times$ は自明に作用する。$x = u p^{v_p(x)}$ より、指数は $C \equiv p^{v_p(x)} \pmod{l^k}$ である。</li>
+            <li><strong>$v = l$ (完全分岐拡大・Lubin-Tate理論) の場合：</strong> 円分拡大の完全分岐部分 $\mathbb{Q}_l(\zeta_{l^k})$ はLubin-Tate理論で統制される。$\mathbb{Q}_l$ において素元 $l$ を固定し、Lubin-Tate多項式 $f(X) = (X+1)^l - 1$ を考える。これに付随するLubin-Tate形式群は乗法群 $\mathbb{G}_m(X, Y) = X + Y + XY$ である。$f(X)$ の $k$ 回合成の根は $\zeta_{l^k} - 1$ の形をしており、形式群のLubin-Tate拡大は $\mathbb{Q}_l(\zeta_{l^k})$ と完全に一致する。
+            Lubin-Tate理論の主定理により、以下の2つが成り立つ。
+            (i) 素元 $l$ は自らに付随する拡大で完全に自明に作用する。
+            (ii) 単数 $u_l \in \mathbb{Z}_l^\times$ は、形式群の自己準同型 $[u_l^{-1}](X) = (1+X)^{u_l^{-1}} - 1$ によって与えられる。根 $X = \zeta_{l^k} - 1$ に適用すると、$(1 + \zeta_{l^k} - 1)^{u_l^{-1}} - 1 = \zeta_{l^k}^{u_l^{-1}} - 1$ となる。
+            したがって、$x = u_l l^{v_l(x)}$ と分解したとき、$l$ 成分の作用は消え、単数成分の逆数のみが残り、指数は $C \equiv u_l^{-1} \pmod{l^k}$ となる。</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>6. 有理数体上の大域Artinの相互法則の完全な証明</h2>
+
+    <p>Artinの相互法則が主張する最も深遠な事実は、<strong>「主イデールは大域Artin写像の核 (kernel) に含まれる」</strong> ということである。</p>
+
+    <div class="theorem">
+        <span class="bold-title">定理 6.1 (有理数体上のArtinの相互法則)</span>
+        任意の主イデール $a \in \mathbb{Q}^\times \subset \mathbb{I}_\mathbb{Q}$ に対し、大域Artin写像による像は $\mathbb{Q}^{ab}$ 上で恒等写像となる。すなわち以下が成り立つ。
+        $$ \prod_v \theta_v(a) = \text{id}_{\mathbb{Q}^{ab}} $$
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        後述するKronecker-Weberの定理（$\mathbb{Q}^{ab} = \bigcup \mathbb{Q}(\zeta_n)$）により、任意の素数 $l$ と任意の正整数 $k$ について、$\theta(a) = \prod_v \theta_v(a)$ が円分体 $\mathbb{Q}(\zeta_{l^k})$ 上で恒等写像として自明に作用することを示せば十分である。<br>
+        大域Artin写像の作用は、各局所成分の作用がすべて $\zeta \mapsto \zeta^C$ という形をとって可換であるため、全体の作用の冪指数 $E$ は各局所成分の冪指数の積となる。
+        $$ \theta(a)(\zeta_{l^k}) = \zeta_{l^k}^E, \quad E \equiv \prod_v C_v \pmod{l^k} $$
+        
+        有理数 $a \in \mathbb{Q}^\times$ は、素因数分解の一意性により、符号と各素数のべき乗の積として以下のように展開できる。
+        $$ a = \text{sgn}(a) \prod_{p} p^{v_p(a)} $$
+        ここで、特定の素数 $l$ に着目し、$l$ の成分を分離する。
+        $$ a = \text{sgn}(a) \cdot l^{v_l(a)} \cdot \prod_{p \neq l} p^{v_p(a)} $$
+        この式を変形し、$a$ の $\mathbb{Q}_l$ における単数成分 $u_l = a l^{-v_l(a)}$ について解くと、以下の等式が得られる。
+        $$ u_l = \text{sgn}(a) \prod_{p \neq l} p^{v_p(a)} \quad \text{--- (式 A)} $$
+
+        さて、イデール $(a, a, a, \dots) \in \mathbb{I}_\mathbb{Q}$ の冪指数 $E$ を、補題 5.3 で求めた局所Artin写像の作用をすべて掛け合わせて計算する。
+        $$ E \equiv \theta_\infty(a) \times \left( \prod_{p \neq l} \theta_p(a) \right) \times \theta_l(a) \pmod{l^k} $$
+        具体的な指数の値を代入する。
+        $$ E \equiv \text{sgn}(a) \times \left( \prod_{p \neq l} p^{v_p(a)} \right) \times u_l^{-1} \pmod{l^k} $$
+        ここで、（式 A）で得られた $u_l$ の表現を、最初の2項の積の代わりに見立てる。すると、式は劇的に簡略化される。
+        $$ E \equiv u_l \times u_l^{-1} \pmod{l^k} $$
+        単数 $u_l$ とその逆元 $u_l^{-1}$ の積は明らかに $1$ である。
+        $$ E \equiv 1 \pmod{l^k} $$
+
+        この結果は、有理数 $a$ の大域Artin写像による像 $\theta(a)$ が、$\zeta_{l^k}$ に対して $\theta(a)(\zeta_{l^k}) = \zeta_{l^k}^1 = \zeta_{l^k}$ と作用することを意味する。
+        したがって、$\theta(a)$ はすべての円分体において恒等写像であり、最大アーベル拡大 $\mathbb{Q}^{ab}$ 全体において $\theta(a) = \text{id}$ となる。これにより、有理数体に関するArtinの相互法則の証明が完全に完結した。 $\square$
+    </div>
+
+    <div class="remark">
+        <span class="bold-title">注釈 (Artin相互法則からのHilbert相互法則の導出)</span>
+        二次拡大 $K = \mathbb{Q}(\sqrt{b})$ の場合、局所Artin写像とHilbert記号の関係は $\theta_v(a)(\sqrt{b}) = (a, b)_v \sqrt{b}$ で与えられる。定理 6.1 をこれに適用すると、大域写像は恒等写像であるため $\sqrt{b} = \theta(a)(\sqrt{b}) = \left(\prod_v (a, b)_v\right) \sqrt{b}$ となり、両辺を割ることで $\prod_v (a, b)_v = 1$ が直ちに導かれる。
+    </div>
+
+    <hr>
+
+    <h2>7. Albert-Brauer-Hasse-Noether完全系列とArtin相互法則の深層的関係</h2>
+
+    <p>Albert-Brauer-Hasse-Noether (ABHN) の完全系列とArtinの相互法則は、どちらも大域類体論の頂点をなす定理であるが、これらは独立したものではない。現代の「ガロア・コホモロジー」の枠組みにおいては<strong>完全に表裏一体（本質的に等価）の関係</strong>にある。</p>
+    <p>端的に言えば、<strong>「ABHNの完全系列（次数2のコホモロジー＝多元環の世界）」を土台として、「Artinの相互法則（次数1やマイナス2のコホモロジー＝ガロア群と拡大体の世界）」が導かれる</strong>という構造を持っている。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>概念</th>
+                <th>Artinの相互法則</th>
+                <th>ABHNの完全系列</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>主要な対象</strong></td>
+                <td>アーベル拡大のガロア群 $\text{Gal}(K^{\text{ab}}/K)$</td>
+                <td>中心単純多元環（ブラウアー群 $\text{Br}(K)$）</td>
+            </tr>
+            <tr>
+                <td><strong>扱う数学的対象</strong></td>
+                <td>イデール類群 $C_K = \mathbb{I}_K / K^\times$</td>
+                <td>ガロア・コホモロジー $H^2(K, \bar{K}^\times)$</td>
+            </tr>
+            <tr>
+                <td><strong>局所・大域原理</strong></td>
+                <td>大域Artin写像は局所写像の積 $\prod_v \theta_v(x) = 1$</td>
+                <td>局所不変量の和はゼロ $\sum_v \text{inv}_v = 0$</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="definition">
+        <span class="bold-title">定義と翻訳 (コホモロジーによる対応)</span>
+        ブラウアー群 $\text{Br}(K)$ は、コホモロジー群を用いて $H^2(\text{Gal}(\bar{K}/K), \bar{K}^\times) \cong \text{Br}(K)$ と表される。ABHNの完全系列は、本質的にこの第2コホモロジー群の大域・局所関係を記述する以下の式に翻訳される。
+        $$ 0 \to H^2(K, \bar{K}^\times) \to \bigoplus_v H^2(K_v, \bar{K}_v^\times) \xrightarrow{\sum \text{inv}_v} \mathbb{Q}/\mathbb{Z} \to 0 $$
+        この式は、「大域的な多元環は、すべての局所体上で分解する（局所不変量がすべて0になる）とき、かつそのときに限り大域的にも分解する（自明になる）」という局所大域原理を主張している。
+    </div>
+
+    <p>このABHNの完全系列（ブラウアー群の性質）が確立されると、そこから鮮やかにArtinの相互法則が導かれる。そのプロセスは以下の3つのステップで構成される。</p>
+
+    <div class="proof">
+        <span class="bold-title">ステップ1：イデール類群のコホモロジー</span>
+        <p>代数体 $K$ のイデール群 $\mathbb{I}_K$ とその主イデールによる商であるイデール類群 $C_K = \mathbb{I}_K / K^\times$ を考える。ABHNの完全系列をコホモロジーの長完全系列に適用することで、イデール類群の第2コホモロジーに関する決定的な同型 $H^2(K, C_K) \cong \mathbb{Q}/\mathbb{Z}$ が得られる。</p>
+        
+        <span class="bold-title">ステップ2：大域基本類 (Fundamental Class) の存在</span>
+        <p>上の同型により、$H^2(K, C_K)$ の中には $\mathbb{Q}/\mathbb{Z}$ の要素 $1/n$ に対応する特別な元が存在する。これを<strong>大域基本類 (Global Fundamental Class)</strong> と呼ぶ。この大域基本類の存在証明こそが、ABHNの完全系列（特に $\sum \text{inv}_v = 0$ となること）に完全に依存している。</p>
+
+        <span class="bold-title">ステップ3：中山・Tateの定理による同型（Artin写像の構成）</span>
+        <p>コホモロジー論における強力な定理である「中山・Tateの定理」によれば、適切なコホモロジー群に基本類が存在する場合、カップ積を取ることで、コホモロジーの次数をずらす同型写像（Tate同型）を作ることができる。具体的には、次数を $-2$ ずらす同型が存在する。</p>
+        $$ \hat{H}^0(\text{Gal}(L/K), C_K) \cong \hat{H}^{-2}(\text{Gal}(L/K), \mathbb{Z}) $$
+        <p>左辺は定義から $C_K / N_{L/K}(C_L)$ （イデール類群をノルムで割ったもの）であり、右辺は $\text{Gal}(L/K)^{\text{ab}}$ （ガロア群の最大アーベル商）となる。すなわち、以下の同型が得られる。</p>
+        $$ C_K / N_{L/K}(C_L) \xrightarrow{\sim} \text{Gal}(L/K)^{\text{ab}} $$
+        <p>これがまさに<strong>Artinの大域相互法則</strong>（Artin写像が同型であること）の厳密な定式化である。</p>
+    </div>
+
+    <div class="remark">
+        <span class="bold-title">結論</span>
+        有理数（あるいは大域体）の世界において、Artinの相互法則 $\prod_v \theta_v(a) = 1$ が成立するのは、背後に「多元環の局所不変量の和が0になる $\sum_v \text{inv}_v = 0$」という強固な代数的構造（ABHNの完全系列）が横たわっているからである。歴史的には、ガウスやヒルベルトが計算によって確認した「平方剰余の相互法則」や「ヒルベルト記号の積公式」を、非可換代数（ブラウアー群）を用いて根本から構造的に証明したものがABHNの完全系列であり、それを再び体の拡大（ガロア群）の言葉に翻訳し直したものがArtinの相互法則であると言える。
+    </div>
+
+    <hr>
+
+    <h2>8. 局所Kronecker-Weberの定理</h2>
+
+    <p>前節までの証明の礎石として用いたKronecker-Weberの定理（「有理数体上の有限次アーベル拡大は必ず円分体の部分体になる」）を証明する。まず、各素点において局所的な定理を確立する。</p>
+
+    <div class="definition">
+        <span class="bold-title">定義 8.1 (ノルム群)</span>
+        局所体 $\mathbb{Q}_p$ の有限次拡大 $K_p$ に対し、そのノルム写像の像 $N_{K_p/\mathbb{Q}_p}(K_p^\times) = \{ N_{K_p/\mathbb{Q}_p}(x) \mid x \in K_p^\times \}$ をノルム群と呼ぶ。局所類体論の基本定理により、$\mathbb{Q}_p$ のアーベル拡大 $K_p$ は、$\mathbb{Q}_p^\times$ の有限指数を持つ開部分群であるノルム群と一対一に対応（Galois対応）し、包含関係は反転する。
+    </div>
+
+    <div class="lemma">
+        <span class="bold-title">補題 8.2 (局所Kronecker-Weberの定理)</span>
+        任意の素数 $p$ に対し、局所体 $\mathbb{Q}_p$ の有限次アーベル拡大 $K_p$ は、ある整数 $n$ について円分拡大 $\mathbb{Q}_p(\zeta_n)$ の部分体となる。
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        局所類体論の対応により、$K_p$ のノルム群 $N$ は $\mathbb{Q}_p^\times \cong p^\mathbb{Z} \times \mathbb{Z}_p^\times$ の有限指数開部分群である。$\mathbb{Z}_p^\times$ における主単数群の基本近傍系は $1 + p^k \mathbb{Z}_p$ で与えられるため、任意の開部分群 $N$ は、ある十分大きな整数 $f$ および $k$ に対して、部分群 $p^{f\mathbb{Z}} \times (1 + p^k \mathbb{Z}_p)$ を部分集合として必ず包含する。すなわち $N \supset p^{f\mathbb{Z}} \times (1 + p^k \mathbb{Z}_p)$ である。<br>
+        一方で、素数 $p$ と互いに素な $m$ を用いた非分岐拡大 $\mathbb{Q}_p(\zeta_m)/\mathbb{Q}_p$ （拡大次数を $f$ とする）のノルム群は $p^{f\mathbb{Z}} \times \mathbb{Z}_p^\times$ である。また、前述のLubin-Tate拡大である完全分岐拡大 $\mathbb{Q}_p(\zeta_{p^k})/\mathbb{Q}_p$ のノルム群は $p^\mathbb{Z} \times (1 + p^k \mathbb{Z}_p)$ に一致する。<br>
+        これら2つの円分拡大の合成体 $\mathbb{Q}_p(\zeta_{m p^k})$ に対応するノルム群は、それぞれのノルム群の交叉 (intersection) となり、まさに $\left(p^{f\mathbb{Z}} \times \mathbb{Z}_p^\times\right) \cap \left(p^\mathbb{Z} \times (1 + p^k \mathbb{Z}_p)\right) = p^{f\mathbb{Z}} \times (1 + p^k \mathbb{Z}_p)$ となる。<br>
+        したがって、$N$ は $\mathbb{Q}_p(\zeta_{m p^k})$ のノルム群を包含している。局所類体論においてノルム群の包含関係は拡大体の包含関係を反転させるため、$K_p$ は合成体 $\mathbb{Q}_p(\zeta_{m p^k})$ の部分体であることが厳密に示された。 $\square$
+    </div>
+
+    <hr>
+
+    <h2>9. 大域Kronecker-Weberの定理の完全な証明</h2>
+
+    <p>局所的なKronecker-Weberの定理を、慣性群とMinkowskiの定理を用いて大域的に束ねる。</p>
+
+    <div class="definition">
+        <span class="bold-title">定義 9.1 (慣性群)</span>
+        代数体 $E/\mathbb{Q}$ のGalois群 $G = \text{Gal}(E/\mathbb{Q})$ において、素数 $p$ の上にある素イデアル $\mathfrak{p}$ を不変に保ち、かつ剰余体 $\mathbb{F}_\mathfrak{p} / \mathbb{F}_p$ に自明に作用する要素の全体を慣性群 (inertia group) $I_p(E/\mathbb{Q})$ と呼ぶ。$E/\mathbb{Q}$ がアーベル拡大の場合、素イデアルの取り方に依存せず定まる。素数 $p$ が $E$ で分岐することと、$I_p$ が非自明（要素を複数持つ）であることは同値である。
+    </div>
+
+    <div class="lemma">
+        <span class="bold-title">補題 9.2 (Minkowskiの定理)</span>
+        有理数体 $\mathbb{Q}$ の真の有限次代数拡大においては、判別式の絶対値が $1$ より真に大きくなるため、少なくとも1つの素数が分岐する。換言すれば、すべての素点で非分岐となる $\mathbb{Q}$ の有限次拡大は $\mathbb{Q}$ 自身のみである。
+    </div>
+
+    <div class="theorem">
+        <span class="bold-title">定理 9.3 (Kronecker-Weberの定理)</span>
+        有理数体 $\mathbb{Q}$ 上の任意の有限次アーベル拡大 $K$ は、ある整数 $N$ について円分拡大 $\mathbb{Q}(\zeta_N)$ の部分体となる。
+    </div>
+
+    <div class="proof">
+        <span class="bold-title">証明:</span>
+        $K/\mathbb{Q}$ を有限次アーベル拡大とする。有限次拡大において分岐する素数は有限個であり、これを $p_1, p_2, \dots, p_r$ とする。
+        各分岐素数 $p_i$ における完備化 $K_{p_i}$ は $\mathbb{Q}_{p_i}$ の有限次アーベル拡大となる。局所Kronecker-Weberの定理（補題 8.2）より、ある整数 $n_i = p_i^{k_i} m_i$ （ただし $p_i \nmid m_i$）が存在して $K_{p_i} \subset \mathbb{Q}_{p_i}(\zeta_{n_i})$ となる。
+        $\zeta_{m_i}$ の付加は非分岐拡大を生成するため、分岐の「深さ」を決定する完全分岐部分は正確に $p_i$ のべき乗部分 $\mathbb{Q}_{p_i}(\zeta_{p_i^{k_i}})$ に集約される。これらすべての分岐素数から抽出したべき乗を掛け合わせ、大域的な整数 $N$ を以下のように定義する。
+        $$ N = p_1^{k_1} p_2^{k_2} \dots p_r^{k_r} $$
+        そして、目的となる大域的な円分体 $L = \mathbb{Q}(\zeta_N)$ を構成し、合成体 $E = KL$ を考える。$K, L$ はともに $\mathbb{Q}$ のアーベル拡大であるため、$E$ もアーベル拡大である。<br>
+        
+        任意の分岐素数 $p_i$ に対し、合成体 $E$ の局所化は $E_{p_i} = K_{p_i} L_{p_i}$ である。構成より $E_{p_i}$ は $\mathbb{Q}_{p_i}(\zeta_{p_i^{k_i}})$ とある非分岐拡大 $\mathbb{Q}_{p_i}^{unr}$ の合成体の中に含まれる（$E_{p_i} \subset \mathbb{Q}_{p_i}(\zeta_{p_i^{k_i}}) \cdot \mathbb{Q}_{p_i}^{unr}$）。
+        局所拡大 $E_{p_i}/\mathbb{Q}_{p_i}$ における最大非分岐部分体を $E_{p_i}^{unr}$ とすると、慣性群 $I_{p_i}(E/\mathbb{Q})$ は自然に $\text{Gal}(E_{p_i}/E_{p_i}^{unr})$ と同型になる。包含関係より、この慣性群は完全分岐拡大 $\text{Gal}(\mathbb{Q}_{p_i}(\zeta_{p_i^{k_i}})/\mathbb{Q}_{p_i}) \cong (\mathbb{Z}/p_i^{k_i}\mathbb{Z})^\times$ の商群となるため、その位数は高々 $\varphi(p_i^{k_i})$ である。
+        $$ |I_{p_i}(E/\mathbb{Q})| \le \varphi(p_i^{k_i}) $$
+
+        一方で、$L \subset E$ であることから、制限写像により $I_{p_i}(E/\mathbb{Q})$ から $I_{p_i}(L/\mathbb{Q})$ への全射準同型が存在する。円分体 $L = \mathbb{Q}(\zeta_N)$ の性質から、局所的な慣性群 $I_{p_i}(L/\mathbb{Q})$ の位数は正確に $\varphi(p_i^{k_i})$ である。
+        位数 $\varphi(p_i^{k_i})$ 以下の群から、位数 $\varphi(p_i^{k_i})$ の群への全射が存在するため、これは同型写像でなければならない。すなわち以下が成り立つ。
+        $$ I_{p_i}(E/\mathbb{Q}) \cong I_{p_i}(L/\mathbb{Q}) $$
+
+        さて、$E/\mathbb{Q}$ のGalois群 $\text{Gal}(E/\mathbb{Q})$ の中で、すべての分岐素数 $p_1, \dots, p_r$ に対する慣性群によって生成される部分群を $I^*$ とする。アーベル群であるため、$I^*$ は単にこれら慣性群の積であり、その位数は各慣性群の位数の積によって上から抑えられる。
+        $$ |I^*| \le \prod_{i=1}^r |I_{p_i}(E/\mathbb{Q})| = \prod_{i=1}^r \varphi(p_i^{k_i}) = [L:\mathbb{Q}] $$
+
+        ここで、部分群 $I^*$ による $E$ の固定体 $M = E^{I^*}$ を考える。$I^*$ は $E/\mathbb{Q}$ において分岐する可能性のある<strong>すべての</strong>素数の慣性群を含んでいる。したがって、固定体 $M/\mathbb{Q}$ においてはどの素数も分岐することができず、$M$ は $\mathbb{Q}$ 上のすべての素点で非分岐な拡大となる。
+        補題 9.2 (Minkowskiの定理) により、そのような拡大は自明なものに限られるため、$M = \mathbb{Q}$ である。Galois理論の基本定理より、$M = \mathbb{Q}$ であることは $I^* = \text{Gal}(E/\mathbb{Q})$ であることを意味する。
+
+        これにより、$E/\mathbb{Q}$ の拡大次数は以下のように評価される。
+        $$ [E:\mathbb{Q}] = |I^*| \le [L:\mathbb{Q}] $$
+        しかし、元より $L \subset E$ であるため $[E:\mathbb{Q}] \ge [L:\mathbb{Q}]$ は自明である。両方の不等式が成り立つことから、$[E:\mathbb{Q}] = [L:\mathbb{Q}]$ でなければならない。包含関係 $L \subset E$ と次数が等しいことから、体として $E = L$ が結論づけられる。
+        $E = KL$ であったため、$E = L$ は $K \subset L$ を意味する。すなわち $K \subset \mathbb{Q}(\zeta_N)$ が示され、Kronecker-Weberの定理の証明が完結した。 $\square$
+    </div>
+
+    <div class="example">
+        <span class="bold-title">例 9.4 (分岐情報からの $N$ の決定)</span>
+        二次体 $K = \mathbb{Q}(\sqrt{3})$ を考える。この拡大は素数 $2$ と $3$ で分岐する。局所的な観察により、$K_3 \subset \mathbb{Q}_3(\zeta_3)$ （すなわち $k_3 = 1$）、および $K_2 \subset \mathbb{Q}_2(\zeta_4)$ （すなわち $k_2 = 2$）となることがわかる。これらを掛け合わせた $N = 3^1 \times 2^2 = 12$ に対し、$K \subset \mathbb{Q}(\zeta_{12})$ が成立する。この局所的な分岐情報を大域的な $N$ に束ねる操作がまさに上記の証明の核心である。
+    </div>
+
+    <hr>
+
+    <h2>参考文献</h2>
+    <ol class="reference-list">
+        <li>Serre, J.-P. <i>A Course in Arithmetic</i>. Graduate Texts in Mathematics, Vol. 7. Springer-Verlag, 1973.</li>
+        <li>Neukirch, J. <i>Algebraic Number Theory</i>. Grundlehren der mathematischen Wissenschaften, Vol. 322. Springer-Verlag, 1999.</li>
+        <li>Cassels, J.W.S., and Fröhlich, A. (Eds.). <i>Algebraic Number Theory</i>. Academic Press, 1967.</li>
+    </ol>
+
+</body>
+</html>

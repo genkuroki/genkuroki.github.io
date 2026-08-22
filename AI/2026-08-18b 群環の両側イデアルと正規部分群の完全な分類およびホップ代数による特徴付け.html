@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>群環の両側イデアルと正規部分群の完全な分類およびホップ代数による特徴付け</title>
+    <!-- MathJaxの設定：インライン数式を $ で囲むように設定 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            padding: 2rem 10%;
+            background-color: #f9fbfd;
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            color: #2c3e50;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            border-left: 5px solid #3498db;
+            padding-left: 1rem;
+            color: #2980b9;
+            margin-top: 3rem;
+            background-color: #eaf2f8;
+            padding: 0.5rem 1rem;
+        }
+        h3 {
+            color: #16a085;
+            border-bottom: 1px dashed #16a085;
+            padding-bottom: 0.3rem;
+        }
+        .theorem, .definition, .proof, .lemma, .proposition, .remark, .example {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: 5px;
+        }
+        .definition {
+            background-color: #e8f6f3;
+            border: 1px solid #1abc9c;
+        }
+        .theorem, .proposition, .lemma {
+            background-color: #ebf5fb;
+            border: 1px solid #3498db;
+        }
+        .proof {
+            background-color: #fdfefe;
+            border: 1px solid #bdc3c7;
+        }
+        .remark {
+            background-color: #fdf2e9;
+            border: 1px solid #e67e22;
+        }
+        .example {
+            background-color: #f4f6f7;
+            border: 1px solid #7f8c8d;
+        }
+        .title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-size: 1.1em;
+        }
+        ul, ol {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>群環の両側イデアルと正規部分群の完全な分類およびホップ代数による特徴付け</h1>
+
+    <p>
+        本稿では、一般の群 $G$ および体 $K$ 上の群環 (group ring) $K[G]$ について、その両側イデアルの構造を詳細に解説する。前半では有限群かつ特定の標数の条件下における半単純な群環のイデアル分類を行い、後半では一般の群と体において、群環のホップ代数 (Hopf algebra) としての構造を通じたイデアルと正規部分群の完全な対応関係を証明する。チャットにおける議論に基づき、論理的ギャップや定義の省略を排除し、完全な証明と理解を助ける具体例を収録している。
+    </p>
+
+    <h2>1. 基本概念の定義</h2>
+
+    <p>
+        群環およびその上の加群の理論を展開するために、基礎となる概念を厳密に定義する。
+    </p>
+
+    <div class="definition">
+        <span class="title">定義 (群環)</span>
+        $G$ を群、 $K$ を体とする。 $G$ の $K$ 上の群環 (group ring) $K[G]$ とは、 $G$ の元を基底とする $K$ 上のベクトル空間
+        $$ K[G] = \bigoplus_{g \in G} Kg = \left\{ \sum_{g \in G} a_g g \ \middle|\ a_g \in K, \text{ 有限個の } g \text{ を除いて } a_g = 0 \right\} $$
+        に対して、積を群の積から線型に拡張して定めた環のことである。すなわち、2つの元 $x = \sum_{g \in G} a_g g$ と $y = \sum_{h \in G} b_h h$ の積は、分配法則を満たすように以下で定義される。
+        $$ xy = \sum_{g \in G} \sum_{h \in G} (a_g b_h) (gh) $$
+        この積により、 $K[G]$ は単位元 $1_{K[G]} = 1_K 1_G$ を持つ環となる。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 (両側イデアル)</span>
+        環 $R$ の部分集合 $I \subset R$ が両側イデアル (two-sided ideal) であるとは、以下の2つの条件を満たすことである。
+        <ol>
+            <li> $I$ は加法に関して $R$ の部分群である。すなわち、任意の $x, y \in I$ について $x - y \in I$ である。</li>
+            <li>任意の $r \in R$ と $x \in I$ に対して、 $rx \in I$ かつ $xr \in I$ が成り立つ。（左からも右からも $R$ の作用で閉じている。）</li>
+        </ol>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 (左加群と半単純環)</span>
+        群環 $K[G]$ 上の左加群 (left module) とは、 $K$ 上のベクトル空間 $V$ であり、環準同型 $\rho: K[G] \to \operatorname{End}_K(V)$ が与えられているもののことである。これは $G$ の $K$ 上の線型表現 (linear representation) と等価な概念である。
+        <br><br>
+        非自明な部分加群（ $\{0\}$ および自身以外の部分加群）を持たない加群を単純加群 (simple module) といい、単純加群の直和に同型である加群を半単純加群 (semisimple module) という。
+        環 $K[G]$ 自身を左から自己に作用する左加群とみなしたとき、これが半単純加群であるならば、 $K[G]$ を半単純環 (semisimple ring) という。
+    </div>
+
+    <h2>2. 有限群の半単純な群環における両側イデアルの分類</h2>
+
+    <p>
+        群 $G$ が有限群であり、体 $K$ の標数 $\operatorname{char}(K)$ が $G$ の位数 $|G|$ を割らない場合（ $\operatorname{char}(K) = 0$ または $\operatorname{char}(K) = p > 0$ で $p \nmid |G|$ ）、群環 $K[G]$ は半単純環となる。この条件下では両側イデアルの完全な分類が可能である。
+    </p>
+
+    <div class="theorem">
+        <span class="title">定理 (半単純な群環の両側イデアルの分類)</span>
+        有限群 $G$ と体 $K$ が $\operatorname{char}(K) \nmid |G|$ を満たすとする。このとき、群環 $K[G]$ は有限個の単純環 $R_1, R_2, \dots, R_r$ の直積に同型である。
+        $$ K[G] \cong R_1 \times R_2 \times \dots \times R_r $$
+        ここで、各 $R_i$ はある斜体 $D_i$ 上の行列環 $M_{n_i}(D_i)$ に同型である。
+        このとき、 $K[G]$ の任意の非自明な両側イデアル $I \subset K[G]$ は、ある部分集合 $J \subset \{1, 2, \dots, r\}$ を用いて、
+        $$ I \cong \prod_{i \in J} R_i \times \prod_{i \notin J} \{0\} $$
+        と一意に表される。したがって、 $K[G]$ の両側イデアルはちょうど $2^r$ 個存在する。
+    </div>
+
+    <p>この分類定理を証明するためには、Maschkeの定理とArtin-Wedderburnの定理という2つの重要な定理を経由する必要がある。</p>
+
+    <div class="theorem">
+        <span class="title">定理 2.1 (Maschkeの定理)</span>
+        有限群 $G$ と体 $K$ が $\operatorname{char}(K) \nmid |G|$ を満たすとする。このとき、任意の $K[G]$ 加群 $V$ は半単純である。特に、群環 $K[G]$ 自身は半単純環である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $V$ を $K[G]$ 加群とし、 $W \subset V$ を部分 $K[G]$ 加群とする。 $V$ が半単純であることを示すには、 $W$ の補加群、すなわち $V = W \oplus U$ となるような部分 $K[G]$ 加群 $U$ が存在することを示せばよい。
+        <br><br>
+        まず、 $V$ は $K$ 上のベクトル空間でもあるので、線型代数学の一般論により、 $K$ 上のベクトル空間としての直和分解 $V = W \oplus U_0$ が存在する。これに対応する $K$ 線型な射影 $p_0: V \to W$ が定まる。すなわち、任意の $v \in V$ は $v = w + u_0$ （ここで $w \in W$ 、 $u_0 \in U_0$ ）と一意に書け、 $p_0(v) = w$ である。この $p_0$ は一般には $K[G]$ 準同型ではない。
+        <br><br>
+        そこで、群の作用を用いてこれを平均化し、新しい写像 $p: V \to V$ を次のように定義する。
+        $$ p(v) = \frac{1}{|G|} \sum_{g \in G} g p_0(g^{-1} v) $$
+        ここで、仮定 $\operatorname{char}(K) \nmid |G|$ により体 $K$ において $|G|$ は可逆であるため、 $\frac{1}{|G|}$ は意味を持つ。この写像 $p$ は以下の性質を満たす。
+        <ol>
+            <li><strong> $p(v) \in W$ であること：</strong> 各 $g \in G$ について $g^{-1} v \in V$ であり、 $p_0$ の像は $W$ に含まれるので、 $p_0(g^{-1} v) \in W$ である。 $W$ は $K[G]$ 加群であるから、群の元 $g$ を作用させても $W$ に留まり、 $g p_0(g^{-1} v) \in W$ となる。したがって和をとっても $p(v) \in W$ である。</li>
+            <li><strong> $w \in W$ ならば $p(w) = w$ であること：</strong> 任意の $g \in G$ について $g^{-1} w \in W$ であり、 $W$ 上で $p_0$ は恒等写像として働くため、 $p_0(g^{-1} w) = g^{-1} w$ となる。ゆえに、
+            $$ p(w) = \frac{1}{|G|} \sum_{g \in G} g (g^{-1} w) = \frac{1}{|G|} \sum_{g \in G} w = w $$
+            </li>
+            <li><strong> $p$ が $K[G]$ 準同型であること：</strong> 任意の $h \in G$ と $v \in V$ に対して、
+            $$ p(h v) = \frac{1}{|G|} \sum_{g \in G} g p_0(g^{-1} h v) $$
+            $x = h^{-1} g$ とおくと、 $g = h x$ であり、 $g$ が $G$ 全体を動くとき $x$ も $G$ 全体を動く。よって、
+            $$ p(h v) = \frac{1}{|G|} \sum_{x \in G} h x p_0(x^{-1} v) = h \left(\frac{1}{|G|} \sum_{x \in G} x p_0(x^{-1} v)\right) = h p(v) $$
+            これより、 $p$ は $K[G]$ 加群の準同型である。</li>
+        </ol>
+        以上の性質から、 $p$ は $V$ から $W$ への $K[G]$ 射影である（すなわち $p \circ p = p$ かつ $\operatorname{Im}(p) = W$ ）。
+        <br><br>
+        ここで $U = \operatorname{Ker}(p)$ とおくと、 $p$ が $K[G]$ 準同型であることから $U$ も $K[G]$ の部分加群となる。任意の $v \in V$ は $v = p(v) + (v - p(v))$ と書け、 $p(v) \in W$ 、かつ $p(v - p(v)) = p(v) - p^2(v) = 0$ より $v - p(v) \in U$ である。さらに $W \cap U = \varnothing$ ではなく、 $W \cap U = \{0\}$ であることも明らかである。
+        <br><br>
+        したがって、 $V = W \oplus U$ となり、直和分解ができる。これを有限次元 $K[G]$ 加群に対して帰納的に適用すれば、 $V$ は単純加群の直和に分解される。よって $V$ は半単純加群であり、特に $K[G]$ 自身も半単純環である。 $\blacksquare$
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 2.2 (Artin-Wedderburnの定理)</span>
+        任意の半単純環 $R$ は、斜体上の行列環の有限個の直積に同型である。すなわち、
+        $$ R \cong M_{n_1}(D_1) \times M_{n_2}(D_2) \times \dots \times M_{n_r}(D_r) $$
+        となる正の整数 $n_i$ と斜体 $D_i$ が存在する。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $R$ は左加群として半単純であるため、有限個の単純左 $R$ 加群の直和として表される。同型な単純加群をまとめて、
+        $$ R \cong V_1^{\oplus n_1} \oplus V_2^{\oplus n_2} \oplus \dots \oplus V_r^{\oplus n_r} $$
+        とする。ここで $V_i$ は互いに同型でない単純左 $R$ 加群である。
+        <br><br>
+        環 $R$ は自身の左作用と可換な自己準同型の環（すなわち右 $R$ 加群としての自己準同型環の反対環）と同型である。標準的な同型 $\operatorname{End}_R(R) \cong R^{\mathrm{op}}$ を用いる。
+        Schurの補題により、単純加群間の準同型は以下の性質を持つ。
+        <ol>
+            <li> $i \neq j$ のとき、 $\operatorname{Hom}_R(V_i, V_j) = \{0\}$</li>
+            <li>各 $i$ について、 $D_i = \operatorname{End}_R(V_i)^{\mathrm{op}}$ は斜体である。</li>
+        </ol>
+        したがって、 $R^{\mathrm{op}} \cong \operatorname{End}_R(R)$ を計算すると、異種の成分間の準同型はゼロになるため、
+        $$ \operatorname{End}_R(R) \cong \operatorname{End}_R \left(\bigoplus_{i=1}^r V_i^{\oplus n_i}\right) \cong \prod_{i=1}^r \operatorname{End}_R(V_i^{\oplus n_i}) $$
+        となる。
+        <br><br>
+        各 $i$ について、 $\operatorname{End}_R(V_i^{\oplus n_i})$ は $\operatorname{End}_R(V_i)$ の要素を成分に持つ $n_i \times n_i$ 行列環 $M_{n_i}(\operatorname{End}_R(V_i))$ と同型である。よって、
+        $$ R^{\mathrm{op}} \cong \prod_{i=1}^r M_{n_i}(\operatorname{End}_R(V_i)) $$
+        両辺の反対環をとると、行列環の反対環の性質 $(M_n(S))^{\mathrm{op}} \cong M_n(S^{\mathrm{op}})$ より、
+        $$ R \cong \prod_{i=1}^r M_{n_i}(D_i) $$
+        を得る。 $\blacksquare$
+    </div>
+
+    <div class="proposition">
+        <span class="title">命題 2.3 (行列環の直積のイデアル)</span>
+        $R = \prod_{i=1}^r R_i$ を環の直積とする。ここで各 $R_i = M_{n_i}(D_i)$ は斜体 $D_i$ 上の行列環である。このとき、 $R$ の任意の両側イデアル $I$ は、各成分の両側イデアル $I_i \subset R_i$ の直積 $\prod_{i=1}^r I_i$ として表される。さらに、行列環 $M_n(D)$ の両側イデアルは $\{0\}$ と $M_n(D)$ 自身のみである。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        まず、環 $S = M_n(D)$ が単純環である（自明でない両側イデアルを持たない）ことを示す。
+        $I \subset S$ を非零な両側イデアルとし、 $I \neq \{0\}$ と仮定する。 $I$ には少なくとも1つの非零行列 $A = (a_{ij})$ が存在する。ある成分 $a_{kl} \neq 0$ となる $k$ と $l$ が存在する。
+        <br><br>
+        $E_{ij}$ を $(i, j)$ 成分のみが 1 で他が 0 の行列基底とする。行列の積の性質として、 $E_{pk} A E_{lq}$ は $(p, q)$ 成分が $a_{kl}$ で他が 0 の行列となる。
+        $a_{kl}$ は斜体 $D$ の非零元であるから逆元 $a_{kl}^{-1}$ を持つ。よって、 $(a_{kl}^{-1} E_{pp}) (E_{pk} A E_{lq}) = E_{pq}$ となる。
+        <br><br>
+        $I$ は両側イデアルなので、任意の $p$ と $q$ について $E_{pq} \in I$ である。単位行列 $I_n$ は $E_{11} + E_{22} + \dots + E_{nn}$ であるから、 $I_n \in I$ となる。単位元を含む両側イデアルは環全体と一致するため、 $I = S$ である。よって $M_n(D)$ は単純環である。
+        <br><br>
+        次に、直積環 $R = \prod_{i=1}^r R_i$ の両側イデアルの形を調べる。
+        $e_i = (0, \dots, 1, \dots, 0)$ を $i$ 番目の成分のみが単位元で他がゼロの元とする。これらは互いに直交する中心元 (central elements) であり、和が単位元 $1_R$ になる。
+        $I$ を $R$ の任意の両側イデアルとする。 $I_i = \{x \in R_i \mid (0, \dots, x, \dots, 0) \in I\}$ とする。これは明らかに $R_i$ の両側イデアルである。
+        <br><br>
+        任意の $x = (x_1, \dots, x_r) \in I$ について、 $x \cdot e_i = (0, \dots, x_i, \dots, 0) \in I$ となるため、 $x_i \in I_i$ である。したがって $I \subset \prod_{i=1}^r I_i$ である。
+        逆に、 $y = (y_1, \dots, y_r) \in \prod_{i=1}^r I_i$ とすると、各 $i$ について $(0, \dots, y_i, \dots, 0) \in I$ であるから、それらの和である $y$ も $I$ に含まれる。ゆえに $I = \prod_{i=1}^r I_i$ である。
+        各 $R_i$ は単純環であるから、 $I_i = \{0\}$ または $I_i = R_i$ のいずれかである。以上より、 $R$ の両側イデアルは定理の主張の通り分類される。 $\blacksquare$
+    </div>
+
+    <div class="example">
+        <span class="title">具体例： $\mathbb{Z}/3\mathbb{Z}$ の複素数体上の群環</span>
+        理論の理解を助けるために具体例を挙げる。
+        $G = \mathbb{Z}/3\mathbb{Z} = \langle g \mid g^3 = 1 \rangle$ とし、体 $K = \mathbb{C}$ （複素数体）とする。 $\operatorname{char}(\mathbb{C}) = 0$ は $|G| = 3$ を割らないため、Maschkeの定理が適用できる。
+        <br><br>
+        群環 $\mathbb{C}[G]$ は次元が3のベクトル空間であり、可換群の群環であるから可換環である。したがって各単純成分は $1 \times 1$ 行列（すなわち体そのもの）となり、 $r=3$ 、各 $D_i = \mathbb{C}$ である。すなわち、環として $\mathbb{C}[G] \cong \mathbb{C} \times \mathbb{C} \times \mathbb{C}$ である。
+        <br><br>
+        この同型は次のように具体的に与えられる。 $\omega = e^{2\pi i / 3}$ とおき、
+        <ul>
+            <li> $e_0 = \frac{1}{3}(1 + g + g^2)$ </li>
+            <li> $e_1 = \frac{1}{3}(1 + \omega^{-1} g + \omega^{-2} g^2)$ </li>
+            <li> $e_2 = \frac{1}{3}(1 + \omega g + \omega^2 g^2)$ </li>
+        </ul>
+        とする。これらは $\mathbb{C}[G]$ における互いに直交する冪等元（ $e_i^2 = e_i$ 、 $e_i e_j = 0$ （ $i \neq j$ ））であり、和が $e_0 + e_1 + e_2 = 1$ になる。
+        $\mathbb{C}[G]$ の両側イデアル（可換環なので単なるイデアル）は、これら $e_i$ が生成する成分を選ぶことで完全に決定され、全部で $2^3 = 8$ 個存在する。具体的には、
+        $$ \{0\}, \ (e_0), \ (e_1), \ (e_2), \ (e_0, e_1), \ (e_1, e_2), \ (e_0, e_2), \ \mathbb{C}[G] $$
+        である。
+    </div>
+
+    <h2>3. 正規部分群と両側イデアルの対応関係</h2>
+
+    <p>
+        次に、一般の群 $G$ と任意の体 $K$ を考える。群 $G$ の正規部分群と群環 $K[G]$ の両側イデアルの間には、自然で密接な対応関係がある。具体的には、任意の正規部分群から特別な両側イデアルを構成することができ、逆に任意の両側イデアルから $G$ の正規部分群を構成することができる。
+    </p>
+
+    <div class="definition">
+        <span class="title">正規部分群から構成されるイデアル $I(N)$ </span>
+        $N$ を群 $G$ の正規部分群とする。このとき、自然な全射群準同型 $p: G \to G/N$ が存在する。この群準同型は、群環の間の自然な環準同型 $\pi: K[G] \to K[G/N]$ へと線型に拡張される。すなわち、
+        $$ \pi\left( \sum_{g \in G} a_g g \right) = \sum_{g \in G} a_g (gN) $$
+        と定義される。この環準同型 $\pi$ は全射であり、その核 $\operatorname{Ker}(\pi)$ は環 $K[G]$ の両側イデアルとなる。この両側イデアルを $I(N)$ と表記する。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 3.1 ($I(N)$ の生成元)</span>
+        $N$ を $G$ の正規部分群とし、 $I(N) = \operatorname{Ker}(\pi)$ と定義する。このとき、 $I(N)$ は集合 $\{ n - 1 \mid n \in N \}$ によって生成される $K[G]$ の両側イデアルに等しい。さらに、 $I(N)$ は $K[G]$ の左イデアルとして単独で $\{ n - 1 \mid n \in N \}$ によって生成される。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $J$ を $\{ n - 1 \mid n \in N \}$ によって生成される $K[G]$ の左イデアルとする。すなわち、
+        $$ J = \left\{ \sum_{i=1}^m x_i (n_i - 1) \ \middle|\ m \in \mathbb{N}, \ x_i \in K[G], \ n_i \in N \right\} $$
+        である。
+        <br><br>
+        まず $J \subset I(N)$ であることを示す。任意の $x \in K[G]$ と $n \in N$ に対して、
+        $$ \pi(x(n - 1)) = \pi(x)(\pi(n) - \pi(1)) = \pi(x)(nN - 1N) $$
+        となるが、 $n \in N$ であるため剰余群 $G/N$ において $nN = 1N$ である。したがって $\pi(x(n - 1)) = 0$ となり、 $x(n - 1) \in I(N)$ である。 $I(N)$ は加法について閉じているため、 $J \subset I(N)$ となる。
+        <br><br>
+        次に $I(N) \subset J$ であることを示す。剰余群 $G/N$ の完全代表系を $R \subset G$ とする。すると、任意の $g \in G$ はある $r \in R$ と $n \in N$ を用いて $g = rn$ と一意に表される。したがって、 $K[G]$ の任意の元 $y$ は、
+        $$ y = \sum_{r \in R} \sum_{n \in N} a_{rn} (rn) $$
+        と一意に書くことができる（ここで $a_{rn} \in K$ であり、非零となるのは有限個のみである）。
+        $y \in I(N)$ と仮定する。定義より $\pi(y) = 0$ である。これを計算すると、
+        $$ \pi(y) = \sum_{r \in R} \sum_{n \in N} a_{rn} (rnN) = \sum_{r \in R} \left( \sum_{n \in N} a_{rn} \right) rN = 0 $$
+        となる。 $K[G/N]$ において、 $\{ rN \mid r \in R \}$ は $K$ 上の基底をなすため、各 $r \in R$ に対してその係数はゼロでなければならない。すなわち、
+        $$ \sum_{n \in N} a_{rn} = 0 $$
+        が成り立つ。これを用いて $y$ を変形する。
+        $$ y = \sum_{r \in R} \sum_{n \in N} a_{rn} (rn) = \sum_{r \in R} \sum_{n \in N} a_{rn} (rn - r + r) $$
+        $$ = \sum_{r \in R} \sum_{n \in N} a_{rn} r(n - 1) + \sum_{r \in R} \left( \sum_{n \in N} a_{rn} \right) r $$
+        第2項の係数はすべてゼロであるから、
+        $$ y = \sum_{r \in R} \sum_{n \in N} a_{rn} r(n - 1) $$
+        となる。各項は $x(n - 1)$ （ただし $x = a_{rn} r \in K[G]$ ）の形をしており、これは左イデアル $J$ の定義を満たす。よって $y \in J$ であり、 $I(N) \subset J$ となる。
+        以上より $I(N) = J$ である。
+        <br><br>
+        また、 $J = I(N)$ は環準同型の核として構成されたため、自動的に両側イデアルとなる。 $\blacksquare$
+    </div>
+
+    <div class="definition">
+        <span class="title">イデアルから構成される正規部分群 $N(I)$</span>
+        逆に、群環の両側イデアル $I \subset K[G]$ に対して、部分集合
+        $$ N(I) = \{ g \in G \mid g - 1 \in I \} $$
+        を定義する。
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 3.2 ($N(I)$ の正規性)</span>
+        $I \subset K[G]$ を両側イデアルとする。このとき、 $N(I)$ は $G$ の正規部分群である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        まず $N(I)$ が $G$ の部分群であることを示す。
+        <ol>
+            <li> $1 - 1 = 0 \in I$ であるから、単位元 $1 \in N(I)$ である。</li>
+            <li> $g, h \in N(I)$ とすると、定義より $g - 1 \in I$ かつ $h - 1 \in I$ である。積 $gh$ について考えると、
+            $$ gh - 1 = gh - g + g - 1 = g(h - 1) + (g - 1) $$
+            と変形できる。 $I$ は左イデアルであるため $g \in K[G]$ に対して $g(h - 1) \in I$ であり、 $g - 1 \in I$ であるから、その和 $gh - 1$ も $I$ に含まれる。よって $gh \in N(I)$ である。</li>
+            <li> $g \in N(I)$ とすると、 $g - 1 \in I$ である。逆元 $g^{-1}$ について考えると、
+            $$ g^{-1} - 1 = g^{-1}(1 - g) = -g^{-1}(g - 1) $$
+            となる。 $I$ は左イデアルであるため、 $-g^{-1} \in K[G]$ を掛けた $-g^{-1}(g - 1)$ も $I$ に含まれる。よって $g^{-1} \in N(I)$ である。</li>
+        </ol>
+        以上により $N(I)$ は $G$ の部分群である。
+        <br><br>
+        次に $N(I)$ が正規部分群であることを示す。
+        $g \in N(I)$ とし、任意の $x \in G$ をとる。共役 $xgx^{-1}$ について考えると、
+        $$ xgx^{-1} - 1 = xgx^{-1} - xx^{-1} = x(g - 1)x^{-1} $$
+        となる。 $g - 1 \in I$ であり、かつ $I$ は両側イデアルであるため、左から $x$ を掛け、右から $x^{-1}$ を掛けた元 $x(g - 1)x^{-1}$ も $I$ に含まれる。したがって $xgx^{-1} \in N(I)$ であり、 $N(I)$ は $G$ の正規部分群である。 $\blacksquare$
+    </div>
+
+    <p>
+        上記で構成した写像 $N \mapsto I(N)$ と $I \mapsto N(I)$ は、正規部分群の集合と両側イデアルの集合の間の一種のガロア接続を与える。
+    </p>
+
+    <div class="theorem">
+        <span class="title">定理 3.3 (対応の単射性)</span>
+        任意の正規部分群 $N \subset G$ に対して、 $N(I(N)) = N$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $n \in N$ とすると、定理3.1の証明より $n - 1 \in I(N)$ である。したがって定義より $n \in N(I(N))$ となり、 $N \subset N(I(N))$ が成り立つ。
+        <br><br>
+        逆に、 $g \in N(I(N))$ とすると、定義より $g - 1 \in I(N)$ である。 $I(N)$ は環準同型 $\pi: K[G] \to K[G/N]$ の核であるから、 $\pi(g - 1) = 0$ である。ゆえに、
+        $$ \pi(g) - \pi(1) = gN - 1N = 0 $$
+        すなわち $K[G/N]$ において $gN = 1N$ となる。
+        $K[G/N]$ は $G/N$ の元を基底とするベクトル空間であり、相異なる剰余類は線型独立である。したがって $gN = 1N$ が成り立つのは、剰余群 $G/N$ において $gN$ と $1N$ が同じ要素である場合、すなわち $g \in N$ の場合に限られる。
+        よって $N(I(N)) \subset N$ が成り立つ。
+        以上より $N(I(N)) = N$ である。 $\blacksquare$
+    </div>
+
+    <div class="remark">
+        <span class="title">注意</span>
+        定理3.3は、写像 $N \mapsto I(N)$ が単射であることを意味している。すなわち、 $G$ の相異なる正規部分群は、 $K[G]$ の相異なる両側イデアルを定める。しかし、逆向きの合成である $I(N(I)) = I$ は一般には成り立たない。 $K[G]$ の両側イデアルの中には、何らかの正規部分群 $N$ から $I(N)$ の形で得られないものが多数存在するからである（例として、セクション2で見た $\mathbb{C}[\mathbb{Z}/3\mathbb{Z}]$ の $I=(e_0)$ などは $N(I) = \{1\}$ となるが、 $I(\{1\}) = \{0\}$ であり一致しない）。
+    </div>
+
+    <div class="example">
+        <span class="title">重要な例：増大イデアル (Augmentation Ideal)</span>
+        群 $G$ の正規部分群として $G$ 自身を選んだ場合を考える。
+        このとき構成されるイデアル $I(G)$ は、 $\pi: K[G] \to K[G/G] \cong K$ の核となる。この $\pi$ は、
+        $$ \pi\left( \sum_{g \in G} a_g g \right) = \sum_{g \in G} a_g $$
+        で与えられる写像（各元の係数の和をとる写像）であり、これを増大写像 (augmentation map) と呼ぶ。その核である $I(G)$ を増大イデアル (augmentation ideal) と呼び、しばしば $\Delta(G)$ と表記される。
+        定義より、
+        $$ \Delta(G) = \left\{ \sum_{g \in G} a_g g \ \middle|\ \sum_{g \in G} a_g = 0 \right\} $$
+        であり、定理3.1を適用すると、 $\Delta(G)$ は集合 $\{ g - 1 \mid g \in G \}$ によって生成される $K[G]$ の両側イデアルであることがわかる。
+    </div>
+
+    <h2>4. 正規部分群から生じるイデアルの特徴付け</h2>
+
+    <p>
+        群環 $K[G]$ のある両側イデアル $I$ が、ある正規部分群 $N$ に対して $I = I(N)$ の形で書けるための「良い条件」を与える。最も直接的なのはイデアルの生成元に関する条件であるが、より深く本質的な特徴付けはホップ代数 (Hopf algebra) の概念を用いることで得られる。
+    </p>
+
+    <div class="theorem">
+        <span class="title">定理 4.1 (生成元による直接的な特徴付け)</span>
+        $I \subset K[G]$ を両側イデアルとする。このとき、 $I$ がある正規部分群 $N \subset G$ に対して $I = I(N)$ となるための必要十分条件は、部分集合 $N(I) = \{ g \in G \mid g - 1 \in I \}$ を考えたとき、 $I$ が集合 $\{ n - 1 \mid n \in N(I) \}$ によって $K[G]$ の左加群として生成されることである。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $(\Rightarrow)$ $I = I(N)$ であると仮定する。定理3.3により、 $N(I(N)) = N$ が成り立つ。したがって $N(I) = N$ である。また定理3.1より、 $I(N)$ は集合 $\{ n - 1 \mid n \in N \}$ によって生成される左イデアルである。よって条件は満たされる。
+        <br><br>
+        $(\Leftarrow)$ $I$ が集合 $S = \{ n - 1 \mid n \in N(I) \}$ によって生成される左加群であると仮定する。定理3.2により $N(I)$ は $G$ の正規部分群である。そこで正規部分群 $N(I)$ に対してイデアル $I(N(I))$ を考えると、これは $S$ によって生成される左イデアルである。仮定より $I$ も $S$ によって生成される左イデアルであるから、 $I = I(N(I))$ が成り立つ。したがって、 $N = N(I)$ とおけば $I = I(N)$ となる。 $\blacksquare$
+    </div>
+
+    <h3>ホップ代数を用いた構造的な特徴付け</h3>
+
+    <p>
+        群環 $K[G]$ は単なる環（代数）ではなく、さらに豊かなホップ代数の構造を持っている。イデアル $I$ が正規部分群から生じることの本質は、「商環 $K[G]/I$ が再びホップ代数としての性質を完全に受け継ぐ」という点にある。完全なself-containednessのため、必要な概念をすべて定義する。
+    </p>
+
+    <div class="definition">
+        <span class="title">定義 (余代数とホップ代数)</span>
+        体 $K$ 上のベクトル空間 $C$ が余代数 (coalgebra) であるとは、 $K$ 線型写像である余積 (comultiplication) $\Delta: C \to C \otimes_K C$ と余単位 (counit) $\epsilon: C \to K$ が存在し、余結合則と余単位則を満たすことである。
+        <br><br>
+        環としての積と単位元を持ち、同時に余代数でもある空間 $A$ において、 $\Delta$ と $\epsilon$ が環の準同型であるとき、 $A$ を双代数 (bialgebra) という。
+        双代数 $A$ において、対蹠 (antipode) と呼ばれる $K$ 線型写像 $S: A \to A$ が存在し特定の公理を満たすとき、 $A$ をホップ代数 (Hopf algebra) という。
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 (群環のホップ代数構造)</span>
+        群環 $A = K[G]$ には、環としての積と単位元に加えて、以下の3つの写像を基底 $g \in G$ に対して定義し、線型に拡張することでホップ代数となる。
+        <ol>
+            <li><strong>余積 $\Delta: A \to A \otimes_K A$ :</strong> 任意の $g \in G$ に対して $\Delta(g) = g \otimes g$ 。</li>
+            <li><strong>余単位 $\epsilon: A \to K$ :</strong> 任意の $g \in G$ に対して $\epsilon(g) = 1$ 。</li>
+            <li><strong>対蹠 $S: A \to A$ :</strong> 任意の $g \in G$ に対して $S(g) = g^{-1}$ 。これは環の反準同型 (anti-homomorphism)、すなわち任意の $x, y \in A$ について $S(xy) = S(y)S(x)$ を満たす。</li>
+        </ol>
+    </div>
+
+    <div class="definition">
+        <span class="title">定義 (ホップ・イデアルと群的元)</span>
+        $A$ をホップ代数とする。 $A$ の両側イデアル $I \subset A$ がホップ・イデアル (Hopf ideal) であるとは、以下の3条件を満たすことである。
+        <ol>
+            <li> $\Delta(I) \subset I \otimes_K A + A \otimes_K I$ </li>
+            <li> $\epsilon(I) = \{0\}$ </li>
+            <li> $S(I) \subset I$ </li>
+        </ol>
+        イデアル $I$ がホップ・イデアルであることは、剰余環 $A/I$ に対して自然に $\Delta, \epsilon, S$ が誘導され、商空間 $A/I$ 自身が再びホップ代数になるための必要十分条件である。
+        <br><br>
+        ホップ代数 $H$ の非零元 $x \in H$ が群的 (group-like) であるとは、 $\Delta(x) = x \otimes x$ かつ $\epsilon(x) = 1$ を満たすことである。ホップ代数 $H$ に含まれる群的元の全体は、ホップ代数の積に関して群をなす。
+    </div>
+
+    <div class="example">
+        <span class="title">具体例： $\mathbb{C}[\mathbb{Z}/3\mathbb{Z}]$ のホップ代数構造とイデアル</span>
+        セクション2で考えた $G = \mathbb{Z}/3\mathbb{Z} = \langle g \mid g^3 = 1 \rangle$ の場合を考える。
+        群的元はまさに $G$ の元である $1, g, g^2$ である。
+        <br><br>
+        イデアルとして $I = (e_1, e_2)$ を考える。これは $e_0 = \frac{1}{3}(1 + g + g^2)$ で生成される成分を消すイデアルである。
+        この $I$ がホップ・イデアルになるか確認しよう。
+        $\epsilon(e_1) = \frac{1}{3}(1 + \omega^{-1} + \omega^{-2}) = 0$ 、 $\epsilon(e_2) = 0$ であり、 $\epsilon(I) = \{0\}$ を満たす。また対蹠についても $S(e_1) = e_2 \in I$ 、 $S(e_2) = e_1 \in I$ より $S(I) \subset I$ を満たす。余積についても条件を満たすため、これはホップ・イデアルである。
+        実際、このイデアルは正規部分群 $N = G$ に対応するイデアル $I(G) = \Delta(G)$ と一致している。商 $\mathbb{C}[G]/I(G) \cong \mathbb{C} e_0 \cong \mathbb{C}$ であり、これは自明な群の群環と同型である。
+        <br><br>
+        一方で、 $J = (e_0)$ というイデアルを考えると、 $\epsilon(e_0) = 1 \neq 0$ であるため、 $\epsilon(J) \neq \{0\}$ となりホップ・イデアルではない。したがってこれは如何なる正規部分群からも生じない。
+    </div>
+
+    <p>
+        次に、Hopfイデアルによる商が必ず群的元で張られるという重要な性質と、群的元の線型独立性を証明する。これらは標数に関わらず成立する。
+    </p>
+
+    <div class="lemma">
+        <span class="title">補題 4.2 (群的元の線型独立性)</span>
+        体 $K$ 上の余代数 $C$ において、相異なる群的元の集合 $S \subset C$ は $K$ 上で線型独立である。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $S$ が線型従属であると仮定して矛盾を導く。 $S$ の有限個の元による自明でない線型関係式のうち、項数 $n$ が最小のものをとる。
+        $$ c_1 g_1 + c_2 g_2 + \dots + c_n g_n = 0 $$
+        ここで $g_i \in S$ は互いに相異なり、 $c_i \in K$ はすべて非零である。 $\epsilon(g_1) = 1 \neq 0$ であるため、もし $n=1$ ならば $c_1 g_1 = 0$ より $c_1 = 0$ となり矛盾する。よって $n \ge 2$ である。全体を $c_1$ で割ることで、 $c_1 = 1$ と仮定してよい。これを移項すると以下の式を得る。
+        $$ g_1 = - \sum_{i=2}^n c_i g_i $$
+        この両辺に余積 $\Delta$ を適用する。 $g_i$ は群的元であるため $\Delta(g_i) = g_i \otimes g_i$ である。
+        $$ g_1 \otimes g_1 = - \sum_{i=2}^n c_i (g_i \otimes g_i) $$
+        左辺の1つ目の $g_1$ に先ほどの式を代入する。
+        $$ \left( - \sum_{i=2}^n c_i g_i \right) \otimes g_1 = - \sum_{i=2}^n c_i (g_i \otimes g_i) $$
+        これを整理すると以下の等式を得る。
+        $$ \sum_{i=2}^n c_i (g_i \otimes g_1 - g_i \otimes g_i) = \sum_{i=2}^n g_i \otimes (c_i (g_1 - g_i)) = 0 $$
+        この式はテンソル積 $C \otimes_K C$ における等式である。仮定より $n$ は線型関係式の項数の最小値であったため、部分集合 $\{g_2, \dots, g_n\}$ は線型独立である。したがって、 $C \otimes_K C$ において $\sum_{i=2}^n g_i \otimes x_i = 0$ が成り立つならば、各 $g_i$ の係数にあたるテンソル成分 $x_i$ はすべて $0$ でなければならない。
+        よって、すべての $i \ge 2$ について $c_i (g_1 - g_i) = 0$ である。
+        $c_i \neq 0$ であるから $g_1 - g_i = 0$ すなわち $g_1 = g_i$ となるが、これは $S$ の元が互いに相異なるという前提に矛盾する。
+        したがって、 $S$ は線型独立である。 $\blacksquare$
+    </div>
+
+    <div class="proposition">
+        <span class="title">命題 4.3 (Hopfイデアルによる商の構造)</span>
+        体 $K$ の標数に関わらず、 $K[G]$ の任意のHopfイデアル $I$ に対して、商Hopf代数 $H = K[G]/I$ はその群的元によって $K$ 上のベクトル空間として張られる (spanned)。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        自然な全射写像 $\pi: K[G] \to H$ はHopf代数の全射準同型である。
+        群環 $K[G]$ は定義より、群 $G$ の元を基底とするベクトル空間である。したがって、任意の $x \in K[G]$ は $g \in G$ の線型結合で書けるため、全射 $\pi$ による像 $H = \pi(K[G])$ は、像の集合 $\pi(G) = \{ \pi(g) \mid g \in G \}$ の元の線型結合によって張られる。すなわち、ベクトル空間として $H = \operatorname{span}_K \pi(G)$ が成り立つ。
+        <br><br>
+        一方で、任意の $g \in G$ は $K[G]$ において群的元（ $\Delta(g) = g \otimes g$ かつ $\epsilon(g) = 1$ ）である。 $\pi$ はHopf代数準同型であるから、余積と余単位を保存する。よって、
+        $$ \Delta_H(\pi(g)) = (\pi \otimes \pi)(\Delta_{K[G]}(g)) = (\pi \otimes \pi)(g \otimes g) = \pi(g) \otimes \pi(g) $$
+        $$ \epsilon_H(\pi(g)) = \epsilon_{K[G]}(g) = 1 $$
+        が成り立つ。これは、 $\pi(G)$ のすべての元が商 $H$ において群的元であることを意味している。
+        以上より、 $H$ は群的元の集合 $\pi(G)$ によってベクトル空間として完全に張られる。 $\blacksquare$
+    </div>
+
+    <div class="theorem">
+        <span class="title">定理 4.4 (群環のHopfイデアルの完全な特徴付け)</span>
+        体 $K$ と群 $G$ を任意とする。群環 $K[G]$ の両側イデアル $I$ がホップ・イデアルであるための必要十分条件は、ある正規部分群 $N \subset G$ が存在して $I = I(N)$ と表されることである。
+    </div>
+
+    <div class="proof">
+        <span class="title">証明</span>
+        $(\Leftarrow)$ $N \subset G$ を正規部分群とする。定理3.1より、 $I(N)$ は集合 $\{ n - 1 \mid n \in N \}$ によって生成される左イデアルである。ホップ・イデアルの各条件を生成元 $n - 1$ について確認する。
+        <ol>
+            <li> 余積について： $\Delta(n - 1) = \Delta(n) - \Delta(1) = n \otimes n - 1 \otimes 1$ である。
+            これを変形すると、 $n \otimes n - 1 \otimes 1 = (n - 1) \otimes n + 1 \otimes (n - 1)$ となる。 $n - 1 \in I(N)$ であるから、第1項は $I(N) \otimes_K K[G]$ に属し、第2項は $K[G] \otimes_K I(N)$ に属する。したがって $\Delta(I(N)) \subset I(N) \otimes_K K[G] + K[G] \otimes_K I(N)$ である。</li>
+            <li> 余単位について： $\epsilon(n - 1) = \epsilon(n) - \epsilon(1) = 1 - 1 = 0$ である。よって $\epsilon(I(N)) = \{0\}$ である。</li>
+            <li> 対蹠について： $S(n - 1) = S(n) - S(1) = n^{-1} - 1$ である。 $N$ は部分群であるから $n^{-1} \in N$ であり、したがって $n^{-1} - 1 \in I(N)$ である。よって $S(I(N)) \subset I(N)$ である。</li>
+        </ol>
+        以上より、 $I(N)$ はホップ・イデアルである。
+        <br><br>
+        $(\Rightarrow)$ $I \subset K[G]$ をホップ・イデアルとする。ホップ・イデアルによる商環 $H = K[G]/I$ は、自然に商ホップ代数となる。自然な全射ホップ代数準同型を $\pi: K[G] \to H$ とする。
+        <br><br>
+        命題4.3により、 $H$ は群的元の集合 $\pi(G)$ によってベクトル空間として張られる。すなわち、 $H = \operatorname{span}_K \pi(G)$ である。
+        <br><br>
+        補題4.2により、 $H$ の相異なる群的元の全体は線型独立である。 $\pi(G)$ に含まれる元はすべて群的元であるため、 $\pi(G)$ はベクトル空間 $H$ の線型独立な基底をなす。
+        基底 $\pi(G)$ が（ $\pi$ が環準同型であることから）積に関して閉じており、群をなすため、 $H$ は群 $\pi(G)$ を基底とする群環 $K[\pi(G)]$ とホップ代数として完全に同型である。
+        <br><br>
+        ここで群準同型 $\pi|_G : G \to \pi(G)$ の核を $N = \operatorname{Ker}(\pi|_G)$ とおく。 $N$ は $G$ の正規部分群であり、第一同型定理より $\pi(G) \cong G/N$ である。したがってホップ代数として $H \cong K[G/N]$ となる。
+        イデアル $I$ は全射 $\pi: K[G] \to H \cong K[G/N]$ の核であるが、この全射は $G$ から $G/N$ への自然な射影を線型に拡張したものである。その核は定義により $I(N)$ に他ならない。よって $I = I(N)$ が成り立つ。 $\blacksquare$
+    </div>
+
+    <div class="remark">
+        <span class="title">注意 (標数 $p > 0$ における現象と代数幾何学との関連)</span>
+        定理4.4および命題4.3において、体の標数 $\operatorname{char}(K)$ に関する仮定は一切不要である。Hopfイデアル $I$ による商 $H = K[G]/I$ が群的元によって張られることは、標数に依存しない普遍的な事実である。
+        <br><br>
+        一部の文献や解説で「体の標数が正（ $\operatorname{char}(K) = p > 0$ ）の場合には商が群的元で張られない例外が生じる」と誤って説明されることがあるが、これは群環（余可換Hopf代数）の理論と、代数幾何学における代数群の座標環（可換Hopf代数）の理論の混同によるものである。
+        <br><br>
+        代数群の座標環 $\mathcal{O}(\mathcal{G})$ の場合、Hopfイデアルによる商をとることは、代数群の閉部分群スキーム (closed subgroup scheme) を考えることに対応する。標数 0 の体上では、Cartierの定理によりすべての群スキームは被約 (reduced) になるため、商は古典的な部分群に対応する。しかし、標数 $p > 0$ においては、例えば加法群 $\mathbb{G}_a$ の座標環 $K[x]$ におけるホップ・イデアル $I = (x^p)$ のように、商環 $K[x]/(x^p)$ に冪零元が残る（非被約となる）無限小群スキーム (infinitesimal group scheme) が存在する。このような商において唯一の群的元は単位元 $1$ のみであり、空間全体が群的元で張られることは決してない。
+        <br><br>
+        しかし、群環 $K[G]$ においてはこのような非被約性の問題は生じず、群的元が常に空間全体を張るため、すべてのホップ・イデアルは例外なく正規部分群からのイデアル $I(N)$ と完全に一対一対応する。
+    </div>
+
+    <h2>参考文献</h2>
+    <ul>
+        <li>Passman, D. S. (1977). <i>The Algebraic Structure of Group Rings</i>. <a href="https://doi.org/10.1002/9780470316696" target="_blank" rel="noopener noreferrer">https://doi.org/10.1002/9780470316696</a>[cite: 1]</li>
+        <li>Sweedler, M. E. (1969). <i>Hopf Algebras</i>. W. A. Benjamin, Inc.[cite: 1]</li>
+        <li>Waterhouse, W. C. (1979). <i>Introduction to Affine Group Schemes</i>. Graduate Texts in Mathematics, vol 66. Springer, New York, NY. <a href="https://doi.org/10.1007/978-1-4612-6217-6" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/978-1-4612-6217-6</a>[cite: 1]</li>
+    </ul>
+
+</body>
+</html>

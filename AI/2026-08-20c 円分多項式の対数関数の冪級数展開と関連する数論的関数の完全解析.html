@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>円分多項式の対数関数の冪級数展開と関連する数論的関数の完全解析</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 20px;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  }
+  h1 {
+    font-size: 2.4rem;
+    color: #2c3e50;
+    border-bottom: 4px solid #3498db;
+    padding-bottom: 15px;
+    margin-bottom: 35px;
+    text-align: center;
+  }
+  h2 {
+    font-size: 1.8rem;
+    color: #2980b9;
+    border-left: 6px solid #3498db;
+    padding-left: 15px;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    background-color: #f0f8ff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  h3 {
+    font-size: 1.4rem;
+    color: #34495e;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px dashed #bdc3c7;
+    padding-bottom: 5px;
+  }
+  p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+    font-size: 1.05rem;
+  }
+  ul, ol {
+    margin-bottom: 1.5em;
+    padding-left: 28px;
+    font-size: 1.05rem;
+  }
+  li {
+    margin-bottom: 0.8em;
+  }
+  .definition, .theorem, .lemma, .proposition {
+    background-color: #eef7fc;
+    border-left: 5px solid #3498db;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 0 5px 5px 0;
+  }
+  .definition-title, .theorem-title, .lemma-title, .proposition-title {
+    font-weight: bold;
+    color: #2980b9;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+  }
+  .proof {
+    background-color: #fdfefe;
+    border: 1px solid #e1e8ed;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 5px;
+  }
+  .proof-title {
+    font-weight: bold;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+  }
+  .proof-end {
+    text-align: right;
+    font-weight: bold;
+    color: #7f8c8d;
+    margin-top: 15px;
+  }
+  .example-box {
+    background-color: #f9fdfa;
+    border: 1px solid #c8e6c9;
+    border-left: 5px solid #4caf50;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 5px 5px 0;
+  }
+  .example-title {
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 1rem;
+  }
+  th, td {
+    border: 1px solid #dcdfe6;
+    padding: 15px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f6fc;
+    color: #303133;
+    font-weight: bold;
+  }
+  tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>円分多項式の対数関数の冪級数展開と関連する数論的関数の完全解析</h1>
+
+<p>本稿では、 $n>1$ のときの円分多項式 $\Phi_n(x)$ に対する $\log \Phi_n(1+t)$ の $t$ に関する冪級数展開を求めるための理論をまとめる。展開の全係数を閉じた形で明示的に決定するため、Bernoulli数、Jordanのtotient関数、符号付き第一種Stirling数などの基礎概念を定義し、論理的なギャップのない証明を提示する。</p>
+
+<h2>1. 基礎となる多項式と数論的関数の定義</h2>
+
+<div class="definition">
+<div class="definition-title">定義 1.1（円分多項式）</div>
+<p>正の整数 $ n $ に対し、複素数体 $ \mathbb{C} $ 上の多項式 $ \Phi_n(x) $ を次のように定義する。</p>
+$$ \Phi_n(x) = \prod_{1 \le k \le n, \gcd(k, n) = 1} (x - e^{2\pi i k / n}) $$
+<p>この多項式を<b>円分多項式 (cyclotomic polynomial)</b> と呼ぶ。その次数はEulerのtotient関数 $ \varphi(n) $ に等しい。代数群の分解恒等式 $ x^n - 1 = \prod_{d | n} \Phi_d(x) $ が成り立つ。</p>
+</div>
+
+<div class="example-box">
+<div class="example-title">理解を助ける例：円分多項式</div>
+<ul>
+  <li>$ n = 1 $ のとき: $ \Phi_1(x) = x - 1 $</li>
+  <li>$ n = 2 $ のとき: $ x^2 - 1 = \Phi_1(x)\Phi_2(x) $ より $ \Phi_2(x) = x + 1 $</li>
+  <li>$ n = 3 $ のとき: $ x^3 - 1 = \Phi_1(x)\Phi_3(x) $ より $ \Phi_3(x) = x^2 + x + 1 $</li>
+  <li>$ n = 4 $ のとき: $ x^4 - 1 = \Phi_1(x)\Phi_2(x)\Phi_4(x) = (x^2-1)\Phi_4(x) $ より $ \Phi_4(x) = x^2 + 1 $</li>
+  <li>$ n = 5 $ のとき: $ x^5 - 1 = (x-1)\Phi_5(x) $ より $ \Phi_5(x) = x^4 + x^3 + x^2 + x + 1 $</li>
+  <li>$ n = 6 $ のとき: $ x^6 - 1 = \Phi_1(x)\Phi_2(x)\Phi_3(x)\Phi_6(x) = (x^3-1)(x+1)\Phi_6(x) $ より $ \Phi_6(x) = x^2 - x + 1 $</li>
+</ul>
+</div>
+
+<div class="definition">
+<div class="definition-title">定義 1.2（Möbius関数とMöbiusの反転公式）</div>
+<p>正の整数 $ n $ に対し、<b>Möbius関数 (Möbius function)</b> $ \mu(n) $ は以下のように定義される。</p>
+<ul>
+  <li>$ n = 1 $ のとき、$ \mu(1) = 1 $</li>
+  <li>$ n $ が相異なる $ k $ 個の素数の積に分解されるとき、$ \mu(n) = (-1)^k $</li>
+  <li>$ n $ がある素数の平方で割り切れるとき、$ \mu(n) = 0 $</li>
+</ul>
+<p>Möbiusの反転公式を乗法群に適用すると、円分多項式は次のように有理式表現される。</p>
+$$ \Phi_n(x) = \prod_{d | n} (x^d - 1)^{\mu(n/d)} $$
+</div>
+
+<div class="example-box">
+<div class="example-title">理解を助ける例：Möbius関数 $\mu(n)$ の具体値</div>
+<ul>
+  <li>$n=1$ のとき: $\mu(1) = 1$</li>
+  <li>$n=2$ (素数) のとき: $\mu(2) = -1$</li>
+  <li>$n=4=2^2$ (平方因子をもつ) のとき: $\mu(4) = 0$</li>
+  <li>$n=6=2 \times 3$ (異なる2つの素数の積) のとき: $\mu(6) = (-1)^2 = 1$</li>
+  <li>$n=30=2 \times 3 \times 5$ (異なる3つの素数の積) のとき: $\mu(30) = (-1)^3 = -1$</li>
+</ul>
+</div>
+
+<div class="definition">
+<div class="definition-title">定義 1.3（Jordanのtotient関数）</div>
+<p>正の整数 $ k, n $ に対し、<b>Jordanのtotient関数 (Jordan's totient function)</b> $ J_k(n) $ は以下のように定義される。</p>
+$$ J_k(n) = n^k \prod_{p | n} \left( 1 - \frac{1}{p^k} \right) = \sum_{d | n} \mu(n/d) d^k $$
+<p>特に $ k = 1 $ のとき、$ J_1(n) $ はEulerのtotient関数 $ \varphi(n) $ に完全に一致する。</p>
+</div>
+
+<div class="example-box">
+<div class="example-title">理解を助ける例：Jordanのtotient関数</div>
+<p>$ n = 6 $ の場合の計算例：</p>
+<ul>
+  <li>約数 $ d $ は $ 1, 2, 3, 6 $。$ \mu(6/1)=1 $、$ \mu(6/2)=-1 $、$ \mu(6/3)=-1 $、$ \mu(6/6)=1 $。</li>
+  <li>$ J_1(6) = \varphi(6) = 1(1) - 1(2) - 1(3) + 1(6) = 2 $</li>
+  <li>$ J_2(6) = 1(1^2) - 1(2^2) - 1(3^2) + 1(6^2) = 1 - 4 - 9 + 36 = 24 $</li>
+</ul>
+</div>
+
+<div class="definition">
+<div class="definition-title">定義 1.4（von Mangoldt関数）</div>
+<p>正の整数 $ n $ 上で定義される数論的関数であり、<b>von Mangoldt関数 (von Mangoldt function)</b> $ \Lambda(n) $ は次のように定義される。</p>
+$$ \Lambda(n) = \begin{cases} \log p & (n = p^k \text{ （ } p \text{ は素数、 } k \ge 1 \text{ は整数）のとき）} \\ 0 & (\text{それ以外のとき}) \end{cases} $$
+</div>
+
+<div class="proposition">
+<div class="proposition-title">命題 1.5（von Mangoldt関数の対数分解恒等式）</div>
+<p>任意の正の整数 $ n $ に対し、次の等式が成り立つ。</p>
+$$ \log n = \sum_{d | n} \Lambda(d) $$
+</div>
+
+<p>Möbiusの反転公式により $ \Lambda(n) = \sum_{d | n} \mu(n/d) \log d $ と書き下せる。</p>
+
+<div class="example-box">
+<div class="example-title">理解を助ける例：von Mangoldt関数 $ \Lambda(n) $ の具体値 ($ n = 1 $ から $ 10 $)</div>
+<ul>
+  <li>$ \Lambda(1) = 0 $</li>
+  <li>$ \Lambda(2) = \log 2 $</li>
+  <li>$ \Lambda(3) = \log 3 $</li>
+  <li>$ \Lambda(4) = \log 2 $</li>
+  <li>$ \Lambda(5) = \log 5 $</li>
+  <li>$ \Lambda(6) = 0 $</li>
+  <li>$ \Lambda(7) = \log 7 $</li>
+  <li>$ \Lambda(8) = \log 2 $</li>
+  <li>$ \Lambda(9) = \log 3 $</li>
+  <li>$ \Lambda(10) = 0 $</li>
+</ul>
+</div>
+
+<h2>2. 組合せ論的数列の定義</h2>
+
+<div class="definition">
+<div class="definition-title">定義 2.1（Bernoulli数と修正Bernoulli数）</div>
+<p>通常の<b>Bernoulli数 (Bernoulli numbers)</b> $ B_k $ は、以下の指数型母関数によって定義される。</p>
+$$ \frac{z}{e^z - 1} = \sum_{k=0}^\infty B_k \frac{z^k}{k!} $$
+<p>本稿では、第一項の符号のみを反転させた修正数列 $ B_k^+ $ を用いる。これは $ B_1^+ = 1/2 $ とし、$ k \neq 1 $ では通常の $ B_k $ に等しい値をとる数列として定義される。</p>
+</div>
+
+<div class="example-box">
+<div class="example-title">理解を助ける例：Bernoulli数 $ B_k $ および $ B_k^+ $ の具体値</div>
+<ul>
+  <li>$ B_0 = 1 $, $ B_0^+ = 1 $</li>
+  <li>$ B_1 = -1/2 $, $ B_1^+ = 1/2 $</li>
+  <li>$ B_2 = 1/6 $, $ B_2^+ = 1/6 $</li>
+  <li>$ B_3 = 0 $, $ B_3^+ = 0 $</li>
+  <li>$ B_4 = -1/30 $, $ B_4^+ = -1/30 $</li>
+</ul>
+</div>
+
+<div class="definition">
+<div class="definition-title">定義 2.2（符号付き第一種Stirling数）</div>
+<p><b>符号付き第一種Stirling数 (signed Stirling numbers of the first kind)</b> $ s(m, k) $ は、対数関数の冪に関する以下の母関数定義によって導入される。</p>
+$$ \frac{(\log(1+t))^k}{k!} = \sum_{m=k}^\infty s(m, k) \frac{t^m}{m!} $$
+</div>
+
+<div class="example-box">
+<div class="example-title">理解を助ける例：符号付き第一種Stirling数 $ s(m, k) $ の具体値</div>
+<table>
+  <tr>
+    <th>$ m $ \ $ k $</th>
+    <th>$ k=1 $</th>
+    <th>$ k=2 $</th>
+    <th>$ k=3 $</th>
+    <th>$ k=4 $</th>
+  </tr>
+  <tr>
+    <td><b>$ m=1 $</b></td>
+    <td>$ s(1,1) = 1 $</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>$ m=2 $</b></td>
+    <td>$ s(2,1) = -1 $</td>
+    <td>$ s(2,2) = 1 $</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>$ m=3 $</b></td>
+    <td>$ s(3,1) = 2 $</td>
+    <td>$ s(3,2) = -3 $</td>
+    <td>$ s(3,3) = 1 $</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>$ m=4 $</b></td>
+    <td>$ s(4,1) = -6 $</td>
+    <td>$ s(4,2) = 11 $</td>
+    <td>$ s(4,3) = -6 $</td>
+    <td>$ s(4,4) = 1 $</td>
+  </tr>
+</table>
+</div>
+
+<h2>3. 円分多項式の対数の分解と関数の消去</h2>
+
+<p>$n=1$ の場合、$F_1(t) = \log t$ となり $t=0$ での冪級数展開は存在しない。以下では $n > 1$ とする。</p>
+
+<div class="proposition">
+<div class="proposition-title">命題 3.1（対数の分解恒等式）</div>
+<p>$ n > 1 $ に対し、以下の恒等式が成り立つ。</p>
+$$ \log \Phi_n(1+t) = \sum_{d | n} \mu(n/d) \log d + \sum_{d | n} \mu(n/d) \log \left( \frac{e^{d \log(1+t)} - 1}{d \log(1+t)} \right) $$
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>有理式表現 $ \Phi_n(x) = \prod_{d | n} (x^d - 1)^{\mu(n/d)} $ において $ x = 1+t $ とおき、自然対数をとる。</p>
+$$ \log \Phi_n(1+t) = \sum_{d | n} \mu(n/d) \log ((1+t)^d - 1) $$
+<p>$ (1+t)^d - 1 $ を $ t $ で割った商を $ Q_d(t) = \frac{(1+t)^d - 1}{t} $ とおく。</p>
+$$ \log \Phi_n(1+t) = \left( \sum_{d | n} \mu(n/d) \right) \log t + \sum_{d | n} \mu(n/d) \log Q_d(t) $$
+<p>$ n > 1 $ のとき、$ \sum_{d | n} \mu(n/d) = 0 $ であるため、$ \log t $ の項は完全に消去される。さらに、$ Q_d(t) $ を以下のように変形する。</p>
+$$ Q_d(t) = \frac{e^{d \log(1+t)} - 1}{d \log(1+t)} \cdot d \cdot \frac{\log(1+t)}{t} $$
+<p>両辺の対数をとり、和の式に代入する。$ d $ に依存しない項 $ \log \left( \frac{\log(1+t)}{t} \right) $ は $ \sum_{d | n} \mu(n/d) = 0 $ により消去されるため、命題の等式が得られる。証明終。</p>
+</div>
+
+<h2>4. Bernoulli数による関数展開表示</h2>
+
+<div class="lemma">
+<div class="lemma-title">補題 4.1</div>
+<p>修正Bernoulli数 $ B_k^+ $ を用いて、以下が成り立つ。</p>
+$$ \log \left( \frac{e^z - 1}{z} \right) = \sum_{k=1}^\infty \frac{B_k^+}{k \cdot k!} z^k $$
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>両辺を $z$ について微分する。</p>
+$$ \frac{d}{dz} \log \left( \frac{e^z - 1}{z} \right) = \frac{e^z}{e^z - 1} - \frac{1}{z} = 1 + \frac{1}{e^z - 1} - \frac{1}{z} $$
+<p>Bernoulli数の母関数定義より $ \frac{1}{e^z - 1} - \frac{1}{z} = \sum_{k=1}^\infty \frac{B_k}{k!} z^{k-1} $ と展開される。</p>
+<p>微分の展開式は $ 1 + B_1 + \sum_{k=2}^\infty \frac{B_k}{k!} z^{k-1} $ となる。$ B_1 = -1/2 $ より定数項は $ 1/2 = B_1^+ $ であり、$ k \ge 2 $ では $ B_k^+ = B_k $ であるから、次式を得る。</p>
+$$ \frac{d}{dz} \log \left( \frac{e^z - 1}{z} \right) = \sum_{k=1}^\infty \frac{B_k^+}{k!} z^{k-1} $$
+<p>これを $0$ から $z$ まで積分することで目的の式が得られる。証明終。</p>
+</div>
+
+<h2>5. 冪級数展開の一般項（主定理）</h2>
+
+<div class="proposition">
+<div class="proposition-title">命題 5.1</div>
+<p>$n > 1$ に対し、 $\log \Phi_n(1+t)$ は次のように表される。</p>
+$$ \log \Phi_n(1+t) = \Lambda(n) + \sum_{k=1}^\infty \frac{B_k^+ J_k(n)}{k \cdot k!} (\log(1+t))^k $$
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>補題4.1の等式に $z = d \log(1+t)$ を代入し、命題3.1に適用する。</p>
+$$ \sum_{d | n} \mu(n/d) \log \left( \frac{e^{d \log(1+t)} - 1}{d \log(1+t)} \right) = \sum_{k=1}^\infty \frac{B_k^+}{k \cdot k!} \left( \sum_{d | n} \mu(n/d) d^k \right) (\log(1+t))^k $$
+<p>内側の和 $ \sum_{d | n} \mu(n/d) d^k $ は $ J_k(n) $ と置き換えられる。第一項は $ \Lambda(n) $ であるから命題が示される。証明終。</p>
+</div>
+
+<div class="theorem">
+<div class="theorem-title">主定理 5.2</div>
+<p>$n > 1$ に対し、 $\log \Phi_n(1+t) = \sum_{m=0}^\infty c_m t^m$ とすると、係数 $c_m$ は以下のように与えられる。</p>
+$$ c_0 = \Lambda(n) $$
+$$ c_m = \frac{1}{m!} \sum_{k=1}^m \frac{B_k^+ J_k(n) s(m, k)}{k} \quad (m \ge 1) $$
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>命題5.1に符号付き第一種Stirling数の母関数定義を代入し、和の順序を交換して $t^m$ の係数を比較することで導かれる。証明終。</p>
+</div>
+
+<h2>6. 低次係数の具体化と展開</h2>
+<div class="example-box">
+<div class="example-title">係数 $c_1, c_2, c_3, c_4$ の代数表示</div>
+<ul>
+  <li><b> $m=1$ のとき</b>: $s(1,1) = 1$ , $B_1^+ = 1/2$ , $J_1(n) = \varphi(n)$ より、<br>
+    $c_1 = \frac{1}{1!} \left( \frac{(1/2) \cdot \varphi(n) \cdot 1}{1} \right) = \frac{\varphi(n)}{2}$
+  </li>
+  <li><b> $m=2$ のとき</b>: $s(2,1) = -1$ , $s(2,2) = 1$ , $B_2^+ = 1/6$ より、<br>
+    $c_2 = \frac{1}{2!} \left( \frac{(1/2) \varphi(n) (-1)}{1} + \frac{(1/6) J_2(n) (1)}{2} \right) = \frac{J_2(n) - 6\varphi(n)}{24}$
+  </li>
+  <li><b> $m=3$ のとき</b>: $s(3,1) = 2$ , $s(3,2) = -3$ , $s(3,3) = 1$ , $B_3^+ = 0$ より、<br>
+    $c_3 = \frac{1}{3!} \left( \frac{(1/2) \varphi(n) (2)}{1} + \frac{(1/6) J_2(n) (-3)}{2} + 0 \right) = \frac{4\varphi(n) - J_2(n)}{24}$
+  </li>
+  <li><b> $m=4$ のとき</b>: $s(4, 1) = -6$ , $s(4, 2) = 11$ , $s(4, 3) = -6$ , $s(4, 4) = 1$ , $B_4^+ = -1/30$ より、<br>
+    $c_4 = \frac{1}{24} \left( -3\varphi(n) + \frac{11}{12}J_2(n) - \frac{1}{120}J_4(n) \right) = \frac{-360\varphi(n) + 110J_2(n) - J_4(n)}{2880}$
+  </li>
+</ul>
+</div>
+
+<h2>7. 具体例：$n=2$ の場合の完全な計算・検証</h2>
+
+<div class="example-box">
+<div class="example-title">$\log \Phi_2(1+t)$ の展開と一般公式の一致確認</div>
+<p>$n=2$ の場合、円分多項式は $ \Phi_2(x) = x + 1 $ です。したがって $x=1+t$ を代入すると、求める関数は $ \Phi_2(1+t) = t + 2 $ となります。<br>
+この対数関数 $ \log(2+t) $ のマクローリン展開（テイラー展開）は、直接計算により以下のようになります。</p>
+$$ \log(2+t) = \log\left(2\left(1+\frac{t}{2}\right)\right) = \log 2 + \sum_{m=1}^\infty \frac{(-1)^{m-1}}{m} \left(\frac{t}{2}\right)^m $$
+$$ = \log 2 + \frac{1}{2}t - \frac{1}{8}t^2 + \frac{1}{24}t^3 - \frac{1}{64}t^4 + \cdots $$
+<p>一方で、本稿で導出した主定理5.2および第6節の公式を用いて、各係数 $c_m$ を計算してみましょう。<br>
+$n=2$ に対する必要な数論的関数の値は次の通りです。</p>
+<ul>
+  <li>$ \Lambda(2) = \log 2 $</li>
+  <li>$ \varphi(2) = 1 $</li>
+  <li>$ J_2(2) = 2^2(1 - 1/2^2) = 4(3/4) = 3 $</li>
+  <li>$ J_4(2) = 2^4(1 - 1/2^4) = 16(15/16) = 15 $</li>
+</ul>
+<p>これらを第6節で導出した代数表示の式に代入すると、以下の結果が得られます。</p>
+<ul>
+  <li>$ c_0 = \Lambda(2) = \log 2 $</li>
+  <li>$ c_1 = \frac{\varphi(2)}{2} = \frac{1}{2} $</li>
+  <li>$ c_2 = \frac{J_2(2) - 6\varphi(2)}{24} = \frac{3 - 6}{24} = -\frac{3}{24} = -\frac{1}{8} $</li>
+  <li>$ c_3 = \frac{4\varphi(2) - J_2(2)}{24} = \frac{4 - 3}{24} = \frac{1}{24} $</li>
+  <li>$ c_4 = \frac{-360\varphi(2) + 110J_2(2) - J_4(2)}{2880} = \frac{-360(1) + 110(3) - 15}{2880} = \frac{-360 + 330 - 15}{2880} = \frac{-45}{2880} = -\frac{1}{64} $</li>
+</ul>
+<p>このように、抽象的な公式から導出した係数 $c_0 \sim c_4$ が、初等的に求めた $ \log(2+t) $ のテイラー展開の係数と<strong>完全に一致</strong>することが確認できます。この例から、数論的関数（Jordanのtotient関数など）と解析的展開が美しく結びついていることがわかります。</p>
+</div>
+
+<h2>8. $x=1$ における円分多項式の値と導関数の決定</h2>
+
+<p>ここまで導出した $\log \Phi_n(1+t)$ の展開係数 $c_m$ の知見を応用することで、$x=1$ における円分多項式の値 $\Phi_n(1)$ と、その微分係数 $\Phi'_n(1), \Phi''_n(1)$ を鮮やかに決定することができます。以下では $n > 1$ とします（$n=1$ のときは $\Phi_1(x) = x - 1$ より $\Phi_1(1)=0$ です）。</p>
+
+<div class="proposition">
+<div class="proposition-title">命題 8.1（$x=1$ における $\Phi_n(x)$ の値）</div>
+<p>$n > 1$ のとき、$x=1$ における円分多項式の値は次のように与えられる。</p>
+$$ \Phi_n(1) = e^{\Lambda(n)} = \begin{cases} p & (n = p^k \text{ のとき）} \\ 1 & (\text{それ以外のとき}) \end{cases} $$
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>冪級数展開 $\log \Phi_n(1+t) = c_0 + c_1 t + c_2 t^2 + \cdots$ において $t=0$ を代入すると、</p>
+$$ \log \Phi_n(1) = c_0 $$
+<p>主定理5.2より $c_0 = \Lambda(n)$ であるため、両辺の指数をとることで $\Phi_n(1) = e^{\Lambda(n)}$ が得られる。von Mangoldt関数の定義により値が決定される。証明終。</p>
+</div>
+
+<div class="proposition">
+<div class="proposition-title">命題 8.2（$x=1$ における導関数の値）</div>
+<p>$n > 1$ のとき、円分多項式の1階導関数および2階導関数の $x=1$ における値は、以下の式で与えられる。</p>
+$$ \Phi'_n(1) = \Phi_n(1) \frac{\varphi(n)}{2} $$
+$$ \Phi''_n(1) = \Phi_n(1) \frac{3\varphi(n)^2 + J_2(n) - 6\varphi(n)}{12} $$
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>$f(t) = \Phi_n(1+t)$ とおくと、$f(0) = \Phi_n(1)$ 、$f'(0) = \Phi'_n(1)$ 、$f''(0) = \Phi''_n(1)$ となる。恒等式</p>
+$$ \log f(t) = c_0 + c_1 t + c_2 t^2 + c_3 t^3 + \cdots $$
+<p>の両辺を $t$ について微分すると、連鎖律より</p>
+$$ \frac{f'(t)}{f(t)} = c_1 + 2c_2 t + 3c_3 t^2 + \cdots $$
+$$ \Rightarrow f'(t) = f(t) (c_1 + 2c_2 t + 3c_3 t^2 + \cdots) $$
+<p>$t=0$ を代入すると、$f'(0) = f(0) c_1$。第6節の結果より $c_1 = \varphi(n)/2$ であるから、1階導関数の式が得られる。</p>
+<p>さらに $f'(t)$ の式をもう一度 $t$ で微分すると、積の微分法則より</p>
+$$ f''(t) = f'(t)(c_1 + 2c_2 t + \cdots) + f(t)(2c_2 + 6c_3 t + \cdots) $$
+<p>$t=0$ を代入すると、</p>
+$$ f''(0) = f'(0)c_1 + 2f(0)c_2 = f(0)c_1^2 + 2f(0)c_2 = f(0)(c_1^2 + 2c_2) $$
+<p>ここで $c_1 = \frac{\varphi(n)}{2}$ 、$c_2 = \frac{J_2(n) - 6\varphi(n)}{24}$ を代入して計算する。</p>
+$$ c_1^2 + 2c_2 = \frac{\varphi(n)^2}{4} + \frac{J_2(n) - 6\varphi(n)}{12} = \frac{3\varphi(n)^2 + J_2(n) - 6\varphi(n)}{12} $$
+<p>これに $f(0) = \Phi_n(1)$ を掛けることで、2階導関数の式が得られる。証明終。</p>
+</div>
+
+<div class="example-box">
+<div class="example-title">理解を助ける例：導関数公式の具体例（$n=4$ と $n=6$）</div>
+<p><b>ケース1: $n=4$ の場合</b></p>
+<p>$\Phi_4(x) = x^2+1$ より、微分は $\Phi'_4(x) = 2x$ 、$\Phi''_4(x) = 2$。<br>
+直接計算すると $x=1$ において <b>$\Phi_4(1) = 2, \Phi'_4(1) = 2, \Phi''_4(1) = 2$</b> となります。<br>
+一方、公式に当てはめると、$n=4 = 2^2$ より $p=2$ だから $\Phi_4(1) = 2$。<br>
+$\varphi(4) = 2$ , $J_2(4) = 12$ より、</p>
+<ul>
+  <li>$\Phi'_4(1) = 2 \times \frac{2}{2} = 2$</li>
+  <li>$\Phi''_4(1) = 2 \times \frac{3(2^2) + 12 - 6(2)}{12} = 2 \times \frac{12 + 12 - 12}{12} = 2$</li>
+</ul>
+<p>公式と完全に一致しました。</p>
+<hr style="border:0; border-top: 1px dashed #c8e6c9; margin: 15px 0;">
+<p><b>ケース2: $n=6$ の場合</b></p>
+<p>$\Phi_6(x) = x^2-x+1$ より、微分は $\Phi'_6(x) = 2x-1$ 、$\Phi''_6(x) = 2$。<br>
+直接計算すると $x=1$ において <b>$\Phi_6(1) = 1, \Phi'_6(1) = 1, \Phi''_6(1) = 2$</b> となります。<br>
+一方、公式に当てはめると、$n=6 = 2 \times 3$ (素数冪ではない) より $\Phi_6(1) = 1$。<br>
+$\varphi(6) = 2$ , $J_2(6) = 24$ より、</p>
+<ul>
+  <li>$\Phi'_6(1) = 1 \times \frac{2}{2} = 1$</li>
+  <li>$\Phi''_6(1) = 1 \times \frac{3(2^2) + 24 - 6(2)}{12} = \frac{12 + 24 - 12}{12} = 2$</li>
+</ul>
+<p>こちらも見事に一致します。</p>
+</div>
+
+</div>
+</body>
+</html>

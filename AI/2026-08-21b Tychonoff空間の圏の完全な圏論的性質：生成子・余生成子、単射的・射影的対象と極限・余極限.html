@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圏Tychoの完全な圏論的性質：生成子・余生成子、単射的・射影的対象と極限・余極限</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    chtml: {
+      matchFontHeight: false
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body {
+    font-family: serif;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 950px;
+    padding: 2em;
+    color: #333;
+  }
+  h1, h2, h3 {
+    color: #111;
+  }
+  h1 { border-bottom: 2px solid #333; padding-bottom: 0.3em; font-size: 2em; }
+  h2 { border-bottom: 1px solid #ccc; padding-bottom: 0.2em; margin-top: 2.5em; font-size: 1.5em; }
+  h3 { margin-top: 2em; }
+  .definition, .theorem, .proposition, .proof, .example, .remark {
+    margin-bottom: 1.5em;
+    padding: 1.2em;
+    border-radius: 4px;
+  }
+  .definition { background-color: #f8f9fa; border-left: 4px solid #007bff; }
+  .theorem, .proposition { background-color: #fdfdfd; border-left: 4px solid #28a745; }
+  .proof { background-color: #fff; border-left: 4px solid #6c757d; }
+  .example { background-color: #fffdf5; border-left: 4px solid #ffc107; }
+  .remark { background-color: #fafafa; border-left: 4px solid #17a2b8; }
+  .title { font-weight: bold; margin-bottom: 0.8em; display: block; font-size: 1.1em; }
+  a { color: #007bff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ul, ol { margin-top: 0.5em; }
+  li { margin-bottom: 0.5em; }
+  .references { margin-top: 4em; font-size: 0.95em; border-top: 1px solid #eee; padding-top: 1em; }
+</style>
+</head>
+<body>
+
+<h1>圏 $\mathrm{Tycho}$ の完全な圏論的性質：生成子・余生成子、単射的・射影的対象と極限・余極限</h1>
+
+<p>本稿では、Tychonoff空間 (Tychonoff space) の圏 $\mathrm{Tycho}$ の性質について、自己完結 (self-contained) な解説と完全な証明を行う。圏 $\mathrm{Tycho}$ は、対象 (object) が完全正則 (completely regular) な Hausdorff空間 (Hausdorff space) であり、射 (morphism) が連続写像 (continuous map) である圏である。</p>
+
+<h2>第1節：位相空間論および圏論の基本概念の定義と例</h2>
+
+<p>議論を自己完結にするため、証明に用いる位相空間論と圏論の基本概念を厳密に定義する。</p>
+
+<div class="definition">
+  <span class="title">定義 1.1 (位相空間の諸性質)</span>
+  位相空間 $X$ について以下の性質を定義する。
+  <ul>
+    <li>$X$ が <strong>Hausdorff空間 (Hausdorff space)</strong> であるとは、任意の相異なる 2点 $x, y \in X$ ($x \neq y$) に対して、互いに素な開集合 $U, V \subset X$ が存在し、$x \in U$ かつ $y \in V$ を満たすことである。</li>
+    <li>$X$ が <strong>完全正則 (completely regular)</strong> であるとは、任意の点 $x \in X$ と、$x$ を含まない任意の閉集合 $F \subset X$ ($x \notin F$) に対して、連続写像 $f: X \to [0, 1]$ が存在して、$f(x) = 1$ かつ任意の $y \in F$ について $f(y) = 0$ を満たすことである。</li>
+    <li>$X$ の部分集合 $A$ が $X$ において <strong>稠密 (dense)</strong> であるとは、$A$ の閉包 $\overline{A}$ が $X$ 全体に一致すること、すなわち $\overline{A} = X$ であることである。同値な定義として、$X$ の空でない任意の開集合が $A$ と交わることである。</li>
+  </ul>
+  Hausdorff空間 であり、かつ完全正則である空間を <strong>Tychonoff空間 (Tychonoff space)</strong> と呼ぶ。
+</div>
+
+<div class="example">
+  <span class="title">例 1.2 (Tychonoff空間の具体例と非例)</span>
+  <ul>
+    <li><strong>例：</strong> 実数空間 $\mathbb{R}$ や閉区間 $[0, 1]$、有理数空間 $\mathbb{Q}$ などはすべて Tychonoff空間 である。より一般に、距離空間 (metric space) やコンパクト (compact) な Hausdorff空間 は常に Tychonoff空間 となる。</li>
+    <li><strong>非例：</strong> 密着空間 (indiscrete space) は完全正則の条件は満たす（空でない真の閉集合が存在しないため自明に満たす）が、Hausdorff空間 ではないため Tychonoff空間 ではない。</li>
+  </ul>
+</div>
+
+<div class="definition">
+  <span class="title">定義 1.3 (圏論の基本概念)</span>
+  圏 $\mathcal{C}$ において、以下の概念を定義する。
+  <ul>
+    <li>射 $m: X \to Y$ が <strong>単射 (monomorphism)</strong> であるとは、任意の対象 $Z$ と射 $u, v: Z \to X$ について、$m \circ u = m \circ v$ ならば $u = v$ が成り立つことである。</li>
+    <li>射 $e: X \to Y$ が <strong>全射 (epimorphism)</strong> であるとは、任意の対象 $Z$ と射 $u, v: Y \to Z$ について、$u \circ e = v \circ e$ ならば $u = v$ が成り立つことである。</li>
+    <li>対象 $G$ が <strong>生成子 (generator)</strong> であるとは、任意の対象 $X, Y$ と相異なる射 $u, v: X \to Y$ ($u \neq v$) に対して、ある射 $f: G \to X$ が存在して $u \circ f \neq v \circ f$ が成り立つことである。</li>
+    <li>対象 $C$ が <strong>余生成子 (cogenerator)</strong> であるとは、任意の対象 $X, Y$ と相異なる射 $u, v: X \to Y$ ($u \neq v$) に対して、ある射 $h: Y \to C$ が存在して $h \circ u \neq h \circ v$ が成り立つことである。</li>
+    <li>対象 $I$ が <strong>単射的対象 (injective object)</strong> であるとは、任意の単射 $m: X \to Y$ と任意の射 $f: X \to I$ に対して、射 $g: Y \to I$ が存在して $g \circ m = f$ が成り立つことである。</li>
+    <li>対象 $P$ が <strong>射影的対象 (projective object)</strong> であるとは、任意の全射 $e: X \to Y$ と任意の射 $f: P \to Y$ に対して、射 $g: P \to X$ が存在して $e \circ g = f$ が成り立つことである。</li>
+  </ul>
+</div>
+
+<h2>第2節：$\mathrm{Tycho}$ における単射と全射の特徴付け</h2>
+
+<p>$\mathrm{Tycho}$ における射の圏論的な性質を決定するため、単射と全射が位相空間論的にどのような意味を持つかを明らかにする。</p>
+
+<div class="proposition">
+  <span class="title">命題 2.1</span>
+  圏 $\mathrm{Tycho}$ において、射 $m: X \to Y$ が単射 (monomorphism) であるための必要十分条件は、$m$ が集合論的意味で単射な連続写像 (injective continuous map) であることである。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  (十分性): $m$ が単射な連続写像であるとする。任意の対象 $Z$ と射 $u, v: Z \to X$ に対して $m \circ u = m \circ v$ が成り立つとする。$m$ は単射であるから、任意の $z \in Z$ について $m(u(z)) = m(v(z))$ より $u(z) = v(z)$ を得る。したがって $u = v$ となり、$m$ は単射 (monomorphism) である。<br><br>
+  (必要性): $m$ が単射 (monomorphism) であるとする。$X$ の異なる 2点 $x_1, x_2$ に対して $m(x_1) = m(x_2)$ となったと仮定する。対象 $Z$ を 1点空間 $\{*\}$ とし、射 $u, v: Z \to X$ を $u(*) = x_1, v(*) = x_2$ と定義する。1点空間から任意の空間への写像は常に連続である。このとき $m \circ u = m \circ v$ であるが $u \neq v$ となり、単射の定義に矛盾する。よって $m$ は集合論的に単射である。(証明終)
+</div>
+
+<div class="proposition">
+  <span class="title">命題 2.2</span>
+  圏 $\mathrm{Tycho}$ において、射 $e: X \to Y$ が全射 (epimorphism) であるための必要十分条件は、像 $e(X)$ が $Y$ において稠密 (dense) であることである。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  (十分性): $e(X)$ が $Y$ において稠密であるとする。2つの射 $u, v: Y \to Z$ が $u \circ e = v \circ e$ を満たすとする。すなわち、任意の $x \in X$ に対して $u(e(x)) = v(e(x))$ である。$Z$ は Hausdorff空間 であるため、連続写像の一致する点の集合 $A = \{y \in Y \mid u(y) = v(y)\}$ は $Y$ の閉集合である。この閉集合 $A$ は稠密な部分集合 $e(X)$ を含む。部分集合が稠密であることの定義から、その閉包は空間全体に等しいため、$\overline{e(X)} = Y$ である。したがって $Y = \overline{e(X)} \subset A \subset Y$ となり、$A = Y$ を得る。よって $u = v$ となり、$e$ は全射 (epimorphism) である。<br><br>
+  (必要性): $e(X)$ が $Y$ で稠密でないとする。すなわち、ある点 $y_0 \in Y$ が存在して $y_0 \notin \overline{e(X)}$ である。$Y$ は完全正則であるため、点 $y_0$ と閉集合 $\overline{e(X)}$ を分離する連続写像が存在する。すなわち、連続写像 $u: Y \to [0, 1]$ で、$u(\overline{e(X)}) = \{0\}$ かつ $u(y_0) = 1$ を満たすものが存在する。一方、定数写像 $v: Y \to [0, 1]$ をすべての $y \in Y$ に対して $v(y) = 0$ と定める。このとき、任意の $x \in X$ について $e(x) \in \overline{e(X)}$ であるから $u(e(x)) = 0 = v(e(x))$ であり、$u \circ e = v \circ e$ が成り立つ。しかし $u(y_0) = 1 \neq 0 = v(y_0)$ より $u \neq v$ である。したがって $e$ は全射 (epimorphism) ではない。(証明終)
+</div>
+
+<div class="example">
+  <span class="title">例 2.3 (全射であるが集合論的「上への写像」ではない例)</span>
+  包含写像 $e: \mathbb{Q} \to \mathbb{R}$ を考える。有理数全体の集合 $\mathbb{Q}$ は実数空間 $\mathbb{R}$ において稠密であるため、命題 2.2 よりこの包含写像は $\mathrm{Tycho}$ における全射 (epimorphism) である。しかし、明らかに $e$ は集合論的な意味での全射（上への写像）ではない。これは、位相空間の圏やその部分圏においては、圏論的な全射と集合論的な全射が一致しないことを示す重要な例である。
+</div>
+
+<h2>第3節：$\mathrm{Tycho}$ の生成子</h2>
+
+<p>$\mathrm{Tycho}$ における生成子について考察する。対象の点を写像によって指定できることから、1点空間が自然な生成子となる。</p>
+
+<div class="proposition">
+  <span class="title">命題 3.1</span>
+  1点空間 $\{*\}$ は圏 $\mathrm{Tycho}$ の生成子 (generator) である。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  1点空間 $G = \{*\}$ が生成子の定義を満たすことを示す。$\mathrm{Tycho}$ の対象 $X, Y$ と異なる射 $u, v: X \to Y$ が与えられたとする。$u \neq v$ であるから、ある点 $x_0 \in X$ が存在して $u(x_0) \neq v(x_0)$ が成り立つ。<br>
+  ここで、1点空間 $G$ から $X$ への写像 $f: G \to X$ を $f(*) = x_0$ と定義する。1点空間を始域とする任意の写像は連続であるため、$f$ は $\mathrm{Tycho}$ の射である。<br>
+  このとき、合成射 $u \circ f$ と $v \circ f$ を点 $*$ において評価すると、
+  $$
+  (u \circ f)(*) = u(f(*)) = u(x_0)
+  $$
+  $$
+  (v \circ f)(*) = v(f(*)) = v(x_0)
+  $$
+  となる。$u(x_0) \neq v(x_0)$ であるから、$(u \circ f)(*) \neq (v \circ f)(*)$ であり、したがって $u \circ f \neq v \circ f$ が成り立つ。これにより、1点空間 $\{*\}$ は生成子であることが示された。(証明終)
+</div>
+
+<div class="example">
+  <span class="title">例 3.2 (その他の生成子)</span>
+  1点空間だけでなく、空でない任意の Tychonoff空間 $G$ も $\mathrm{Tycho}$ の生成子となる。なぜなら、空でない $G$ から任意の 1点 $g_0 \in G$ を固定し、定数写像 $f: G \to X$ を $f(g) = x_0$ と定義すれば、命題 3.1 の証明と全く同様の論法で $u \circ f \neq v \circ f$ を導けるからである。しかし、構造として最も小さく、他のすべての空間へ点を指定する役割を持つ $\{*\}$ が標準的な生成子とみなされる。
+</div>
+
+<h2>第4節：$\mathrm{Tycho}$ の余生成子</h2>
+
+<p>$\mathrm{Tycho}$ の定義（完全正則性）に直結する重要な対象として、区間 $[0, 1]$ と実数空間 $\mathbb{R}$ がある。ここではまず $[0, 1]$ が余生成子であることを示し、続いて $\mathbb{R}$ についても議論する。</p>
+
+<div class="proposition">
+  <span class="title">命題 4.1</span>
+  閉区間 $[0, 1]$ は圏 $\mathrm{Tycho}$ の余生成子 (cogenerator) であるが、単射的対象 (injective object) ではない。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  前半として、$[0, 1]$ が余生成子であることを示す。$\mathrm{Tycho}$ の対象 $X, Y$ と異なる射 $u, v: X \to Y$ が与えられたとする。$u \neq v$ であるから、$u(x_0) \neq v(x_0)$ となる点 $x_0 \in X$ が存在する。$Y$ は Tychonoff空間 であるため、とくに完全正則 (completely regular) かつ Hausdorff空間 である。1点からなる集合 $\{v(x_0)\}$ は $Y$ が Hausdorff空間 であることから閉集合である。完全正則性の定義により、点 $u(x_0)$ と、それを含まない閉集合 $\{v(x_0)\}$ を分離する連続写像 $h: Y \to [0, 1]$ が存在する。すなわち、$h(u(x_0)) = 0$ かつ $h(v(x_0)) = 1$ を満たす。<br>
+  このとき、合成射 $h \circ u, h \circ v: X \to [0, 1]$ を考えると、$h(u(x_0)) = 0 \neq 1 = h(v(x_0))$ となるため、$h \circ u \neq h \circ v$ である。したがって $[0, 1]$ は余生成子の定義を満たす。<br><br>
+  後半として、$[0, 1]$ が単射的対象ではないことを示す。対象 $X = (0, 1)$ と $Y = [0, 1]$ を考える。包含写像 $m: (0, 1) \to [0, 1]$ は単射な連続写像であるため、命題 2.1 より $\mathrm{Tycho}$ における単射 (monomorphism) である。<br>
+  連続写像 $f: (0, 1) \to [0, 1]$ を $f(x) = |\sin(1/x)|$ と定義する。$[0, 1]$ が単射的対象であると仮定すると、$g \circ m = f$ を満たす連続写像 $g: [0, 1] \to [0, 1]$ が存在しなければならない。<br>
+  しかし、$g$ は $[0, 1]$ 全体で連続であるため、$x \to +0$ のときの極限 $\lim_{x \to +0} g(x)$ は $g(0)$ として存在しなければならない。一方、$x \in (0, 1)$ において $g(x) = g(m(x)) = f(x) = |\sin(1/x)|$ であり、$x \to +0$ のとき $|\sin(1/x)|$ は $0$ と $1$ の間を無限回振動し、極限を持たない。これは $g$ が $0$ において連続であることに矛盾する。したがって $[0, 1]$ は単射的対象ではない。(証明終)
+</div>
+
+<div class="proposition">
+  <span class="title">命題 4.2</span>
+  実数空間 $\mathbb{R}$ は圏 $\mathrm{Tycho}$ の余生成子 (cogenerator) であるが、単射的対象 (injective object) ではない。したがって、$\mathbb{R}$ は単射的余生成子ではない。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  前半として、$\mathbb{R}$ が余生成子であることを示す。命題 4.1 の証明と同様にして、異なる射 $u, v: X \to Y$ に対して、連続写像 $h: Y \to [0, 1]$ で $h \circ u \neq h \circ v$ を満たすものが存在する。包含写像 $i: [0, 1] \to \mathbb{R}$ は連続であるため、合成写像 $h' = i \circ h: Y \to \mathbb{R}$ も連続写像（すなわち $\mathrm{Tycho}$ の射）である。このとき $h'(u(x_0)) = 0 \neq 1 = h'(v(x_0))$ となるため、$h' \circ u \neq h' \circ v$ となる。したがって $\mathbb{R}$ は余生成子である。<br><br>
+  後半として、$\mathbb{R}$ が単射的対象ではないことを示す。対象 $X = (0, 1)$ と $Y = [0, 1]$ を考える。包含写像 $m: (0, 1) \to [0, 1]$ は単射 (monomorphism) である。<br>
+  連続写像 $f: (0, 1) \to \mathbb{R}$ を $f(x) = 1/x$ と定義する。$\mathbb{R}$ が単射的対象であると仮定すると、$g \circ m = f$ を満たす連続写像 $g: [0, 1] \to \mathbb{R}$ が存在しなければならない。<br>
+  しかし、区間 $[0, 1]$ はコンパクト空間 (compact space) であるため、連続写像 $g$ による像 $g([0, 1])$ は $\mathbb{R}$ のコンパクト部分集合、すなわち有界閉集合 (bounded closed set) となる。一方、$x \to +0$ のとき $f(x) \to \infty$ となるため、$f$ の像は非有界である。任意の $x \in (0, 1)$ に対して $g(m(x)) = f(x)$ より $g$ の像も非有界とならなければならず、これは $g([0, 1])$ が有界であることに矛盾する。したがって $\mathbb{R}$ は単射的対象ではない。(証明終)
+</div>
+
+<h2>第5節：$\mathrm{Tycho}$ の単射的対象</h2>
+
+<p>圏 $\mathrm{Tycho}$ には、自明な空間を除いて単射的対象は存在しない。具体的には、1点空間のみが単射的対象となる。</p>
+
+<div class="proposition">
+  <span class="title">命題 5.1</span>
+  圏 $\mathrm{Tycho}$ における単射的対象 (injective object) は、1点空間 $\{*\}$ のみである。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  まず、1点空間 $P = \{*\}$ が単射的対象であることを示す。任意の単射 $m: X \to Y$ と射 $f: X \to P$ に対して、$g: Y \to P$ をすべての $y \in Y$ を $*$ に写す定数写像と定義すれば、明らかに $g \circ m = f$ が成り立つ。したがって 1点空間は単射的対象である。<br><br>
+  次に、これ以外の空間が単射的対象にならないことを背理法により示す。$I \in \mathrm{Tycho}$ を単射的対象であると仮定する。<br><br>
+  第 1 段階として、$I \neq \varnothing$ を示す。仮に $I = \varnothing$ であるとする。対象 $X = \varnothing$ と $Y = \{*\}$ (1点空間) を考える。包含写像 $m: \varnothing \to \{*\}$ は単射な連続写像であるため、単射 (monomorphism) である。射 $f: \varnothing \to \varnothing$ が与えられたとき、$g \circ m = f$ を満たす射 $g: \{*\} \to \varnothing$ が存在しなければならない。しかし、空でない空間から空集合への写像は存在しないため矛盾する。よって $I \neq \varnothing$ である。<br><br>
+  第 2 段階として、$I$ が 2つ以上の異なる点を持つことはできないことを示す。$I$ に異なる 2点 $a, b \in I$ が存在すると仮定する。$I$ は完全正則であるため、連続写像 $\varphi: I \to [0, 1]$ で $\varphi(a) = 0$ かつ $\varphi(b) = 1$ を満たすものが存在する。<br>
+  また、対象 $D = \{0, 1\}$ (離散位相を入れた 2点空間) と $Y = [0, 1]$ を考える。包含写像 $m_0: \{0, 1\} \to [0, 1]$ は単射 (monomorphism) である。射 $f_0: \{0, 1\} \to I$ を $f_0(0) = a, f_0(1) = b$ と定義する。$I$ は単射的対象であるから、$g \circ m_0 = f_0$ を満たす連続写像 $g: [0, 1] \to I$ が存在する。これは $g(0) = a, g(1) = b$ を満たす道 (path) である。<br><br>
+  ここで、対象 $X = (0, 1)$ と $Y = [0, 1]$ を考え、単射 (monomorphism) である包含写像 $m: (0, 1) \to [0, 1]$ をとる。連続写像 $f: (0, 1) \to I$ を、すべての $t \in (0, 1)$ に対して 
+  $$
+  f(t) = g(\sin^2(1/t))
+  $$
+  と定義する。$I$ は単射的対象であるため、$F \circ m = f$ を満たす連続写像 $F: [0, 1] \to I$ が存在する。<br>
+  $F$ は $[0, 1]$ 上で連続であるから、$t \to +0$ のときの極限 $\lim_{t \to +0} F(t) = F(0) \in I$ が存在する。したがって、合成関数 $\varphi \circ F$ も $t \to +0$ で $\varphi(F(0))$ に収束しなければならない。<br>
+  しかし、$t \in (0, 1)$ において $\varphi(F(t)) = \varphi(f(t)) = \varphi(g(\sin^2(1/t)))$ である。関数 $\sin^2(1/t)$ は $t \to +0$ において区間 $[0, 1]$ 全体を無限回往復する。$\varphi(g(0)) = \varphi(a) = 0$ および $\varphi(g(1)) = \varphi(b) = 1$ であるため、$\varphi(F(t))$ は $t \to +0$ に伴い $0$ と $1$ の間を無限回振動し、極限を持たない。これは $F$ の連続性に矛盾する。<br>
+  したがって、$I$ は 2つ以上の点を持つことはできず、$I$ は 1点空間でなければならない。(証明終)
+</div>
+
+<h2>第6節：$\mathrm{Tycho}$ の射影的対象</h2>
+
+<p>圏 $\mathrm{Tycho}$ における射影的対象は、空集合 $\varnothing$ のみである。位相空間の圏において射影的対象となるには離散空間である必要があるが、$\mathrm{Tycho}$ における全射（稠密な像を持つ写像）に対する持ち上げ条件は非常に厳しいため、空でない空間はすべて排除される。</p>
+
+<div class="proposition">
+  <span class="title">命題 6.1</span>
+  圏 $\mathrm{Tycho}$ における射影的対象 (projective object) は空集合 $\varnothing$ のみである。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  まず、空集合 $\varnothing$ が射影的対象であることを示す。任意の全射 $e: X \to Y$ と射 $f: \varnothing \to Y$ が与えられたとする。$\varnothing$ を始域とする写像は空写像のみであるため、$g: \varnothing \to X$ を空写像とすれば、$e \circ g = f$ は自明に成り立つ。よって $\varnothing$ は射影的対象である。<br><br>
+  次に、空でない対象が射影的対象にはならないことを示す。$P \in \mathrm{Tycho}$ を空でない射影的対象であると仮定する。$P$ は少なくとも 1つの点 $p_0 \in P$ を持つ。<br>
+  対象 $X = (0, 1]$ と $Y = [0, 1]$ を考える。包含写像 $e: (0, 1] \to [0, 1]$ は、その像が $Y$ において稠密であるため、命題 2.2 より $\mathrm{Tycho}$ における全射 (epimorphism) である。<br>
+  射 $f: P \to Y$ を、すべての $p \in P$ に対して $f(p) = 0$ となる定数写像として定義する。定数写像は明らかに連続写像である。<br>
+  $P$ が射影的対象であるという仮定から、$e \circ g = f$ を満たす連続写像 $g: P \to X$ が存在しなければならない。<br>
+  この等式を点 $p_0 \in P$ について評価すると、
+  $$
+  e(g(p_0)) = f(p_0) = 0
+  $$
+  となる。$e$ は包含写像であるため、これは $g(p_0) = 0$ を意味する。しかし、$g$ の終域は $X = (0, 1]$ であり、$0 \notin X$ であるため、このような $g(p_0) \in X$ は存在し得ない。これは矛盾である。<br>
+  したがって、空でない射影的対象は存在しない。(証明終)
+</div>
+
+<h2>第7節：$\mathrm{Tycho}$ における極限 (Limit)</h2>
+
+<div class="definition">
+  <span class="title">定義 7.1 (完備性と具体的な極限)</span>
+  圏が <strong>完備 (complete)</strong> であるとは、任意の小さな図式に対する極限 (limit) が存在することである。一般に、任意の族の積 (product) と、任意の並行する射の対に対するイコライザ (equalizer) が存在すれば、その圏は完備となる。
+  <ul>
+    <li><strong>積 (product):</strong> 対象の族 $(X_i)_{i \in I}$ に対して、対象 $X$ と射影の族 $p_i: X \to X_i$ の組であり、任意の対象 $Z$ と射の族 $f_i: Z \to X_i$ に対して、一意な射 $f: Z \to X$ が存在して $p_i \circ f = f_i$ を満たすもの。</li>
+    <li><strong>イコライザ (equalizer):</strong> 並行する射 $f, g: X \to Y$ に対して、対象 $E$ と射 $m: E \to X$ の組であり、$f \circ m = g \circ m$ を満たし、かつ $f \circ h = g \circ h$ を満たす任意の射 $h: Z \to X$ に対して、一意な射 $k: Z \to E$ が存在して $m \circ k = h$ を満たすもの。</li>
+  </ul>
+</div>
+
+<div class="theorem">
+  <span class="title">定理 7.2</span>
+  圏 $\mathrm{Tycho}$ は完備 (complete) であり、任意の図式の極限が存在する。また、$\mathrm{Tycho}$ における極限は、位相空間の圏 $\mathrm{Top}$ における極限と位相空間として完全に一致する。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  第 1 段階として、$\mathrm{Tycho}$ における積の存在を示す。対象の族 $(X_i)_{i \in I}$ が与えられたとする。これらはすべて Tychonoff 空間である。位相空間の圏 $\mathrm{Top}$ における直積に積位相を入れた空間 $X = \prod_{i \in I} X_i$ を考える。<br>
+  まず $X$ が Hausdorff空間 であることを示す。$X$ の異なる 2 点 $x = (x_i), y = (y_i)$ をとると、ある添字 $j \in I$ について $x_j \neq y_j$ である。$X_j$ は Hausdorff空間 であるから、互いに素な開集合 $U, V \subset X_j$ で $x_j \in U, y_j \in V$ を満たすものが存在する。射影 $p_j: X \to X_j$ は連続であるため、$p_j^{-1}(U)$ と $p_j^{-1}(V)$ は $X$ の互いに素な開集合であり、それぞれ $x$ と $y$ を含む。よって $X$ は Hausdorff空間 である。<br>
+  次に $X$ が完全正則 (completely regular) であることを示す。点 $x \in X$ と $x$ を含まない閉集合 $F \subset X$ をとる。積位相の定義より、$x$ を含む基本開集合 $W = p_{j_1}^{-1}(O_1) \cap \cdots \cap p_{j_n}^{-1}(O_n)$ で $W \subset X \smallsetminus F$ となるものが存在する。ここで各 $O_k$ は $X_{j_k}$ の開集合であり、$x_{j_k} \in O_k$ である。<br>
+  各 $k = 1, \dots, n$ について、$X_{j_k}$ は完全正則であるため、連続写像 $f_k: X_{j_k} \to [0, 1]$ で $f_k(x_{j_k}) = 1$ かつ $f_k(X_{j_k} \smallsetminus O_k) = \{0\}$ を満たすものが存在する。<br>
+  連続写像 $f: X \to [0, 1]$ を 
+  $$
+  f(y) = \min \{ f_1(p_{j_1}(y)), \dots, f_n(p_{j_n}(y)) \}
+  $$
+  と定義する。すると $f(x) = 1$ であり、 $y \notin W$ ならばある $k$ について $p_{j_k}(y) \notin O_k$ となるため $f(y) = 0$ となる。したがって $F \subset X \smallsetminus W$ 上で $f = 0$ である。よって $X$ は完全正則である。<br>
+  以上より $X$ は Tychonoff 空間であり、$\mathrm{Tycho}$ の対象である。射影 $p_i$ も連続であるため、$X$ は $\mathrm{Tycho}$ における積 (product) となる。<br><br>
+  第 2 段階として、$\mathrm{Tycho}$ におけるイコライザの存在を示す。対象 $X, Y$ と射の対 $f, g: X \to Y$ が与えられたとする。位相空間の圏におけるイコライザは、一致する点の集合 $E = \{x \in X \mid f(x) = g(x)\}$ に部分空間位相 (subspace topology) を入れた空間と、包含写像 $m: E \to X$ の組である。<br>
+  Tychonoff 空間の部分空間は再び Tychonoff 空間になることを示す。<br>
+  $E$ が Hausdorff空間 であることは、$X$ が Hausdorff空間 であることから明らかである。<br>
+  $E$ が完全正則であることについて、点 $x \in E$ と $E$ における閉集合 $C \subset E$ で $x \notin C$ となるものをとる。部分空間位相の定義より、$X$ の閉集合 $F$ が存在して $C = F \cap E$ と書ける。$x \notin F$ であるから、$X$ の完全正則性より、連続写像 $h: X \to [0, 1]$ で $h(x) = 1$ かつ $h(F) = \{0\}$ を満たすものが存在する。$h$ を $E$ に制限した写像 $h|_E: E \to [0, 1]$ は連続であり、$h|_E(x) = 1$ かつ $h|_E(C) = \{0\}$ を満たす。よって $E$ は完全正則である。<br>
+  したがって $E$ は $\mathrm{Tycho}$ の対象であり、$m: E \to X$ は $\mathrm{Tycho}$ におけるイコライザとなる。<br><br>
+  以上より、$\mathrm{Tycho}$ は積とイコライザを持つため完備であり、その極限は $\mathrm{Top}$ における構成と一致する。(証明終)
+</div>
+
+<h2>第8節：$\mathrm{Tycho}$ における余極限 (Colimit) と Tychonoff化</h2>
+
+<p>余極限について考えるためには、位相空間の Tychonoff化 (Tychonoffification) と呼ばれる構成が必要になる。これは、包含関手 (inclusion functor) $i: \mathrm{Tycho} \to \mathrm{Top}$ が左随伴 (left adjoint) を持つことを意味し、$\mathrm{Tycho}$ は $\mathrm{Top}$ の反射的充満部分圏 (reflective full subcategory) であることを示す。</p>
+
+<div class="theorem">
+  <span class="title">定理 8.1 (Tychonoff化)</span>
+  任意の位相空間 $X$ に対して、Tychonoff 空間 $T(X)$ と連続写像 $\tau_X: X \to T(X)$ の組が存在して、次の普遍性 (universal property) を満たす。<br>
+  任意の Tychonoff 空間 $Y$ と連続写像 $f: X \to Y$ に対して、連続写像 $\bar{f}: T(X) \to Y$ がただ 1 つ存在して $f = \bar{f} \circ \tau_X$ が成り立つ。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  位相空間 $X$ が与えられたとする。$X$ から実数空間 $\mathbb{R}$ へのすべての連続写像の集合を $C(X, \mathbb{R})$ とおく。<br>
+  評価写像 (evaluation map) $\Phi: X \to \mathbb{R}^{C(X, \mathbb{R})}$ を、各 $x \in X$ に対して 
+  $$
+  \Phi(x) = (h(x))_{h \in C(X, \mathbb{R})}
+  $$ 
+  と定義する。$\mathbb{R}$ は Tychonoff 空間であり、定理 7.2 で示した通り Tychonoff 空間の任意の積空間は Tychonoff 空間であるため、積空間 $\mathbb{R}^{C(X, \mathbb{R})}$ は Tychonoff 空間である。<br>
+  対象 $T(X)$ を、$\Phi$ の像 $\Phi(X)$ に部分空間位相を入れた空間と定義する。Tychonoff 空間の部分空間は Tychonoff 空間であるから、$T(X) \in \mathrm{Tycho}$ である。<br>
+  写像 $\tau_X: X \to T(X)$ を、すべての $x \in X$ について $\tau_X(x) = \Phi(x)$ と定義する。各成分への射影 $p_h \circ \Phi = h$ が連続であるため、$\Phi$ は連続であり、したがって $\tau_X$ も連続である。<br><br>
+  この組 $(T(X), \tau_X)$ が普遍性を満たすことを示す。<br>
+  $Y$ を任意の Tychonoff 空間とし、$f: X \to Y$ を連続写像とする。<br>
+  Tychonoff 空間 $Y$ も同様にして評価写像 $\Psi: Y \to \mathbb{R}^{C(Y, \mathbb{R})}$ を用いて埋め込むことができる。$Y$ は完全正則かつ Hausdorff空間 であるため、点と閉集合を分離する十分な連続関数が存在し、$\Psi$ は像 $\Psi(Y)$ への同相写像 (homeomorphism) となる。<br>
+  任意の $g \in C(Y, \mathbb{R})$ に対して、合成 $g \circ f$ は $X$ から $\mathbb{R}$ への連続写像であるから、$C(X, \mathbb{R})$ の元である。<br>
+  そこで、写像 $H: \mathbb{R}^{C(X, \mathbb{R})} \to \mathbb{R}^{C(Y, \mathbb{R})}$ を、座標 $(z_h)_{h \in C(X, \mathbb{R})}$ に対して、その $g$ 成分を $z_{g \circ f}$ とすることで定義する。各成分の写像は単なる射影であるから、$H$ は連続写像である。<br>
+  任意の $x \in X$ について、$H(\Phi(x))_g = \Phi(x)_{g \circ f} = g(f(x)) = \Psi(f(x))_g$ となるため、$H \circ \Phi = \Psi \circ f$ が成り立つ。<br>
+  これを像に制限すると、$H(T(X)) = H(\Phi(X)) = \Psi(f(X)) \subset \Psi(Y)$ である。<br>
+  $\Psi$ は $Y$ から $\Psi(Y)$ への同相写像であるから、その逆写像 $\Psi^{-1}: \Psi(Y) \to Y$ が存在する。<br>
+  写像 $\bar{f}: T(X) \to Y$ を $\bar{f} = \Psi^{-1} \circ H|_{T(X)}$ と定義する。これは連続写像の合成であるから連続である。<br>
+  また、$\bar{f}(\tau_X(x)) = \Psi^{-1}(H(\Phi(x))) = \Psi^{-1}(\Psi(f(x))) = f(x)$ となるため、$\bar{f} \circ \tau_X = f$ を満たす。<br><br>
+  最後に $\bar{f}$ の一意性を示す。<br>
+  $\bar{f}_1, \bar{f}_2: T(X) \to Y$ が $\bar{f}_1 \circ \tau_X = \bar{f}_2 \circ \tau_X = f$ を満たすとする。<br>
+  $\tau_X$ の定義から像は $\tau_X(X) = T(X)$ であり、全射である。したがって、任意の $z \in T(X)$ に対してある $x \in X$ が存在して $z = \tau_X(x)$ となり、$\bar{f}_1(z) = \bar{f}_1(\tau_X(x)) = f(x) = \bar{f}_2(\tau_X(x)) = \bar{f}_2(z)$ を得る。よって $\bar{f}_1 = \bar{f}_2$ である。(証明終)
+</div>
+
+<div class="definition">
+  <span class="title">定義 8.2 (余完備性)</span>
+  圏が <strong>余完備 (cocomplete)</strong> であるとは、任意の小さな図式に対する余極限 (colimit) が存在することである。余極限は極限の双対概念であり、余積 (coproduct, 位相空間の直和) や 余イコライザ (coequalizer, 同値関係による商空間) などを包含する。
+</div>
+
+<div class="theorem">
+  <span class="title">定理 8.3</span>
+  圏 $\mathrm{Tycho}$ は余完備 (cocomplete) であり、任意の図式の余極限が存在する。$\mathrm{Tycho}$ における図式 $D$ の余極限は、位相空間の圏 $\mathrm{Top}$ における余極限 $C$ をとった後、その Tychonoff化 $T(C)$ をとることで得られる。
+</div>
+
+<div class="proof">
+  <span class="title">証明</span>
+  圏 $\mathrm{Tycho}$ からの図式関手 $D: J \to \mathrm{Tycho}$ が与えられたとする。これを $\mathrm{Top}$ の図式とみなす。$\mathrm{Top}$ は余完備であるから、余極限 $C = \varinjlim_{\mathrm{Top}} D$ が存在する。余角錐 (cocone) をなす普遍的な射の族を $u_j: D(j) \to C$ $(j \in J)$ とおく。<br><br>
+  定理 8.1 より、位相空間 $C$ の Tychonoff化 $(T(C), \tau_C)$ が存在する。<br>
+  各 $j \in J$ に対して、射 $v_j: D(j) \to T(C)$ を $v_j = \tau_C \circ u_j$ と定義する。<br>
+  $T(C)$ は Tychonoff 空間であり、$v_j$ は連続である。図式 $J$ の任意の射 $\alpha: j \to k$ に対して $u_k \circ D(\alpha) = u_j$ であるから、$v_k \circ D(\alpha) = \tau_C \circ u_k \circ D(\alpha) = \tau_C \circ u_j = v_j$ が成り立つ。したがって $(T(C), (v_j))$ は $\mathrm{Tycho}$ における余角錐である。<br><br>
+  これが $\mathrm{Tycho}$ において普遍性を持つことを示す。<br>
+  $Y$ を任意の Tychonoff 空間とし、$(f_j: D(j) \to Y)$ を $\mathrm{Tycho}$ における余角錐とする。<br>
+  これらは $\mathrm{Top}$ においても余角錐であるため、$C$ の $\mathrm{Top}$ における余極限の普遍性から、連続写像 $f: C \to Y$ がただ 1 つ存在して、$f \circ u_j = f_j$ を満たす。<br>
+  $Y$ は Tychonoff 空間であるから、定理 8.1 の $T(C)$ の普遍性により、連続写像 $\bar{f}: T(C) \to Y$ がただ 1 つ存在して、$f = \bar{f} \circ \tau_C$ を満たす。<br>
+  このとき、任意の $j \in J$ について、$\bar{f} \circ v_j = \bar{f} \circ \tau_C \circ u_j = f \circ u_j = f_j$ が成り立つ。<br><br>
+  一意性について、$\bar{g}: T(C) \to Y$ がすべての $j \in J$ について $\bar{g} \circ v_j = f_j$ を満たしたとする。<br>
+  このとき $(\bar{g} \circ \tau_C) \circ u_j = f_j$ となる。$C$ の普遍性により条件を満たす $C \to Y$ への写像は $f$ として一意であるから、$\bar{g} \circ \tau_C = f$ でなければならない。さらに $T(C)$ の普遍性により、$f$ を経由する写像は $\bar{f}$ と一意に定まるため、$\bar{g} = \bar{f}$ を得る。<br>
+  以上より、$T(C)$ は図式 $D$ の $\mathrm{Tycho}$ における余極限 (colimit) である。したがって $\mathrm{Tycho}$ は余完備である。(証明終)
+</div>
+
+<div class="example">
+  <span class="title">例 8.4 ($\mathrm{Top}$ と $\mathrm{Tycho}$ の余極限が異なる例)</span>
+  $\mathrm{Tycho}$ における余極限が $\mathrm{Top}$ における余極限と異なる具体例として、同値関係による商空間 (quotient space) すなわち余イコライザ (coequalizer) を考える。<br>
+  実数空間 $\mathbb{R} \in \mathrm{Tycho}$ において、有理数 $\mathbb{Q}$ のすべての点を 1つの点に同一視する同値関係 $\sim$ を考える。$\mathrm{Top}$ における余極限は、商位相を入れた空間 $C = \mathbb{R}/\sim$ である。しかし、$C$ においては、無理数の点と同一視された有理数の点を互いに素な開集合で分離することができないため、$C$ は Hausdorff空間 ではない。したがって $C \notin \mathrm{Tycho}$ である。<br>
+  $\mathrm{Tycho}$ における正しい余極限を得るには、この $C$ に Tychonoff化 を施し $T(C)$ を構築する必要がある。この操作によって、連続写像によって分離できない点はすべて強制的に同一視され、Hausdorff性 および完全正則性が回復する（この極端な例では、$T(C)$ は 1点空間に潰れてしまう）。
+</div>
+
+<div class="references">
+  <span class="title">参考文献</span>
+  <ul>
+    <li>Engelking, R. <em>General Topology</em>. Heldermann Verlag, 1989. (位相空間論の標準的文献であり、Tychonoff空間やTychonoff化についての詳細がある) <a href="https://zbmath.org/?q=an:0684.54001" target="_blank">[zbMATH]</a></li>
+    <li>Mac Lane, S. <em>Categories for the Working Mathematician</em>. Springer, 1998. (極限・余極限や随伴関手に関する圏論的基礎) <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8" target="_blank">[SpringerLink]</a></li>
+    <li>nLab. "Tychonoff space". (圏 $\mathrm{Tycho}$ の性質や単射性・射影性に関するオンラインの統合的リファレンス) <a href="https://ncatlab.org/nlab/show/Tychonoff+space" target="_blank">[nLab]</a></li>
+  </ul>
+</div>
+
+</body>
+</html>

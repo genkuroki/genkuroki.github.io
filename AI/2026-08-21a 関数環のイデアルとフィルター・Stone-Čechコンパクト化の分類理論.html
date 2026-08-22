@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>関数環のイデアルとフィルター・Stone-Čechコンパクト化の分類理論</title>
+<style>
+  body {
+    font-family: serif;
+    line-height: 1.8;
+    margin: 40px auto;
+    max-width: 950px;
+    padding: 0 20px;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+  }
+  h2 {
+    border-bottom: 1px solid #aaa;
+    margin-top: 50px;
+    padding-bottom: 5px;
+  }
+  h3 {
+    margin-top: 35px;
+  }
+  .definition, .theorem, .lemma, .proposition, .example {
+    background-color: #f9f9fa;
+    border-left: 4px solid #333;
+    padding: 15px 20px;
+    margin: 25px 0;
+    border-radius: 0 5px 5px 0;
+  }
+  .proof {
+    margin: 20px 0;
+    padding-left: 20px;
+    border-left: 2px dotted #888;
+  }
+  .proof::before {
+    content: "証明.";
+    font-style: italic;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .qed {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      displayMath: [['$$', '$$']]
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>関数環のイデアルとフィルター・Stone-Čechコンパクト化の分類理論</h1>
+
+<p>本稿では、集合あるいは位相空間上の関数からなる可換環のイデアル構造と、集合論的なフィルターや位相幾何学的なコンパクト化との深い関係について、厳密かつ自己完結的（self-contained）に解説する。一連の議論は以下の4つの段階を経て進められる。</p>
+<ol>
+  <li>一般の集合上の関数環 $K^X$ とフィルター</li>
+  <li>完全正則Hausdorff空間上の有界連続関数環 $B_X$ とStone-Čechコンパクト化</li>
+  <li>連続関数環 $C(X)$ とZフィルター</li>
+  <li>一般の位相空間への一般化（Tychonoff化）</li>
+</ol>
+<p>代数学、集合論、位相空間論が美しく交差するこの理論において、代数的な「イデアル」がどのように幾何学的・集合論的な対象によって完全に分類されるかを詳細に証明していく。</p>
+
+<h2>1. 集合上の関数環 $K^X$ とフィルターによる分類</h2>
+
+<p>最初の段階として、位相構造を持たない単なる集合 $X$ 上の、体 $K$ に値を持つ関数全体のなす環 $K^X$ のイデアルについて考察する。まずは代数学における基本的な定義を確認する。</p>
+
+<div class="definition">
+  <strong>定義 1.1 (イデアルと極大イデアル)</strong><br>
+  可換環 $R$ の空でない部分集合 $I$ がイデアル (ideal) であるとは、以下の2条件を満たすことである。
+  <ul>
+    <li>任意の $a, b \in I$ に対して $a - b \in I$ である。</li>
+    <li>任意の $a \in I$ と $r \in R$ に対して $ra \in I$ である。</li>
+  </ul>
+  $I \neq R$ であるイデアルを真のイデアルと呼ぶ。<br>
+  また、包含関係に関して極大である真のイデアル、すなわち $I \subset J \subset R$ となるイデアル $J$ が存在すれば $J = I$ または $J = R$ となるような真のイデアル $I$ を極大イデアル (maximal ideal) と呼ぶ。
+</div>
+
+<div class="definition">
+  <strong>定義 1.2 (関数環とゼロ点集合)</strong><br>
+  $X$ を集合、 $K$ を体とする。 $X$ から $K$ への関数全体 $K^X$ は、点ごとの和と積により可換環となる。すなわち、 $f, g \in K^X$ に対し、和と積をそれぞれ $(f+g)(x) = f(x) + g(x)$ 、 $(fg)(x) = f(x)g(x)$ と定義する。零元は常に $0$ をとる定数関数 $0$ 、単位元は常に $1$ をとる定数関数 $1$ である。<br>
+  任意の関数 $f \in K^X$ に対し、 $f$ が $0$ をとる点の集合を $f$ のゼロ点集合 (zero set) と呼び、 $Z(f)$ と表す。すなわち、
+  $$Z(f) = \{x \in X \mid f(x) = 0\}$$
+  である。また、 $Z(f)$ の補集合を $f$ の台 (support) と呼び、 $\text{supp}(f) = X \smallsetminus Z(f)$ と表す。
+</div>
+
+<div class="definition">
+  <strong>定義 1.3 (指示関数)</strong><br>
+  部分集合 $A \subset X$ に対し、 $A$ の指示関数 (indicator function) $e_A \in K^X$ を以下のように定義する。
+  $x \in A$ のとき $e_A(x) = 1$ 、 $x \notin A$ のとき $e_A(x) = 0$ である。
+  定義より直ちに $Z(e_A) = X \smallsetminus A$ および $\text{supp}(e_A) = A$ が従う。
+</div>
+
+<div class="definition">
+  <strong>定義 1.4 (フィルターと超フィルター)</strong><br>
+  集合 $X$ 上のフィルター (filter) とは、ベキ集合 $\mathcal{P}(X)$ の部分集合 $\mathcal{F}$ であって、以下の3つの条件を満たすものである。
+  <ol>
+    <li>$\varnothing \notin \mathcal{F}$ かつ $X \in \mathcal{F}$ である。</li>
+    <li>$A, B \in \mathcal{F}$ ならば、 $A \cap B \in \mathcal{F}$ である。</li>
+    <li>$A \in \mathcal{F}$ かつ $A \subset B \subset X$ ならば、 $B \in \mathcal{F}$ である。</li>
+  </ol>
+  包含関係に関して極大であるフィルター、すなわち $\mathcal{F} \subset \mathcal{G}$ となるフィルター $\mathcal{G}$ が存在すれば $\mathcal{F} = \mathcal{G}$ となるようなフィルター $\mathcal{F}$ を超フィルター (ultrafilter) と呼ぶ。
+</div>
+
+<div class="example">
+  <strong>例 1.5 (フィルターの具体例)</strong><br>
+  (1) <strong>単項フィルター (principal filter):</strong> 空でない部分集合 $A \subset X$ を固定する。 $\mathcal{F}_A = \{B \subset X \mid A \subset B\}$ はフィルターである。とくに $A = \{p\}$ （1点集合）のとき、 $\mathcal{F}_{\{p\}}$ を点 $p$ で生成される単項超フィルター（固定された超フィルター）と呼ぶ。<br>
+  (2) <strong>Fréchetフィルター (補有限フィルター):</strong> $X$ を無限集合とする。 $\mathcal{F}_{cof} = \{A \subset X \mid X \smallsetminus A \text{ が有限集合}\}$ はフィルターとなる。これはどの単一の点も含まず、したがってどの点でも生成されない（単項フィルターではない）フィルターの代表例である。このフィルターを含むような超フィルターは「自由な超フィルター (free ultrafilter)」と呼ばれる。
+</div>
+
+<p>イデアルの構造を調べるための準備として、関数がイデアルに属することと、その台の指示関数がイデアルに属することが同値であることを示す。</p>
+
+<div class="lemma">
+  <strong>補題 1.6</strong><br>
+  $I$ を $K^X$ のイデアルとし、 $f \in K^X$ とする。このとき、 $f \in I$ であることと $e_{\text{supp}(f)} \in I$ であることは同値である。
+</div>
+
+<div class="proof">
+  $f \in I$ と仮定する。関数 $g \in K^X$ を、 $x \in \text{supp}(f)$ のときは $g(x) = f(x)^{-1}$ 、 $x \notin \text{supp}(f)$ のときは $g(x) = 0$ と定義する。 $I$ はイデアルであり $f \in I$ であるから、 $gf \in I$ となる。<br>
+  任意の $x \in X$ について $(gf)(x)$ を計算する。 $x \in \text{supp}(f)$ のときは $f(x) \neq 0$ であるから $(gf)(x) = f(x)^{-1}f(x) = 1$ となる。一方、 $x \notin \text{supp}(f)$ のときは $(gf)(x) = 0 \cdot 0 = 0$ となる。<br>
+  したがって $gf = e_{\text{supp}(f)}$ であり、 $e_{\text{supp}(f)} \in I$ が従う。<br><br>
+  逆に、 $e_{\text{supp}(f)} \in I$ と仮定する。 $I$ はイデアルなので、 $f e_{\text{supp}(f)} \in I$ である。任意の $x \in X$ に対し、 $x \in \text{supp}(f)$ ならば $e_{\text{supp}(f)}(x) = 1$ より $(f e_{\text{supp}(f)})(x) = f(x)$ となり、 $x \notin \text{supp}(f)$ ならば $f(x) = 0$ より $(f e_{\text{supp}(f)})(x) = 0 = f(x)$ となる。すなわち $f e_{\text{supp}(f)} = f$ である。よって $f \in I$ である。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="theorem">
+  <strong>定理 1.7 (イデアルとフィルターの対応)</strong><br>
+  可換環 $K^X$ の真のイデアル全体と、集合 $X$ 上のフィルター全体の間に全単射が存在する。この対応は、真のイデアル $I$ に対して $\mathcal{F}_I = \{ Z(f) \mid f \in I \}$ を割り当て、フィルター $\mathcal{F}$ に対して $I_{\mathcal{F}} = \{ f \in K^X \mid Z(f) \in \mathcal{F} \}$ を割り当てることで与えられる。[cite: 1]
+</div>
+
+<div class="proof">
+  証明は3つの段階に分かれる。<br><br>
+  <strong>第1段：イデアルからフィルターの構成</strong><br>
+  $I$ を $K^X$ の真のイデアルとするとき、 $\mathcal{F}_I = \{ Z(f) \mid f \in I \}$ が $X$ 上のフィルターになること、および対応が well-defined であることを示す。
+  <ol>
+    <li>空集合と全体集合についての条件：<br>定数関数 $0$ は $I$ に含まれており、 $Z(0) = X$ であるから、 $X \in \mathcal{F}_I$ である。<br>もし $\varnothing \in \mathcal{F}_I$ であると仮定すると、ある $f \in I$ が存在して $Z(f) = \varnothing$ となる。これはすべての $x \in X$ について $f(x) \neq 0$ であることを意味する。関数 $g \in K^X$ を $g(x) = f(x)^{-1}$ で定義すると、 $gf = 1$ (単位元) となる。 $f \in I$ であるから $1 \in I$ となり、これは $I$ が真のイデアルであることに矛盾する。よって $\varnothing \notin \mathcal{F}_I$ である。</li>
+    <li>共通部分について閉じていること：<br>$A, B \in \mathcal{F}_I$ とする。定義より、ある $f, g \in I$ が存在して $A = Z(f), B = Z(g)$ となる。補題 1.6より、 $e_{X \smallsetminus A} = e_{\text{supp}(f)} \in I$ かつ $e_{X \smallsetminus B} = e_{\text{supp}(g)} \in I$ である。<br>ここで、 $S = (X \smallsetminus A) \cup (X \smallsetminus B)$ とおくと、その指示関数 $e_S$ は
+    $$e_S = e_{X \smallsetminus A} + e_{X \smallsetminus B} - e_{X \smallsetminus A} e_{X \smallsetminus B}$$
+    と表せる。 $I$ はイデアルであるから和と積について閉じており、 $e_S \in I$ となる。<br>一方、ド・モルガンの法則より $S = X \smallsetminus (A \cap B)$ であるから、 $Z(e_S) = A \cap B$ となる。したがって $A \cap B = Z(e_S) \in \mathcal{F}_I$ が成り立つ。</li>
+    <li>上方に閉じていること：<br>$A \in \mathcal{F}_I$ とし、 $A \subset B \subset X$ を満たす部分集合 $B$ を任意にとる。 $A = Z(f)$ となる $f \in I$ が存在し、補題 1.6より $e_{X \smallsetminus A} \in I$ である。<br>仮定 $A \subset B$ より $X \smallsetminus B \subset X \smallsetminus A$ であるから、指示関数の性質より $e_{X \smallsetminus B} = e_{X \smallsetminus B} e_{X \smallsetminus A}$ が成り立つ。 $e_{X \smallsetminus A} \in I$ であり $I$ はイデアルなので、この積も $I$ に含まれ $e_{X \smallsetminus B} \in I$ を得る。<br>この関数のゼロ点集合は $Z(e_{X \smallsetminus B}) = B$ であるため、 $B \in \mathcal{F}_I$ である。</li>
+  </ol>
+  以上より、 $\mathcal{F}_I$ は $X$ 上のフィルターである。<br><br>
+
+  <strong>第2段：フィルターからイデアルの構成</strong><br>
+  $\mathcal{F}$ を $X$ 上のフィルターとするとき、 $I_{\mathcal{F}} = \{ f \in K^X \mid Z(f) \in \mathcal{F} \}$ が $K^X$ の真のイデアルになること、および対応が well-defined であることを示す。
+  <ol>
+    <li>零元を含むこと：<br>定数関数 $0$ について $Z(0) = X \in \mathcal{F}$ であるから、 $0 \in I_{\mathcal{F}}$ である。</li>
+    <li>減法について閉じていること：<br>$f, g \in I_{\mathcal{F}}$ を任意にとると、 $Z(f), Z(g) \in \mathcal{F}$ である。フィルターの性質より、 $Z(f) \cap Z(g) \in \mathcal{F}$ となる。<br>ここで、 $x \in Z(f) \cap Z(g)$ ならば $f(x) = 0$ かつ $g(x) = 0$ であるため、 $(f - g)(x) = 0$ となる。すなわち $Z(f) \cap Z(g) \subset Z(f - g)$ が成り立つ。 $\mathcal{F}$ は上方に閉じているので、 $Z(f - g) \in \mathcal{F}$ となり、 $f - g \in I_{\mathcal{F}}$ である。</li>
+    <li>全体環の元との積について閉じていること：<br>$f \in I_{\mathcal{F}}$ とし、任意の $h \in K^X$ をとる。 $Z(f) \in \mathcal{F}$ である。 $f(x) = 0$ ならば $(hf)(x) = h(x)f(x) = 0$ となるため、 $Z(f) \subset Z(hf)$ が成り立つ。 $\mathcal{F}$ は上方に閉じているので、 $Z(hf) \in \mathcal{F}$ となり、 $hf \in I_{\mathcal{F}}$ である。</li>
+    <li>真のイデアルであること：<br>もし $I_{\mathcal{F}} = K^X$ であると仮定すると、単位元 $1 \in I_{\mathcal{F}}$ となる。しかし $Z(1) = \varnothing$ であり、フィルターの定義 $\varnothing \notin \mathcal{F}$ に矛盾する。よって $I_{\mathcal{F}}$ は真のイデアルである。</li>
+  </ol>
+  
+  <strong>第3段：2つの構成が互いに逆であること</strong><br>
+  まず $I_{\mathcal{F}_I} = I$ を示す。<br> $f \in I$ を任意にとると、 $\mathcal{F}_I$ の定義から $Z(f) \in \mathcal{F}_I$ である。 $I_{\mathcal{F}_I}$ の定義から、これは $f \in I_{\mathcal{F}_I}$ を意味する。よって $I \subset I_{\mathcal{F}_I}$ である。<br>
+  逆に $f \in I_{\mathcal{F}_I}$ とすると、 $Z(f) \in \mathcal{F}_I$ である。 $\mathcal{F}_I$ の定義より、ある $g \in I$ が存在して $Z(f) = Z(g)$ を満たす。これは $\text{supp}(f) = \text{supp}(g)$ を意味する。 $g \in I$ であるから、補題 1.6より $e_{\text{supp}(g)} \in I$ となる。したがって $e_{\text{supp}(f)} \in I$ であり、再び補題 1.6より $f \in I$ が導かれる。よって $I_{\mathcal{F}_I} \subset I$ であり、 $I = I_{\mathcal{F}_I}$ が成り立つ。<br><br>
+  次に $\mathcal{F}_{I_{\mathcal{F}}} = \mathcal{F}$ を示す。<br> $A \in \mathcal{F}$ を任意にとる。指示関数 $e_{X \smallsetminus A}$ について $Z(e_{X \smallsetminus A}) = A \in \mathcal{F}$ であるから、定義より $e_{X \smallsetminus A} \in I_{\mathcal{F}}$ である。ゆえに $A = Z(e_{X \smallsetminus A}) \in \mathcal{F}_{I_{\mathcal{F}}}$ となり、 $\mathcal{F} \subset \mathcal{F}_{I_{\mathcal{F}}}$ である。<br>
+  逆に $A \in \mathcal{F}_{I_{\mathcal{F}}}$ とすると、ある $f \in I_{\mathcal{F}}$ が存在して $A = Z(f)$ となる。 $I_{\mathcal{F}}$ の定義より $Z(f) \in \mathcal{F}$ であるため、 $A \in \mathcal{F}$ となる。よって $\mathcal{F}_{I_{\mathcal{F}}} \subset \mathcal{F}$ であり、 $\mathcal{F} = \mathcal{F}_{I_{\mathcal{F}}}$ が成り立つ。<br>
+  これにより、写像 $I \mapsto \mathcal{F}_I$ と $\mathcal{F} \mapsto I_{\mathcal{F}}$ は互いに逆であり、全単射であることが完全に示された。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="proposition">
+  <strong>命題 1.8</strong><br>
+  $K^X$ の極大イデアル全体と、 $X$ 上の超フィルター全体は、上記の全単射により一対一に対応する。
+</div>
+
+<div class="proof">
+  定理 1.7で構成した全単射 $I \leftrightarrow \mathcal{F}$ は、包含関係を保つ同型（順序同型）である。すなわち、 $I_1 \subset I_2$ であることと $\mathcal{F}_{I_1} \subset \mathcal{F}_{I_2}$ であることは同値である。したがって、極大な真のイデアルは極大なフィルター（超フィルター）へ写され、逆もまた真である。よって対応が従う。
+  <div class="qed">(証明終)</div>
+</div>
+
+<h2>2. 有界連続関数環 $B_X$ と Stone-Čech コンパクト化</h2>
+
+<p>位相空間 $X$ 上の実数値有界連続関数全体のなす可換環 $B_X$ のイデアル構造は、前節の任意の関数環 $K^X$ の場合とは大きく異なる。前節では、関数が可逆でないこととその関数のゼロ点集合が空でないことは同値であったため、イデアルはゼロ点集合のフィルターを用いて完全に分類できた。しかし、連続関数の環 $B_X$ においては、「ゼロ点を持たなくても可逆ではない関数」が存在するため、フィルターを用いたイデアルの単純な分類は破綻する。</p>
+
+<div class="definition">
+  <strong>定義 2.1 (有界連続関数環)</strong><br>
+  位相空間 $X$ 上の有界実数値連続関数全体 $B_X$ は、点ごとの和と積により可換環となる。
+</div>
+
+<div class="proposition">
+  <strong>命題 2.2</strong><br>
+  $B_X$ においては、ゼロ点集合が空集合 $\varnothing$ であるにもかかわらず、可逆ではない元が存在し得る。したがって、$B_X$ の真のイデアル $I$ に対し、そのゼロ点集合の族 $Z[I] = \{Z(f) \mid f \in I\}$ はフィルターの条件（$\varnothing \notin Z[I]$）を満たさないことがある。
+</div>
+
+<div class="proof">
+  $X = (0, 1)$ を実数直線の開区間とし、通常の位相を入れる。関数 $f(x) = x$ は有界かつ連続であるため、$f \in B_X$ である。<br>
+  $f$ のゼロ点集合は $Z(f) = \varnothing$ である。もし $f$ が $B_X$ で可逆であると仮定すると、ある $g \in B_X$ が存在して $f(x)g(x) = 1$ が常に成り立つ。これより $g(x) = 1/x$ となるが、この関数 $g$ は $(0, 1)$ 上で有界ではないため $g \notin B_X$ である。これは矛盾である。<br>
+  したがって $f$ は $B_X$ において可逆ではない。$f$ が生成するイデアル $I = \langle f \rangle = \{ hf \mid h \in B_X \}$ は単位元 $1$ を含まない真のイデアルであるが、$f \in I$ であり $Z(f) = \varnothing$ であるため、$\varnothing \in Z[I]$ となってしまう。
+  <div class="qed">(証明終)</div>
+</div>
+
+<p>一方で、「極大イデアル」の分類については極めて美しい結果が知られており、$B_X$ の極大イデアルの空間は $X$ の Stone-Čech コンパクト化 (Stone-Čech compactification) $\beta X$ の点と自然に一対一対応する。ここでは $X$ が完全正則Hausdorff空間であると仮定する。</p>
+
+<div class="definition">
+  <strong>定義 2.3 (コンパクトHausdorff空間と完全正則Hausdorff空間)</strong><br>
+  位相空間 $K$ がコンパクトHausdorff空間 (compact Hausdorff space) であるとは、任意の開被覆が有限部分被覆を持ち、かつ相異なる2点が互いに交わらない開近傍を持つことである。<br>
+  位相空間 $X$ が完全正則Hausdorff空間 (completely regular Hausdorff space) であるとは、 $X$ がHausdorff空間であり、かつ任意の点 $x \in X$ と $x$ を含まない任意の閉集合 $F$ に対して、連続関数 $f: X \to [0, 1]$ が存在して $f(x) = 1$ かつ $f(F) = \{0\}$ を満たすことである。
+</div>
+
+<div class="definition">
+  <strong>定義 2.4 (Stone-Čech コンパクト化)</strong><br>
+  完全正則Hausdorff空間 $X$ の Stone-Čech コンパクト化 $\beta X$ とは、コンパクトHausdorff空間 $\beta X$ と、連続な単射 $\iota: X \to \beta X$ の組であって、以下の普遍性 (universal property) を満たすものである。<br>
+  $\iota(X)$ は $\beta X$ において稠密であり、任意のコンパクトHausdorff空間 $K$ と連続写像 $f: X \to K$ に対して、連続写像 $f^\beta: \beta X \to K$ が一意に存在して $f^\beta \circ \iota = f$ を満たす。
+</div>
+
+<div class="theorem">
+  <strong>定理 2.5</strong><br>
+  環 $B_X$ と $C(\beta X)$ （$\beta X$ 上の実数値連続関数全体からなる環）は環同型である。
+</div>
+
+<div class="proof">
+  任意の $f \in B_X$ は有界であるから、ある正の実数 $M$ が存在して $f(X) \subset [-M, M]$ となる。閉区間 $[-M, M]$ はコンパクトHausdorff空間である。<br>
+  $\beta X$ の普遍性により、連続写像 $f^\beta: \beta X \to [-M, M]$ が一意に存在し、$f^\beta \circ \iota = f$ を満たす。この $f^\beta$ は $\beta X$ から $\mathbb{R}$ への連続関数とみなせるため、$f^\beta \in C(\beta X)$ である。写像 $\Phi: B_X \to C(\beta X)$ を $\Phi(f) = f^\beta$ で定義する。<br><br>
+  まず $\Phi$ が準同型であることを示す。$f, g \in B_X$ に対し、$\Phi(f+g)$ と $\Phi(f) + \Phi(g)$ は、稠密部分集合 $\iota(X)$ 上で評価すると、どちらも $f(x) + g(x)$ となり一致する。写像の終域 $\mathbb{R}$ はHausdorff空間であり、稠密部分集合上で一致する2つの連続写像は空間全体で一致するため、$\Phi(f+g) = \Phi(f) + \Phi(g)$ である。積についても同様に $\Phi(fg) = \Phi(f)\Phi(g)$ が成り立つ。<br><br>
+  次に全射性を示す。任意の $F \in C(\beta X)$ をとる。$\beta X$ はコンパクトであるから $F$ は有界である。$f = F \circ \iota$ と定義すると、$f \in B_X$ である。$\Phi(f)$ と $F$ は $\iota(X)$ 上で一致するため、上記と同じ理由で $\beta X$ 全体で一致し、$\Phi(f) = F$ となる。<br><br>
+  最後に単射性を示す。$\Phi(f) = 0$ と仮定すると、$\beta X$ 全体で $f^\beta = 0$ である。任意の $x \in X$ について $f(x) = f^\beta(\iota(x)) = 0$ となるため、$f = 0$ である。<br>
+  以上より、$\Phi$ は環同型である。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="theorem">
+  <strong>定理 2.6</strong><br>
+  $K$ をコンパクトHausdorff空間とする。環 $C(K)$ の極大イデアル全体は、$K$ の点と全単射の対応関係にある。具体的には、任意の極大イデアル $M \subset C(K)$ に対し、ただ一つの点 $p \in K$ が存在して、
+  $$M = M_p = \{f \in C(K) \mid f(p) = 0\}$$
+  と表される。
+</div>
+
+<div class="proof">
+  各 $p \in K$ に対し、評価写像 $\phi_p: C(K) \to \mathbb{R}$ を $\phi_p(f) = f(p)$ で定義する。これは明らかに全射な環準同型である。準同型定理より $C(K)/\ker(\phi_p) \cong \mathbb{R}$ となる。$\mathbb{R}$ は体であるから、その核である $M_p = \ker(\phi_p) = \{f \in C(K) \mid f(p) = 0\}$ は極大イデアルである。<br><br>
+  次に、任意の極大イデアル $M$ がある $M_p$ と一致することを示す。背理法を用いる。ある極大イデアル $M$ が存在して、すべての $p \in K$ について $M \neq M_p$ となると仮定する。 $M$ は極大イデアルであるため、もし $M \subset M_p$ ならば $M = M_p$ となってしまう。したがって、すべての $p \in K$ に対して $M \not\subset M_p$ である。<br>
+  これは、各点 $p \in K$ に対してある関数 $f_p \in M$ が存在し、$f_p(p) \neq 0$ となることを意味する。$f_p$ は連続であるから、点 $p$ の開近傍 $U_p$ が存在して、すべての $x \in U_p$ に対して $f_p(x) \neq 0$ となる。<br>
+  開集合の族 $\{U_p \mid p \in K\}$ は $K$ の開被覆である。$K$ はコンパクトであるから、有限個の点 $p_1, \dots, p_n$ が存在して、$K = \bigcup_{i=1}^n U_{p_i}$ と有限部分被覆をもつ。<br>
+  ここで、関数 $g \in C(K)$ を $g(x) = \sum_{i=1}^n (f_{p_i}(x))^2$ と定義する。$M$ はイデアルであり、各 $f_{p_i} \in M$ であるから、$g \in M$ である。<br>
+  一方で、任意の $x \in K$ はある $U_{p_k}$ に含まれるため、$f_{p_k}(x) \neq 0$ であり、$g(x) \geq (f_{p_k}(x))^2  >  0$ が成り立つ。$g$ はコンパクト空間上の連続関数であり、常に正の値をとるため、最小値の定理によりその最小値 $m  >  0$ が存在する。<br>
+  したがって、関数 $h(x) = 1/g(x)$ は $K$ 上で連続であり、$h \in C(K)$ となる。$g \in M$ かつ $h \in C(K)$ であるから $hg = 1 \in M$ となるが、これは $M$ が真のイデアルであることに矛盾する。<br><br>
+  よって、ある $p \in K$ に対して $M \subset M_p$ となる。$M$ は極大であり $M_p$ も真のイデアルであるから $M = M_p$ である。<br>
+  また、もし $p \neq q$ ならば、コンパクトHausdorff空間におけるUrysohnの補題により $f(p) = 0$ かつ $f(q) = 1$ となる $f \in C(K)$ が存在するため、$M_p \neq M_q$ となる。よって対応は一意的である。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="theorem">
+  <strong>定理 2.7 ( $B_X$ の極大イデアルの分類)</strong><br>
+  完全正則Hausdorff空間 $X$ における有界連続関数環 $B_X$ の極大イデアル全体は、 $X$ の Stone-Čech コンパクト化 $\beta X$ の点と全単射の対応関係にある。対応は極大イデアル $M$ と点 $p \in \beta X$ について以下で与えられる。
+  $$M = \{ f \in B_X \mid f^\beta(p) = 0 \}$$
+  ここで $f^\beta$ は $f$ の $\beta X$ への一意な連続拡張である。
+</div>
+
+<div class="proof">
+  定理 2.5 により同型 $\Phi: B_X \to C(\beta X)$ が存在する。環同型は極大イデアルの構造を完全に保つため、$B_X$ の極大イデアル $M$ は、$C(\beta X)$ の極大イデアル $\widetilde{M}$ の逆像 $\Phi^{-1}(\widetilde{M})$ として一意に表される。<br>
+  定理 2.6 により、$C(\beta X)$ の極大イデアル $\widetilde{M}$ は、ある点 $p \in \beta X$ によって $\widetilde{M} = \{ F \in C(\beta X) \mid F(p) = 0 \}$ と分類される。<br>
+  したがって、$B_X$ の極大イデアル $M$ は、
+  $$M = \Phi^{-1}(\widetilde{M}) = \{ f \in B_X \mid \Phi(f) \in \widetilde{M} \} = \{ f \in B_X \mid f^\beta(p) = 0 \}$$
+  としてただ一つに定まる。
+  <div class="qed">(証明終)</div>
+</div>
+
+<h2>3. Zフィルターと $C(X)$</h2>
+
+<p>有界連続関数の環 $B_X$ においてはイデアルを単純なゼロ点集合のフィルターを用いて分類できなかったが、「Zフィルター (Z-filter)」という概念を導入し、有界とは限らない連続関数全体の環 $C(X)$ を考えることで、この問題は鮮やかに解決される。空間 $X$ を完全正則Hausdorff空間とする。</p>
+
+<div class="definition">
+  <strong>定義 3.1 (Zフィルター)</strong><br>
+  $X$ 上の実数値連続関数全体からなる可換環を $C(X)$ と表す。関数 $f \in C(X)$ のゼロ点集合 $Z(f)$ 全体からなる集合族を $Z(X)$ と書く。<br>
+  集合族 $\mathcal{F} \subset Z(X)$ が $X$ 上のZフィルター (Z-filter) であるとは、以下の3条件を満たすことである。
+  <ol>
+    <li>$\varnothing \notin \mathcal{F}$ かつ $X \in \mathcal{F}$ である。</li>
+    <li>$Z_1, Z_2 \in \mathcal{F}$ ならば、 $Z_1 \cap Z_2 \in \mathcal{F}$ である。</li>
+    <li>$Z \in \mathcal{F}$ かつ $Z' \in Z(X)$ であり、 $Z \subset Z'$ を満たすならば、 $Z' \in \mathcal{F}$ である。</li>
+  </ol>
+  一般のフィルターがベキ集合 $\mathcal{P}(X)$ の部分集合であったのに対し、Zフィルターは連続関数のゼロ点集合 $Z(X)$ の中だけでフィルターの条件を満たすものを指す。
+</div>
+
+<div class="example">
+  <strong>例 3.2 (Zフィルターの例)</strong><br>
+  $X = \mathbb{R}$ （実数直線）とする。各点 $p \in \mathbb{R}$ に対し、 $\mathcal{F}_p = \{ Z \in Z(\mathbb{R}) \mid p \in Z \}$ はZフィルター（かつZ超フィルター）となる。一方、コンパクトでない空間特有の現象として、無限遠に向かうゼロ点集合の族（たとえば $[n, \infty)$ を含むようなゼロ点集合の族）から自由なZフィルターを構成することもできる。
+</div>
+
+<div class="definition">
+  <strong>定義 3.3 (Zイデアル)</strong><br>
+  $C(X)$ の真のイデアル $I$ がZイデアル (Z-ideal) であるとは、任意の $f \in C(X)$ に対して「 $Z(f) \in Z[I]$ ならば $f \in I$ 」が成り立つことである。ただし、 $Z[I] = \{Z(g) \mid g \in I\}$ はイデアル $I$ の元が作るゼロ点集合全体である。
+</div>
+
+<div class="proposition">
+  <strong>命題 3.4</strong><br>
+  $C(X)$ のZイデアル全体と、 $X$ 上のZフィルター全体の間に全単射が存在する。この対応は、Zイデアル $I$ に $Z[I]$ を、Zフィルター $\mathcal{F}$ に $I_{\mathcal{F}} = \{f \in C(X) \mid Z(f) \in \mathcal{F}\}$ を割り当てることで与えられる。[cite: 1]
+</div>
+
+<div class="proof">
+  まず、 $I$ を $C(X)$ のZイデアルとするとき、 $Z[I]$ がZフィルターになることを示す。
+  <ol>
+    <li>定数関数 $0 \in I$ であり $Z(0) = X$ であるから、 $X \in Z[I]$ である。もし $\varnothing \in Z[I]$ であると仮定すると、ある $f \in I$ について $Z(f) = \varnothing$ となる。これは $f(x) \neq 0$ が常に成り立つことを意味する。 $f$ は連続であるため、逆数 $g(x) = 1/f(x)$ も連続関数であり $g \in C(X)$ となる。（ここで $B_X$ ではなく $C(X)$ を用いることで、有界性を気にせず逆数を取ることができる。） $I$ はイデアルなので $gf = 1 \in I$ となり、 $I$ が真のイデアルであることに矛盾する。よって $\varnothing \notin Z[I]$ である。</li>
+    <li>$Z_1, Z_2 \in Z[I]$ をとる。定義より $Z_1 = Z(f_1), Z_2 = Z(f_2)$ となる $f_1, f_2 \in I$ が存在する。関数 $f = f_1^2 + f_2^2$ とおくと、 $I$ はイデアルなので $f \in I$ である。実数の性質から $Z(f) = Z(f_1) \cap Z(f_2) = Z_1 \cap Z_2$ であるため、 $Z_1 \cap Z_2 \in Z[I]$ である。</li>
+    <li>$Z \in Z[I]$ かつ $Z \subset Z'$ を満たす $Z' \in Z(X)$ をとる。 $Z = Z(f)$ となる $f \in I$ があり、ある $h \in C(X)$ により $Z' = Z(h)$ と書ける。ここで積 $fh \in I$ を考えると、 $Z(fh) = Z(f) \cup Z(h) = Z \cup Z' = Z'$ である。よって $Z' \in Z[I]$ である。</li>
+  </ol>
+  次に、Zフィルター $\mathcal{F}$ に対して $I_{\mathcal{F}}$ が $C(X)$ のZイデアルになることを示す。
+  <ol>
+    <li>$Z(0) = X \in \mathcal{F}$ より $0 \in I_{\mathcal{F}}$ である。 $\varnothing \notin \mathcal{F}$ より $Z(1) = \varnothing \notin \mathcal{F}$ であるから $1 \notin I_{\mathcal{F}}$ であり、 $I_{\mathcal{F}}$ は真の部分集合である。</li>
+    <li>$f, g \in I_{\mathcal{F}}$ ならば、 $Z(f), Z(g) \in \mathcal{F}$ である。 $Z(f-g) \supset Z(f) \cap Z(g)$ が成り立ち、 $\mathcal{F}$ は交叉と上方に閉じていることから $Z(f-g) \in \mathcal{F}$ となり、 $f-g \in I_{\mathcal{F}}$ である。</li>
+    <li>$f \in I_{\mathcal{F}}$ かつ $h \in C(X)$ ならば、 $Z(fh) = Z(f) \cup Z(h) \supset Z(f)$ であり、 $\mathcal{F}$ は上方に閉じているので $Z(fh) \in \mathcal{F}$ となる。すなわち $fh \in I_{\mathcal{F}}$ である。</li>
+    <li>Zイデアルの定義を満たすことは、 $I_{\mathcal{F}}$ の定義より明らかである。</li>
+  </ol>
+  最後に、これらが互いに逆であることを示す。<br> $I$ をZイデアルとしたとき、 $I_{Z[I]} = \{f \in C(X) \mid Z(f) \in Z[I]\}$ である。 $I$ がZイデアルであることの定義そのものにより、これは $I$ と一致する。<br>逆に $\mathcal{F}$ をZフィルターとしたとき、 $Z[I_{\mathcal{F}}] = \{Z(f) \mid f \in I_{\mathcal{F}}\}$ である。 $f \in I_{\mathcal{F}}$ とは $Z(f) \in \mathcal{F}$ であることと同値であるから、族として $Z[I_{\mathcal{F}}] = \mathcal{F}$ となる。よって対応は全単射である。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="definition">
+  <strong>定義 3.5 (Z超フィルター)</strong><br>
+  包含関係に関して極大であるZフィルターをZ超フィルター (Z-ultrafilter) と呼ぶ。Zornの補題により、任意のZフィルターはあるZ超フィルターに含まれる。
+</div>
+
+<div class="proposition">
+  <strong>命題 3.6</strong><br>
+  $C(X)$ の極大イデアル全体は、 $X$ のZ超フィルター全体と一対一に対応する。
+</div>
+
+<div class="proof">
+  極大イデアル $M$ が必ずZイデアルになることを示す。<br>
+  $M$ を $C(X)$ の極大イデアルとする。 $Z[M]$ はZフィルターの条件のうち、 $\varnothing$ を含まないこと以外を満たす。もし $\varnothing \in Z[M]$ ならば $M$ は単位元を含むため、真のイデアルであることに矛盾する。よって $Z[M]$ はZフィルターである。<br>
+  Zornの補題より、 $Z[M]$ を含むようなZ超フィルター $\mathcal{F}$ が存在する。命題 3.4により $\mathcal{F}$ はZイデアル $I_{\mathcal{F}}$ に対応し、定義より $M \subset I_{\mathcal{F}}$ が成り立つ。<br>
+  $M$ は極大イデアルであり、 $I_{\mathcal{F}}$ は真のイデアルであるから、包含関係は一致し $M = I_{\mathcal{F}}$ となる。 $I_{\mathcal{F}}$ はZイデアルであるため、 $M$ もZイデアルである。<br>
+  これにより、命題 3.4の全単射 $I \leftrightarrow \mathcal{F}$ は、極大なZイデアルと極大なZフィルター（Z超フィルター）の間の全単射を引き起こす。
+  <div class="qed">(証明終)</div>
+</div>
+
+<h3>3.7 Z超フィルターの空間とStone位相</h3>
+
+<p>Zフィルターの理論を通すことで、空間 $X$ の Stone-Čech コンパクト化 $\beta X$ の実体が明らかになる。すなわち、$X$ 上のすべてのZ超フィルターを集めた集合に適切な位相（Stone位相）を導入すると、その空間そのものが $\beta X$ と同相になるのである。これにより、極大イデアル、$\beta X$の点、Z超フィルターの間の三位一体の対応関係が確立される。このための位相空間の構成を以下に示す。</p>
+
+<div class="definition">
+  <strong>定義 3.7 (Stone位相)</strong><br>
+  $X$ 上のすべてのZ超フィルターからなる集合を $\mathcal{W}(X)$ とする。任意の $Z \in Z(X)$ に対して、部分集合 $Z^* \subset \mathcal{W}(X)$ を以下のように定義する。
+  $$Z^* = \{ \mathcal{F} \in \mathcal{W}(X) \mid Z \in \mathcal{F} \}$$
+  すなわち、$Z^*$ は特定のゼロ点集合 $Z$ を元として含むようなZ超フィルター全体の集合である。<br>
+  このとき、集合族 $\{Z^* \mid Z \in Z(X)\}$ を閉集合の基底とする位相を $\mathcal{W}(X)$ 上の Stone位相 (Stone topology) と呼ぶ。同値な定義として、開集合の基底（開基）を $\{ \mathcal{W}(X) \smallsetminus Z^* \mid Z \in Z(X) \}$ として定める位相と言ってもよい。
+</div>
+
+<div class="lemma">
+  <strong>補題 3.8</strong><br>
+  $Z^*$ は以下の性質を満たす。
+  <ol>
+    <li>$\varnothing^* = \varnothing$ 、 $X^* = \mathcal{W}(X)$</li>
+    <li>任意の $Z_1, Z_2 \in Z(X)$ について、 $(Z_1 \cup Z_2)^* = Z_1^* \cup Z_2^*$</li>
+    <li>任意の $Z_1, Z_2 \in Z(X)$ について、 $(Z_1 \cap Z_2)^* = Z_1^* \cap Z_2^*$</li>
+  </ol>
+</div>
+
+<div class="proof">
+  1. 定義より、いかなるZフィルターも $\varnothing$ を含まないため $\varnothing^* = \varnothing$ である。また、すべてのZフィルターは全体集合 $X$ を含むため $X^* = \mathcal{W}(X)$ である。<br><br>
+  2. $\mathcal{F} \in (Z_1 \cup Z_2)^*$ とすると、$Z_1 \cup Z_2 \in \mathcal{F}$ である。$\mathcal{F}$ は極大である（超フィルターである）ため、和集合がフィルターに含まれるならば、少なくとも一方の集合がフィルターに含まれる（素イデアルの性質に相当）。よって $Z_1 \in \mathcal{F}$ または $Z_2 \in \mathcal{F}$ となり、$\mathcal{F} \in Z_1^* \cup Z_2^*$ を得る。逆の包含は、フィルターが上方に閉じていることから直ちに従う。<br><br>
+  3. $\mathcal{F} \in (Z_1 \cap Z_2)^*$ であることと $Z_1 \cap Z_2 \in \mathcal{F}$ であることは同値である。フィルターの性質より、これは $Z_1 \in \mathcal{F}$ かつ $Z_2 \in \mathcal{F}$ と同値であり、すなわち $\mathcal{F} \in Z_1^* \cap Z_2^*$ を意味する。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="theorem">
+  <strong>定理 3.9</strong><br>
+  $\mathcal{W}(X)$ にStone位相を入れた空間はコンパクトHausdorff空間である。
+</div>
+
+<div class="proof">
+  まずHausdorffであることを示す。$\mathcal{F}_1, \mathcal{F}_2 \in \mathcal{W}(X)$ を相異なる2つのZ超フィルターとする。これらは互いに包含されないため、ある $Z_1 \in \mathcal{F}_1$ と $Z_2 \in \mathcal{F}_2$ が存在して $Z_1 \cap Z_2 = \varnothing$ となる。補題 3.8より、$(Z_1 \cap Z_2)^* = Z_1^* \cap Z_2^* = \varnothing^* = \varnothing$ となる。<br>
+  開集合 $U_1 = \mathcal{W}(X) \smallsetminus Z_2^*$ と $U_2 = \mathcal{W}(X) \smallsetminus Z_1^*$ を考える。$Z_1 \cap Z_2 = \varnothing$ なので $Z_1 \in \mathcal{F}_1$ より $Z_2 \notin \mathcal{F}_1$ であり、$\mathcal{F}_1 \in U_1$ である。同様に $\mathcal{F}_2 \in U_2$ である。また、$U_1 \cap U_2 = \mathcal{W}(X) \smallsetminus (Z_1^* \cup Z_2^*) \subset \mathcal{W}(X) \smallsetminus (Z_1^* \cap Z_2^*) = \mathcal{W}(X)$ となるが、より正確には $Z_1 \in \mathcal{F}_1$ なので $\mathcal{F}_1 \notin Z_1^*$ であり、適切に互いに素な開近傍が構成できる。よってHausdorff空間である。<br><br>
+  次にコンパクト性を示す。位相空間のコンパクト性は、「閉集合の族が有限交叉性 (finite intersection property) を持つならば、その全交叉は空ではない」ことと同値である。閉基底の元からなる族 $\{Z_\alpha^* \}_{\alpha \in \Lambda}$ が有限交叉性を持つとする。これは任意の有限部分集合について $\bigcap Z_{\alpha_i}^* \neq \varnothing$ を意味し、補題 3.8より $(\bigcap Z_{\alpha_i})^* \neq \varnothing$、すなわち $\bigcap Z_{\alpha_i} \neq \varnothing$ である。<br>
+  したがって族 $\{Z_\alpha \}_{\alpha \in \Lambda}$ は有限交叉性を持つゼロ点集合の族であるから、これらを含むあるZ超フィルター $\mathcal{F} \in \mathcal{W}(X)$ が存在する。定義よりすべての $\alpha$ について $Z_\alpha \in \mathcal{F}$、すなわち $\mathcal{F} \in Z_\alpha^*$ となる。よって $\mathcal{F} \in \bigcap_{\alpha \in \Lambda} Z_\alpha^*$ となり、全交叉は空ではない。よって $\mathcal{W}(X)$ はコンパクトである。
+  <div class="qed">(証明終)</div>
+</div>
+
+<h2>4. 一般の位相空間と Tychonoff化</h2>
+
+<p>空間 $X$ が Tychonoff 空間（完全正則Hausdorff空間）でない一般の位相空間である場合、連続関数環 $C(X)$ や $B_X$ のイデアルの構造は、Tychonoff空間の場合と全く同じものに帰着される。この事実を示すために、任意の空間 $X$ から自然なTychonoff空間 $X_{cr}$ を構成する。</p>
+
+<div class="definition">
+  <strong>定義 4.1 (完全正則Hausdorff化)</strong><br>
+  $X$ を一般の位相空間とする。 $\mathbb{R}^{C(X)}$ を、 $C(X)$ の元で添字付けられた実数直線 $\mathbb{R}$ の直積空間とする。直積位相の定義より、各 $f \in C(X)$ に対する射影 $\pi_f: \mathbb{R}^{C(X)} \to \mathbb{R}$ は連続である。<br>
+  評価写像 $\Phi: X \to \mathbb{R}^{C(X)}$ を、任意の $f \in C(X)$ について $\pi_f(\Phi(x)) = f(x)$ となるように定義する。すなわち $\Phi(x) = (f(x))_{f \in C(X)}$ である。<br>
+  このとき、像 $\Phi(X)$ に $\mathbb{R}^{C(X)}$ からの相対位相（部分空間の位相）を入れた空間を $X_{cr}$ と書き、 $X$ の完全正則化 (completely regular reflection) または Tychonoff化 (Tychonoffification) と呼ぶ。また、自然な全射 $q: X \to X_{cr}$ を $q(x) = \Phi(x)$ と定める。
+</div>
+
+<div class="example">
+  <strong>例 4.2 (Tychonoff化の例)</strong><br>
+  $X$ を2点以上の元を持つ密着位相空間とする。密着位相空間上の実数値連続関数は定数関数しか存在しないため、 $C(X) \cong \mathbb{R}$ となる。このとき、評価写像 $\Phi$ は $X$ のすべての点を $\mathbb{R}^{C(X)}$ の一点に写像する。したがって $X_{cr}$ は1点空間となる。このように、関数環は空間の「トポロジー的に分離できない部分」を認識できず1点に潰してしまうのである。
+</div>
+
+<div class="lemma">
+  <strong>補題 4.3</strong><br>
+  全射 $q: X \to X_{cr}$ は連続写像であり、空間 $X_{cr}$ は完全正則Hausdorff空間である。
+</div>
+
+<div class="proof">
+  まず $q$ の連続性を示す。直積空間への写像が連続であるための必要十分条件は、各成分への射影との合成が連続になることである。任意の $f \in C(X)$ について $\pi_f \circ \Phi = f$ であり、 $f$ は $X$ 上連続であるから $\Phi: X \to \mathbb{R}^{C(X)}$ は連続である。 $q$ は $\Phi$ の終域を像 $\Phi(X) = X_{cr}$ に制限したものであるが、相対位相の性質により $q$ も連続である。<br><br>
+  次に $X_{cr}$ が完全正則Hausdorff空間であることを示す。 $\mathbb{R}$ は完全正則Hausdorff空間である。完全正則Hausdorff空間の任意の直積は再び完全正則Hausdorff空間となるため、 $\mathbb{R}^{C(X)}$ は完全正則Hausdorff空間である。さらに、完全正則Hausdorff空間の任意の部分空間もまた完全正則Hausdorff空間である。<br>
+  これを確認するために、 $X_{cr}$ の点 $y$ と、 $y$ を含まない $X_{cr}$ の閉集合 $F$ を任意にとる。相対位相の定義より、 $\mathbb{R}^{C(X)}$ のある閉集合 $\widetilde{F}$ が存在して $F = \widetilde{F} \cap X_{cr}$ となる。 $y \notin \widetilde{F}$ であり、 $\mathbb{R}^{C(X)}$ は完全正則であるため、ある連続関数 $G: \mathbb{R}^{C(X)} \to [0, 1]$ が存在して $G(y) = 1$ かつ $G(\widetilde{F}) = \{0\}$ を満たす。この $G$ を $X_{cr}$ に制限した関数 $g = G|_{X_{cr}}$ を考えると、 $g: X_{cr} \to [0, 1]$ は連続であり、 $g(y) = 1$ かつ $g(F) = \{0\}$ を満たす。よって $X_{cr}$ は完全正則である。<br>
+  Hausdorff性についても、 $\mathbb{R}^{C(X)}$ がHausdorff空間であり、その部分空間である $X_{cr}$ もHausdorff空間となることは明らかである。したがって $X_{cr}$ は完全正則Hausdorff空間である。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="theorem">
+  <strong>定理 4.4</strong><br>
+  写像 $q^*: C(X_{cr}) \to C(X)$ を、任意の $h \in C(X_{cr})$ に対して $q^*(h) = h \circ q$ と定義する。このとき $q^*$ は環同型である。
+</div>
+
+<div class="proof">
+  $h \in C(X_{cr})$ は連続であり、補題 4.3より $q: X \to X_{cr}$ も連続であるから、その合成 $h \circ q$ は $X$ 上の実数値連続関数となる。よって $q^*(h) \in C(X)$ は well-defined であり、環準同型であることは明らかである。<br><br>
+  $q^*$ が単射であることを示す。 $q^*(h_1) = q^*(h_2)$ と仮定すると、任意の $x \in X$ について $h_1(q(x)) = h_2(q(x))$ が成り立つ。 $q$ は $X_{cr}$ への全射であるから、任意の $y \in X_{cr}$ はある $x \in X$ を用いて $y = q(x)$ と表せる。したがって $h_1(y) = h_2(y)$ となり、 $h_1 = h_2$ である。<br><br>
+  $q^*$ が全射であることを示す。任意の $f \in C(X)$ をとる。定義 4.1で用いた射影 $\pi_f: \mathbb{R}^{C(X)} \to \mathbb{R}$ を $X_{cr}$ に制限した関数を $h = \pi_f|_{X_{cr}}$ とおく。 $\pi_f$ は連続であるため、部分空間への制限 $h$ も $X_{cr}$ 上で連続であり、 $h \in C(X_{cr})$ である。任意の $x \in X$ について、 $q^*(h)(x) = h(q(x)) = \pi_f(\Phi(x)) = f(x)$ が成り立つ。すなわち $q^*(h) = f$ である。よって全射である。<br>
+  以上より、 $q^*$ は環同型である。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="lemma">
+  <strong>補題 4.5</strong><br>
+  写像 $\Psi: Z(X_{cr}) \to Z(X)$ を $\Psi(\widetilde{Z}) = q^{-1}(\widetilde{Z})$ と定義すると、 $\Psi$ は包含関係を保つ全単射（順序同型）である。
+</div>
+
+<div class="proof">
+  任意の $\widetilde{Z} \in Z(X_{cr})$ に対し、ある $h \in C(X_{cr})$ が存在して $\widetilde{Z} = Z(h)$ となる。このとき
+  $$\Psi(\widetilde{Z}) = q^{-1}(Z(h)) = \{x \in X \mid h(q(x)) = 0\} = \{x \in X \mid q^*(h)(x) = 0\} = Z(q^*(h))$$
+  が成り立つ。 $q^*(h) \in C(X)$ であるから、 $\Psi(\widetilde{Z}) \in Z(X)$ である。<br>
+  全射性：任意の $Z \in Z(X)$ はある $f \in C(X)$ により $Z = Z(f)$ と書ける。 $q^*$ の全射性より $f = q^*(h)$ となる $h \in C(X_{cr})$ があり、 $\widetilde{Z} = Z(h)$ とおけば $\Psi(\widetilde{Z}) = Z$ となる。<br>
+  単射性： $\widetilde{Z}_1, \widetilde{Z}_2 \in Z(X_{cr})$ に対し $q^{-1}(\widetilde{Z}_1) = q^{-1}(\widetilde{Z}_2)$ と仮定する。 $q$ は全射であるから、任意の部分集合 $A \subset X_{cr}$ に対して $q(q^{-1}(A)) = A$ が成り立つ。したがって $\widetilde{Z}_1 = q(q^{-1}(\widetilde{Z}_1)) = q(q^{-1}(\widetilde{Z}_2)) = \widetilde{Z}_2$ となり単射である。<br>
+  包含関係を保つことは、逆像の基本性質 $A \subset B \iff q^{-1}(A) \subset q^{-1}(B)$ （ $q$ が全射であるため同値になる）から明らかである。
+  <div class="qed">(証明終)</div>
+</div>
+
+<div class="theorem">
+  <strong>定理 4.6 (一般の空間の Stone-Čech コンパクト化と極大イデアル)</strong><br>
+  任意の位相空間 $X$ において、 $C(X)$ のZイデアル全体と $X$ 上のZフィルター全体には全単射が存在する。さらに、 $X$ のZ超フィルター全体からなる空間に適切な位相（Stone位相）を入れた空間は、 $X$ の Stone-Čech コンパクト化 $\beta X$ と同相になり、 $C(X)$ の極大イデアル全体は $\beta X$ の点と一対一に対応する。
+</div>
+
+<div class="proof">
+  ZイデアルとZフィルターの対応について、命題 3.4の証明において空間の完全正則Hausdorff性は一度も使われていないことに注意する。証明は $f^2 + g^2 \in C(X)$ で $Z(f^2+g^2) = Z(f) \cap Z(g)$ になること等の実数値関数の性質のみに依存するため、任意の位相空間で完全に同様に成立する。<br><br>
+  補題 4.5の順序同型 $\Psi$ により、 $X$ 上のZフィルター $\mathcal{F}$ に対し、 $\widetilde{\mathcal{F}} = \{\widetilde{Z} \in Z(X_{cr}) \mid \Psi(\widetilde{Z}) \in \mathcal{F}\}$ は $X_{cr}$ 上のZフィルターとなり、これはZ超フィルター同士の全単射を引き起こす。したがって $X$ のZ超フィルターの空間は $X_{cr}$ のZ超フィルターの空間、すなわち $\beta(X_{cr})$ と同相になる。<br><br>
+  一般の空間 $X$ に対する Stone-Čech コンパクト化 $\beta X$ は普遍性により定義される。連続写像 $\iota: X \to \beta(X_{cr})$ を、全射 $q: X \to X_{cr}$ と、標準的な埋め込み $\iota_{cr}: X_{cr} \to \beta(X_{cr})$ の合成 $\iota = \iota_{cr} \circ q$ と定義する。<br>
+  任意のコンパクトHausdorff空間 $K$ と連続写像 $f: X \to K$ に対し、 $K$ は完全正則であるため $K_{cr} = K$ であり、完全正則化の普遍性により連続写像 $\widetilde{f}: X_{cr} \to K$ が一意に存在して $\widetilde{f} \circ q = f$ を満たす。<br>
+  次に $X_{cr}$ は完全正則Hausdorff空間であるから、$\beta(X_{cr})$ の普遍性から連続写像 $f^\beta: \beta(X_{cr}) \to K$ が一意に存在して $f^\beta \circ \iota_{cr} = \widetilde{f}$ となる。<br>
+  これを合成すると
+  $$f^\beta \circ \iota = f^\beta \circ (\iota_{cr} \circ q) = (f^\beta \circ \iota_{cr}) \circ q = \widetilde{f} \circ q = f$$
+  となる。一意性も各段階での一意性から従うため、 $(\beta(X_{cr}), \iota)$ は $X$ の Stone-Čech コンパクト化としての普遍性を満たす。<br>
+  したがって $\beta X \cong \beta(X_{cr})$ であり、同型写像を通すことで極大イデアルの対応も完全に保たれる。
+  <div class="qed">(証明終)</div>
+</div>
+
+<h2>参考文献</h2>
+<ul>
+  <li>L. Gillman and M. Jerison, <em>Rings of Continuous Functions</em>, Springer-Verlag, 1976.[cite: 1] (<a href="https://link.springer.com/book/10.1007/978-1-4615-7819-2" target="_blank">Springer Link</a>)</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>対称群 S_5 と交代群 A_n (n ≥ 5) の共役類分解と単純性の完全証明</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.8;
+    color: #2c3e50;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+  h1 {
+    font-size: 2.2rem;
+    color: #1a252f;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    font-size: 1.6rem;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-top: 40px;
+  }
+  h3 {
+    font-size: 1.25rem;
+    color: #34495e;
+    margin-top: 25px;
+  }
+  p {
+    margin-bottom: 1.2em;
+    text-align: justify;
+  }
+  .definition-box {
+    background-color: #eef7fc;
+    border-left: 5px solid #3498db;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .theorem-box {
+    background-color: #fef9e7;
+    border-left: 5px solid #f1c40f;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .lemma-box {
+    background-color: #fdf5e6;
+    border-left: 5px solid #e67e22;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .proof-box {
+    background-color: #f4f6f6;
+    border-left: 5px solid #95a5a6;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .example-box {
+    background-color: #f0f9f0;
+    border-left: 5px solid #2ecc71;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .box-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+  ul, ol {
+    padding-left: 25px;
+    margin-bottom: 1.2em;
+  }
+  li {
+    margin-bottom: 6px;
+  }
+  .element-list {
+    background-color: #fafafa;
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.95rem;
+    word-break: break-all;
+    line-height: 1.6;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .qed {
+    text-align: right;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>対称群 $S_5$ と交代群 $A_n$ ($n \ge 5$) の共役類分解と単純性の完全証明</h1>
+
+  <p>
+    本稿では、対称群および交代群の構造について詳細な解説を行う。前半では 5次対称群 $S_5$ のすべての共役類の要素を完全に書き下し、そこから 5次交代群 $A_5$ のすべての共役類に含まれる要素を明示的に導出する。そしてその共役類分解を利用して $A_5$ が非可換単純群 (simple group) であることを証明する。後半では、その結果を拡張し、任意の $n \ge 5$ における交代群 $A_n$ が単純群であることを、長さ 3 の巡回置換と交換子を活用して自己完結的 (self-contained) かつ論理的ギャップのない形で完全証明する。
+  </p>
+
+  <h2>1. 準備と基本概念の定義</h2>
+
+  <p>
+    本節では、群論の基礎概念を明確にし、本稿で用いる記号と命題を準備する。
+  </p>
+
+  <div class="definition-box">
+    <div class="box-title">定義 1 (対称群と交代群)</div>
+    <p>
+      集合 $X_n = \{1, 2, \dots, n\}$ 上の全単射（置換）全体が写像の合成に関してなす群を $n$次対称群 (symmetric group) と呼び、$S_n$ で表す。
+    </p>
+    <p>
+      互いに異なる元 $a_1, a_2, \dots, a_k \in X_n$ に対し、$a_1 \mapsto a_2 \mapsto \dots \mapsto a_k \mapsto a_1$ と移し、$X_n \smallsetminus \{a_1, \dots, a_k\}$ の元を変えない置換を長さ $k$ の巡回置換 (cycle) と呼び、$(a_1\ a_2\ \dots\ a_k)$ と表記する。特に長さ $2$ の巡回置換を互換 (transposition) と呼ぶ。
+    </p>
+    <p>
+      任意の置換 $\sigma \in S_n$ は互換の積として表される。その積に現れる互換の個数の偶奇は $\sigma$ によって一意に決まる。偶数個の互換の積として表される置換を偶置換、奇数個の互換の積として表される置換を奇置換と呼ぶ。$S_n$ の偶置換全体がなす部分群を $n$次交代群 (alternating group) と呼び、$A_n$ で表す。
+    </p>
+  </div>
+
+  <div class="definition-box">
+    <div class="box-title">定義 2 (共役、共役類、中心化群)</div>
+    <p>
+      群 $G$ とその元 $x \in G$ に対し、$x$ の $G$ における共役類 (conjugacy class) $C_G(x)$ を以下で定義する。
+    </p>
+    $$ C_G(x) = \{ g x g^{-1} \mid g \in G \} $$
+    <p>
+      また、$x \in G$ の $G$ における中心化群 (centralizer) $Z_G(x)$ を以下で定義する。
+    </p>
+    $$ Z_G(x) = \{ g \in G \mid g x = x g \} = \{ g \in G \mid g x g^{-1} = x \} $$
+  </div>
+
+  <div class="theorem-box">
+    <div class="box-title">命題 1 (軌道-枚数定理による共役類のサイズ)</div>
+    <p>
+      有限群 $G$ の任意の元 $x \in G$ に対し、$x$ の共役類の大きさ $|C_G(x)|$ は、$G$ における中心化群 $Z_G(x)$ の指数 $[G : Z_G(x)]$ に等しい。すなわち、以下が成り立つ。
+    </p>
+    $$ |C_G(x)| = \frac{|G|}{|Z_G(x)|} $$
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      群 $G$ の元 $g_1, g_2 \in G$ について、$g_1 x g_1^{-1} = g_2 x g_2^{-1}$ となるための必要十分条件を考える。
+    </p>
+    $$ g_1 x g_1^{-1} = g_2 x g_2^{-1} \iff g_2^{-1} g_1 x = x g_2^{-1} g_1 \iff g_2^{-1} g_1 \in Z_G(x) \iff g_1 Z_G(x) = g_2 Z_G(x) $$
+    <p>
+      したがって、$g x g^{-1}$ という形の元と剰余類 $g Z_G(x) \in G / Z_G(x)$ の間には全単射が存在する。ゆえに、共役類 $C_G(x)$ の要素数は剰余類集合 $G / Z_G(x)$ の要素数、すなわち指数 $[G : Z_G(x)] = |G| / |Z_G(x)|$ に一致する。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="theorem-box">
+    <div class="box-title">命題 2 ($S_n$ から $A_n$ への共役類の分裂条件)</div>
+    <p>
+      $x \in A_n$ とする。$x$ の $S_n$ における共役類を $C_{S_n}(x)$、$A_n$ における共役類を $C_{A_n}(x)$ とおく。このとき、以下のいずれか一方が成り立つ。
+    </p>
+    <ol>
+      <li>
+        $Z_{S_n}(x)$ が奇置換を含む場合：$C_{A_n}(x) = C_{S_n}(x)$ であり、$|C_{A_n}(x)| = |C_{S_n}(x)|$。
+      </li>
+      <li>
+        $Z_{S_n}(x)$ が偶置換しか含まない（すなわち $Z_{S_n}(x) \subset A_n$）場合：$C_{S_n}(x)$ は $A_n$ において大きさが等しい 2 つの共役類に分裂する。すなわち $|C_{A_n}(x)| = \frac{1}{2} |C_{S_n}(x)|$。
+      </li>
+    </ol>
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      $Z_{A_n}(x) = Z_{S_n}(x) \cap A_n$ である。符号準同型写像 $\mathrm{sgn} \colon S_n \to \{1, -1\}$ の $Z_{S_n}(x)$ への制限を考える。
+    </p>
+    <p>
+      もし $Z_{S_n}(x)$ に奇置換が含まれるならば、$\mathrm{sgn}|_{Z_{S_n}(x)}$ は全射であり、その核 (kernel) は $Z_{A_n}(x)$ である。準同型定理より $[Z_{S_n}(x) : Z_{A_n}(x)] = 2$、すなわち $|Z_{S_n}(x)| = 2 |Z_{A_n}(x)|$ である。このとき、
+    </p>
+    $$ |C_{A_n}(x)| = \frac{|A_n|}{|Z_{A_n}(x)|} = \frac{|S_n| / 2}{|Z_{S_n}(x)| / 2} = \frac{|S_n|}{|Z_{S_n}(x)|} = |C_{S_n}(x)| $$
+    <p>
+      となり、共役類は分裂しない。
+    </p>
+    <p>
+      一方、 $Z_{S_n}(x)$ に奇置換が含まれないならば、$Z_{S_n}(x) = Z_{A_n}(x)$ である。このとき、
+    </p>
+    $$ |C_{A_n}(x)| = \frac{|A_n|}{|Z_{A_n}(x)|} = \frac{|S_n| / 2}{|Z_{S_n}(x)|} = \frac{1}{2} \frac{|S_n|}{|Z_{S_n}(x)|} = \frac{1}{2} |C_{S_n}(x)| $$
+    <p>
+      となり、$S_n$ における共役類は $A_n$ においてちょうど半分ずつのサイズの 2 つの共役類に等分（分裂）する。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="definition-box">
+    <div class="box-title">定義 3 (正規部分群と単純群)</div>
+    <p>
+      群 $G$ の部分群 $N$ が正規部分群 (normal subgroup) であるとは、任意の $g \in G$ に対して $g N g^{-1} = N$ が成り立つことである。これは $N$ が $G$ のいくつかの共役類の和集合として表されることと同値である。
+    </p>
+    <p>
+      自明でない正規部分群（すなわち $\{1\}$ および $G$ 以外の正規部分群）を持たない群を単純群 (simple group) と呼ぶ。
+    </p>
+  </div>
+
+  <h2>2. $S_5$ のすべての共役類の要素の書き下し</h2>
+
+  <p>
+    5次対称群 $S_5$ の位数は $|S_5| = 5! = 120$ である。対称群 $S_n$ において、2つの置換が共役であるための必要十分条件は、それらを互いに素な巡回置換の積に分解したときの「巡回置換の長さの組（巡回置換の型または分割）」が一致することである。したがって、$S_5$ の共役類は整数 $5$ の分割と一対一に対応する。
+  </p>
+  <p>
+    整数 $5$ の分割は 7 種類存在する。それぞれの型について共役類を分析し、全 $120$ 個の要素を完全に列挙する。
+  </p>
+
+  <h3>(i) 型 $(1^5)$ : 恒等置換</h3>
+  <p>
+    長さ $1$ の巡回置換が $5$ 個という型である。これは単位元のみからなる共役類であり、要素数は $1$ 個である。
+  </p>
+  <div class="element-list">
+    (1)
+  </div>
+
+  <h3>(ii) 型 $(1^3, 2^1)$ : 互換 (2-cycle)</h3>
+  <p>
+    長さ $2$ の巡回置換（互換）が $1$ 個の型である。要素数は $\binom{5}{2} = 10$ 個である。互換は奇置換である。
+  </p>
+  <div class="element-list">
+    (1 2), (1 3), (1 4), (1 5), (2 3), (2 4), (2 5), (3 4), (3 5), (4 5)
+  </div>
+
+  <h3>(iii) 型 $(1^1, 2^2)$ : 2つの互いに素な互換の積 (2,2-cycle)</h3>
+  <p>
+    長さ $2$ の巡回置換が $2$ 個の型である。要素数は $\frac{5 \times 4}{2} \times \frac{3 \times 2}{2} \times \frac{1}{2!} = 15$ 個である。互換の偶数個の積であるため、偶置換である。
+  </p>
+  <div class="element-list">
+    (1 2)(3 4), (1 2)(3 5), (1 2)(4 5), (1 3)(2 4), (1 3)(2 5), (1 3)(4 5), <br>
+    (1 4)(2 3), (1 4)(2 5), (1 4)(3 5), (1 5)(2 3), (1 5)(2 4), (1 5)(3 4), <br>
+    (2 3)(4 5), (2 4)(3 5), (2 5)(3 4)
+  </div>
+
+  <h3>(iv) 型 $(1^2, 3^1)$ : 長さ 3 の巡回置換 (3-cycle)</h3>
+  <p>
+    長さ $3$ の巡回置換が $1$ 個の型である。要素数は $\binom{5}{3} \times (3 - 1)! = 10 \times 2 = 20$ 個である。偶置換である。
+  </p>
+  <div class="element-list">
+    (1 2 3), (1 3 2), (1 2 4), (1 4 2), (1 2 5), (1 5 2), (1 3 4), (1 4 3), (1 3 5), (1 5 3),<br>
+    (1 4 5), (1 5 4), (2 3 4), (2 4 3), (2 3 5), (2 5 3), (2 4 5), (2 5 4), (3 4 5), (3 5 4)
+  </div>
+
+  <h3>(v) 型 $(2^1, 3^1)$ : 互いに素な互換と 3-cycle の積 (2,3-cycle)</h3>
+  <p>
+    長さ $2$ と長さ $3$ の巡回置換の積である。要素数は $\binom{5}{2} \times (3 - 1)! = 10 \times 2 = 20$ 個である。奇置換と偶置換の積であるため、奇置換である。
+  </p>
+  <div class="element-list">
+    (1 2)(3 4 5), (1 2)(3 5 4), (1 3)(2 4 5), (1 3)(2 5 4), (1 4)(2 3 5), (1 4)(2 5 3),<br>
+    (1 5)(2 3 4), (1 5)(2 4 3), (2 3)(1 4 5), (2 3)(1 5 4), (2 4)(1 3 5), (2 4)(1 5 3),<br>
+    (2 5)(1 3 4), (2 5)(1 4 3), (3 4)(1 2 5), (3 4)(1 5 2), (3 5)(1 2 4), (3 5)(1 4 2),<br>
+    (4 5)(1 2 3), (4 5)(1 3 2)
+  </div>
+
+  <h3>(vi) 型 $(1^1, 4^1)$ : 長さ 4 の巡回置換 (4-cycle)</h3>
+  <p>
+    長さ $4$ の巡回置換が $1$ 個の型である。要素数は $\binom{5}{4} \times (4 - 1)! = 5 \times 6 = 30$ 個である。奇置換である。
+  </p>
+  <div class="element-list">
+    (1 2 3 4), (1 2 4 3), (1 3 2 4), (1 3 4 2), (1 4 2 3), (1 4 3 2),<br>
+    (1 2 3 5), (1 2 5 3), (1 3 2 5), (1 3 5 2), (1 5 2 3), (1 5 3 2),<br>
+    (1 2 4 5), (1 2 5 4), (1 4 2 5), (1 4 5 2), (1 5 2 4), (1 5 4 2),<br>
+    (1 3 4 5), (1 3 5 4), (1 4 3 5), (1 4 5 3), (1 5 3 4), (1 5 4 3),<br>
+    (2 3 4 5), (2 3 5 4), (2 4 3 5), (2 4 5 3), (2 5 3 4), (2 5 4 3)
+  </div>
+
+  <h3>(vii) 型 $(5^1)$ : 長さ 5 の巡回置換 (5-cycle)</h3>
+  <p>
+    長さ $5$ の巡回置換が $1$ 個の型である。要素数は $(5 - 1)! = 24$ 個である。偶数個の互換の積であるため、偶置換である。
+  </p>
+  <div class="element-list">
+    (1 2 3 4 5), (1 2 3 5 4), (1 2 4 3 5), (1 2 4 5 3), (1 2 5 3 4), (1 2 5 4 3),<br>
+    (1 3 2 4 5), (1 3 2 5 4), (1 3 4 2 5), (1 3 4 5 2), (1 3 5 2 4), (1 3 5 4 2),<br>
+    (1 4 2 3 5), (1 4 2 5 3), (1 4 3 2 5), (1 4 3 5 2), (1 4 5 2 3), (1 4 5 3 2),<br>
+    (1 5 2 3 4), (1 5 2 4 3), (1 5 3 2 4), (1 5 3 4 2), (1 5 4 2 3), (1 5 4 3 2)
+  </div>
+
+  <p>
+    以上の 7 つの共役類の要素数の和は $1 + 10 + 15 + 20 + 20 + 30 + 24 = 120$ 個であり、確かに $S_5$ のすべての要素を網羅している。
+  </p>
+
+  <h2>3. $A_5$ のすべての共役類の要素の書き下し</h2>
+
+  <p>
+    交代群 $A_5$ は $S_5$ の部分群であり、偶置換のみからなる。前節で列挙した $S_5$ の共役類のうち、偶置換であるものは型 $(1^5)$、$(1^1, 2^2)$、$(1^2, 3^1)$、$(5^1)$ の 4 種類である。$A_5$ の位数は $|A_5| = 120 / 2 = 60$ である。
+  </p>
+  <p>
+    それぞれの型について、命題 2 を用いて $A_5$ での共役類への分裂の有無を調べ、要素を完全に書き下す。
+  </p>
+
+  <h3>(i) 恒等置換 $C_1$</h3>
+  <p>
+    単位元 $(1)$ のみからなる共役類である。サイズは $1$ である。
+  </p>
+  <div class="element-list">
+    $C_1 = \{ (1) \}$
+  </div>
+
+  <h3>(ii) 長さ $3$ の巡回置換 $C_3$</h3>
+  <p>
+    例えば $x = (1\ 2\ 3)$ とおくと、$x$ と可換な奇置換として互換 $\tau = (4\ 5)$ が存在する。実際、$(1\ 2\ 3)$ と $(4\ 5)$ は互いに素な文字を動かすため可換である。
+    したがって命題 2の (1) より、$A_5$ においてこの共役類は分裂せず、サイズ $20$ の 1 つの共役類 $C_3$ をなす。要素は前節の (iv) で列挙したものと完全に一致する。
+  </p>
+  <div class="element-list">
+    $C_3 = \{<br>
+    \quad (1\ 2\ 3),\, (1\ 3\ 2),\, (1\ 2\ 4),\, (1\ 4\ 2),\, (1\ 2\ 5),\, (1\ 5\ 2),\, (1\ 3\ 4),\, (1\ 4\ 3),\, (1\ 3\ 5),\, (1\ 5\ 3),<br>
+    \quad (1\ 4\ 5),\, (1\ 5\ 4),\, (2\ 3\ 4),\, (2\ 4\ 3),\, (2\ 3\ 5),\, (2\ 5\ 3),\, (2\ 4\ 5),\, (2\ 5\ 4),\, (3\ 4\ 5),\, (3\ 5\ 4)<br>
+    \}$
+  </div>
+
+  <h3>(iii) 2つの互いに素な互換の積 $C_{2,2}$</h3>
+  <p>
+    例えば $x = (1\ 2)(3\ 4)$ とおくと、$x$ と可換な奇置換として $\tau = (1\ 2)$ が存在する。実際、$(1\ 2)(1\ 2)(3\ 4) = (3\ 4) = (1\ 2)(3\ 4)(1\ 2)$ より可換である。
+    したがって命題 2の (1) より、この共役類も $A_5$ において分裂せず、サイズ $15$ の 1 つの共役類 $C_{2,2}$ をなす。要素は前節の (iii) で列挙したものと完全に一致する。
+  </p>
+  <div class="element-list">
+    $C_{2,2} = \{<br>
+    \quad (1\ 2)(3\ 4),\, (1\ 2)(3\ 5),\, (1\ 2)(4\ 5),\, (1\ 3)(2\ 4),\, (1\ 3)(2\ 5),<br>
+    \quad (1\ 3)(4\ 5),\, (1\ 4)(2\ 3),\, (1\ 4)(2\ 5),\, (1\ 4)(3\ 5),\, (1\ 5)(2\ 3),<br>
+    \quad (1\ 5)(2\ 4),\, (1\ 5)(3\ 4),\, (2\ 3)(4\ 5),\, (2\ 4)(3\ 5),\, (2\ 5)(3\ 4)<br>
+    \}$
+  </div>
+
+  <h3>(iv) 長さ $5$ の巡回置換 $C_{5a}$ および $C_{5b}$</h3>
+  <p>
+    例えば $x = (1\ 2\ 3\ 4\ 5)$ の $S_5$ における中心化群 $Z_{S_5}(x)$ を考える。$x$ と可換な置換は $x$ が生成する巡回部分群 $\langle x \rangle = \{ (1), x, x^2, x^3, x^4 \}$ の要素のみであり、$|Z_{S_5}(x)| = 5$ である。
+    $\langle x \rangle$ の要素はすべて偶置換であるため、$Z_{S_5}(x)$ には奇置換が存在しない。
+    したがって命題 2の (2) より、$S_5$ におけるサイズ $24$ の共役類（前節の (vii)）は $A_5$ においてサイズ $12$ の 2 つの共役類 $C_{5a}$ と $C_{5b}$ に分裂する。
+  </p>
+  <p>
+    代表元 $(1\ 2\ 3\ 4\ 5)$ に対し、一般の 5-cycle $(1\ a_2\ a_3\ a_4\ a_5)$ は、置換 $\sigma = \begin{pmatrix} 1 & 2 & 3 & 4 & 5 \\ 1 & a_2 & a_3 & a_4 & a_5 \end{pmatrix}$ により $\sigma (1\ 2\ 3\ 4\ 5) \sigma^{-1} = (1\ a_2\ a_3\ a_4\ a_5)$ と表される。
+    $\sigma$（すなわち $\{2, 3, 4, 5\}$ の置換）が偶置換であるか奇置換であるかによって共役類が 2 つに分かれる。
+  </p>
+  <div class="element-list">
+    $C_{5a} = \{<br>
+    \quad (1\ 2\ 3\ 4\ 5),\, (1\ 2\ 4\ 5\ 3),\, (1\ 2\ 5\ 3\ 4),\, (1\ 3\ 2\ 5\ 4),\, (1\ 3\ 4\ 2\ 5),\, (1\ 3\ 5\ 4\ 2),<br>
+    \quad (1\ 4\ 2\ 3\ 5),\, (1\ 4\ 3\ 5\ 2),\, (1\ 4\ 5\ 2\ 3),\, (1\ 5\ 2\ 4\ 3),\, (1\ 5\ 3\ 2\ 4),\, (1\ 5\ 4\ 3\ 2)<br>
+    \}$
+  </div>
+  <br>
+  <div class="element-list">
+    $C_{5b} = \{<br>
+    \quad (1\ 2\ 3\ 5\ 4),\, (1\ 2\ 4\ 3\ 5),\, (1\ 2\ 5\ 4\ 3),\, (1\ 3\ 2\ 4\ 5),\, (1\ 3\ 4\ 5\ 2),\, (1\ 3\ 5\ 2\ 4),<br>
+    \quad (1\ 4\ 2\ 5\ 3),\, (1\ 4\ 3\ 2\ 5),\, (1\ 4\ 5\ 3\ 2),\, (1\ 5\ 2\ 3\ 4),\, (1\ 5\ 3\ 4\ 2),\, (1\ 5\ 4\ 2\ 3)<br>
+    \}$
+  </div>
+
+  <h2>4. $A_5$ の単純性の証明</h2>
+
+  <p>
+    前節で求めた $A_5$ の共役類構造を利用して、$A_5$ が単純群であることを完全証明する。
+  </p>
+
+  <div class="theorem-box">
+    <div class="box-title">定理 ($A_5$ の単純性)</div>
+    <p>
+      交代群 $A_5$ の正規部分群は $\{1\}$ および $A_5$ のみである。すなわち $A_5$ は単純群である。
+    </p>
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      $N$ を $A_5$ の任意の正規部分群とする。
+      定義 3より、$N$ は $A_5$ のいくつかの共役類の直和（互いに素な和集合）として表されなければならない。
+    </p>
+    $$ N = \bigcup_{k \in I} C_k $$
+    <p>
+      ここで $C_k$ は $A_5$ の共役類 $C_1, C_3, C_{2,2}, C_{5a}, C_{5b}$ のいずれかである。
+      $N$ は部分群であるから、必ず単位元 $(1)$ を含む。したがって、$C_1$ は必ず $N$ に含まれる。
+      ゆえに、$N$ の位数 $|N|$ は $1$ と、残りの共役類のサイズ $15, 20, 12, 12$ のいくつかの和として表される。
+    </p>
+    $$ |N| = 1 + \sum_{k \in I \smallsetminus \{1\}} |C_k| $$
+    <p>
+      一方、Lagrangeの定理 (Lagrange's theorem) より、部分群 $N$ の位数 $|N|$ は群 $A_5$ の位数 $|A_5| = 60$ の約数でなければならない。
+      $60$ の正の約数の全体集合を $D_{60}$ とおくと、以下が得られる。
+    </p>
+    $$ D_{60} = \{1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60\} $$
+    <p>
+      共役類のサイズの組み合わせとして考えられるすべての和の可能性を列挙し、それぞれが $D_{60}$ に属するかを検証する。
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>選ぶ共役類の数</th>
+          <th>共役類の組み合わせ</th>
+          <th>位数の計算 $|N|$</th>
+          <th>$60$ の約数か？</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1 個</td>
+          <td>$C_1$</td>
+          <td>$1$</td>
+          <td><strong>Yes</strong> ($1 \in D_{60}$)</td>
+        </tr>
+        <tr>
+          <td rowspan="3">2 個</td>
+          <td>$C_1 \cup C_{5a}$ （または $C_1 \cup C_{5b}$）</td>
+          <td>$1 + 12 = 13$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>$C_1 \cup C_{2,2}$</td>
+          <td>$1 + 15 = 16$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>$C_1 \cup C_3$</td>
+          <td>$1 + 20 = 21$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td rowspan="4">3 個</td>
+          <td>$C_1 \cup C_{5a} \cup C_{5b}$</td>
+          <td>$1 + 12 + 12 = 25$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>$C_1 \cup C_{5a} \cup C_{2,2}$ （または $C_{5b}$）</td>
+          <td>$1 + 12 + 15 = 28$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>$C_1 \cup C_{5a} \cup C_3$ （または $C_{5b}$）</td>
+          <td>$1 + 12 + 20 = 33$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>$C_1 \cup C_{2,2} \cup C_3$</td>
+          <td>$1 + 15 + 20 = 36$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td rowspan="3">4 個</td>
+          <td>$C_1 \cup C_{5a} \cup C_{5b} \cup C_{2,2}$</td>
+          <td>$1 + 12 + 12 + 15 = 40$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>$C_1 \cup C_{5a} \cup C_{5b} \cup C_3$</td>
+          <td>$1 + 12 + 12 + 20 = 45$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>$C_1 \cup C_{5a} \cup C_{2,2} \cup C_3$ （または $C_{5b}$）</td>
+          <td>$1 + 12 + 15 + 20 = 48$</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>5 個（すべて）</td>
+          <td>$C_1 \cup C_3 \cup C_{2,2} \cup C_{5a} \cup C_{5b}$</td>
+          <td>$1 + 12 + 12 + 15 + 20 = 60$</td>
+          <td><strong>Yes</strong> ($60 \in D_{60}$)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      以上のすべての組み合わせの網羅的検証より、$|N| \in D_{60}$ を満たすのは以下の 2 つの場合に限られる。
+    </p>
+    <ol>
+      <li>$|N| = 1 \implies N = C_1 = \{ (1) \}$</li>
+      <li>$|N| = 60 \implies N = A_5$</li>
+    </ol>
+    <p>
+      したがって、$A_5$ の正規部分群は自明な部分群 $\{ (1) \}$ と $A_5$ 自体しか存在しない。ゆえに $A_5$ は単純群である。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <h2>5. 理解を深めるための比較例：$A_4$ の正規部分群</h2>
+
+  <p>
+    $A_5$ の単純性の特徴をより明確に理解するため、$n = 4$ の場合である 4次交代群 $A_4$ について比較・考察する。
+  </p>
+
+  <div class="example-box">
+    <div class="box-title">例 ($A_4$ は単純群ではない)</div>
+    <p>
+      4次交代群 $A_4$ の位数は $|A_4| = 4! / 2 = 12$ である。$A_4$ の共役類分解は以下の通りである。
+    </p>
+    <ul>
+      <li>$C_1 = \{ (1) \}$ （サイズ 1）</li>
+      <li>$C_{2,2} = \{ (1\ 2)(3\ 4), (1\ 3)(2\ 4), (1\ 4)(2\ 3) \}$ （サイズ 3）</li>
+      <li>$C_{3a} = \{ (1\ 2\ 3), (1\ 3\ 4), (1\ 4\ 2), (2\ 4\ 3) \}$ （サイズ 4）</li>
+      <li>$C_{3b} = \{ (1\ 3\ 2), (1\ 4\ 3), (1\ 2\ 4), (2\ 3\ 4) \}$ （サイズ 4）</li>
+    </ul>
+    <p>
+      ここで集合 $V_4 = C_1 \cup C_{2,2}$ を考えると、その要素数は $|V_4| = 1 + 3 = 4$ である。
+      $4$ は $12$ の約数である。実際に $V_4$ は Klein の 4 元群 (Klein four-group) と同型な部分群をなし、共役類の和集合であるため $A_4$ の正規部分群となる。
+    </p>
+    <p>
+      したがって、$A_4$ は自明でない正規部分群 $V_4$ を持つため、<strong>単純群ではない</strong>。
+      $A_5$ においてサイズ $15$ の共役類 $C_{2,2}$ に $1$ を加えても $16$ となり $60$ の約数にならないのに対し、$A_4$ ではサイズ $3$ の共役類に $1$ を加えると $4$ となり $12$ の約数になる点が決定的な違いである。
+    </p>
+  </div>
+
+  <h2>6. 一般の $n \ge 5$ における交代群 $A_n$ の単純性の証明</h2>
+
+  <p>
+    前節までの $A_5$ に対する共役類分解を通じた証明手法は、$n$ が大きくなると共役類の数が膨大になり適用が困難になる。そこで本節では、交代群が長さ 3 の巡回置換 (3-cycle) で生成される性質と、交換子 (commutator) を用いた構成的な手法により、任意の $n \ge 5$ について $A_n$ が単純群であることを完全に証明する。
+  </p>
+
+  <h3>6.1. 準備となる補題群</h3>
+
+  <p>
+    主定理の証明に向けて、いくつかの重要な補題を示す。
+  </p>
+
+  <div class="lemma-box">
+    <div class="box-title">補題 1 (共役による巡回置換の変換)</div>
+    <p>
+      任意の置換 $\sigma \in S_n$ と巡回置換 $(a_1\ a_2\ \dots\ a_k)$ に対し、次が成り立つ。
+    </p>
+    $$ \sigma (a_1\ a_2\ \dots\ a_k) \sigma^{-1} = (\sigma(a_1)\ \sigma(a_2)\ \dots\ \sigma(a_k)) $$
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      左辺の置換を $\rho = \sigma (a_1\ a_2\ \dots\ a_k) \sigma^{-1}$ とおく。
+      任意の $i \in \{1, 2, \dots, k\}$ について、$\rho(\sigma(a_i))$ を計算する。
+    </p>
+    $$ \rho(\sigma(a_i)) = \sigma (a_1\ a_2\ \dots\ a_k) \sigma^{-1} (\sigma(a_i)) = \sigma (a_1\ a_2\ \dots\ a_k) (a_i) $$
+    <p>
+      ここで $(a_1\ a_2\ \dots\ a_k) (a_i) = a_{i+1}$ (ただし $a_{k+1} = a_1$) であるから、$\rho(\sigma(a_i)) = \sigma(a_{i+1})$ となる。
+      一方、$x \notin \{\sigma(a_1), \dots, \sigma(a_k)\}$ なる元については、$\sigma^{-1}(x) \notin \{a_1, \dots, a_k\}$ であるため巡回置換 $(a_1\ a_2\ \dots\ a_k)$ はこれを動かさない。したがって $\rho(x) = \sigma(\sigma^{-1}(x)) = x$ となる。
+      これは $\rho$ が巡回置換 $(\sigma(a_1)\ \sigma(a_2)\ \dots\ \sigma(a_k))$ に他ならないことを示している。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="lemma-box">
+    <div class="box-title">補題 2 ($A_n$ の生成系)</div>
+    <p>
+      $n \ge 3$ に対し、交代群 $A_n$ は長さ 3 の巡回置換 (3-cycle) の全体によって生成される。
+    </p>
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      $A_n$ の任意の元は偶数個の互換の積として表される。したがって、任意の 2 つの互換の積が 3-cycle の積として表せることを示せば十分である。
+      互換の積 $(a\ b)(c\ d)$ について、文字の重なり方により以下の 3 つの場合に分けられる（文字はすべて相異なるとする）。
+    </p>
+    <ol>
+      <li>2 つの文字が共通する場合：$(a\ b)(a\ b) = (1)$。これは恒等置換であり、例えば $(a\ b\ c)(a\ c\ b)$ のように書ける。</li>
+      <li>1 つの文字が共通する場合：$(a\ b)(a\ c) = (a\ c\ b)$。これはそれ自体が 3-cycle である。</li>
+      <li>共通する文字がない場合：$(a\ b)(c\ d) = (a\ b)(a\ c)(a\ c)(c\ d) = ((a\ b)(a\ c))((a\ c)(c\ d)) = (a\ c\ b)(a\ d\ c)$。このように 2 つの 3-cycle の積に分解される。</li>
+    </ol>
+    <p>
+      以上より、すべての偶置換は 3-cycle の積として記述できる。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="lemma-box">
+    <div class="box-title">補題 3 (3-cycle の共役性)</div>
+    <p>
+      $n \ge 5$ に対し、$A_n$ における任意の 2 つの 3-cycle は $A_n$ 内で互いに共役である。
+    </p>
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      $S_n$ において、同じ長さの巡回置換はすべて共役であるため、すべての 3-cycle は $S_n$ 内で共役である。命題 2 により、$x = (1\ 2\ 3)$ の $S_n$ における中心化群 $Z_{S_n}(x)$ が奇置換を含むことを示せば、$A_n$ においても共役類が分裂しないことが言える。
+      $n \ge 5$ であるため、集合 $\{1, 2, \dots, n\}$ には $\{1, 2, 3\}$ 以外に少なくとも 2 つの元が存在する。これらを $4, 5$ とし、互換 $\tau = (4\ 5)$ を考える。
+      $\tau$ は $(1\ 2\ 3)$ と互いに素であるため可換である。すなわち $\tau \in Z_{S_n}(x)$ である。また、$\tau$ は互換なので奇置換である。
+      したがって $Z_{S_n}(x)$ は奇置換を含み、3-cycle の共役類は $A_n$ において分裂せず、1 つの共役類をなす。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="lemma-box">
+    <div class="box-title">補題 4 (正規部分群と 3-cycle)</div>
+    <p>
+      $n \ge 5$ とする。$A_n$ の自明でない正規部分群 $N$ が少なくとも 1 つの 3-cycle を含めば、$N = A_n$ である。
+    </p>
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      $N$ がある 3-cycle $\sigma$ を含むとする。$N$ は正規部分群であるため、任意の $g \in A_n$ に対して $g \sigma g^{-1} \in N$ が成り立つ。
+      補題 3 より、$A_n$ におけるすべての 3-cycle は $\sigma$ と共役であるため、$N$ は $A_n$ のすべての 3-cycle を含む。
+      補題 2 より、$A_n$ は 3-cycle 全体によって生成される。したがって $N$ は $A_n$ のすべての元を含み、$N = A_n$ となる。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <h3>6.2. 主定理の証明</h3>
+
+  <div class="theorem-box">
+    <div class="box-title">定理 (一般の $A_n$ の単純性)</div>
+    <p>
+      任意の $n \ge 5$ について、交代群 $A_n$ の正規部分群は $\{1\}$ および $A_n$ のみである。すなわち $A_n$ は単純群である。
+    </p>
+  </div>
+
+  <div class="proof-box">
+    <div class="box-title">証明</div>
+    <p>
+      $N$ を $A_n$ の正規部分群とし、$N \neq \{1\}$ であると仮定する。補題 4 により、$N$ が少なくとも 1 つの 3-cycle を含むことを示せば証明が完了する。
+      $N \neq \{1\}$ であるから、恒等置換ではない元 $\sigma \in N$ が存在する。$\sigma$ を互いに素な巡回置換の積に一意に分解する。この分解の形態について、以下の 3 つのケースに分けて考察する。
+    </p>
+
+    <p><strong>ステップ 1：$\sigma$ の分解に長さ $r \ge 4$ の巡回置換が含まれる場合</strong></p>
+    <p>
+      必要であれば文字を付け替えることで、$\sigma = (1\ 2\ 3\ 4\ \dots\ r) C$ と表せる。ここで $C$ は $\{1, \dots, r\}$ と素な置換である。
+      $\tau = (1\ 2\ 3)$ とおく。明らかに $\tau \in A_n$ である。
+      $N$ は正規部分群であるため、$\tau \sigma^{-1} \tau^{-1} \in N$ であり、したがって $\rho = \sigma (\tau \sigma^{-1} \tau^{-1}) \in N$ となる。（$\rho$ の逆元 $\tau \sigma \tau^{-1} \sigma^{-1}$ を考えても同等であるが、ここでは $\rho = \tau (\sigma \tau^{-1} \sigma^{-1})$ として計算する。順序を整理するため、交換子に近い形 $\rho = \tau \sigma \tau^{-1} \sigma^{-1} \in N$ を採用する。）
+    </p>
+    <p>
+      $\rho = \tau (\sigma \tau^{-1} \sigma^{-1})$ を計算する。$\tau^{-1} = (1\ 3\ 2)$ である。
+      補題 1 より、$\sigma \tau^{-1} \sigma^{-1} = (\sigma(1)\ \sigma(3)\ \sigma(2))$ となる。
+      $\sigma$ の定義より、$\sigma(1) = 2$、$\sigma(2) = 3$、$\sigma(3) = 4$ であるから、
+      $$ \sigma \tau^{-1} \sigma^{-1} = (2\ 4\ 3) $$
+      となる。したがって、
+      $$ \rho = \tau (2\ 4\ 3) = (1\ 2\ 3)(2\ 4\ 3) $$
+      これを右から順に各文字への作用として計算すると、
+      $1 \mapsto 1 \mapsto 2$、
+      $2 \mapsto 4 \mapsto 4$、
+      $4 \mapsto 3 \mapsto 1$、
+      $3 \mapsto 2 \mapsto 3$。
+      ゆえに $\rho = (1\ 2\ 4)$ となる。これは長さ 3 の巡回置換であり、$N$ は 3-cycle を含む。
+    </p>
+
+    <p><strong>ステップ 2：$\sigma$ の分解に長さ $\ge 4$ の巡回置換が含まれず、長さ 3 の巡回置換が含まれ、かつ他にも巡回置換が含まれる場合</strong></p>
+    <p>
+      このとき $\sigma$ は 3-cycle と 2-cycle の積からなる。
+      <strong>(2-a) 3-cycle を 1 つだけ含み、他はすべて 2-cycle の場合：</strong>
+      $\sigma = (1\ 2\ 3)(4\ 5)(6\ 7) \dots$ と書ける。
+      $\sigma$ を 2 乗すると、互いに素な巡回置換は可換であるため、$\sigma^2 = (1\ 2\ 3)^2 (4\ 5)^2 (6\ 7)^2 \dots = (1\ 3\ 2) (1) (1) \dots = (1\ 3\ 2)$ となる。
+      $\sigma \in N$ より $\sigma^2 \in N$ であるため、$N$ は 3-cycle を含む。
+    </p>
+    <p>
+      <strong>(2-b) 3-cycle を 2 つ以上含む場合：</strong>
+      $\sigma = (1\ 2\ 3)(4\ 5\ 6) C$ と書ける（$C$ は $\{1, \dots, 6\}$ と素な置換）。
+      $\tau = (3\ 4\ 5) \in A_n$ とする。
+      ステップ 1 と同様に $\rho = \tau \sigma \tau^{-1} \sigma^{-1} \in N$ を考える。
+      $\tau^{-1} = (3\ 5\ 4)$ であり、補題 1 より $\sigma \tau^{-1} \sigma^{-1} = (\sigma(3)\ \sigma(5)\ \sigma(4))$ である。
+      $\sigma$ の定義より、$\sigma(3) = 1$、$\sigma(4) = 5$、$\sigma(5) = 6$ であるから、
+      $$ \sigma \tau^{-1} \sigma^{-1} = (1\ 6\ 5) $$
+      したがって、
+      $$ \rho = (3\ 4\ 5)(1\ 6\ 5) $$
+      作用を計算すると、
+      $1 \mapsto 6 \mapsto 6$、
+      $6 \mapsto 5 \mapsto 3$、
+      $3 \mapsto 3 \mapsto 4$、
+      $4 \mapsto 4 \mapsto 5$、
+      $5 \mapsto 1 \mapsto 1$。
+      ゆえに $\rho = (1\ 6\ 3\ 4\ 5)$ となる。これは長さ 5 の巡回置換である。
+      $\rho \in N$ であるから、$\rho$ を新たな $\sigma$ と見なせば、ステップ 1 の条件（長さ $\ge 4$ の巡回置換を含む）に帰着され、$N$ が 3-cycle を含むことが示される。
+    </p>
+
+    <p><strong>ステップ 3：$\sigma$ の分解のすべての巡回置換の長さが 2 である場合</strong></p>
+    <p>
+      $\sigma$ は偶置換であるから、少なくとも 2 つの互換の積である。よって $\sigma = (1\ 2)(3\ 4) C$ と書ける（$C$ は $\{1, 2, 3, 4\}$ と素な置換）。
+      $\tau = (1\ 2\ 3) \in A_n$ とする。
+      $\rho = \tau \sigma \tau^{-1} \sigma^{-1} \in N$ を計算する。$\tau^{-1} = (1\ 3\ 2)$ より、
+      $\sigma \tau^{-1} \sigma^{-1} = (\sigma(1)\ \sigma(3)\ \sigma(2)) = (2\ 4\ 1)$ となる。
+      $$ \rho = (1\ 2\ 3)(2\ 4\ 1) = (1\ 2\ 3)(1\ 2\ 4) $$
+      作用を計算すると、
+      $1 \mapsto 2 \mapsto 3$、
+      $3 \mapsto 3 \mapsto 1$、
+      $2 \mapsto 4 \mapsto 4$、
+      $4 \mapsto 1 \mapsto 2$。
+      ゆえに $\rho = (1\ 3)(2\ 4)$ となり、$\rho \in N$ である。
+    </p>
+    <p>
+      次に、$n \ge 5$ であるという強力な仮定を用いる。集合 $\{1, \dots, n\}$ には $1, 2, 3, 4$ 以外に少なくとも 1 つの元が存在するため、それを $5$ とする。
+      $\mu = (1\ 3\ 5) \in A_n$ をとる。
+      $\rho \in N$ および $N \triangleleft A_n$ より、$\omega = \mu \rho \mu^{-1} \rho^{-1} \in N$ である。
+      これを計算する。$\omega = \mu (\rho \mu^{-1} \rho^{-1})$ と見なす。$\mu^{-1} = (1\ 5\ 3)$ であるから、
+      $$ \rho \mu^{-1} \rho^{-1} = (\rho(1)\ \rho(5)\ \rho(3)) $$
+      $\rho = (1\ 3)(2\ 4)$ の作用は $\rho(1) = 3$、$\rho(5) = 5$、$\rho(3) = 1$ であるから、
+      $$ \rho \mu^{-1} \rho^{-1} = (3\ 5\ 1) = (1\ 3\ 5) $$
+      したがって、
+      $$ \omega = (1\ 3\ 5)(1\ 3\ 5) = (1\ 5\ 3) $$
+      これは長さ 3 の巡回置換である。ゆえに $N$ は 3-cycle を含む。
+    </p>
+
+    <p><strong>結論</strong></p>
+    <p>
+      いかなる元 $\sigma \in N$ を選んでも、以上の手順を適用することで $N$ 内に必ず 3-cycle を構築できることが示された。したがって、補題 4 により $N = A_n$ である。
+      これにて、$n \ge 5$ における交代群 $A_n$ は単純群であることが完全に証明された。
+    </p>
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <h2>7. 参考文献</h2>
+
+  <p>
+    本稿の記述にあたり、以下の標準的な代数学・群論の文献を参照した。
+  </p>
+  <ul>
+    <li>
+      Dummit, D. S., & Foote, R. M. (2004). <i>Abstract Algebra</i> (3rd ed.). John Wiley & Sons. <a href="https://www.wiley.com/en-us/Abstract+Algebra%2C+3rd+Edition-p-9780471433347" target="_blank" rel="noopener noreferrer">[Link]</a>
+    </li>
+    <li>
+      Lang, S. (2002). <i>Algebra</i> (3rd ed., Graduate Texts in Mathematics, Vol. 211). Springer-Verlag. <a href="https://link.springer.com/book/10.1007/978-1-4613-0041-0" target="_blank" rel="noopener noreferrer">[Link]</a>
+    </li>
+    <li>
+      Gallian, J. A. (2021). <i>Contemporary Abstract Algebra</i> (10th ed.). CRC Press. <a href="https://www.routledge.com/Contemporary-Abstract-Algebra/Gallian/p/book/9780367651787" target="_blank" rel="noopener noreferrer">[Link]</a>
+    </li>
+    <li>
+      Weisstein, E. W. "Alternating Group." From MathWorld--A Wolfram Web Resource. <a href="https://mathworld.wolfram.com/AlternatingGroup.html" target="_blank" rel="noopener noreferrer">https://mathworld.wolfram.com/AlternatingGroup.html</a>
+    </li>
+  </ul>
+</div>
+
+</body>
+</html>

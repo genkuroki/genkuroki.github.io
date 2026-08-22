@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAPデータベース推移的部分群における線形群・射影線形群のリスト</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #111;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .definition {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f4f8fc;
+            border-left: 4px solid #3b82f6;
+        }
+        .theorem {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #fdfdfd;
+            border-left: 4px solid #10b981;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>GAPデータベース推移的部分群における線形群・射影線形群のリスト</h1>
+
+    <p>これまでに作成した次数 $n \le 8$ の推移的部分群の表の中に登場する群のうち、一般線形群 ($\operatorname{GL}$)、特殊線形群 ($\operatorname{SL}$)、射影一般線形群 ($\operatorname{PGL}$)、および射影特殊線形群 ($\operatorname{PSL}$) に同型であるものをすべて抽出し、GAPのT番号とともにリスト化する。自己完結な解説とするため、まずこれらの群の基本概念を定義する。</p>
+
+    <h2>1. 基本概念の定義</h2>
+
+    <div class="definition">
+        <strong>定義 1.1 (一般線形群と特殊線形群)</strong><br>
+        有限体 $\mathbb{F}_q$ 上の $d$ 次元ベクトル空間における正則な線形変換全体のなす群を一般線形群 (general linear group) と呼び、$\operatorname{GL}_d(q)$ または $\operatorname{GL}(d, q)$ と記述する。このうち、行列式が $1$ である変換の全体は $\operatorname{GL}_d(q)$ の正規部分群をなし、これを特殊線形群 (special linear group) と呼び、$\operatorname{SL}_d(q)$ または $\operatorname{SL}(d, q)$ と記述する。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.2 (射影一般線形群と射影特殊線形群)</strong><br>
+        $\operatorname{GL}_d(q)$ の中心 $Z$ は、非零のスカラー行列全体からなる。$\operatorname{GL}_d(q)$ をその中心で割った剰余群を射影一般線形群 (projective general linear group) と呼び、$\operatorname{PGL}_d(q)$ または $\operatorname{PGL}(d, q)$ と記述する。$\operatorname{PGL}_d(q) = \operatorname{GL}_d(q) / Z$ である。<br>
+        同様に、$\operatorname{SL}_d(q)$ をその中心（$Z \cap \operatorname{SL}_d(q)$）で割った剰余群を射影特殊線形群 (projective special linear group) と呼び、$\operatorname{PSL}_d(q)$ または $\operatorname{PSL}(d, q)$ と記述する。これは射影幾何学における対称性の群として自然に現れる。
+    </div>
+
+    <div class="theorem">
+        <strong>理解に役立つ例とよく知られた同型対応:</strong><br>
+        低次数の有限群においては、上記の線形群や射影線形群が、対称群 $S_n$ や交代群 $A_n$ と同型になる場合がある。以下は本リストに登場する重要な同型である。<br>
+        1. $\operatorname{PSL}_2(5) \cong A_5$ （位数は60）<br>
+        2. $\operatorname{PGL}_2(5) \cong S_5$ （位数は120）<br>
+        3. $\operatorname{GL}_3(2) \cong \operatorname{SL}_3(2) \cong \operatorname{PSL}_3(2) \cong \operatorname{PSL}_2(7)$ （位数は168）。体 $\mathbb{F}_2$ 上ではスカラーが $1$ のみであるため、$\operatorname{GL}$, $\operatorname{SL}$, $\operatorname{PGL}$, $\operatorname{PSL}$ はすべて一致する。
+    </div>
+
+    <h2>2. GL, SL, PGL, PSL に該当する推移的部分群の完全リスト</h2>
+
+    <p>これまでの表（次数5から8）から、構造がこれらの群に一致する（同型である）ものをすべて網羅した。表における名称は、同型なものを併記している。</p>
+
+    <table>
+        <tr>
+            <th>次数 $n$</th>
+            <th>GAP T番号</th>
+            <th>群の構造・名称</th>
+            <th>位数</th>
+            <th>推移的な作用の幾何学的・代数的な意味</th>
+        </tr>
+        <tr>
+            <td><strong>5</strong></td>
+            <td><strong>5T4</strong></td>
+            <td>$A_5 \cong \operatorname{PSL}_2(5)$</td>
+            <td>60</td>
+            <td>5点集合への自然な交代群としての作用。$\operatorname{PSL}_2(5)$ としては、射影直線 $\mathbb{P}^1(\mathbb{F}_5)$ の6点上ではなく、Sylow 2-部分群（5個存在する）への共役作用として5点に推移的に作用する。</td>
+        </tr>
+        <tr>
+            <td><strong>5</strong></td>
+            <td><strong>5T5</strong></td>
+            <td>$S_5 \cong \operatorname{PGL}_2(5)$</td>
+            <td>120</td>
+            <td>5点集合への対称群としての自然な作用。</td>
+        </tr>
+        <tr>
+            <td><strong>6</strong></td>
+            <td><strong>6T12</strong></td>
+            <td>$A_5 \cong \operatorname{PSL}_2(5)$</td>
+            <td>60</td>
+            <td>有限体 $\mathbb{F}_5$ 上の射影直線 $\mathbb{P}^1(\mathbb{F}_5)$ は $5+1=6$ 個の点からなる。$\operatorname{PSL}_2(5)$ がこの6点に対して分数線形変換として推移的に作用する。</td>
+        </tr>
+        <tr>
+            <td><strong>6</strong></td>
+            <td><strong>6T14</strong></td>
+            <td>$S_5 \cong \operatorname{PGL}_2(5)$</td>
+            <td>120</td>
+            <td>$\operatorname{PGL}_2(5)$ が、上記と同様に射影直線 $\mathbb{P}^1(\mathbb{F}_5)$ の6点に対して一次分数変換として推移的に作用する置換表現。</td>
+        </tr>
+        <tr>
+            <td><strong>7</strong></td>
+            <td><strong>7T5</strong></td>
+            <td>$\operatorname{GL}_3(2) \cong \operatorname{PSL}_2(7)$</td>
+            <td>168</td>
+            <td>有限体 $\mathbb{F}_2$ 上の射影平面（ファノ平面）は7つの点を持つ。$\operatorname{GL}_3(2)$ はこの7点に対して自己同型群として推移的かつ2重推移的に作用する。</td>
+        </tr>
+        <tr>
+            <td><strong>8</strong></td>
+            <td><strong>8T12</strong></td>
+            <td>$\operatorname{SL}_2(3)$</td>
+            <td>24</td>
+            <td>交代群 $A_4$ の二重被覆群である。8点集合上への推移的な作用を持つ可解群である。</td>
+        </tr>
+        <tr>
+            <td><strong>8</strong></td>
+            <td><strong>8T23</strong></td>
+            <td>$\operatorname{GL}_2(3)$</td>
+            <td>48</td>
+            <td>対称群 $S_4$ の二重被覆群である。$\operatorname{SL}_2(3)$ を指数2の正規部分群として含み、8点集合上に推移的に作用する。</td>
+        </tr>
+        <tr>
+            <td><strong>8</strong></td>
+            <td><strong>8T37</strong></td>
+            <td>$\operatorname{PSL}_2(7) \cong \operatorname{GL}_3(2)$</td>
+            <td>168</td>
+            <td>有限体 $\mathbb{F}_7$ 上の射影直線 $\mathbb{P}^1(\mathbb{F}_7)$ は $7+1=8$ 個の点からなる。$\operatorname{PSL}_2(7)$ がこの8点に対して分数線形変換として推移的に作用する。原始的な作用である。</td>
+        </tr>
+        <tr>
+            <td><strong>8</strong></td>
+            <td><strong>8T43</strong></td>
+            <td>$\operatorname{PGL}_2(7)$</td>
+            <td>336</td>
+            <td>$\operatorname{PGL}_2(7)$ が、上記と同様に $\mathbb{F}_7$ 上の射影直線 $\mathbb{P}^1(\mathbb{F}_7)$ の8点に対して推移的に作用する。$\operatorname{PSL}_2(7)$ を指数2の正規部分群として含む。</td>
+        </tr>
+    </table>
+
+</body>
+</html>

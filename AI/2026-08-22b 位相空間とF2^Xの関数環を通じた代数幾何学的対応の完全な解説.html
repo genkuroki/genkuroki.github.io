@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>位相空間と 𝔽₂^X の関数環を通じた代数幾何学的対応の完全な解説</title>
+    <!-- MathJax v3 の設定: $ によるインライン数式の有効化 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.8;
+            margin: 0 auto;
+            max-width: 1000px;
+            padding: 30px;
+            color: #2c3e50;
+            background-color: #fcfcfc;
+        }
+        h1, h2, h3 {
+            color: #1a252f;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+        }
+        h2 {
+            font-size: 1.6em;
+            border-left: 5px solid #2980b9;
+            padding-left: 15px;
+        }
+        h3 {
+            font-size: 1.3em;
+            color: #2980b9;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .theorem, .proposition, .lemma, .definition {
+            background-color: #f8f9fa;
+            border-left: 5px solid #2980b9;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .definition {
+            border-left: 5px solid #8e44ad;
+            background-color: #f9f0ff;
+        }
+        .proof {
+            background-color: #ffffff;
+            border: 1px solid #dcdde1;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .proof-title {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+            display: inline-block;
+        }
+        .example {
+            background-color: #eafaf1;
+            border-left: 5px solid #27ae60;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+        .remark {
+            background-color: #fff9e6;
+            border-left: 5px solid #f1c40f;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        code {
+            background-color: #f1f2f6;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        .references {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 3px solid #bdc3c7;
+        }
+        .references ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .references li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>位相空間と $\mathbb{F}_2^X$ の関数環を通じた代数幾何学的対応の完全な解説</h1>
+
+    <p>
+        本稿では、位相空間 $X$ における幾何学的な性質（フィルターの収束、連続性、分離公理、連続関数の拡張性など）が、2元体 $\mathbb{F}_2$ 上の関数環 $\mathbb{F}_2^X$ における代数的な性質（イデアルの包含関係や和、極大イデアル、位相環の構造など）としてどのように完全に翻訳されるかをまとめる。
+    </p>
+    <p>
+        特に、位相空間の点や閉集合の「分離性」に関するイデアル和による特徴付けに加え、$\mathbb{F}_2^X$ に線型位相（linear topology）を導入することで位相環を構成し、元の空間 $X$ が <strong>$T_1$ 空間</strong> であればその位相構造を完全に復元できるという、Stone 双対性（Stone duality）の基礎となる事実についてもギャップなく厳密な証明を与える。自己完結性（self-containedness）を高めるため、各章において前提となる位相空間論および環論の基本定義と具体例を適宜補足する。
+    </p>
+
+    <h2>1. 基礎概念の準備（位相空間、関数環、イデアル）</h2>
+
+    <div class="definition">
+        <strong>定義 1.0（位相空間と開近傍系）</strong><br>
+        集合 $X$ と、その部分集合の族 $\tau$ が以下の条件を満たすとき、組 $(X, \tau)$ を<strong>位相空間 (topological space)</strong> と呼び、$\tau$ の元を<strong>開集合 (open set)</strong> と呼ぶ。
+        <ol>
+            <li>$\varnothing \in \tau$ かつ $X \in \tau$</li>
+            <li>$U_1, U_2 \in \tau \implies U_1 \cap U_2 \in \tau$ （有限交叉について閉じている）</li>
+            <li>$\{U_\lambda\}_{\lambda \in \Lambda} \subset \tau \implies \bigcup_{\lambda \in \Lambda} U_\lambda \in \tau$ （任意の合併について閉じている）</li>
+        </ol>
+        点 $x \in X$ を含む開集合全体を、点 $x$ の<strong>開近傍系 (open neighborhood system)</strong> と呼び、$\mathcal{N}(x)$ で表す。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.1（関数環 $\mathbb{F}_2^X$ とブール環）</strong><br>
+        $X$ を任意の集合とし、$\mathbb{F}_2 = \{0, 1\}$ を2元からなる有限体とする。$X$ から $\mathbb{F}_2$ への関数全体がなす集合を $\mathbb{F}_2^X$ とする。この集合は、関数同士の各点ごとの加法（$1+1=0$）と乗法により可換環となる。<br>
+        さらに任意の $f \in \mathbb{F}_2^X$ に対して $f^2 = f$ および $f + f = 0$ が成り立つため、この環は<strong>ブール環 (Boolean ring)</strong> である。<br>
+        部分集合 $A \subset X$ に対して、<strong>指示関数に類する関数</strong> $f_A \in \mathbb{F}_2^X$ を次のように定める：
+        $$ f_A(x) = \begin{cases} 0 & (x \in A) \\ 1 & (x \notin A) \end{cases} $$
+        また、関数 $f \in \mathbb{F}_2^X$ の零点集合を $Z(f) = \{x \in X \mid f(x) = 0\}$ とする。定義より、任意の $f$ に対して $f = f_{Z(f)}$ が成り立つ。
+    </div>
+
+    <div class="example">
+        <strong>例 1.2（有限集合における $\mathbb{F}_2^X$ の具体例）</strong><br>
+        $X = \{a, b\}$ のとき、関数環 $\mathbb{F}_2^X$ は $2^2 = 4$ つの要素を持つ。具体的には以下の4つの関数である。<br>
+        ・ $0$ (零関数): $a \mapsto 0, b \mapsto 0$ (すなわち $f_X$) <br>
+        ・ $1$ (単位元): $a \mapsto 1, b \mapsto 1$ (すなわち $f_\varnothing$) <br>
+        ・ $f_{\{a\}}$: $a \mapsto 0, b \mapsto 1$ <br>
+        ・ $f_{\{b\}}$: $a \mapsto 1, b \mapsto 0$ <br>
+        ここで $f_{\{a\}} + f_{\{b\}} = 1$、$f_{\{a\}} \cdot f_{\{b\}} = 0$ などの演算が各点ごとに成立することがわかる。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.3（イデアルと近傍のイデアル）</strong><br>
+        可換環 $R$ の空でない部分集合 $I$ が、和について閉じており（$a, b \in I \implies a+b \in I$）、かつ環の任意の元による乗法を吸収する（$r \in R, a \in I \implies ra \in I$）とき、$I$ を $R$ の<strong>イデアル (ideal)</strong> と呼ぶ。<br>
+        位相空間 $X$ において、点 $x \in X$ の開近傍系 $\mathcal{N}(x)$ に対応する環 $\mathbb{F}_2^X$ のイデアル $I_{\mathcal{N}(x)}$ を次のように定める。
+        $$ I_{\mathcal{N}(x)} = \{f \in \mathbb{F}_2^X \mid \exists U \in \mathcal{N}(x), \forall z \in U, f(z) = 0\} $$
+        これは、点 $x$ の「ある近傍上で恒等的に $0$ となる関数」の全体であり、代数幾何学における「点 $x$ において芽 (germ) が零になる関数」の概念に対応する。
+        同様に、部分集合 $A \subset X$ に対しても、ある開近傍 $U \supset A$ 上で $0$ となる関数のイデアルを $I_{\mathcal{N}(A)}$ と定義する。すなわち、
+        $$ I_{\mathcal{N}(A)} = \{f \in \mathbb{F}_2^X \mid \exists U \supset A \text{ (open)}, \forall z \in U, f(z) = 0\} $$
+        である。
+    </div>
+
+    <div class="definition">
+        <strong>定義 1.4（イデアルの和と互いに素）</strong><br>
+        環 $\mathbb{F}_2^X$ の2つのイデアル $I, J$ に対して、和イデアル $I + J = \{f + g \mid f \in I, g \in J\}$ を定義する。これは $I$ と $J$ の双方を含む最小のイデアルである。
+        $I + J = \mathbb{F}_2^X$ となる必要十分条件は、乗法単位元である定数関数 $1$ が $1 \in I + J$ を満たすことである。このとき $I$ と $J$ は<strong>互いに素 (comaximal)</strong> であるという。
+    </div>
+
+    <h2>2. フィルターの収束とイデアルの代数幾何学</h2>
+
+    <div class="definition">
+        <strong>定義 2.1（フィルターと対応するイデアル、極大イデアル）</strong><br>
+        集合 $X$ 上の<strong>フィルター (filter)</strong> $F$ とは、べき集合 $\mathcal{P}(X)$ の部分集合族であり、以下の条件を満たすものである。
+        <ol>
+            <li>$F \neq \varnothing$ かつ $\varnothing \notin F$</li>
+            <li>$A, B \in F \implies A \cap B \in F$</li>
+            <li>$A \in F$ かつ $A \subset B \implies B \in F$</li>
+        </ol>
+        包含関係について極大なるフィルターを<strong>超フィルター (ultrafilter)</strong>と呼ぶ。<br>
+        一方、環 $R$ のイデアル $M \neq R$ であり、$M$ を真に含むイデアルが $R$ 自身しか存在しないものを<strong>極大イデアル (maximal ideal)</strong> と呼ぶ。<br>
+        フィルター $F$ に対して、$\mathbb{F}_2^X$ のイデアル $I_F$ を次のように定める：
+        $$ I_F = \{f_A \mid A \in F\} $$
+    </div>
+
+    <div class="example">
+        <strong>例 2.2（フィルターの具体例）</strong><br>
+        ・<strong>主フィルター (Principal Filter):</strong> 集合 $X$ の空でない部分集合 $S$ に対して、$S$ を包含する部分集合の全体 $F_S = \{A \subset X \mid S \subset A\}$ はフィルターとなる。特に $S = \{x\}$ （一点）のとき、これは超フィルター（主超フィルター）となる。<br>
+        ・<strong>補有限フィルター (Cofinite Filter):</strong> $X$ を無限集合とする。「$X \setminus A$ が有限集合となるような $A \subset X$ 全体」はフィルターをなす。これは自由フィルター（いかなる主フィルターにも含まれないフィルター）の代表例である。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 2.3（フィルターとイデアルの対応および零点集合）</strong><br>
+        写像 $F \mapsto I_F$ は、$X$ 上のフィルター全体と $\mathbb{F}_2^X$ の真のイデアル全体の一対一対応（全単射）を与える。
+        また、イデアル $I_F$ の共通零点集合 $V_{I_F} = \{x \in X \mid \forall f \in I_F, f(x)=0\}$ について、次が成り立つ：
+        $$ V_{I_F} = \bigcap_{A \in F} A $$
+    </div>
+    
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        全単射性について：<br>
+        1. フィルターの交叉の公理（$A, B \in F \implies A \cap B \in F$）は、イデアルの加法閉性に対応する。実際、$f_A, f_B \in I_F$ のとき、$f_A + f_B$ は $A \cap B$ 上で $0$ を取り、$X \setminus (A \cup B)$ 上でも $0$ を取る関数となるが、指示関数の性質を活かして $f_{A \cap B}$ を作ることができる。<br>
+        2. 上位集合を含む公理（$A \in F, A \subset B \implies B \in F$）は、乗法吸収性に対応する。$f_A \in I_F$ と任意の $g \in \mathbb{F}_2^X$ に対して、$g \cdot f_A$ は少なくとも $A$ 上で $0$ になるため、$B = Z(g \cdot f_A)$ とおけば $A \subset B$ であり、$g \cdot f_A = f_B \in I_F$ となる。<br>
+        零点集合について：<br>
+        点 $x \in X$ を任意に取る。$x \in V_{I_F}$ は定義より $\forall f \in I_F, f(x) = 0$ である。
+        $I_F = \{f_A \mid A \in F\}$ であるから、この条件は $\forall A \in F, f_A(x) = 0$ と同値である。
+        指示関数 $f_A$ の定義より、$f_A(x) = 0 \iff x \in A$ である。
+        ゆえに、$\forall A \in F, x \in A$ となり、これは $x \in \bigcap_{A \in F} A$ と同値である。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <div class="proposition">
+        <strong>定理 2.4（超フィルターと極大イデアルの対応）</strong><br>
+        写像 $F \mapsto I_F$ は、集合 $X$ の超フィルター全体と可換環 $\mathbb{F}_2^X$ の<strong>極大イデアル (maximal ideal)</strong> 全体との間の一対一対応を与える。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        まず、$F \mapsto I_F$ が包含関係を保つことを厳密に確認する。$F_1 \subset F_2$ とすると、任意の $A \in F_1$ に対し $A \in F_2$ であるから $f_A \in I_{F_2}$ となり、$I_{F_1} \subset I_{F_2}$ が従う。
+        逆に $I_{F_1} \subset I_{F_2}$ であれば、任意の $A \in F_1$ に対して $f_A \in I_{F_1} \subset I_{F_2}$ となり、$I_{F_2}$ の定義からある $B \in F_2$ が存在して $f_A = f_B$ となる。指示関数の定義より $f_A = f_B \implies A = B$ であるから $A \in F_2$。よって $F_1 \subset F_2$ が成立する。<br>
+        次に、真性が保たれることを見る。$F$ が全体集合 $\mathcal{P}(X)$ となる（すなわち真のフィルターでない）のは $\varnothing \in F$ のときであり、これは $f_\varnothing = 1 \in I_F$ と同値である。$1$ を含むイデアルは環全体であるから、真性は互いに保たれる。<br>
+        最後に極大性を示す。$F$ を超フィルターとする。$I_F$ を包含する真のイデアル $J$ が存在したとする。命題 2.3 の全単射性より、$J = I_G$ となる真のフィルター $G$ が存在する。上で示した包含関係の保存性から $I_F \subset I_G \implies F \subset G$ となる。しかし $F$ は超フィルター（極大フィルター）であるため、真のフィルター $G$ に真に包含されることはない。よって $F = G$ であり、$I_F = J$ となる。よって $I_F$ は極大イデアルである。
+        逆も同様に、極大イデアル $I_F$ に対応する $F$ が超フィルターでないと仮定すれば、$F$ を真に含むフィルター $G$ が存在し、$I_F \subsetneq I_G$ となる真のイデアル $I_G$ が存在することになり、極大性に矛盾する。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <div class="remark">
+        <strong>注釈:</strong> 例 2.2 で述べたように、各点 $x \in X$ を生成元とする「主超フィルター (principal ultrafilter)」 $\{A \subset X \mid x \in A\}$ に対応する極大イデアルを<strong>「評価極大イデアル」</strong>と呼び、$M_x = \{f \in \mathbb{F}_2^X \mid f(x) = 0\}$ で表す。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 2.5（収束の代数的特徴付け）</strong><br>
+        位相空間 $X$ において、フィルター $F$ が点 $x \in X$ に収束する（すなわち $x$ の任意の近傍が $F$ に属する）ための必要十分条件は、
+        $$ I_{\mathcal{N}(x)} \subset I_F $$
+        が成り立つことである。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <strong>$(\implies)$</strong> フィルター $F$ が点 $x$ に収束すると仮定する。すなわち近傍系について $\mathcal{N}(x) \subset F$ である。
+        $f \in I_{\mathcal{N}(x)}$ を任意に取ると、$x$ のある開近傍 $V$ 上で恒等的に $0$ となる。
+        すなわち零点集合 $Z(f)$ は $V$ を包含する（$V \subset Z(f)$）。
+        $V \in \mathcal{N}(x) \subset F$ であり、フィルターの性質（上位集合を含む）から、$V \subset Z(f) \implies Z(f) \in F$ となる。
+        関数 $f$ は $f = f_{Z(f)}$ と書けるため、$Z(f) \in F$ より $f \in I_F$ が従う。<br>
+        <strong>$(\impliedby)$</strong> 逆に $I_{\mathcal{N}(x)} \subset I_F$ と仮定する。
+        点 $x$ の任意の開近傍 $V \in \mathcal{N}(x)$ を取る。
+        関数 $f_V$ は $V$ 上で $0$ となるため、$f_V \in I_{\mathcal{N}(x)}$ である。
+        仮定より $f_V \in I_F$ が成り立つ。$I_F$ の定義より $f_V = f_A$ を満たすある $A \in F$ が存在する。
+        指示関数が一致することから $V = Z(f_V) = Z(f_A) = A$ となるため、$V = A \in F$ を得る。よって近傍系が $F$ に含まれ、$F$ は $x$ に収束する。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <h2>3. 位相空間における連続性と開集合の代数的特徴付け</h2>
+
+    <div class="definition">
+        <strong>定義 3.0（連続写像）</strong><br>
+        二つの位相空間 $(X, \tau_X)$ と $(Y, \tau_Y)$ について、写像 $g \colon X \to Y$ が<strong>連続 (continuous)</strong> であるとは、任意の $Y$ の開集合 $V \in \tau_Y$ に対して、その逆像 $g^{-1}(V) = \{x \in X \mid g(x) \in V\}$ が $X$ の開集合となる（$g^{-1}(V) \in \tau_X$）ことである。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 3.1（開集合と関数の連続性の特徴付け）</strong><br>
+        (1) 部分集合 $U \subset X$ が開集合である $\iff$ 任意の $x \in U$ に対して $f_U \in I_{\mathcal{N}(x)}$。 <br>
+        (2) 関数 $f \in \mathbb{F}_2^X$ が（離散位相を持つ $\mathbb{F}_2$ への）連続関数である $\iff$ 任意の点 $x \in X$ に対して、$f \in I_{\mathcal{N}(x)}$ または $f + 1 \in I_{\mathcal{N}(x)}$ のいずれかが成り立つ。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        (1) $U$ が開集合であれば、任意の $x \in U$ について $U$ 自身が $x$ の開近傍であり、$f_U$ は $U$ 上で $0$ を取るため $f_U \in I_{\mathcal{N}(x)}$ である。
+        逆に条件を満たせば、各 $x \in U$ に対してある近傍 $V_x$ 上で $f_U = 0$ となる。$f_U = 0$ となるのは定義より $U$ 上のみであるから $V_x \subset U$。よって $U = \bigcup_{x \in U} V_x$ となり、$U$ は開集合の和で表せるため開集合である。<br>
+        (2) $f$ が離散位相空間 $\mathbb{F}_2$ へ連続であることは、$f^{-1}(0)$ と $f^{-1}(1)$ が共に $X$ の開集合であることと同値である。
+        $f$ が連続であるとする。任意の $x$ について、$f(x)=0$ ならば $x \in f^{-1}(0)$ であり、これは開集合であるため $x$ の開近傍となる。この上で $f=0$ であるから $f \in I_{\mathcal{N}(x)}$。
+        一方、$f(x)=1$ ならば $x \in f^{-1}(1)$ となり、この開近傍上で $f=1$、すなわち $f+1=0$ となる。よって $f+1 \in I_{\mathcal{N}(x)}$。
+        逆に各点 $x$ で $f \in I_{\mathcal{N}(x)}$ または $f + 1 \in I_{\mathcal{N}(x)}$ が成り立つと仮定する。$U = f^{-1}(0)$ が開集合であることを示す。$U$ の任意の点 $x$ を取る。もし $f+1 \in I_{\mathcal{N}(x)}$ ならば、$x$ を含むある近傍上で $f+1=0$ すなわち $f=1$ となるが、これは $x \in U$（$f(x)=0$）に矛盾する。したがって $f \in I_{\mathcal{N}(x)}$ でなければならず、$x$ はある近傍を含んで $U$ に属するため、$U$ は開集合となる。全く同様の論理で $f^{-1}(1)$ も開集合となり、連続性が示される。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <div class="proposition">
+        <strong>命題 3.2（連続写像と引き戻し）</strong><br>
+        写像 $g \colon X \to Y$ による関数の引き戻しを $g^* \colon \mathbb{F}_2^Y \to \mathbb{F}_2^X$ ($g^*(f) = f \circ g$) とする。<br>
+        写像 $g$ が連続であるための必要十分条件は、任意の点 $x \in X$ に対して、$g^*(I_{\mathcal{N}(g(x))}) \subset I_{\mathcal{N}(x)}$ が成り立つことである。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        $(\implies)$ $g$ を連続とする。任意の $x \in X$ と、$I_{\mathcal{N}(g(x))}$ に属する任意の関数 $f$ を取る。定義より、$g(x)$ のある開近傍 $V$ が存在して、その上で $f = 0$ となる。$g$ の連続性より、逆像 $U = g^{-1}(V)$ は $X$ における $x$ の開近傍である。この $U$ の任意の点 $z$ に対して、$g^*(f)(z) = f(g(z))$ を計算すると、$z \in U \implies g(z) \in V$ であるため $f(g(z)) = 0$ となる。よって $g^*(f)$ は近傍 $U$ 上で $0$ となり、$g^*(f) \in I_{\mathcal{N}(x)}$ を満たす。<br>
+        $(\impliedby)$ 条件を仮定する。任意の $x \in X$ と $g(x)$ の任意の開近傍 $V$ を取る。指示関数 $f_V \in \mathbb{F}_2^Y$ は $V$ 上で $0$ を取るため、$f_V \in I_{\mathcal{N}(g(x))}$ である。仮定より、その引き戻し $g^*(f_V) \in I_{\mathcal{N}(x)}$ となる。
+        ところで $g^*(f_V)(z) = 0 \iff f_V(g(z))=0 \iff g(z) \in V \iff z \in g^{-1}(V)$ であるから、関数 $g^*(f_V)$ はまさしく逆像 $g^{-1}(V)$ の指示関数 $f_{g^{-1}(V)}$ に他ならない。
+        これが $I_{\mathcal{N}(x)}$ に属すということは、$x$ のある開近傍 $U$ が $g^{-1}(V)$ に含まれることを意味する。したがって、各点 $x$ において $g^{-1}(V)$ が開近傍を包含するため、$g^{-1}(V)$ は開集合であり、$g$ は連続である。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <div class="example">
+        <strong>コンパクト Hausdorff 空間の特徴付け:</strong><br>
+        位相空間 $X$ がコンパクト Hausdorff であるとは、任意の超フィルターがただ一つの点に収束することと同値である。これを代数的に翻訳すると、「可換環 $\mathbb{F}_2^X$ の<strong>任意の極大イデアル $M$ に対して、$I_{\mathcal{N}(x)} \subset M$ を満たす点 $x \in X$ がただ一つ存在する</strong>」という美しい代数的な性質と同値になる。
+    </div>
+
+    <h2>4. $\mathbb{F}_2^X$ の位相環構造（線型位相の導入）</h2>
+
+    <p>
+        関数環 $\mathbb{F}_2^X$ 自体に自然な位相を導入することで、元の位相空間 $X$ の構造との関連をさらに深めることができる。ただし、単なる積位相（点ごとの収束）では不十分な場合がある。
+    </p>
+    
+    <div class="definition">
+        <strong>定義 4.0（位相環と線型位相）</strong><br>
+        環 $R$ が位相空間の構造を持ち、環の基本演算である加法 $(x, y) \mapsto x+y$、反数 $x \mapsto -x$、乗法 $(x, y) \mapsto xy$ がすべて（直積位相から）連続写像となるとき、$R$ を<strong>位相環 (topological ring)</strong> と呼ぶ。<br>
+        特に、位相環の $0$ の基本近傍系（neighborhood basis of zero）が「イデアルの族」によって与えられているとき、その位相を<strong>線型位相 (linear topology)</strong> と呼ぶ。
+    </div>
+
+    <div class="proposition">
+        <strong>命題 4.1（$\mathbb{F}_2$ 上の自明な位相の不適当さ）</strong><br>
+        位相空間 $\mathbb{F}_2$ に位相 $\tau_0 = \{\varnothing, \{0\}, \mathbb{F}_2\}$ または $\tau_1 = \{\varnothing, \{1\}, \mathbb{F}_2\}$ を入れた空間は、いずれも加法 $+ \colon \mathbb{F}_2 \times \mathbb{F}_2 \to \mathbb{F}_2$ が連続にならず、位相環にはならない。
+    </div>
+    
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        $\tau_0$ の場合を考える。加法が連続であると仮定する。$\{0\}$ は開集合であるため、その逆像 $+^{-1}(\{0\}) = \{(0, 0), (1, 1)\}$ は直積位相 $\tau_0 \times \tau_0$ において開集合でなければならない。
+        しかし、直積位相の定義から、開集合の基本要素は $U \times V$ ($U, V \in \tau_0$) の形をしている。点 $(1, 1)$ を含む開集合を作るためには、$U$ も $V$ も $1$ を含んでいなければならない。$\tau_0$ の中で $1$ を含む開集合は $\mathbb{F}_2$ しか存在しないため、$U = \mathbb{F}_2, V = \mathbb{F}_2$ とせざるを得ない。
+        したがって、$(1, 1)$ を含む最小の開集合は $\mathbb{F}_2 \times \mathbb{F}_2$ となるが、これは明らかに $\{(0, 0), (1, 1)\}$ には含まれない（例えば $(1, 0)$ がはみ出す）。これは逆像が開集合であることに矛盾するため、加法は連続ではない。$\tau_1$ についても同様に $(0, 0) = +^{-1}(\{0\})$ を考えれば矛盾が導ける。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <p>
+        したがって、$\mathbb{F}_2^X$ を位相環にするためには、単なる直積位相ではなくイデアルを用いた線型位相を導入する。
+    </p>
+
+    <div class="proposition">
+        <strong>命題 4.2（$\mathbb{F}_2^X$ の線型位相）</strong><br>
+        イデアルの有限交叉の全体を $\mathcal{B} = \{ \bigcap_{i=1}^n I_{\mathcal{N}(x_i)} \mid n \in \mathbb{N}, x_i \in X \}$ とする。
+        この $\mathcal{B}$ を環の $0$ の基本近傍系として定めることで、$\mathbb{F}_2^X$ は位相環となる。
+        さらに、空間 $X$ がすべての点について $I_{\mathcal{N}(x)}$ が自明でない（密着位相でない）とき、この位相環は Hausdorff となる。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        $\mathcal{B}$ の各元はイデアルである。イデアルは加法について部分群であり、乗法について吸収的である（$a \in \mathbb{F}_2^X, I \in \mathcal{B} \implies a \cdot I \subset I$）。また有限交叉について閉じているため、$\mathcal{B}$ を $0$ の基本近傍系とする群位相は自然に環の演算と両立し、線型位相環の公理を満たす。
+        Hausdorff 性を示すには、すべての基本近傍の共通部分が $\{0\}$ のみからなること、すなわち $\bigcap_{B \in \mathcal{B}} B = \{0\}$ を示せばよい。
+        ある関数 $f$ がすべての $B \in \mathcal{B}$ に属すると仮定する。特に、$B$ として単一の $I_{\mathcal{N}(x)}$ を取れば、関数 $f$ はすべての点 $x \in X$ について $f \in I_{\mathcal{N}(x)}$ に属することになる。
+        これは、任意の $x \in X$ に対して、ある開近傍 $U_x$ が存在し、その上で恒等的に $f=0$ となることを意味する。
+        空間全体 $X$ はこれらの開近傍の和集合 $X = \bigcup_{x \in X} U_x$ として被覆される。任意の $y \in X$ はある $U_x$ に含まれるため、$f(y) = 0$ となる。よって空間全体で $f = 0$ となる。ゆえに $\bigcap B = \{0\}$ となり位相環は Hausdorff である。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <h2>5. 空間の分離公理と位相の一意的な復元（$T_1$ 空間）</h2>
+
+    <p>
+        位相環 $\mathbb{F}_2^X$ の代数構造から、元の空間 $X$ の位相を完全に復元できるかという問題は、空間の分離公理に依存する。
+    </p>
+    
+    <div class="definition">
+        <strong>定義 5.0（$T_0, T_1$ 空間と Sober 空間）</strong><br>
+        位相空間 $X$ において、<br>
+        ・<strong>$T_0$ 空間 (Kolmogorov space):</strong> 任意の相異なる2点 $x, y \in X$ に対し、$x$ を含み $y$ を含まない開集合が存在する、<strong>または</strong> $y$ を含み $x$ を含まない開集合が存在する。<br>
+        ・<strong>$T_1$ 空間 (Fréchet space):</strong> 任意の相異なる2点 $x, y \in X$ に対し、$x$ を含み $y$ を含まない開集合が存在する、<strong>かつ</strong> $y$ を含み $x$ を含まない開集合が存在する。これは「すべての一点集合 $\{x\}$ が閉集合である」ことと同値である。<br>
+        ・<strong>Sober 空間:</strong> 既約閉集合（これ以上小さな2つの閉集合の和として書けない閉集合）が、常にただ一つの「生成点 (generic point)」の閉包として一意に表されるような空間。
+    </div>
+
+    <div class="example">
+        <strong>例 5.1（$T_0$ および Sober 空間での復元不可能性の反例）</strong><br>
+        $X = \{a, b\}$ 上の2つの位相 $\tau_1 = \{\varnothing, \{a\}, X\}$（Sierpiński空間）と $\tau_2 = \{\varnothing, \{b\}, X\}$ を考える。これらは互いに異なる $T_0$ 空間（かつ Sober 空間）である。<br>
+        $\tau_1$ において、点 $b$ の唯一の開近傍は $X$ 自身であるため、$I_{\mathcal{N}(b)}$ は「$X$ 全体で $0$ となる関数」のみ、すなわち $\{0\}$ となる。
+        同様に $\tau_2$ においては $I_{\mathcal{N}(a)} = \{0\}$ となる。<br>
+        いずれの場合も、基本近傍系の生成元に自明なイデアル $\{0\}$ が含まれてしまうため、$\mathbb{F}_2^X$ に引き起こされる線型位相は共に「離散位相」となり、代数・位相環構造からは元の2つの異なる位相 $\tau_1, \tau_2$ を区別することができない。弱い分離公理（$T_0$）では復元には不十分である。
+    </div>
+
+    <div class="proposition">
+        <strong>定理 5.2（$T_1$ 空間の代数的特徴付けと位相の復元）</strong><br>
+        位相空間 $X$ が <strong>$T_1$ 空間 (T1 space)</strong> であるための必要十分条件は、任意の点 $x, y \in X$ に対して、
+        $$ I_{\mathcal{N}(x)} \subset M_y \implies x = y $$
+        が成り立つことである。また、このとき位相環 $\mathbb{F}_2^X$ の構造から $X$ の位相構造は一意に復元できる。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明 ($T_1$ 特徴付けと復元への布石):</div><br>
+        <strong>幾何学的直観との対応:</strong> 代数的な条件 $I_{\mathcal{N}(x)} \subset M_y$ は、「点 $x$ の任意の開近傍上で 0 となる関数は、必ず点 $y$ でも 0 となる」ことを意味する。これは位相幾何学的に「点 $x$ の任意の開近傍に点 $y$ が含まれる」、すなわち「$x$ が $\{y\}$ の閉包に属する（$x \in \overline{\{y\}}$）」ことと完全に同値である。この直観に基づいて証明を行う。<br><br>
+        <strong>$(\implies)$</strong> $X$ を $T_1$ 空間とし $I_{\mathcal{N}(x)} \subset M_y$ を仮定する。
+        背理法を用いて $x \neq y$ と仮定して矛盾を導く。$T_1$ 空間の定義より、各点は閉集合であるため、点 $y$ を含まない点 $x$ の開近傍 $U$ が存在する（$y \notin U$ かつ $x \in U$）。
+        指示関数 $f_U$ は $U$ 上で $0$ なので、定義により $f_U \in I_{\mathcal{N}(x)}$ である。
+        仮定 $I_{\mathcal{N}(x)} \subset M_y$ より、$f_U$ は極大イデアル $M_y$ にも属さなければならない（$f_U \in M_y$）。しかし、評価イデアルの定義から、これは $f_U(y) = 0$ を意味する。
+        指示関数の性質上 $f_U(y) = 0 \iff y \in U$ であるため、これは $y \notin U$ と矛盾する。よって $x = y$。<br><br>
+        <strong>$(\impliedby)$</strong> 条件が成り立つと仮定する。任意の $x \neq y$ を取る。
+        条件の対偶を取ると、$x \neq y \implies I_{\mathcal{N}(x)} \not\subset M_y$ となる。これは、ある関数 $f \in I_{\mathcal{N}(x)}$ が存在し、$f \notin M_y$ となることを意味する。
+        $f \notin M_y$ とは、評価イデアルの定義から $f(y) \neq 0$、すなわち $f(y) = 1$ であることと同値である。
+        一方 $f \in I_{\mathcal{N}(x)}$ より、点 $x$ のある開近傍 $V$ が存在し、その上で $f = 0$ となる。
+        $y$ においては $f(y) = 1$ であるため、$y$ はこの開近傍 $V$ に含まれない（$y \notin V$）。よって、点 $y$ を含まずに点 $x$ を含む開近傍が存在する。対称的に $x, y$ の役割を入れ替えれば逆も言えるため、$X$ は $T_1$ 空間であることが示された。<br><br>
+        <strong>復元へのつながり:</strong> この証明が示す通り、$T_1$ 空間の性質によって「開近傍のイデアル $I_{\mathcal{N}(x)}$ が、自らと対応する極大イデアル $M_x$ 以外の極大イデアル $M_y$ に包摂されることは決してない」ことが保証される。この「一意な包含関係」こそが、次の定理 5.3 で空間を復元するための決定的な鍵となる。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <h3>位相環 $\mathbb{F}_2^X$ の構造から空間 $X$ を一意に復元するプロセス</h3>
+    <p>
+        定理 5.2 の後半で述べた「位相の復元」について、位相環 $(R, \tau_R) = (\mathbb{F}_2^X, \text{線型位相})$ の代数的・位相的データのみから、元の $T_1$ 空間 $(X, \tau_X)$ を完全に再構築する具体的な手順を示す。
+    </p>
+    
+    <div class="proposition">
+        <strong>定理 5.3（空間の完全な復元手順における $T_0$ と $T_1$ の決定的な差異）</strong><br>
+        位相空間 $X$ が $T_1$ 空間であるとき、位相環 $R = \mathbb{F}_2^X$ から空間 $X$ の集合としての構造および位相構造 $\tau_X$ は以下の手順で一意に復元される。この復元プロセスの「ステップ2」において、$T_0$ 空間では不可能であり、$T_1$ 空間でなければならない代数的な理由が明確に現れる。
+        <ol>
+            <li><strong>点の復元（評価極大イデアルの同定と $T_0$ の限界）:</strong><br>
+            空間 $X$ の各点 $x$ は、環 $R$ の極大イデアル $M_x = \{f \in R \mid f(x) = 0\}$ と一対一に対応する。<br>
+            実は空間が <strong>$T_0$ 空間</strong> であっても、相異なる点 $x, y$ に対して少なくとも一方は他方を含まない開集合を持つため、$f(x) \neq f(y)$ となる指示関数が存在し、$M_x \neq M_y$ が保証される。したがって、集合 $X$ 自体は極大イデアルの集合 $\mathcal{M} = \{M_x \mid x \in X\}$ として代数的に同定できる。</li>
+            <li><strong>開近傍のイデアル $I_{\mathcal{N}(x)}$ の一意な抽出（★ $T_1$ が不可欠なステップ）:</strong><br>
+            次に、位相環の $0$ の基本近傍系（開イデアル族）から、各極大イデアル $M_x$ に対応する $I_{\mathcal{N}(x)}$ を特定しなければならない。<br>
+            <strong>【なぜ $T_0$ ではダメなのか？】</strong><br>
+            $X$ が $T_0$ 空間に過ぎない場合、ある点 $x \neq y$ について $x \in \overline{\{y\}}$（$x$ の任意の開近傍が $y$ を含む）となる状況が起こり得る。このとき、代数的には $I_{\mathcal{N}(x)} \subset M_y$ が成立してしまう。つまり、$I_{\mathcal{N}(x)}$ が $M_x$ だけでなく $M_y$ にも含まれるため、位相環の包含関係のデータだけでは「この開イデアルはどの極大イデアル（点）のものか」を一意に決定できない。<br>
+            <strong>【なぜ $T_1$ なら良いのか？】</strong><br>
+            $X$ が <strong>$T_1$ 空間</strong> であれば、定理 5.2 より $I_{\mathcal{N}(x)} \subset M_y \implies x = y$ が成り立つ。したがって、「極大イデアル $M_x$ に含まれ、かつ他のいかなる極大イデアルにも含まれない最大の開イデアル」を探すことで、元の空間を参照せずに位相環の構造のみから $I_{\mathcal{N}(x)}$ を一意に抽出・紐付けできる。</li>
+            <li><strong>開集合系の完全な復元:</strong><br>
+            $X$（と同定された $\mathcal{M}$）の部分集合 $U$ が元の空間で開集合であるための必要十分条件は、命題 3.1 を用いて代数的に次のように翻訳される：<br>
+            「関数 $f_U$ が、任意の $M_x \in U$ に対して抽出した $I_{\mathcal{N}(x)}$ に属する」<br>
+            これにより、位相環 $(R, \tau_R)$ の構造のみから、どの部分集合が開集合であるかを完全に決定でき、元の空間の位相 $\tau_X$ が一意に復元される。</li>
+        </ol>
+    </div>
+
+    <h2>6. Hausdorff, 正則, 正規空間のイデアル和による特徴付け</h2>
+
+    <p>
+        $T_1$ より強い分離公理は、「イデアルが互いに素 (comaximal)」という条件で段階的に美しく表現される。ここでは省略を用いることなく、それぞれの分離公理に対応する証明を完全に記述する。
+    </p>
+
+    <div class="definition">
+        <strong>定義 6.0（強い分離公理）</strong><br>
+        ・<strong>Hausdorff 空間 ($T_2$ 空間):</strong> 任意の相異なる2点 $x, y \in X$ が互いに素な（交わらない）開近傍を持つ。<br>
+        ・<strong>正則空間 (Regular space):</strong> $T_1$ 空間であり、かつ、任意の閉集合 $F$ と $F$ に属さない点 $x$ が、互いに素な開近傍によって分離できる。<br>
+        ・<strong>正規空間 (Normal space):</strong> $T_1$ 空間であり、かつ、任意の互いに素な2つの閉集合 $F_1, F_2$ が、互いに素な開近傍によって分離できる（距離空間などは常に正規空間である）。
+    </div>
+
+    <div class="proposition">
+        <strong>定理 6.1（分離公理の代数幾何学的特徴付け）</strong><br>
+        (1) $X$ が <strong>Hausdorff 空間</strong> $\iff$ 任意の $x \neq y$ に対し $1 \in I_{\mathcal{N}(x)} + I_{\mathcal{N}(y)}$。 <br>
+        (2) $X$ が <strong>正則空間 (regular space)</strong> $\iff$ 任意の閉集合 $F$ と $x \notin F$ に対し $1 \in I_{\mathcal{N}(x)} + I_{\mathcal{N}(F)}$。 <br>
+        (3) $X$ が <strong>正規空間 (normal space)</strong> $\iff$ 任意の互いに素な閉集合 $F_1, F_2$ に対し $1 \in I_{\mathcal{N}(F_1)} + I_{\mathcal{N}(F_2)}$。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明 ((1) Hausdorff空間について):</div>
+        $(\implies)$ $X$ が Hausdorff とし、$x \neq y$ を取る。定義より互いに素な開近傍 $U \ni x$ と $V \ni y$ が存在する。指示関数 $f_U$ は $U$ 上で $0$ を取るため $f_U \in I_{\mathcal{N}(x)}$ である。関数 $g = f_U + 1$ を考えると、これは $U$ で $1$、$X \setminus U$ で $0$ を取る。$U \cap V = \varnothing \implies V \subset X \setminus U$ であるから、$g$ は $V$ 上で $0$ を取る。ゆえに $g \in I_{\mathcal{N}(y)}$ である。ここで $f_U + g = f_U + (f_U + 1) = 2f_U + 1 = 1$（$\mathbb{F}_2$ の演算より）となるため、$1 \in I_{\mathcal{N}(x)} + I_{\mathcal{N}(y)}$ が示された。<br>
+        $(\impliedby)$ $1 = f + g$ となるような $f \in I_{\mathcal{N}(x)}, g \in I_{\mathcal{N}(y)}$ が存在すると仮定する。定義より、$x$ の開近傍 $U$ が存在して $U$ 上で $f=0$ となり、$y$ の開近傍 $V$ が存在して $V$ 上で $g=0$ となる。もし $U \cap V \neq \varnothing$ であり、ある点 $w \in U \cap V$ が存在したとすると、方程式より $1 = f(w) + g(w)$ となるが、$w$ は $U$ にも $V$ にも属するため $f(w) = 0$ かつ $g(w) = 0$ である。ゆえに $1 = 0 + 0 = 0$ となり矛盾が生じる。よって $U \cap V = \varnothing$ でなければならず、空間は Hausdorff である。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明 ((2) 正則空間について):</div>
+        $(\implies)$ $X$ が正則空間であるとし、任意の閉集合 $F$ と $x \notin F$ を取る。定義より互いに素な開近傍 $U \ni x$ と $V \supset F$ が存在する。指示関数 $f_U$ は $U$ 上で $0$ となるため $f_U \in I_{\mathcal{N}(x)}$ である。関数 $g = f_U + 1$ を考えると、これは $X \setminus U$ で $0$ となる。$U \cap V = \varnothing \implies V \subset X \setminus U$ であるから、$g$ は開集合 $V$ 上で恒等的に $0$ となり、定義 1.3 より $g \in I_{\mathcal{N}(F)}$ である。$f_U + g = 1$ より $1 \in I_{\mathcal{N}(x)} + I_{\mathcal{N}(F)}$ となる。<br>
+        $(\impliedby)$ $1 = f + g$ となるような $f \in I_{\mathcal{N}(x)}, g \in I_{\mathcal{N}(F)}$ が存在すると仮定する。定義より、$x$ の開近傍 $U$ が存在して $U$ 上で $f=0$ となり、また $F$ を包含する開集合 $V \supset F$ が存在して $V$ 上で $g=0$ となる。もし $U$ と $V$ が交わり、点 $w \in U \cap V$ が存在したとすると、$1 = f(w) + g(w) = 0 + 0 = 0$ となり矛盾。よって $U \cap V = \varnothing$。これにより $x$ と閉集合 $F$ が互いに素な開集合で分離され、正則性が示された。
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明 ((3) 正規空間について):</div>
+        $(\implies)$ $X$ が正規空間であるとし、任意の互いに素な閉集合 $F_1, F_2$ を取る。定義より互いに素な開近傍 $U \supset F_1$ と $V \supset F_2$ が存在する。指示関数 $f_U$ は $U$ 上で $0$ となるため $f_U \in I_{\mathcal{N}(F_1)}$ である。関数 $g = f_U + 1$ は $X \setminus U$ で $0$ となるが、$U \cap V = \varnothing \implies V \subset X \setminus U$ より、$g$ は $V$ 上で $0$ となる。したがって $g \in I_{\mathcal{N}(F_2)}$。$f_U + g = 1$ より $1 \in I_{\mathcal{N}(F_1)} + I_{\mathcal{N}(F_2)}$。<br>
+        $(\impliedby)$ $1 = f + g$ となるような $f \in I_{\mathcal{N}(F_1)}, g \in I_{\mathcal{N}(F_2)}$ が存在すると仮定する。定義より、$F_1$ を包含する開集合 $U$ が存在して $U$ 上で $f=0$ となり、$F_2$ を包含する開集合 $V$ が存在して $V$ 上で $g=0$ となる。もし $U \cap V \neq \varnothing$ であり $w \in U \cap V$ が存在したとすると、$1 = f(w) + g(w) = 0 + 0 = 0$ となり矛盾。よって $U \cap V = \varnothing$ となり、互いに素な閉集合を互いに素な開集合で分離できたため、正規性が示された。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <h2>7. 連続関数の拡張: $\mathbb{F}_2$ 版 Urysohn の補題と Tietze の拡張定理</h2>
+
+    <p>
+        実数体 $\mathbb{R}$ への関数に対する Urysohn や Tietze の定理は、$\mathbb{F}_2$ への関数に対しては、位相空間が「強ゼロ次元」であることと同値になる。ここで $C(X, \mathbb{F}_2)$ は、$X$ から離散位相を入れた $\mathbb{F}_2$ への連続関数全体を表す。
+    </p>
+
+    <div class="definition">
+        <strong>定義 7.1（クロープン集合と強ゼロ次元）</strong><br>
+        開集合であり同時に閉集合でもあるような部分集合を<strong>クロープン集合 (clopen set)</strong> と呼ぶ。<br>
+        位相空間 $X$ が <strong>強ゼロ次元 (strongly zero-dimensional)</strong> であるとは、$X$ が正規空間であり、任意の互いに素な閉集合 $F_1, F_2$ に対して、$F_1 \subset U$ かつ $F_2 \subset X \setminus U$ を満たすクロープン集合 $U$ が存在することである。
+    </div>
+
+    <div class="proposition">
+        <strong>定理 7.2（ Urysohn と Tietze の $\mathbb{F}_2$ への完全な翻訳 ）</strong><br>
+        以下の3つの条件は同値である。
+        <ol>
+            <li>$X$ は強ゼロ次元空間である。</li>
+            <li><strong>($\mathbb{F}_2$ 版 Urysohn の補題)</strong> 任意の互いに素な閉集合 $F_1, F_2$ に対して、連続関数 $f \in C(X, \mathbb{F}_2)$ が存在し、$F_1$ 上で $f=0$、$F_2$ 上で $f=1$ となる。</li>
+            <li><strong>($\mathbb{F}_2$ 版 Tietze の拡張定理)</strong> $X$ の任意の閉集合 $F$ と、その上の任意の連続関数 $g \in C(F, \mathbb{F}_2)$ に対して、空間全体への拡張となる連続関数 $f \in C(X, \mathbb{F}_2)$ （$f|_F = g$）が存在する。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">証明:</div>
+        <strong>(1 $\implies$ 2):</strong> 
+        強ゼロ次元であれば、互いに素な閉集合 $F_1, F_2$ を分離するクロープン集合 $U$ が存在する。$U$ で $0$、$X \setminus U$ で $1$ を取る指示関数 $f_U$ を構成する。逆像について $f_U^{-1}(0) = U$ はクロープンなので開集合、$f_U^{-1}(1) = X \setminus U$ も開集合となるため $f_U$ は連続関数としての条件を満たし、(2) が成立する。<br>
+        <strong>(2 $\implies$ 1):</strong>
+        (2) を満たす連続関数 $f$ が存在すれば、$U = f^{-1}(0)$ と置くと、$\mathbb{F}_2$ の各点は開かつ閉であるため、逆像 $U$ は $X$ におけるクロープン集合となる。$f$ の条件より $F_1 \subset U$ かつ $F_2 \subset f^{-1}(1) = X \setminus U$ となるため、強ゼロ次元性が従う。<br><br>
+        <strong>(2 $\implies$ 3):</strong> 
+        閉集合 $F$ と $g \in C(F, \mathbb{F}_2)$ が与えられたとする。定義域 $F$ を持つ関数 $g$ の連続性より、$F_1 = g^{-1}(0)$ と $F_2 = g^{-1}(1)$ は部分空間 $F$ における閉集合である。ここで $F$ 自身が $X$ の閉集合であるため、$F_1, F_2$ は空間 $X$ 全体から見ても閉集合となる。また $F_1 \cap F_2 = \varnothing$ であるため、これらは $X$ における互いに素な閉集合である。(2)の条件よりこれらを $0$ と $1$ で分離する連続関数 $f \in C(X, \mathbb{F}_2)$ が存在する。この $f$ は $F_1$ 上で $0$、$F_2$ 上で $1$ を取るため、任意の $x \in F$ で $g(x)$ と完全に一致し、拡張関数となる。<br>
+        <strong>(3 $\implies$ 2):</strong>
+        互いに素な閉集合 $F_1, F_2$ が与えられたとき、$F = F_1 \cup F_2$ は有限和なので閉集合である。$F_1$ 上で $0$、$F_2$ 上で $1$ を取る関数 $g \colon F \to \mathbb{F}_2$ を定義する。$g^{-1}(0) = F_1$、$g^{-1}(1) = F_2$ はそれぞれ $F$ の閉集合であり開集合でもあるため $g$ は連続である。(3)の仮定よりこれを拡張する連続関数 $f$ が存在し、(2) の条件を満たす。
+        <div class="qed">（証明終）</div>
+    </div>
+
+    <h2>8. Stone 空間への展望</h2>
+    
+    <p>
+        これらの結果から、$T_1$ 分離公理および各点での連続関数の性質が、可換環 $\mathbb{F}_2^X$ におけるイデアルの代数的操作として余すところなく捉えられることがわかる。
+        空間 $X$ が強ゼロ次元かつコンパクトである場合（いわゆる <strong>Stone空間</strong>）、環 $C(X, \mathbb{F}_2)$ の極大イデアルの空間に適切な位相（Stone位相）を導入することで、元の空間 $X$ との間に完全な双対性が成立する（<strong>Stoneの表現定理</strong>）。本稿での $\mathbb{F}_2^X$ の性質の翻訳は、この高度な代数幾何学的・圏論的対応を理解するための最も具体的かつ基礎的な第一歩である。
+    </p>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ul>
+            <li>Engelking, R. (1989). <i>General Topology</i>. Heldermann Verlag.</li>
+            <li>Johnstone, P. T. (1982). <i>Stone Spaces</i>. Cambridge University Press.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

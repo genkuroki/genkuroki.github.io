@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lie群の剰余群とCartanの閉部分群定理の完全な証明と解説</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+<style>
+  body {
+    font-family: serif;
+    line-height: 1.6;
+    margin: 40px auto;
+    max-width: 900px;
+    padding: 0 20px;
+    color: #333;
+  }
+  h1, h2, h3, h4 {
+    color: #111;
+  }
+  .definition, .theorem, .proposition, .lemma, .proof, .example, .remark {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  .definition { background-color: #f0f8ff; border-left: 5px solid #0066cc; }
+  .theorem { background-color: #fdf5e6; border-left: 5px solid #cc6600; }
+  .proposition { background-color: #f5fffa; border-left: 5px solid #00cc66; }
+  .lemma { background-color: #f0fff0; border-left: 5px solid #2e8b57; }
+  .proof { background-color: #f9f9f9; border-left: 5px solid #666; }
+  .example { background-color: #fffff0; border-left: 5px solid #cccc00; }
+  .remark { background-color: #f5f5f5; border-left: 5px solid #888; }
+  a { color: #0066cc; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>Lie群の剰余群とCartanの閉部分群定理の完全な証明と解説</h1>
+
+<p>本稿では、Lie群 $G$ を正規部分群 $N$ で割った剰余群 $G/N$ がLie群になるかどうかという問題について、厳密な証明を与える。結論から言えば、一般の正規部分群で割った場合はLie群にはならないが、位相的に閉な正規部分群で割った場合は自然にLie群になる。これを証明するために必要となる「Cartanの閉部分群定理」や、証明を自己完結 (self-contained) にするためのすべての基本概念、および直観的な意味付けについても漏れなく詳述する。</p>
+
+<h2>1. 基本概念の定義と準備</h2>
+
+<p>本論における議論のギャップを埋め、自己完結な解説とするために必要な諸定義や事実をここで完全に書き下す。</p>
+
+<div class="definition">
+<strong>定義 1.1 (Lie群とLie代数)</strong><br>
+可微分多様体 (differentiable manifold) $G$ が群構造を持ち、群演算である積 $m \colon G \times G \to G, (x, y) \mapsto xy$ および逆元を取る操作 $i \colon G \to G, x \mapsto x^{-1}$ がともに滑らかな写像 (smooth map) であるとき、$G$ をLie群 (Lie group) という。$G$ の単位元 $e$ における接空間 $T_e G$ は自然にLie代数 (Lie algebra) の構造を持ち、これを $\mathfrak{g}$ と表す。
+</div>
+
+<div class="definition">
+<strong>定義 1.2 (正規部分群)</strong><br>
+群 $G$ の部分群 $N$ が、任意の $g \in G$ に対して $gNg^{-1} = N$ を満たすとき、$N$ を $G$ の正規部分群 (normal subgroup) という。このとき、剰余類の集合 $G/N = \{ gN \mid g \in G \}$ は、演算 $(g_1 N)(g_2 N) = (g_1 g_2) N$ により自然に群となる。
+</div>
+
+<div class="definition">
+<strong>定義 1.3 (商位相)</strong><br>
+位相空間 $X$ と同値関係 $\sim$ が与えられたとき、商写像 $\pi \colon X \to X/\sim$ に関して、商空間 $X/\sim$ の部分集合 $U$ が開集合であることを、$\pi^{-1}(U)$ が $X$ の開集合であることと定義する。この位相を商位相 (quotient topology) という。
+</div>
+
+<div class="definition">
+<strong>定義 1.4 (指数写像)</strong><br>
+各 $X \in \mathfrak{g}$ に対して、$X$ を初期速度とする $G$ 上の1パラメータ部分群 (1-parameter subgroup) $\gamma_X \colon \mathbb{R} \to G$ が一意に存在する。このとき、写像 $\exp \colon \mathfrak{g} \to G$ を $\exp(X) = \gamma_X(1)$ によって定義し、これを指数写像 (exponential map) という。指数写像は $0 \in \mathfrak{g}$ のある開近傍から $e \in G$ のある開近傍への微分同相写像 (diffeomorphism) となる。
+</div>
+
+<div class="definition">
+<strong>定義 1.5 (埋め込まれた部分多様体)</strong><br>
+多様体 $M$ の部分集合 $S$ が埋め込まれた部分多様体 (embedded submanifold) であるとは、任意の $p \in S$ に対して、$M$ における $p$ の開近傍 $U$ と局所座標系 $(x_1, \dots, x_n)$ が存在して、$U \cap S$ が $x_{k+1} = \cdots = x_n = 0$ によって特徴付けられることである。この局所座標をスライスチャート (slice chart) という。
+</div>
+
+<div class="definition">
+<strong>定義 1.6 (沈め込み)</strong><br>
+可微分多様体間の滑らかな写像 $f \colon M \to N$ が、任意の点 $p \in M$ においてその微分 $df_p \colon T_p M \to T_{f(p)} N$ が全射 (surjective) であるとき、$f$ を沈め込み (submersion) という。
+</div>
+
+<div class="proposition">
+<strong>命題 1.7 (沈め込みの普遍性質)</strong><br>
+$f \colon M \to N$ を滑らかな沈め込みとする。滑らかな写像 $g \colon M \to P$ が、$f(x) = f(y)$ を満たす任意の $x, y \in M$ に対して $g(x) = g(y)$ を満たす（すなわち $g$ が $f$ のファイバー上で一定である）ならば、滑らかな写像 $h \colon N \to P$ が一意に存在して $g = h \circ f$ を満たす。
+</div>
+
+<div class="lemma">
+<strong>補題 1.8 (Lie-Trotter積公式)</strong><br>
+Lie群 $G$ とそのLie代数 $\mathfrak{g}$ において、任意の $X, Y \in \mathfrak{g}$ に対して次が成り立つ。
+$$ \exp(X+Y) = \lim_{n \to \infty} \left( \exp\left(\frac{1}{n}X\right) \exp\left(\frac{1}{n}Y\right) \right)^n $$
+</div>
+
+
+<h2>2. 一般の正規部分群による剰余群（Lie群にならない場合）</h2>
+
+<p>Lie群 $G$ を一般の正規部分群 $N$ で割った場合、剰余群 $G/N$ は商位相のもとでHausdorff空間 (Hausdorff space) にならないことがあり、その場合はLie群にはならない。</p>
+
+<div class="proposition">
+<strong>命題 2.1</strong><br>
+Lie群 $G$ とその正規部分群 $N$ について、剰余群 $G/N$ が商位相に関してHausdorff空間となるための必要十分条件は、$N$ が $G$ の閉集合であることである。
+</div>
+
+<div class="proof">
+<strong>証明.</strong><br>
+商写像を $\pi \colon G \to G/N$ とする。$G/N$ が商位相によりHausdorff空間であると仮定する。Hausdorff空間における1点集合 $\{ \pi(e) \}$ ($e$ は $G$ の単位元) は閉集合である。$\pi$ は連続であるため、その逆像 $\pi^{-1}(\{ \pi(e) \}) = N$ は $G$ の閉集合となる。<br><br>
+
+逆に $N$ が閉集合であるとする。直積空間 $G \times G$ 上の同値関係 $R = \{ (x, y) \in G \times G \mid x^{-1}y \in N \}$ を考える。連続写像 $f \colon G \times G \to G, (x, y) \mapsto x^{-1}y$ に対し $R = f^{-1}(N)$ であり、$N$ は閉集合であるから $R$ も $G \times G$ の閉集合である。$\pi$ は開写像 (open map) である。なぜなら、任意の開集合 $U \subset G$ に対し $\pi^{-1}(\pi(U)) = UN = \bigcup_{n \in N} Un$ は開集合の和集合ゆえ開集合となり、商位相の定義から $\pi(U)$ は開集合となるからである。開写像による商空間において、同値関係が閉集合であることと商空間がHausdorff空間であることは同値である。したがって $G/N$ はHausdorff空間となる。証明終。
+</div>
+
+<div class="example">
+<strong>反例 2.2</strong><br>
+$G = \mathbb{R}$ (加法群) とし、$N = \mathbb{Q}$ (有理数のなす部分群) とする。$\mathbb{R}$ は可換なLie群であり、任意の部分群は正規部分群である。しかし、$\mathbb{Q}$ は $\mathbb{R}$ において稠密であり、閉集合ではない。剰余群 $\mathbb{R}/\mathbb{Q}$ に商位相を入れると、任意の空でない開集合が空間全体と交わるため（密着位相に近い非Hausdorff位相となる）、可微分多様体の要件であるHausdorff性を満たさず、Lie群にはならない。
+</div>
+
+<div class="remark">
+<strong>反例の直観的意味</strong><br>
+$G/N$ の点を空間として区別するためには、元の空間 $G$ において $N$ の各剰余類が「互いに離れている」必要がある。$N$ が閉集合でない場合（例えば稠密な場合）、剰余類の境界が空間の中で溶け合ってしまい、商空間として独立した点を形成できなくなる。これが位相的にHausdorff性を満たさなくなる直観的な理由である。
+</div>
+
+
+<h2>3. Cartanの閉部分群定理</h2>
+
+<p>閉正規部分群で割った剰余群がLie群となることを示すためには、その閉部分群自身がLie群として良い性質を持っていることを保証する必要がある。それがCartanの閉部分群定理である。この定理は、部分群が「位相的に閉集合である」という位相的な条件を満たすだけで、自動的に「可微分多様体としての滑らかな構造」を持つことを保証する極めて強力な定理である。</p>
+
+<div class="theorem">
+<strong>定理 3.1 (Cartanの閉部分群定理)</strong><br>
+Lie群 $G$ の任意の部分群 $H$ が $G$ の閉集合であるならば、$H$ は $G$ の埋め込まれたLie部分群 (embedded Lie subgroup) である。
+</div>
+
+<div class="proof">
+<strong>証明.</strong><br>
+部分群 $H$ の「候補となるLie代数」を構成し、それが実際にベクトル空間となること、そして指数写像を用いて局所的に $H$ と一致することを示すことで証明を行う。<br><br>
+
+<strong>第1段落：候補となるLie代数の定義とスカラー倍の閉鎖性</strong><br>
+$H$ は $G$ の閉部分群であるとする。$H$ に対応するLie代数の候補 $\mathfrak{h}$ を次のように定義する。
+$$ \mathfrak{h} = \{ X \in \mathfrak{g} \mid \text{任意の } t \in \mathbb{R} \text{ について } \exp(tX) \in H \} $$
+まず、$\mathfrak{h}$ が $\mathfrak{g}$ の部分ベクトル空間であることを示す。定義から明らかに、任意の $X \in \mathfrak{h}$ と任意の実数 $s \in \mathbb{R}$ に対して $sX \in \mathfrak{h}$ である。したがって $\mathfrak{h}$ はスカラー倍について閉じている。<br><br>
+
+<strong>第2段落：ベクトルの和についての閉鎖性</strong><br>
+次に $X, Y \in \mathfrak{h}$ としたとき、$X+Y \in \mathfrak{h}$ となることを示す。ここで補題 1.8 のLie-Trotter積公式を用いる。任意の $t \in \mathbb{R}$ に対して、次が成り立つ。
+$$ \exp(t(X+Y)) = \lim_{n \to \infty} \left( \exp\left(\frac{t}{n}X\right) \exp\left(\frac{t}{n}Y\right) \right)^n $$
+$X, Y \in \mathfrak{h}$ であるため、任意の整数 $n \ge 1$ に対して $\exp(\frac{t}{n}X) \in H$ かつ $\exp(\frac{t}{n}Y) \in H$ である。$H$ は群であるから、それらの積およびその $n$ 乗も $H$ に属する。さらに $H$ は $G$ の閉集合であるため、$H$ の元の列の極限もまた $H$ に属する。したがって $\exp(t(X+Y)) \in H$ となり、$X+Y \in \mathfrak{h}$ が示された。以上により、$\mathfrak{h}$ は $\mathfrak{g}$ の部分ベクトル空間である。<br><br>
+
+<strong>第3段落：局所的な一致の証明のための背理法の仮定</strong><br>
+指数写像 $\exp$ は $\mathfrak{g}$ における原点 $0$ の近傍から $G$ における単位元 $e$ の近傍への微分同相写像である。定理を証明するためには、$0$ の十分小さな近傍 $U \subset \mathfrak{g}$ が存在し、$\exp(U \cap \mathfrak{h}) = \exp(U) \cap H$ が成り立つことを示せばよい。これが成り立てば、$\mathfrak{g}$ に適当な補空間を選んで基底を構成することでスライスチャートが構成でき、$H$ が埋め込まれた部分多様体であることが従う。<br>
+これが成り立たないと仮定して背理法で導く。部分空間 $\mathfrak{h}$ に対して、ベクトル空間としての補空間 $\mathfrak{m}$ を選び、$\mathfrak{g} = \mathfrak{h} \oplus \mathfrak{m}$ と直和分解する。このとき、写像 $\Phi \colon \mathfrak{h} \times \mathfrak{m} \to G$ を $\Phi(X, Y) = \exp(X)\exp(Y)$ で定義すると、$(0,0)$ での微分は同型となるため、逆写像定理より $(0,0)$ の近傍で局所微分同相となる。仮定より、いくら原点の近傍を小さく取っても $\exp(U \cap \mathfrak{h}) = \exp(U) \cap H$ が成り立たないため、$G$ において $e$ に収束する点列 $\{ h_n \} \subset H$ であって、$\exp(U \cap \mathfrak{h})$ に属さないようなものが存在する。<br><br>
+
+<strong>第4段落：点列の解析と矛盾の導出</strong><br>
+局所微分同相性より、十分大きな $n$ に対して $h_n = \exp(X_n)\exp(Y_n)$ と一意に書ける。ここで $X_n \in \mathfrak{h}$、$Y_n \in \mathfrak{m}$ であり、$n \to \infty$ のとき $X_n \to 0$ かつ $Y_n \to 0$ である。$h_n \in H$ であり、定義から $\exp(X_n) \in H$ であるため、群の性質から $\exp(Y_n) = \exp(-X_n)h_n \in H$ となる。もし $Y_n = 0$ であれば $h_n = \exp(X_n) \in \exp(U \cap \mathfrak{h})$ となってしまい矛盾するため、$Y_n \neq 0$ である。<br>
+$\mathfrak{m}$ に任意のノルム $\| \cdot \|$ を入れる。$c_n = \| Y_n \|$ とおくと、$c_n > 0$ かつ $c_n \to 0$ である。点列 $\frac{1}{c_n}Y_n$ は $\mathfrak{m}$ の単位球面上にある。単位球面はコンパクト (compact) であるから、収束する部分列が存在する。必要ならば部分列をとることで、ある $Y \in \mathfrak{m}$ (ただし $\| Y \| = 1$) に対して $\frac{1}{c_n}Y_n \to Y$ となると仮定してよい。<br>
+任意の $t \in \mathbb{R}$ に対して、整数 $k_n$ を $k_n = \lfloor \frac{t}{c_n} \rfloor$ と定義する。このとき $k_n c_n \to t$ である。したがって、
+$$ k_n Y_n = (k_n c_n) \left( \frac{1}{c_n} Y_n \right) \to tY \quad (n \to \infty) $$
+が成り立つ。一方で、$\exp(Y_n) \in H$ であり $H$ は群であるから、任意の整数 $k_n$ に対して $\exp(k_n Y_n) = (\exp(Y_n))^{k_n} \in H$ である。$\exp$ は連続写像であり、$H$ は閉集合であるから、極限をとると、
+$$ \exp(tY) = \exp\left( \lim_{n \to \infty} k_n Y_n \right) = \lim_{n \to \infty} \exp(k_n Y_n) \in H $$
+となる。これは任意の $t \in \mathbb{R}$ で成り立つため、定義から $Y \in \mathfrak{h}$ である。<br>
+しかし、$Y \in \mathfrak{m}$ であり $\| Y \| = 1$ であるから $Y \neq 0$ である。これは $\mathfrak{h} \cap \mathfrak{m} = \{ 0 \}$ であることと矛盾する。<br><br>
+
+<strong>第5段落：結論</strong><br>
+したがって背理法の仮定は誤りであり、$0$ の十分小さな近傍 $U \subset \mathfrak{g}$ において $\exp(U \cap \mathfrak{h}) = \exp(U) \cap H$ が成り立つ。これは局所的に $H$ が $\mathfrak{g}$ の部分空間 $\mathfrak{h}$ の指数写像による像と一致することを意味し、$H$ 上にスライスチャートが構成できる。ゆえに $H$ は $G$ の埋め込まれた部分多様体である。また、部分多様体としての可微分構造において、群演算は $G$ の滑らかな群演算の制限として滑らかになるため、$H$ 自身もLie群となる。証明終。
+</div>
+
+<div class="remark">
+<strong>定理の直観的意味</strong><br>
+この定理は、直観的に言えば「連続的に変化するパラメータを持つ群の中で、極限操作をしてもその群から飛び出さない（閉集合である）ならば、それは必ず滑らかな図形（多様体）になっている」ということを主張している。具体的な群を構成する際に、微分可能性を直接示す手間を省き、位相的な閉性だけを確認すればよいという点で非常に強力な道具である。
+</div>
+
+<div class="example">
+<strong>例 3.2 (一般線形群の閉部分群)</strong><br>
+実数成分の $n \times n$ 正則行列全体がなす群 $\mathrm{GL}(n, \mathbb{R})$ は、$n^2$ 次元のユークリッド空間 $\mathbb{R}^{n^2}$ の開集合であり、自然にLie群となる。部分群として、直交群 $\mathrm{O}(n) = \{ A \in \mathrm{GL}(n, \mathbb{R}) \mid A^T A = I \}$ や、特殊線形群 $\mathrm{SL}(n, \mathbb{R}) = \{ A \in \mathrm{GL}(n, \mathbb{R}) \mid \det(A) = 1 \}$ を考える。これらは行列の成分に関する多項式の零点集合として定義されているため、$\mathrm{GL}(n, \mathbb{R})$ の位相的な閉集合である。ここでCartanの閉部分群定理を適用するだけで、個別に局所座標系（チャート）を計算して可微分多様体であることを示すことなく、これらが滑らかな多様体としての構造を持つLie群であることが即座に証明される。
+</div>
+
+
+<h2>4. 閉正規部分群による剰余群のLie群構造</h2>
+
+<p>以上の準備のもと、位相的に閉な正規部分群による商空間が自然なLie群になることを証明する。</p>
+
+<div class="theorem">
+<strong>定理 4.1</strong><br>
+Lie群 $G$ の位相的に閉な正規部分群 $N$ による剰余群 $G/N$ は、商位相のもとで一意な可微分構造を持ち、商写像 $\pi \colon G \to G/N$ が滑らかな沈め込みとなるLie群になる。
+</div>
+
+<div class="proof">
+<strong>証明.</strong><br>
+<strong>第1段落：商位相のHausdorff性と多様体構造の導入の準備</strong><br>
+命題 2.1 で示した通り、$N$ が閉部分群であることから、商位相を入れた $G/N$ はHausdorff空間である。また、商写像 $\pi \colon G \to G/N$ は開写像である。定理 3.1（Cartanの閉部分群定理）により、$N$ は $G$ の埋め込まれたLie部分群となる。$G$ の単位元 $e$ におけるLie代数を $\mathfrak{g}$ とし、$N$ のLie代数を $\mathfrak{n} \subset \mathfrak{g}$ とする。ベクトル空間として $\mathfrak{g} = \mathfrak{n} \oplus \mathfrak{m}$ と直和分解されるような部分空間 $\mathfrak{m}$ を選ぶ。<br><br>
+
+<strong>第2段落：局所座標系の構成</strong><br>
+写像 $\Phi \colon \mathfrak{n} \times \mathfrak{m} \to G$ を $\Phi(X, Y) = \exp(X)\exp(Y)$ で定義する。ここで $\exp \colon \mathfrak{g} \to G$ は指数写像である。$(0,0)$ における微分 $d\Phi_{(0,0)}$ は $\mathfrak{n} \oplus \mathfrak{m} \to \mathfrak{g}$ の恒等写像と同一視できるため、同型写像である。逆写像定理により、原点 $0$ の近傍 $U_{\mathfrak{n}} \subset \mathfrak{n}$ と $U_{\mathfrak{m}} \subset \mathfrak{m}$ が存在して、$\Phi$ は $U_{\mathfrak{n}} \times U_{\mathfrak{m}}$ 上で微分同相写像となり、その像 $W = \Phi(U_{\mathfrak{n}} \times U_{\mathfrak{m}})$ は $e$ の開近傍となる。<br><br>
+
+<strong>第3段落：局所切断 (local section) の存在と局所同相</strong><br>
+$N$ が埋め込まれた部分多様体であるため、$e$ の開近傍 $W'$ を十分小さく取れば $W' \cap N = \exp(U'_{\mathfrak{n}})$ ($U'_{\mathfrak{n}} \subset \mathfrak{n}$) と書ける。$U_{\mathfrak{n}}$ と $U_{\mathfrak{m}}$ をさらに小さく取り直し、$W \subset W'$ となるようにする。このとき、任意の $Y_1, Y_2 \in U_{\mathfrak{m}}$ に対し、もし $\exp(Y_1)$ と $\exp(Y_2)$ が同じ $N$ の剰余類に属すると仮定する。すなわち、ある $n \in N$ が存在して $\exp(Y_1) = n \exp(Y_2)$ となる。$U_{\mathfrak{m}}$ が十分に小さければ $n = \exp(Y_1)\exp(-Y_2)$ は $e$ に十分近くなり、$W \cap N$ に含まれる。したがって $n = \exp(X)$ となる $X \in U_{\mathfrak{n}}$ が存在する。これより $\exp(Y_1) = \exp(X)\exp(Y_2) = \Phi(X, Y_2)$ となるが、$\exp(Y_1) = \Phi(0, Y_1)$ であり、$\Phi$ の単射性から $X=0$ かつ $Y_1=Y_2$ を得る。<br>
+これは、写像 $\psi = \pi \circ \exp|_{U_{\mathfrak{m}}} \colon U_{\mathfrak{m}} \to G/N$ が単射であることを意味する。$\pi$ は開写像であり、$\exp$ も $0$ の近傍で局所微分同相であるため、$\psi$ は $U_{\mathfrak{m}}$ から $G/N$ の単位元 $\bar{e} = \pi(e)$ の開近傍 $\bar{U} = \pi(\exp(U_{\mathfrak{m}}))$ への同相写像となる。これにより $\bar{U}$ に局所座標が導入される。<br><br>
+
+<strong>第4段落：全体へのアトラスの拡張と座標変換の滑らかさ</strong><br>
+任意の $\bar{g} = \pi(g) \in G/N$ に対し、左移動 $\bar{L}_{\bar{g}} \colon G/N \to G/N, x \mapsto \bar{g}x$ は同相写像であり、well-definedである。これを用いて、開近傍 $\bar{g}\bar{U}$ に座標系を導入することで、$G/N$ を覆うアトラスを得る。<br>
+二つの座標近傍が交わる部分での座標変換が滑らかであることを示す。座標近傍の構成より、局所切断 $s \colon \bar{U} \to G$ を $s(\bar{x}) = \exp(\psi^{-1}(\bar{x}))$ と定義できる。これは滑らかな多様体 $G$ への滑らかな写像と見なせる。任意の点での局所切断も左移動を用いて $s_g(\bar{x}) = g s(\bar{g}^{-1}\bar{x})$ と定義できる。座標変換は、ある局所切断によって $G$ へ持ち上げられた点を別の局所座標で読み直す操作に他ならず、$G$ における群演算と滑らかな写像の合成で書けるため、座標変換は滑らか (smooth) である。したがって、$G/N$ は可微分多様体となる。<br><br>
+
+<strong>第5段落：商写像が滑らかな沈め込みであること</strong><br>
+上記の多様体構造において、$\bar{e}$ の近傍で $\pi \colon G \to G/N$ を局所座標で表現すると、$\Phi(X, Y) \mapsto Y$ となる。これは滑らかな射影に他ならず、微分が常に全射である。左移動は微分同相であるから、$G$ の全ての点において $\pi$ は滑らかな沈め込みとなる。<br><br>
+
+<strong>第6段落：群演算の滑らかさ</strong><br>
+最後に、$G/N$ の群演算 $\bar{m} \colon G/N \times G/N \to G/N$ が滑らかであることを示す。ここで、命題 1.7（沈め込みの普遍性質）を用いる。写像 $\pi \circ m \colon G \times G \to G/N$ は滑らかな写像の合成ゆえに滑らかである。また、直積写像 $\pi \times \pi \colon G \times G \to G/N \times G/N$ は滑らかな沈め込みの直積であるため、これも滑らかな沈め込みである。定義より $\bar{m} \circ (\pi \times \pi) = \pi \circ m$ が成り立つ。$\pi \circ m$ は $\pi \times \pi$ のファイバー上で一定であるため、普遍性質により誘導される写像 $\bar{m}$ は一意でありかつ滑らかである。逆元を取る写像 $\bar{i} \colon G/N \to G/N$ についても全く同様の議論で滑らかさが示される。<br>
+以上により、$G/N$ は可微分多様体であり、群演算が滑らかであるため、Lie群となる。証明終。
+</div>
+
+<div class="example">
+<strong>例 4.2 (正例の代表例)</strong><br>
+可換なLie群である実数の加法群 $\mathbb{R}$ を考える。整数のなす部分群 $\mathbb{Z}$ は $\mathbb{R}$ における位相的に閉な正規部分群である。したがって、定理 4.1 により剰余群 $\mathbb{R}/\mathbb{Z}$ は商位相と自然な可微分構造を持つLie群となる。具体的には、この商群は円周 $S^1$ と同型になり、見事な1次元Lie群として機能する。この構成は幾何学において極めて頻繁に用いられる最も基本的かつ重要な正例である。
+</div>
+
+
+<h2>5. 参考文献</h2>
+
+<p>以上の論理展開（Lie群の閉部分群による商空間が再びLie群となる定理およびCartanの閉部分群定理）の厳密な証明や詳細な展開が記載されている代表的な文献（和書および洋書）を以下に示す。</p>
+
+<ul>
+    <li>松島与三, <i>多様体入門</i>, 裳華房. <br>
+    <a href="https://www.shokabo.co.jp/mybooks/ISBN978-4-7853-1316-6.htm" target="_blank">https://www.shokabo.co.jp/mybooks/ISBN978-4-7853-1316-6.htm</a><br>
+    日本における多様体論およびLie群論の古典的・標準的な名著である。特に第3章・第4章において、Lie群の基礎概念、閉部分群、および商Lie群の構造についての厳密かつ self-contained な証明が詳述されている。</li>
+    <li>小林昭七, <i>多様体論入門</i>, 裳華房. <br>
+    <a href="https://www.shokabo.co.jp/mybooks/ISBN978-4-7853-1323-4.htm" target="_blank">https://www.shokabo.co.jp/mybooks/ISBN978-4-7853-1323-4.htm</a><br>
+    微分多様体の基礎からLie群への接続までを丁寧に解説した教科書である。商多様体 (quotient manifold) の構成や、Lie群の作用による商空間の可微分構造について明確な議論がなされている。</li>
+    <li>服部晶夫, <i>多様体</i>, 岩波書店. <br>
+    <a href="https://www.iwanami.co.jp/book/b265691.html" target="_blank">https://www.iwanami.co.jp/book/b265691.html</a><br>
+    幾何学的な視点から多様体とLie群を記述した教科書である。商空間に可微分構造が入るための条件や、Cartanの閉部分群定理に関する補足的な解説が含まれている。</li>
+    <li>John M. Lee, <i>Introduction to Smooth Manifolds</i>, Graduate Texts in Mathematics, Springer. <br>
+    <a href="https://link.springer.com/book/10.1007/978-1-4419-9982-5" target="_blank">https://link.springer.com/book/10.1007/978-1-4419-9982-5</a><br>
+    現代的な可微分多様体論の最も標準的な教科書の一つである。商多様体定理 (Quotient Manifold Theorem) や、閉部分群による商群 $G/N$ がLie群構造を持つことの完全な証明が論理的に整理されて記載されている。</li>
+    <li>Frank W. Warner, <i>Foundations of Differentiable Manifolds and Lie Groups</i>, Graduate Texts in Mathematics, Springer. <br>
+    <a href="https://link.springer.com/book/10.1007/978-1-4757-1799-0" target="_blank">https://link.springer.com/book/10.1007/978-1-4757-1799-0</a><br>
+    多様体上の解析とLie群論の厳密な接続を与える名著である。第3章「Lie Groups」において、Cartanの閉部分群定理 (Cartan's closed subgroup theorem) や商Lie群の構成の証明が完全に書き下されている。</li>
+    <li>Brian C. Hall, <i>Lie Groups, Lie Algebras, and Representations: An Elementary Introduction</i>, Graduate Texts in Mathematics, Springer. <br>
+    <a href="https://link.springer.com/book/10.1007/978-3-319-13467-3" target="_blank">https://link.springer.com/book/10.1007/978-3-319-13467-3</a><br>
+    主に行列Lie群 (matrix Lie group) に焦点を当てているが、Lie群の商群や位相的性質に関する概念的理解を深める上で非常に分かりやすい記述がなされている。</li>
+</ul>
+
+</body>
+</html>
