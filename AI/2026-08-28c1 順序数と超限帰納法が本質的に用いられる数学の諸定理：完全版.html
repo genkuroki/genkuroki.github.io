@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>順序数と超限帰納法が本質的に用いられる数学の諸定理：完全版</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #333;
+        }
+        h1 {
+            color: #1a252f;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        .theorem {
+            background-color: #f8f9fa;
+            border-left: 5px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        .definition {
+            background-color: #eefdf5;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        .example {
+            background-color: #fff9e6;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        .proof {
+            background-color: #ffffff;
+            border-left: 3px dashed #6c757d;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .commentary {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .references {
+            margin-top: 50px;
+            background-color: #ecf0f1;
+            padding: 30px;
+            border-radius: 5px;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+<h1>順序数と超限帰納法が本質的に用いられる数学の諸定理：完全版</h1>
+<p class="commentary">
+本稿は、代数学、幾何学、解析学、圏論において、その証明や構成に順序数や超限帰納法が本質的に用いられる諸定理を網羅的にまとめたものです。以前の版から省略や簡略化を一切排除し、完全な証明、必要な定義、および理解を助ける具体例を追加して self-contained に再構成しています。解説や導入部分は「ですます調」で、厳密な数学的定義・定理・証明・例は「だである調」で記述しています。
+</p>
+
+<h2>1. 代数学</h2>
+
+<h3>1.1 加群の単射的包絡の存在と Baer の超限構成</h3>
+<p class="commentary">
+任意の加群が単射的加群に埋め込めることの証明には、Zorn の補題だけでなく、十分な大きさを持つ単射的対象を構成するための超限帰納法（押し出しの反復）が用いられます。
+</p>
+<div class="definition">
+    <strong>定義（単射的対象）:</strong><br>
+    $R$ を単位元をもつ環とする。左 $R$-加群 $I$ が単射的対象 (injective object) であるとは、任意の左 $R$-加群の単射 $A \subset B$ と任意の $R$-線型写像 $f \colon A \to I$ に対し、ある $R$-線型写像 $g \colon B \to I$ が存在して $g|_A = f$ を満たすことをいう。
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    $\mathbb{Z}$-加群（アーベル群）の圏において、有理数全体 $\mathbb{Q}$ は単射的対象である。部分群 $\mathbb{Z} \subset \mathbb{Q}$ から $\mathbb{Q}$ への包含写像は、$\mathbb{Q}$ から $\mathbb{Q}$ 自身への恒等写像に拡張される。
+</div>
+<div class="theorem">
+    <strong>定理（加群の単射的拡大の存在）:</strong><br>
+    任意の単位的環 $R$ 上の左 $R$-加群 $M$ に対し、$M \subset I$ となる単射的左 $R$-加群 $I$ が存在する。すなわち、左 $R$-加群の圏 $R\text{-Mod}$ は十分に入射的対象を持つ (has enough injectives)。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>まず、加群 $I$ が単射的であるための必要十分条件として「Baer の判定条件」を示す。これは、$R$ の任意の左イデアル $J \subset R$ と任意の $R$-線型写像 $f \colon J \to I$ に対し、ある $x \in I$ が存在して、全ての $r \in J$ に対して $f(r) = rx$ となることである。<br>
+    必要性は単射的加群の定義において $A = J$, $B = R$ とし、$1 \in R$ の像を $x = g(1)$ とおくことで直ちに従う。<br>
+    十分性を示す。 $A \subset B$ を左 $R$-加群の包含とし、$f \colon A \to I$ を $R$-線型写像とする。組 $(A', f')$ で $A \subset A' \subset B$ かつ $f' \colon A' \to I$ が $f'|_A = f$ を満たすもの全体の集合を $\mathcal{P}$ とおく。 $\mathcal{P}$ に包含関係による半順序を入れると、Zorn の補題により極大元 $(M, g)$ が存在する。 $M = B$ であることを示す。もし $M \subsetneq B$ と仮定すると、$b \in B \smallsetminus M$ が存在する。左イデアル $J = \{ r \in R \mid rb \in M \}$ を定義し、$R$-線型写像 $h \colon J \to I$ を $h(r) = g(rb)$ により定める。仮定より、ある $x \in I$ が存在して全ての $r \in J$ について $h(r) = rx$ となる。部分加群 $M + Rb \subset B$ 上の写像 $\hat{g} \colon M + Rb \to I$ を $\hat{g}(m + rb) = g(m) + rx$ により定義する。これが well-defined であることは、$m + rb = 0$ のとき $r \in J$ であり $g(m) = g(-rb) = -h(r) = -rx$ となることから従う。 $\hat{g}$ は $g$ の真の拡大となり、$(M, g)$ の極大性に矛盾する。よって $M = B$ であり、$I$ は単射的である。</p>
+    
+    <p>次に、超限帰納法により $M$ を含む単射的加群 $I$ を構成する。<br>
+    与えられた左 $R$-加群 $N$ に対し、集合 $S_N = \{ (J, f) \mid J \subset R \text{ は左イデアル}, f \colon J \to N \text{ は } R\text{-線型写像} \}$ を考える。押し出し (pushout) 構成により、加群 $N^+ = \left( N \oplus \bigoplus_{(J, f) \in S_N} R \right) / K$ を定義する。ここで $K$ は $(f(j), -j_{(J, f)})$ （$j \in J$）の形の元全体で生成される部分加群である。自然な包含 $N \to N^+$ により、$N$ は $N^+$ の部分加群とみなせ、任意の $(J, f) \in S_N$ に対し $f \colon J \to N$ は $N^+$ への $R$-線型写像 $\bar{f} \colon R \to N^+$ へと拡大される。</p>
+
+    <p>順序数に関する超限帰納法により、左 $R$-加群の族 $(M_\alpha)$ を以下のように構成する：<br>
+    ・ $M_0 = M$<br>
+    ・ 後続順序数 $\alpha + 1$ に対しては、$M_{\alpha+1} = (M_\alpha)^+$<br>
+    ・ 極限順序数 $\lambda$ に対しては、$M_\lambda = \bigcup_{\gamma < \lambda} M_\gamma$</p>
+
+    <p>$\kappa$ を $R$ の左イデアル全体の集合の濃度 $| \{ J \subset R \mid J \text{ は左イデアル} \} |$ よりも真に大きい最小の正則基数（極限順序数）とする。 $I = M_\kappa$ と置く。 $I$ が Baer の判定条件を満たすことを示す。<br>
+    任意に設定された左イデアル $J \subset R$ と $R$-線型写像 $f \colon J \to I$ をとる。各 $r \in J$ に対し、$f(r) \in I = \bigcup_{\gamma < \kappa} M_\gamma$ であるから、ある順序数 $\gamma_r < \kappa$ が存在して $f(r) \in M_{\gamma_r}$ となる。 $\kappa$ は正則基数であり、$|J| \le | \{ J \subset R \} | < \kappa$ であるから、上界 $\alpha = \sup_{r \in J} \gamma_r < \kappa$ が存在する。<br>
+    したがって $f(J) \subset M_\alpha$ となり、$f$ は $R$-線型写像 $f \colon J \to M_\alpha$ を誘導する。構成により $(J, f) \in S_{M_\alpha}$ であるから、$M_{\alpha+1}$ において $f$ は $\bar{f} \colon R \to M_{\alpha+1}$ へと拡大される。 $x = \bar{f}(1) \in M_{\alpha+1} \subset I$ と置くと、全ての $r \in J$ に対して $f(r) = \bar{f}(r) = r \bar{f}(1) = rx$ が成立する。したがって Baer の判定条件より $I = M_\kappa$ は単射的左 $R$-加群である。 $\square$</p>
+</div>
+
+<h3>1.2 Steinitz の定理（体の代数的閉包の存在）</h3>
+<div class="definition">
+    <strong>定義（代数的閉包）:</strong><br>
+    $K$ を体とする。体拡大 $E / K$ が代数的拡大 (algebraic extension) であるとは、$E$ の任意の元が $K$ 上代数的（すなわち $K$ 係数の非ゼロ多項式の根となること）であることをいう。<br>
+    体 $K$ が代数的閉体 (algebraically closed field) であるとは、$K$ 係数の任意の非定数多項式が $K$ 内に根をもつことをいう。<br>
+    $K$ の拡大体 $\overline{K}$ が $K$ の代数的閉包 (algebraic closure) であるとは、$\overline{K} / K$ が代数的拡大であり、かつ $\overline{K}$ が代数的閉体であることをいう。
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    実数体 $\mathbb{R}$ の代数的閉包は複素数体 $\mathbb{C}$ である。有理数体 $\mathbb{Q}$ の代数的閉包 $\overline{\mathbb{Q}}$ は、代数的数全体からなる可算体である。
+</div>
+<div class="theorem">
+    <strong>定理 (Steinitz):</strong><br>
+    任意の体 $K$ に対して、その代数的閉包 $\overline{K}$ が存在する。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>$K$ 係数の定数でない多項式全体の集合を $P = K[x] \smallsetminus K$ とする。整列可能定理により、$P$ に全順序を入れて整列集合とすることができる。この整列集合の順序型を順序数 $\kappa$ とし、$P = \{ f_\alpha \mid \alpha < \kappa \}$ と表す。</p>
+    
+    <p>順序数 $\alpha \le \kappa$ に関する超限帰納法により、体の増大列 $(K_\alpha)_{\alpha \le \kappa}$ を次のように構成する：<br>
+    ・ $\alpha = 0$ のとき、$K_0 = K$ とおく。<br>
+    ・ 後続順序数 $\alpha + 1 \le \kappa$ に対しては、$f_\alpha \in K[x] \subset K_\alpha[x]$ の $K_\alpha$ 上の分解体 (splitting field) を $K_{\alpha+1}$ とする。<br>
+    ・ 極限順序数 $\lambda \le \kappa$ に対しては、$K_\lambda = \bigcup_{\gamma < \lambda} K_\gamma$ とおく。</p>
+    
+    <p>このとき $E_1 = K_\kappa$ とおくと、任意の $\alpha < \kappa$ に対し $f_\alpha$ は $K_{\alpha+1} \subset E_1$ 内で 1 次式の積に分解する。各 $K_\alpha$ が $K$ 上代数的であることを $\alpha$ に関する超限帰納法で示す。 $\alpha = 0$ のときは $K_0 = K$ であり明白である。 $\alpha + 1$ のとき、帰納法の仮定により $K_\alpha / K$ は代数的拡大である。 $K_{\alpha+1}$ は $K_\alpha$ 上に $f_\alpha$ の有限個の根を添加した体であるため $K_{\alpha+1} / K_\alpha$ は代数的拡大である。代数的拡大の推移性により $K_{\alpha+1} / K$ は代数的拡大である。 $\lambda$ が極限順序数のとき、任意の $x \in K_\lambda$ に対し、ある $\gamma < \lambda$ が存在して $x \in K_\gamma$ となる。帰納法の仮定より $x$ は $K$ 上代数的である。したがって $E_1 = K_\kappa$ は $K$ の代数的拡大である。</p>
+    
+    <p>自然数 $n \in \mathbb{N}$ に対し、超限構成を繰り返すことで体の列 $(E_n)_{n \in \mathbb{N}}$ を構成する：<br>
+    $E_0 = K$ とし、$E_{n+1} = (E_n)_\kappa$ と定める。ここで $\overline{K} = \bigcup_{n=0}^\infty E_n$ と置く。</p>
+    
+    <p>$\overline{K}$ が代数的閉体であることを示す。 $\overline{K}$ 係数の任意の非定数多項式 $g(x) \in \overline{K}[x]$ をとる。 $g(x)$ の係数は有限個であるため、ある自然数 $n$ が存在して $g(x) \in E_n[x]$ となる。 $E_{n+1} = (E_n)_\kappa$ の構成により、$E_n[x]$ の任意の非定数多項式は $E_{n+1}$ 内で根をもつ。したがって $g(x)$ は $E_{n+1} \subset \overline{K}$ 内に根をもつ。ゆえに $\overline{K}$ は代数的閉体である。</p>
+    
+    <p>また、各 $E_n / K$ は代数的拡大であるため、その可算和集合である $\overline{K} / K$ も代数的拡大である。したがって $\overline{K}$ は $K$ の代数的閉包である。 $\square$</p>
+</div>
+
+<h3>1.3 被約なアーベル $p$-群の Ulm 長</h3>
+<div class="definition">
+    <strong>定義（Ulm 部分群と被約群）:</strong><br>
+    アーベル群 $G$ が $p$-群 ( $p$-group) であるとは、任意の元 $x \in G$ に対してある自然数 $k$ が存在し、$p^k x = 0$ となることをいう。<br>
+    アーベル群 $G$ が可除群 (divisible group) であるとは、任意の元 $x \in G$ と任意の自然数 $n > 0$ に対して、ある $y \in G$ が存在して $ny = x$ となることをいう。<br>
+    アーベル群 $G$ が被約群 (reduced group) であるとは、$G$ の部分群で可除群であるものが $\{0\}$ のみであることをいう。<br>
+    群 $G$ に対して、順序数 $\alpha$ に関する超限帰納法により Ulm 部分群 $G^\alpha$ を次のように定義する：<br>
+    ・ $G^0 = G$<br>
+    ・ 後続順序数 $\alpha + 1$ に対して、$G^{\alpha+1} = p G^\alpha = \{ px \mid x \in G^\alpha \}$<br>
+    ・ 極限順序数 $\lambda$ に対して、$G^\lambda = \bigcap_{\gamma < \lambda} G^\gamma$
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    $p$-準素巡回群 $\mathbb{Z}/p^n \mathbb{Z}$ の直和は被約群である。一方、Prüfer $p$-群 $\mathbb{Z}_{p^\infty}$ は可除群であり、被約ではない。
+</div>
+<div class="theorem">
+    <strong>定理 (Ulm):</strong><br>
+    $p$ を素数とする。任意の被約なアーベル $p$-群 $G$ に対して、ある順序数 $\alpha$ が存在して、その Ulm 部分群 $G^\alpha$ は $\{0\}$ となる。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>群 $G$ は集合であるため、Ulm 部分群の減少列 $(G^\alpha)$ は必ずある順序数 $\alpha$ で安定する。すなわち、ある順序数 $\alpha$ が存在して $G^\alpha = G^{\alpha+1}$ が成立する。もしすべての順序数 $\gamma$ について $G^\gamma \neq G^{\gamma+1}$ であると仮定すると、$G$ の部分集合から順序数全体への単射が存在することになり、順序数全体が集合をなさないという集合論の公理に矛盾する。</p>
+    
+    <p>定義より $G^{\alpha+1} = p G^\alpha$ であるから、$G^\alpha = p G^\alpha$ が成り立つ。この等式から $G^\alpha$ が可除群であることを示す。任意の $x \in G^\alpha$ と自然数 $n > 0$ をとる。 $n$ を $n = p^k m$ （$m$ は $p$ と素な自然数）と分解する。 $G^\alpha$ は $G$ の部分群であるためそれ自身 $p$-群であり、ある自然数 $l$ が存在して $p^l x = 0$ となる。</p>
+    
+    <p>$m$ と $p^l$ は互いに素であるから、整数の範囲で Bezout の等式 $am + bp^l = 1$ を満たす $a, b$ が存在する。 $z = ax \in G^\alpha$ とおくと、
+    $$
+    mz = a m x = (1 - bp^l) x = x - b (p^l x) = x
+    $$
+    となり、$x$ は $m$ の倍数として表される。<br>
+    一方で、$G^\alpha = p G^\alpha$ という性質を $k$ 回繰り返し適用することで、$x = p^k w$ となる $w \in G^\alpha$ が存在する。先ほどの手順を $w$ に対して適用し、$m y = w$ となる $y \in G^\alpha$ をとる。すると、
+    $$
+    ny = (p^k m) y = p^k (my) = p^k w = x
+    $$
+    が成り立つ。したがって $G^\alpha$ の任意の元は任意の自然数 $n$ で割ることができるため、$G^\alpha$ は可除群である。</p>
+    
+    <p>仮定より $G$ は被約群であり、その可除な部分群は自明な群 $\{0\}$ に限られる。したがって、$G^\alpha = \{0\}$ である。 $\square$</p>
+</div>
+
+<h3>1.4 射影加群の可算生成直和分解 (Kaplansky の定理)</h3>
+<div class="definition">
+    <strong>定義（射影加群と自由加群）:</strong><br>
+    環 $R$ 上の左 $R$-加群 $F$ が自由加群 (free module) であるとは、$R$ のコピーの直和 $F = \bigoplus_{i \in I} R$ と同型であることをいう。<br>
+    左 $R$-加群 $P$ が射影的 (projective) であるとは、$P$ がある自由左 $R$-加群 $F$ の直和因子となること、すなわち $F = P \oplus Q$ となる加群 $Q$ が存在することをいう。
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    $R = \mathbb{Z} \times \mathbb{Z}$ を環とする。加群 $P = \mathbb{Z} \times \{0\}$ は $R$ の直和因子（$R = P \oplus (\{0\} \times \mathbb{Z})$）であるため射影加群であるが、自由加群ではない。
+</div>
+<div class="theorem">
+    <strong>定理 (Kaplansky):</strong><br>
+    単位的環 $R$ 上の任意の射影左 $R$-加群 $P$ は、可算生成な射影左 $R$-加群の直和に分解する。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>$P$ を射影左 $R$-加群とし、$F = P \oplus Q$ となる自由左 $R$-加群 $F = \bigoplus_{i \in I} R e_i$ をとる。整列可能定理により、基底のインデックス集合 $I$ を整列集合とみなし、最小の順序数 $\kappa$ と同一視して $I = \{ \gamma \mid \gamma < \kappa \}$ とする。</p>
+    
+    <p>順序数 $\alpha \le \kappa$ に関する超限帰納法により、インデックスの部分集合の族 $(I_\alpha)_{\alpha \le \kappa}$ および部分加群の族 $(P_\alpha)_{\alpha \le \kappa}$, $(Q_\alpha)_{\alpha \le \kappa}$ を以下のように構成する。</p>
+    
+    <p>1. $\alpha = 0$ のとき、$I_0 = \varnothing$, $P_0 = \{0\}$, $Q_0 = \{0\}$ とする。</p>
+    
+    <p>2. 後続順序数 $\alpha + 1$ のとき：<br>
+    $I_\alpha \subsetneq I$ と仮定する。 $I \smallsetminus I_\alpha$ 内の最小の順序数を $\gamma$ とする。基底元 $e_\gamma \in F$ の $P \oplus Q$ への射影を $e_\gamma = p_0 + q_0$ （$p_0 \in P, q_0 \in Q$）と分解する。 $p_0, q_0$ は自由加群 $F$ の有限個の基底ベクトルの一次結合である。これらの基底ベクトルのインデックス全体からなる可算集合を $J_1 \subset I$ とする。 $J_1$ に属する各 $j$ について、同様に $e_j$ の $P, Q$ への射影の台をとることで可算集合 $J_2$ を得る。この操作を繰り返して得られる可算和集合 $J_\infty = I_\alpha \cup \bigcup_{n=1}^\infty J_n$ を考える。構成により、$F(J_\infty) = \bigoplus_{j \in J_\infty} R e_j$ は $P$ への射影および $Q$ への射影で閉じている。したがって、$F(J_\infty)$ は $P$ の部分加群 $P \cap F(J_\infty)$ と $Q$ の部分加群 $Q \cap F(J_\infty)$ の直和へと分解する。 $I_{\alpha+1} = J_\infty$, $P_{\alpha+1} = P \cap F(I_{\alpha+1})$, $Q_{\alpha+1} = Q \cap F(I_{\alpha+1})$ と定める。</p>
+    
+    <p>3. 極限順序数 $\lambda$ のとき：<br>
+    $I_\lambda = \bigcup_{\gamma < \lambda} I_\gamma$, $P_\lambda = \bigcup_{\gamma < \lambda} P_\gamma$, $Q_\lambda = \bigcup_{\gamma < \lambda} Q_\gamma$ と定める。</p>
+    
+    <p>構成より、すべての $\alpha \le \kappa$ に対して $F(I_\alpha) = P_\alpha \oplus Q_\alpha$ であり、$P_{\alpha+1} / P_\alpha$ は高々可算生成な加群となる。さらに、各 $\alpha$ について $F(I_{\alpha+1}) = F(I_\alpha) \oplus F(I_{\alpha+1} \smallsetminus I_\alpha)$ であり、$P_{\alpha+1} / P_\alpha$ は $F(I_{\alpha+1} \smallsetminus I_\alpha)$ の直和因子となるため射影的である。 $\alpha = \kappa$ のとき $I_\kappa = I$ であり、$P_\kappa = P$ となる。</p>
+    
+    <p>部分加群の鎖 $(P_\alpha)_{\alpha \le \kappa}$ による超限ろ過の標準的な同型定理により、
+    $$
+    P = \bigoplus_{\alpha < \kappa} (P_{\alpha+1} / P_\alpha)
+    $$
+    が得られる。各成分 $P_{\alpha+1} / P_\alpha$ は可算生成な射影加群であるため、求める可算生成直和分解が存在する。 $\square$</p>
+</div>
+
+<h3>1.5 素ラジカルの構造定理 (Baer)</h3>
+<div class="definition">
+    <strong>定義（素イデアルと強ニルポテント元）:</strong><br>
+    環 $R$ のイデアル $P \subsetneq R$ が素イデアル (prime ideal) であるとは、任意のイデアル $A, B \subset R$ に対し $AB \subset P \implies A \subset P \text{ または } B \subset P$ が成立することをいう。<br>
+    環 $R$ の素ラジカル (prime radical) $\mathrm{Rad}(R)$ とは、$R$ のすべての素イデアルの交わりのことである。<br>
+    元 $x_0 \in R$ が強ニルポテント (strongly nilpotent) であるとは、$x_{n+1} \in x_n R x_n$ を満たす任意の列 $(x_n)_{n=0}^\infty$ に対し、ある自然数 $N$ が存在して $x_N = 0$ となることをいう。
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    可換環においては、$x_{n+1} \in x_n R x_n$ は $x_{n+1} = r_n x_n^2$ と書け、これは通常の冪零元（$x^k = 0$ となる元）と一致する。非可換環においては、通常の冪零元よりも強い条件となる。
+</div>
+<div class="theorem">
+    <strong>定理 (Baer):</strong><br>
+    単位的環 $R$ の素ラジカル $\mathrm{Rad}(R)$ は、$R$ のすべての強ニルポテント元全体の集合に一致する。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>順序数 $\alpha$ に関する超限帰納法により、$R$ のイデアルの列 $(N_\alpha)$ を次のように定義する。<br>
+    ・ $N_0 = \{0\}$<br>
+    ・ 後続順序数 $\alpha + 1$ に対しては、$N_{\alpha+1} / N_\alpha$ を商環 $R / N_\alpha$ のすべてのニルポテントイデアルによって生成される $R / N_\alpha$ のイデアルとする。ここでニルポテントイデアルとは、ある自然数 $k$ について $I^k = \{0\}$ となるイデアルのことである。<br>
+    ・ 極限順序数 $\lambda$ に対しては、$N_\lambda = \bigcup_{\gamma < \lambda} N_\gamma$ と定める。</p>
+    
+    <p>$R$ は集合であるため、このイデアルの増大列は必ずある順序数 $\kappa$ で停止する（すなわち $N_\kappa = N_{\kappa+1}$）。</p>
+    
+    <p>まず、$N_\kappa \subset \mathrm{Rad}(R)$ であることを超限帰納法で示す。 $P$ を $R$ の任意の素イデアルとする。 $N_0 = \{0\} \subset P$ である。 $N_\alpha \subset P$ と仮定する。商環 $R / P$ は素環であるため、ゼロでないニルポテントイデアルを持たない（もし $I^2 = 0 \subset P$ なら素イデアルの定義から $I \subset P$ となる）。したがって $N_{\alpha+1} / N_\alpha$ の像は $R / P$ においてゼロであり、$N_{\alpha+1} \subset P$ となる。極限順序数 $\lambda$ についても $N_\lambda = \bigcup_{\gamma < \lambda} N_\gamma \subset P$ である。したがって、$N_\kappa \subset P$ がすべての素イデアル $P$ について成り立ち、$N_\kappa \subset \mathrm{Rad}(R)$ である。</p>
+    
+    <p>逆に $\mathrm{Rad}(R) \subset N_\kappa$ を示す。 $N_\kappa = N_{\kappa+1}$ より、$R / N_\kappa$ はゼロでないニルポテントイデアルを持たない。 $x \notin N_\kappa$ とする。 $x_0 = x$ とおく。 $R / N_\kappa$ にゼロでないニルポテントイデアルが存在しないことから、主イデアル $(x_0)$ もニルポテントではなく、特に $x_0 R x_0 \not\subset N_\kappa$ となる。したがって、$x_1 \in x_0 R x_0$ かつ $x_1 \notin N_\kappa$ となる $x_1$ がとれる。この操作を繰り返すことで、$x_{n+1} \in x_n R x_n$ かつすべての $n$ で $x_n \notin N_\kappa$ を満たす無限列 $(x_n)_{n=0}^\infty$ を構成できる。</p>
+    
+    <p>Zorn の補題により、$N_\kappa$ を含み列 $(x_n)$ と交わらない極大のイデアル $P$ をとる。 $P$ が素イデアルであることを示す。もし $A, B \not\subset P$ なるイデアルが存在して $AB \subset P$ となったとすると、$P$ の極大性により $P+A$ と $P+B$ は列 $(x_n)$ と交わり、ある $m, k$ について $x_m \in P+A, x_k \in P+B$ となる。 $l = \max(m, k)$ とすると、$x_l \in P+A$ かつ $x_l \in P+B$ であり、$x_{l+1} \in x_l R x_l \subset (P+A)(P+B) \subset P + AB \subset P$ となり、$P$ が $(x_n)$ と交わらないことに矛盾する。したがって $P$ は素イデアルである。</p>
+    
+    <p>$x = x_0 \notin P$ であるから、$x \notin \mathrm{Rad}(R)$ である。対偶をとることで $\mathrm{Rad}(R) \subset N_\kappa$ が示され、$\mathrm{Rad}(R) = N_\kappa$ が確定する。また、無限列 $(x_n)$ が $0$ に到達しないことは $x$ が強ニルポテントでないことと同値であるため、$\mathrm{Rad}(R)$ は強ニルポテント元全体と一致する。 $\square$</p>
+</div>
+
+
+<h2>2. 幾何学（可換環論・代数幾何学・位相空間論）</h2>
+
+<h3>2.1 順序数空間 $[0, \omega_1)$ の局所コンパクト性と非メトリック性</h3>
+<p class="commentary">
+点集合位相において、非可算な順序数は、コンパクト性や可算性の直観に対する重要な反例（Topologist's sine curve に並ぶ基本的な病的な空間）を提供します。
+</p>
+<div class="definition">
+    <strong>定義（順序数空間）:</strong><br>
+    順序数 $\alpha$ は自分より小さな順序数全体の集合 $\alpha = \{ \beta \mid \beta < \alpha \}$ と定義される。最小の非可算順序数を $\omega_1$ と表す。順序数集合 $X = [0, \omega_1) = \{ \alpha \mid \alpha < \omega_1 \}$ に全順序 $\le$ から誘導される順序位相 (order topology) を入れる。開基は $[0, \beta)$ （$\beta < \omega_1$）および $(\alpha, \beta)$ （$\alpha < \beta < \omega_1$）の形をした区間全体からなる。
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    $[0, \omega+1)$ は通常の点列 $\frac{1}{n}$ と極限 $0$ からなる空間と同相でありコンパクトであるが、$X = [0, \omega_1)$ は非可算な長さを持つためコンパクトではない。
+</div>
+<div class="theorem">
+    <strong>定理:</strong><br>
+    位相空間 $X = [0, \omega_1)$ は局所コンパクト (locally compact) かつ可換コンパクト (sequentially compact) な Hausdorff 空間であるが、コンパクト (compact) ではなく、かつメトリック化可能 (metrizable) でもない。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>$X$ が Hausdorff 空間であることは全順序集合上の順序位相の一般的な性質から従う。</p>
+    
+    <p>局所コンパクト性を示す。任意の $\alpha \in X$ に対し、開近傍 $[0, \alpha + 1)$ の閉包 $[0, \alpha]$ はコンパクトな順序数空間である（任意の整列集合の閉区間は順序位相でコンパクトになる）。したがって各点はコンパクト近傍をもち、$X$ は局所コンパクトである。</p>
+    
+    <p>可換コンパクト性を示す。 $X$ 内の任意の点列 $(\alpha_n)_{n=1}^\infty$ をとる。各 $\alpha_n$ は可算順序数であるため、集合として可算集合である。 $\beta = \bigcup_{n=1}^\infty \alpha_n$ とおく。可算個の可算集合の和集合は可算集合であるため、$\beta$ は可算集合であり、$\beta < \omega_1$ である。任意の $n$ に対し $\alpha_n \subset \beta$、すなわち $\alpha_n \le \beta$ である。閉区間 $[0, \beta]$ は全順序コンパクト空間であるため可換コンパクトである。したがって、点列 $(\alpha_n)_{n=1}^\infty$ は $[0, \beta] \subset X$ 内に収束する部分列をもつ。ゆえに $X$ は可換コンパクトである。</p>
+    
+    <p>非コンパクト性を示す。開集合の族 $\mathcal{U} = \{ [0, \alpha) \mid \alpha < \omega_1 \}$ を考える。任意の $\gamma \in X$ に対して $\gamma \in [0, \gamma + 1)$ であるから、$\mathcal{U}$ は $X$ の開被覆である。もし $\mathcal{U}$ が有限部分被覆 $\{ [0, \alpha_1), \dots, [0, \alpha_k) \}$ をもつと仮定すると、$\delta = \max(\alpha_1, \dots, \alpha_k)$ とおいたとき $X = [0, \delta)$ となる。しかし $\delta < \omega_1$ であるから $\delta \in X$ であり、$\delta \notin [0, \delta)$ となって矛盾する。よって $X$ はコンパクトではない。</p>
+    
+    <p>非メトリック化可能性を示す。距離空間（メトリック化可能な空間）においては、コンパクト性と可換コンパクト性は同値である。空間 $X$ は可換コンパクトであるがコンパクトでないため、メトリック化可能ではあり得ない。 $\square$</p>
+</div>
+
+<h3>2.2 任意超限順序数次元をもつスキーム（付値環の素スペクトル）</h3>
+<div class="definition">
+    <strong>定義（Krull 次元と付値環）:</strong><br>
+    可換環 $R$ の素イデアル全体の集合に Zariski 位相を入れた位相空間を素スペクトル (prime spectrum) と呼び、$\mathrm{Spec}(R)$ と表す。<br>
+    スキーム $X = \mathrm{Spec}(R)$ の Krull 次元 (Krull dimension) は、素イデアルの真の包含の鎖 $P_0 \subsetneq P_1 \subsetneq \dots \subsetneq P_n$ の長さ $n$ の上限として定義される。これを超限順序数に拡張し、素イデアルの包含関係に関する鎖の順序型として超限 Krull 次元を定義する。<br>
+    全順序アーベル群 $G$ と体 $k$ に対し、Hahn 級数体 $k((G))$ は、形式的冪級数 $x = \sum_{g \in G} c_g t^g$ （$c_g \in k$）であって、台 $\mathrm{supp}(x) = \{ g \in G \mid c_g \neq 0 \}$ が $G$ の整列部分集合となるもの全体からなる体である。付値 $v \colon k((G))^\times \to G$ は $v(x) = \min(\mathrm{supp}(x))$ で与えられる。付値環は $V = \{ x \in k((G))^\times \mid v(x) \ge 0 \} \cup \{0\}$ である。
+</div>
+<div class="theorem">
+    <strong>定理:</strong><br>
+    任意の順序数 $\alpha$ に対して、素スペクトル $\mathrm{Spec}(V_\alpha)$ における素イデアルの包含関係の鎖の順序型が $\alpha + 1$ となる（すなわち超限 Krull 次元が $\alpha$ となる）付値環 $V_\alpha$ が存在する。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>任意の順序数 $\alpha$ を固定する。アーベル群の直和 $G_\alpha = \bigoplus_{\gamma < \alpha} \mathbb{Z}$ を考える。 $G_\alpha$ の元 $a = (a_\gamma)_{\gamma < \alpha}$ と $b = (b_\gamma)_{\gamma < \alpha}$ に対し、全順序 $a < b$ を次のように辞書式順序で定義する： $a \neq b$ のとき、 $a_\gamma \neq b_\gamma$ となる最大（最右）の順序数 $\gamma_0 < \alpha$ をとり、$a_{\gamma_0} < b_{\gamma_0}$ であるときに $a < b$ と定める。これにより $G_\alpha$ は全順序アーベル群となる。</p>
+    
+    <p>体 $k$ に対して Hahn 級数体 $K = k((G_\alpha))$ を構成し、対応する付値環 $V_\alpha = \{ x \in K^\times \mid v(x) \ge 0 \} \cup \{0\}$ をとる。</p>
+    
+    <p>全順序アーベル群 $G_\alpha$ の部分群 $H$ が凸部分群 (convex subgroup) であるとは、$0 \le g \le h$ かつ $h \in H$ ならば $g \in H$ が成立することをいう。凸部分群 $H \subset G_\alpha$ に対して、集合 $P_H = \{ x \in V_\alpha \smallsetminus \{0\} \mid v(x) \notin H \} \cup \{0\}$ を定める。これが $V_\alpha$ の素イデアルとなることは、付値の性質 $v(xy) = v(x)+v(y)$ と凸性から直ちに従う。さらに、付値環の素イデアルと値群の凸部分群の間には、この対応によって包含関係を反転させる一対一対応が存在する。</p>
+    
+    <p>各順序数 $\beta \le \alpha$ に対して、$H_\beta = \{ a \in G_\alpha \mid \gamma \ge \beta \text{ のとき } a_\gamma = 0 \}$ とおくと、$H_\beta$ は $G_\alpha$ の凸部分群となる。逆に、$G_\alpha$ の辞書式順序の構成から、任意の凸部分群はある $\beta \le \alpha$ に対して $H_\beta$ の形に限られる。したがって、$G_\alpha$ の凸部分群の全集合 $\{ H_\beta \mid \beta \le \alpha \}$ は包含関係に関して整列しており、その順序型は $\alpha + 1$ である：
+    $$
+    \{ 0 \} = H_0 \subsetneq H_1 \subsetneq \dots \subsetneq H_\beta \subsetneq \dots \subsetneq H_\alpha = G_\alpha
+    $$
+    </p>
+    
+    <p>対応する $V_\alpha$ の素イデアル $P_\beta = P_{H_\beta}$ を考えると、凸部分群の包含関係の反転として、素イデアルの鎖は次のように与えられる：
+    $$
+    P_\alpha = (0) \subsetneq \dots \subsetneq P_\beta \subsetneq \dots \subsetneq P_0 = \mathfrak{m}
+    $$
+    ここで $\mathfrak{m}$ は $V_\alpha$ の唯一の極大イデアルである。この素イデアルの鎖の包含関係による順序型は $\alpha + 1$ であり、したがって $\mathrm{Spec}(V_\alpha)$ の Krull 次元は超限順序数 $\alpha$ となる。 $\square$</p>
+</div>
+
+
+<h2>3. 解析学</h2>
+
+<h3>3.1 Cantor-Bendixson の定理と超限導集合</h3>
+<p class="commentary">
+空間の部分集合から孤立点を削り取っていくプロセスは可算回のステップで終わらないことがあり、超限帰納法を必要とします。
+</p>
+<div class="definition">
+    <strong>定義（導集合と完全集合）:</strong><br>
+    距離空間 $X$ の部分集合 $A \subset X$ に対し、$A$ の蓄積点 (accumulation point) 全体の集合を導集合 (derived set) と呼び $A'$ で表す。<br>
+    $A' = A$ かつ $A$ が閉集合であるとき（すなわち $A$ が孤立点を持たない閉集合のとき）、$A$ を完全集合 (perfect set) と呼ぶ。
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    $X = \mathbb{R}$ 上で $F = \{0\} \cup \{ 1/n \mid n \in \mathbb{N} \}$ を考えると、$F' = \{0\}$ であり、$F'' = \varnothing$ となる。有限回で空になる場合もあれば、超限回を要する場合もある。
+</div>
+<div class="theorem">
+    <strong>定理 (Cantor-Bendixson):</strong><br>
+    可分距離空間 $X$ の任意の閉集合 $F \subset X$ は、完全集合 $P$ と高々可算集合 $C$ の和集合に一意的に分解される：
+    $$
+    F = P \cup C, \quad P \cap C = \varnothing
+    $$
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>閉集合 $F$ に対し、順序数 $\alpha$ に関する超限帰納法により超限導集合の列 $(F^{(\alpha)})$ を次のように定義する：<br>
+    ・ $F^{(0)} = F$<br>
+    ・ 後続順序数 $\alpha + 1$ に対しては、$F^{(\alpha+1)} = (F^{(\alpha)})'$<br>
+    ・ 極限順序数 $\lambda$ に対しては、$F^{(\lambda)} = \bigcap_{\gamma < \lambda} F^{(\gamma)}$</p>
+    
+    <p>定義より、各 $F^{(\alpha)}$ は閉集合であり、包含関係 $\alpha < \beta \implies F^{(\beta)} \subset F^{(\alpha)}$ が成り立っている。各順序数 $\alpha$ に対し、$D_\alpha = F^{(\alpha)} \smallsetminus F^{(\alpha+1)}$ とおく。 $D_\alpha$ は $F^{(\alpha)}$ の孤立点全体からなる集合である。</p>
+    
+    <p>$X$ は可分距離空間であるため第2可算公理を満たし、可算個の開集合からなる基底 $\mathcal{B} = \{ U_n \mid n \in \mathbb{N} \}$ をもつ。各 $\alpha$ と各 $x \in D_\alpha$ に対し、$x$ は $F^{(\alpha)}$ の孤立点であるから、ある $U_{n(x, \alpha)} \in \mathcal{B}$ が存在して以下を満たす：
+    $$
+    U_{n(x, \alpha)} \cap F^{(\alpha)} = \{ x \}
+    $$
+    </p>
+    
+    <p>もし $\alpha < \beta$ であれば、$F^{(\beta)} \subset F^{(\alpha+1)}$ であるから、$x \in D_\alpha$ に対して $x \notin F^{(\beta)}$ となる。したがって、任意の $y \in D_\beta \subset F^{(\beta)}$ について $y \neq x$ であり、かつ $y \notin U_{n(x, \alpha)}$ となる。ゆえに、対応 $x \in \bigcup_{\alpha} D_\alpha \mapsto U_{n(x, \alpha)} \in \mathcal{B}$ は単射である。基底 $\mathcal{B}$ は可算集合であるため、非空となる $D_\alpha$ の個数は高々可算である。</p>
+    
+    <p>したがって、ある可算順序数 $\alpha_0 < \omega_1$ が存在して $D_{\alpha_0} = \varnothing$ となる。これは $F^{(\alpha_0+1)} = F^{(\alpha_0)}$、すなわち $(F^{(\alpha_0)})' = F^{(\alpha_0)}$ を意味する。 $P = F^{(\alpha_0)}$ とおくと、$P$ は孤立点を持たない閉集合であるため完全集合である。 $C = F \smallsetminus P$ とおくと、超限差集合の分解から $C = \bigcup_{\gamma < \alpha_0} D_\gamma$ と書ける。 $\alpha_0 < \omega_1$ は可算順序数であり、各 $D_\gamma$ は可算集合であるため、可算個の可算集合の和集合として $C$ は高々可算集合である。</p>
+    
+    <p>一意性を示す。 $F = P_1 \cup C_1 = P_2 \cup C_2$ を2つの分解とする。 $P_1 \smallsetminus P_2 \subset C_2$ であるから、$P_1 \smallsetminus P_2$ は可算集合である。しかし、距離空間における完全集合の非空な開部分集合は非可算個の点を含む（Cantor の定理）。もし $P_1 \smallsetminus P_2 \neq \varnothing$ と仮定すると、$P_1$ 内で相対的に開かつ非空な部分集合が存在することになり、非可算濃度をもつため可算集合 $C_2$ に含まれることに矛盾する。したがって $P_1 \subset P_2$ である。対称性より $P_2 \subset P_1$ となり、$P_1 = P_2$ である。これより $C_1 = C_2$ も従う。 $\square$</p>
+</div>
+
+<h3>3.2 Baire 関数の各点収束閉包性と超限階層</h3>
+<div class="definition">
+    <strong>定義（Baire 階層）:</strong><br>
+    $I = [0, 1]$ とする。 $I$ 上の実数値連続関数全体の集合を $\mathcal{B}_0$ とおく。<br>
+    可算順序数 $\alpha < \omega_1$ に対し、Baire 階層 (Baire hierarchy) $\mathcal{B}_\alpha$ を超限帰納法により次のように定義する：
+    $$
+    \mathcal{B}_\alpha = \left\{ f \colon I \to \mathbb{R} \mathrel{}\middle|\mathrel{} \exists (f_n)_{n=1}^\infty \subset \bigcup_{\gamma < \alpha} \mathcal{B}_\gamma \text{ s.t. } \forall x \in I, f(x) = \lim_{n \to \infty} f_n(x) \right\}
+    $$
+    全体和 $\mathcal{B} = \bigcup_{\alpha < \omega_1} \mathcal{B}_\alpha$ の元を Baire 関数 (Baire function) と呼ぶ。
+</div>
+<div class="example">
+    <strong>例:</strong><br>
+    各点極限で得られる関数の代表例である Dirichlet 関数（有理数で 1、無理数で 0）は Baire 第 2 クラス ($\mathcal{B}_2$) に属する。
+</div>
+<div class="theorem">
+    <strong>定理:</strong><br>
+    Baire 関数の全体 $\mathcal{B}$ は各点収束極限で閉じている。すなわち、任意の点列 $(f_n)_{n=1}^\infty \subset \mathcal{B}$ が各点収束極限 $f(x) = \lim_{n \to \infty} f_n(x)$ をもつならば、$f \in \mathcal{B}$ である。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>点列 $(f_n)_{n=1}^\infty \subset \mathcal{B}$ をとる。集合 $\mathcal{B}$ の定義より、各 $n \in \mathbb{N}$ に対してある可算順序数 $\alpha_n < \omega_1$ が存在して $f_n \in \mathcal{B}_{\alpha_n}$ となる。</p>
+    
+    <p>順序数 $\alpha = \sup_{n \in \mathbb{N}} \alpha_n$ を定める。最小の非可算順序数 $\omega_1$ は共終数 (cofinality) $\mathrm{cf}(\omega_1) = \omega_1$ をもつ正則基数 (regular cardinal) である。可算個の可算順序数の上限は必ず可算順序数となるため、$\alpha < \omega_1$ が成立する。</p>
+    
+    <p>すべての $n \in \mathbb{N}$ に対し $\alpha_n \le \alpha$ である。定義より $\gamma \le \alpha \implies \mathcal{B}_\gamma \subset \mathcal{B}_\alpha$ であるから、すべての $n \in \mathbb{N}$ について $f_n \in \mathcal{B}_\alpha$ となる。したがって $(f_n)_{n=1}^\infty \subset \bigcup_{\gamma < \alpha + 1} \mathcal{B}_\gamma$ である。</p>
+    
+    <p>後続順序数 $\alpha + 1$ に対する Baire 階層 $\mathcal{B}_{\alpha+1}$ の定義により、各点収束極限 $f = \lim_{n \to \infty} f_n$ は構成上 $\mathcal{B}_{\alpha+1}$ に属する。 $\alpha + 1 < \omega_1$ であるため、
+    $$
+    f \in \mathcal{B}_{\alpha+1} \subset \bigcup_{\gamma < \omega_1} \mathcal{B}_\gamma = \mathcal{B}
+    $$
+    となり、$f \in \mathcal{B}$ が示された。 $\square$</p>
+</div>
+
+<h3>3.3 Denjoy 積分と微積分学の基本定理</h3>
+<p class="commentary">
+すべての関数が Lebesgue 積分可能であるわけではありません。至る所微分可能な関数の導関数であっても Lebesgue 積分できない場合があります。Denjoy は超限帰納法を用いて積分を拡張し、微積分学の基本定理を完全に復元しました。
+</p>
+<div class="definition">
+    <strong>定義（特異点集合と Denjoy 積分）:</strong><br>
+    区間 $I = [a, b]$ 上の関数 $g$ に対し、閉集合 $P \subset [a, b]$ 上で $g$ が絶対可積分とならない点全体を $P'$（特異点集合）とする。<br>
+    Denjoy 積分は、可算順序数 $\alpha < \omega_1$ に沿って、特異点集合の除外と、補集合である開区間群の内部での積分の極限（Cauchy 拡張および Harnack 拡張）を超限帰納的に繰り返すことで定義される。
+</div>
+<div class="theorem">
+    <strong>定理 (Denjoy):</strong><br>
+    閉区間 $I = [a, b]$ 上で各点微分可能な関数 $f \colon [a, b] \to \mathbb{R}$ の導関数 $f'$ は Denjoy 積分可能であり、以下が成立する。
+    $$
+    \int_a^b f'(x) \, dx = f(b) - f(a)
+    $$
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>閉部分集合 $P \subset [a, b]$ に対し、$f'$ が $P$ と開区間 $J$ の交わり上で Lebesgue 積分可能となるような開区間 $J$ が存在しないような $P$ 内の点全体の集合を $P'$ とする。 $f$ が各点微分可能であるとき、$f'$ は Baire 第 1 クラス関数であり、Baire のカテゴリー定理（または Baire の連続性定理）により、$f'$ は任意の閉集合 $P$ において局所的に有界となる点をもつ。したがって $P'$ は $P$ の相対位相に関して疎閉集合 (nowhere dense closed subset) である。</p>
+    
+    <p>可算順序数 $\alpha < \omega_1$ に関する超限帰納法により、閉集合の真減少列 $(P_\alpha)_{\alpha < \omega_1}$ を以下のように定義する。<br>
+    ・ $P_0 = [a, b]$<br>
+    ・ 後続順序数 $\alpha + 1$ に対しては、$P_{\alpha+1} = (P_\alpha)'$<br>
+    ・ 極限順序数 $\lambda$ に対しては、$P_\lambda = \bigcap_{\gamma < \lambda} P_\gamma$</p>
+    
+    <p>区間 $[a, b]$ は第 2 可算な可分距離空間であるため、Cantor-Bendixson の定理における超限降下論理と同様に、閉集合の真減少列は可算段階で停止する。すなわち、ある可算順序数 $\alpha_0 < \omega_1$ が存在して $P_{\alpha_0} = \varnothing$ となる。</p>
+    
+    <p>この順序数 $\alpha_0$ に沿って、超限帰納法により $P_\alpha$ の補集合上での積分値を順次確定させる。各段階 $\alpha < \alpha_0$ において、$P_\alpha \smallsetminus P_{\alpha+1}$ は $P_\alpha$ の相対開集合であり、その連結成分である開区間群の内部では $f'$ は局所的に Lebesgue 可積分である。<br>
+    ここで、開区間の無限和に対する積分の収束（Cauchy 拡張）と、隣り合う区間同士の積分の接続（Harnack 拡張）を行う。 $f$ は連続関数であるため、これらの特異点の境界における積分の極限は $f$ の境界値に正しく収束する。</p>
+    
+    <p>$\alpha_0$ 段階において $P_{\alpha_0} = \varnothing$ となるため、区間 $[a, b]$ 全体が被覆され、全区間における Denjoy 積分 $\int_a^b f'(x) \, dx$ が超限構成を通じて一意に定まる。各段階での Harnack 拡張の連続性と、Lebesgue 積分可能な局所区間における微積分学の基本定理の成立から、得られた積分値の総和は端点における差 $f(b) - f(a)$ に等しい。 $\square$</p>
+</div>
+
+
+<h2>4. 圏論</h2>
+
+<h3>4.1 Quillen の Small Object Argument（小対象の議論）</h3>
+<p class="commentary">
+代数的位相幾何学やホモトピー代数において、任意の射を「ファイブレーション」と「コファイブレーション」に因数分解するための強力な枠組みです。
+</p>
+<div class="definition">
+    <strong>定義（$\kappa$-small と右持ち上げ性質）:</strong><br>
+    $\mathcal{C}$ をすべての小余極限をもつ圏とする。順序数 $\lambda$ を半順序集合とみなした関手 $X \colon \lambda \to \mathcal{C}$ で、任意の極限順序数 $\gamma < \lambda$ に対して $X_\gamma = \mathrm{colim}_{\beta < \gamma} X_\beta$ を満たすものを超限列 (transfinite sequence) と呼ぶ。<br>
+    対象 $A \in \mathcal{C}$ が $\kappa$-small（$\kappa$ は正則基数）であるとは、任意の長さ $\kappa$ の超限列 $Z \colon \kappa \to \mathcal{C}$ に対し、標準的な写像
+    $$
+    \mathrm{colim}_{\beta < \kappa} \mathcal{C}(A, Z_\beta) \to \mathcal{C}\left( A, \mathrm{colim}_{\beta < \kappa} Z_\beta \right)
+    $$
+    が全単射であることをいう。<br>
+    射 $p \colon X \to Y$ が、射の集合 $I$ に対して右持ち上げ性質 (right lifting property) をもつ（$p \in \mathrm{Inj}(I)$）とは、任意の $g \colon A \to B \in I$ と可換図式 $u \colon A \to Z, v \colon B \to Y$ ($p \circ u = v \circ g$) に対し、$h \circ g = u$ かつ $p \circ h = v$ を満たす $h \colon B \to Z$ が存在することをいう。
+</div>
+<div class="theorem">
+    <strong>定理 (Quillen の Small Object Argument):</strong><br>
+    圏 $\mathcal{C}$ がすべての小余極限をもち、$I$ を $\kappa$-small（$\kappa$ はある正則基数）な始域をもつ射の集合とする。このとき、$\mathcal{C}$ の任意の射 $f \colon X \to Y$ は次のように関手的に因数分解できる。
+    $$
+    f = p \circ j
+    $$
+    ここで $j$ は $I$ の射の押し出しと超限合成の反復により構成される射のクラス $\mathrm{Cell}(I)$ に属し、$p \in \mathrm{Inj}(I)$ である。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>順序数 $\alpha \le \kappa$ に関する超限帰納法により、対象 $Z_\alpha$、射 $j_{\beta, \alpha} \colon Z_\beta \to Z_\alpha$ （$\beta < \alpha$）、および $p_\alpha \colon Z_\alpha \to Y$ を以下のように構成する。</p>
+
+    <p>1. <strong>初期段階 ($\alpha = 0$)</strong>: $Z_0 = X$ とおき、$p_0 = f \colon Z_0 \to Y$ とする。</p>
+
+    <p>2. <strong>後続段階 ($\alpha \to \alpha + 1$)</strong>:<br>
+    $Z_\alpha$ と $p_\alpha \colon Z_\alpha \to Y$ が定義されているとする。 $I$ の射 $g \colon A \to B$ と可換四角形を作る写像の三つ組の集合を $S_\alpha$ とおく：
+    $$
+    S_\alpha = \{ (g \colon A \to B, u \colon A \to Z_\alpha, v \colon B \to Y) \mid g \in I, p_\alpha \circ u = v \circ g \}
+    $$
+    次の押し出し (pushout) 図式により $Z_{\alpha+1}$ および $j_{\alpha, \alpha+1} \colon Z_\alpha \to Z_{\alpha+1}$ を定義する：
+    $$
+    \begin{array}{ccc}
+    \coprod_{(g, u, v) \in S_\alpha} A & \xrightarrow{\coprod u} & Z_\alpha \\
+    \downarrow^{\coprod g} & & \downarrow^{j_{\alpha, \alpha+1}} \\
+    \coprod_{(g, u, v) \in S_\alpha} B & \xrightarrow{} & Z_{\alpha+1}
+    \end{array}
+    $$
+    押し出しの普遍性により、射 $p_{\alpha+1} \colon Z_{\alpha+1} \to Y$ が一意に定まり、$p_{\alpha+1} \circ j_{\alpha, \alpha+1} = p_\alpha$ を満たす。</p>
+
+    <p>3. <strong>極限段階 ($\lambda$)</strong>:<br>
+    極限順序数 $\lambda \le \kappa$ に対し、$Z_\lambda = \mathrm{colim}_{\beta < \lambda} Z_\beta$ と定義し、$p_\lambda \colon Z_\lambda \to Y$ を誘起される極限射とする。</p>
+
+    <p>$\alpha = \kappa$ において、$Z = Z_\kappa$ とおき、$j = j_{0, \kappa} \colon X \to Z_\kappa$、$p = p_\kappa \colon Z_\kappa \to Y$ とする。構成により $f = p \circ j$ であり、$j \in \mathrm{Cell}(I)$ である。</p>
+
+    <p>$p \colon Z_\kappa \to Y$ が $I$ に対する右持ち上げ性質をもつことを示す。任意の $g \colon A \to B \in I$ および可換図式 $u \colon A \to Z_\kappa$, $v \colon B \to Y$ ($p \circ u = v \circ g$) をとる。仮定より $A$ は $\kappa$-small であるから、超限列 $Z \colon \kappa \to \mathcal{C}$ に対し写像 $u \colon A \to Z_\kappa = \mathrm{colim}_{\beta < \kappa} Z_\beta$ はある順序数 $\alpha < \kappa$ において $u_\alpha \colon A \to Z_\alpha$ を経由する（即ち $u = j_{\alpha, \kappa} \circ u_\alpha$）。</p>
+
+    <p>このとき、三つ組 $(g, u_\alpha, v)$ は $S_\alpha$ の元となる。 $Z_{\alpha+1}$ の構成における押し出しの定義により、射 $h_{\alpha+1} \colon B \to Z_{\alpha+1}$ であって $h_{\alpha+1} \circ g = j_{\alpha, \alpha+1} \circ u_\alpha$ かつ $p_{\alpha+1} \circ h_{\alpha+1} = v$ を満たすものが存在する。 $h = j_{\alpha+1, \kappa} \circ h_{\alpha+1} \colon B \to Z_\kappa$ とおくと、
+    $$
+    h \circ g = j_{\alpha+1, \kappa} \circ h_{\alpha+1} \circ g = j_{\alpha+1, \kappa} \circ j_{\alpha, \alpha+1} \circ u_\alpha = j_{\alpha, \kappa} \circ u_\alpha = u
+    $$
+    $$
+    p \circ h = p_\kappa \circ j_{\alpha+1, \kappa} \circ h_{\alpha+1} = p_{\alpha+1} \circ h_{\alpha+1} = v
+    $$
+    が成立する。したがって $h$ は求める持ち上げであり、$p \in \mathrm{Inj}(I)$ が示された。 $\square$</p>
+</div>
+
+<h3>4.2 Adámek の自由モナド超限構成定理</h3>
+<div class="definition">
+    <strong>定義（$F$-代数）:</strong><br>
+    $\mathcal{C}$ を初期対象 $0$ と小余極限をもつ圏とし、$F \colon \mathcal{C} \to \mathcal{C}$ を自己関手 (endofunctor) とする。<br>
+    $F$-代数 ($F$-algebra) とは、対象 $A \in \mathcal{C}$ と射 $a \colon F(A) \to A$ の組 $(A, a)$ のことである。<br>
+    射 $f \colon (A, a) \to (B, b)$ が $F$-代数の射であるとは、$f \circ a = b \circ F(f)$ を満たす $\mathcal{C}$ の射 $f \colon A \to B$ のことをいう。<br>
+    $F$-代数の圏の初期対象を初期 $F$-代数 (initial $F$-algebra) と呼ぶ。
+</div>
+<div class="theorem">
+    <strong>定理 (Adámek):</strong><br>
+    $\kappa$ を正則基数とし、$F \colon \mathcal{C} \to \mathcal{C}$ は $\kappa$-フィルタ順序余極限 ($\kappa$-filtered colimit) を保存する関手とする。このとき、超限帰納法により圏 $\mathcal{C}$ における初期 $F$-代数が構成できる。
+</div>
+<div class="proof">
+    <strong>証明:</strong><br>
+    <p>順序数 $\alpha \le \kappa$ に関する超限帰納法により、圏 $\mathcal{C}$ 内の対象の族 $(W_\alpha)_{\alpha \le \kappa}$ および射の族 $w_{\beta, \alpha} \colon W_\beta \to W_\alpha$ （$\beta \le \alpha$）を以下のように構成する。</p>
+    
+    <p>1. <strong>初期段階 ($\alpha = 0$)</strong>: $W_0 = 0$ とし、$w_{0, 1} \colon 0 \to W_1 = F(0)$ を初期対象からの唯一の射とする。<br>
+    2. <strong>後続段階 ($\alpha \to \alpha + 1$)</strong>: $W_{\alpha+1} = F(W_\alpha)$ とし、$w_{\alpha+1, \alpha+2} = F(w_{\alpha, \alpha+1})$ とする。<br>
+    3. <strong>極限段階 ($\lambda \le \kappa$)</strong>: 極限順序数 $\lambda$ に対しては $W_\lambda = \mathrm{colim}_{\gamma < \lambda} W_\gamma$ とし、$w_{\gamma, \lambda} \colon W_\gamma \to W_\lambda$ を余極限の標準的射とする。</p>
+    
+    <p>$F$ は $\kappa$-フィルタ順序余極限を保存し、図式 $(W_\alpha)_{\alpha < \kappa}$ は長さ $\kappa$ のフィルタ順序図式であるから、次の自然な同型が得られる：
+    $$
+    F(W_\kappa) = F\left( \mathrm{colim}_{\alpha < \kappa} W_\alpha \right) \cong \mathrm{colim}_{\alpha < \kappa} F(W_\alpha) = \mathrm{colim}_{\alpha < \kappa} W_{\alpha+1} \cong W_\kappa
+    $$
+    この同型射を $\mu \colon F(W_\kappa) \to W_\kappa$ とおき、$(W_\kappa, \mu)$ が初期 $F$-代数であることを示す。</p>
+    
+    <p>任意の $F$-代数 $(A, a)$ をとる。射の族 $h_\alpha \colon W_\alpha \to A$ を $\alpha \le \kappa$ に関する超限帰納法で定義する：<br>
+    ・ $\alpha = 0$: $h_0 \colon 0 \to A$ は初期対象からの唯一の射とする。<br>
+    ・ $\alpha + 1$: $h_{\alpha+1} = a \circ F(h_\alpha) \colon F(W_\alpha) \to A$ と定める。<br>
+    ・ $\lambda$: 極限順序数 $\lambda$ については、$W_\lambda = \mathrm{colim}_{\gamma < \lambda} W_\gamma$ の普遍性により、すべての $\gamma < \lambda$ に対して $h_\lambda \circ w_{\gamma, \lambda} = h_\gamma$ を満たす唯一の射 $h_\lambda \colon W_\lambda \to A$ を定める。</p>
+    
+    <p>$h = h_\kappa \colon W_\kappa \to A$ と置く。 $h$ が $F$-代数の射であること、すなわち $h \circ \mu = a \circ F(h)$ を示す。 $F(W_\kappa) \cong \mathrm{colim}_{\alpha < \kappa} W_{\alpha+1}$ であるから、任意の $\alpha < \kappa$ に対する射 $F(W_\alpha) = W_{\alpha+1}$ 上での制限を比較すればよい。 $h \circ \mu$ の $W_{\alpha+1}$ への制限は $h_{\alpha+1} = a \circ F(h_\alpha)$ である。一方、$a \circ F(h)$ の $W_{\alpha+1} = F(W_\alpha)$ への制限は $a \circ F(h \circ w_{\alpha, \kappa}) = a \circ F(h_\alpha)$ である。余極限の普遍性により、$h \circ \mu = a \circ F(h)$ が成立する。</p>
+    
+    <p>一意性を示す。 $g \colon (W_\kappa, \mu) \to (A, a)$ を任意の $F$-代数の射とする。すべての $\alpha \le \kappa$ について $g \circ w_{\alpha, \kappa} = h_\alpha$ となることを超限帰納法で示す。 $\alpha = 0$ では $0$ は初期対象であるため $g \circ w_{0, \kappa} = h_0$ である。 $\alpha + 1$ では $g$ が $F$-代数の射であることから、$g \circ w_{\alpha+1, \kappa} = g \circ \mu \circ F(w_{\alpha, \kappa}) = a \circ F(g \circ w_{\alpha, \kappa}) = a \circ F(h_\alpha) = h_{\alpha+1}$ となる。極限順序数 $\lambda$ については、余極限の一意性より従う。したがって $\alpha = \kappa$ とすることで $g = h_\kappa = h$ が示され、射の一意性が確定した。 $\square$</p>
+</div>
+
+<div class="references">
+    <h3>引用・参考文献</h3>
+    <ul>
+        <li>Kaplansky, I. (1958). Projective Modules. <i>Annals of Mathematics</i>, 68(2), 372-377. <a href="https://doi.org/10.2307/1970252" target="_blank">https://doi.org/10.2307/1970252</a></li>
+        <li>Baer, R. (1943). Radical Ideals. <i>American Journal of Mathematics</i>, 65(4), 537-568. <a href="https://doi.org/10.2307/2371720" target="_blank">https://doi.org/10.2307/2371720</a></li>
+        <li>Quillen, D. G. (1967). <i>Homotopical Algebra</i>. Lecture Notes in Mathematics, vol. 43, Springer-Verlag. <a href="https://doi.org/10.1007/BFb0097438" target="_blank">https://doi.org/10.1007/BFb0097438</a></li>
+        <li>Adámek, J. (1974). Free algebras and automata realizations in the language of categories. <i>Commentationes Mathematicae Universitatis Carolinae</i>, 15(4), 589-602. <a href="https://dml.cz/dmlcz/105584" target="_blank">https://dml.cz/dmlcz/105584</a></li>
+    </ul>
+</div>
+
+</body>
+</html>

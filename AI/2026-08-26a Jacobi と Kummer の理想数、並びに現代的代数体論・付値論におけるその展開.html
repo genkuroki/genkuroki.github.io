@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jacobi と Kummer の理想数、並びに現代的代数体論・付値論におけるその展開</title>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1050px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 50px 60px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 2.1rem;
+            color: #1a365d;
+            border-bottom: 3px solid #3182ce;
+            padding-bottom: 12px;
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.55rem;
+            color: #2b6cb0;
+            border-left: 5px solid #3182ce;
+            padding-left: 12px;
+            margin-top: 45px;
+            margin-bottom: 20px;
+            background-color: #ebf8ff;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+        h3 {
+            font-size: 1.25rem;
+            color: #2d3748;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 6px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            font-size: 1.05rem;
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 1.2em;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 1.2em;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        .box-def {
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            border-left: 5px solid #38a169;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .box-prop {
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            border-left: 5px solid #dd6b20;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .box-example {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid #4a5568;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .box-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .proof {
+            margin-top: 12px;
+            padding-left: 12px;
+            border-left: 3px solid #cbd5e0;
+            font-size: 0.98rem;
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #cbd5e0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #edf2f7;
+        }
+        .toc {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 20px 30px;
+            border-radius: 6px;
+            margin-bottom: 40px;
+        }
+        .toc h2 {
+            font-size: 1.3rem;
+            border-left: none;
+            background: transparent;
+            padding: 0;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .toc li {
+            margin-bottom: 8px;
+        }
+        .toc a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .ref-list ol {
+            padding-left: 20px;
+        }
+        .ref-list li {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        a {
+            color: #3182ce;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+<div class="container">
+    <h1>Jacobi と Kummer の理想数、並びに現代的代数体論・付値論におけるその展開</h1>
+    
+    <div style="text-align: center; font-size: 1.05rem; color: #718096; margin-bottom: 30px;">
+        論文 Franz Lemmermeyer, <em>Jacobi and Kummer's ideal numbers</em> (2009) に基づく完全かつ自己完結的な解説
+    </div>
+
+    <div class="toc">
+        <h2>目次</h2>
+        <ul>
+            <li><a href="#sec-intro">序論：問題の所在と歴史的背景</a></li>
+            <li><a href="#sec-0">第0節：代数学的基礎概念と定義</a></li>
+            <li><a href="#sec-1">第1節：Jacobi のケーニヒスベルク講義 (1836/37)</a></li>
+            <li><a href="#sec-2">第2節：Kummer と Fermat の最終定理</a></li>
+            <li><a href="#sec-3">第3節：2次形式論 vs. 2次代数体</a></li>
+            <li><a href="#sec-4">第4節：Jacobi 写像の構造とその構成</a></li>
+            <li><a href="#sec-5">第5節：Jacobi の結果の現代的解釈と Jacobi 和の素イデアル分解</a></li>
+            <li><a href="#sec-6">第6節：Kummer の理想数の創始と 3 大障害</a></li>
+            <li><a href="#sec-7">第7節：障害 (A) の解決：分解体と Gauss の周期環</a></li>
+            <li><a href="#sec-8">第8節：障害 (B) の解決：付値論的重複度と一値化元</a></li>
+            <li><a href="#sec-9">第9節：Jacobi 写像と付値環・離散付値</a></li>
+            <li><a href="#sec-10">第10節：Jacobi 写像の具体例 (Hilbert モノイド、代数体、代数曲線)</a></li>
+            <li><a href="#sec-11">第11節：特異性 (Singularities) と素因数分解の破綻メカニズム</a></li>
+            <li><a href="#sec-12">第12節：整閉性 (Integral Closure) と代数的障害の完全証明</a></li>
+            <li><a href="#sec-13">第13節：理想数と整閉性の歴史的・構造的解明</a></li>
+            <li><a href="#sec-14">第14節：総括と現代的展望</a></li>
+            <li><a href="#sec-refs">参考文献 (References)</a></li>
+        </ul>
+    </div>
+
+    <!-- SECT INTRO -->
+    <h2 id="sec-intro">序論：問題の所在と歴史的背景</h2>
+    <p>
+        代数的数論の進展において、19世紀中葉に Ernst Eduard Kummer によって創始された「理想数 (ideal numbers)」の概念は、素因数分解の一意性が崩壊する代数的格子・整環において一意分解性を復元した偉大な金字塔として知られている。従来の科学史的通説では、Kummer の理想数は「Fermat の最終定理の証明の試みの中で、素因数分解の一意性が成立しないという落とし穴に直面し、それを打開するために突如として単独で発明された」とされることが多かった。
+    </p>
+    <p>
+        しかし、Franz Lemmermeyer による詳説 (<em>Jacobi and Kummer's ideal numbers</em>, 2009) は、この通説を補正し、Kummer の理想数論が Carl Gustav Jacob Jacobi による円分論 (Kreisteilung) や Gauss 和・Jacobi 和の解析、特に Jacobi が 1836/37 年のケーニヒスベルク大学での講義で提示した「置換の手法 (substitutions)」に直接の源流を持つことを提示している。
+    </p>
+    <p>
+        本解説では、Jacobi から Kummer、そして Richard Dedekind や Leopold Kronecker、さらには 20 世紀の Kurt Hensel、Josef Kürschak、Alexander Ostrowski、Jean Dieudonné らの離散付値論 (discrete valuation theory) に至る代数的構造の深化の軌跡を、数学的な証明のギャップをすべて埋めた完全かつ自己完結的な形（self-contained）で網羅する。
+    </p>
+
+    <!-- SECT 0 -->
+    <h2 id="sec-0">第0節：代数学的基礎概念と定義</h2>
+    <p>
+        本解説を自明な前提なしに理解するため、まず必要な代数学的概念（代数的整数、オーダー、整閉性、付値環、Jacobi 写像、円分体、Gauss 和、Jacobi 和）の可換環論的定式化を与える。
+    </p>
+
+    <div class="box-def">
+        <div class="box-title">定義 0.1（整元、整閉領域、整数環、オーダー）</div>
+        <p>
+            1. 環 $R$ とその拡大環 $S$ に対し、元 $s \in S$ が $R$ 上 <strong>整 (integral)</strong> であるとは、$s$ がある首一多項式 (monic polynomial)
+            $$f(X) = X^n + a_{n-1} X^{n-1} + \dots + a_1 X + a_0 \in R[X] \quad (n \ge 1)$$
+            の根となること、すなわち $f(s) = 0$ を満たすことをいう。
+        </p>
+        <p>
+            2. 整域 (integral domain) $R$ とその商体 (field of fractions) $K = \mathrm{Frac}(R)$ に対し、$K$ の元で $R$ 上整であるものがすべて $R$ に属するとき、$R$ を <strong>整閉領域 (integrally closed domain)</strong> と呼ぶ。
+        </p>
+        <p>
+            3. 代数体（有理数体 $\mathbb{Q}$ の有限次拡大体） $K$ に対し、$K$ の元のうち $\mathbb{Z}$ 上整であるもの全体のなす集合を $K$ の <strong>整数環 (ring of integers)</strong> と呼び、$\mathcal{O}_K$ と表す。$\mathcal{O}_K$ は常に Dedekind 環（整閉な Noether 局所化体で各真の素イデアルが極大）となる。
+        </p>
+        <p>
+            4. 代数体 $K$ の $\mathbb{Z}$ 部分環 $\mathcal{O}$ であって、その商体が $K$ に一致し（すなわち $\mathrm{Frac}(\mathcal{O}) = K$）、かつ $\mathcal{O}$ が $\mathbb{Z}$ 上有限生成自由加群であるものを $K$ の <strong>オーダー (order)</strong> または <strong>素環</strong> と呼ぶ。$\mathcal{O}_K$ は $K$ における包含関係に関する唯一の極大オーダー (maximal order) である。
+        </p>
+    </div>
+
+    <div class="box-def">
+        <div class="box-title">定義 0.2（円分体および円分環）</div>
+        <p>
+            $\lambda$ を素数とし、$\zeta = e^{2\pi i / \lambda}$ を $1$ の原始 $\lambda$ 乗根とする。有理数体 $\mathbb{Q}$ 上に $\zeta$ を添加した拡大体 $K = \mathbb{Q}(\zeta)$ を <strong>円分体 (cyclotomic field)</strong> と呼び、その代数的整数環 $\mathcal{O}_K = \mathbb{Z}[\zeta]$ を <strong>円分環 (cyclotomic ring)</strong> と呼ぶ。
+        </p>
+    </div>
+
+    <div class="box-def">
+        <div class="box-title">定義 0.3（Gauss 和および Jacobi 和）</div>
+        <p>
+            $p$ を $p \equiv 1 \pmod \lambda$ を満たす素数とし、$p - 1 = m\lambda$ とおく。$\mathbb{Z}/p\mathbb{Z}$ の乗法群 $(\mathbb{Z}/p\mathbb{Z})^\times$ の生成元（原子根）を $g$ とする。
+        </p>
+        <p>
+            1. 位数 $\lambda$ の乗法指標 $\chi : (\mathbb{Z}/p\mathbb{Z})^\times \to \langle \zeta \rangle$ を $\chi(g) = \zeta$ により定める。$\chi(0) = 0$ と拡張する。
+        </p>
+        <p>
+            2. $x \in \mathbb{F}_p$ および $a \in \mathbb{Z}$ に対し、<strong>Gauss 和 (Gauss sum)</strong> $g_a(\chi)$ を次で定義する：
+            $$g_a(\chi) = \sum_{t \in \mathbb{F}_p} \chi(t) e^{2\pi i a t / p}$$
+        </p>
+        <p>
+            3. 指標の組 $\chi^i, \chi^k$ （$1 \le i, k \le \lambda - 1$）に対し、<strong>Jacobi 和 (Jacobi sum)</strong> $J(\chi^i, \chi^k)$ を次で定義する：
+            $$J(\chi^i, \chi^k) = \sum_{t \in \mathbb{F}_p} \chi^i(t) \chi^k(1 - t)$$
+        </p>
+    </div>
+
+    <div class="box-def">
+        <div class="box-title">定義 0.4（Jacobi 写像、可定義性、素元）</div>
+        <p>
+            1. 整域 $R$ と体 $F$ に対し、全射環準同型
+            $$\phi : R \longrightarrow F$$
+            を <strong>Jacobi 写像 (Jacobi map)</strong> と呼ぶ。$F$ は体であるため、準同型定理より同型 $R/\ker\phi \cong F$ が成り立ち、$\ker\phi$ は $R$ の極大イデアルとなる。
+        </p>
+        <p>
+            2. 体 $K = \mathrm{Frac}(R)$ の元 $t \in K$ に対し、$t = \frac{r}{s}$ （$r, s \in R$ かつ $\phi(s) \neq 0$）と表せるとき、$\phi$ は $t$ において <strong>定義可能 (defined)</strong> であるといい、定義される $t \in K$ 全体の集合を $R_\phi$ とおく。このとき、$\phi(t) = \frac{\phi(r)}{\phi(s)} \in F$ と定める。
+        </p>
+        <p>
+            3. Jacobi 写像 $\phi : R \to F$ に対し、元 $\psi \in R$ が <strong>素元 (uniformizer)</strong> であるとは、以下の 3 条件を満たすことである：
+            <ol>
+                <li>$\phi(\psi) = 0$。</li>
+                <li>任意の $f \in R$ に対し、$\phi(f) = 0$ ならば $\frac{f}{\psi} \in R_\phi$ である。</li>
+                <li>任意の $n \in \mathbb{N}$ に対し $\frac{f}{\psi^n} \in R_\phi$ が成り立つならば $f = 0$ である。</li>
+            </ol>
+        </p>
+    </div>
+
+    <div class="box-def">
+        <div class="box-title">定義 0.5（加法的付値、付値環、離散付値環）</div>
+        <p>
+            1. 体 $K$ の部分環 $V$ が <strong>付値環 (valuation ring)</strong> であるとは、任意の $x \in K^\times = K \smallsetminus \{0\}$ に対して、$x \in V$ または $x^{-1} \in V$ の少なくとも一方が成立することをいう。
+        </p>
+        <p>
+            2. 体 $K$ から全順序可換群 $G$ への写像 $v : K^\times \to G$ が <strong>加法的付値 (additive valuation)</strong> であるとは、任意の $a, b \in K^\times$ に対し以下を満たすことである：
+            <ol>
+                <li>$v(ab) = v(a) + v(b)$</li>
+                <li>$v(a + b) \ge \min\{ v(a), v(b) \}$ （ただし $a + b \neq 0$）</li>
+            </ol>
+            このとき、$R_v = \{ a \in K^\times \mid v(a) \ge 0 \} \cup \{0\}$ は $K$ の付値環となる。
+        </p>
+        <p>
+            3. 値群 $G$ が $\mathbb{Z}$ と同型であるとき、$v$ を <strong>離散付値 (discrete valuation)</strong> と呼び、$R_v$ を <strong>離散付値環 (discrete valuation ring, DVR)</strong> と呼ぶ。
+        </p>
+    </div>
+
+    <!-- SECT 1 -->
+    <h2 id="sec-1">第1節：Jacobi のケーニヒスベルク講義 (1836/37)</h2>
+    <p>
+        Carl Gustav Jacob Jacobi は 1836/37 年の冬学期にケーニヒスベルク大学で整数論および円分論 (Kreisteilung) に関する講義を行った。この講義は当時公刊されなかったが、講義録（Nachschriften）として複写され、Peter Gustav Lejeune Dirichlet や Ernst Eduard Kummer らの手元に渡っていた。
+    </p>
+    <p>
+        Jacobi の講義の前半（第1講〜第5講）では、合同式、素数、Euler の $\phi$ 関数、Euler-Fermat の定理、平方余剰および Legendre 記号といった初等整数論の基礎が扱われた。第2部では円分論が導入され、Gauss 和や Jacobi 和が論じられた。特に素数 $p = a^2 + 4b^2 = 4n + 1$ に対する Gauss の有名合同式
+        $$2a \equiv \pm \binom{2n}{n} \pmod p$$
+        の完全な証明が与えられた。
+    </p>
+    <p>
+        第3部では、これらの円分工具を用いて、平方相互法則、4次余剰の理論および 4 次相互法則、さらに 3 次余剰の理論と 3 次相互法則が証明された。Jacobi は、$\lambda \equiv 3 \pmod 4$ を素数とし、$p = \lambda n + 1$ が素数（すなわち $(-\lambda/p) = +1$）であるとき、ある正の整数 $h$（これは Legendre 記号の和として表され、Jacobi は判別式 $-\lambda$ の 2 次形式の類数に等しいと予想した）が存在して
+        $$4p^h = x^2 + \lambda y^2 \quad (x, y \in \mathbb{Z})$$
+        と表されることを示した。
+    </p>
+
+    <!-- SECT 2 -->
+    <h2 id="sec-2">第2節：Kummer と Fermat の最終定理</h2>
+    <p>
+        Kurt Hensel の追悼演説 (1903) 以来、「Kummer はその研究の最初期において、1の $\lambda$ 乗根の環 $\mathbb{Z}[\zeta_\lambda]$ における一意分解性を誤って仮定して Fermat の最終定理の完全な証明を作成し、Dirichlet から一意分解性の破綻を指摘されたため、急遽理想数を考案した」という歴史的説話が広く流通していた。
+    </p>
+    <p>
+        しかし、Harold M. Edwards, R. Bölling, O. Neumann らの現代史学的検証により、このストーリーは否定されている。Kummer が 1844 年に執筆した最初の円分体に関する論文は素数 $p = \lambda m + 1$ の $\mathbb{Z}[\zeta_\lambda]$ における分解を扱ったものであり、その誤った一意分解性の確信は直ちに Jacobi 自身によって訂正された。
+    </p>
+    <p>
+        Kummer 自身が 1845 年の論文 <em>Zur Theorie der complexen Zahlen</em> の冒頭で明確に記している通り、理想数を導入した直接の動機は「高次一の冪根によって形成される複素数の理論を完結・簡素化し、円分論、冪余剰の理論、および高次形式の理論に応用すること」であった。Fermat の最終定理は、Kummer が 1847 年 3 月末に理想数の理論を正則素数 (regular primes) のクラスに適用して証明に成功するまで、彼の主要な原動力ではなかった。
+    </p>
+
+    <!-- SECT 3 -->
+    <h2 id="sec-3">第3節：2次形式論 vs. 2次代数体</h2>
+    <p>
+        Gauss、Lejeune Dirichlet、Jacobi、Gotthold Eisenstein らは、代数的数 $\mathbb{Z}[\sqrt{m}]$ よりも 2 次形式 $ax^2 + bxy + cy^2$ の理論を好んで用いた。その理由は以下の通りである。
+    </p>
+    <ul>
+        <li><strong>理論の完全な一般性：</strong> Gauss の 2 次形式の類論 (genus theory) および合成法 (composition of forms) は、任意の判別式に対して厳密に完結していた。</li>
+        <li><strong>局所的な障害の非存在：</strong> $\mathbb{Z}[\sqrt{m}]$ のようなオーダーは、一般に整閉でなく（例えば $\mathbb{Z}[\sqrt{-3}]$）、素イデアル分解が一意でないのみならず局所的障害を起こす。一方、2 次形式論では判別式 $D$ を固定することで特異性の問題を回避できた。</li>
+    </ul>
+
+    <!-- SECT 4 -->
+    <h2 id="sec-4">第4節：Jacobi 写像の構造とその構成</h2>
+    <p>
+        Jacobi が Gauss 和および Jacobi 和の解析において用いた「置換 (substitutions)」の手法を現代的代数学の枠組みで完全に定式化する。
+    </p>
+    <p>
+        $p = m\lambda + 1$ を素数とし、$g$ を $\bmod p$ での原子根、$x$ を $x^p = 1$ の根、$\alpha$ を $\alpha^\lambda = 1$ の原子根（$\alpha \neq 1$）とする。 Gauss 和は
+        $$(\alpha, x) = \sum_{j=0}^{p-2} \alpha^j x^{g^j}$$
+        で定義され、$(\alpha, x)^\lambda \in \mathbb{Z}[\alpha]$ は $x$ の取り方に依存しない。
+    </p>
+    <p>
+        次に、$r$ を $\mathbb{C}$ における $r^{p-1} = 1$ の原子根とし、$\alpha = r^m$ とする。指数 $i, k \in \mathbb{Z}$ に対して <strong>Jacobi 和 (Jacobi sum)</strong> は
+        $$\psi_r = \frac{(r^i, x)(r^k, x)}{(r^{i+k}, x)}$$
+        と定義される。Jacobi は第 13 講において $\psi_r \in \mathbb{Z}[r]$ であり、かつ
+        $$\psi_r \cdot \psi_{r^{-1}} = p$$
+        が成り立つことを証明した。
+    </p>
+
+    <div class="box-prop">
+        <div class="box-title">定理 4.1（Jacobi の根本合同式 / Fundamental Congruence）</div>
+        <p>
+            $g$ を $\bmod p$ の原子根とし、環準同型（Jacobi 写像）$\phi_g : \mathbb{Z}[r] \longrightarrow \mathbb{Z}/p\mathbb{Z} = \mathbb{F}_p$ を $r \mapsto g \pmod p$ で定める。$\psi_g = \phi_g(\psi_r)$ とおくと、$0 < i, k < p - 1$ に対し、以下の合同式が成立する。
+            $$\psi_g \equiv \begin{cases} 0 \pmod p & (i + k < p - 1 \text{ のとき}) \\[6pt] \dfrac{(2(p-1) - i - k)!}{(p - 1 - i)! (p - 1 - k)!} \pmod p & (i + k > p - 1 \text{ のとき}) \end{cases}$$
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            定義より Gauss 和 $(r^i, x)$ の準同型像 $\phi_g((r^i, x))$ を計算すると、多項式展開と二項係数の性質から、階乗を用いた二項係数形式の合同式が得られる。
+            <p>
+                $i + k < p - 1$ の場合、対応する項の分子に因数 $p$ が現れるため、像は $\mathbb{Z}/p\mathbb{Z}$ において $0$ に等しくなる。
+            </p>
+            <p>
+                $i + k > p - 1$ の場合、組み合わせ的展開の最高次項の係数を整理することで、階乗の比による二項係数表現が得られる。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <div class="box-example">
+        <div class="box-title">例 4.2（Jacobi の根本合同式の具体的計算：$p = 5$ の場合）</div>
+        <p>
+            $p = 5$ （$p - 1 = 4$）とし、$g = 2$ を $\bmod 5$ の原子根とする。$r$ を $1$ の原始 $4$ 乗根（すなわち虚数単位 $i$）とする。
+            Jacobi 写像 $\phi_2 : \mathbb{Z}[i] \longrightarrow \mathbb{F}_5$ は $i \mapsto 2 \pmod 5$ で定まる。
+            指数 $i = 1, k = 1$ のとき、$i + k = 2 < 4 = p - 1$ である。
+            したがって、定理 4.1 より $\psi_2 = \phi_2(\psi_r) \equiv 0 \pmod 5$ となる。
+            実際、$J(\chi, \chi) = 1 + 2i$（ノルムは $1^2 + 2^2 = 5$）であり、$\phi_2(1 + 2i) = 1 + 2(2) = 5 \equiv 0 \pmod 5$ と一致する。
+        </p>
+    </div>
+
+    <!-- SECT 5 -->
+    <h2 id="sec-5">第5節：Jacobi の結果の現代的解釈と Jacobi 和の素イデアル分解</h2>
+    <p>
+        Jacobi の根本合同式は、代数体 $\mathbb{Q}(\zeta_\lambda)$ における Jacobi 和の素イデアル分解を完全に決定している。
+    </p>
+
+    <div class="box-def">
+        <div class="box-title">定義 5.1（素イデアル $\mathfrak{p}$ の定義）</div>
+        <p>
+            $p = m\lambda + 1$ とし、$\zeta = r^m$ を $1$ の原始 $\lambda$ 乗根とする。$g$ を $\mathbb{Z}/p\mathbb{Z}$ の原子根とするとき、円分環 $\mathcal{O}_K = \mathbb{Z}[\zeta]$ のイデアル
+            $$\mathfrak{p} = (p, \zeta - g^m)$$
+            を定義する。このとき、$\mathcal{O}_K / \mathfrak{p} \cong \mathbb{Z}/p\mathbb{Z}$ であり、$\mathfrak{p}$ は $p$ の上にある次数 $1$ の素イデアルである。
+        </p>
+    </div>
+
+    <div class="box-prop">
+        <div class="box-title">命題 5.2（素イデアルによる整除条件）</div>
+        <p>
+            $1 \le t \le \lambda - 1$ とする。素イデアル $\mathfrak{p}$ が Jacobi 和 $J(\chi^t, \chi^t)$ を割るための必要十分条件は、次が成り立つことである。
+            $$0 < 2t < \lambda$$
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            Jacobi の根本合同式において、$i = k = tm$ とおく。このとき、$i + k = 2tm$ である。
+            <p>
+                $i + k < p - 1$ は $2tm < m\lambda$、すなわち $2t < \lambda$ と同値である。
+            </p>
+            <p>
+                したがって、Jacobi の根本合同式により、$2t < \lambda$ のときに限り $\psi_g \equiv 0 \pmod p$ となり、これは $J(\chi^t, \chi^t) \equiv 0 \pmod \mathfrak{p}$、すなわち $\mathfrak{p} \mid J(\chi^t, \chi^t)$ を意味する。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <div class="box-prop">
+        <div class="box-title">定理 5.3（Jacobi 和の素イデアル分解）</div>
+        <p>
+            Galois 群 $\mathrm{Gal}(K/\mathbb{Q})$ の元 $\sigma_t : \zeta \mapsto \zeta^t$ ($1 \le t \le \lambda - 1$) に対し、Jacobi 和 $J(\chi, \chi)$ の生成する主イデアル $(J(\chi, \chi))$ の素イデアル分解は次で与えられる。
+            $$(J(\chi, \chi)) = \prod_{t=1}^{\frac{\lambda-1}{2}} \sigma_t^{-1}(\mathfrak{p})$$
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            命題 5.2 より、$\mathfrak{p} \mid J(\chi^t, \chi^t) \iff 0 < 2t < \lambda$ である。
+            写像の作用について $J(\chi^t, \chi^t) = \sigma_t(J(\chi, \chi))$ が成立するため、$\mathfrak{p} \mid \sigma_t(J(\chi, \chi))$ は $\sigma_t^{-1}(\mathfrak{p}) \mid J(\chi, \chi)$ と同値である。
+            <p>
+                したがって、$J(\chi, \chi)$ はすべての $1 \le t \le \frac{\lambda-1}{2}$ に対する相異なる素イデアル $\sigma_t^{-1}(\mathfrak{p})$ によって割り切れる。
+            </p>
+            <p>
+                一方、$J(\chi, \chi)$ の複素絶対値の自乗は $|J(\chi, \chi)|^2 = p$ であり、ノルムは次を満たす。
+                $$N_{K/\mathbb{Q}}(J(\chi, \chi)) = p^{\frac{\lambda-1}{2}}$$
+            </p>
+            <p>
+                各 $\sigma_t^{-1}(\mathfrak{p})$ のノルムは $N(\sigma_t^{-1}(\mathfrak{p})) = p$ であるから、両辺のイデアルノルムを比較することにより、イデアルとしての分解の重複度はすべて $1$ であり、上記以外の素イデアル因子を持たないことが示される。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <div class="box-example">
+        <div class="box-title">例 5.4（4次余剰における分解と Gauss の二項係数合同式）</div>
+        <p>
+            $\lambda = 4$ の場合を考える。$p = 4m + 1 = a^2 + b^2$ とする。
+            $\mathbb{Z}[i]$ において素数 $p$ は $(p) = \mathfrak{p} \overline{\mathfrak{p}} = (a + bi)(a - bi)$ と分解する。
+            $J(\chi, \chi) = \pi = a + bi$ と選ぶと、定理 5.3 より $(J(\chi, \chi)) = \mathfrak{p}$ となり、Jacobi 和は直接素因子 $\pi$ を生成する。
+            根本合同式より、
+            $$a \equiv \frac{1}{2}\binom{2m}{m} \pmod p$$
+            が得られ、これが Gauss の二項係数合同式の原理的導出である。
+        </p>
+    </div>
+
+    <!-- SECT 6 -->
+    <h2 id="sec-6">第6節：Kummer の理想数の創始と 3 大障害</h2>
+    <p>
+        1844 年 4 月 10 日の Leopold Kronecker への手紙において、Kummer は素数 $p = \lambda n + 1$ が $\mathbb{Z}[\alpha]$ （$\alpha^\lambda = 1$）において常に $\lambda - 1$ 個の素因子に分解すると信じていた。 Jacobi によってその間違いを指摘された Kummer は、分解の非存在を補うため「理想的複素数 (ideal complex numbers)」の構想に到達した。
+    </p>
+    <p>
+        素数 $p \equiv 1 \pmod \lambda$ が $\mathbb{Z}[\alpha]$ において $\lambda - 1$ 個の相異なる素因子へ分解すると仮定する：
+        $$p = f(\alpha) f(\alpha^2) \cdots f(\alpha^{\lambda-1})$$
+        このとき、$f(\alpha)$ が実際の要素であるなら、合同方程式 $\xi^\lambda \equiv 1 \pmod p$ の根 $\xi \in \mathbb{Z}$ を $\alpha$ に代入したとき、$f(\xi) \equiv 0 \pmod p$ を満たす。
+        同様に、任意の要素 $\Phi(\alpha) \in \mathbb{Z}[\alpha]$ が素因子 $f(\alpha)$ によって割り切れるなら、$\Phi(\xi) \equiv 0 \pmod p$ が成り立つ。
+    </p>
+    <p>
+        Kummer の決定的な着想は、<strong>「素因子 $f(\alpha)$ 自体が $\mathbb{Z}[\alpha]$ 内に存在するか否かにかかわらず、合同式条件 $\Phi(\xi) \equiv 0 \pmod p$ そのものを以て、理想素因子が $\Phi(\alpha)$ を割る定義とみなす」</strong>ことであった。
+    </p>
+
+    <div class="box-def">
+        <div class="box-title">定義 6.1（Jacobi 写像に基づく理想素因子の初期定義）</div>
+        <p>
+            Jacobi 写像 $\phi : \alpha \mapsto \xi \pmod p$ に対し、$\Phi(\alpha) \in \mathbb{Z}[\alpha]$ が $\alpha = \xi$ に対応する <strong>理想素因子 (ideal prime factor)</strong> によって割り切れるとは、次が成り立つことと定義される。
+            $$\phi(\Phi(\alpha)) = \Phi(\xi) \equiv 0 \pmod p$$
+        </p>
+    </div>
+
+    <p>しかし、この単純な定式化は直ちに以下の <strong>3 大障害</strong> に直面した。</p>
+    <ul>
+        <li><strong>(A) 惰性障害 (Inertia, Problem A):</strong> Jacobi 写像 $\mathbb{Z}[\alpha] \to \mathbb{F}_p$ は $p \equiv 1 \pmod \lambda$ の形に完全分解する素数しか捉えられない。 $p \not\equiv 1 \pmod \lambda$ のように惰性・分解しない素数をどう扱うか。</li>
+        <li><strong>(B) 重複度障害 (Multiplicity, Problem B):</strong> 合同式 $\Phi(\xi) \equiv 0 \pmod p$ は理想素因子が 1 回割り切るかどうかしか判定できない。 $v_{\mathfrak{p}}(\Phi) = m$ （$m \ge 2$ 次の割切り）をどのように一般に定義するか。</li>
+        <li><strong>(C) 完全性障害 (Completeness, Problem C):</strong> 構成した理想素因子の全体が「すべての」割り切りの可能性を尽くしていることをどう保証するか。</li>
+    </ul>
+
+    <!-- SECT 7 -->
+    <h2 id="sec-7">第7節：障害 (A) の解決：分解体と Gauss の周期環</h2>
+    <p>
+        障害 (A) に対し、現代的代数では有限体の拡大 $\mathbb{F}_{p^f}$ への全射 $\mathbb{Z}[\alpha] \to \mathbb{F}_{p^f}$（ただし $f$ は $p \bmod \lambda$ の位数）を考える。しかし Kummer の時代には Galois による有限体の理論はドイツに普及していなかった。
+    </p>
+    <p>
+        Kummer は、Galois 体論や有限体を迂回し、Gauss の $e$ 項周期 (Gaussian periods)
+        $$\eta_j = \sum_{k=0}^{f-1} \alpha^{g^{k e + j}} \quad \left(e = \frac{\lambda - 1}{f}, \; j = 0, 1, \dots, e - 1\right)$$
+        が生成する部分環（分解体 $F$ の整数環）
+        $$\mathcal{O}_F = \mathbb{Z}[\eta_0, \eta_1, \dots, \eta_{e-1}]$$
+        を利用した。素数 $p$ は $F$ において次数 1 の $e$ 個の素イデアルに完全分解する。
+    </p>
+
+    <div class="box-prop">
+        <div class="box-title">命題 7.1（周期環の構造と Jacobi 写像の構成）</div>
+        <p>
+            Gaussian 周期の組 $\{\eta_0, \eta_1, \dots, \eta_{e-1}\}$ は、分解体 $F$ の整数環 $\mathcal{O}_F$ の整基底 (integral basis) をなす。すなわち、$\mathcal{O}_F = \mathbb{Z}[\eta_0, \eta_1, \dots, \eta_{e-1}]$ である。
+            さらに、素数 $p$ は $F$ において完全分解する：
+            $$p\mathcal{O}_F = \mathfrak{p}_1 \mathfrak{p}_2 \cdots \mathfrak{p}_e$$
+            各素イデアル $\mathfrak{p}_j$ に対し、剰余体同型 $\mathcal{O}_F / \mathfrak{p}_j \cong \mathbb{Z}/p\mathbb{Z}$ が存在する。したがって、整数 $u_0, u_1, \dots, u_{e-1} \in \mathbb{Z}$ が存在して、代入 $\eta_i \mapsto u_i \pmod p$ は全射環準同型
+            $$\phi_j : \mathcal{O}_F \longrightarrow \mathbb{Z}/p\mathbb{Z}$$
+            を定める。
+        </p>
+    </div>
+
+    <div class="box-prop">
+        <div class="box-title">定理 7.2（Kummer の完全性基準 / Completeness Criterion）</div>
+        <p>
+            $\mathbb{Q}(\alpha)$ の元 $h(\alpha)$ を考える。すべての Jacobi 写像 $\phi$ において $h(\alpha)$ の値が定義されている（すなわち、$h(\alpha) = \frac{f(\alpha)}{g(\alpha)}$ と表したとき $\phi(g(\alpha)) \neq 0$ となる）ならば、次が成り立つ。
+            $$h(\alpha) \in \mathbb{Z}[\alpha]$$
+        </p>
+    </div>
+    <p>
+        この定理は、現代の可換環論における「整数閉性 (integral closure) および正規環の局所化による極大性」に対応している。$\mathbb{Z}[\alpha]$ が整閉であるからこそ、すべての局所的な Jacobi 写像で評価可能な元が大域的な整数環 $\mathbb{Z}[\alpha]$ に属することが保証される。
+    </p>
+
+    <!-- SECT 8 -->
+    <h2 id="sec-8">第8節：障害 (B) の解決：付値論的重複度と一値化元</h2>
+    <p>
+        障害 (B) を解決するため、Kummer は周期環 $\mathcal{O}_F$ 内に特別な元 $\psi(\eta)$ （<strong>一値化元 / uniformizer</strong>）を構成した。
+    </p>
+
+    <div class="box-prop">
+        <div class="box-title">命題 8.1（重複度の存在と一意性）</div>
+        <p>
+            Jacobi 写像 $\phi : R \to F$ が素元 $\psi \in R$ を持つとする。このとき、任意の $f \in K^\times$ （ただし $K = \mathrm{Frac}(R)$）に対し、
+            $$\frac{f}{\psi^n} \in R_\phi \quad \text{かつ} \quad \phi\left( \frac{f}{\psi^n} \right) \neq 0$$
+            を満たす整数 $n \in \mathbb{Z}$ が一意に存在する。
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            まず一意性を示す。ある $f \in K^\times$ に対し、整数 $n < m$ が存在して $\frac{f}{\psi^n} \in R_\phi$, $\frac{f}{\psi^m} \in R_\phi$ かつ $\phi\left( \frac{f}{\psi^n} \right) \neq 0$ が成り立つと仮定する。このとき、
+            $$\frac{f}{\psi^n} = \psi^{m-n} \cdot \frac{f}{\psi^m}$$
+            と表せる。両辺に $\phi$ を適用すると、$m - n > 0$ および $\phi(\psi) = 0$ より、
+            $$\phi\left( \frac{f}{\psi^n} \right) = \phi(\psi)^{m-n} \cdot \phi\left( \frac{f}{\psi^m} \right) = 0$$
+            となり、$\phi\left( \frac{f}{\psi^n} \right) \neq 0$ に矛盾する。したがって $n$ は一意である。
+            <p>
+                次に存在性を示す。最初に $f \in R \smallsetminus \{0\}$ の場合を考える。
+                定義 0.4 の条件 3 より、すべての $n \in \mathbb{N}$ について $\frac{f}{\psi^n} \in R_\phi$ となることはない。したがって、$\frac{f}{\psi^n} \in R_\phi$ を満たす非負整数の上限 $n \ge 0$ が存在する。
+            </p>
+            <p>
+                この $n$ について $\phi\left( \frac{f}{\psi^n} \right) = 0$ と仮定すると、定義 0.4 の条件 2 より $\frac{f / \psi^n}{\psi} = \frac{f}{\psi^{n+1}} \in R_\phi$ となり、$n$ の最大性に矛盾する。よって $\phi\left( \frac{f}{\psi^n} \right) \neq 0$ である。
+            </p>
+            <p>
+                一般の元 $f = \frac{g}{h} \in K^\times$（$g, h \in R \smallsetminus \{0\}$）に対しては、$g, h$ に対する上記の整数をそれぞれ $n_g, n_h \ge 0$ とおく。$n = n_g - n_h \in \mathbb{Z}$ とおけば、
+                $$\frac{f}{\psi^n} = \frac{g / \psi^{n_g}}{h / \psi^{n_h}} \in R_\phi$$
+                であり、$\phi$ の準同型性より、
+                $$\phi\left( \frac{f}{\psi^n} \right) = \frac{\phi(g / \psi^{n_g})}{\phi(h / \psi^{n_h})} \neq 0$$
+                が得られる。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <p>
+        この一意に定まる整数 $n$ を $v_\phi(f)$ と表記し、$f$ における理想素数の重複度（値付け）と定義する。
+    </p>
+    <p>
+        Kummer は、ノルム $N_{F/\mathbb{Q}}(\psi(\eta)) = \psi(\eta_0) \psi(\eta_1) \cdots \psi(\eta_{e-1})$ が素数 $q = p^f$ で割り切れるが $q^2$ では割り切れないような元 $\psi(\eta)$（素元）を構成した。
+        そして $\Psi(\eta_r) = \prod_{j \neq r} \psi(\eta_j)$ とおき、$f(\alpha) \Psi(\eta_r)^\mu$ が $q^\mu$ で割り切れる（同値条件として $\frac{f(\alpha)}{\psi(\eta_r)^\mu} \in R_\phi$ となる）最大の整数 $\mu$ として重複度を定義した。
+    </p>
+
+    <!-- SECT 9 -->
+    <h2 id="sec-9">第9節：Jacobi 写像と付値環・離散付値</h2>
+    <p>
+        Kummer のアイデアを現代の付値論 (Valuation theory) の観点から一般化・整理する。
+    </p>
+
+    <div class="box-prop">
+        <div class="box-title">命題 9.1（Jacobi 写像からの付値環の誘導条件 / 条件 $(B'')$）</div>
+        <p>
+            整域 $R$ 上の Jacobi 写像 $\phi : R \longrightarrow F$ に対し、商体 $K = \mathrm{Frac}(R)$ の部分集合
+            $$R_\phi = \left\{ \frac{r}{s} \in K \;\middle|\; r, s \in R, \; \phi(s) \neq 0 \right\}$$
+            が $K$ の付値環となるための必要十分条件は、任意の $t \in K^\times$ に対して
+            $$t \in R_\phi \quad \text{または} \quad t^{-1} \in R_\phi$$
+            が成り立つこと（条件 $(B'')$）である。
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            （必要性）$R_\phi$ が付値環であるなら、付値環の定義（定義 0.5）より直ちに任意の $t \in K^\times$ に対し $t \in R_\phi$ または $t^{-1} \in R_\phi$ が成り立つ。
+            <p>
+                （十分性）まず $R_\phi$ が $K$ の部分環であることを示す。
+                $x, y \in R_\phi$ とする。可定義性より、$x = \frac{r_1}{s_1}, y = \frac{r_2}{s_2}$（$r_1, r_2, s_1, s_2 \in R$, $\phi(s_1) \neq 0, \phi(s_2) \neq 0$）と表せる。
+            </p>
+            <p>
+                このとき、$x + y = \frac{r_1 s_2 + r_2 s_1}{s_1 s_2}$ および $xy = \frac{r_1 r_2}{s_1 s_2}$ である。
+                $F$ は体であり $\phi$ は準同型であるから、$\phi(s_1 s_2) = \phi(s_1) \phi(s_2) \neq 0$ である。
+                したがって $x + y \in R_\phi$ かつ $xy \in R_\phi$ となり、$R_\phi$ は $K$ の部分環をなす。
+            </p>
+            <p>
+                条件 $(B'')$ の成立仮定と合わせることで、$R_\phi$ は $K$ の付値環である。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <p>
+        さらに、極大イデアル $\mathfrak{m}_\phi = \{ t \in R_\phi \mid \phi(t) = 0 \}$ が単項イデアル $\mathfrak{m}_\phi = (\pi)$ となるとき、$R_\phi$ は<strong>離散付値環 (Discrete Valuation Ring, DVR)</strong> となり、任意の $x \in K^\times$ は $x = u \pi^v$ （$u \in R_\phi^\times$, $v \in \mathbb{Z}$）と一意に表される。この指数 $v = v_\phi(x)$ が加法的離散付値 $v : K^\times \to \mathbb{Z}$ を与える。
+    </p>
+
+    <!-- SECT 10 -->
+    <h2 id="sec-10">第10節：Jacobi 写像の具体例 (Hilbert モノイド、代数体、代数曲線)</h2>
+
+    <h3>10.1 Hilbert モノイド</h3>
+    <div class="box-def">
+        <div class="box-title">定義 10.1（Hilbert モノイド）</div>
+        <p>
+            自然数の乗法可換モノイド $M = \{ n \in \mathbb{N} \mid n \equiv 1 \pmod 4 \}$ を考える。
+            $M$ では $21 \times 21 = 441 = 9 \times 49$ のように非一意分解が生じる。
+            各奇素数 $p$ に対し、全射モノイド準同型 $\phi_p : M \to \mathbb{F}_p ; n \mapsto n \pmod p$ を定義する。
+            商モノイド $Q(M) = \{ \frac{a}{b} \mid a, b \in M \}$ への拡張において、$\phi_p$ が $\frac{a}{b}$ で定義可能とは、$\frac{a}{b} = \frac{c}{d}$（$c, d \in M$）かつ $p \nmid d$ と表せることである。
+        </p>
+    </div>
+
+    <div class="box-prop">
+        <div class="box-title">命題 10.2（Hilbert モノイドの非特異性）</div>
+        <p>
+            任意の奇素数 $p$ と任意の $\frac{a}{b} \in Q(M)$ に対し、$\phi_p$ は $\frac{a}{b}$ または $\frac{b}{a}$ の少なくとも一方で定義可能である。
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            $a, b \in M$ とする。
+            <ol>
+                <li>$p \nmid b$ の場合：定義より直ちに $\phi_p$ は $\frac{a}{b}$ で定義可能である。</li>
+                <li>$p \nmid a$ の場合：$\frac{b}{a}$ において分母が $p$ で割り切れないため、$\phi_p$ は $\frac{b}{a}$ で定義可能である。</li>
+                <li>$p \mid a$ かつ $p \mid b$ の場合：
+                    <ul>
+                        <li>$p \equiv 1 \pmod 4$ のとき、$p \in M$ であるから $a = pa', b = pb'$（$a', b' \in M$）と約分できる。</li>
+                        <li>$p \equiv 3 \pmod 4$ のとき、$p \nmid r$ かつ $r \equiv 3 \pmod 4$ となる素数 $r$（例えば $r = 3$ または $r = 7$）をとる。このとき $ra', rb' \in M$ であり、
+                        $$\frac{a}{b} = \frac{pa'}{pb'} = \frac{ra'}{rb'}$$
+                        と変形できる。$p \nmid r$ より、分子と分母に含まれる因数 $p$ の重複度を有限回で減らすことができる。</li>
+                    </ul>
+                </li>
+            </ol>
+            繰返し適用することで、$p \nmid c$ または $p \nmid d$ を満たす表現 $\frac{a}{b} = \frac{c}{d}$（$c, d \in M$）が得られる。したがって $\phi_p$ は $\frac{a}{b}$ または $\frac{b}{a}$ で定義可能である。
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <div class="box-example">
+        <div class="box-title">具体計算例（$p = 3$ における素元と重複度計算）</div>
+        <p>
+            $21 \in M$ は $p = 3$ における素元である。実際、$\phi_3(c) = 0$ を満たす任意の $c \in M$（すなわち $3 \mid c$）を考える。
+            $c = 3c'$（$c' \equiv 3 \pmod 4$）とおく。$\frac{c}{21}$ に対し、分子分母に $7$ を乗じると、
+            $$\frac{c}{21} = \frac{7c}{147} = \frac{21c'}{147} = \frac{7c'}{49}$$
+            が得られる。ここで $7 \equiv 3 \pmod 4$ かつ $c' \equiv 3 \pmod 4$ より $7c' \equiv 1 \pmod 4$ であるから $7c' \in M$ である。また $49 \equiv 1 \pmod 4$ より $49 \in M$ である。
+            さらに $\phi_3(49) = 49 \pmod 3 = 1 \neq 0$ であるため、$\phi_3$ は $\frac{c}{21}$ で定義可能である。
+        </p>
+        <p>
+            ここで $9 \in M$ について調べる。$\frac{9}{21^2}$ に分子分母 $49$ を乗じると、
+            $$\frac{9}{21^2} = \frac{9}{441} = \frac{9 \times 49}{441 \times 49} = \frac{441}{21609} = \frac{1}{49}$$
+            となり、$\phi_3(49) = 1 \neq 0$ より $\frac{9}{21^2} \in R_{\phi_3}$ である。一方 $\frac{9}{21^3}$ は定義されない。したがって $v_3(9) = 2$ と一意に定まり、モノイド $M$ における一意分解性が完全に復元される。
+        </p>
+    </div>
+
+    <h3>10.2 代数体と Dedekind 整域</h3>
+    <p>
+        Dedekind 整域 $R$ の非ゼロ素イデアル $\mathfrak{p}$ に対し、全射環準同型 $\phi_\mathfrak{p} : R \to R/\mathfrak{p}$ は Jacobi 写像であり、対応する局所化 $R_{\phi_\mathfrak{p}} = R_\mathfrak{p}$ は離散付値環となる。
+    </p>
+
+    <h3>10.3 代数曲線</h3>
+    <p>
+        代数閉体 $K$ 上の既約平面曲線 $\mathcal{C}: f(X, Y) = 0$ の座標環 $\mathcal{O} = K[X, Y]/(f)$ および点 $P = (a, b) \in \mathcal{C}(K)$ に対し、評価射 $\phi_P : \mathcal{O} \to K, \; g \mapsto g(P)$ は Jacobi 写像である。
+    </p>
+    <div class="box-example">
+        <div class="box-title">例 10.3（曲線 $Y^2 = X^3 + X^2$ 上の局所的評価）</div>
+        <p>
+            曲線 $\mathcal{C} : Y^2 = X^3 + X^2$ 上の元 $h(x, y) = \frac{y}{x + 1} \in K(\mathcal{C})$ は点 $P = (-1, 0)$ において直接は定義されないが、
+            $$\frac{1}{h(x, y)} = \frac{x + 1}{y} = \frac{(x + 1) y}{y^2} = \frac{(x + 1) y}{x^2 (x + 1)} = \frac{y}{x^2}$$
+            と変形でき、$\phi_P(x^2) = (-1)^2 = 1 \neq 0$ より $h^{-1}$ は $P$ で定義可能であり $\phi_P(h^{-1}) = 0$ となる。
+        </p>
+    </div>
+
+    <!-- SECT 11 -->
+    <h2 id="sec-11">第11節：特異性 (Singularities) と素因数分解の破綻メカニズム</h2>
+    <p>
+        Jacobi 写像 $\phi$ が常に付値環を誘導するとは限らない。その根底にある原因は「特異性 (Singularity)」である。
+    </p>
+
+    <h3>11.1 特異モノイド</h3>
+    <p>
+        モノイド $N = \{ n \in \mathbb{N} \mid n \equiv 0, 1, 2 \pmod 4 \}$ と、準同型 $\phi_2 : N \to \mathbb{F}_2 ; n \mapsto n \pmod 2$ を考える。
+    </p>
+
+    <div class="box-prop">
+        <div class="box-title">命題 11.1（特異モノイドにおける定義不可性）</div>
+        <p>
+            元 $\frac{6}{2} \in Q(N)$ に対し、$\phi_2$ は $\frac{6}{2}$ および $\frac{2}{6}$ のいずれにおいても定義されない。
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            $\phi_2$ が $\frac{6}{2}$ で定義可能であると仮定する。
+            このとき、ある $a, b \in N$ が存在して $\frac{6}{2} = \frac{a}{b}$ かつ $\phi_2(b) \neq 0$（すなわち $b$ は奇数）と表せる。
+            $b \in N$ で $b$ が奇数であることから $b \equiv 1 \pmod 4$ である。
+            一方、$6b = 2a$ より $a = 3b$ である。$b \equiv 1 \pmod 4$ より $a = 3b \equiv 3 \pmod 4$ となるが、これは $a \in N$ に矛盾する。
+            <p>
+                同様に $\frac{2}{6}$ が定義可能と仮定しても $b = 3a \equiv 3 \pmod 4$ となり矛盾する。
+                したがって、$\phi_2$ は $\frac{6}{2}$ および $\frac{2}{6}$ のいずれにおいても定義されない。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+    <p>
+        多項式 $X^2 - 9 \in N[X]$ は $N$ 上で約分不可能であるが、$Q(N)$ 上で $\left( X - \frac{6}{2} \right) \left( X + \frac{6}{2} \right)$ と分解し、Gauss の補題が破綻している。
+    </p>
+
+    <h3>11.2 特異代数曲線</h3>
+    <p>
+        節点 (node) を持つ曲線 $\mathcal{C}: Y^2 = X^3 + X^2$ の原点 $P = (0, 0)$ を考える。
+    </p>
+
+    <div class="box-prop">
+        <div class="box-title">命題 11.2（特異点における定義不可性）</div>
+        <p>
+            元 $\frac{y}{x} \in K(\mathcal{C})$ に対し、評価写像 $\phi_P$ は $\frac{y}{x}$ および $\frac{x}{y}$ のいずれにおいても定義されない。
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            $\phi_P$ が $\frac{y}{x}$ で定義可能であると仮定する。ある $g, h \in \mathcal{O}$ が存在して $\frac{y}{x} = \frac{g}{h}$ かつ $h(P) \neq 0$ と表せる。
+            $yh(x, y) = xg(x, y)$ より、多項式環 $K[X, Y]$ において、
+            $$Y H(X, Y) - X G(X, Y) = R(X, Y)(Y^2 - X^3 - X^2)$$
+            を満たす多項式 $G, H, R \in K[X, Y]$ が存在する。
+            <p>
+                $Y = 0$ を代入すると、
+                $$-X G(X, 0) = R(X, 0)(-X^3 - X^2) = -X^2 (X + 1) R(X, 0)$$
+                となり、両辺を $-X$ で割ると $G(X, 0) = X (X + 1) R(X, 0)$ となる。
+            </p>
+            <p>
+                元の式に $X = 0$ を代入すると、
+                $$Y H(0, Y) = R(0, Y) Y^2$$
+                となり、両辺を $Y$ で割ると $H(0, Y) = Y R(0, Y)$ となる。
+                ここで $X = 0, Y = 0$ を代入すると $h(P) = H(0, 0) = 0$ となり、$h(P) \neq 0$ に矛盾する。
+            </p>
+            <p>
+                $\frac{x}{y}$ についても同様の論理で $g(P) = G(0, 0) = 0$ が導かれ矛盾する。
+                したがって、$\phi_P$ は $\frac{y}{x}$ および $\frac{x}{y}$ のいずれにおいても定義されない。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+    <p>
+        $\frac{y}{x}$ は $\mathcal{O}[T]$ のモニック多項式 $T^2 - (x + 1) = 0$ の根であるが $\frac{y}{x} \notin \mathcal{O}$ であるため、$\mathcal{O}$ は整閉でない。
+    </p>
+
+    <!-- SECT 12 -->
+    <h2 id="sec-12">第12節：整閉性 (Integral Closure) と代数的障害の完全証明</h2>
+    <p>
+        本節では、整閉性 (Integral closure) の有無が付値環の構築可能性に与える影響を厳密に証明する。
+    </p>
+
+    <div class="box-prop">
+        <div class="box-title">命題 12.1（付値環の整閉性）</div>
+        <p>
+            体 $K$ の任意の付値環 $V$ は整閉領域である。
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            $t \in K$ が $V$ 上整であるとする。定義より、ある $n \ge 1$ および $a_0, a_1, \dots, a_{n-1} \in V$ が存在して、
+            $$t^n + a_{n-1} t^{n-1} + \dots + a_1 t + a_0 = 0$$
+            を満たす。
+            <p>
+                ここで $t \in V$ であることを示す。仮に $t \notin V$ と仮定する。 $V$ は付値環であるから、付値環の定義（定義 0.5）より $t^{-1} \in V$ が成立する。 上記の方程式の両辺に $t^{-(n-1)}$ を乗じると、
+                $$t + a_{n-1} + a_{n-2} t^{-1} + \dots + a_0 t^{-(n-1)} = 0$$
+                が得られる。
+            </p>
+            <p>
+                これより、$t$ を左辺に残して移行すると、
+                $$t = - a_{n-1} - a_{n-2} t^{-1} - \dots - a_0 t^{-(n-1)}$$
+                となる。 $a_i \in V$ かつ $t^{-1} \in V$ であるから、右辺の各項は $V$ の元の有限個の積および和であり、環 $V$ の閉じ方より右辺全体は $V$ に属する。
+            </p>
+            <p>
+                したがって $t \in V$ となり、仮定 $t \notin V$ に直接矛盾する。
+                ゆえに $t \in V$ であり、$V$ は整閉領域である。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <div class="box-prop">
+        <div class="box-title">命題 12.2（非整閉オーダーにおける障害と定義不可能射）</div>
+        <p>
+            $K$ を代数体、$\mathcal{O}_K$ をその整数環とし、$\mathcal{O} \subsetneq \mathcal{O}_K$ を $K$ の真のオーダーとする。このとき、ある $\alpha \in \mathcal{O}_K \smallsetminus \mathcal{O}$ と Jacobi 写像 $\phi : \mathcal{O} \longrightarrow F$ が存在して、$\phi$ は $\alpha$ においても $\alpha^{-1}$ においても定義されない。
+        </p>
+        <div class="proof">
+            <span class="proof-title">証明.</span><br>
+            $\mathcal{O} \subsetneq \mathcal{O}_K$ より、$\alpha \in \mathcal{O}_K \smallsetminus \mathcal{O}$ が存在する。 $\alpha \notin \mathcal{O}$ であるため、$\mathcal{O}$ 上の Jacobi 写像 $\phi : \mathcal{O} \longrightarrow F$ であって $\phi$ が $\alpha$ において定義されないものが存在する。
+            <p>
+                この $\phi$ に対し、仮に $\phi$ が $\alpha^{-1}$ において定義されると仮定する。このとき、定義よりある $\beta, \gamma \in \mathcal{O}$ （ただし $\phi(\gamma) \neq 0$）が存在して、
+                $$\alpha^{-1} = \frac{\beta}{\gamma}$$
+                と書ける。これより $\alpha = \frac{\gamma}{\beta}$ である。
+            </p>
+            <p>
+                一方、$\alpha \in \mathcal{O}_K$ は $\mathbb{Z}$ 上整であるから、ある $n \ge 1$ と $a_0, a_1, \dots, a_{n-1} \in \mathbb{Z} \subset \mathcal{O}$ が存在して、
+                $$\alpha^n = a_{n-1} \alpha^{n-1} + \dots + a_1 \alpha + a_0$$
+                を満たす。 $\alpha = \frac{\gamma}{\beta}$ を代入して両辺に $\beta^n$ を乗じると、
+                $$\gamma^n = a_{n-1} \gamma^{n-1} \beta + \dots + a_1 \gamma \beta^{n-1} + a_0 \beta^n$$
+                を得る。項を整理すると、
+                $$a_0 \beta^n = \gamma^n - a_{n-1} \gamma^{n-1} \beta - \dots - a_1 \gamma \beta^{n-1} = \gamma \left( \gamma^{n-1} - a_{n-1} \gamma^{n-2} \beta - \dots - a_1 \beta^{n-1} \right)$$
+                となる。両辺に Jacobi 写像 $\phi$ を施す。
+            </p>
+            <p>
+                もし $\phi(\beta) = 0$ であったとすると、上式の展開形 $\gamma^n = \beta (a_{n-1} \gamma^{n-1} + \dots + a_0 \beta^{n-1})$ に $\phi$ を適用すると、右辺は $\phi(\beta) = 0$ より $0$ となる。 したがって $\phi(\gamma^n) = (\phi(\gamma))^n = 0$ を得る。 $F$ は体（整域）であるから、$\phi(\gamma) = 0$ となり、前提条件 $\phi(\gamma) \neq 0$ に矛盾する。
+            </p>
+            <p>
+                したがって、$\phi(\beta) \neq 0$ でなければならない。
+                しかし、$\phi(\beta) \neq 0$ であれば、$\alpha = \frac{\gamma}{\beta}$ （$\gamma, \beta \in \mathcal{O}$ かつ $\phi(\beta) \neq 0$）であるから、定義より $\phi$ は $\alpha$ において定義されることになり、最初の「$\phi$ は $\alpha$ において定義されない」という設定に矛盾する。
+            </p>
+            <p>
+                以上より、背理法によって $\phi$ は $\alpha^{-1}$ においても定義されない。
+            </p>
+            <div class="qed">$\square$</div>
+        </div>
+    </div>
+
+    <div class="box-example">
+        <div class="box-title">例 12.3（$\mathcal{O} = \mathbb{Z}[\sqrt{-3}]$ における具体的な破綻事例）</div>
+        <p>
+            代数体 $K = \mathbb{Q}(\sqrt{-3})$ を考える。 その整数環は $\mathcal{O}_K = \mathbb{Z}\left[\frac{-1+\sqrt{-3}}{2}\right]$ であり、真のオーダーとして $\mathcal{O} = \mathbb{Z}[\sqrt{-3}]$ をとる。
+            $\alpha = \frac{1+\sqrt{-3}}{2} \in \mathcal{O}_K \smallsetminus \mathcal{O}$ を選ぶ。
+            全射環準同型 $\phi_2 : \mathbb{Z}[\sqrt{-3}] \longrightarrow \mathbb{Z}/2\mathbb{Z} = \mathbb{F}_2$ を
+            $$\phi_2(a + b\sqrt{-3}) = (a + b) \bmod 2$$
+            により定義する。このとき、
+            $$\phi_2(2) = 0, \quad \phi_2(1+\sqrt{-3}) = 1 + 1 = 0 \pmod 2$$
+            である。 $\alpha = \frac{1+\sqrt{-3}}{2}$ の分子 $1+\sqrt{-3}$ も分母 $2$ も共に $\phi_2$ によって $0$ に写るため、$\phi_2$ は $\alpha$ で定義されない。
+            同様に、$\alpha^{-1} = \frac{2}{1+\sqrt{-3}} = \frac{1-\sqrt{-3}}{2}$ についても、分子 $2$ と分母 $1-\sqrt{-3}$（$\phi_2(1-\sqrt{-3}) = 0$）が共に $0$ に写るため、$\phi_2$ は $\alpha^{-1}$ で定義されない。
+        </p>
+        <p>
+            このとき、素イデアル $\mathfrak{p} = \ker\phi_2 = (2, 1+\sqrt{-3})$ は、
+            $$\mathfrak{p}^2 = (4, 2(1+\sqrt{-3}), -2+2\sqrt{-3}) = (2)(2, 1+\sqrt{-3}) = (2)\mathfrak{p}$$
+            を満たし、素イデアル分解の一意性が破綻する。このため、非整閉オーダー $\mathbb{Z}[\sqrt{-3}]$ 上では Kummer の手法による理想素因子の構成が完全に破綻する。
+        </p>
+    </div>
+
+    <!-- SECT 13 -->
+    <h2 id="sec-13">第13節：理想数と整閉性の歴史的・構造的解明</h2>
+    <p>
+        Kummer 自身は整閉領域の一般概念を持っていなかったが、彼が扱った対象が幸運にもすべて整閉領域（極大オーダー）であったため、この障害を回避できた。
+    </p>
+    <ol>
+        <li>
+            <strong>円分環 $\mathbb{Z}[\zeta_\lambda]$ の整閉性：</strong> 1の $\lambda$ 乗根による円分体 $K = \mathbb{Q}(\zeta_\lambda)$ の素環 $\mathbb{Z}[\zeta_\lambda]$ は、全整数環 $\mathcal{O}_K$ そのもの（すなわち整閉領域）に一致していた。
+        </li>
+        <li>
+            <strong>Gauss の周期環の整閉性：</strong> Kummer が部分体で用いた Gauss の周期の環 $\mathbb{Z}[\eta_1, \dots, \eta_e]$ もまた、当該部分体の全整数環 $\mathcal{O}_F$ に一致していた。 例えば $p \equiv 1 \pmod 4$ に対する 2 次体 $\mathbb{Q}(\sqrt{p})$ では、周期環は $\mathbb{Z}\left[\frac{1+\sqrt{p}}{2}\right]$ となり、完全な整閉領域である。
+        </li>
+        <li>
+            <strong>Kummer の証明における論理的ギャップ：</strong> Richard Dedekind や R. Haubrich の歴史的指摘によると、Kummer の理想数の構成（特に第2の証明）には「理想素因子が数 $a$ を $m$ 回割り切るならば、$m-1$ 回も割り切る」という補題の証明が欠落していた。 Dedekind は、この基本的な割り切りの可逆性を証明するためには領域が整閉であることが本質的に不可欠であることを解明した。
+        </li>
+    </ol>
+
+    <!-- SECT 14 -->
+    <h2 id="sec-14">第14節：総括と現代的展望</h2>
+    <p>
+        Jacobi から Kummer、Dedekind、そして現代の付値論に至る概念の進展と進化を以下のように要約できる。
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>時代・研究者</th>
+                <th>数学的定式化</th>
+                <th>代数的実体・現代的解釈</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>C. G. J. Jacobi (1836/37)</td>
+                <td>置換 $r \mapsto g \pmod p$ と合同式体系</td>
+                <td>剰余体 $\mathbb{F}_p$ への環準同型（Jacobi 写像） $\phi$</td>
+            </tr>
+            <tr>
+                <td>E. E. Kummer (1844-1847)</td>
+                <td>理想素因子および周期環上の合同式条件</td>
+                <td>円分体上の離散付値 (discrete valuation) の決定</td>
+            </tr>
+            <tr>
+                <td>R. Dedekind (1871-1877)</td>
+                <td>理想数で割り切れる数の集合としての「イデアル」</td>
+                <td>Jacobi 写像の核 $\mathfrak{p} = \ker\phi$ および Dedekind 環</td>
+            </tr>
+            <tr>
+                <td>K. Hensel / J. Kürschak / J. Dieudonné</td>
+                <td>$p$ 進数体 $\mathbb{Q}_p$ および離散付値体 (DVR)</td>
+                <td>局所体における素付値と完備化理論</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        Jean Dieudonné らの評釈に示されるように、Kummer が行っていた理論の本質は「円分体上の離散付値の決定」に他ならなかった。 Jacobi の研究にあった環準同型という概念的萌芽が、Kummer の理想数、Dedekind のイデアル理論、そして抽象代数学・付値論へと結実していったのである。
+    </p>
+
+    <!-- REFS -->
+    <h2 id="sec-refs">参考文献 (References)</h2>
+    <div class="ref-list">
+        <ol>
+            <li>Bachmann, P.: <em>Die Lehre von der Kreistheilung und ihre Beziehungen zur Zahlentheorie</em>. B. G. Teubner, Leipzig (1872). <a href="https://archive.org/details/dielehrevonderk00bachgoog" target="_blank" rel="noopener">Online Archive</a></li>
+            <li>Berndt, B. C., Evans, R. J., Williams, K. S.: <em>Gauss and Jacobi Sums</em>. Wiley-Interscience, New York (1998). <a href="https://www.wiley.com/en-us/Gauss+and+Jacobi+Sums-p-9780471128076" target="_blank" rel="noopener">Publisher Link</a></li>
+            <li>Bölling, R.: Kummer vor der Erfindung der "idealen complexen Zahlen": Das Jahr 1844. <em>Acta Historica Leopoldina</em> 27, 145-157 (1997).</li>
+            <li>Dedekind, R.: Besprechung von P. Bachmann, "Die Lehre von der Kreistheilung". <em>Zeitschrift für Mathematik und Physik</em> 18, 14-24 (1873); <em>Gesammelte mathematische Werke</em> Bd. 3, 408-419.</li>
+            <li>Edwards, H. M.: The background of Kummer's proof of Fermat's last theorem for regular primes. <em>Archive for History of Exact Sciences</em> 14(3), 219-236 (1975). <a href="https://doi.org/10.1007/BF00327448" target="_blank" rel="noopener">DOI: 10.1007/BF00327448</a></li>
+            <li>Edwards, H. M.: <em>Fermat's Last Theorem: A Genetic Introduction to Algebraic Number Theory</em>. Graduate Texts in Mathematics, vol. 50, Springer-Verlag, New York (1977). <a href="https://link.springer.com/book/10.1007/978-1-4684-9330-6" target="_blank" rel="noopener">Springer Link</a></li>
+            <li>Gauss, C. F.: <em>Disquisitiones Arithmeticae</em>. Gerhard Fleischer, Leipzig (1801). <a href="https://archive.org/details/disquisitionesa00gausgoog" target="_blank" rel="noopener">Online Archive</a></li>
+            <li>Jacobi, C. G. J.: Über die Kreistheilung und ihre Anwendung auf die Zahlentheorie. <em>Berliner Akademie Berichte</em> 1837, 127-136; <em>Journal für die reine und angewandte Mathematik</em> 30, 166-182 (1846). <a href="https://www.digizeitschriften.de/dms/img/?PID=GDZPPN002145326" target="_blank" rel="noopener">DigiZeitschriften</a></li>
+            <li>Kummer, E. E.: Zur Theorie der complexen Zahlen. <em>Monatsberichte der Königlich Preußischen Akademie der Wissenschaften zu Berlin</em> 1845, 87-96; <em>Journal für die reine und angewandte Mathematik</em> 35, 319-326 (1847). <a href="https://www.digizeitschriften.de/dms/img/?PID=GDZPPN002145784" target="_blank" rel="noopener">DigiZeitschriften</a></li>
+            <li>Lemmermeyer, F.: Jacobi and Kummer's ideal numbers. <em>Abhandlungen aus dem Mathematischen Seminar der Universität Hamburg</em> 79(2), 165-187 (2009). <a href="https://doi.org/10.1007/s12188-009-0020-5" target="_blank" rel="noopener">DOI: 10.1007/s12188-009-0020-5</a></li>
+        </ol>
+    </div>
+
+</div>
+
+</body>
+</html>

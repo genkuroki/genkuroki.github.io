@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前層の圏におけるエピ射とモノ射の特徴付けおよびBartle-Gravesの定理</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #fdfbf7;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 1.6rem;
+            color: #2980b9;
+            margin-top: 2.5rem;
+            border-left: 5px solid #2980b9;
+            padding-left: 10px;
+        }
+        h3 {
+            font-size: 1.3rem;
+            color: #16a085;
+            margin-top: 2rem;
+        }
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+        .definition, .theorem, .lemma, .example {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .definition-title, .theorem-title, .lemma-title, .example-title {
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .definition-title { color: #8e44ad; }
+        .theorem-title { color: #c0392b; }
+        .example-title { color: #27ae60; }
+        .proof {
+            background-color: #f9f9f9;
+            border-left: 4px solid #7f8c8d;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            font-style: normal;
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 0.8rem;
+        }
+        .qed {
+            text-align: right;
+            font-style: normal;
+        }
+        .references {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ccc;
+        }
+        .references ol {
+            padding-left: 2rem;
+        }
+        .references li {
+            margin-bottom: 0.8rem;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .math-display {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>前層の圏におけるエピ射とモノ射の特徴付けおよびBartle-Gravesの定理</h1>
+
+    <p>
+        本稿では、圏論における前層の圏におけるエピ射とモノ射が、各成分における集合論的な全射と単射に完全に一致するという事実について、詳細かつ自己完結した解説を行う。また、その関数解析的および位相幾何学的な応用として、Banach空間の間の連続な全射線形写像から誘導される前層の射がエピ射になるという興味深い結果を示す。この応用の鍵となるのは、開写像定理と<strong>Bartle-Gravesの定理</strong>である。本稿の後半では、Bartle-Gravesの定理の完全な証明を与える。
+    </p>
+
+    <h2>1. 前層の圏の基本概念と性質</h2>
+
+    <p>
+        まず、議論の基礎となる圏論の基本概念を厳密に定義する。圏 $ \mathcal{C} $ は局所小 (locally small) な圏であるとする。すなわち、任意の対象 $ X, Y \in \mathrm{Ob}(\mathcal{C}) $ に対し、射の集まり $ \mathrm{Hom}_{\mathcal{C}}(X, Y) $ は集合であるとする。
+    </p>
+
+    <div class="definition">
+        <div class="definition-title">定義 (前層 / Presheaf)</div>
+        <p>
+            圏 $ \mathcal{C} $ 上の<strong>前層 (presheaf)</strong> とは、反変関手 $ F: \mathcal{C}^{op} \to \mathrm{Set} $ のことである。すなわち、各対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ に対して集合 $ F(X) $ を割り当て、各射 $ f: X \to Y $ に対して写像 $ F(f): F(Y) \to F(X) $ を割り当てる対応であり、以下の関手性の公理を満たすものである。
+        </p>
+        <ul>
+            <li>任意の対象 $ X $ について、恒等射 $ \mathrm{id}_X $ に対して $ F(\mathrm{id}_X) = \mathrm{id}_{F(X)} $ である。</li>
+            <li>任意の射の合成 $ g \circ f $ に対して、 $ F(g \circ f) = F(f) \circ F(g) $ が成り立つ。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 (自然変換 / Natural Transformation)</div>
+        <p>
+            $ 2 $ つの前層 $ F, G: \mathcal{C}^{op} \to \mathrm{Set} $ の間の射は<strong>自然変換 (natural transformation)</strong> $ \alpha: F \to G $ である。これは、各対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ に対して写像 $ \alpha_X: F(X) \to G(X) $ が与えられ、任意の射 $ f: X \to Y $ に対して以下の図式が可換となることである。
+        </p>
+        <p>
+            すなわち、 $ \alpha_X \circ F(f) = G(f) \circ \alpha_Y $ が成り立つ。
+        </p>
+    </div>
+
+    <p>
+        対象を前層、射を自然変換とする圏を $ \mathrm{Set}^{\mathcal{C}^{op}} $ と表す。この圏は余極限 (colimit) や極限 (limit) を備えた非常に豊かな構造を持つ圏（トポス）である。
+    </p>
+
+    <div class="definition">
+        <div class="definition-title">定義 (モノ射とエピ射 / Monomorphism and Epimorphism)</div>
+        <p>
+            一般の圏における射 $ f: A \to B $ が<strong>モノ射 (monomorphism)</strong> であるとは、左簡約可能であること、すなわち任意の対象 $ C $ と射 $ g, h: C \to A $ に対して $ f \circ g = f \circ h \implies g = h $ が成り立つことである。
+        </p>
+        <p>
+            同様に、射 $ f: A \to B $ が<strong>エピ射 (epimorphism)</strong> であるとは、右簡約可能であること、すなわち任意の対象 $ C $ と射 $ g, h: B \to C $ に対して $ g \circ f = h \circ f \implies g = h $ が成り立つことである。
+        </p>
+    </div>
+
+    <h2>2. エピ射とモノ射の特徴付け</h2>
+
+    <p>
+        前層の圏 $ \mathrm{Set}^{\mathcal{C}^{op}} $ のような関手圏においては、圏論的な性質が各対象における成分ごとの性質に完全に還元される。
+    </p>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 (前層の圏におけるモノ射とエピ射)</div>
+        <p>
+            圏 $ \mathrm{Set}^{\mathcal{C}^{op}} $ における自然変換 $ \alpha: F \to G $ について、以下の同値関係が成り立つ。
+        </p>
+        <ol>
+            <li>$ \alpha $ がモノ射であることと、任意の対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ において成分 $ \alpha_X: F(X) \to G(X) $ が単射であることは同値である。</li>
+            <li>$ \alpha $ がエピ射であることと、任意の対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ において成分 $ \alpha_X: F(X) \to G(X) $ が全射であることは同値である。</li>
+        </ol>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">モノ射の特徴付けの証明</div>
+        <p>
+            <strong>[成分が単射ならばモノ射であることの証明]</strong>
+            <br>
+            各対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ について $ \alpha_X $ が単射であると仮定する。任意の前層 $ H $ と自然変換 $ \beta, \gamma: H \to F $ に対して、 $ \alpha \circ \beta = \alpha \circ \gamma $ と仮定する。このとき、任意の $ X \in \mathrm{Ob}(\mathcal{C}) $ と $ w \in H(X) $ に対して、以下の等式が成り立つ。
+        </p>
+        <div class="math-display">
+        $$
+        \alpha_X(\beta_X(w)) = (\alpha \circ \beta)_X(w) = (\alpha \circ \gamma)_X(w) = \alpha_X(\gamma_X(w))
+        $$
+        </div>
+        <p>
+            仮定より $ \alpha_X $ は単射であるため、 $ \beta_X(w) = \gamma_X(w) $ を得る。これは任意の $ X $ と $ w $ について成り立つため、 $ \beta_X = \gamma_X $ となり、 $ \beta = \gamma $ が従う。したがって $ \alpha $ はモノ射である。
+        </p>
+
+        <p>
+            <strong>[モノ射ならば成分が単射であることの証明]</strong>
+            <br>
+            $ \alpha $ がモノ射であると仮定する。ある対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ を固定し、 $ \alpha_X $ が単射であることを示す。 $ x, x' \in F(X) $ が $ \alpha_X(x) = \alpha_X(x') $ を満たすとする。
+        </p>
+        <p>
+            表現可能前層 $ h_X = \mathrm{Hom}_{\mathcal{C}}(-, X) $ から $ F $ への自然変換 $ \beta, \gamma: h_X \to F $ を次のように構成する。任意の対象 $ Y \in \mathrm{Ob}(\mathcal{C}) $ と射 $ f \in h_X(Y) $ （すなわち $ f: Y \to X $ ）に対して、米田の補題の証明に現れる対応を用いて以下のように定義する。
+        </p>
+        <div class="math-display">
+        $$
+        \beta_Y(f) = F(f)(x)
+        $$
+        $$
+        \gamma_Y(f) = F(f)(x')
+        $$
+        </div>
+        <p>
+            これらが自然変換であることを見よう。任意の射 $ g: Z \to Y $ in $ \mathcal{C} $ に対し、 $ f \in h_X(Y) $ とすると、前層 $ h_X $ における射の作用は $ h_X(g)(f) = f \circ g $ である。 $ \beta $ について自然性の条件を確認すると、
+        </p>
+        <div class="math-display">
+        $$
+        F(g)(\beta_Y(f)) = F(g)(F(f)(x)) = F(f \circ g)(x) = \beta_Z(f \circ g) = \beta_Z(h_X(g)(f))
+        $$
+        </div>
+        <p>
+            となり、 $ \beta $ は自然変換である。全く同様にして $ \gamma $ も自然変換となる。
+        </p>
+        <p>
+            次に、 $ \alpha \circ \beta = \alpha \circ \gamma $ であることを示す。任意の $ Y \in \mathrm{Ob}(\mathcal{C}) $ と $ f: Y \to X $ に対して、自然変換 $ \alpha $ の自然性 $ \alpha_Y \circ F(f) = G(f) \circ \alpha_X $ を用いると、
+        </p>
+        <div class="math-display">
+        $$
+        (\alpha \circ \beta)_Y(f) = \alpha_Y(F(f)(x)) = G(f)(\alpha_X(x))
+        $$
+        </div>
+        <p>
+            となる。同様に、 $ (\alpha \circ \gamma)_Y(f) = G(f)(\alpha_X(x')) $ を得る。仮定 $ \alpha_X(x) = \alpha_X(x') $ より、これらは等しい。よって $ \alpha \circ \beta = \alpha \circ \gamma $ である。
+        </p>
+        <p>
+            $ \alpha $ はモノ射であるから、 $ \beta = \gamma $ が導かれる。特に成分 $ Y = X $ を考え、 $ f = \mathrm{id}_X $ を代入すると、
+        </p>
+        <div class="math-display">
+        $$
+        \beta_X(\mathrm{id}_X) = \gamma_X(\mathrm{id}_X)
+        $$
+        </div>
+        <p>
+            となる。前層の公理より $ F(\mathrm{id}_X) $ は恒等写像であるため、左辺は $ F(\mathrm{id}_X)(x) = x $ 、右辺は $ F(\mathrm{id}_X)(x') = x' $ となり、 $ x = x' $ を得る。したがって $ \alpha_X $ は単射である。
+        </p>
+        <div class="qed">□</div>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">エピ射の特徴付けの証明</div>
+        <p>
+            <strong>[成分が全射ならばエピ射であることの証明]</strong>
+            <br>
+            各対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ について $ \alpha_X $ が全射であると仮定する。任意の前層 $ H $ と自然変換 $ \beta, \gamma: G \to H $ に対して、 $ \beta \circ \alpha = \gamma \circ \alpha $ と仮定する。
+        </p>
+        <p>
+            任意の対象 $ X \in \mathrm{Ob}(\mathcal{C}) $ と元 $ y \in G(X) $ をとる。 $ \alpha_X $ は全射であるから、ある $ x \in F(X) $ が存在して $ y = \alpha_X(x) $ となる。このとき、
+        </p>
+        <div class="math-display">
+        $$
+        \beta_X(y) = \beta_X(\alpha_X(x)) = (\beta \circ \alpha)_X(x)
+        $$
+        </div>
+        <p>
+            となる。仮定より $ (\beta \circ \alpha)_X(x) = (\gamma \circ \alpha)_X(x) $ であるから、
+        </p>
+        <div class="math-display">
+        $$
+        (\gamma \circ \alpha)_X(x) = \gamma_X(\alpha_X(x)) = \gamma_X(y)
+        $$
+        </div>
+        <p>
+            が成り立つ。よって $ \beta_X(y) = \gamma_X(y) $ となり、 $ \beta = \gamma $ を得る。したがって $ \alpha $ はエピ射である。
+        </p>
+
+        <p>
+            <strong>[エピ射ならば成分が全射であることの証明]</strong>
+            <br>
+            $ \alpha $ がエピ射であると仮定する。この証明には、集合の圏 $ \mathrm{Set} $ における融合和（pushout, アマルガム和）の構成を前層の圏に成分ごとに持ち上げる手法を用いる。
+        </p>
+        <p>
+            まず、各対象 $ Y \in \mathrm{Ob}(\mathcal{C}) $ に対し、部分集合 $ I(Y) \subset G(Y) $ を $ I(Y) = \mathrm{Im}(\alpha_Y) = \alpha_Y(F(Y)) $ で定義する。
+        </p>
+        <p>
+            この $ I $ が $ G $ の部分前層 (subpresheaf) となることを確認する。任意の射 $ f: Y \to Z $ in $ \mathcal{C} $ に対し、 $ G(f): G(Z) \to G(Y) $ が $ I(Z) $ の元を $ I(Y) $ へ写すことを示せばよい。 $ z \in I(Z) $ とすると、ある $ w \in F(Z) $ が存在して $ z = \alpha_Z(w) $ と書ける。自然性 $ \alpha_Y \circ F(f) = G(f) \circ \alpha_Z $ より、
+        </p>
+        <div class="math-display">
+        $$
+        G(f)(z) = G(f)(\alpha_Z(w)) = \alpha_Y(F(f)(w))
+        $$
+        </div>
+        <p>
+            となる。 $ F(f)(w) \in F(Y) $ であるため、これは $ I(Y) $ の元である。よって $ I $ は well-defined な部分前層である。
+        </p>
+        <p>
+            次に、前層 $ H $ を構成する。各対象 $ Y $ に対して、融合和 $ H(Y) = G(Y) \amalg_{I(Y)} G(Y) $ とする。すなわち、 $ G(Y) $ の $ 2 $ つのコピーの直和 $ (G(Y) \times \{1\}) \amalg (G(Y) \times \{2\}) $ を考え、各 $ z \in I(Y) $ に対して $ (z, 1) $ と $ (z, 2) $ を同一視する同値関係 $ \sim_Y $ で割った商集合を $ H(Y) $ とする。商集合の元（同値類）を $ [(y, i)] $ と表す。
+        </p>
+        <p>
+            射 $ f: Y \to Z $ に対する写像 $ H(f): H(Z) \to H(Y) $ は、
+        </p>
+        <div class="math-display">
+        $$
+        H(f)([(w, i)]) = [(G(f)(w), i)]
+        $$
+        </div>
+        <p>
+            で自然に定義される。 $ I $ が部分前層であるため、 $ w \in I(Z) $ ならば $ G(f)(w) \in I(Y) $ となり、 $ (G(f)(w), 1) \sim_Y (G(f)(w), 2) $ が成り立つ。したがってこの写像は同値関係を保ち well-defined である。
+        </p>
+        <p>
+            自然変換 $ \beta, \gamma: G \to H $ を次のように定義する。
+        </p>
+        <div class="math-display">
+        $$
+        \beta_Y(y) = [(y, 1)], \quad \gamma_Y(y) = [(y, 2)]
+        $$
+        </div>
+        <p>
+            これらが自然変換であることは $ H(f) $ の定義より直ちに従う。ここで $ \beta \circ \alpha $ と $ \gamma \circ \alpha $ を比較する。任意の $ Y \in \mathrm{Ob}(\mathcal{C}) $ と $ x \in F(Y) $ に対して、 $ y = \alpha_Y(x) $ は定義により $ I(Y) $ の元である。同値関係 $ \sim_Y $ の定義より、 $ I(Y) $ の元については $ [(y, 1)] = [(y, 2)] $ が成り立つ。すなわち、
+        </p>
+        <div class="math-display">
+        $$
+        (\beta \circ \alpha)_Y(x) = \beta_Y(\alpha_Y(x)) = [(\alpha_Y(x), 1)] = [(\alpha_Y(x), 2)] = \gamma_Y(\alpha_Y(x)) = (\gamma \circ \alpha)_Y(x)
+        $$
+        </div>
+        <p>
+            となる。よって $ \beta \circ \alpha = \gamma \circ \alpha $ である。
+        </p>
+        <p>
+            仮定より $ \alpha $ はエピ射であるから、 $ \beta = \gamma $ を得る。これは任意の $ X \in \mathrm{Ob}(\mathcal{C}) $ と $ y \in G(X) $ に対して、
+        </p>
+        <div class="math-display">
+        $$
+        [(y, 1)] = [(y, 2)]
+        $$
+        </div>
+        <p>
+            が成り立つことを意味する。融合和の定義から、異なる成分に属する元が同値になるのは、それらがアマルガム部分 $ I(X) $ に属する場合に限られる。したがって任意の $ y \in G(X) $ は $ y \in I(X) $ であり、 $ G(X) = I(X) $ が成り立つ。 $ \alpha_X $ の像が $ G(X) $ 全体に一致するため、 $ \alpha_X $ は全射である。
+        </p>
+        <div class="qed">□</div>
+    </div>
+
+    <h2>3. Banach空間から誘導される前層の射と位相空間の圏</h2>
+
+    <p>
+        以上の一般的な圏論の事実を踏まえ、関数解析と位相幾何学が交差する具体例を考察する。位相空間の圏 $ \mathrm{Top} $ 上の前層の圏 $ \mathrm{Set}^{\mathrm{Top}^{op}} $ を考える。
+    </p>
+    <p>
+        $ X, Y $ を $ \mathbb{R} $ 上のBanach空間とする。任意の位相空間 $ S $ に対して、 $ C(S, X) $ は $ S $ から $ X $ への連続写像全体の集合を表す。対応 $ S \mapsto C(S, X) $ は、連続写像の引き戻しを射の対応とすることで、 $ \mathrm{Top} $ 上の前層となる。
+    </p>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 (前層の射の全射性)</div>
+        <p>
+            $ T: X \to Y $ をBanach空間の間の連続な全射線形写像とする。このとき、 $ T $ が誘導する自然変換 $ \alpha: C(-, X) \to C(-, Y) $ （ただし各成分は $ \alpha_S(f) = T \circ f $ ）は、前層の圏 $ \mathrm{Set}^{\mathrm{Top}^{op}} $ におけるエピ射である。
+        </p>
+    </div>
+
+    <p>
+        前節で証明した定理により、自然変換 $ \alpha $ がエピ射であることを示すためには、任意の位相空間 $ S $ において成分 $ \alpha_S: C(S, X) \to C(S, Y) $ が全射であることを示せば十分である。
+    </p>
+    <p>
+        すなわち、任意の連続写像 $ g \in C(S, Y) $ に対して、 $ T \circ f = g $ を満たす連続写像 $ f \in C(S, X) $ が存在することを示さなければならない。この証明の鍵となるのが、関数解析学の基本定理である<strong>開写像定理 (Open Mapping Theorem)</strong> と、そこから導かれる<strong>Bartle-Gravesの定理</strong>である。
+    </p>
+
+    <div class="lemma">
+        <div class="lemma-title">定理 (開写像定理)</div>
+        <p>
+            完備な距離空間であるBanach空間の間の連続な全射線形写像 $ T: X \to Y $ は開写像である。すなわち、 $ X $ の任意の開集合の $ T $ による像は、 $ Y $ の開集合となる。
+        </p>
+    </div>
+
+    <p>
+        開写像定理により、 $ T $ に対応する同値関係での商空間 $ X / \ker(T) $ は $ Y $ と同相になる。しかし、これだけでは任意の位相空間 $ S $ からの連続写像 $ g: S \to Y $ を連続に $ X $ へ持ち上げられる（リフトできる）保証はない。これを解決するのが次の定理である。
+    </p>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 (Bartle-Gravesの定理)</div>
+        <p>
+            $ X, Y $ をBanach空間とし、 $ T: X \to Y $ を連続な全射線形写像とする。このとき、 $ T $ は連続な右逆写像（切断）を持つ。すなわち、連続写像 $ R: Y \to X $ であって、任意の $ y \in Y $ に対して $ T(R(y)) = y $ を満たすものが存在する。
+        </p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">前層のエピ射定理の証明</div>
+        <p>
+            前層の圏 $ \mathrm{Set}^{\mathrm{Top}^{op}} $ において、 $ \alpha $ がエピ射であることを示すためには、任意の位相空間 $ S \in \mathrm{Ob}(\mathrm{Top}) $ について、成分 $ \alpha_S: C(S, X) \to C(S, Y) $ が全射であることを示せばよい。
+        </p>
+        <p>
+            任意の位相空間 $ S $ と、任意の連続写像 $ g: S \to Y $ をとる。Bartle-Gravesの定理より、連続写像 $ R: Y \to X $ であって $ T \circ R = \mathrm{id}_Y $ を満たすものが存在する。
+        </p>
+        <p>
+            ここで、写像 $ f: S \to X $ を $ f = R \circ g $ と定義する。
+        </p>
+        <p>
+            $ g $ は $ S $ から $ Y $ への連続写像であり、 $ R $ は $ Y $ から $ X $ への連続写像である。位相空間の間の連続写像の合成は再び連続であるため、 $ f $ は $ S $ から $ X $ への連続写像となる。すなわち、 $ f \in C(S, X) $ である。
+        </p>
+        <p>
+            次に、この $ f $ を $ T $ で写像する。任意の $ s \in S $ について、以下が成り立つ。
+        </p>
+        <div class="math-display">
+        $$
+        (T \circ f)(s) = T(f(s)) = T(R(g(s))) = (T \circ R)(g(s)) = \mathrm{id}_Y(g(s)) = g(s)
+        $$
+        </div>
+        <p>
+            すなわち、 $ T \circ f = g $ が成り立つ。これは $ \alpha_S(f) = g $ であることを意味しており、したがって $ \alpha_S $ は全射である。前層の射の成分がすべての対象において全射であるため、 $ \alpha $ は $ \mathrm{Set}^{\mathrm{Top}^{op}} $ におけるエピ射である。
+        </p>
+        <div class="qed">□</div>
+    </div>
+
+    <div class="example">
+        <div class="example-title">理解に役立つ例と注意（線形な右逆写像が存在しない例）</div>
+        <p>
+            Bartle-Gravesの定理によって保証される連続な右逆写像 $ R: Y \to X $ は、一般には<strong>非線形</strong>な連続写像であることに注意が必要である。
+        </p>
+        <p>
+            線形代数のように「核の補空間をとって、線形な右逆写像を構成すればよい」と考えるかもしれない。しかし、一般のBanach空間においては、閉部分空間（この場合は $ \ker(T) $ ）が必ずしも閉な位相的補空間を持つとは限らないため、連続な線形右逆写像が存在するとは限らない。
+        </p>
+        <p>
+            例えば、数列空間 $ \ell^\infty $ （有界数列のなすBanach空間）とその閉部分空間 $ c_0 $ （ $ 0 $ に収束する数列のなすBanach空間）を考える。商空間への標準的な射影 $ T: \ell^\infty \to \ell^\infty / c_0 $ は連続な全射線形写像である。Sobczykの定理などから知られるように、 $ \ell^\infty $ において $ c_0 $ は補空間を持たない（Phillipsの定理、1940年）。したがって、もし $ T $ に連続な線形右逆写像 $ R $ が存在したとすると、 $ I - R \circ T $ が $ c_0 $ への有界線形射影となってしまい矛盾する。よって、この $ T $ には連続な線形右逆写像が存在しない。
+        </p>
+        <p>
+            このように線形な右逆写像が存在しない場合であっても、位相空間上の前層の射としては、単なる（非線形な）連続写像としての右逆写像が存在すれば全射性が保証される。Bartle-Gravesの定理はまさにそのギャップを埋め、いかなる場合でも連続な切断が存在することを保証し、前層の射がエピ射になるという美しい結論を導くのである。
+        </p>
+    </div>
+
+    <h2>4. Bartle-Gravesの定理の証明</h2>
+
+    <p>
+        ここではBartle-Gravesの定理の完全な証明を与える。証明は大きく3つのステップに分けられる。第一に開写像定理を用いたノルム評価の獲得、第二に $ 1 $ の分割 (partition of unity) を用いた近似的な連続切断の構成、第三に近似切断の級数による真の連続切断の構成である。
+    </p>
+
+    <div class="proof">
+        <div class="proof-title">Bartle-Gravesの定理の証明</div>
+        
+        <p><strong>第1ステップ：開写像定理によるノルム評価</strong></p>
+        <p>
+            $ T $ はBanach空間の間の連続な全射線形写像であるため、開写像定理より $ T $ は開写像である。したがって、 $ X $ の開単位球 $ B_X = \{ x \in X \mid \|x\|  <  1 \} $ の像 $ T(B_X) $ は $ Y $ の原点の開近傍となる。
+        </p>
+        <p>
+            よって、ある実数 $ r  >  0 $ が存在して、 $ Y $ の開球 $ B_Y(0, r) = \{ y \in Y \mid \|y\|  <  r \} $ は $ T(B_X) $ に含まれる。この事実から、任意の $ y \in Y $ に対して、 $ T(x) = y $ かつ $ \|x\| \le C\|y\| $ を満たす $ x \in X $ が存在することを示す。ここで定数 $ C $ を $ C = \frac{2}{r} $ とする。
+        </p>
+        <p>
+            $ y = 0 $ のときは $ x = 0 $ とすれば条件を満たす。
+            $ y \neq 0 $ のとき、 $ y' = \frac{r}{2\|y\|} y $ とおくと、 $ \|y'\| = \frac{r}{2}  <  r $ となる。したがって $ y' \in B_Y(0, r) \subset T(B_X) $ である。
+            ゆえに、ある $ x' \in B_X $ が存在して $ T(x') = y' $ を満たす。 $ x' \in B_X $ より $ \|x'\|  <  1 $ である。
+        </p>
+        <p>
+            ここで $ x = \frac{2\|y\|}{r} x' $ とおくと、線形性より以下が成り立つ。
+        </p>
+        <div class="math-display">
+        $$
+        T(x) = \frac{2\|y\|}{r} T(x') = \frac{2\|y\|}{r} y' = y
+        $$
+        </div>
+        <p>
+            また、 $ x $ のノルムは次のように評価できる。
+        </p>
+        <div class="math-display">
+        $$
+        \|x\| = \frac{2\|y\|}{r} \|x'\|  <  \frac{2}{r} \|y\| = C \|y\|
+        $$
+        </div>
+        <p>
+            よって、任意の $ y \in Y $ に対して目的の $ x \in X $ が存在することが示された。
+        </p>
+
+        <p><strong>第2ステップ：近似的な連続切断の構成</strong></p>
+        <p>
+            $ Y \smallsetminus \{0\} $ の各点 $ z $ に対して、第1ステップの結果を用い、 $ T(x_z) = z $ かつ $ \|x_z\| \le C\|z\| $ となる $ x_z \in X $ を一つ選ぶ。各 $ z \in Y \smallsetminus \{0\} $ に対して、以下の開集合 $ U_z $ を定義する。
+        </p>
+        <div class="math-display">
+        $$
+        U_z = \left\{ y \in Y \smallsetminus \{0\} \;\middle|\; \|y - z\|  <  \frac{1}{3} \|z\| \right\}
+        $$
+        </div>
+        <p>
+            $ z \in U_z $ であるから、族 $ \{ U_z \}_{z \in Y \smallsetminus \{0\}} $ は $ Y \smallsetminus \{0\} $ の開被覆である。ここで、任意の $ y \in U_z $ に対して、三角不等式より以下が成り立つ。
+        </p>
+        <div class="math-display">
+        $$
+        \|z\| \le \|z - y\| + \|y\|  <  \frac{1}{3}\|z\| + \|y\|
+        $$
+        </div>
+        <p>
+            これより $ \frac{2}{3}\|z\|  <  \|y\| $ となり、 $ \|z\|  <  \frac{3}{2}\|y\| $ を得る。さらに、これを用いると次が成り立つ。
+        </p>
+        <div class="math-display">
+        $$
+        \|y - z\|  <  \frac{1}{3}\|z\|  <  \frac{1}{3} \cdot \frac{3}{2}\|y\| = \frac{1}{2}\|y\|
+        $$
+        </div>
+        <p>
+            距離空間 $ Y \smallsetminus \{0\} $ はパラコンパクト (paracompact) である。したがって、開被覆 $ \{ U_z \}_{z \in Y \smallsetminus \{0\}} $ は、局所有限 (locally finite) な開細分 $ \{ V_i \}_{i \in I} $ を持つ。開細分の定義から、各 $ i \in I $ に対してある $ z_i \in Y \smallsetminus \{0\} $ が存在して $ V_i \subset U_{z_i} $ を満たす。
+        </p>
+        <p>
+            さらに、被覆 $ \{ V_i \}_{i \in I} $ に従属する連続な $ 1 $ の分割 (partition of unity) $ \{ \phi_i \}_{i \in I} $ が存在する。すなわち、各 $ \phi_i: Y \smallsetminus \{0\} \to [0, 1] $ は連続であり、 $ \phi_i $ の台 $ \mathrm{supp}(\phi_i) $ は $ V_i $ に含まれ、任意の $ y \in Y \smallsetminus \{0\} $ において $ \sum_{i \in I} \phi_i(y) = 1 $ を満たす。
+        </p>
+        <p>
+            関数 $ f_0: Y \smallsetminus \{0\} \to X $ を次のように定義する。
+        </p>
+        <div class="math-display">
+        $$
+        f_0(y) = \sum_{i \in I} \phi_i(y) x_{z_i}
+        $$
+        </div>
+        <p>
+            この和は各点の近傍で有限和となるため、 $ f_0 $ は連続である。ここで、 $ y \in Y \smallsetminus \{0\} $ を固定する。 $ \phi_i(y)  >  0 $ となる $ i $ については、 $ y \in V_i \subset U_{z_i} $ であるため、先ほどの評価より $ \|y - z_i\|  <  \frac{1}{2}\|y\| $ および $ \|z_i\|  <  \frac{3}{2}\|y\| $ が成り立つ。 $ T $ は線形であるため、次のように計算できる。
+        </p>
+        <div class="math-display">
+        $$
+        T(f_0(y)) = T\left(\sum_{i \in I} \phi_i(y) x_{z_i}\right) = \sum_{i \in I} \phi_i(y) T(x_{z_i}) = \sum_{i \in I} \phi_i(y) z_i
+        $$
+        </div>
+        <p>
+            $ \sum_{i \in I} \phi_i(y) = 1 $ であるから、 $ y = \sum_{i \in I} \phi_i(y) y $ と書ける。よって、
+        </p>
+        <div class="math-display">
+        $$
+        y - T(f_0(y)) = \sum_{i \in I} \phi_i(y) (y - z_i)
+        $$
+        </div>
+        <p>
+            となる。両辺のノルムをとると、次のように評価できる。
+        </p>
+        <div class="math-display">
+        $$
+        \|y - T(f_0(y))\| \le \sum_{i \in I} \phi_i(y) \|y - z_i\|  <  \sum_{i \in I} \phi_i(y) \frac{1}{2}\|y\| = \frac{1}{2}\|y\|
+        $$
+        </div>
+        <p>
+            また、 $ f_0(y) $ のノルムについても次のように評価できる。
+        </p>
+        <div class="math-display">
+        $$
+        \|f_0(y)\| \le \sum_{i \in I} \phi_i(y) \|x_{z_i}\| \le \sum_{i \in I} \phi_i(y) C \|z_i\|  <  \sum_{i \in I} \phi_i(y) C \frac{3}{2}\|y\| = \frac{3}{2}C\|y\|
+        $$
+        </div>
+        <p>
+            ここで $ C' = \frac{3}{2}C $ とおく。関数 $ f_0 $ を $ Y $ 全体に拡張するために、 $ f_0(0) = 0 $ と定義する。 $ y $ が $ 0 $ に近づくとき $ \|f_0(y)\| \le C'\|y\| $ は $ 0 $ に近づくため、拡張された $ f_0: Y \to X $ は原点でも連続となる。
+            以上の構成により、連続写像 $ f_0: Y \to X $ であって、任意の $ y \in Y $ に対して以下の $ 2 $ 条件を満たすものが得られた。
+        </p>
+        <div class="math-display">
+        $$
+        \|y - T(f_0(y))\| \le \frac{1}{2}\|y\|, \quad \|f_0(y)\| \le C'\|y\|
+        $$
+        </div>
+
+        <p><strong>第3ステップ：級数による真の連続切断の構成</strong></p>
+        <p>
+            第2ステップで得られた $ f_0 $ を用いて、関数列 $ y_n: Y \to Y $ と $ g_n: Y \to X $ を帰納的に以下のように定義する。
+        </p>
+        <div class="math-display">
+        $$
+        y_0(y) = y, \quad g_0(y) = f_0(y_0(y)) = f_0(y)
+        $$
+        </div>
+        <p>
+            $ n \ge 0 $ に対して、
+        </p>
+        <div class="math-display">
+        $$
+        y_{n+1}(y) = y_n(y) - T(g_n(y))
+        $$
+        $$
+        g_{n+1}(y) = f_0(y_{n+1}(y))
+        $$
+        </div>
+        <p>
+            数学的帰納法により、すべての $ n \ge 0 $ に対して以下の不等式が成り立つことを示す。
+        </p>
+        <div class="math-display">
+        $$
+        \|y_n(y)\| \le \frac{1}{2^n}\|y\|, \quad \|g_n(y)\| \le \frac{C'}{2^n}\|y\|
+        $$
+        </div>
+        <p>
+            $ n = 0 $ のときは、 $ \|y_0(y)\| = \|y\| $ であり、 $ \|g_0(y)\| = \|f_0(y)\| \le C'\|y\| $ であるから成立する。ある $ n $ で成立すると仮定すると、 $ f_0 $ の性質より次が成り立つ。
+        </p>
+        <div class="math-display">
+        $$
+        \|y_{n+1}(y)\| = \|y_n(y) - T(f_0(y_n(y)))\| \le \frac{1}{2}\|y_n(y)\| \le \frac{1}{2} \cdot \frac{1}{2^n}\|y\| = \frac{1}{2^{n+1}}\|y\|
+        $$
+        </div>
+        <p>
+            さらに、 $ g_{n+1} $ についても次が成り立つ。
+        </p>
+        <div class="math-display">
+        $$
+        \|g_{n+1}(y)\| = \|f_0(y_{n+1}(y))\| \le C'\|y_{n+1}(y)\| \le \frac{C'}{2^{n+1}}\|y\|
+        $$
+        </div>
+        <p>
+            よって帰納法は完結し、すべての $ n \ge 0 $ で不等式が成立する。
+        </p>
+        <p>
+            $ X $ は完備なBanach空間であるため、関数項級数 $ \sum_{n=0}^\infty g_n(y) $ を考えることができる。任意の有界集合 $ B \subset Y $ 上において、各 $ y \in B $ に対するノルム $ \|g_n(y)\| $ は $ \frac{C'}{2^n} \sup_{y \in B} \|y\| $ で一様に上から抑えられる。したがって、ワイエルシュトラスのM判定法より、この級数は $ Y $ 上で局所一様に絶対収束する。各 $ g_n $ は連続であるため、局所一様収束極限である関数 $ R: Y \to X $ も連続となる。
+        </p>
+        <div class="math-display">
+        $$
+        R(y) = \sum_{n=0}^\infty g_n(y)
+        $$
+        </div>
+        <p>
+            最後に、 $ T \circ R = \mathrm{id}_Y $ であることを確認する。 $ T $ は連続な線形写像であるため、無限和と順序を交換することができる。
+        </p>
+        <div class="math-display">
+        $$
+        T(R(y)) = T\left(\sum_{n=0}^\infty g_n(y)\right) = \sum_{n=0}^\infty T(g_n(y))
+        $$
+        </div>
+        <p>
+            和の部分和を計算すると、 $ T(g_k(y)) = y_k(y) - y_{k+1}(y) $ であるため、次のように望遠鏡和となる。
+        </p>
+        <div class="math-display">
+        $$
+        \sum_{k=0}^n T(g_k(y)) = \sum_{k=0}^n (y_k(y) - y_{k+1}(y)) = y_0(y) - y_{n+1}(y) = y - y_{n+1}(y)
+        $$
+        </div>
+        <p>
+            ここで $ n \to \infty $ とすると、 $ \|y_{n+1}(y)\| \le \frac{1}{2^{n+1}}\|y\| $ は $ 0 $ に収束するため、 $ y_{n+1}(y) $ は $ 0 $ に近づく。したがって、無限和の値は $ y $ に等しい。
+        </p>
+        <div class="math-display">
+        $$
+        T(R(y)) = y
+        $$
+        </div>
+        <p>
+            以上により、連続な右逆写像 $ R $ が存在することが証明された。
+        </p>
+        <div class="qed">□</div>
+    </div>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ol>
+            <li>R. G. Bartle and L. M. Graves, "Continuous extensions and selections," <i>Transactions of the American Mathematical Society</i>, 72 (1952), 400-413. <a href="https://doi.org/10.1090/S0002-9947-1952-0045952-2" target="_blank">https://doi.org/10.1090/S0002-9947-1952-0045952-2</a></li>
+            <li>E. Michael, "Continuous selections. I," <i>Annals of Mathematics</i>, 63 (1956), 361-382. <a href="https://doi.org/10.2307/1969615" target="_blank">https://doi.org/10.2307/1969615</a></li>
+            <li>S. Mac Lane, "Categories for the Working Mathematician," Graduate Texts in Mathematics 5, Springer-Verlag, 1998.</li>
+        </ol>
+    </div>
+</body>
+</html>

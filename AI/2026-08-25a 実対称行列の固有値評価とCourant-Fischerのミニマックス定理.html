@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>実対称行列の固有値評価とCourant-Fischerのミニマックス定理</title>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <style>
+        body { font-family: "Noto Serif JP", serif; line-height: 1.8; color: #333; max-width: 1000px; margin: 0 auto; padding: 40px 20px; background-color: #fafafa; }
+        h1 { font-size: 2em; border-bottom: 2px solid #555; padding-bottom: 10px; color: #222; margin-bottom: 30px;}
+        h2 { font-size: 1.5em; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 50px; color: #444; }
+        h3 { font-size: 1.25em; color: #555; margin-top: 30px; }
+        p { margin-bottom: 1em; text-align: justify; }
+        .theorem { background-color: #eef7f9; border-left: 5px solid #3498db; padding: 15px 20px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .theorem-title { font-weight: bold; color: #2980b9; margin-bottom: 10px; display: block; font-size: 1.1em; }
+        .proof { background-color: #fff; border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .proof-title { font-weight: bold; font-style: italic; margin-bottom: 15px; display: block; border-bottom: 1px dashed #ccc; padding-bottom: 5px;}
+        .definition { background-color: #fcfcfc; border-left: 5px solid #27ae60; padding: 15px 20px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .definition-title { font-weight: bold; color: #27ae60; margin-bottom: 10px; display: block; font-size: 1.1em; }
+        .example { background-color: #fff9e6; border-left: 5px solid #f1c40f; padding: 15px 20px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .example-title { font-weight: bold; color: #d35400; margin-bottom: 10px; display: block; font-size: 1.1em; }
+        ul, ol { margin-bottom: 20px; padding-left: 30px; }
+        li { margin-bottom: 8px; }
+        .references { background-color: #eaeaea; padding: 25px; border-radius: 5px; margin-top: 50px; font-size: 0.95em; }
+        .references h2 { margin-top: 0; border-bottom: 1px solid #bbb; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h1>実対称行列の固有値評価とCourant-Fischerのミニマックス定理</h1>
+    
+    <p>本稿では、実対称行列およびHermite行列の固有値の評価に関する基礎理論（Courant-Fischerのミニマックス定理やWeylの不等式など）を詳細に解説し、それらの理論を応用して具体的な線形代数の大学入試レベルの問題（固有値の不等式評価）を解く。さらに、高度な定理をブラックボックスとして使わずに、部分空間の次元定理とRayleigh商の基本性質のみを用いて直接的に証明する別解も提示する。</p>
+
+    <h2>1. 問題の記述</h2>
+    <p>以下の問題は、行列の固有値の取りうる範囲を評価する問題である。</p>
+    
+    <div class="theorem">
+        <span class="theorem-title">第 6 問</span>
+        <p>$P$ を $3$ 次実正方行列とする。このとき、$3$ 次対称行列 $A$ を次のように定める。</p>
+        $$
+        A = \begin{pmatrix} \frac{1}{3} & 0 & 0 \\ 0 & \frac{2}{3} & 0 \\ 0 & 0 & 1 \end{pmatrix} + {}^t P P
+        $$
+        <p>ただし、${}^t P$ は $P$ の転置行列を表す。対称行列 $A$ の固有値を $\alpha_1 \le \alpha_2 \le \alpha_3$ とする。${}^t P P$ が相異なる $3$ つの固有値 $\rho_1  <  \rho_2  <  \rho_3$ をもち、それらがすべて整数であるとする。</p>
+        <ol>
+            <li>(1) $A$ は正則行列であることを示せ。</li>
+            <li>(2) $\rho_1 + \frac{1}{3} \le \alpha_1 \le \rho_1 + 1$ を示せ。</li>
+            <li>(3) $\alpha_1 + \alpha_3  <  \rho_1 + \rho_3 + 2$ を示せ。</li>
+            <li>(4) $\alpha_1, \alpha_2, \alpha_3$ は相異なることを示せ。</li>
+        </ol>
+    </div>
+
+    <h2>2. 基礎概念の定義と性質</h2>
+    <p>問題の解決にあたり、必要となる線形代数の基本的な定義と定理を明記する。これらの概念はself-containedな理解のために不可欠である。</p>
+
+    <div class="definition">
+        <span class="definition-title">定義 1: 実対称行列 (Real Symmetric Matrix)</span>
+        <p>成分がすべて実数である正方行列 $M$ が ${}^t M = M$ を満たすとき、実対称行列という。実対称行列の固有値はすべて実数であり、直交行列によって対角化可能である。すなわち、正規直交基底をなす固有ベクトルが存在する。</p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 2: 正定値行列 (Positive Definite Matrix) と 半正定値行列 (Positive Semi-Definite Matrix)</span>
+        <p>実対称行列 $M$ が、任意のゼロでない実ベクトル $x \neq 0$ に対して $x^T M x  >  0$ を満たすとき、正定値行列という。このとき、すべての固有値は正（$ \lambda  >  0 $）となる。<br>
+        同様に、任意のベクトル $x$ に対して $x^T M x \ge 0$ を満たすとき、半正定値行列という。このとき、すべての固有値は非負（$ \lambda \ge 0 $）となる。</p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 3: Rayleigh商 (Rayleigh Quotient)</span>
+        <p>実対称行列（またはHermite行列） $M$ と非ゼロベクトル $x$ に対して、以下で定義されるスカラー値を Rayleigh商 と呼ぶ。</p>
+        $$
+        R_M(x) = \frac{x^T M x}{x^T x}
+        $$
+        <p>行列 $M$ の最小固有値を $\lambda_{\min}$、最大固有値を $\lambda_{\max}$ とすると、Rayleigh商は必ず $\lambda_{\min} \le R_M(x) \le \lambda_{\max}$ の範囲に収まる。特に、$x$ が対応する固有ベクトルのときに等号が成立する。</p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 4: Grassmannの次元公式 (Grassmann's Dimension Formula)</span>
+        <p>有限次元ベクトル空間 $V$ の2つの部分空間 $W_1, W_2$ について、以下の関係が成り立つ。</p>
+        $$
+        \dim(W_1 + W_2) = \dim(W_1) + \dim(W_2) - \dim(W_1 \cap W_2)
+        $$
+        <p>空間全体の次元が $n$ である場合、$\dim(W_1 + W_2) \le n$ であるため、$\dim(W_1 \cap W_2) \ge \dim(W_1) + \dim(W_2) - n$ が導かれる。これは、2つの部分空間の交わりの次元を下から評価する強力な道具である。</p>
+    </div>
+
+
+    <h2>3. Courant-Fischerのミニマックス定理とWeylの不等式</h2>
+    <p>Hermite行列（実対称行列の複素数への一般化）の固有値に対する2つの重要な定理を証明付きで解説する。</p>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 1: Courant-Fischerのミニマックス定理 (Courant-Fischer Min-Max Theorem)</span>
+        <p>$M \in \mathbb{C}^{n \times n}$ を Hermite 行列とし、その固有値を $\lambda_1(M) \le \lambda_2(M) \le \dots \le \lambda_n(M)$ とする。このとき、各 $k \in \{1, 2, \dots, n\}$ に対して以下が成り立つ。</p>
+        $$
+        \lambda_k(M) = \min_{\dim V = k} \max_{x \in V, x \neq 0} \frac{x^* M x}{x^* x} = \min_{\dim V = k} \max_{x \in V, \|x\| = 1} x^* M x
+        $$
+        $$
+        \lambda_k(M) = \max_{\dim W = n-k+1} \min_{x \in W, x \neq 0} \frac{x^* M x}{x^* x} = \max_{\dim W = n-k+1} \min_{x \in W, \|x\| = 1} x^* M x
+        $$
+        <p>ただし、$V, W$ は $\mathbb{C}^n$ の部分空間を表し、$x^*$ は随伴転置（共役転置）を表す。</p>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">Courant-Fischerのミニマックス定理の証明</span>
+        <p>前半の式 $\lambda_k(M) = \min_{\dim V = k} \max_{x \in V, \|x\| = 1} x^* M x$ を示す。</p>
+        <p>まず、任意の $k$ 次元部分空間 $V \subset \mathbb{C}^n$ に対して、</p>
+        $$
+        \max_{x \in V, \|x\| = 1} x^* M x \ge \lambda_k(M)
+        $$
+        <p>であることを示す。$M$ の正規直交固有ベクトルを $u_1, \dots, u_n$ (対応する固有値 $\lambda_1 \le \dots \le \lambda_n$) とし、 $n - k + 1$ 次元の部分空間 $W_k$ を次のように定義する。</p>
+        $$
+        W_k = \mathrm{span}(u_k, u_{k+1}, \dots, u_n)
+        $$
+        <p>$\dim V = k$ かつ $\dim W_k = n - k + 1$ であるから、 Grassmann の次元公式より、</p>
+        $$
+        \dim(V \cap W_k) = \dim V + \dim W_k - \dim(V + W_k) \ge k + (n - k + 1) - n = 1
+        $$
+        <p>となる。したがって、 $V \cap W_k \neq \{0\}$ である。</p>
+        <p>単位ベクトル $x \in V \cap W_k$ ( $\|x\| = 1$ ) を 1 つ選ぶ。 $x \in W_k$ であるため、 $x$ は $u_k, \dots, u_n$ の線形結合として $x = \sum_{j=k}^n c_j u_j$ と表せる。 $\|x\|^2 = \sum_{j=k}^n |c_j|^2 = 1$ である。このとき、</p>
+        $$
+        x^* M x = \sum_{j=k}^n \lambda_j(M) |c_j|^2 \ge \lambda_k(M) \sum_{j=k}^n |c_j|^2 = \lambda_k(M)
+        $$
+        <p>が得られる。 $x \in V$ でもあるため、</p>
+        $$
+        \max_{y \in V, \|y\| = 1} y^* M y \ge x^* M x \ge \lambda_k(M)
+        $$
+        <p>が任意の $k$ 次元部分空間 $V$ に対して成り立つ。したがって、全体の下限をとると</p>
+        $$
+        \min_{\dim V = k} \max_{x \in V, \|x\| = 1} x^* M x \ge \lambda_k(M)
+        $$
+        <p>が成立する。</p>
+        <p>次に、等号を達成する $k$ 次元部分空間 $V$ の存在を示す。<br>
+        $V_k = \mathrm{span}(u_1, u_2, \dots, u_k)$ と置く。 $\dim V_k = k$ である。任意の $x \in V_k$ ( $\|x\| = 1$ ) は $x = \sum_{j=1}^k d_j u_j$ ($\sum_{j=1}^k |d_j|^2 = 1$) と表され、</p>
+        $$
+        x^* M x = \sum_{j=1}^k \lambda_j(M) |d_j|^2 \le \lambda_k(M) \sum_{j=1}^k |d_j|^2 = \lambda_k(M)
+        $$
+        <p>が成り立つ。特別に $x = u_k \in V_k$ のとき $u_k^* M u_k = \lambda_k(M)$ であるから、</p>
+        $$
+        \max_{x \in V_k, \|x\| = 1} x^* M x = \lambda_k(M)
+        $$
+        <p>となる。以上の下限の評価と具体的な部分空間の構成により、前半の式が示された。</p>
+        <p>後半の式についても、行列 $-M$ に前半の定理を適用するか、完全に並行した次元論議（ $V_k' = \mathrm{span}(u_1, \dots, u_k)$ との交わりを考える）を行うことで証明される。$\blacksquare$</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 2: Weylの不等式 (Weyl's Inequality)</span>
+        <p>$A, B \in \mathbb{C}^{n \times n}$ を Hermite 行列とし、それらの固有値を小さい順に</p>
+        $$
+        \lambda_1(A) \le \dots \le \lambda_n(A), \quad \lambda_1(B) \le \dots \le \lambda_n(B), \quad \lambda_1(A+B) \le \dots \le \lambda_n(A+B)
+        $$
+        <p>とする。このとき、任意の $i, j \in \{1, 2, \dots, n\}$ に対して、以下の不等式が成り立つ。</p>
+        <ol>
+            <li>$i + j - 1 \le n$ のとき、$ \lambda_{i+j-1}(A+B) \ge \lambda_i(A) + \lambda_j(B) $</li>
+            <li>$i + j - n \ge 1$ のとき、$ \lambda_{i+j-n}(A+B) \le \lambda_i(A) + \lambda_j(B) $</li>
+        </ol>
+        <p>特に $j=1$ と $j=n$ を代入することで、以下の有用な単調性の評価式が得られる。</p>
+        $$
+        \lambda_i(A) + \lambda_1(B) \le \lambda_i(A+B) \le \lambda_i(A) + \lambda_n(B)
+        $$
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">Weylの不等式の証明</span>
+        <p>Courant-Fischerのミニマックス定理を用いて1式を証明する。 $k = i + j - 1$ と置く。 ミニマックス定理の後半の等式より、</p>
+        $$
+        \lambda_i(A) = \max_{\dim W = n-i+1} \min_{x \in W, \|x\| = 1} x^* A x
+        $$
+        $$
+        \lambda_j(B) = \max_{\dim U = n-j+1} \min_{x \in U, \|x\| = 1} x^* B x
+        $$
+        <p>となる部分空間 $W$ ( $\dim W = n-i+1$ ) と $U$ ( $\dim U = n-j+1$ ) が存在する。 Grassmannの次元公式より、</p>
+        $$
+        \dim(W \cap U) = \dim W + \dim U - \dim(W + U) \ge (n - i + 1) + (n - j + 1) - n = n - (i + j - 1) + 1 = n - k + 1
+        $$
+        <p>となる。次元が $n - k + 1$ 以上である部分空間 $W \cap U$ から、次元がちょうど $n - k + 1$ である部分空間 $Z \subset W \cap U$ を取ることができる。任意の単位ベクトル $x \in Z$ ( $\|x\| = 1$ ) に対し、 $x \in W$ かつ $x \in U$ であるから、</p>
+        $$
+        x^* A x \ge \min_{y \in W, \|y\| = 1} y^* A y = \lambda_i(A), \quad x^* B x \ge \min_{y \in U, \|y\| = 1} y^* B y = \lambda_j(B)
+        $$
+        <p>が成り立つ。したがって、 $x^* (A + B) x = x^* A x + x^* B x \ge \lambda_i(A) + \lambda_j(B)$ となる。 $Z$ 上での最小値を取ると、</p>
+        $$
+        \min_{x \in Z, \|x\| = 1} x^* (A + B) x \ge \lambda_i(A) + \lambda_j(B)
+        $$
+        <p>が得られる。ミニマックス定理によれば、次元 $n - k + 1$ の任意の部分空間 $Z$ 上での最小値の全体における最大値が $\lambda_k(A+B)$ であるため、</p>
+        $$
+        \lambda_{i+j-1}(A+B) = \lambda_k(A+B) \ge \min_{x \in Z, \|x\| = 1} x^* (A + B) x \ge \lambda_i(A) + \lambda_j(B)
+        $$
+        <p>となり、1式が示された。</p>
+        <p>2式は、行列を $-A, -B$ に置き換え、$\lambda_r(-M) = -\lambda_{n-r+1}(M)$ の関係を用いることで、1式から直接導出される。$\blacksquare$</p>
+    </div>
+
+    <div class="example">
+        <span class="example-title">理解に役立つ具体例：Weylの不等式の適用</span>
+        <p>2次実対称行列を次のように定める。</p>
+        $$
+        A = \begin{pmatrix} 1 & 0 \\ 0 & 3 \end{pmatrix}, \quad B = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}
+        $$
+        <p>$A$ の固有値は対角成分であるから $\lambda_1(A) = 1, \lambda_2(A) = 3$ である。<br>
+        $B$ の固有多項式は $\det(B - \lambda I) = (\lambda-1)(\lambda-3) = 0$ より、$\lambda_1(B) = 1, \lambda_2(B) = 3$ である。<br>
+        それらの和 $A+B$ は</p>
+        $$ A + B = \begin{pmatrix} 3 & 1 \\ 1 & 5 \end{pmatrix} $$
+        <p>となり、その固有多項式は $\mu^2 - 8\mu + 14 = 0$ であるため、固有値は $\mu = 4 \pm \sqrt{2}$ となる。小さい順に並べると $\lambda_1(A+B) = 4 - \sqrt{2} \approx 2.586$, $\lambda_2(A+B) = 4 + \sqrt{2} \approx 5.414$ である。</p>
+        <p>ここで $i=2$ に対してWeylの単調性評価式 $\lambda_2(A) + \lambda_1(B) \le \lambda_2(A+B) \le \lambda_2(A) + \lambda_2(B)$ を確認すると、</p>
+        $$
+        3 + 1 \le 4 + \sqrt{2} \le 3 + 3 \implies 4 \le 5.414 \le 6
+        $$
+        <p>となり、行列の摂動（足し算）による固有値の変動が見事に不等式の範囲内に収まっていることが直観的に確認できる。</p>
+    </div>
+
+    <h2>4. 問題の解答例 1 (定理を活用する解答)</h2>
+    <p>Courant-Fischerの定理の系であるWeylの不等式および行列の跡（trace）の性質を用いた解答を記述する。</p>
+    <p>準備として、対角行列 $D$ と対称行列 $B$ を以下のように定義する。</p>
+    $$
+    D = \begin{pmatrix} \frac{1}{3} & 0 & 0 \\ 0 & \frac{2}{3} & 0 \\ 0 & 0 & 1 \end{pmatrix}, \quad B = {}^t P P
+    $$
+    <p>$D$ は固有値 $d_1 = \frac{1}{3}, d_2 = \frac{2}{3}, d_3 = 1$ を持つ。 $B$ は任意の $x \in \mathbb{R}^3$ に対し $x^T B x = \|P x\|^2 \ge 0$ となる半正定値行列であり、条件より固有値は $0 \le \rho_1  <  \rho_2  <  \rho_3$ を満たす整数である。行列 $A$ は $A = D + B$ であり、固有値は $\alpha_1 \le \alpha_2 \le \alpha_3$ である。</p>
+
+    <div class="proof">
+        <span class="proof-title">(1) の証明</span>
+        <p>$D$ の最小固有値は $\frac{1}{3}  >  0$ であるため、$D$ は正定値行列であり、任意の $x \neq 0$ に対して $x^T D x  >  0$ が成り立つ。 $B$ は半正定値なので $x^T B x \ge 0$ である。よって</p>
+        $$
+        x^T A x = x^T D x + x^T B x  >  0
+        $$
+        <p>が任意の $x \neq 0$ に対して成立する。これは $A$ が正定値行列であることを意味し、その固有値はすべて正となる（$\alpha_1 \ge \alpha_2 \ge \alpha_3  >  0$）。固有値の積である行列式は $\det(A) = \alpha_1 \alpha_2 \alpha_3  >  0$ となるため、$A$ は正則行列である。$\blacksquare$</p>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">(2) の証明</span>
+        <p>Weylの不等式（単調性の式） $\lambda_i(B) + \lambda_1(D) \le \lambda_i(D+B) \le \lambda_i(B) + \lambda_n(D)$ を $i=1, n=3$ で適用する。<br>
+        $A = B + D$ であり、$D$ の最小固有値は $\lambda_1(D) = \frac{1}{3}$、最大固有値は $\lambda_3(D) = 1$ であるから、直接代入して以下を得る。</p>
+        $$
+        \rho_1 + \frac{1}{3} \le \alpha_1 \le \rho_1 + 1
+        $$
+        <p>これにより直ちに題意の不等式が示された。$\blacksquare$</p>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">(3) の証明</span>
+        <p>行列の跡（trace、対角成分の和）は固有値の総和に等しい。線形性 $\operatorname{tr}(A) = \operatorname{tr}(D) + \operatorname{tr}(B)$ を用いると、</p>
+        $$
+        \alpha_1 + \alpha_2 + \alpha_3 = \left(\frac{1}{3} + \frac{2}{3} + 1\right) + (\rho_1 + \rho_2 + \rho_3) = 2 + \rho_1 + \rho_2 + \rho_3
+        $$
+        <p>が成り立つ。これを $\alpha_1 + \alpha_3$ について解くと、</p>
+        $$
+        \alpha_1 + \alpha_3 = \rho_1 + \rho_3 + 2 + (\rho_2 - \alpha_2)
+        $$
+        <p>となる。ここで $\alpha_2$ の下限を Weylの不等式の単調性で評価する。$i=2$ として適用すると、</p>
+        $$
+        \alpha_2 = \lambda_2(B+D) \ge \lambda_2(B) + \lambda_1(D) = \rho_2 + \frac{1}{3}
+        $$
+        <p>が得られる。したがって、 $\rho_2 - \alpha_2 \le -\frac{1}{3}  <  0$ である。これを先ほどの跡の式に代入すると、</p>
+        $$
+        \alpha_1 + \alpha_3 \le \rho_1 + \rho_3 + 2 - \frac{1}{3} = \rho_1 + \rho_3 + \frac{5}{3}  <  \rho_1 + \rho_3 + 2
+        $$
+        <p>となり、題意が示された。$\blacksquare$</p>
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">(4) の証明</span>
+        <p>$\alpha_1  <  \alpha_2  <  \alpha_3$ であることを示す。</p>
+        <p><strong>(i) $\alpha_1  <  \alpha_2$ の証明:</strong><br>
+        (2) より $\alpha_1 \le \rho_1 + 1$ であり、(3) の証明過程より $\alpha_2 \ge \rho_2 + \frac{1}{3}$ である。 $\rho_1, \rho_2$ は整数であり、 $\rho_1  <  \rho_2$ であることから $\rho_2 \ge \rho_1 + 1$ が成り立つ。したがって、</p>
+        $$
+        \alpha_2 \ge \rho_2 + \frac{1}{3} \ge (\rho_1 + 1) + \frac{1}{3} = \rho_1 + \frac{4}{3}  >  \rho_1 + 1 \ge \alpha_1
+        $$
+        <p>となり、 $\alpha_1  <  \alpha_2$ が示された。</p>
+        <p><strong>(ii) $\alpha_2  <  \alpha_3$ の証明:</strong><br>
+        Weylの不等式の単調性を用いて、同様に $\alpha_2$ の上限と $\alpha_3$ の下限を評価する。
+        $$ \alpha_2 = \lambda_2(B+D) \le \lambda_2(B) + \lambda_3(D) = \rho_2 + 1 $$
+        $$ \alpha_3 = \lambda_3(B+D) \ge \lambda_3(B) + \lambda_1(D) = \rho_3 + \frac{1}{3} $$
+        $\rho_2, \rho_3$ は整数かつ $\rho_2  <  \rho_3$ であるため $\rho_3 \ge \rho_2 + 1$ である。よって、</p>
+        $$
+        \alpha_3 \ge \rho_3 + \frac{1}{3} \ge (\rho_2 + 1) + \frac{1}{3} = \rho_2 + \frac{4}{3}  >  \rho_2 + 1 \ge \alpha_2
+        $$
+        <p>となり、 $\alpha_2  <  \alpha_3$ が示された。以上より、3つの固有値はすべて相異なる。$\blacksquare$</p>
+    </div>
+
+
+    <h2>5. 問題の解答例 2 (定理を直接構成して解く直接的な証明)</h2>
+    <p>Weylの不等式やCourant-Fischerのミニマックス定理を既知とせず、二次形式（Rayleigh商）の基本性質とGrassmannの次元公式のみを用いて自己完結的（self-contained）に解答する。</p>
+
+    <div class="proof">
+        <span class="proof-title">次元定理による直接証明の準備</span>
+        <p>行列 $A, B, D$ は解答例1と同様に定義する。<br>
+        $A$ の正規直交固有ベクトルを $v_1, v_2, v_3$ ($A v_k = \alpha_k v_k$) とし、 $B$ の正規直交固有ベクトルを $u_1, u_2, u_3$ ($B u_k = \rho_k u_k$) とする。<br>
+        Rayleigh商の性質により、単位ベクトル $x$ ($\|x\|=1$) に対して $\alpha_1 \le x^T A x \le \alpha_3$ であり、 $\alpha_1 = \min_{\|x\|=1} x^T A x$, $\alpha_3 = \max_{\|x\|=1} x^T A x$ である。$B, D$ に対しても同様のことが言える。特に $D$ については任意のベクトル $x$ に対し $\frac{1}{3}\|x\|^2 \le x^T D x \le \|x\|^2$ が成り立つ。</p>
+        
+        <p><strong>(1) の証明:</strong> 解答例1と全く同様であるため省略する。</p>
+
+        <p><strong>(2) の証明:</strong></p>
+        <p>左側の不等式 $\rho_1 + \frac{1}{3} \le \alpha_1$ について。<br>
+        $A$ の最小固有値 $\alpha_1$ に対応する単位固有ベクトル $v_1$ ( $\|v_1\| = 1$ ) を取る。</p>
+        $$
+        \alpha_1 = v_1^T A v_1 = v_1^T D v_1 + v_1^T B v_1
+        $$
+        <p>であり、$v_1^T D v_1 \ge \frac{1}{3} \|v_1\|^2 = \frac{1}{3}$ かつ $v_1^T B v_1 \ge \rho_1 \|v_1\|^2 = \rho_1$ であるから、$\alpha_1 \ge \frac{1}{3} + \rho_1$ が成り立つ。</p>
+        <p>右側の不等式 $\alpha_1 \le \rho_1 + 1$ について。<br>
+        $B$ の最小固有値 $\rho_1$ に対応する単位固有ベクトル $u_1$ ( $\|u_1\| = 1$ ) を取る。$\alpha_1 = \min_{\|x\| = 1} x^T A x$ であるから、</p>
+        $$
+        \alpha_1 \le u_1^T A u_1 = u_1^T D u_1 + u_1^T B u_1 = u_1^T D u_1 + \rho_1
+        $$
+        <p>が成り立つ。 $u_1^T D u_1 \le 1 \cdot \|u_1\|^2 = 1$ であるから、$\alpha_1 \le 1 + \rho_1$ が得られる。これで(2)が証明された。</p>
+
+        <p><strong>(3) の証明:</strong></p>
+        <p>跡の等式 $\alpha_1 + \alpha_3 = \rho_1 + \rho_3 + 2 + (\rho_2 - \alpha_2)$ を得るところまでは解答例1と同様である。<br>
+        ここで、 $\alpha_2 \ge \rho_2 + \frac{1}{3}$ を定理に頼らず直接示す。<br>
+        2 つの部分空間を考える。</p>
+        $$ V_2 = \mathrm{span}(v_1, v_2), \quad W_2 = \mathrm{span}(u_2, u_3) $$
+        <p>$\dim V_2 = 2$ かつ $\dim W_2 = 2$ である。全空間の次元は $3$ であるため、 Grassmann の次元公式より、</p>
+        $$ \dim(V_2 \cap W_2) \ge \dim V_2 + \dim W_2 - 3 = 2 + 2 - 3 = 1 $$
+        <p>となる。したがって、 $V_2 \cap W_2$ に属する単位ベクトル $z$ ( $\|z\| = 1$ ) が存在する。</p>
+        <ul>
+            <li>$z \in V_2$ より $z = a_1 v_1 + a_2 v_2$ ( $a_1^2 + a_2^2 = 1$ ) と表せるため、<br>
+            $z^T A z = \alpha_1 a_1^2 + \alpha_2 a_2^2 \le \alpha_2 (a_1^2 + a_2^2) = \alpha_2$</li>
+            <li>$z \in W_2$ より $z = b_2 u_2 + b_3 u_3$ ( $b_2^2 + b_3^2 = 1$ ) と表せるため、<br>
+            $z^T B z = \rho_2 b_2^2 + \rho_3 b_3^2 \ge \rho_2 (b_2^2 + b_3^2) = \rho_2$</li>
+        </ul>
+        <p>また $z^T D z \ge \frac{1}{3} \|z\|^2 = \frac{1}{3}$ であるため、</p>
+        $$ z^T A z = z^T D z + z^T B z \ge \frac{1}{3} + \rho_2 $$
+        <p>が得られる。以上より $\alpha_2 \ge z^T A z \ge \rho_2 + \frac{1}{3}$ となり、 $\rho_2 - \alpha_2 \le -\frac{1}{3}  <  0$ が導出される。あとは解答例1と同じ計算で (3) が証明される。</p>
+
+        <p><strong>(4) の証明:</strong></p>
+        <p>(i) $\alpha_1  <  \alpha_2$ の証明は解答例1と同じ代数計算で示される。<br>
+        (ii) $\alpha_2  <  \alpha_3$ の証明について。まず $B$ の固有ベクトル $u_3$ に対し</p>
+        $$ \alpha_3 \ge u_3^T A u_3 = u_3^T D u_3 + u_3^T B u_3 \ge \frac{1}{3} + \rho_3 $$
+        <p>である。次に $\alpha_2$ の上限を求めるため、2つの部分空間 $V_2' = \mathrm{span}(v_2, v_3)$ と $W_2' = \mathrm{span}(u_1, u_2)$ を考える。先ほどと同様に次元公式より $\dim(V_2' \cap W_2') \ge 1$ であるため、交わりの中に単位ベクトル $w$ を取れる。</p>
+        <ul>
+            <li>$w \in V_2'$ より $w^T A w = \alpha_2 c_2^2 + \alpha_3 c_3^2 \ge \alpha_2$</li>
+            <li>$w \in W_2'$ より $w^T B w = \rho_1 d_1^2 + \rho_2 d_2^2 \le \rho_2$</li>
+        </ul>
+        <p>また $w^T D w \le 1$ であるため、</p>
+        $$ \alpha_2 \le w^T A w = w^T D w + w^T B w \le 1 + \rho_2 $$
+        <p>が得られる。これも解答例1と同様の代数計算に持ち込めば、 $\alpha_2  <  \alpha_3$ が示される。$\blacksquare$</p>
+    </div>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ul>
+            <li>Horn, R. A., & Johnson, C. R. (2012). <em>Matrix Analysis</em> (2nd ed.). Cambridge University Press. 
+                <a href="https://doi.org/10.1017/CBO9781139020411" target="_blank" rel="noopener noreferrer">https://doi.org/10.1017/CBO9781139020411</a> <br>
+                (第4章においてHermite行列の固有値、Courant-Fischerのミニマックス定理、Weylの不等式に関する詳細な記述がある)</li>
+            <li>Weyl, H. (1912). Das asymptotische Verteilungsgesetz der Eigenwerte linearer partieller Differentialgleichungen. <em>Mathematische Annalen</em>, 71(4), 441-479. 
+                <a href="https://doi.org/10.1007/BF01456804" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/BF01456804</a> <br>
+                (Weylの不等式が最初に論じられた歴史的文献)</li>
+            <li>Min-max theorem. (n.d.). In <em>Wikipedia</em>. Retrieved August 25, 2026, from 
+                <a href="https://en.wikipedia.org/wiki/Min-max_theorem" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Min-max_theorem</a> <br>
+                (Courant-Fischerの定理の概要とレイリー商に関するオンライン上の参考資料)</li>
+        </ul>
+    </div>
+</body>
+</html>

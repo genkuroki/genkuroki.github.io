@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="完全な自己完結型HTMLの包括的ガイドとテンプレート。省略のない定義と具体例を多数収録。">
+    <title>完全版：自己完結型HTML実装ガイドとリファレンス</title>
+    <style>
+        /* =========================================
+           1. CSS変数（カスタムプロパティ）の定義
+           ========================================= */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #e74c3c;
+            --background-light: #f9fbfd;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --code-bg: #2d2d2d;
+            --code-text: #f8f8f2;
+            --border-color: #e0e6ed;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 32px;
+            --font-main: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+        }
+
+        /* =========================================
+           2. リセットと基本設定
+           ========================================= */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-main);
+            background-color: var(--background-light);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* =========================================
+           3. レイアウトとタイポグラフィ
+           ========================================= */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            border-left: 5px solid var(--accent-color);
+            padding-left: var(--spacing-md);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            margin-top: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================================
+           4. コンポーネントスタイル
+           ========================================= */
+        .definition-box {
+            background-color: #e8f4f8;
+            border: 1px solid #bce0fd;
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .definition-box h4 {
+            color: #2980b9;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .example-box {
+            background-color: #fcfcfc;
+            border: 1px dashed #cccccc;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            border-radius: 4px;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: var(--spacing-md);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--spacing-md);
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        /* インタラクティブ要素（JSで制御） */
+        .tab-container {
+            display: flex;
+            margin-bottom: var(--spacing-sm);
+        }
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab-button.active {
+            background-color: white;
+            font-weight: bold;
+            border-bottom: 2px solid white;
+            margin-bottom: -1px;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>完全版：自己完結型HTML実装ガイドとリファレンス</h1>
+            <p>このドキュメントは、外部ファイル（CSS、JavaScript、画像）に依存せず、単一のHTMLファイルとして完全に機能する「自己完結型（Self-contained）」の構造を持つよう設計されています。省略されがちな定義や具体例を網羅しています。</p>
+        </header>
+
+        <nav role="navigation" aria-label="目次">
+            <h2>目次</h2>
+            <ul>
+                <li><a href="#section-definitions">1. 必須となる諸定義と前提知識</a></li>
+                <li><a href="#section-semantics">2. セマンティックHTMLとアクセシビリティの完全実装</a></li>
+                <li><a href="#section-self-contained">3. 自己完結性のための技術（Base64, インライン展開）</a></li>
+                <li><a href="#section-interactive">4. インタラクティブな実例（JavaScript）</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="section-definitions">
+                <h2>1. 必須となる諸定義と前提知識</h2>
+                <p>自己完結型HTMLを記述する上で、曖昧にされがちな用語と仕様を厳密に定義します。</p>
+
+                <div class="definition-box">
+                    <h4>自己完結型HTML（Self-contained HTML）とは</h4>
+                    <p>外部のリソース（<code>&lt;link rel="stylesheet" href="..."&gt;</code> や <code>&lt;script src="..."&gt;</code>、外部画像へのURL）を一切使用せず、ネットワーク接続がないオフライン環境でも、レイアウト、スタイル、インタラクション、メディアのすべてが意図通りにレンダリングされるHTMLドキュメントのこと。</p>
+                </div>
+
+                <h3>1.1 必須のメタデータ定義</h3>
+                <p>HTMLの<code>&lt;head&gt;</code>内には、文字化けやレイアウト崩れを防ぐための完全なメタデータが必要です。</p>
+                <div class="code-block">
+&lt;!-- 常にHTML5の宣言を使用 --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;!-- 言語指定はスクリーンリーダーの読み上げに必須 --&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;!-- 文字エンコーディングは文書の先頭1024バイト以内に配置 --&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;!-- モバイル対応（レスポンシブ）のためのビューポート設定 --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;!-- SEOとアクセシビリティのためのタイトル（具体的に） --&gt;
+    &lt;title&gt;具体的なページタイトル&lt;/title&gt;
+&lt;/head&gt;
+                </div>
+            </section>
+
+            <section id="section-semantics">
+                <h2>2. セマンティックHTMLとアクセシビリティの完全実装</h2>
+                <p>視覚的な表現だけでなく、文書の「意味」を機械（検索エンジンや支援技術）に正しく伝えるためのマークアップです。</p>
+
+                <h3>2.1 主要なセマンティックタグの使い分け（具体例）</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>タグ</th>
+                            <th>厳密な定義と役割</th>
+                            <th>よくある省略・誤用と正しい例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>&lt;article&gt;</code></td>
+                            <td>それ単体で独立して完結するコンテンツ（ブログ記事、ニュース記事など）。</td>
+                            <td>誤: 単なるレイアウト枠として使う。<br>正: 内部に見出し(h1-h6)を持ち、RSSで配信可能な単位にする。</td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;section&gt;</code></td>
+                            <td>テーマ性のあるコンテンツのまとまり。必ず見出しを伴うべき。</td>
+                            <td>誤: スタイリングのためのdivの代わりに使う。<br>正: <code>&lt;section&gt;&lt;h2&gt;章タイトル&lt;/h2&gt;...&lt;/section&gt;</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;aside&gt;</code></td>
+                            <td>メインコンテンツと関連性が薄い、または補足的な情報（サイドバー、広告など）。</td>
+                            <td>本文の理解に不可欠な情報を入れないこと。</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>2.2 アクセシビリティ（WAI-ARIA）の具体例</h3>
+                <p>視覚障害者などの支援技術に対する配慮（WAI-ARIA）の具体的な実装例です。属性を省略してはいけません。</p>
+                <div class="example-box">
+                    <h4>アイコン付きボタンの実装例（ARIA対応）</h4>
+                    <p>視覚的には「×」アイコンだけのボタンでも、スクリーンリーダーには「閉じる」と伝わるようにします。</p>
+                    <button aria-label="メニューを閉じる" style="padding: 10px; font-size: 20px; cursor: pointer;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="code-block">
+&lt;!-- aria-labelで意味を伝え、aria-hidden="true"で装飾アイコンを読み上げから除外 --&gt;
+&lt;button aria-label="メニューを閉じる"&gt;
+    &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+&lt;/button&gt;
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-self-contained">
+                <h2>3. 自己完結性のための技術（Base64, インライン展開）</h2>
+                
+                <h3>3.1 画像のBase64エンコード埋め込み</h3>
+                <p>外部の画像ファイル（.png, .jpgなど）をHTMLファイル内に直接埋め込む手法です。データURIスキームを使用します。</p>
+                <div class="definition-box">
+                    <h4>Data URI スキームの構文</h4>
+                    <p><code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</code></p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>実例：小さな赤い点の画像（Base64）</h4>
+                    <!-- 1x1の赤いピクセルのBase64 -->
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==" alt="デモ用の赤い点" style="width: 50px; height: 50px; border: 1px solid black;">
+                    <p>上記の画像は外部通信を行わず、以下のコードで表示されています。</p>
+                    <div class="code-block">
+&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==" alt="デモ用の赤い点"&gt;
+                    </div>
+                </div>
+
+                <h3>3.2 SVGのインライン記述</h3>
+                <p>ベクター画像はBase64に変換するよりも、SVGコードを直接HTMLに記述する方が、CSSで色を変更できるなどの利点があります。</p>
+                <div class="example-box">
+                    <h4>実例：インラインSVGによるチェックマーク</h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <div class="code-block">
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"&gt;
+    &lt;polyline points="20 6 9 17 4 12"&gt;&lt;/polyline&gt;
+&lt;/svg&gt;
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-interactive">
+                <h2>4. インタラクティブな実例（JavaScript）</h2>
+                <p>自己完結型ファイル内で、DOM操作を行うJavaScriptの完全な実例です。タブ切り替えUIを実装します。</p>
+
+                <div class="example-box">
+                    <h4>タブUIのデモンストレーション</h4>
+                    <div class="tab-container" role="tablist">
+                        <button class="tab-button active" role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1">概要</button>
+                        <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2">詳細仕様</button>
+                        <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-3" id="tab-3">注意事項</button>
+                    </div>
+                    <div class="tab-content active" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+                        <p>ここは「概要」のパネルです。JavaScriptによってクラスが切り替わり、表示制御が行われています。</p>
+                    </div>
+                    <div class="tab-content" role="tabpanel" id="panel-2" aria-labelledby="tab-2">
+                        <p>ここは「詳細仕様」のパネルです。アクセシビリティを考慮し、<code>role="tabpanel"</code>や<code>aria-labelledby</code>が適切に設定されています。</p>
+                    </div>
+                    <div class="tab-content" role="tabpanel" id="panel-3" aria-labelledby="tab-3">
+                        <p>ここは「注意事項」のパネルです。インラインスクリプトによって制御されています。</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p><small>&copy; 2026 Comprehensive HTML Guide. 全てのコードはMITライセンスに基づき自由に使用可能です。</small></p>
+        </footer>
+    </div>
+
+    <script>
+        /* =========================================
+           インラインJavaScript: タブ制御の実装
+           ========================================= */
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const panels = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // 1. 全てのタブからアクティブ状態を解除
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    
+                    // 2. 全てのパネルを非表示
+                    panels.forEach(p => {
+                        p.classList.remove('active');
+                    });
+
+                    // 3. クリックされたタブをアクティブにする
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+
+                    // 4. 対応するパネルを表示する
+                    const panelId = tab.getAttribute('aria-controls');
+                    const targetPanel = document.getElementById(panelId);
+                    if(targetPanel) {
+                        targetPanel.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
