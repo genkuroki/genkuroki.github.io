@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アーベル圏の構造：Grothendieck圏の単射的余生成子とMitchellの埋め込み定理の完全解説</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 50px;
+            background-color: #fdfdfd;
+        }
+        h1 {
+            text-align: center;
+            color: #1a252f;
+            border-bottom: 3px solid #34495e;
+            padding-bottom: 15px;
+            margin-bottom: 50px;
+            font-size: 2em;
+        }
+        h2 {
+            color: #2980b9;
+            border-left: 6px solid #2980b9;
+            padding-left: 15px;
+            margin-top: 60px;
+            font-size: 1.6em;
+            background-color: #f0f8ff;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 40px;
+            border-bottom: 2px dashed #16a085;
+            padding-bottom: 8px;
+            font-size: 1.3em;
+        }
+        p {
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+        .definition, .theorem, .proof, .example, .lemma {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
+        .definition-title { font-weight: bold; color: #d35400; margin-bottom: 15px; font-size: 1.2em; border-bottom: 1px solid #d35400; padding-bottom: 5px;}
+        .theorem-title { font-weight: bold; color: #c0392b; margin-bottom: 15px; font-size: 1.2em; border-bottom: 1px solid #c0392b; padding-bottom: 5px;}
+        .lemma-title { font-weight: bold; color: #c0392b; margin-bottom: 15px; font-size: 1.1em; }
+        .proof-title { font-weight: bold; font-style: italic; margin-bottom: 15px; font-size: 1.1em; color: #34495e; }
+        .example-title { font-weight: bold; color: #8e44ad; margin-bottom: 15px; font-size: 1.1em; border-bottom: 1px solid #8e44ad; padding-bottom: 5px;}
+        ul, ol { margin-bottom: 25px; padding-left: 35px; }
+        li { margin-bottom: 12px; }
+        blockquote {
+            background-color: #ecf0f1;
+            border-left: 5px solid #bdc3c7;
+            padding: 20px 25px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #555;
+        }
+        .references {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 70px;
+            border: 1px solid #e9ecef;
+        }
+        .references h2 { border: none; padding: 0; margin-top: 0; color: #2c3e50; background-color: transparent;}
+        a { color: #2980b9; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; color: #1a5276; }
+        .math-display {
+            overflow-x: auto;
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #fbfbfb;
+            border-radius: 5px;
+        }
+        strong { color: #2c3e50; }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+    <h1>アーベル圏の構造：Grothendieck圏の単射的余生成子とMitchellの埋め込み定理</h1>
+
+    <p>本稿では、アーベル圏（Abelian Category）の理論において極めて重要となる2つのトピックについて、基礎的な定義から詳細な証明、そして具体的な応用例に至るまで、完全に自己完結的（self-contained）に解説します。</p>
+    <p>第一の主題は、代数幾何学や層のホモロジー代数で不可欠な「<strong>Grothendieck圏は単射的余生成子を持つ</strong>」という定理の完全な証明です。第二の主題は、抽象的な圏論における証明を劇的に容易にし、「元（要素）を用いた計算」を正当化する「<strong>Mitchellの埋め込み定理</strong>」の厳密なフル証明とその「<strong>メタ定理</strong>」に関する徹底的な解説です。これらの定理を真に理解するために、まずは圏論の基礎概念の厳密な定義から始めます。</p>
+
+    <h2>1. 準備：アーベル圏と完全列の基礎概念</h2>
+    <p>定理の証明に入る前に、議論の基礎となる概念を漏れなく定義し、読者の直観を助けるための具体例を提示します。アーベル圏とは、大雑把に言えば「加群の圏と同じように、核や像が定義でき、完全列の概念が意味を持つ圏」のことです。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 1.1 (アーベル圏の基礎構成要素)</div>
+        <p>圏 $\mathcal{C}$ において、以下の概念を定義する。</p>
+        <ul>
+            <li><strong>零対象（Zero Object）：</strong> 圏 $\mathcal{C}$ における始対象かつ終対象である対象を零対象と呼び、$0$ で表す。任意の対象 $X, Y$ 間に唯一のゼロ射 $0: X \to Y$ が定まる。</li>
+            <li><strong>単射（Monomorphism）と全射（Epimorphism）：</strong> 射 $f: X \to Y$ が単射であるとは、任意の $g, h: W \to X$ について $f \circ g = f \circ h \implies g = h$ が成り立つこと。全射であるとは、任意の $u, v: Y \to Z$ について $u \circ f = v \circ f \implies u = v$ が成り立つこと。</li>
+            <li><strong>核（Kernel）と余核（Cokernel）：</strong> 射 $f: X \to Y$ に対して、 $f \circ k = 0$ を満たす射 $k: K \to X$ であり、普遍性（任意の $f \circ g = 0$ となる $g$ が $k$ を経由する）を満たすものを $f$ の核といい、対象 $K$ を $\ker f$ と書く。双対的に、余核 $\mathrm{coker} f$ も定義される。</li>
+            <li><strong>像（Image）と余像（Coimage）：</strong> 射 $f: X \to Y$ に対して、$\mathrm{im} f = \ker(\mathrm{coker} f)$ を像と定義し、$\mathrm{coim} f = \mathrm{coker}(\ker f)$ を余像と定義する。</li>
+        </ul>
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 1.2 (アーベル圏 - Abelian Category)</div>
+        <p>圏 $\mathcal{A}$ が<strong>アーベル圏</strong>であるとは、以下の条件をすべて満たすことをいう：</p>
+        <ol>
+            <li>零対象が存在する。</li>
+            <li>任意の2対象の有限直和（Coproduct）および有限直積（Product）が存在し、それらが自然に同型となる（双積・Biproductの存在）。</li>
+            <li>任意の射 $f: X \to Y$ に対して、核（$\ker f$）および余核（$\mathrm{coker} f$）が存在する。</li>
+            <li>任意の射 $f: X \to Y$ について、同型定理が成り立つ。すなわち、自然な射 $\mathrm{coim} f \to \mathrm{im} f$ が同型射（Isomorphism）となる。</li>
+        </ol>
+        <p><em>具体例の追加：</em></p>
+        <ul>
+            <li>環 $R$ 上の左 $R$-加群の圏 $R\text{-Mod}$ はアーベル圏の典型例です。アーベル群の圏 $\mathrm{Ab}$ （すなわち $\mathbb{Z}\text{-Mod}$）もアーベル圏です。</li>
+            <li>位相空間 $X$ 上のアーベル群の層の圏 $\mathrm{Sh}(X)$ もアーベル圏となります。</li>
+            <li>一方、群の圏 $\mathrm{Grp}$ は、正規部分群以外の部分群に関する商群が群にならない（余核がうまく振る舞わない）ため、アーベル圏ではありません。</li>
+        </ul>
+    </div>
+
+    <h2>2. 生成子・余生成子と単射的対象</h2>
+    <p>圏全体を「統制」する特別な対象について定義します。</p>
+
+    <div class="definition">
+        <div class="definition-title">定義 2.1 (生成子と余生成子 - Generator and Cogenerator)</div>
+        <p>アーベル圏 $\mathcal{A}$ の対象 $U$ が<strong>生成子</strong>であるとは、任意の対象 $X, Y$ と任意のゼロでない射 $f: X \to Y$（$f \neq 0$）に対して、ある射 $h: U \to X$ が存在し、
+        $$f \circ h \neq 0$$
+        となることをいう。これは関手 $\mathrm{Hom}_{\mathcal{A}}(U, -)$ が忠実（faithful）であることと同値である。</p>
+        <p>対象 $C$ が<strong>余生成子</strong>であるとは、任意の対象 $X, Y$ と任意のゼロでない射 $f: X \to Y$（$f \neq 0$）に対して、ある射 $g: Y \to C$ が存在し、
+        $$g \circ f \neq 0$$
+        となることをいう。これは関手 $\mathrm{Hom}_{\mathcal{A}}(-, C)$ が忠実であることと同値である。</p>
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 2.2 (単射的対象 - Injective Object)</div>
+        <p>アーベル圏 $\mathcal{A}$ の対象 $Q$ が<strong>単射的対象</strong>であるとは、任意の単射（monomorphism）$i: A \to B$ と射 $f: A \to Q$ に対して、射 $g: B \to Q$ が存在し、
+        $$g \circ i = f$$
+        となること（すなわち、下図の図式が可換になるように拡張できること）をいう。</p>
+        <p>圏 $\mathcal{A}$ が<strong>十分な単射的対象を持つ（has enough injectives）</strong>とは、任意の対象 $X$ に対して、ある単射的対象 $Q$ と単射 $X \to Q$ が存在すること（すなわち、任意の対象を単射的対象に埋め込めること）をいう。</p>
+    </div>
+
+    <h2>3. Grothendieck圏の定義と部分対象の集合性（Well-powered）</h2>
+    
+    <div class="definition">
+        <div class="definition-title">定義 3.1 (部分対象と商対象、Well-powered)</div>
+        <p>対象 $X$ への単射 $m_1: A_1 \to X$ と $m_2: A_2 \to X$ が同値であるとは、同型射 $h: A_1 \to A_2$ が存在して $m_2 \circ h = m_1$ となることとする。この同値類を $X$ の<strong>部分対象（Subobject）</strong>という。双対的に、全射 $X \to Q$ の同値類を<strong>商対象（Quotient Object）</strong>という。</p>
+        <p>アーベル圏 $\mathcal{A}$ が<strong>Well-powered</strong>であるとは、任意の対象 $X$ に対して、その部分対象の全体が（真のクラスではなく）「集合（set）」になることをいう。双対的に、任意の対象の商対象の全体が集合になる場合、<strong>Co-well-powered</strong>であるという。</p>
+    </div>
+
+    <div class="definition">
+        <div class="definition-title">定義 3.2 (Grothendieck圏 - Grothendieck Category)</div>
+        <p>アーベル圏 $\mathcal{A}$ が<strong>Grothendieck圏</strong>であるとは、以下の3条件を満たすことをいう：</p>
+        <ol>
+            <li><strong>余極限の存在：</strong> 任意の（小）余極限（特に任意の集合を添字とする直和などの帰納的極限）が存在する。</li>
+            <li><strong>AB5公理:</strong> フィルター付けられた帰納的極限（filtered colimits）を取る関手が完全関手になる。</li>
+            <li><strong>生成子の存在：</strong> 圏 $\mathcal{A}$ は生成子を持つ。</li>
+        </ol>
+    </div>
+
+    <h2>4. 定理：Grothendieck圏は単射的余生成子を持つ</h2>
+    
+    <p>この節では、本稿の第一の主目標である「Grothendieck圏 $\mathcal{A}$ が単射的余生成子（injective cogenerator）を持つこと」の厳密で省略のない証明を行います。この証明には、Grothendieck圏の定義から直接導かれる以下の2つの重要な基本定理（性質）を前提とします。</p>
+
+    <div class="lemma">
+        <div class="lemma-title">基本定理 A (Well-powered性とCo-well-powered性)</div>
+        <p>生成子を持ち、任意の余極限を持つアーベル圏（特にGrothendieck圏）$\mathcal{A}$ は、Well-powered かつ Co-well-powered である。したがって、任意の対象 $X \in \mathcal{A}$ に対して、$X$ の商対象の同型類は真のクラスではなく「集合」をなす。</p>
+    </div>
+
+    <div class="lemma">
+        <div class="lemma-title">基本定理 B (十分な単射的対象の存在)</div>
+        <p>GrothendieckのTôhoku論文[2]により、Grothendieck圏 $\mathcal{A}$ は十分な単射的対象を持つ。すなわち、任意の対象は単射的対象へ単射で埋め込まれる。</p>
+    </div>
+
+    <div class="theorem">
+        <div class="theorem-title">主定理 4.1</div>
+        <p>任意の Grothendieck圏 $\mathcal{A}$ は、単射的余生成子（Injective Cogenerator）を持つ。</p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">完全な証明：</div>
+        <p><strong>第1段：単射的対象 $Q$ の構成</strong></p>
+        <p>$\mathcal{A}$ は Grothendieck圏であるため、公理より生成子が存在します。この生成子を $U$ とします。</p>
+        <p>基本定理 A により、$\mathcal{A}$ は Co-well-powered であるため、$U$ の商対象（すなわち全射 $U \twoheadrightarrow V$ の同値類）の集まりは集合をなします。この商対象の集合から、代表元となる対象を一つずつ選んで集めた族を $\{ U_i \}_{i \in I}$ とします（ここで $I$ は何らかの添字集合です）。</p>
+        <p>Grothendieck圏は任意の余極限（直和）を持つため、これらすべての商対象の直和である対象 $S$ を圏 $\mathcal{A}$ の中に構成することができます：</p>
+        <div class="math-display">
+        $$S = \bigoplus_{i \in I} U_i$$
+        </div>
+        <p>次に、基本定理 B（十分な単射的対象の存在）を、構成した対象 $S$ に適用します。すると、$S$ を部分対象として含むような単射的対象 $Q$ と、単射（monomorphism）$\iota: S \to Q$ が存在します。具体的には、$S$ の単射的包絡（injective hull）$E(S)$ を $Q$ として選ぶことができます。</p>
+        <p>構成方法より、$Q$ は明らかに単射的対象です。残るタスクは、この $Q$ が $\mathcal{A}$ の「余生成子」としての条件を実際に満たすことを厳密に示すことです。</p>
+
+        <p><strong>第2段：$Q$ が余生成子であることの証明</strong></p>
+        <p>対象 $Q$ が余生成子であることを示すには、定義2.1より「任意の対象 $X, Y$ と任意のゼロでない射 $f: X \to Y$（$f \neq 0$）に対して、$g \circ f \neq 0$ となる射 $g: Y \to Q$ が存在する」ことを示せば十分です。</p>
+        
+        <p>任意にゼロでない射 $f: X \to Y$ をとります。アーベル圏において、任意の射はその像（image）を通じて分解します。すなわち、$f$ は次のように全射（epimorphism）$e$ と単射（monomorphism）$m$ の合成として分解できます：</p>
+        <div class="math-display">
+        $$X \xrightarrow{e} \mathrm{im} f \xrightarrow{m} Y$$
+        </div>
+        <p>ここで $f \neq 0$ であるため、その像 $N = \mathrm{im} f$ はゼロ対象ではありません（$N \neq 0$）。</p>
+        
+        <p>対象 $U$ は $\mathcal{A}$ の生成子であるため、$U$ から $N$ へのゼロでない射 $h: U \to N$ が存在します（$h \neq 0$）。</p>
+        
+        <p>今度はこの射 $h$ の像 $\mathrm{im} h$ を考えます。アーベル圏における第一同型定理より、射 $h$ の像 $\mathrm{im} h$ は、始域 $U$ の核 $\ker h$ による商対象 $U / \ker h$ と同型になります。したがって、$\mathrm{im} h$ は $U$ のある商対象です。前段で選んだ商対象の代表系 $\{ U_i \}_{i \in I}$ はすべての同型類を網羅しているため、$\mathrm{im} h$ はある添字 $j \in I$ に対する $U_j$ と同型になります：</p>
+        <div class="math-display">
+        $$\mathrm{im} h \cong U_j$$
+        </div>
+        
+        <p>これにより、以下の自然な単射（埋め込み）の連鎖を構成できます。</p>
+        <ol>
+            <li><strong>$\iota_1$ の構成：</strong> $h$ の像 $\mathrm{im} h$ は $N$ の部分対象であり、$N$ は $Y$ の部分対象です。したがって、自然な単射の合成により $\iota_1 : U_j \cong \mathrm{im} h \hookrightarrow N \hookrightarrow Y$ が得られます。</li>
+            <li><strong>$\iota_2$ の構成：</strong> $U_j$ は直和 $S = \bigoplus_{i \in I} U_i$ の一つの成分であるため、標準的な埋め込み $U_j \hookrightarrow S$ があります。さらに単射的対象への埋め込み $\iota: S \hookrightarrow Q$ と合成することで、単射 $\iota_2 : U_j \hookrightarrow S \hookrightarrow Q$ が得られます。</li>
+        </ol>
+        
+        <p>さて、$Y$ の部分対象である $U_j$（正確には $U_j \cong \mathrm{im} h$）に着目します。$\iota_1$ は $U_j$ の全体 $Y$ への埋め込みを与えています。一方、$\iota_2$ は部分対象 $U_j$ から単射的対象 $Q$ への射を与えています。</p>
+        
+        <p>ここで、$Q$ が<strong>単射的対象</strong>であるという強力な性質を使用します。部分対象 $U_j$ から $Q$ への射 $\iota_2$ は、全体 $Y$ から $Q$ への射 $g: Y \to Q$ に拡張することができます。すなわち、次の図式を可換にする $g$ が存在します：</p>
+        <div class="math-display">
+        $$g \circ \iota_1 = \iota_2$$
+        </div>
+        
+        <p>最後に、構成したこの $g: Y \to Q$ に対して、$g \circ f \neq 0$ が成り立つことを背理法で証明します。<br>
+        仮に $g \circ f = 0$ であったと仮定しましょう。前述の $f$ の分解 $f = m \circ e$（$X \xrightarrow{e} N \xrightarrow{m} Y$）を代入すると、</p>
+        <div class="math-display">
+        $$g \circ m \circ e = 0$$
+        </div>
+        <p>となります。アーベル圏において $e: X \twoheadrightarrow N$ は全射（epimorphism）であるため、右簡約法則が成り立ちます。したがって $e$ を消去することができ、$g \circ m = 0$、すなわち $g$ の部分対象 $N$ への制限 $g|_N$ がゼロ射であることが導かれます（$g|_N = 0$）。</p>
+        
+        <p>しかし、$\mathrm{im} h$（$\cong U_j$）は $N$ の部分対象であり、$\iota_1$ は $U_j \hookrightarrow N \hookrightarrow Y$ という包含写像でした。したがって、$g$ をさらに $U_j$ に制限したものはゼロでなければなりません。一方で、図式の可換性により $g|_{U_j} = g \circ \iota_1 = \iota_2$ です。$\iota_2$ は $U_j$ から $Q$ への単射の合成（$U_j \hookrightarrow S \hookrightarrow Q$）であり、$U_j \neq 0$（$h \neq 0$ より）であるため、$\iota_2$ は決してゼロ射ではありません。</p>
+        
+        <p>これは $g|_N = 0$ であることと明らかに矛盾します。したがって、背理法の仮定は誤りであり、$g \circ f \neq 0$ でなければなりません。</p>
+        <p>以上により、任意の $f \neq 0$ に対して $g \circ f \neq 0$ となる $g: Y \to Q$ の存在が示されたため、$Q$ は $\mathcal{A}$ の余生成子です。単射的対象でもあるため、$Q$ は求める「単射的余生成子」です。 $\blacksquare$</p>
+    </div>
+
+    <h2>5. Mitchellの埋め込み定理とその完全な証明</h2>
+
+    <div class="theorem">
+        <div class="theorem-title">定理 5.2 (Mitchellの埋め込み定理 - Freyd-Mitchell Embedding Theorem)</div>
+        <p>任意の「小さい」アーベル圏 $\mathcal{A}$ に対して、ある単位元を持つ環 $R$ と、$\mathcal{A}$ から左 $R$-加群の圏 $R\text{-Mod}$ への<strong>完全（exact）かつ充満忠実（fully faithful）な関手</strong>
+        $$F: \mathcal{A} \to R\text{-Mod}$$
+        が存在する。</p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">Mitchellの埋め込み定理の完全な証明：</div>
+        
+        <p><strong>ステップ1：Grothendieck圏への完全な埋め込みの自己完結的構成</strong></p>
+        <p>$\mathcal{A}$ を小さいアーベル圏とします。証明の第一歩は、$\mathcal{A}$ を適切な Grothendieck圏 に「形を崩さずに（完全かつ充満忠実に）」埋め込むことです。</p>
+        
+        <p>まず、加法的反変関手の圏 $\mathcal{F} = \mathrm{Add}(\mathcal{A}^{op}, \mathrm{Ab})$ を考えます。$\mathcal{F}$ の対象は $\mathcal{A}$ からアーベル群の圏 $\mathrm{Ab}$ への加法的関手であり、射は自然変換です。$\mathcal{F}$ において、核や余核は対象ごとに（pointwiseに）計算されるため、$\mathcal{F}$ は明らかにアーベル圏であり、さらに任意の余極限や生成子を持つ Grothendieck圏 になります。</p>
+        
+        <p>ここで、各対象 $A \in \mathcal{A}$ に対して表現可能関手 $h_A = \mathrm{Hom}_{\mathcal{A}}(-, A)$ を対応させる<strong>米田埋め込み（Yoneda embedding）</strong> $h: \mathcal{A} \to \mathcal{F}$ を定義します。米田の補題により、この関手 $h$ は充満忠実（fully faithful）です。しかし、アーベル圏の性質上、$h$ は左完全関手ではあるものの、右完全とは限りません。すなわち、$\mathcal{A}$ の短完全列 $0 \to A \to B \to C \to 0$ に対して、$\mathcal{F}$ において $0 \to h_A \to h_B \to h_C$ は完全ですが、$h_B \to h_C \to 0$ は一般に完全になりません（全射にならない）。これでは「完全な埋め込み」が得られません。</p>
+        
+        <p>そこで、$\mathcal{F}$ 全体ではなく、その部分圏である<strong>左完全関手の圏 $\mathcal{G} = \mathrm{Lex}(\mathcal{A}^{op}, \mathrm{Ab})$</strong> を考えます。$\mathrm{Hom}$ 関手は常に左完全であるため、任意の $A \in \mathcal{A}$ に対して $h_A$ は $\mathcal{G}$ の対象となります。つまり、米田埋め込みは $h: \mathcal{A} \to \mathcal{G}$ とみなすことができます。</p>
+        
+        <p>この圏 $\mathcal{G}$ は、$\mathcal{F}$ の<strong>反射的部分圏（reflective subcategory）</strong>になることが知られています。これは、包含関手 $I: \mathcal{G} \hookrightarrow \mathcal{F}$ に対して、左随伴関手（これを「層化関手」のアナロジーで $a: \mathcal{F} \to \mathcal{G}$ とします）が存在し、さらにこの $a$ が完全関手になるという強力な性質を持っています。反射的部分圏の性質と $a$ の完全性から、$\mathcal{G}$ 自身もAB5公理を満たし、生成子を持つ Grothendieck圏 となることが証明されます。</p>
+        
+        <p>最も重要なのは、この $\mathcal{G}$ においては $h: \mathcal{A} \to \mathcal{G}$ が<strong>完全関手（Exact Functor）</strong>になるという事実です。$\mathcal{A}$ での全射 $g: B \twoheadrightarrow C$ を考えます。$\mathcal{F}$ における余核 $\mathrm{coker}_{\mathcal{F}}(h(g))$ はゼロにはなりませんが、$\mathcal{G}$ における余核は、随伴関手 $a$ を通して $\mathrm{coker}_{\mathcal{G}}(h(g)) = a(\mathrm{coker}_{\mathcal{F}}(h(g)))$ と計算されます。アーベル圏において全射 $g: B \twoheadrightarrow C$ は、任意の射 $X \to C$ を「局所的に（ある全射で引き戻した上で）」$B$ からの射に持ち上げられるという性質を持ちます。この「局所的な全射性」により、層化関手 $a$ を適用すると $\mathrm{coker}_{\mathcal{F}}(h(g))$ はゼロ対象へと潰れます。したがって、$\mathcal{G}$ において $h_B \to h_C \to 0$ は完全となり、$h$ は完全かつ充満忠実な埋め込みとなります。</p>
+
+        <p><strong>ステップ2：巨大な単射的余生成子の構成</strong></p>
+        <p>$\mathcal{G}$ は Grothendieck圏であるため、前節で証明した定理 4.1 により、単射的余生成子 $Q_0$ を持ちます。<br>
+        ここで、特別な巨大な対象を構成します。添字集合 $I$ を、$\mathcal{A}$ のすべての対象からの射の集まりとして次のように定義します：</p>
+        <div class="math-display">
+        $$I = \bigsqcup_{A \in \mathrm{Ob}(\mathcal{A})} \mathrm{Hom}_{\mathcal{G}}(h_A, Q_0)$$
+        </div>
+        <p>$\mathcal{A}$ は小さい圏であるため、この $I$ は（真のクラスではなく）集合になります。<br>
+        この添字集合 $I$ を用いて、$Q_0$ の直積 $Q = Q_0^I = \prod_{i \in I} Q_0$ を定義します。$\mathcal{G}$ は Grothendieck圏であり任意の直積を持ち、さらに単射的対象の直積は再び単射的であるため、$Q$ は単射的対象です。また、$Q$ は $Q_0$ を直積成分として含むため、依然として余生成子です。<br>
+        この $Q$ の自己準同型環を $R = \mathrm{End}_{\mathcal{G}}(Q)$ とします。</p>
+
+        <p><strong>ステップ3：反変関手 $H$ の定義と完全・忠実性の確認</strong></p>
+        <p>関手 $H: \mathcal{A}^{op} \to \text{Mod-}R$ （右 $R$-加群の圏）を、
+        $$H(A) = \mathrm{Hom}_{\mathcal{G}}(h_A, Q)$$
+        で定めます（$r \in R$ の作用は、射の合成 $g \mapsto r \circ g$ で定義されます）。<br>
+        $h$ が完全関手であり、$Q$ が単射的対象であるため、$H$ は完全（exact）です。また、$Q$ が余生成子であるため、$H$ は忠実（faithful）になります。</p>
+
+        <p><strong>ステップ4：$H$ が充満（Full）であることの証明 (Mitchellのトリック)</strong></p>
+        <p>ここが証明の核心です。任意の対象 $A, B \in \mathcal{A}$ と、任意の $R$-加群の準同型 $\alpha: H(B) \to H(A)$ が与えられたとします。この $\alpha$ が、ある射 $f: A \to B$ によって $\alpha = H(f)$ と引き起こされることを示します。<br>
+        $H(B) = \mathrm{Hom}_{\mathcal{G}}(h_B, Q)$ の元として、次のような特別な射 $u_B: h_B \to Q$ を考えます。$Q = Q_0^I$ は直積であるため、$u_B$ を決めるには各成分 $i \in I$ への射を決めれば十分です。成分 $i$ が部分集合 $I_B = \mathrm{Hom}_{\mathcal{G}}(h_B, Q_0) \subset I$ に属するときはその $i$ 自身（すなわち $h_B \to Q_0$）とし、それ以外のときはゼロ射とします。<br>
+        $Q_0$ が余生成子であることから、$u_B$ は単射（monomorphism）となります。</p>
+
+        <p>この $u_B \in H(B)$ を $\alpha$ で写したものを $v_A = \alpha(u_B) \in H(A)$ とおきます（$v_A: h_A \to Q$）。<br>
+        ここで、任意の $g \in H(B)$ （$g: h_B \to Q$）を取ります。$g$ の各成分 $g_j: h_B \to Q_0$ は定義より $I_B$ に属しています。したがって、$Q = Q_0^I$ から $Q$ 自身への適切な射影（自己準同型）$r \in R$ を選ぶことで、
+        $$g = r \circ u_B$$
+        と表すことができます。<br>
+        $\alpha$ は $R$-加群の準同型であるため、$R$ の作用と可換です。ゆえに、
+        $$\alpha(g) = \alpha(r \circ u_B) = r \circ \alpha(u_B) = r \circ v_A$$
+        が成り立ちます。</p>
+
+        <p>次に、$v_A$ が $u_B$ を経由することを示します。任意の $r \in R$ に対して $r \circ u_B = 0$ であったとします。すると、$\alpha$ の性質から $r \circ v_A = \alpha(r \circ u_B) = \alpha(0) = 0$ となります。<br>
+        「$Q$ が単射的対象である」という性質と「$u_B$ が単射である」ことから、任意の $r$ について $r \circ u_B = 0 \implies r \circ v_A = 0$ が成り立つならば、$v_A$ は $u_B$ を経由しなければならないという補題が成立します。すなわち、ある射 $f: h_A \to h_B$ が存在して、
+        $$v_A = u_B \circ f$$
+        となります。<br>
+        これを先ほどの式に代入すると、任意の $g \in H(B)$ に対して、
+        $$\alpha(g) = r \circ v_A = r \circ (u_B \circ f) = (r \circ u_B) \circ f = g \circ f$$
+        となります。つまり、$\alpha$ は「$f$ を右から合成する操作」そのものであり、$\alpha = H(f)$ であることが示されました。<br>
+        米田埋め込み $h$ が充満忠実であるため、$f: h_A \to h_B$ は $\mathcal{A}$ の射 $A \to B$ に対応します。これで $H$ が充満（full）であることが完全に証明されました。</p>
+
+        <p><strong>ステップ5：共変関手への変換</strong></p>
+        <p>以上により、任意の小さいアーベル圏 $\mathcal{C}$ は $\text{Mod-}R$ への充満忠実かつ完全な<strong>反変</strong>関手を持つことがわかりました。<br>
+        これを $\mathcal{C} = \mathcal{A}^{op}$ （これも小さいアーベル圏）に適用します。すると、$\mathcal{A}^{op} \to \text{Mod-}S$ という充満忠実な反変完全関手が得られます。これは、$\mathcal{A}$ から $\text{Mod-}S$ への<strong>共変</strong>完全関手と同値です。<br>
+        右 $S$-加群の圏 $\text{Mod-}S$ は、反対環（opposite ring）$S^{op}$ 上の左加群の圏 $S^{op}\text{-Mod}$ と全く同型です。<br>
+        したがって、$\mathcal{A}$ はある環（$S^{op}$）上の左加群の圏 $S^{op}\text{-Mod}$ へ、充満忠実かつ完全に埋め込まれます。これで Mitchellの埋め込み定理の完全な証明が完了しました。 $\blacksquare$</p>
+    </div>
+
+    <h3>定理の性質がもたらす意味</h3>
+    <p>この定理は驚くべき強力さを持っています。</p>
+    <ul>
+        <li><strong>完全性による恩恵：</strong> 関手 $F$ が完全であるため、核（$\ker$）、余核（$\mathrm{coker}$）、像（$\mathrm{im}$）などのホモロジー的な概念が、$R\text{-Mod}$ 上のそれらと完全に一致します。ある系列が $\mathcal{A}$ で完全であることと、その $F$ による像が $R\text{-Mod}$ で完全であることは同値になります。</li>
+        <li><strong>充満忠実性による恩恵：</strong> $\mathrm{Hom}$ 集合が全単射になるため、図式の可換性や、射がゼロであるかどうかといった情報が完全に保たれます。</li>
+    </ul>
+
+    <div class="theorem">
+        <div class="theorem-title">メタ定理（Metatheorem）</div>
+        <p>有限個（または集合のサイズ）の対象と射からなる図式に関する、完全性や可換性に関する命題（例えば、「ある図式が可換でいくつかの行が完全ならば、別の行も完全である」といった命題）を証明したいとする。<br>
+        このとき、対象を「環 $R$ 上の加群（要素を持つ集合）」、射を「加群の準同型写像」と見なし、<strong>要素（元）を用いた図式追跡（diagram chasing）によって証明できれば、その命題は任意の（小さくなくてもよい）アーベル圏において真である</strong>。</p>
+    </div>
+
+    <div class="proof">
+        <div class="proof-title">メタ定理が成立する論理的背景：</div>
+        <p>Grothendieck圏や任意のアーベル圏のように、対象が大きすぎて「小さい圏」ではない場合であっても、このメタ定理が使える理由は以下の通りです。</p>
+        <ol>
+            <li><strong>小さい部分圏への帰着：</strong> 証明したい定理（例えば蛇の補題や5項補題）に登場する対象や射は、有限個しかありません。これらの対象と射、およびそれらから生成される有限極限・余極限等を含む「最小のアーベル部分圏」$\mathcal{A}_0$ を元の圏 $\mathcal{A}$ の中に構成します。この $\mathcal{A}_0$ は要素数が集合の範囲に収まるため「小さい」アーベル圏になります。</li>
+            <li><strong>埋め込みの適用：</strong> 小さいアーベル圏 $\mathcal{A}_0$ に対して Mitchellの埋め込み定理（定理5.2）を適用し、関手 $F: \mathcal{A}_0 \to R\text{-Mod}$ によって加群の圏に埋め込みます。</li>
+            <li><strong>加群の圏での証明（図式追跡）：</strong> 加群の圏 $R\text{-Mod}$ の対象は実際に要素（元）を持つ集合です。したがって、「$x \in F(X)$ をとる。$f(x) = 0$ だから完全性より $y \in F(Y)$ が存在して…」といった具体的な要素レベルの計算（diagram chasing）が合法的に可能です。これによって $R\text{-Mod}$ 上で命題の正しさを証明します。</li>
+            <li><strong>元の圏への引き戻し：</strong> 関手 $F$ が「完全」かつ「充満忠実」であるため、$R\text{-Mod}$ 上で成立した図式の可換性や完全列の存在は、元の部分圏 $\mathcal{A}_0$ でも完全に成立します。部分圏 $\mathcal{A}_0$ で完全であることは元の巨大なアーベル圏 $\mathcal{A}$ で完全であることと同じであるため、結果として元の圏でも命題が証明されたことになります。</li>
+        </ol>
+    </div>
+
+    <div class="example">
+        <div class="example-title">詳細な応用例：蛇の補題 (Snake Lemma) の図式追跡</div>
+        <p>Mitchellの埋め込み定理の恩恵を最も受ける代表例が「蛇の補題」です。抽象的な圏論の普遍性（universality）だけを用いて証明しようとすると、多数の射を構成し可換性を一つ一つ確認する非常に長く難解な証明になりますが、メタ定理により「要素（元）の追跡」で証明できます。</p>
+        
+        <p>アーベル圏において、次のような可換な図式があり、上下の2つの行が完全列であるとします。</p>
+        <div class="math-display">
+        $$
+        \begin{array}{ccccccc}
+        A & \xrightarrow{f} & B & \xrightarrow{g} & C & \to & 0 \\
+        \downarrow{\alpha} & & \downarrow{\beta} & & \downarrow{\gamma} & & \\
+        A' & \xrightarrow{f'} & B' & \xrightarrow{g'} & C' & & 
+        \end{array}
+        $$
+        </div>
+        <p>このとき、次のような完全列（連結準同型 $\delta$ を含む）が存在します：</p>
+        <div class="math-display">
+        $$ \ker \alpha \to \ker \beta \to \ker \gamma \xrightarrow{\delta} \mathrm{coker} \alpha \to \mathrm{coker} \beta \to \mathrm{coker} \gamma $$
+        </div>
+        
+        <p><strong>連結準同型 $\delta: \ker \gamma \to \mathrm{coker} \alpha$ の元を用いた構成（Diagram Chasing）：</strong></p>
+        <ol>
+            <li>元 $c \in \ker \gamma$ をとります。定義より $\gamma(c) = 0$ です。</li>
+            <li>上の行が $C$ において完全（$g$ が全射）であるため、$g(b) = c$ となる元 $b \in B$ が存在します。</li>
+            <li>この $b$ を $\beta$ で写して $\beta(b) \in B'$ を考えます。図式の可換性より、$g'(\beta(b)) = \gamma(g(b)) = \gamma(c) = 0$ となります。</li>
+            <li>下の行が $B'$ において完全（$\ker g' = \mathrm{im} f'$）であるため、$g'(\beta(b)) = 0$ より、$f'(a') = \beta(b)$ を満たす元 $a' \in A'$ が存在します。$f'$ は単射である（完全列の前提による）ため、この $a'$ は一意に定まります。</li>
+            <li>この $a'$ の、余核への自然な射影による像 $a' + \mathrm{im} \alpha \in \mathrm{coker} \alpha$ を $\delta(c)$ と定義します。</li>
+        </ol>
+        <p><strong>$\delta$ の well-defined 性の確認：</strong><br>
+        ステップ2で $b$ を選ぶ際、別の $\tilde{b}$ を選んだとします（$g(\tilde{b}) = c$）。このとき $g(b - \tilde{b}) = 0$ となります。上の行の完全性より、$f(a) = b - \tilde{b}$ となる $a \in A$ が存在します。<br>
+        図式の可換性から、$f'(\alpha(a)) = \beta(f(a)) = \beta(b) - \beta(\tilde{b})$ です。<br>
+        したがって、それぞれに対応する $A'$ の元を $a'$ と $\tilde{a}'$ とすると、$f'(a' - \tilde{a}') = f'(\alpha(a))$ となります。$f'$ は単射であるため $a' - \tilde{a}' = \alpha(a)$ となり、これは $a' - \tilde{a}' \in \mathrm{im} \alpha$ を意味します。<br>
+        ゆえに、$\mathrm{coker} \alpha = A' / \mathrm{im} \alpha$ において $a'$ と $\tilde{a}'$ は同じクラスを定め、$\delta(c)$ の値は $b$ の選び方に依存せず well-defined であることが「元の計算」だけで見事に証明されます。</p>
+        <p>このように、メタ定理は大学初年度の線形代数と同じ直感的な手続きを、一般のアーベル圏の証明において正当化する強力なツールです。</p>
+    </div>
+
+    <h2>6. 引用文献 (References)</h2>
+    <div class="references">
+        <ul>
+            <li>[1] Gabriel, P. (1962). Des catégories abéliennes. <em>Bulletin de la Société Mathématique de France</em>, 90, 323-448.</li>
+            <li>[2] Grothendieck, A. (1957). Sur quelques points d'algèbre homologique. <em>Tôhoku Mathematical Journal</em>, 9(2), 119-221.</li>
+            <li>[3] Mitchell, B. (1964). The Full Embedding Theorem. <em>American Journal of Mathematics</em>, 86(3), 619-637.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

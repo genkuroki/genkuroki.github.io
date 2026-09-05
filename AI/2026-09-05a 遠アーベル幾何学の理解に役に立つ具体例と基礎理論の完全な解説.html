@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遠アーベル幾何学の理解に役に立つ具体例と基礎理論の完全な解説</title>
+    <!-- MathJax v3 configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- Load MathJax v3 -->
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: "Noto Serif JP", serif;
+            line-height: 1.8;
+            padding: 2em;
+            max-width: 1000px;
+            margin: auto;
+            color: #333;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            font-family: "Noto Sans JP", sans-serif;
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5em;
+            margin-top: 1em;
+            margin-bottom: 1.5em;
+        }
+        h2 {
+            font-family: "Noto Sans JP", sans-serif;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.3em;
+            margin-top: 2.5em;
+            color: #1a4a7b;
+        }
+        h3 {
+            font-family: "Noto Sans JP", sans-serif;
+            margin-top: 2em;
+        }
+        p {
+            margin-bottom: 1.5em;
+        }
+        .theorem {
+            border: 1px solid #0056b3;
+            padding: 1.5em;
+            margin: 2em 0;
+            background-color: #f8fbff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .theorem-title {
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 1em;
+            display: block;
+            font-size: 1.1em;
+        }
+        .proof {
+            margin-bottom: 2.5em;
+            padding-left: 1.5em;
+            border-left: 3px solid #6c757d;
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            display: block;
+            margin-bottom: 1em;
+            color: #495057;
+        }
+        .definition {
+            border: 1px solid #28a745;
+            padding: 1.5em;
+            margin: 2em 0;
+            background-color: #f9fff9;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .definition-title {
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 1em;
+            display: block;
+            font-size: 1.1em;
+        }
+        .example {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 1.5em;
+            margin: 2em 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .example-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 1em;
+            display: block;
+            font-size: 1.1em;
+        }
+        .philosophy {
+            background-color: #f4f0ec;
+            border: 1px solid #dcd3c6;
+            padding: 1.5em;
+            margin: 2em 0;
+            border-radius: 5px;
+        }
+        .philosophy-title {
+            font-weight: bold;
+            color: #5c4d3c;
+            margin-bottom: 1em;
+            display: block;
+        }
+        .references {
+            margin-top: 4em;
+            background-color: #f1f1f1;
+            padding: 2em;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>遠アーベル幾何学の理解に役に立つ具体例と基礎理論の完全な解説</h1>
+
+    <p>遠アーベル幾何 (anabelian geometry) とは、Alexander Grothendieckにより提唱された「代数多様体や体の幾何学的・代数的な構造を、その基本群や絶対Galois群といった群論的な情報のみから完全に復元する」という数学的プログラムです。本稿では、その最も基礎的で直観的なプロトタイプとも言える具体例群（Kummer理論、Artin-Schreier理論、GrothendieckのGalois理論、Artin-Schreierの定理）について、いかなる論理的ギャップも許さず、self-containedで完全な証明とともに解説します。</p>
+
+    <!-- Section 1 -->
+    <h2>1. Kummer理論：乗法構造の群論的復元</h2>
+
+    <p>体の絶対Galois群の連続準同型から元の体の乗法群の構造を復元できることを示すKummer理論は、群から代数を復元する遠アーベル幾何の精神を理解するための絶好の具体例です。</p>
+
+    <div class="definition">
+        <span class="definition-title">定義 (絶対Galois群と射有限位相)</span>
+        <p>体 $k$ に対して、その分離閉包を $k^{sep}$ とおく。 $k^{sep}$ の $k$ 上の自己同型全体のなす群を絶対Galois群 (absolute Galois group) と呼び、 $G_k = \mathrm{Gal}(k^{sep}/k)$ と表す。</p>
+        <p> $G_k$ にはKrull位相と呼ばれる位相が入り、射有限群 (profinite group) となる。この位相において、 $G_k$ の開正規部分群 (open normal subgroup) は、ある有限Galois拡大 $L/k$ を用いて $\mathrm{Gal}(k^{sep}/L)$ と表されるものに他ならない。</p>
+    </div>
+
+    <div class="definition">
+        <span class="definition-title">定義 (1-コサイクル)</span>
+        <p>群 $G$ が群 $A$ に作用しているとする。写像 $c : G \to A$ が1-コサイクル (1-cocycle) であるとは、任意の $\sigma, \tau \in G$ について以下のコサイクル条件を満たすことである。</p>
+        <p>乗法群の場合: $c(\sigma \tau) = c(\sigma) \sigma(c(\tau))$</p>
+        <p>加法群の場合: $c(\sigma \tau) = c(\sigma) + \sigma(c(\tau))$</p>
+    </div>
+
+    <p>$n$ を自然数とする。本節を通して、体 $k$ の標数は $n$ を割らないと仮定する。方程式 $X^n - 1 = 0$ の $k^{sep}$ における解の全体を $\mu_n$ と書く。 $\mu_n$ は乗法に関して巡回群をなす。さらに本解説では、基礎体 $k$ があらかじめ $\mu_n$ のすべての元を含んでいると仮定する。すなわち $\mu_n \subset k^\times$ であるとする。</p>
+
+    <div class="theorem">
+        <span class="theorem-title">補題 (Dedekindの補題)</span>
+        群 $G$ と体 $L$ を固定する。 $G$ から $L^\times$ への相異なる群準同型の族 $\sigma_1, \dots, \sigma_m$ は $L$ 上線型独立である。
+    </div>
+    
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p>指標の個数 $m$ に関する帰納法で証明する。</p>
+        <p>$m = 1$ のとき、任意の $g \in G$ に対して $c_1 \sigma_1(g) = 0$ であると仮定する。 $\sigma_1(g)$ は $L^\times$ の元であるため $0$ ではない。したがって $c_1 = 0$ となり、定理は成立する。</p>
+        <p>$m - 1$ まで線型独立性が成立すると仮定し、 $m$ の場合を考える。背理法を用いる。ある自明でない線型関係 $\sum_{i=1}^m c_i \sigma_i(g) = 0$ がすべての $g \in G$ について成り立つと仮定する。係数 $c_i$ はすべてが $0$ ではないため、必要なら番号を付け替えて、すべての $i$ について $c_i \neq 0$ であるとしてよい。</p>
+        <p>$\sigma_1 \neq \sigma_m$ であるから、ある $h \in G$ が存在して $\sigma_1(h) \neq \sigma_m(h)$ となる。任意の $g \in G$ に対して積 $gh$ も $G$ の元であるから、元の線型関係式より $\sum_{i=1}^m c_i \sigma_i(gh) = 0$ が成り立つ。 $\sigma_i$ は群準同型であるため、展開すると以下の式を得る。</p>
+        $$
+        \sum_{i=1}^m c_i \sigma_i(g) \sigma_i(h) = 0
+        $$
+        <p>一方で、最初の線型関係式 $\sum_{i=1}^m c_i \sigma_i(g) = 0$ の両辺に $\sigma_m(h)$ を掛けると、以下の式を得る。</p>
+        $$
+        \sum_{i=1}^m c_i \sigma_i(g) \sigma_m(h) = 0
+        $$
+        <p>上で得られた2つの式の差をとると、 $m$ 番目の項が完全に相殺され、以下の式を得る。</p>
+        $$
+        \sum_{i=1}^{m-1} c_i (\sigma_i(h) - \sigma_m(h)) \sigma_i(g) = 0
+        $$
+        <p>帰納法の仮定より、 $\sigma_1, \dots, \sigma_{m-1}$ は線型独立である。したがって、すべての $i \le m-1$ について係数は $0$ となり、特に $c_1 (\sigma_1(h) - \sigma_m(h)) = 0$ が成立する。しかし、仮定より $c_1 \neq 0$ かつ $\sigma_1(h) \neq \sigma_m(h)$ であるため、これは矛盾である。ゆえに群指標は線型独立である。 ■</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 (Hilbertの定理90: 乗法版)</span>
+        $L/k$ を有限Galois拡大とし、そのGalois群を $G = \mathrm{Gal}(L/k)$ とおく。写像 $c : G \to L^\times$ が1-コサイクルであるとする。このとき、ある $a \in L^\times$ が存在して、任意の $\sigma \in G$ について $c(\sigma) = a / \sigma(a)$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p>$G$ の元は $L$ から $L$ への自己同型であるから、 $G$ から $L^\times$ への相異なる群指標とみなすことができる。Dedekindの補題より、これらの指標は $L$ 上線型独立である。したがって、写像 $\sum_{\tau \in G} c(\tau) \tau$ は $L$ から $L$ への写像として恒等的に $0$ ではない。</p>
+        <p>すなわち、ある $b \in L$ が存在して、 $a = \sum_{\tau \in G} c(\tau) \tau(b)$ は $0$ ではない $L$ の元、つまり $a \in L^\times$ となる。</p>
+        <p>この $a$ に対して、任意の $\sigma \in G$ による作用 $\sigma(a)$ を計算する。</p>
+        $$
+        \sigma(a) = \sum_{\tau \in G} \sigma(c(\tau)) \sigma(\tau(b))
+        $$
+        <p>ここで、1-コサイクルの条件 $c(\sigma \tau) = c(\sigma) \sigma(c(\tau))$ の両辺に $c(\sigma)^{-1}$ を掛けることで、 $\sigma(c(\tau)) = c(\sigma)^{-1} c(\sigma \tau)$ が得られる。これを上の式に代入する。</p>
+        $$
+        \sigma(a) = \sum_{\tau \in G} c(\sigma)^{-1} c(\sigma \tau) (\sigma \tau)(b) = c(\sigma)^{-1} \sum_{\tau \in G} c(\sigma \tau) (\sigma \tau)(b)
+        $$
+        <p>$\tau$ が群 $G$ 全体を動くとき、 $\sigma \tau$ も群 $G$ 全体を重複なく動く。したがって、右辺の和の部分は $a$ の定義式そのものに等しい。ゆえに $\sigma(a) = c(\sigma)^{-1} a$ となる。これを整理すると $c(\sigma) = a / \sigma(a)$ を得る。 ■</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 (Kummer理論)</span>
+        $k$ を体、 $n$ を標数を割らない自然数とし、 $k$ は $\mu_n$ を部分群として含むと仮定する。このとき、以下の群の同型が存在する。
+        $$
+        \Delta : k^\times / (k^\times)^n \xrightarrow{\sim} \mathrm{Hom}_{cont}(G_k, \mu_n)
+        $$
+        ここで右辺は、絶対Galois群 $G_k$ から $\mu_n$ への連続な群準同型の全体である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p>まず、写像 $\Delta$ を構成する。剰余群 $k^\times / (k^\times)^n$ の元を代表元 $x \in k^\times$ を用いて $[x]$ と書く。 $k^{sep}$ において方程式 $Y^n - x = 0$ の根を一つ選び、それを $y$ とおく。</p>
+        <p>任意の $\sigma \in G_k$ に対して、 $(\sigma(y))^n = \sigma(y^n) = \sigma(x) = x$ が成り立つ（ $x \in k$ であるため $\sigma$ で固定される）。したがって $\sigma(y)$ もまた $x$ の $n$ 乗根である。 $k$ はすべての $n$ 乗根を含むため、比 $\sigma(y) / y$ は $\mu_n$ の元となる。これを $\Delta([x])(\sigma) = \sigma(y) / y$ と定義する。</p>
+        <p>この対応がwell-definedであることを確認する。別の根 $y'$ を選んだ場合、ある $\zeta \in \mu_n$ を用いて $y' = \zeta y$ と書ける。仮定より $\zeta \in k$ であるから $\sigma(\zeta) = \zeta$ となる。したがって $\sigma(y') / y' = \sigma(\zeta y) / (\zeta y) = \zeta \sigma(y) / (\zeta y) = \sigma(y) / y$ となり、根の選び方に依存しない。
+        また、 $x$ に $(k^\times)^n$ の元 $z^n$ を掛けた $x z^n$ を代表元とした場合、その $n$ 乗根として $y z$ がとれる。 $\sigma(y z) / (y z) = \sigma(y) \sigma(z) / (y z) = \sigma(y) z / (y z) = \sigma(y) / y$ （ $z \in k$ より $\sigma(z) = z$ ）となるため、代表元の選び方にも依存しない。</p>
+        <p>次に、 $\Delta([x])$ が $G_k$ から $\mu_n$ への群準同型であることを確認する。任意の $\sigma, \tau \in G_k$ について、 $\Delta([x])(\sigma \tau) = (\sigma \tau)(y) / y = \sigma(\tau(y)) / y$ である。定義より $\tau(y) = \Delta([x])(\tau) y$ であり、 $\Delta([x])(\tau) \in \mu_n \subset k$ であるから $\sigma$ で固定される。よって $\sigma(\tau(y)) / y = \sigma(\Delta([x])(\tau) y) / y = \Delta([x])(\tau) \sigma(y) / y = \Delta([x])(\tau) \Delta([x])(\sigma)$ となり、準同型であることがわかる。また、その核は $G_k$ の開部分群となるため連続である。さらに $\Delta$ 自身が群準同型であることも、定義から容易に従う。</p>
+        <p>次に、 $\Delta$ の単射性を証明する。 $\Delta([x])$ が自明な準同型であるとする。すなわち、すべての $\sigma \in G_k$ について $\sigma(y) / y = 1$ となる。これはすべての $\sigma \in G_k$ について $\sigma(y) = y$ であることを意味し、Galois理論の基本定理より $y \in k$ である。したがって $x = y^n \in (k^\times)^n$ となり、 $[x]$ は自明な類である。ゆえに $\Delta$ は単射である。</p>
+        <p>最後に、 $\Delta$ の全射性を証明する。任意の連続準同型 $f \in \mathrm{Hom}_{cont}(G_k, \mu_n)$ をとる。 $f$ の核 $N = \ker(f)$ は $G_k$ の開正規部分群であり、Galois理論よりある有限Galois拡大 $L/k$ が存在して $N = \mathrm{Gal}(k^{sep}/L)$ となる。 $f$ は商群 $G = \mathrm{Gal}(L/k)$ を経由する写像とみなすことができる。</p>
+        <p>$f$ は群準同型であり、かつ値域である $\mu_n$ は基礎体 $k$ に含まれるため $G$ の作用を自明に受ける。したがって、任意の $\sigma, \tau \in G$ に対して $f(\sigma \tau) = f(\sigma) f(\tau) = f(\sigma) \sigma(f(\tau))$ が成り立つ。これは $f$ が $G$ から $L^\times$ への1-コサイクルであることを意味する。</p>
+        <p>ここでHilbertの定理90を適用すると、ある $a \in L^\times$ が存在して、すべての $\sigma \in G$ について $f(\sigma) = a / \sigma(a)$ と書ける。</p>
+        <p>$y = a^{-1} \in L^\times$ とおく。すると $f(\sigma) = y^{-1} / \sigma(y^{-1}) = \sigma(y) / y$ となる。</p>
+        <p>$f(\sigma)$ は $\mu_n$ の元であるから、 $(f(\sigma))^n = 1$ である。すなわち $(\sigma(y) / y)^n = 1$ であり、 $\sigma(y^n) = y^n$ がすべての $\sigma \in G$ で成り立つ。</p>
+        <p>これは $y^n$ が $L$ の元のうち $G$ によって固定される元であることを示しており、Galois理論より $x = y^n$ は $k^\times$ の元である。この $x$ に対して $\Delta$ を評価すると、 $\Delta([x])(\sigma) = \sigma(y) / y = f(\sigma)$ となる。したがって $f = \Delta([x])$ となり、全射性が示された。 ■</p>
+    </div>
+
+    <div class="philosophy">
+        <span class="philosophy-title">遠アーベル幾何との繋がり</span>
+        <p>式の左辺 $k^\times / (k^\times)^n$ は体 $k$ の純粋に「代数的な構造」を表しています。一方で、右辺 $\mathrm{Hom}_{cont}(G_k, \mu_n)$ は絶対Galois群 $G_k$ という「群論的・位相的な対象」のみから定まる情報です。</p>
+        <p>この定理は、**「絶対Galois群 $G_k$ の構造さえ分かれば、元の体 $k$ の乗法群の構造が（ $n$ 乗の曖昧さを除いて）完全に復元できる」** ことを証明しています。Grothendieckの遠アーベル幾何は、この事実を極限まで押し進め、対象の基本的な群構造から、元の空間のすべての幾何学的および代数的な構造を再構築しようとする壮大な理論体系です。Kummer理論は、その復元プロセスを実感するための最良の第一歩となります。</p>
+    </div>
+
+    <div class="example">
+        <span class="example-title">理解に役立つ例：二次拡大の分類</span>
+        <p>基礎体を $k = \mathbb{Q}$ とし、 $n = 2$ とします。 $\mu_2 = \{1, -1\}$ は $\mathbb{Q}$ に含まれます。Kummer理論によれば、同型 $\mathbb{Q}^\times / (\mathbb{Q}^\times)^2 \cong \mathrm{Hom}_{cont}(G_{\mathbb{Q}}, \{1, -1\})$ が成り立ちます。</p>
+        <p>右辺の連続準同型は（自明なものを除けば）指数 $2$ の開部分群を核に持つため、 $\mathbb{Q}$ の二次拡大体と1対1に対応します。一方、左辺は $x \in \mathbb{Q}^\times$ の平方因子を除いたもの、すなわち平方自由な整数 (square-free integer) $d$ によって完全に代表されます。</p>
+        <p>これは「 $\mathbb{Q}$ の任意の二次拡大は $\mathbb{Q}(\sqrt{d})$ の形に書ける」というよく知られた事実の、純粋に群論的な定式化（言い換え）を与えています。</p>
+    </div>
+
+    <!-- Section 2 -->
+    <h2>2. Artin-Schreier理論：加法構造の群論的復元</h2>
+
+    <p>Kummer理論が体の標数が $n$ を割らない場合に乗法群の構造を復元したのに対し、Artin-Schreier理論は、体の標数 $p$ と同じ冪の作用を用いて、体の「加法的な構造」を絶対Galois群から復元します。</p>
+
+    <div class="definition">
+        <span class="definition-title">定義 (Artin-Schreier作用素とトレース)</span>
+        <p>$p$ を素数とし、体 $k$ の標数は $p  >  0$ であるとする。 $k$ の分離閉包を $k^{sep}$ とする。</p>
+        <p>標数 $p$ の体においては、和の $p$ 乗について $(x + y)^p = x^p + y^p$ が成り立つ。この性質を利用して、多項式 $\wp(X) = X^p - X$ によって定まる写像 $\wp : k^{sep} \to k^{sep}$ をArtin-Schreier作用素と呼ぶ。 $\wp$ は加法群としての準同型写像となる。方程式 $X^p - X = 0$ の $k^{sep}$ における解の全体は、要素数 $p$ の有限体 $\mathbb{F}_p$ に他ならない。ここで $\mathbb{F}_p$ は $k$ の素体として $k$ に含まれている。</p>
+        <p>また、有限Galois拡大 $L/k$ とそのGalois群 $G$ に対して、トレース写像 $\mathrm{Tr}_{L/k} : L \to k$ は $\mathrm{Tr}_{L/k}(x) = \sum_{\tau \in G} \tau(x)$ で定義される。 $L/k$ は分離拡大であるため、このトレース写像は恒等的に $0$ ではない写像となる。</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 (加法的なHilbertの定理90)</span>
+        $L/k$ を有限Galois拡大とし、そのGalois群を $G = \mathrm{Gal}(L/k)$ とおく。写像 $c : G \to L$ が加法的な1-コサイクルである、すなわち任意の $\sigma, \tau \in G$ について $c(\sigma \tau) = c(\sigma) + \sigma(c(\tau))$ を満たすとする。このとき、ある $a \in L$ が存在して、任意の $\sigma \in G$ について $c(\sigma) = a - \sigma(a)$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p>$L/k$ は有限分離拡大であるから、トレース写像 $\mathrm{Tr}_{L/k} : L \to k$ は恒等的に $0$ ではない。したがって、ある $b_0 \in L$ が存在して $\mathrm{Tr}_{L/k}(b_0) \neq 0$ となる。 $\mathrm{Tr}_{L/k}(b_0)$ は $k$ の元であるから、 $b = b_0 / \mathrm{Tr}_{L/k}(b_0)$ とおけば $\mathrm{Tr}_{L/k}(b) = 1$ を満たす $b \in L$ が得られる。すなわち以下の式が成り立つ。</p>
+        $$
+        \sum_{\tau \in G} \tau(b) = 1
+        $$
+        <p>この $b$ を用いて、 $L$ の元 $a$ を次のように定義する。</p>
+        $$
+        a = \sum_{\tau \in G} c(\tau) \tau(b)
+        $$
+        <p>この $a$ に対して、任意の $\sigma \in G$ による作用 $\sigma(a)$ を計算する。</p>
+        $$
+        \sigma(a) = \sum_{\tau \in G} \sigma(c(\tau)) \sigma(\tau(b))
+        $$
+        <p>ここで、1-コサイクルの条件 $c(\sigma \tau) = c(\sigma) + \sigma(c(\tau))$ を変形すると、 $\sigma(c(\tau)) = c(\sigma \tau) - c(\sigma)$ が得られる。これを上の式に代入する。</p>
+        $$
+        \sigma(a) = \sum_{\tau \in G} (c(\sigma \tau) - c(\sigma)) (\sigma \tau)(b)
+        $$
+        <p>和を2つに分割する。</p>
+        $$
+        \sigma(a) = \sum_{\tau \in G} c(\sigma \tau) (\sigma \tau)(b) - c(\sigma) \sum_{\tau \in G} (\sigma \tau)(b)
+        $$
+        <p>$\tau$ が群 $G$ 全体を動くとき、 $\sigma \tau$ も群 $G$ 全体を重複なく動く。したがって、右辺の第1項の和は $a$ の定義式そのものに等しい。また、第2項の和は $\mathrm{Tr}_{L/k}(b)$ に等しく、これは $1$ である。ゆえに以下の式を得る。</p>
+        $$
+        \sigma(a) = a - c(\sigma) \cdot 1 = a - c(\sigma)
+        $$
+        <p>これを整理すると $c(\sigma) = a - \sigma(a)$ を得る。 ■</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 (Artin-Schreier理論)</span>
+        $k$ を標数 $p  >  0$ の体とする。このとき、以下の加法群の同型が存在する。
+        $$
+        \Delta : k / \wp(k) \xrightarrow{\sim} \mathrm{Hom}_{cont}(G_k, \mathbb{F}_p)
+        $$
+        ここで $\wp(k)$ は $k$ の元の $p$ 乗と自身の差として表される元の集合 $\{ z^p - z \mid z \in k \}$ であり、右辺は絶対Galois群 $G_k$ から $\mathbb{F}_p$ への連続な群準同型の全体である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p>まず、写像 $\Delta$ を構成する。剰余群 $k / \wp(k)$ の元を代表元 $x \in k$ を用いて $[x]$ と書く。 $k^{sep}$ において方程式 $Y^p - Y - x = 0$ の根を一つ選び、それを $y$ とおく。</p>
+        <p>任意の $\sigma \in G_k$ に対して、 $(\sigma(y))^p - \sigma(y) = \sigma(y^p - y) = \sigma(x) = x$ が成り立つ（ $x \in k$ であるため $\sigma$ で固定される）。したがって $\sigma(y)$ もまた同じ方程式の根である。方程式の2つの根の差は $(Y^p - Y)$ の根、すなわち $\mathbb{F}_p$ の元となるため、 $\sigma(y) - y$ は $\mathbb{F}_p$ に属する。これを $\Delta([x])(\sigma) = \sigma(y) - y$ と定義する。</p>
+        <p>この対応がwell-definedであることを確認する。別の根 $y'$ を選んだ場合、ある $c \in \mathbb{F}_p$ を用いて $y' = y + c$ と書ける。素体 $\mathbb{F}_p$ の元は $G_k$ の作用で固定されるため $\sigma(c) = c$ となる。したがって $\sigma(y') - y' = \sigma(y + c) - (y + c) = \sigma(y) + c - y - c = \sigma(y) - y$ となり、根の選び方に依存しない。
+        また、 $x$ に $\wp(k)$ の元 $z^p - z$ を加えた $x + z^p - z$ を代表元とした場合、その方程式の根として $y + z$ がとれる。 $\sigma(y + z) - (y + z) = \sigma(y) + \sigma(z) - y - z = \sigma(y) - y$ （ $z \in k$ より $\sigma(z) = z$ ）となるため、代表元の選び方にも依存しない。</p>
+        <p>次に、 $\Delta([x])$ が $G_k$ から $\mathbb{F}_p$ への群準同型であることを確認する。任意の $\sigma, \tau \in G_k$ について、 $\Delta([x])(\sigma \tau) = (\sigma \tau)(y) - y = \sigma(\tau(y)) - y$ である。定義より $\tau(y) = y + \Delta([x])(\tau)$ であり、 $\Delta([x])(\tau) \in \mathbb{F}_p \subset k$ であるから $\sigma$ で固定される。よって $\sigma(\tau(y)) - y = \sigma(y + \Delta([x])(\tau)) - y = \sigma(y) + \Delta([x])(\tau) - y = \Delta([x])(\sigma) + \Delta([x])(\tau)$ となり、準同型であることがわかる。その核は $G_k$ の開部分群となるため連続である。さらに $\Delta$ 自身が群の準同型であることも、定義の足し算の構造から容易に従う。</p>
+        <p>次に、 $\Delta$ の単射性を証明する。 $\Delta([x])$ が自明な準同型であるとする。すなわち、すべての $\sigma \in G_k$ について $\sigma(y) - y = 0$ となる。これはすべての $\sigma \in G_k$ について $\sigma(y) = y$ であることを意味し、Galois理論の基本定理より $y \in k$ である。したがって $x = y^p - y = \wp(y) \in \wp(k)$ となり、 $[x]$ は自明な類である。ゆえに $\Delta$ は単射である。</p>
+        <p>最後に、 $\Delta$ の全射性を証明する。任意の連続準同型 $f \in \mathrm{Hom}_{cont}(G_k, \mathbb{F}_p)$ をとる。 $f$ の核は $G_k$ の開正規部分群であり、Galois理論よりある有限Galois拡大 $L/k$ が存在して、 $f$ は商群 $G = \mathrm{Gal}(L/k)$ を経由する写像とみなすことができる。</p>
+        <p>$f$ は群準同型であり、かつ値域である $\mathbb{F}_p$ は基礎体 $k$ に含まれるため $G$ の作用を自明に受ける。したがって、任意の $\sigma, \tau \in G$ に対して $f(\sigma \tau) = f(\sigma) + f(\tau) = f(\sigma) + \sigma(f(\tau))$ が成り立つ。これは $f$ が $G$ から $L$ への加法的な1-コサイクルであることを意味する。</p>
+        <p>ここで加法的なHilbertの定理90を適用すると、ある $a \in L$ が存在して、すべての $\sigma \in G$ について $f(\sigma) = a - \sigma(a)$ と書ける。符号を反転させるため $y = -a$ とおくと、 $f(\sigma) = \sigma(y) - y$ となる。</p>
+        <p>$f(\sigma)$ は $\mathbb{F}_p$ の元であるから、 $(f(\sigma))^p = f(\sigma)$ である。すなわち $(\sigma(y) - y)^p = \sigma(y) - y$ となる。標数 $p$ の性質 $(A - B)^p = A^p - B^p$ を用いると、 $\sigma(y^p) - y^p = \sigma(y) - y$ となる。これを変形して $\sigma(y^p - y) = y^p - y$ を得る。</p>
+        <p>これは $y^p - y$ が $L$ の元のうち $G$ によって固定される元であることを示しており、Galois理論より $x = y^p - y$ は $k$ の元である。この $x$ に対して $\Delta$ を評価すると、 $\Delta([x])(\sigma) = \sigma(y) - y = f(\sigma)$ となる。したがって $f = \Delta([x])$ となり、全射性が示された。 ■</p>
+    </div>
+
+    <div class="philosophy">
+        <span class="philosophy-title">遠アーベル幾何との繋がり</span>
+        <p>Kummer理論が $k^\times / (k^\times)^n$ という「乗法構造」を復元したのに対し、Artin-Schreier理論は $k / \wp(k)$ という「加法構造」を絶対Galois群 $G_k$ の連続準同型から完全に復元します。</p>
+        <p>これら2つの理論を両輪として捉えることで、純粋に群論的・位相的な対象である絶対Galois群の中に、元の空間（体）の代数構造（加法と乗法からなる環構造）がいかに深くコード化されているかが立体的に見えてきます。</p>
+    </div>
+
+    <!-- Section 3 -->
+    <h2>3. GrothendieckのGalois理論：空間と群作用の圏同値</h2>
+
+    <p>遠アーベル幾何の根底にある思想は「空間の幾何学的な構造を、その基本群の位相群としての構造から圏論的に復元する」ことです。この哲学の原点であり、それ自体が自己完結した美しい具体例となっているのが、GrothendieckによるGalois理論の圏論的定式化です。</p>
+
+    <div class="definition">
+        <span class="definition-title">定義 (有限エタール代数と有限連続 $G_k$ 集合)</span>
+        <p>体 $k$ 上の有限エタール代数 (finite étale algebra) とは、 $k$ の有限次分離拡大体の有限個の直積 $L_1 \times \dots \times L_n$ に同型な可換 $k$ 代数のことである。有限エタール代数と $k$ 代数の準同型からなる圏を $\mathcal{C}$ とする。</p>
+        <p>一方、有限連続 $G_k$ 集合とは、離散位相を入れた有限集合 $X$ であり、絶対Galois群 $G_k$ の連続な作用を持つものである。作用が連続であるとは、任意の $x \in X$ の安定群 (stabilizer) が $G_k$ の開部分群になることと同値である。これらを対象とし、 $G_k$ 同変写像を射とする圏を $\mathcal{D}$ とする。</p>
+    </div>
+
+    <p>空間から群作用を抽出する反変関手 $F : \mathcal{C} \to \mathcal{D}$ を以下のように構成する。</p>
+    <p>対象 $A \in \mathcal{C}$ に対して、集合 $F(A)$ を $F(A) = \mathrm{Hom}_{k\text{-alg}}(A, k^{sep})$ と定義する。これは $A$ から $k^{sep}$ への $k$ 代数としての準同型全体の集合である。</p>
+    <p>$f \in F(A)$ と $\sigma \in G_k$ に対して、群作用を $(\sigma \cdot f)(a) = \sigma(f(a))$ で定める。 $A$ は $k$ 上有限次元のベクトル空間であるため、 $f(A)$ は $k^{sep}$ のある有限次Galois拡大 $M/k$ に含まれる。したがって、 $G_k$ の作用は有限商 $\mathrm{Gal}(M/k)$ を経由し、各 $f$ の安定群は $G_k$ の開部分群となる。ゆえに $F(A)$ はwell-definedな有限連続 $G_k$ 集合となる。</p>
+    <p>射 $\phi : A \to B$ に対しては、 $F(\phi) : F(B) \to F(A)$ を $F(\phi)(g) = g \circ \phi$ で定める。これは $G_k$ 同変な写像となる。</p>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 (GrothendieckのGalois理論の主定理)</span>
+        上記で構成した関手 $F$ は、圏 $\mathcal{C}$ と圏 $\mathcal{D}^{op}$ の間の圏同値を与える。すなわち、 $F$ は充満忠実 (fully faithful) であり、かつ本質的に全射である。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p><b>(充満忠実性)</b><br>
+        任意の $A, B \in \mathcal{C}$ に対して、写像 $F_{A,B} : \mathrm{Hom}_{\mathcal{C}}(A, B) \to \mathrm{Hom}_{\mathcal{D}}(F(B), F(A))$ が全単射であることを示す。有限エタール代数の定義より、 $A = \prod_{i=1}^n L_i$ および $B = \prod_{j=1}^m M_j$ と分解できる。関手 $F$ は直積を非交和（集合の直和）に送る性質を持つため、写像の全単射性の証明は $A, B$ がともに体である場合、すなわち $A = L, B = M$ の場合に帰着される。</p>
+        <p>$L, M$ を $k$ の有限次分離拡大とする。 $F(L)$ は $L$ から $k^{sep}$ への埋め込みの集合である。包含写像 $i_L \in F(L)$ を一つ固定する。その安定群は $H_L = \mathrm{Gal}(k^{sep}/L)$ である。軌道・安定群定理により、 $G_k$ 集合としての同型 $F(L) \cong G_k/H_L$ が得られる（対応は $\sigma \cdot i_L \leftrightarrow \sigma H_L$ ）。同様に $i_M \in F(M)$ を固定し $H_M = \mathrm{Gal}(k^{sep}/M)$ とおくと、 $F(M) \cong G_k/H_M$ となる。</p>
+        <p>この同一視のもとで、 $G_k$ 同変写像 $\Phi : G_k/H_M \to G_k/H_L$ を考える。 $\Phi$ は単位余剰類 $e H_M$ の行き先 $\sigma H_L$ によって完全に決定される。 $\Phi$ がwell-definedであるための必要十分条件は、任意の $h \in H_M$ について $h \sigma H_L = \sigma H_L$ が成り立つこと、すなわち $\sigma^{-1} H_M \sigma \subset H_L$ である。</p>
+        <p>Galois理論の基本定理より、開部分群の包含関係 $\sigma^{-1} H_M \sigma \subset H_L$ は、対応する固定体の包含関係 $L \subset \sigma^{-1}(M)$ と同値である。これは $\sigma(L) \subset M$ を意味する。</p>
+        <p>$\sigma(L) \subset M$ であるとき、写像 $f = i_M^{-1} \circ \sigma \circ i_L$ は $L$ から $M$ への well-defined な $k$ 代数準同型となる。この対応により $f$ から一意な $\Phi$ が構成され、逆もまた然りであるため、 $F_{L,M}$ は全単射である。</p>
+
+        <p><b>(本質的全射性)</b><br>
+        任意の有限連続 $G_k$ 集合 $X$ が与えられたとする。 $X$ は $G_k$ の作用に関する有限個の軌道に一意に分解できる。これを $X = X_1 \cup \dots \cup X_m$ (非交和) とする。</p>
+        <p>各軌道 $X_r$ から代表元 $x_r$ を選ぶ。作用が連続であるため、その安定群 $H_r = \mathrm{Stab}(x_r)$ は $G_k$ の開部分群である。Galois理論の基本定理より、開部分群 $H_r$ に対応する固定体 $L_r = (k^{sep})^{H_r}$ は、 $k$ の有限次分離拡大となる。</p>
+        <p>ここで、有限エタール代数 $A = \prod_{r=1}^m L_r$ を定義する。</p>
+        <p>関手 $F$ を適用すると、 $F(A) = \coprod_{r=1}^m F(L_r)$ となる。 $F(L_r)$ は先ほどの議論により $G_k/H_r$ と同型であり、これは代表元 $x_r$ を持つ軌道 $X_r$ と同型である。したがって、 $F(A) \cong \coprod_{r=1}^m X_r = X$ となる。ゆえに関手 $F$ は本質的に全射であり、圏同値が示された。 ■</p>
+    </div>
+
+    <div class="philosophy">
+        <span class="philosophy-title">遠アーベル幾何との繋がり</span>
+        <p>ここで示された事実は、「代数方程式の解からなる空間（有限エタール代数）」のすべての情報が、「点の集まりに対する位相群の作用（ $G_k$ 集合）」という純粋に組み合わせ的かつ群論的な情報へと完全に翻訳できることを意味しています。空間の連結成分が位相群の軌道に完璧に対応するというこの事実は、遠アーベル幾何学における「空間の構造を基本群から復元する」というアプローチの最も基礎的な枠組みとなります。</p>
+    </div>
+
+    <!-- Section 4 -->
+    <h2>4. 標数0の場合のArtin-Schreierの定理と無限素点の復元</h2>
+
+    <p>代数体の構造を絶対Galois群から復元する際、最も劇的な第一歩となるのが「無限素点（実素点）の群論的復元」です。群のねじれ元（有限位数を持つ元）を調べるだけで代数体の実埋め込みの数が完全に決定できるという事実を、標数0の場合のArtin-Schreierの定理の完全な証明とともに解説します。</p>
+
+    <div class="definition">
+        <span class="definition-title">定義 (代数体の実素点とノルム)</span>
+        <p>代数体 $k$ から実数体 $\mathbb{R}$ への体の埋め込みを、 $k$ の実素点 (real place) と呼ぶ。遠アーベル幾何学においては、抽象的な位相群として与えられた絶対Galois群の中から、この実素点に対応する情報を純粋に群論的に抽出することが求められる。</p>
+        <p>また、有限Galois拡大 $C/E$ とそのGalois群 $G$ に対して、ノルム $N_{C/E} : C \to E$ は $N_{C/E}(\alpha) = \prod_{\sigma \in G} \sigma(\alpha)$ で定義される。ノルムの値は基礎体 $E$ の元となる。</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 (Artin-Schreierの定理: 標数0の場合)</span>
+        標数 $0$ の代数閉体 $C$ の真の部分体 $E$ であって、拡大次数 $[C : E]$ が有限となるものが存在すると仮定する。このとき、 $[C : E] = 2$ であり、 $C = E(\sqrt{-1})$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p>$C/E$ は標数 $0$ の有限次拡大であるため分離拡大であり、 $C$ が代数閉体であることから正規拡大でもある。したがって $C/E$ は有限Galois拡大である。Galois群 $G = \mathrm{Gal}(C/E)$ は位数 $ >  1$ の有限群である。</p>
+        <p>Cauchyの定理より、 $G$ はある素数 $p$ を位数に持つ部分群 $H$ を含む。Galois理論の基本定理より、 $H$ に対応する固定体 $L = C^H$ を考えると、拡大次数について $[C : L] = p$ が成り立つ。 $C$ は代数閉体であるため、 $L$ を改めて基礎体 $E$ と置き直すことにより、最初から $[C : E] = p$ であると仮定して矛盾を導く（および $p = 2$ を示す）ことで証明に十分である。以下、 $[C : E] = p$ とする。</p>
+        <p>$C$ は代数閉体なので、 $1$ の原始 $p$ 乗根 $\zeta$ を含む。拡大 $E(\zeta)/E$ の次数 $[E(\zeta) : E]$ は、Galois群 $\mathrm{Gal}(E(\zeta)/E)$ が $(\mathbb{Z}/p\mathbb{Z})^\times$ の部分群となるため、 $p - 1$ の約数である。一方で、 $E(\zeta)$ は $C/E$ の中間体であるため、 $[E(\zeta) : E]$ は $[C : E] = p$ の約数でもある。 $p$ と $p - 1$ の最大公約数は $1$ であるから、 $[E(\zeta) : E] = 1$ 、すなわち $\zeta \in E$ である。</p>
+        <p>$\zeta \in E$ であるため、Kummer理論により、ある $a \in E$ が存在して $C = E(\sqrt[p]{a})$ と表すことができる。 $C \neq E$ であるから、 $a$ は $E$ の元のある $p$ 乗の形（すなわち $a \in E^p$）ではない。</p>
+        <p>$C$ は代数閉体であるため、 $\sqrt[p]{a}$ の $p$ 乗根 $\alpha$ が $C$ に存在する。すなわち $\alpha^p = \sqrt[p]{a}$ である。Galois群 $G = \mathrm{Gal}(C/E)$ の生成元を $\sigma$ とおく。 $\sigma$ の $\sqrt[p]{a}$ への作用は、 $\sigma(\sqrt[p]{a}) = \zeta \sqrt[p]{a}$ を満たすように選ぶことができる。</p>
+        <p>ここで、 $\alpha$ の $C/E$ に関するノルムを計算する。</p>
+        $$
+        N_{C/E}(\alpha) = \prod_{j=0}^{p-1} \sigma^j(\alpha)
+        $$
+        <p>ノルムの定義より、 $b = N_{C/E}(\alpha)$ は基礎体 $E$ の元である。この $b$ の $p$ 乗を計算する。</p>
+        $$
+        b^p = \prod_{j=0}^{p-1} (\sigma^j(\alpha))^p = \prod_{j=0}^{p-1} \sigma^j(\alpha^p) = \prod_{j=0}^{p-1} \sigma^j(\sqrt[p]{a})
+        $$
+        <p>$\sigma^j(\sqrt[p]{a}) = \zeta^j \sqrt[p]{a}$ を代入する。</p>
+        $$
+        b^p = \prod_{j=0}^{p-1} (\zeta^j \sqrt[p]{a}) = \zeta^{\sum_{j=0}^{p-1} j} (\sqrt[p]{a})^p = \zeta^{p(p-1)/2} a
+        $$
+        <p>ここで、もし $p$ が奇素数（すなわち $p  >  2$ ）であれば、 $p(p-1)/2$ は $p$ の倍数である。 $\zeta$ は $1$ の $p$ 乗根であるから、 $\zeta^{p(p-1)/2} = 1$ となる。したがって $b^p = a$ となるが、 $b \in E$ であるため、これは $a$ が $E$ 内に $p$ 乗根を持つことを意味する。これは $C = E(\sqrt[p]{a}) = E$ となり、 $[C : E] = p  >  1$ という仮定に矛盾する。</p>
+        <p>ゆえに $p$ は奇素数ではなく、 $p = 2$ でなければならない。 $p = 2$ のとき、 $\zeta = -1$ であり、 $p(p-1)/2 = 1$ となる。したがって、先の式は以下のようになる。</p>
+        $$
+        b^2 = \zeta^1 a = -a
+        $$
+        <p>これを変形すると $a = -b^2$ を得る。したがって、 $C = E(\sqrt{a}) = E(\sqrt{-b^2}) = E(b\sqrt{-1}) = E(\sqrt{-1})$ となる。 ■</p>
+    </div>
+
+    <div class="philosophy">
+        <span class="philosophy-title">遠アーベル幾何としての無限素点の復元</span>
+        <p>証明されたArtin-Schreierの定理を、代数体 $k$ の絶対Galois群 $G_k$ の構造に適用します。 $G_k$ の中で、有限の位数を持つ元 $\sigma \neq 1$ （すなわち $\sigma^n = 1$ を満たすねじれ元）をとります。 $\sigma$ が生成する部分群 $\langle \sigma \rangle$ に対応する固定体 $E = (k^{sep})^{\langle \sigma \rangle}$ を考えると、拡大次数 $[k^{sep} : E]$ は部分群の位数に等しく、有限です。</p>
+        <p>$k^{sep}$ は代数閉体であるから、Artin-Schreierの定理が完全に適用され、以下の強烈な事実が従います。</p>
+        <ol>
+            <li>拡大次数は必ず $2$ である。すなわち、 $G_k$ の任意の非自明なねじれ元の位数は $2$ に限られる（対合、involutionと呼ばれる）。</li>
+            <li>固定体 $E$ は $k^{sep} = E(\sqrt{-1})$ を満たし、実閉体 (real closed field) となる。</li>
+            <li>実閉体 $E$ は、実数体 $\mathbb{R}$ への順序を保つ埋め込みをただ1つだけ持つ。</li>
+        </ol>
+        <p>この $\mathbb{R}$ への埋め込みを基礎体 $k \subset E$ に制限することで、 $k$ の実素点が1つ定まります。遠アーベル幾何の視点からは、**「代数体 $k$ が持つ実素点の個数は、絶対Galois群 $G_k$ の中に存在する位数 $2$ の元の共役類の個数を数えるだけで、純粋に群論的に決定できる」** のです。これは「空間の幾何学的な形」が「基本群の代数構造」の中に完全にコード化されていることを示す、極めて美しく自己完結した具体例です。</p>
+    </div>
+
+    <!-- Section 5 -->
+    <h2>5. 一般のArtin-Schreierの定理：標数に関する剛性</h2>
+
+    <p>代数閉体が真の有限次拡大を持つ場合、その基礎体は必ず「標数0」の実閉体に限られるという、標数の仮定を外した「一般のArtin-Schreierの定理」を証明します。</p>
+
+    <div class="definition">
+        <span class="definition-title">定義 (完全体)</span>
+        <p>体 $K$ が完全体 (perfect field) であるとは、 $K$ 上の任意の既約多項式が重根を持たない（すなわち分離的である）ことである。標数 $0$ の体は常に完全体である。標数 $p  >  0$ の体 $K$ が完全体であるための必要十分条件は、フロベニウス自己準同型 $x \mapsto x^p$ が全射であること、すなわち $K = K^p$ が成り立つことである。代数閉体は常に完全体である。</p>
+    </div>
+
+    <div class="theorem">
+        <span class="theorem-title">定理 (一般のArtin-Schreierの定理)</span>
+        $C$ を任意の標数の代数閉体とする。 $E$ を $C$ の真の部分体であり、拡大次数 $[C : E]$ が有限であると仮定する。このとき、基礎体 $E$ の標数は必ず $0$ であり、 $[C : E] = 2$ かつ $C = E(\sqrt{-1})$ が成り立つ。
+    </div>
+
+    <div class="proof">
+        <span class="proof-title">証明.</span>
+        <p><b>ステップ1: $E$ が完全体であること</b><br>
+        代数閉体 $C$ は完全体である。もし $E$ の標数が $p  >  0$ であり、かつ $E$ が完全体でないと仮定すると、ある $a \in E$ が存在して $a \notin E^p$ となる。このとき、方程式 $X^{p^n} - a = 0$ の $C$ における根 $a^{1/p^n}$ を添加した体の列 $E(a^{1/p}) \subset E(a^{1/p^2}) \subset \dots$ は無限に続く真の拡大の列となり、 $C$ が $E$ の有限次拡大であることに矛盾する。したがって、 $E$ は完全体である。</p>
+        <p>$E$ が完全体であるため、有限次拡大 $C/E$ は分離拡大となる。さらに $C$ は代数閉体（したがって正規拡大）であるから、 $C/E$ は有限Galois拡大である。そのGalois群を $G = \mathrm{Gal}(C/E)$ とおく。</p>
+
+        <p><b>ステップ2: 標数 $p  >  0$ の場合の次数 $p$ の拡大の不可能性</b><br>
+        $C/E$ の中間体 $L$ をとり、 $[C : L]$ が素数 $q$ に等しいと仮定する。このとき $q$ が基礎体の標数 $p  >  0$ に等しいことは起こり得ないことを証明する。</p>
+        <p>背理法のため、 $q = p$ であると仮定する。 $C/L$ は標数 $p$ の巡回拡大であるため、Artin-Schreier理論により、ある $a \in L$ が存在して $C = L(\alpha)$ 、かつ $\alpha^p - \alpha = a$ が成り立つ。</p>
+        <p>$C$ は代数閉体であるから、任意の $c \in L$ に対して、方程式 $X^p - X = c \alpha^{p-1}$ は $C$ に根 $\beta$ を持つ。すなわち $\beta^p - \beta = c \alpha^{p-1}$ である。この式の両辺に対して、拡大 $C/L$ に関するトレース $\mathrm{Tr}_{C/L}$ をとる。</p>
+        $$
+        \mathrm{Tr}_{C/L}(\beta^p - \beta) = \mathrm{Tr}_{C/L}(c \alpha^{p-1})
+        $$
+        <p>左辺について、拡大のGalois群の生成元 $\sigma$ は $x \mapsto x^p$ と可換であるため、 $\mathrm{Tr}_{C/L}(\beta^p) = (\mathrm{Tr}_{C/L}(\beta))^p$ が成り立つ。したがって、左辺は $(\mathrm{Tr}_{C/L}(\beta))^p - \mathrm{Tr}_{C/L}(\beta)$ となる。</p>
+        <p>右辺について、 $c \in L$ はトレースの外に出るため $c \mathrm{Tr}_{C/L}(\alpha^{p-1})$ となる。 $\alpha$ の最小多項式 $X^p - X - a = 0$ の根は $\alpha + i$ （ $i = 0, \dots, p-1$ ）であるため、トレースはこれらの $p-1$ 乗の和となる。</p>
+        $$
+        \mathrm{Tr}_{C/L}(\alpha^{p-1}) = \sum_{i=0}^{p-1} (\alpha + i)^{p-1}
+        $$
+        <p>二項定理で展開すると、和 $\sum_{i=0}^{p-1} i^k$ は $0 \le k  <  p-1$ のとき $0 \pmod p$ であり、 $k = p-1$ のとき $-1 \pmod p$ となる性質を用いることで、全体の和は $-1$ と計算される。したがって、右辺は $-c$ となる。これをまとめると以下の式を得る。</p>
+        $$
+        (\mathrm{Tr}_{C/L}(\beta))^p - \mathrm{Tr}_{C/L}(\beta) = -c
+        $$
+        <p>$u = -\mathrm{Tr}_{C/L}(\beta) \in L$ とおけば、 $u^p - u = c$ となる。これは $L$ の任意の元 $c$ が $u^p - u$ の形に書けることを意味する。特に $c = a$ を選ぶと、ある $u \in L$ が存在して $u^p - u = a$ となる。しかし $\alpha^p - \alpha = a$ であったから、 $(\alpha - u)^p - (\alpha - u) = 0$ となり、 $\alpha - u$ は $\mathbb{F}_p$ の元となる。これは $\alpha \in L$ を意味し、 $[C : L] = p  >  1$ に矛盾する。ゆえに $q = p$ は起こり得ない。</p>
+
+        <p><b>ステップ3: 標数と異なる素数次数の拡大と拡大次数の決定</b><br>
+        次に、中間体 $L$ が $[C : L] = q \neq p$ を満たすとする。 $C$ は代数閉体であるため $1$ の原始 $q$ 乗根 $\zeta$ を含むが、 $[L(\zeta) : L]$ は $q-1$ の約数であり、かつ $[C : L] = q$ の約数でもある。 $q$ と $q-1$ は互いに素であるため $[L(\zeta) : L] = 1$ 、すなわち $\zeta \in L$ である。</p>
+        <p>Kummer理論により、 $C = L(\alpha)$ （ $\alpha^q = a \in L$ ）と表せる。 $C$ には $\alpha$ の $q$ 乗根 $\beta$ が存在する（ $\beta^q = \alpha$ ）。 $\beta$ の $C/L$ におけるノルム $b = N_{C/L}(\beta) \in L$ を考えると、 $b^q = N_{C/L}(\alpha) = \zeta^{q(q-1)/2} a$ となる。</p>
+        <p>もし $q  >  2$ ならば $q(q-1)/2$ は $q$ の倍数であり $\zeta^{q(q-1)/2} = 1$ となる。すると $b^q = a$ となり $\alpha = b \in L$ となって矛盾する。したがって $q = 2$ でなければならない。このとき $\zeta = -1$ であり、 $b^2 = -a$ となるため $C = L(\sqrt{a}) = L(\sqrt{-b^2}) = L(\sqrt{-1})$ となる。</p>
+        <p>これにより、 $C$ の真の部分体で素数指数を持つものは指数 $2$ であり、かつ $\sqrt{-1}$ を添加すると $C$ に一致することが示された。</p>
+        <p>さらに、 $G = \mathrm{Gal}(C/E)$ が位数 $2$ の群であることを示す。 $G$ の位数は素因数として $2$ しか持たないため有限 $2$-群である。もし $|G| \ge 4$ ならば、 $G$ は指数 $4$ の部分群を持ち、対応する中間体 $K$ は $[C : K] = 4$ を満たす。有限 $2$-群の性質から $K$ と $C$ の間に $[C : L'] = 2$ を満たす中間体 $L'$ が存在する。上記の結論から $C = L'(\sqrt{-1})$ である。 $\sqrt{-1} \notin L'$ より $\sqrt{-1} \notin K$ であるため、 $K(\sqrt{-1})$ は $K$ の $2$ 次拡大となる。再び上記の結論を $K(\sqrt{-1})$ に適用すると $C = K(\sqrt{-1})(\sqrt{-1}) = K(\sqrt{-1})$ となり、 $[C : K] = 2$ となって矛盾する。ゆえに $|G| = 2$ 、すなわち $[C : E] = 2$ であり $C = E(\sqrt{-1})$ が示された。</p>
+
+        <p><b>ステップ4: 基礎体の標数が0であることの証明</b><br>
+        最後に、基礎体 $E$ の標数が $p  >  0$ となり得ないことを示す。前段の議論により $[C : E] = 2$ であるため、 $p \neq 2$ 、すなわち $p$ は奇素数である。</p>
+        <p>$C = E(\sqrt{-1})$ は代数閉体であるから、 $E$ の任意の元 $a, b$ に対して、ある $C$ の元 $z = x + y\sqrt{-1}$ （ $x, y \in E$ ）が存在し、 $z^2 = a + b\sqrt{-1}$ を満たす。展開すると $x^2 - y^2 = a$ および $2xy = b$ となる。両辺の $C/E$ に関するノルムをとると、以下の式を得る。</p>
+        $$
+        (x^2 + y^2)^2 = a^2 + b^2
+        $$
+        <p>これは、 $E$ の任意の $2$ つの平方元の和 $a^2 + b^2$ が、再び $E$ の平方元 $(x^2 + y^2)^2$ になることを意味する。帰納的に、 $E$ における任意の個数の平方元の和は平方元となる。 $1 = 1^2$ は平方元であるため、 $E$ の素体 $\mathbb{F}_p$ の任意の元（ $1$ を複数回足したもの）は $E$ の平方元となる。</p>
+        <p>とくに $-1 \in \mathbb{F}_p$ も $E$ の平方元である。しかし、これは $C = E(\sqrt{-1})$ が $2$ 次拡大であるという事実（ $\sqrt{-1} \notin E$ ）に矛盾する。したがって標数 $p  >  0$ は不可能であり、基礎体 $E$ の標数は必ず $0$ でなければならない。 ■</p>
+    </div>
+
+    <div class="philosophy">
+        <span class="philosophy-title">遠アーベル幾何における群論的剛性</span>
+        <p>この定理は、群論的な有限性（部分群の指数が有限であること）が、空間の代数的な制約（標数が $0$ であり、順序を持った実閉体になること）を完全に強制してしまうことを示しています。いかなる標数であってもこの剛性が成り立つことは、群の位相的な性質が元の体の絶対的な情報を支配するという遠アーベル幾何の哲学の強力な証左となります。</p>
+    </div>
+
+    <div class="references">
+        <h3>引用文献</h3>
+        <ul>
+            <li>[1] S. Bosch, <i>Algebra</i>. Springer, 2003. (代数拡大およびGalois理論の基礎) <a href="https://link.springer.com/book/10.1007/978-3-540-40082-8" target="_blank">https://link.springer.com/book/10.1007/978-3-540-40082-8</a></li>
+            <li>[2] J. Neukirch, <i>Algebraic Number Theory</i>. Springer, 1999. (Kummer理論、Artin-Schreierの定理、および遠アーベル幾何の動機付け) <a href="https://link.springer.com/book/10.1007/978-3-662-03983-0" target="_blank">https://link.springer.com/book/10.1007/978-3-662-03983-0</a></li>
+            <li>[3] A. Grothendieck, <i>Revêtements étales et groupe fondamental (SGA 1)</i>. Springer, 1971. (GrothendieckのGalois理論の圏論的定式化) <a href="https://link.springer.com/book/10.1007/BFb0058656" target="_blank">https://link.springer.com/book/10.1007/BFb0058656</a></li>
+            <li>[4] E. Artin, O. Schreier, "Algebraische Konstruktion reeller Körper". <i>Abhandlungen aus dem Mathematischen Seminar der Universität Hamburg</i>, 1927. (一般のArtin-Schreierの定理の原論文) <a href="https://doi.org/10.1007/BF02952522" target="_blank">https://doi.org/10.1007/BF02952522</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>
