@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Sommerfeld置換の完全な数学的背景と幾何学的構造、および定積分の網羅的計算例</title>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: "Noto Serif JP", "Mincho", serif;
+            line-height: 1.8;
+            padding: 3em;
+            max-width: 1000px;
+            margin: 0 auto;
+            color: #222;
+            background-color: #fafafa;
+        }
+        h1 {
+            text-align: center;
+            color: #1a252f;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 0.5em;
+            margin-bottom: 1.5em;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 0.3em;
+            margin-top: 2em;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 1.5em;
+        }
+        p {
+            margin-bottom: 1.2em;
+            text-align: justify;
+        }
+        .definition-box, .theorem-box, .proposition-box {
+            padding: 1.5em;
+            margin-bottom: 1.5em;
+            border-radius: 4px;
+        }
+        .definition-box {
+            background-color: #e8f4f8;
+            border-left: 5px solid #3498db;
+        }
+        .theorem-box {
+            background-color: #fdf5e6;
+            border-left: 5px solid #f39c12;
+        }
+        .proposition-box {
+            background-color: #f9f9f9;
+            border-left: 5px solid #9b59b6;
+        }
+        .proof-box {
+            padding: 1.5em;
+            border: 1px dashed #7f8c8d;
+            background-color: #ffffff;
+            margin-bottom: 1.5em;
+        }
+        .example-box {
+            padding: 1.5em;
+            background-color: #eef7f0;
+            border-left: 5px solid #2ecc71;
+            margin-bottom: 1.5em;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 0.8em;
+        }
+        ul, ol {
+            margin-bottom: 1.5em;
+            padding-left: 2em;
+        }
+        .reference-list {
+            list-style-type: decimal;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Sommerfeld置換の完全な数学的背景と幾何学的構造</h1>
+
+<p>
+本稿では、流体力学や天体力学において頻出する三角関数の有理式の積分を、解析的かつ厳密に計算するための強力な変数変換手法である「Sommerfeld置換 (Sommerfeld substitution)」について、その定義、幾何学的な由来、Weierstrass置換との関係、双曲型への拡張、および豊富な計算例を自己完結的 (self-contained) に網羅して解説する。
+</p>
+
+<h2>1. 導入と主な応用先 (Reynolds方程式)</h2>
+
+<p>
+Sommerfeld置換の最も代表的な応用先は、流体潤滑理論 (tribology) におけるジャーナル軸受 (journal bearing) の圧力分布の解析である。軸受内の流体膜圧力 $p$ は、Reynolds方程式 (Reynolds equation) によって記述される。無限長ジャーナル軸受の仮定のもとでは、角度 $\theta$ に対する圧力勾配は以下の微分方程式を満たす。
+</p>
+
+$$ \frac{dp}{d\theta} = \frac{6\eta U r}{c^2} \left( \frac{1}{(1 + \varepsilon \cos \theta)^2} - \frac{h_0}{c(1 + \varepsilon \cos \theta)^3} \right) $$
+
+<p>
+ここで各パラメータは以下の物理的意味を持つ。
+</p>
+<ul>
+    <li>$\eta$: 潤滑油の粘度</li>
+    <li>$U$: 軸の周速</li>
+    <li>$r$: 軸受半径</li>
+    <li>$c$: 半径すきま</li>
+    <li>$h_0$: 境界条件から決まる定数（最大圧力位置に関するパラメータ）</li>
+    <li>$\varepsilon$: 偏心率 (eccentricity ratio)。軸と軸受の偏心距離を半径すきまで割った無次元量であり、幾何学的制約から $0 \le \varepsilon  <  1$ を満たす。</li>
+</ul>
+
+<p>
+この方程式を積分して圧力分布 $p$ を求めるためには、自然数 $n \in \{1, 2, 3\}$ に対する以下の定積分を計算しなければならない。
+</p>
+
+$$ I_n = \int \frac{1}{(1 + \varepsilon \cos \theta)^n} d\theta $$
+
+<p>
+この被積分関数に現れる三角関数の有理式を簡略化し、解析的な積分を可能にするための変数変換がSommerfeld置換である。
+</p>
+
+<h2>2. 数学的背景と基本定義</h2>
+
+<p>
+Sommerfeld置換は、実数パラメータ $\varepsilon$ に対して以下のように定義される。
+</p>
+
+<div class="definition-box">
+    <div class="title">定義 1 (Sommerfeld置換)</div>
+    <p>
+    実数 $\varepsilon$ を $0 \le \varepsilon  <  1$ を満たす定数とする。変数 $\theta \in (-\pi, \pi)$ に対して、新たな変数 $\gamma$ を以下の関係式によって定義する変換をSommerfeld置換と呼ぶ。
+    </p>
+    $$ \cos \gamma = \frac{\varepsilon + \cos \theta}{1 + \varepsilon \cos \theta} $$
+    <p>
+    この変換によって導入される変数 $\gamma$ をSommerfeld角と呼ぶ。
+    </p>
+</div>
+
+<div class="proposition-box">
+    <div class="title">命題 2 (Sommerfeld置換による積分要素の変換)</div>
+    <p>
+    Sommerfeld置換によって、被積分関数の分母および微小変位 $d\theta$ は以下のように変換される。
+    </p>
+    <ol>
+        <li>$1 + \varepsilon \cos \theta = \frac{1 - \varepsilon^2}{1 - \varepsilon \cos \gamma}$</li>
+        <li>$d\theta = \frac{\sqrt{1 - \varepsilon^2}}{1 - \varepsilon \cos \gamma} d\gamma$</li>
+    </ol>
+</div>
+
+<div class="proof-box">
+    <div class="title">証明</div>
+    <p>
+    まず、第一の等式を証明する。定義式から $\cos \theta$ を $\gamma$ について解く（逆変換の導出）。
+    </p>
+    $$ (1 + \varepsilon \cos \theta) \cos \gamma = \varepsilon + \cos \theta $$
+    $$ \cos \gamma + \varepsilon \cos \theta \cos \gamma = \varepsilon + \cos \theta $$
+    $$ \cos \theta (1 - \varepsilon \cos \gamma) = \cos \gamma - \varepsilon $$
+    $$ \cos \theta = \frac{\cos \gamma - \varepsilon}{1 - \varepsilon \cos \gamma} $$
+    <p>
+    これを元の分母 $1 + \varepsilon \cos \theta$ に代入する。
+    </p>
+    $$ 1 + \varepsilon \cos \theta = 1 + \varepsilon \frac{\cos \gamma - \varepsilon}{1 - \varepsilon \cos \gamma} $$
+    <p>
+    右辺を通分して整理する。
+    </p>
+    $$ \frac{1 - \varepsilon \cos \gamma + \varepsilon \cos \gamma - \varepsilon^2}{1 - \varepsilon \cos \gamma} = \frac{1 - \varepsilon^2}{1 - \varepsilon \cos \gamma} $$
+    <p>
+    これにより第一の等式が示された。
+    </p>
+    <p>
+    次に、第二の等式を証明する。先ほど導出した $\cos \theta$ の逆変換式を $\gamma$ で微分する。
+    </p>
+    $$ -\sin \theta \frac{d\theta}{d\gamma} = \frac{d}{d\gamma} \left( \frac{\cos \gamma - \varepsilon}{1 - \varepsilon \cos \gamma} \right) $$
+    <p>
+    商の微分法則を適用して右辺を展開する。
+    </p>
+    $$ \frac{d}{d\gamma} \left( \frac{\cos \gamma - \varepsilon}{1 - \varepsilon \cos \gamma} \right) = \frac{(-\sin \gamma)(1 - \varepsilon \cos \gamma) - (\cos \gamma - \varepsilon)(\varepsilon \sin \gamma)}{(1 - \varepsilon \cos \gamma)^2} $$
+    <p>
+    分子を展開して整理する。
+    </p>
+    $$ -\sin \gamma + \varepsilon \sin \gamma \cos \gamma - \varepsilon \sin \gamma \cos \gamma + \varepsilon^2 \sin \gamma = -(1 - \varepsilon^2) \sin \gamma $$
+    <p>
+    したがって、以下の式を得る。
+    </p>
+    $$ -\sin \theta \frac{d\theta}{d\gamma} = \frac{-(1 - \varepsilon^2) \sin \gamma}{(1 - \varepsilon \cos \gamma)^2} $$
+    <p>
+    次に、 $\sin \theta$ を $\gamma$ を用いて表す。三角関数の基本公式 $\sin^2 \theta = 1 - \cos^2 \theta$ を用いる。
+    </p>
+    $$ \sin^2 \theta = 1 - \left( \frac{\cos \gamma - \varepsilon}{1 - \varepsilon \cos \gamma} \right)^2 = \frac{(1 - \varepsilon \cos \gamma)^2 - (\cos \gamma - \varepsilon)^2}{(1 - \varepsilon \cos \gamma)^2} $$
+    <p>
+    分子を展開する。
+    </p>
+    $$ (1 - 2\varepsilon \cos \gamma + \varepsilon^2 \cos^2 \gamma) - (\cos^2 \gamma - 2\varepsilon \cos \gamma + \varepsilon^2) $$
+    <p>
+    整理すると以下のようになる。
+    </p>
+    $$ 1 - \varepsilon^2 - \cos^2 \gamma + \varepsilon^2 \cos^2 \gamma = (1 - \varepsilon^2)(1 - \cos^2 \gamma) = (1 - \varepsilon^2) \sin^2 \gamma $$
+    <p>
+    $0 \le \varepsilon  <  1$ であり、 $\theta$ と $\gamma$ の符号が一致する主値の範囲を考えると、両辺の平方根から以下の関係が成り立つ。
+    </p>
+    $$ \sin \theta = \frac{\sqrt{1 - \varepsilon^2} \sin \gamma}{1 - \varepsilon \cos \gamma} $$
+    <p>
+    これを微分の関係式に代入する。
+    </p>
+    $$ -\frac{\sqrt{1 - \varepsilon^2} \sin \gamma}{1 - \varepsilon \cos \gamma} \frac{d\theta}{d\gamma} = \frac{-(1 - \varepsilon^2) \sin \gamma}{(1 - \varepsilon \cos \gamma)^2} $$
+    <p>
+    両辺から $-\sin \gamma$ と分母の一部を簡約化する。
+    </p>
+    $$ \frac{d\theta}{d\gamma} = \frac{\sqrt{1 - \varepsilon^2}}{1 - \varepsilon \cos \gamma} $$
+    <p>
+    これにより、 $d\theta = \frac{\sqrt{1 - \varepsilon^2}}{1 - \varepsilon \cos \gamma} d\gamma$ となることが完全に証明された。
+    </p>
+</div>
+
+
+<h2>3. 楕円の幾何学とSommerfeld置換の完全な一致</h2>
+
+<p>
+流体力学で導入されたこの置換は、天体力学において中心力場（太陽など）を原点として物体の軌道を記述する際の、真近点角 (true anomaly) から離心角 (eccentric anomaly) への幾何学的射影と完全に同一の数学的構造を持っている。この事実を自己完結的に証明するために、まず楕円の定義と極方程式から出発する。
+</p>
+
+<div class="definition-box">
+    <div class="title">定義 3 (楕円と離心率)</div>
+    <p>
+    平面上に定点 $F$ と、 $F$ を通らない定直線 $l$ が与えられているとする。また、実数の定数 $e$ が $0  <  e  <  1$ を満たすとする。このとき、平面上の点 $P$ から $F$ までの距離 $PF$ と、 $P$ から $l$ に下ろした垂線の長さ $PH$ の比が常に $e$ に等しい、すなわち以下の関係を満たす点 $P$ の軌跡を楕円 (ellipse) と呼ぶ。
+    </p>
+    $$ PF = e \cdot PH $$
+    <p>
+    この定義において、定点 $F$ を焦点 (focus)、定直線 $l$ を準線 (directrix)、定数 $e$ を離心率 (eccentricity) と呼ぶ。離心率 $e$ が $0$ に近づくほど軌跡は真円に近づく。
+    </p>
+</div>
+
+<div class="proposition-box">
+    <div class="title">命題 4 (楕円の極方程式)</div>
+    <p>
+    焦点 $F$ を極座標の極（原点）に選び、極軸（偏角 $\theta = 0$ の半直線）を楕円の長軸に沿ってとる。離心率を $e$ 、準線 $l$ を極軸に垂直な直線とし、極 $F$ から準線 $l$ までの距離を $h$ ( $h  >  0$ ) とする。このとき、楕円上の点 $P$ の極座標 $(r, \theta)$ は以下の極方程式を満たす。
+    </p>
+    $$ r = \frac{eh}{1 + e \cos \theta} $$
+</div>
+
+<div class="proof-box">
+    <div class="title">証明</div>
+    <p>
+    極座標平面上に原点 $O$ をとり、これを焦点 $F$ と一致させる。極軸として $x$ 軸の正の向きをとる。準線 $l$ は $y$ 軸に平行な直線であり、ここでは原点（左側の焦点）に対して右側に準線が存在する配置、すなわち $l$ の方程式を直交座標で $x = h$ とする。
+    </p>
+    <p>
+    楕円上の任意の点 $P$ の極座標を $(r, \theta)$ とすると、その直交座標 $(x, y)$ は $x = r \cos \theta$ 、 $y = r \sin \theta$ と表される。
+    点 $P$ から準線 $l$ へ下ろした垂線の足を $H$ とすると、 $H$ の座標は $(h, r \sin \theta)$ となる。したがって、点 $P$ から準線 $l$ までの距離 $PH$ は以下のように書ける。
+    </p>
+    $$ PH = |h - x| = |h - r \cos \theta| $$
+    <p>
+    一方、点 $P$ から焦点 $F$ (原点) までの距離 $PF$ は動径 $r$ そのものである。
+    </p>
+    $$ PF = r $$
+    <p>
+    楕円の定義 $PF = e \cdot PH$ にこれらを代入する。軌跡が準線より左側（原点側）の領域 $r \cos \theta  <  h$ に閉じて存在することは $0  <  e  <  1$ から保証されるため、絶対値をそのまま外すことができる。
+    </p>
+    $$ r = e (h - r \cos \theta) $$
+    <p>
+    この式を $r$ について解くために展開し、 $r$ を含む項を左辺にまとめる。
+    </p>
+    $$ r + e r \cos \theta = eh $$
+    $$ r (1 + e \cos \theta) = eh $$
+    <p>
+    両辺を $1 + e \cos \theta$ で割ることで、求める極方程式が得られる。
+    </p>
+    $$ r = \frac{eh}{1 + e \cos \theta} $$
+    <p>
+    ここで、分子の定数 $p = eh$ は半直弦 (semi-latus rectum) と呼ばれる。これにより命題が完全に証明された。
+    </p>
+</div>
+
+<div class="theorem-box">
+    <div class="title">定理 5 (Sommerfeld置換の幾何学的導出)</div>
+    <p>
+    極方程式 $r = \frac{p}{1 + e \cos \theta}$ で表される楕円上の点 $P$ の極角 $\theta$ に対して、中心を原点とする補助円に基づく離心角 $E$ を導入すると、 $\theta$ と $E$ の間には以下の関係が成り立つ。
+    </p>
+    $$ \cos E = \frac{e + \cos \theta}{1 + e \cos \theta} $$
+    <p>
+    これは、 $\varepsilon = e$ 、 $\gamma = E$ としたSommerfeld置換の定義式そのものである。
+    </p>
+</div>
+
+<div class="proof-box">
+    <div class="title">証明</div>
+    <p>
+    極方程式 $r = eh - er \cos \theta$ を直交座標 $(x, y)$ に戻して楕円の中心と軸の長さを特定する。 $r = \sqrt{x^2 + y^2}$ および $r \cos \theta = x$ を代入する。
+    </p>
+    $$ \sqrt{x^2 + y^2} = eh - ex $$
+    <p>
+    両辺を2乗して整理する。
+    </p>
+    $$ x^2 + y^2 = e^2 h^2 - 2e^2 h x + e^2 x^2 $$
+    $$ (1 - e^2)x^2 + 2e^2 h x + y^2 = e^2 h^2 $$
+    <p>
+    $0  <  e  <  1$ より $1 - e^2  >  0$ であるから、両辺を $1 - e^2$ で割って $x$ について平方完成を行う。
+    </p>
+    $$ \left( x + \frac{e^2 h}{1 - e^2} \right)^2 - \left( \frac{e^2 h}{1 - e^2} \right)^2 + \frac{y^2}{1 - e^2} = \frac{e^2 h^2}{1 - e^2} $$
+    <p>
+    定数項を右辺に移行して整理する。
+    </p>
+    $$ \left( x + \frac{e^2 h}{1 - e^2} \right)^2 + \frac{y^2}{1 - e^2} = \frac{e^2 h^2 (1 - e^2) + e^4 h^2}{(1 - e^2)^2} = \frac{e^2 h^2}{(1 - e^2)^2} $$
+    <p>
+    ここで、楕円の軌道長半径 (semi-major axis) を $a = \frac{eh}{1 - e^2}$ と定義する。これにより、半直弦は $p = eh = a(1 - e^2)$ と書き換えられる。また、楕円の中心の $x$ 座標は $-ea$ となる。方程式は以下のように標準形となる。
+    </p>
+    $$ \frac{(x + ea)^2}{a^2} + \frac{y^2}{a^2(1 - e^2)} = 1 $$
+    <p>
+    この標準形に基づき、離心角 $E$ を媒介変数として点 $P(x, y)$ を表現する。楕円に外接する半径 $a$ の補助円を考えると、 $P$ の座標は以下のように書ける。
+    </p>
+    $$ x + ea = a \cos E \implies x = a(\cos E - e) $$
+    <p>
+    一方、極座標系における $x$ 座標は $x = r \cos \theta$ である。極方程式に $p = a(1 - e^2)$ を代入した $r = \frac{a(1 - e^2)}{1 + e \cos \theta}$ を用いる。
+    </p>
+    <p>
+    まず、動径 $r$ を $E$ で表す。極方程式を $r + er \cos \theta = a(1 - e^2)$ と変形し、 $r \cos \theta$ に $a(\cos E - e)$ を代入する。
+    </p>
+    $$ r + e \cdot a(\cos E - e) = a - a e^2 $$
+    $$ r + ae \cos E - ae^2 = a - a e^2 $$
+    $$ r = a (1 - e \cos E) $$
+    <p>
+    次に、 $x = r \cos \theta$ の関係式に、導出した $r$ と $x = a(\cos E - e)$ を代入して $\cos \theta$ と $\cos E$ を直接結びつける。
+    </p>
+    $$ a(\cos E - e) = a(1 - e \cos E) \cos \theta $$
+    <p>
+    両辺を $a$ で割る（ $a  >  0$ ）。
+    </p>
+    $$ \cos E - e = (1 - e \cos E) \cos \theta $$
+    <p>
+    この式を $\cos E$ について解くために展開する。
+    </p>
+    $$ \cos E - e = \cos \theta - e \cos E \cos \theta $$
+    <p>
+    $\cos E$ を含む項を左辺にまとめる。
+    </p>
+    $$ \cos E + e \cos E \cos \theta = e + \cos \theta $$
+    $$ \cos E (1 + e \cos \theta) = e + \cos \theta $$
+    <p>
+    最後に両辺を $1 + e \cos \theta$ で割る（ $0  <  e  <  1$ より $1 + e \cos \theta  >  0$ であるため、ゼロ除算は発生しない）。
+    </p>
+    $$ \cos E = \frac{e + \cos \theta}{1 + e \cos \theta} $$
+    <p>
+    この結果は、偏心率 $\varepsilon$ を離心率 $e$ と同一視し、Sommerfeld角 $\gamma$ を離心角 $E$ と同一視したときのSommerfeld置換そのものである。
+    </p>
+</div>
+
+<h2>4. 置換の有効範囲と双曲型への拡張</h2>
+
+<p>
+Sommerfeld置換が実数の範囲で特異点を持たずに適用できる条件は、被積分関数の分母を標準形に帰着させることで明確になる。
+</p>
+
+<div class="proposition-box">
+    <div class="title">命題 6 (標準形への帰着と有効範囲)</div>
+    <p>
+    実数の定数 $a, b, c$ を持つ式 $a + b \cos \theta + c \sin \theta$ は、適当な定数 $A$ と $0 \le \varepsilon$ なる定数 $\varepsilon$、および位相角 $\alpha$ を用いて $A(1 + \varepsilon \cos(\theta - \alpha))$ の形に変形できる。
+    このとき、すべての実数 $\theta$ に対して分母が正となる（すなわち $a + b \cos \theta + c \sin \theta  >  0$ が成り立つ）ための必要十分条件は $a  >  \sqrt{b^2 + c^2}$ であり、これは標準形におけるパラメータ $\varepsilon$ が $0 \le \varepsilon  <  1$ を満たすことと同値である。
+    </p>
+</div>
+
+<div class="proof-box">
+    <div class="title">証明</div>
+    <p>
+    ベクトル $(b, c)$ のノルムを $R = \sqrt{b^2 + c^2}$ とする。 $R = 0$ の場合は $b = c = 0$ となり、分母が定数となるため自明である。 $R  >  0$ の場合、以下の関係を満たす角 $\alpha$ が一意に存在する。
+    </p>
+    $$ \cos \alpha = \frac{b}{R}, \quad \sin \alpha = \frac{c}{R} $$
+    <p>
+    これを用いると、元の式は三角関数の合成公式により以下のように変形できる。
+    </p>
+    $$ a + b \cos \theta + c \sin \theta = a + R (\cos \alpha \cos \theta + \sin \alpha \sin \theta) = a + R \cos(\theta - \alpha) $$
+    <p>
+    ここで、 $a \neq 0$ と仮定し、全体を $a$ でくくり出す。
+    </p>
+    $$ a + R \cos(\theta - \alpha) = a \left( 1 + \frac{R}{a} \cos(\theta - \alpha) \right) $$
+    <p>
+    定数 $A = a$ 、 $\varepsilon = \frac{R}{a} = \frac{\sqrt{b^2 + c^2}}{a}$ と置くことで、標準形 $A(1 + \varepsilon \cos(\theta - \alpha))$ が得られる。
+    次に、すべての実数 $\theta$ に対してこの値が正となる条件を求める。関数 $\cos(\theta - \alpha)$ の最小値は $-1$ であるため、 $a + R \cos(\theta - \alpha)$ の最小値は $a - R$ である。したがって、すべての $\theta$ で正となるための必要十分条件は以下の不等式が成り立つことである。
+    </p>
+    $$ a - R  >  0 \implies a  >  \sqrt{b^2 + c^2} $$
+    <p>
+    この条件 $a  >  R$ と $\varepsilon = \frac{R}{a}$ を組み合わせると、 $R \ge 0$ であることから自動的に $0 \le \varepsilon$ となり、 $\frac{R}{a}  <  1$ から $\varepsilon  <  1$ を得る。したがって、分母が $0$ にならない条件は $0 \le \varepsilon  <  1$ と完全に同値であることが証明された。
+    </p>
+</div>
+
+<p>
+もし $\varepsilon  >  1$ の場合（幾何学的には双曲線軌道に相当）、分母が $0$ になる特異点が存在するため通常の置換は破綻する。しかし、分母が正となる区間に限定して積分を行う場合は、双曲線関数を用いた類似の置換が可能である。自己完結性のため、双曲線関数の定義を先に述べる。
+</p>
+
+<div class="definition-box">
+    <div class="title">定義 7 (双曲線関数)</div>
+    <p>
+    実数 $x$ に対して、双曲線余弦 (hyperbolic cosine) と双曲線正弦 (hyperbolic sine) を以下のように定義する。
+    </p>
+    $$ \cosh x = \frac{e^x + e^{-x}}{2}, \quad \sinh x = \frac{e^x - e^{-x}}{2} $$
+    <p>
+    これらは基本恒等式 $\cosh^2 x - \sinh^2 x = 1$ を満たし、 $(\cosh x)' = \sinh x$ , $(\sinh x)' = \cosh x$ である。
+    </p>
+</div>
+
+<div class="proposition-box">
+    <div class="title">命題 8 ($\varepsilon  >  1$ の場合の双曲Sommerfeld置換)</div>
+    <p>
+    パラメータが $\varepsilon  >  1$ を満たすとき、分母が正となる区間における積分には以下の変数変換（双曲Sommerfeld置換）を用いることで、有理関数の積分へ帰着できる。
+    </p>
+    $$ \cosh H = \frac{\varepsilon + \cos \theta}{1 + \varepsilon \cos \theta} $$
+    <p>
+    このとき、微小変位は $d\theta = \frac{\sqrt{\varepsilon^2 - 1}}{\varepsilon \cosh H - 1} dH$ となる。
+    </p>
+</div>
+
+<div class="proof-box">
+    <div class="title">証明</div>
+    <p>
+    分母が正となる $1 + \varepsilon \cos \theta  >  0$ を満たす区間において、定義式から $\cos \theta$ を $H$ について解く。
+    </p>
+    $$ (1 + \varepsilon \cos \theta) \cosh H = \varepsilon + \cos \theta $$
+    $$ \cos \theta (\varepsilon \cosh H - 1) = \varepsilon - \cosh H $$
+    $$ \cos \theta = \frac{\varepsilon - \cosh H}{\varepsilon \cosh H - 1} $$
+    <p>
+    これを元の分母に代入する。
+    </p>
+    $$ 1 + \varepsilon \cos \theta = 1 + \varepsilon \frac{\varepsilon - \cosh H}{\varepsilon \cosh H - 1} = \frac{\varepsilon^2 - 1}{\varepsilon \cosh H - 1} $$
+    <p>
+    次に、 $\cos \theta$ の式を $H$ で微分する。商の微分法則より以下の式を得る。
+    </p>
+    $$ -\sin \theta \frac{d\theta}{dH} = \frac{(-\sinh H)(\varepsilon \cosh H - 1) - (\varepsilon - \cosh H)(\varepsilon \sinh H)}{(\varepsilon \cosh H - 1)^2} $$
+    <p>
+    分子を展開して整理する。
+    </p>
+    $$ -\varepsilon \sinh H \cosh H + \sinh H - \varepsilon^2 \sinh H + \varepsilon \sinh H \cosh H = (1 - \varepsilon^2) \sinh H $$
+    <p>
+    一方、双曲線関数の公式 $\cosh^2 H - \sinh^2 H = 1$ を用いて $\sin^2 \theta$ を計算する。
+    </p>
+    $$ \sin^2 \theta = 1 - \left( \frac{\varepsilon - \cosh H}{\varepsilon \cosh H - 1} \right)^2 = \frac{(\varepsilon \cosh H - 1)^2 - (\varepsilon - \cosh H)^2}{(\varepsilon \cosh H - 1)^2} $$
+    <p>
+    分子を展開して整理すると $\varepsilon^2 \cosh^2 H + 1 - \varepsilon^2 - \cosh^2 H = (\varepsilon^2 - 1) \sinh^2 H$ となる。 $\varepsilon  >  1$ より $\varepsilon^2 - 1  >  0$ であるため、主値の範囲をとると以下のようになる。
+    </p>
+    $$ \sin \theta = \frac{\sqrt{\varepsilon^2 - 1} \sinh H}{\varepsilon \cosh H - 1} $$
+    <p>
+    これを微分の関係式に代入する。
+    </p>
+    $$ -\frac{\sqrt{\varepsilon^2 - 1} \sinh H}{\varepsilon \cosh H - 1} \frac{d\theta}{dH} = \frac{(1 - \varepsilon^2) \sinh H}{(\varepsilon \cosh H - 1)^2} $$
+    <p>
+    両辺を整理することで、微小変位は以下のように変換されることが証明された。
+    </p>
+    $$ d\theta = \frac{\sqrt{\varepsilon^2 - 1}}{\varepsilon \cosh H - 1} dH $$
+</div>
+
+<h2>5. Weierstrass置換との関係</h2>
+
+<p>
+汎用的な変数変換であるWeierstrass置換とSommerfeld置換は、代数的に密接な関係を持つ。
+</p>
+
+<div class="definition-box">
+    <div class="title">定義 9 (Weierstrass置換)</div>
+    <p>
+    変数 $\theta \in (-\pi, \pi)$ に対して、新たな変数 $t$ を $t = \tan(\frac{\theta}{2})$ と定義する変換をWeierstrass置換（半角正接置換）と呼ぶ。このとき、三角関数および微小変位は以下の有理式で記述される。
+    </p>
+    $$ \sin \theta = \frac{2t}{1 + t^2}, \quad \cos \theta = \frac{1 - t^2}{1 + t^2}, \quad d\theta = \frac{2}{1 + t^2} dt $$
+</div>
+
+<div class="theorem-box">
+    <div class="title">定理 10 (両者の代数的関係)</div>
+    <p>
+    定数 $\varepsilon$ を $0 \le \varepsilon  <  1$ とする。元の角度 $\theta$ に対するWeierstrassパラメータを $t = \tan(\frac{\theta}{2})$ とし、Sommerfeld角 $\gamma$ に対するWeierstrassパラメータを $u = \tan(\frac{\gamma}{2})$ とする。このとき、Sommerfeld置換の定義式 $\cos \gamma = \frac{\varepsilon + \cos \theta}{1 + \varepsilon \cos \theta}$ は、以下の単純な比例関係（線形な尺度変換）と完全に同値である。
+    </p>
+    $$ u = \sqrt{\frac{1 - \varepsilon}{1 + \varepsilon}} t $$
+</div>
+
+<div class="proof-box">
+    <div class="title">証明</div>
+    <p>
+    Weierstrass置換の公式 $\cos \theta = \frac{1 - t^2}{1 + t^2}$ をSommerfeld置換の右辺に代入する。
+    </p>
+    $$ \frac{\varepsilon + \cos \theta}{1 + \varepsilon \cos \theta} = \frac{\varepsilon + \frac{1 - t^2}{1 + t^2}}{1 + \varepsilon \frac{1 - t^2}{1 + t^2}} $$
+    <p>
+    分子と分母のそれぞれを通分する。
+    分子: $\varepsilon + \frac{1 - t^2}{1 + t^2} = \frac{\varepsilon(1 + t^2) + 1 - t^2}{1 + t^2} = \frac{(\varepsilon + 1) - (1 - \varepsilon)t^2}{1 + t^2}$
+    </p>
+    <p>
+    分母: $1 + \varepsilon \frac{1 - t^2}{1 + t^2} = \frac{1 + t^2 + \varepsilon(1 - t^2)}{1 + t^2} = \frac{(\varepsilon + 1) + (1 - \varepsilon)t^2}{1 + t^2}$
+    </p>
+    <p>
+    両者の比をとることで、分母の $1 + t^2$ が相殺される。
+    </p>
+    $$ \frac{\varepsilon + \cos \theta}{1 + \varepsilon \cos \theta} = \frac{(\varepsilon + 1) - (1 - \varepsilon)t^2}{(\varepsilon + 1) + (1 - \varepsilon)t^2} $$
+    <p>
+    ここで $0 \le \varepsilon  <  1$ より $\varepsilon + 1  >  0$ であるため、分子と分母をそれぞれ $\varepsilon + 1$ で割る。
+    </p>
+    $$ \frac{(\varepsilon + 1) - (1 - \varepsilon)t^2}{(\varepsilon + 1) + (1 - \varepsilon)t^2} = \frac{1 - \frac{1 - \varepsilon}{1 + \varepsilon}t^2}{1 + \frac{1 - \varepsilon}{1 + \varepsilon}t^2} $$
+    <p>
+    一方で、Sommerfeld角 $\gamma$ に対してもWeierstrass置換を適用すると、 $\cos \gamma$ はパラメータ $u$ を用いて $\cos \gamma = \frac{1 - u^2}{1 + u^2}$ と表される。
+    したがって、以下の等式が成り立つ。
+    </p>
+    $$ \frac{1 - u^2}{1 + u^2} = \frac{1 - \frac{1 - \varepsilon}{1 + \varepsilon}t^2}{1 + \frac{1 - \varepsilon}{1 + \varepsilon}t^2} $$
+    <p>
+    関数 $f(x) = \frac{1 - x}{1 + x}$ は $x \ge 0$ において単射であるため、対応する項を比較することで以下の関係を得る。
+    </p>
+    $$ u^2 = \frac{1 - \varepsilon}{1 + \varepsilon} t^2 $$
+    <p>
+    $\theta$ と $\gamma$ は同じ符号を持ち、したがって $t$ と $u$ も同じ符号を持つ。両辺の平方根をとることで定理が証明される。
+    </p>
+    $$ u = \sqrt{\frac{1 - \varepsilon}{1 + \varepsilon}} t $$
+</div>
+
+<h2>6. 定積分の計算例（網羅的コレクション）</h2>
+
+<p>
+Sommerfeld置換の理解を深めるため、互いに数学的構造が異なる様々なパターンの定積分の完全な計算手順を示す。
+</p>
+
+<div class="example-box">
+    <div class="title">例 1: 基本となる定積分（分母が1次の場合）</div>
+    <p>
+    定積分 $I_1 = \int_0^\pi \frac{1}{1 + \varepsilon \cos \theta} d\theta$ を計算せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    Sommerfeld置換を適用し、被積分関数および積分要素 $d\theta$ を $\gamma$ の式に書き換える。
+    </p>
+    $$ I_1 = \int_0^\pi \left( \frac{1 - \varepsilon \cos \gamma}{1 - \varepsilon^2} \right) \frac{\sqrt{1 - \varepsilon^2}}{1 - \varepsilon \cos \gamma} d\gamma $$
+    <p>
+    被積分関数の分母と分子にある $1 - \varepsilon \cos \gamma$ は完全に相殺される。積分区間について、 $\theta=0 \implies \gamma=0$ , $\theta=\pi \implies \gamma=\pi$ となる。
+    </p>
+    $$ I_1 = \int_0^\pi \frac{1}{\sqrt{1 - \varepsilon^2}} d\gamma $$
+    <p>
+    被積分関数は定数となるため、ただちに積分を実行できる。
+    </p>
+    $$ I_1 = \left[ \frac{\gamma}{\sqrt{1 - \varepsilon^2}} \right]_0^\pi = \frac{\pi}{\sqrt{1 - \varepsilon^2}} $$
+</div>
+
+<div class="example-box">
+    <div class="title">例 2: 分母が2次の場合（ジャーナル軸受の圧力分布計算）</div>
+    <p>
+    定積分 $I_2 = \int_0^\pi \frac{1}{(1 + \varepsilon \cos \theta)^2} d\theta$ を計算せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    前例と同様にSommerfeld置換を適用する。分母が2乗になっていることに注意する。
+    </p>
+    $$ I_2 = \int_0^\pi \left( \frac{1 - \varepsilon \cos \gamma}{1 - \varepsilon^2} \right)^2 \frac{\sqrt{1 - \varepsilon^2}}{1 - \varepsilon \cos \gamma} d\gamma $$
+    <p>
+    式を整理すると、被積分関数は $\gamma$ の一次式を定数で割った形に帰着する。
+    </p>
+    $$ I_2 = \int_0^\pi \frac{1 - \varepsilon \cos \gamma}{(1 - \varepsilon^2)^{3/2}} d\gamma $$
+    <p>
+    項ごとに積分を行う。 $\cos \gamma$ の区間 $[0, \pi]$ における定積分は $0$ となる。
+    </p>
+    $$ I_2 = \frac{1}{(1 - \varepsilon^2)^{3/2}} \left[ \gamma - \varepsilon \sin \gamma \right]_0^\pi $$
+    <p>
+    したがって、求める値は以下のようになる。
+    </p>
+    $$ I_2 = \frac{\pi}{(1 - \varepsilon^2)^{3/2}} $$
+</div>
+
+<div class="example-box">
+    <div class="title">例 3: 分子に余弦を含む場合（摩擦力やせん断応力の計算）</div>
+    <p>
+    定積分 $J = \int_0^\pi \frac{\cos \theta}{(1 + \varepsilon \cos \theta)^2} d\theta$ を計算せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    被積分関数の分子の $\cos \theta$ に逆変換則 $\cos \theta = \frac{\cos \gamma - \varepsilon}{1 - \varepsilon \cos \gamma}$ を代入し、分母と微小変位はこれまで通り変換する。
+    </p>
+    $$ J = \int_0^\pi \frac{\cos \gamma - \varepsilon}{1 - \varepsilon \cos \gamma} \left( \frac{1 - \varepsilon \cos \gamma}{1 - \varepsilon^2} \right)^2 \frac{\sqrt{1 - \varepsilon^2}}{1 - \varepsilon \cos \gamma} d\gamma $$
+    <p>
+    分母と分子の $1 - \varepsilon \cos \gamma$ の個数を数えて簡約する。分子に2つ、分母に2つ存在するため、これらは完全に相殺される。
+    </p>
+    $$ J = \int_0^\pi \frac{\cos \gamma - \varepsilon}{(1 - \varepsilon^2)^{3/2}} d\gamma $$
+    <p>
+    項ごとに積分を行う。
+    </p>
+    $$ J = \frac{1}{(1 - \varepsilon^2)^{3/2}} \left[ \sin \gamma - \varepsilon \gamma \right]_0^\pi $$
+    <p>
+    したがって、求める値は以下のようになる。
+    </p>
+    $$ J = -\frac{\varepsilon \pi}{(1 - \varepsilon^2)^{3/2}} $$
+</div>
+
+<div class="example-box">
+    <div class="title">例 4: 分母が3次の場合（高次の膜厚変動の影響）</div>
+    <p>
+    定積分 $I_3 = \int_0^\pi \frac{1}{(1 + \varepsilon \cos \theta)^3} d\theta$ を計算せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    Sommerfeld置換を適用する。
+    </p>
+    $$ I_3 = \int_0^\pi \left( \frac{1 - \varepsilon \cos \gamma}{1 - \varepsilon^2} \right)^3 \frac{\sqrt{1 - \varepsilon^2}}{1 - \varepsilon \cos \gamma} d\gamma $$
+    <p>
+    式を整理すると、被積分関数の分子に2乗の項が残る。
+    </p>
+    $$ I_3 = \int_0^\pi \frac{(1 - \varepsilon \cos \gamma)^2}{(1 - \varepsilon^2)^{5/2}} d\gamma $$
+    <p>
+    分子を展開する。
+    </p>
+    $$ I_3 = \frac{1}{(1 - \varepsilon^2)^{5/2}} \int_0^\pi (1 - 2\varepsilon \cos \gamma + \varepsilon^2 \cos^2 \gamma) d\gamma $$
+    <p>
+    ここで、 $\cos^2 \gamma$ の定積分は半角の公式を用いて計算する。
+    </p>
+    $$ \int_0^\pi \cos^2 \gamma d\gamma = \int_0^\pi \frac{1 + \cos 2\gamma}{2} d\gamma = \left[ \frac{\gamma}{2} + \frac{\sin 2\gamma}{4} \right]_0^\pi = \frac{\pi}{2} $$
+    <p>
+    これと $\int_0^\pi \cos \gamma d\gamma = 0$ を用いて全体の定積分を評価する。
+    </p>
+    $$ I_3 = \frac{1}{(1 - \varepsilon^2)^{5/2}} \left( \pi - 0 + \varepsilon^2 \frac{\pi}{2} \right) = \frac{\pi \left( 1 + \frac{\varepsilon^2}{2} \right)}{(1 - \varepsilon^2)^{5/2}} $$
+</div>
+
+<div class="example-box">
+    <div class="title">例 5: 位相のずれと正弦を含む一周積分（標準形への帰着）</div>
+    <p>
+    実数の定数 $a, b, c$ が $a  >  \sqrt{b^2 + c^2}$ を満たすとき、定積分 $K = \int_0^{2\pi} \frac{1}{a + b \cos \theta + c \sin \theta} d\theta$ を計算せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    まず、分母に三角関数の合成公式を適用する。 $R = \sqrt{b^2 + c^2}$ とおき、 $\cos \alpha = \frac{b}{R}$ 、 $\sin \alpha = \frac{c}{R}$ を満たす位相角 $\alpha$ を導入する。
+    </p>
+    $$ a + b \cos \theta + c \sin \theta = a + R \cos(\theta - \alpha) = a \left( 1 + \frac{R}{a} \cos(\theta - \alpha) \right) $$
+    <p>
+    ここで $\varepsilon = \frac{R}{a}$ とおくと、条件 $a  >  \sqrt{b^2 + c^2}$ より $0 \le \varepsilon  <  1$ である。積分変数として $\varphi = \theta - \alpha$ を導入すると、微小変位は $d\varphi = d\theta$ となる。被積分関数は周期 $2\pi$ を持つため、任意の連続する $2\pi$ の区間における定積分は等しくなる。したがって、積分区間を $[-\alpha, 2\pi - \alpha]$ から $[0, 2\pi]$ にずらすことができる。
+    </p>
+    $$ K = \frac{1}{a} \int_0^{2\pi} \frac{1}{1 + \varepsilon \cos \varphi} d\varphi $$
+    <p>
+    被積分関数は $\varphi = \pi$ に関して対称（偶関数的な性質）であるため、区間 $[0, \pi]$ における積分の2倍となる。
+    </p>
+    $$ K = \frac{2}{a} \int_0^\pi \frac{1}{1 + \varepsilon \cos \varphi} d\varphi $$
+    <p>
+    この定積分は例1で計算した $I_1$ そのものであるため、その結果を代入する。
+    </p>
+    $$ K = \frac{2}{a} \frac{\pi}{\sqrt{1 - \varepsilon^2}} $$
+    <p>
+    最後に $\varepsilon = \frac{\sqrt{b^2 + c^2}}{a}$ を代入して元の定数 $a, b, c$ に戻す。
+    </p>
+    $$ K = \frac{2\pi}{a \sqrt{1 - \frac{b^2 + c^2}{a^2}}} = \frac{2\pi}{\sqrt{a^2 - (b^2 + c^2)}} = \frac{2\pi}{\sqrt{a^2 - b^2 - c^2}} $$
+</div>
+
+<div class="example-box">
+    <div class="title">例 6: 被積分関数が正弦と余弦の積を含む場合</div>
+    <p>
+    定積分 $L = \int_0^{\pi/2} \frac{1}{1 + \cos \theta \sin \theta} d\theta$ を計算せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    被積分関数の分母にある $\cos \theta \sin \theta$ を2倍角の公式を用いて変形する。
+    </p>
+    $$ 1 + \cos \theta \sin \theta = 1 + \frac{1}{2} \sin 2\theta $$
+    <p>
+    この結果を積分に代入し、新しい変数 $x = 2\theta$ を導入する。これに伴い、積分区間は $[0, \pi/2]$ から $[0, \pi]$ へ変化し、微小変位は $d\theta = \frac{1}{2} dx$ となる。
+    </p>
+    $$ L = \int_0^\pi \frac{1}{1 + \frac{1}{2} \sin x} \frac{1}{2} dx = \int_0^\pi \frac{1}{2 + \sin x} dx $$
+    <p>
+    次に、Sommerfeld置換の標準形である余弦関数に帰着させるため、三角関数の性質 $\sin x = \cos(x - \pi/2)$ を用いて位相をずらす。さらに変数 $\varphi = x - \pi/2$ を導入すると、微小変位は $dx = d\varphi$ であり、積分区間は $[0, \pi]$ から $[-\pi/2, \pi/2]$ へ変化する。
+    </p>
+    $$ L = \int_{-\pi/2}^{\pi/2} \frac{1}{2 + \cos \varphi} d\varphi $$
+    <p>
+    被積分関数 $\frac{1}{2 + \cos \varphi}$ は偶関数であるため、区間 $[-\pi/2, \pi/2]$ での積分は区間 $[0, \pi/2]$ での積分の2倍に等しい。さらに分母と分子を2で割ることで、Sommerfeld置換が適用可能な形に整理する。
+    </p>
+    $$ L = 2 \int_0^{\pi/2} \frac{1}{2 + \cos \varphi} d\varphi = \int_0^{\pi/2} \frac{1}{1 + \frac{1}{2} \cos \varphi} d\varphi $$
+    <p>
+    ここで、 $\varepsilon = \frac{1}{2}$ としてSommerfeld置換を適用する。新しい変数 $\gamma$ は以下の関係を満たす。
+    </p>
+    $$ \cos \gamma = \frac{\frac{1}{2} + \cos \varphi}{1 + \frac{1}{2} \cos \varphi} $$
+    <p>
+    積分区間の対応を確認する。 $\varphi = 0$ のとき、 $\cos \gamma = \frac{1/2 + 1}{1 + 1/2} = 1$ より $\gamma = 0$ である。 $\varphi = \pi/2$ のとき、 $\cos \varphi = 0$ となるため、 $\cos \gamma = \frac{1/2 + 0}{1 + 0} = \frac{1}{2}$ より $\gamma = \pi/3$ となる。したがって、 $\gamma$ の積分区間は $[0, \pi/3]$ となる。
+    前述の命題における基本公式を用いて、分母および微小変位を $\gamma$ の式に書き換える。
+    </p>
+    $$ 1 + \frac{1}{2} \cos \varphi = \frac{1 - (1/2)^2}{1 - \frac{1}{2} \cos \gamma} = \frac{3/4}{1 - \frac{1}{2} \cos \gamma} $$
+    $$ d\varphi = \frac{\sqrt{1 - (1/2)^2}}{1 - \frac{1}{2} \cos \gamma} d\gamma = \frac{\sqrt{3}/2}{1 - \frac{1}{2} \cos \gamma} d\gamma $$
+    <p>
+    これらを定積分 $L$ に代入する。
+    </p>
+    $$ L = \int_0^{\pi/3} \frac{1 - \frac{1}{2} \cos \gamma}{3/4} \frac{\sqrt{3}/2}{1 - \frac{1}{2} \cos \gamma} d\gamma $$
+    <p>
+    被積分関数の分子と分母にある $1 - \frac{1}{2} \cos \gamma$ は完全に相殺され、定数の積分に帰着する。
+    </p>
+    $$ L = \int_0^{\pi/3} \frac{\sqrt{3}/2}{3/4} d\gamma = \int_0^{\pi/3} \frac{2}{\sqrt{3}} d\gamma $$
+    <p>
+    積分を実行し、最終的な値を求める。
+    </p>
+    $$ L = \left[ \frac{2}{\sqrt{3}} \gamma \right]_0^{\pi/3} = \frac{2\pi}{3\sqrt{3}} $$
+</div>
+
+<div class="example-box">
+    <div class="title">例 7: 双曲型Sommerfeld置換の適用例 ($\varepsilon  >  1$ の場合)</div>
+    <p>
+    定積分 $M = \int_0^{\pi/2} \frac{1}{2 + 3 \cos \theta} d\theta$ を計算せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    分母の定数項で全体をくくり出し、標準形にする。
+    </p>
+    $$ M = \frac{1}{2} \int_0^{\pi/2} \frac{1}{1 + 1.5 \cos \theta} d\theta $$
+    <p>
+    $\varepsilon = 1.5  >  1$ であるため、命題8で導入した双曲型Sommerfeld置換 $\cosh H = \frac{1.5 + \cos \theta}{1 + 1.5 \cos \theta}$ を用いる。
+    </p>
+    <p>
+    積分区間の変換を行う。
+    $\theta = 0$ のとき、 $\cosh H = \frac{1.5 + 1}{1 + 1.5} = 1$ より $H = 0$ である。
+    $\theta = \pi/2$ のとき、 $\cosh H = \frac{1.5 + 0}{1 + 0} = 1.5$ より $H = \operatorname{arccosh}(1.5)$ となる。この値を $H_1$ とおく。
+    </p>
+    <p>
+    微小変位 $d\theta$ と分母は以下のように変換される。
+    </p>
+    $$ 1 + 1.5 \cos \theta = \frac{1.5^2 - 1}{1.5 \cosh H - 1} = \frac{1.25}{1.5 \cosh H - 1} $$
+    $$ d\theta = \frac{\sqrt{1.5^2 - 1}}{1.5 \cosh H - 1} dH = \frac{\sqrt{1.25}}{1.5 \cosh H - 1} dH $$
+    <p>
+    これらを定積分 $M$ に代入する。
+    </p>
+    $$ M = \frac{1}{2} \int_0^{H_1} \frac{1.5 \cosh H - 1}{1.25} \frac{\sqrt{1.25}}{1.5 \cosh H - 1} dH $$
+    <p>
+    被積分関数が簡約化され、定数の積分に帰着する。
+    </p>
+    $$ M = \frac{1}{2} \int_0^{H_1} \frac{1}{\sqrt{1.25}} dH = \frac{1}{2\sqrt{1.25}} H_1 $$
+    <p>
+    $\sqrt{1.25} = \sqrt{5/4} = \frac{\sqrt{5}}{2}$ であるから、係数は $\frac{1}{\sqrt{5}}$ となる。逆双曲線関数の公式 $\operatorname{arccosh}(x) = \log(x + \sqrt{x^2 - 1})$ を用いて $H_1$ を評価する。
+    </p>
+    $$ H_1 = \log\left(1.5 + \sqrt{1.5^2 - 1}\right) = \log\left(\frac{3}{2} + \sqrt{\frac{5}{4}}\right) = \log\left(\frac{3 + \sqrt{5}}{2}\right) $$
+    <p>
+    したがって、最終的な値は以下のようになる。
+    </p>
+    $$ M = \frac{1}{\sqrt{5}} \log\left(\frac{3 + \sqrt{5}}{2}\right) $$
+</div>
+
+<div class="example-box">
+    <div class="title">例 8: Weierstrass置換を直接適用した場合の複雑さの比較</div>
+    <p>
+    例2の積分 $I_2 = \int_0^\pi \frac{1}{(1 + \varepsilon \cos \theta)^2} d\theta$ に対して、直接Weierstrass置換 $t = \tan(\frac{\theta}{2})$ を適用した場合の計算の煩雑さを確認せよ。
+    </p>
+    <p><strong>解答:</strong></p>
+    <p>
+    $\cos \theta = \frac{1 - t^2}{1 + t^2}$, $d\theta = \frac{2}{1 + t^2} dt$ を代入する。積分区間は $\theta \in [0, \pi)$ が $t \in [0, \infty)$ に対応する。
+    </p>
+    $$ I_2 = \int_0^\infty \frac{1}{\left( 1 + \varepsilon \frac{1 - t^2}{1 + t^2} \right)^2} \frac{2}{1 + t^2} dt $$
+    <p>
+    分母の中を $1 + t^2$ で通分する。
+    </p>
+    $$ 1 + \varepsilon \frac{1 - t^2}{1 + t^2} = \frac{(1 + \varepsilon) + (1 - \varepsilon)t^2}{1 + t^2} $$
+    <p>
+    これを代入して整理する。
+    </p>
+    $$ I_2 = \int_0^\infty \frac{(1 + t^2)^2}{\left( (1 + \varepsilon) + (1 - \varepsilon)t^2 \right)^2} \frac{2}{1 + t^2} dt = 2 \int_0^\infty \frac{1 + t^2}{\left( (1 + \varepsilon) + (1 - \varepsilon)t^2 \right)^2} dt $$
+    <p>
+    得られた積分は、分母が $t^2$ の多項式の2乗、分子が $1+t^2$ という複雑な有理関数の広義積分となる。これを解くには、部分分数分解や、 $t = \sqrt{\frac{1+\varepsilon}{1-\varepsilon}} \tan \phi$ のような再度の変数変換（実質的にこれがSommerfeld置換の代数的操作と同値である）が必要となり、非常に迂遠な計算を強いられる。Sommerfeld置換が初めからこの複雑さを回避する「規格化」を含んでいることが、この比較から明確に理解できる。
+    </p>
+</div>
+
+<h2>7. 参考文献</h2>
+<ul class="reference-list">
+    <li>Pinkus, O., & Sternlicht, B. (1961). <em>Theory of Hydrodynamic Lubrication</em>. McGraw-Hill.</li>
+    <li>Sommerfeld, A. (1904). <a href="https://archive.org/details/zeitschriftfrma05rungegoog/page/n111/mode/2up" target="_blank" rel="noopener noreferrer">Zur hydrodynamischen Theorie der Schmiermittelreibung.</a> <em>Zeitschrift für Mathematik und Physik</em>, 50, 97-155.</li>
+</ul>
+
+</body>
+</html>

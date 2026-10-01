@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofic群とNon-Sofic群の理論：定義、例、構造定理、および最新の発展</title>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    header {
+      border-bottom: 2px solid #2c3e50;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 2em;
+    }
+    h2 {
+      color: #2980b9;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+      margin-top: 30px;
+    }
+    h3 {
+      color: #16a085;
+      margin-top: 20px;
+    }
+    .statement {
+      background-color: #ffffff;
+      border-left: 4px solid #2980b9;
+      padding: 15px;
+      margin: 20px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .proof {
+      background-color: #ffffff;
+      border-left: 4px solid #27ae60;
+      padding: 15px;
+      margin: 20px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .example {
+      background-color: #ffffff;
+      border-left: 4px solid #f39c12;
+      padding: 15px;
+      margin: 20px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .proof-title {
+      font-weight: bold;
+      color: #27ae60;
+      margin-bottom: 10px;
+    }
+    .statement-title {
+      font-weight: bold;
+      color: #2980b9;
+      margin-bottom: 10px;
+    }
+    .example-title {
+      font-weight: bold;
+      color: #f39c12;
+      margin-bottom: 10px;
+    }
+    ul, ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    a {
+      color: #2980b9;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      margin-top: 50px;
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+      font-size: 0.9em;
+      color: #7f8c8d;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Sofic群とNon-Sofic群の理論：定義、例、構造定理、および最新の発展</h1>
+</header>
+
+<main>
+  <section id="introduction">
+    <h2>1. はじめに</h2>
+    <p>
+      本解説では、幾何学的群論および力学系理論において極めて重要な概念である <strong>sofic群 (sofic group)</strong> および <strong>non-sofic群 (non-sofic group)</strong> について、基礎定義から具体例、構造定理、そして近年の数学的発展に至るまでを厳密かつ自己完結的に解説する。
+    </p>
+  </section>
+
+  <section id="definitions">
+    <h2>2. 基本定義と準備</h2>
+    
+    <p>
+      sofic群の定義を述べるために、まず有限集合上の置換群および正規化Hamming距離についての準備を行う。
+    </p>
+
+    <div class="statement">
+      <div class="statement-title">定義 2.1 (対称群)</div>
+      <p>
+        有限集合 $X$ に対し、$X$ から $X$ への全単射全体のなす群を <strong>対称群 (symmetric group)</strong> と呼び、$\mathrm{Sym}(X)$ で表す。
+      </p>
+    </div>
+
+    <div class="statement">
+      <div class="statement-title">定義 2.2 (正規化Hamming距離)</div>
+      <p>
+        有限集合 $X$ 上の対称群 $\mathrm{Sym}(X)$ の2つの元 $\sigma, \tau \in \mathrm{Sym}(X)$ に対し、それらの間の <strong>正規化Hamming距離 (normalized Hamming distance)</strong> $d_H(\sigma, \tau)$ を以下のように定義する。
+      </p>
+      $$
+      d_H(\sigma, \tau) = \frac{1}{|X|} |\{x \in X \mid \sigma(x) \neq \tau(x)\}|
+      $$
+    </div>
+
+    <div class="example">
+      <div class="example-title">例 2.3 (正規化Hamming距離の計算例)</div>
+      <p>
+        $X = \{1, 2, 3, 4\}$ とし、$\sigma, \tau \in \mathrm{Sym}(X)$ を巡回置換表示で $\sigma = (1\ 2)$, $\tau = (1\ 2\ 3)$ とする。各要素の行き先を計算すると、
+      </p>
+      <ul>
+        <li>$\sigma(1) = 2, \quad \tau(1) = 2$ （一致）</li>
+        <li>$\sigma(2) = 1, \quad \tau(2) = 3$ （不一致）</li>
+        <li>$\sigma(3) = 3, \quad \tau(3) = 1$ （不一致）</li>
+        <li>$\sigma(4) = 4, \quad \tau(4) = 4$ （一致）</li>
+      </ul>
+      <p>
+        したがって、$\sigma(x) \neq \tau(x)$ となる $x \in X$ は $x = 2, 3$ の 2 個である。ゆえに、正規化Hamming距離は $d_H(\sigma, \tau) = \frac{2}{4} = \frac{1}{2}$ である。
+      </p>
+    </div>
+
+    <div class="statement">
+      <div class="statement-title">定義 2.4 (Sofic群)</div>
+      <p>
+        群 $G$ が <strong>sofic (sofic)</strong> であるとは、任意の有限部分集合 $F \subset G$ と任意の $\epsilon > 0$ に対して、ある有限集合 $X$ と写像 $\phi \colon G \to \mathrm{Sym}(X)$ （$\phi$ は群準同型である必要はない）が存在し、以下の2つの条件を満たすことである。
+      </p>
+      <ol>
+        <li>任意の $g, h \in F$ に対して、$d_H(\phi(gh), \phi(g)\phi(h)) < \epsilon$ である。</li>
+        <li>任意の相異なる $g, h \in F$ に対して、$d_H(\phi(g), \phi(h)) > 1 - \epsilon$ である。</li>
+      </p>
+    </div>
+
+    <p>
+      また、sofic群の定義を満たさない群のことを <strong>non-sofic群 (non-sofic group)</strong> と呼ぶ。
+    </p>
+
+    <h3>2.1. 語源と名称の由来</h3>
+    <p>
+      "sofic" という単語は、ヘブライ語で「有限」や「終わり」を意味する単語 "sof" (סוף) に由来する造語である。数学者 Benjamin Weiss が 2000 年に、Mikhail Gromov (1999) によって導入された群のクラスを名付けるために提唱した。この名称は、無限群の有限部分構造を有限対称群の置換として「ほぼ正確に」近似できるという、群の「有限的」な性質を直接的に反映している。
+    </p>
+  </section>
+
+  <section id="residually-finite">
+    <h2>3. Sofic群の基本例：剰余有限群</h2>
+    
+    <p>
+      sofic群の概念を理解する上で最も重要な古典的例の一つが <strong>剰余有限群 (residually finite group)</strong> である。
+    </p>
+
+    <div class="statement">
+      <div class="statement-title">定義 3.1 (剰余有限群)</div>
+      <p>
+        群 $G$ が <strong>剰余有限 (residually finite)</strong> であるとは、任意の $e \neq g \in G$ に対して、ある有限群 $Q$ と群準同型 $\pi \colon G \to Q$ が存在し、$\pi(g) \neq e_Q$ （ここで $e_Q$ は $Q$ の単位元）を満たすことである。
+      </p>
+    </div>
+
+    <div class="statement">
+      <div class="statement-title">命題 3.2</div>
+      <p>
+        任意の剰余有限群 $G$ はsoficである。
+      </p>
+    </div>
+
+    <div class="proof">
+      <div class="proof-title">証明</div>
+      <p>
+        群 $G$ を剰余有限群とする。任意に有限部分集合 $F \subset G$ と $\epsilon > 0$ をとる。$G$ がsoficであることを示すためには、適当な有限集合 $X$ と写像 $\phi \colon G \to \mathrm{Sym}(X)$ を構成し、定義 2.4 の2条件を満たすことを確認すればよい。
+      </p>
+      <p>
+        集合 $K = \{g^{-1} h \mid g, h \in F, g \neq h\}$ を定義する。$F$ は有限集合であるから $K$ も有限集合である。また、$g \neq h$ より $g^{-1}h \neq e$ であるから、$K$ は $G$ の単位元 $e$ を含まない。
+      </p>
+      <p>
+        $K$ の各元 $k \in K$ に対して、$G$ は剰余有限であるから、ある有限群 $Q_k$ と群準同型 $\pi_k \colon G \to Q_k$ が存在して、$\pi_k(k) \neq e_{Q_k}$ を満たす。
+      </p>
+      <p>
+        これらをすべて束ねた群準同型 $\Pi \colon G \to \prod_{k \in K} Q_k$ を、以下のように定義する。
+      </p>
+      $$
+      \Pi(g) = (\pi_k(g))_{k \in K}
+      $$
+      <p>
+        $K$ は有限集合であり、各 $Q_k$ も有限群であるから、直積群 $Q = \prod_{k \in K} Q_k$ は有限群である。さらに、任意の $k \in K$ に対して、第 $k$ 成分 $\pi_k(k)$ が単位元ではないため、$\Pi(k) \neq e_Q$ が成り立つ。
+      </p>
+      <p>
+        ここで、有限集合 $X$ として有限群 $Q$ 自身をとる。すなわち $X = Q$ とする。写像 $\phi \colon G \to \mathrm{Sym}(X)$ を、$Q$ に対する左移動作用 (left translation action) を用いて次のように定義する。任意の $g \in G$ と $x \in X = Q$ に対して、
+      </p>
+      $$
+      \phi(g)(x) = \Pi(g)x
+      $$
+      <p>
+        とする。$\Pi$ は群準同型であるため、任意の $g \in G$ に対して $\phi(g)$ は $X$ から $X$ への全単射となり、$\phi(g) \in \mathrm{Sym}(X)$ である。
+      </p>
+      <p>
+        この $X$ と $\phi$ がsofic群の条件を満たすことを確認する。
+      </p>
+      <p>
+        <strong>条件1の検証：</strong><br>
+        任意の $g, h \in G$ に対して、$\Pi$ が群準同型であることから、$\Pi(gh) = \Pi(g)\Pi(h)$ が成り立つ。したがって、任意の $x \in X$ に対して、
+      </p>
+      $$
+      \phi(gh)(x) = \Pi(gh)x = (\Pi(g)\Pi(h))x = \Pi(g)(\Pi(h)x) = \phi(g)(\phi(h)(x)) = (\phi(g) \circ \phi(h))(x)
+      $$
+      <p>
+        となる。これはすべての $x \in X$ に対して成り立つため、$\mathrm{Sym}(X)$ において $\phi(gh) = \phi(g)\phi(h)$ である。ゆえに、正規化されたHamming距離は $d_H(\phi(gh), \phi(g)\phi(h)) = 0$ となる。$0 < \epsilon$ であるから、条件1は完全に満たされる。
+      </p>
+      <p>
+        <strong>条件2の検証：</strong><br>
+        任意の相異なる $g, h \in F$ をとる。このとき、$g^{-1}h \in K$ である。構成から、$\Pi(g^{-1}h) \neq e_Q$ である。群準同型の性質から $\Pi(g)^{-1} \Pi(h) \neq e_Q$ であり、したがって $\Pi(g) \neq \Pi(h)$ である。
+      </p>
+      <p>
+        各 $x \in X = Q$ に対して、$Q$ における群の簡約律により $\Pi(g)x = \Pi(h)x$ となるのは $\Pi(g) = \Pi(h)$ のときに限る。しかし $\Pi(g) \neq \Pi(h)$ であるから、すべての $x \in X$ に対して $\Pi(g)x \neq \Pi(h)x$ が成り立つ。すなわち、すべての $x \in X$ に対して $\phi(g)(x) \neq \phi(h)(x)$ である。
+      </p>
+      <p>
+        したがって、一致する要素の数は 0 であり、正規化されたHamming距離は次のように計算される。
+      </p>
+      $$
+      d_H(\phi(g), \phi(h)) = \frac{1}{|X|} |\{x \in X \mid \phi(g)(x) \neq \phi(h)(x)\}| = \frac{|X|}{|X|} = 1
+      $$
+      <p>
+        $1 > 1 - \epsilon$ であるから、条件2も完全に満たされる。以上により、任意の剰余有限群はsofic群である。（証明終わり）
+      </p>
+    </div>
+  </section>
+
+  <section id="glnr-sofic">
+    <h2>4. 一般線型群 $GL_n(\mathbb{R})$ のSofic性</h2>
+
+    <p>
+      実数体 $\mathbb{R}$ 上の一般線型群 $GL_n(\mathbb{R})$ を離散群として考えたとき、これがsofic群であるかどうかを判定するために、sofic性の局所性と線型群の剰余有限性に関する2つの重要な定理を証明する。
+    </p>
+
+    <div class="statement">
+      <div class="statement-title">定理 4.1 (Sofic性の局所性)</div>
+      <p>
+        群 $G$ がsoficであるための必要十分条件は、$G$ の任意の有限生成部分群がsoficであることである。
+      </p>
+    </div>
+
+    <div class="proof">
+      <div class="proof-title">証明</div>
+      <p>
+        $(\Rightarrow)$ $G$ がsofic群であると仮定する。$H$ を $G$ の任意の部分群とする。$H$ の任意の有限部分集合 $F \subset H$ は $G$ の有限部分集合でもある。$G$ のsofic性により、$F$ と $\epsilon > 0$ に対して定義を満たす有限集合 $X$ と写像 $\phi \colon G \to \mathrm{Sym}(X)$ が存在する。この $\phi$ の定義域を $H$ に制限した写像 $\phi|_H \colon H \to \mathrm{Sym}(X)$ は、そのまま $H$ に対するsofic性の条件を満たす。したがって、$H$ はsoficであり、特に $G$ の任意の有限生成部分群はsoficである。
+      </p>
+      <p>
+        $(\Leftarrow)$ $G$ のすべての有限生成部分群がsoficであると仮定する。$G$ の任意の有限部分集合 $F \subset G$ と任意の $\epsilon > 0$ をとる。有限集合 $F$ によって生成される $G$ の部分群を $H = \langle F \rangle$ とする。$H$ は有限生成部分群であるから、仮定により $H$ はsoficである。したがって、ある有限集合 $X$ と写像 $\psi \colon H \to \mathrm{Sym}(X)$ が存在し、次の2条件を満たす。
+      </p>
+      <ol>
+        <li>任意の $g, h \in F$ に対して、$d_H(\psi(gh), \psi(g)\psi(h)) < \epsilon$ である。</li>
+        <li>任意の相異なる $g, h \in F$ に対して、$d_H(\psi(g), \psi(h)) > 1 - \epsilon$ である。</li>
+      </ol>
+      <p>
+        ここで、写像 $\phi \colon G \to \mathrm{Sym}(X)$ を次のように拡張定義する。
+      </p>
+      $$
+      \phi(g) = \begin{cases} \psi(g) & (g \in H \text{ のとき}) \\ \mathrm{id}_X & (g \notin H \text{ のとき}) \end{cases}
+      $$
+      <p>
+        ここで $\mathrm{id}_X$ は $X$ 上の恒等置換である。$F \subset H$ であるため、$F$ の元に対する $\phi$ の値は $\psi$ と完全に一致する。したがって、この $X$ と $\phi$ は群 $G$ に対するsofic群の定義の2条件を満たす。ゆえに $G$ はsofic群である。（証明終わり）
+      </p>
+    </div>
+
+    <div class="statement">
+      <div class="statement-title">定理 4.2 (Mal'cevの定理)</div>
+      <p>
+        標数 $0$ の体 $\mathbb{R}$ 上の一般線型群 $GL_n(\mathbb{R})$ の任意の有限生成部分群は、剰余有限 (residually finite) である。
+      </p>
+    </div>
+
+    <div class="proof">
+      <div class="proof-title">証明</div>
+      <p>
+        $GL_n(\mathbb{R})$ の任意の有限生成部分群を $H$ とし、その有限な生成系を $S = \{s_1, \dots, s_k\}$ とする。$S$ の各元は $n \times n$ 可逆行列である。$S$ の各元の行列成分、および各元の逆行列 $s_i^{-1}$ の行列成分をすべて集めた集合を $S_{\text{entry}} \subset \mathbb{R}$ とする。$S$ は有限集合であるから、$S_{\text{entry}}$ も $\mathbb{R}$ の有限部分集合である。
+      </p>
+      <p>
+        $S_{\text{entry}}$ によって $\mathbb{Z}$ 上生成される可換環を $A \subset \mathbb{R}$ とする。構成から、$A$ は有限生成 $\mathbb{Z}$-代数であり、$H$ の任意の元の成分は $A$ に属する。すなわち $H \subset GL_n(A)$ が成り立つ。
+      </p>
+      <p>
+        $H$ が剰余有限であることを示すため、任意に単位元ではない元 $g \in H$ をとる。$g$ は単位行列 $I_n$ ではないので、ある成分 $(i, j)$ が存在して $g_{ij} \neq \delta_{ij}$ (ここで $\delta_{ij}$ はKroneckerのデルタ) が成り立つ。$x = g_{ij} - \delta_{ij}$ とおくと、$x \in A$ かつ $x \neq 0$ である。
+      </p>
+      <p>
+        有限生成 $\mathbb{Z}$-代数 $A$ はJacobson環である。Jacobson環の基本性質により、$A$ のすべての極大イデアルの共通部分は零イデアル $\{0\}$ に等しい。$x \neq 0$ であるから、ある極大イデアル $\mathfrak{m} \subset A$ が存在して、$x \notin \mathfrak{m}$ を満たす。
+      </p>
+      <p>
+        さらに、代数幾何学におけるZariskiの補題 (Zariski's Lemma) により、有限生成 $\mathbb{Z}$-代数 $A$ の極大イデアル $\mathfrak{m}$ による剰余環 $A/\mathfrak{m}$ は有限体となる。この有限体を $\mathbb{F}$ とおく。
+      </p>
+      <p>
+        標準的な射影 $\rho \colon A \to \mathbb{F} = A/\mathfrak{m}$ は環準同型である。これを各行列成分ごとに適用することで、群準同型 $\pi \colon GL_n(A) \to GL_n(\mathbb{F})$ が誘導される。$\mathbb{F}$ は有限体であるため、$GL_n(\mathbb{F})$ は有限群である。
+      </p>
+      <p>
+        行列 $g$ の $(i, j)$ 成分の像について考えると、$x = g_{ij} - \delta_{ij} \notin \mathfrak{m}$ であるため、$\rho(g_{ij}) \neq \rho(\delta_{ij})$ が成り立つ。これは $\pi(g)$ が $GL_n(\mathbb{F})$ の単位行列ではないことを意味する。
+      </p>
+      <p>
+        以上により、任意の $e \neq g \in H$ に対して、有限群 $GL_n(\mathbb{F})$ と群準同型 $\pi$ が存在して $\pi(g) \neq e$ となることが示された。したがって、$H$ は剰余有限である。（証明終わり）
+      </p>
+    </div>
+
+    <div class="statement">
+      <div class="statement-title">系 4.3</div>
+      <p>
+        離散群としての一般線型群 $GL_n(\mathbb{R})$ はsoficである。
+      </p>
+    </div>
+
+    <div class="proof">
+      <div class="proof-title">証明</div>
+      <p>
+        定理 4.2 より、$GL_n(\mathbb{R})$ の任意の有限生成部分群は剰余有限である。命題 3.2 より、すべての剰余有限群はsoficであるため、$GL_n(\mathbb{R})$ の任意の有限生成部分群はsofic群である。そして定理 4.1 (sofic性の局所性) により、任意の有限生成部分群がsoficである群はそれ自身がsoficとなる。ゆえに $GL_n(\mathbb{R})$ はsofic群である。（証明終わり）
+      </p>
+    </div>
+  </section>
+
+  <section id="non-sofic">
+    <h2>5. Non-Sofic群の存在と最新の発展</h2>
+
+    <p>
+      1999年に Mikhail Gromov がsofic群の概念を導入して以来、以下の問いは幾何学的群論における最大の未解決問題の一つであった。
+    </p>
+    
+    <div class="statement">
+      <div class="statement-title">Gromovの未解決問題 (1999)</div>
+      <p>
+        すべての群はsoficか？（すなわち、non-sofic群は存在するか？）
+      </p>
+    </div>
+
+    <p>
+      amenable群、剰余有限群、可解群、局所有限群、自由群など、既知の主要な群のクラスがすべてsoficであることが次々と証明されたため、反例となるnon-sofic群を発見することは極めて困難とされていた。
+    </p>
+
+    <h3>5.1. 2026年8月の歴史的解決</h3>
+    <p>
+      この長年の未解決問題は、<strong>2026年8月</strong>に肯定的に（すなわちnon-sofic群が存在するという形で）解決された。
+    </p>
+    <ul>
+      <li>
+        <strong>OpenAIによる構成 (2026年8月1日):</strong> OpenAIの研究チームは、<strong>binary Leavitt algebra の単元群 (unit group of the binary Leavitt algebra)</strong> が non-sofic 群であることを明示的に構成し、機械検証可能な証明を発表した。
+      </li>
+      <li>
+        <strong>Francesco Fournier-Facio による拡張 (2026年8月3日 / 8月11日):</strong> 続いて Francesco Fournier-Facio はプレプリント (<a href="https://arxiv.org/abs/2608.02025" target="_blank">arXiv:2608.02025</a>) において、同じ判定法を応用し、<strong>torsion-free (ねじれのない) non-sofic群</strong> が存在することを証明した。
+      </li>
+    </ul>
+    <p>
+      これらの成果により、sofic群の枠組みには収まらない群が存在することが数学的に完全に確立された。
+    </p>
+  </section>
+
+  <section id="references">
+    <h2>6. 参考文献 (References)</h2>
+    <ol>
+      <li>
+        Gromov, M. (1999). Endomorphisms of symbolic algebraic varieties. <em>Journal of the European Mathematical Society</em>, 1(2), 109–197. <a href="https://eudml.org/doc/277515" target="_blank">https://eudml.org/doc/277515</a>
+      </li>
+      <li>
+        Weiss, B. (2000). Sofic groups and dynamical systems. <em>Sankhyā: The Indian Journal of Statistics, Series A</em>, 62(3), 350–359. <a href="https://www.researchgate.net/publication/228538030_Sofic_groups_and_dynamical_systems" target="_blank">https://www.researchgate.net/publication/228538030_Sofic_groups_and_dynamical_systems</a>
+      </li>
+      <li>
+        Mal'cev, A. I. (1940). On the faithful representations of infinite groups by matrices. <em>Matematicheskii Sbornik</em>, 8(50)(3), 405–422. <a href="https://geodesic.mathdoc.fr/articles/10.4153/CJM-1995-033-7/" target="_blank">https://geodesic.mathdoc.fr/articles/10.4153/CJM-1995-033-7/</a>
+      </li>
+      <li>
+        Fournier-Facio, F. (2026). A torsion-free non-sofic group. <em>arXiv preprint arXiv:2608.02025</em>. <a href="https://arxiv.org/abs/2608.02025" target="_blank">https://arxiv.org/abs/2608.02025</a>
+      </li>
+      <li>
+        Wikipedia contributors. Sofic group. <em>Wikipedia, The Free Encyclopedia</em>. <a href="https://en.wikipedia.org/wiki/Sofic_group" target="_blank">https://en.wikipedia.org/wiki/Sofic_group</a>
+      </li>
+    </ol>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2026 Mathematical Expository Document on Sofic and Non-Sofic Groups.</p>
+</footer>
+
+</body>
+</html>

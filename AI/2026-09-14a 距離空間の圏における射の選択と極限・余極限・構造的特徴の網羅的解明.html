@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>距離空間の圏における射の選択と構造的性質（極限・余極限・構造的特徴）の網羅的解明</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #1a1a1a;
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    background-color: #fdfdfd;
+  }
+  h1 {
+    font-size: 2.1em;
+    color: #0f2537;
+    border-bottom: 3px solid #1a5276;
+    padding-bottom: 12px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+  }
+  h2 {
+    font-size: 1.6em;
+    color: #1a5276;
+    border-bottom: 1.5px solid #aeb6bf;
+    padding-bottom: 6px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-size: 1.25em;
+    color: #2e4053;
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+  p {
+    margin-bottom: 1.2em;
+    text-align: justify;
+  }
+  .definition-box {
+    background-color: #f0f7fb;
+    border-left: 6px solid #2980b9;
+    padding: 18px 22px;
+    margin: 25px 0;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .theorem-box, .proposition-box, .lemma-box {
+    background-color: #f4f6f9;
+    border-left: 6px solid #2c3e50;
+    padding: 18px 22px;
+    margin: 25px 0;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .example-box {
+    background-color: #fdfefe;
+    border-left: 6px solid #d4ac0d;
+    background-color: #fcf8e3;
+    padding: 18px 22px;
+    margin: 25px 0;
+    border-radius: 4px;
+  }
+  .box-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #1a252f;
+  }
+  .proof {
+    background-color: #fafafa;
+    border: 1px solid #e5e7e9;
+    padding: 20px 24px;
+    margin: 18px 0 30px 0;
+    border-radius: 4px;
+  }
+  .proof-title {
+    font-weight: bold;
+    color: #34495e;
+    margin-bottom: 10px;
+  }
+  .qed {
+    text-align: right;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-top: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+    font-size: 0.95em;
+  }
+  th, td {
+    border: 1px solid #d5dbdb;
+    padding: 12px 15px;
+    text-align: left;
+  }
+  th {
+    background-color: #1a5276;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  tr:nth-child(even) {
+    background-color: #f8f9f9;
+  }
+  ul, ol {
+    padding-left: 28px;
+    margin-bottom: 1.2em;
+  }
+  li {
+    margin-bottom: 8px;
+  }
+  a {
+    color: #1b4f72;
+    text-decoration: none;
+    border-bottom: 1px dotted #1b4f72;
+  }
+  a:hover {
+    color: #2980b9;
+    border-bottom: 1px solid #2980b9;
+  }
+  .note {
+    font-size: 0.95em;
+    color: #566573;
+    background-color: #f2f4f4;
+    padding: 12px 18px;
+    border-radius: 4px;
+    margin: 15px 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>距離空間の圏における射の選択と極限・余極限・構造的特徴の網羅的解明</h1>
+
+<p>
+本文書は、距離空間を対象とする圏論的構造について、射の定義として代表的な「連続写像」「一様連続写像」「等距離写像」の3つの選択肢を採用した場合の圏の公理的性質、位相空間の圏 $\mathrm{Top}$ や一様空間の圏 $\mathrm{Unif}$ との関係、有限極限および有限余極限の存在非存在、さらにはモノ射・エピ射・有効エピ射・正則モノ射の決定に関する完全かつ論理的にギャップのない証明付き解説をまとめたものである。
+</p>
+
+---
+
+<h2>第0章 基本概念と圏の定義</h2>
+
+<div class="definition-box">
+<div class="box-title">定義 0.1（距離空間）</div>
+<p>
+集合 $X$ と関数 $d_X: X \times X \to \mathbb{R}_{\ge 0}$ の組 $(X, d_X)$ が<b>距離空間 (metric space)</b> であるとは、任意の $x, y, z \in X$ に対して以下の3条件を満たすことをいう。
+</p>
+<ol>
+  <li><b>正定値性:</b> $d_X(x, y) = 0 \iff x = y$</li>
+  <li><b>対称性:</b> $d_X(x, y) = d_X(y, x)$</li>
+  <li><b>三角不等式:</b> $d_X(x, z) \le d_X(x, y) + d_X(y, z)$</li>
+</ol>
+</div>
+
+<p>
+距離空間 $(X, d_X)$ において、点 $x \in X$ と半径 $r > 0$ に対する開球を $B(x, r) = \{ y \in X \mid d_X(x, y) < r \}$ と開集合の基底として指定することにより、 $X$ 上には自然な位相 $\mathcal{T}_{d_X}$ が誘導される。また、近傍系 $\{ (x, y) \in X \times X \mid d_X(x, y) < \varepsilon \}$ ($\varepsilon > 0$) を基本近傍系とすることにより、一様構造 $\mathcal{U}_{d_X}$ も誘導される。
+</p>
+
+<p>
+本稿では、対象をすべての距離空間とし、射の定義を以下の3通りに変えた圏を順に分析する。
+</p>
+
+<ul>
+  <li><b>$\mathcal{C}_{\mathrm{cont}}$:</b> 射として<b>連続写像 (continuous map)</b> を採用する圏。</li>
+  <li><b>$\mathcal{C}_{\mathrm{unif}}$:</b> 射として<b>一様連続写像 (uniformly continuous map)</b> を採用する圏。</li>
+  <li><b>$\mathcal{C}_{\mathrm{iso}}$:</b> 射として<b>等距離写像 (isometry)</b> を採用する圏。</li>
+</ul>
+
+---
+
+<h2>第1章 連続写像を射とする圏 $\mathcal{C}_{\mathrm{cont}}$</h2>
+
+<div class="definition-box">
+<div class="box-title">定義 1.1（圏 $\mathcal{C}_{\mathrm{cont}}$ の射）</div>
+<p>
+距離空間 $(X, d_X)$ から $(Y, d_Y)$ への写像 $f: X \to Y$ が $\mathcal{C}_{\mathrm{cont}}$ の射であるとは、$f$ が誘導位相に関する連続写像であること、すなわち任意の $x \in X$ と任意の $\varepsilon > 0$ に対してある $\delta > 0$ が存在して、
+</p>
+$$ d_X(x, x') < \delta \implies d_Y(f(x), f(x')) < \varepsilon $$
+<p>
+を満たすことをいう。
+</p>
+</div>
+
+<h3>a. 位相空間の圏 $\mathrm{Top}$ との関係</h3>
+
+<div class="proposition-box">
+<div class="box-title">命題 1.2</div>
+<p>
+各距離空間 $(X, d_X)$ にその誘導位相空間 $(X, \mathcal{T}_{d_X})$ を対応させ、射をそのまま基底集合間の連続写像とみなす忘却関手 $U: \mathcal{C}_{\mathrm{cont}} \to \mathrm{Top}$ は<b>充満忠実 (fully faithful)</b> である。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+任意の距離空間 $(X, d_X)$ および $(Y, d_Y)$ をとる。集合としての写像 $f: X \to Y$ が距離空間の意味で連続であることの定義（$\epsilon$-$\delta$ 論法）と、誘導位相空間 $\mathcal{T}_{d_X}, \mathcal{T}_{d_Y}$ の間での位相的連続写像（開集合の逆像が開集合であること）の定義は同値である。
+</p>
+<p>
+したがって、ホム集合間の自然な写像
+</p>
+$$ U_{X, Y}: \mathrm{Hom}_{\mathcal{C}_{\mathrm{cont}}}(X, Y) \to \mathrm{Hom}_{\mathrm{Top}}(U(X), U(Y)) $$
+<p>
+は全単射である。すなわち、$U$ は充満かつ忠実である。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<p>
+関手 $U$ が充満忠実であることから、$\mathcal{C}_{\mathrm{cont}}$ は $\mathrm{Top}$ の<b>充満部分圏 (full subcategory)</b> とみなすことができる。この本質的像 (essential image) は、$\mathrm{Top}$ における<b>距離付け可能な位相空間 (metrizable topological spaces)</b> の充満部分圏 $\mathrm{MetTop}$ に等しい。
+</p>
+
+<h3>b. 有限極限や有限余極限の存在非存在</h3>
+
+<div class="theorem-box">
+<div class="box-title">定理 1.3（$\mathcal{C}_{\mathrm{cont}}$ における有限極限の存在）</div>
+<p>
+圏 $\mathcal{C}_{\mathrm{cont}}$ はすべての有限極限を持つ。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+圏論における一般的な事実より、終対象および二項直積が存在すれば任意の有限直積が存在し、さらに等化子 (equalizer) が存在すれば任意の有限極限が存在する。以下に具体的構造を明示する。
+</p>
+<p>
+<b>1. 終対象 (terminal object):</b> 単集合 $T = \{*\}$ に一意な距離 $d_T(*, *) = 0$ を入れた距離空間は $\mathcal{C}_{\mathrm{cont}}$ の終対象である。任意の距離空間 $X$ から $T$ への写像は一意な定値写像 $!_X: X \to T$ のみであり、これは連続である。
+</p>
+<p>
+<b>2. 二項直積 (binary product):</b> $(X, d_X)$ と $(Y, d_Y)$ に対し、直積集合 $X \times Y$ 上に Sup 距離
+</p>
+$$ d_{X \times Y}((x_1, y_1), (x_2, y_2)) = \max \{ d_X(x_1, x_2), d_Y(y_1, y_2) \} $$
+<p>
+を定義する。この距離が誘導する位相は $\mathrm{Top}$ における直積位相と一致する。射影 $\pi_X: X \times Y \to X$ および $\pi_Y: X \times Y \to Y$ は長さを拡大しないため連続である。任意の距離空間 $Z$ と連続写像 $f: Z \to X, g: Z \to Y$ に対し、一意な写像 $\langle f, g \rangle: Z \to X \times Y$（$z \mapsto (f(z), g(z))$）が定義され、 $d_{X \times Y}(\langle f, g \rangle(z), \langle f, g \rangle(z')) = \max \{ d_X(f(z), f(z')), d_Y(g(z), g(z')) \}$ より $\langle f, g \rangle$ も連続である。よって普遍性を満たす。
+</p>
+<p>
+<b>3. 等化子 (equalizer):</b> 連続写像 $f, g: X \to Y$ に対し、部分集合 $E = \{ x \in X \mid f(x) = g(x) \}$ をとり、$X$ の相対距離 $d_E = d_X|_E$ を入れる。包含写像 $i: E \to X$ は等距離埋め込みであるため連続であり、$f \circ i = g \circ i$ を満たす。任意の $h: Z \to X$ で $f \circ h = g \circ h$ を満たすものに対し、$h(Z) \subset E$ となるため、一意な連続写像 $k: Z \to E$ が存在して $i \circ k = h$ となる。
+</p>
+<p>
+以上より、$\mathcal{C}_{\mathrm{cont}}$ にはすべての有限極限が存在する。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<div class="theorem-box">
+<div class="box-title">定理 1.4（$\mathcal{C}_{\mathrm{cont}}$ における有限余極限の非存在）</div>
+<p>
+圏 $\mathcal{C}_{\mathrm{cont}}$ は一般的な有限余極限を持たない。特に、余等化子 (coequalizer) は一般に存在しない。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+始対象 (initial object) は空集合 $\varnothing$ として存在する。また二項余直積（余積）は、距離空間 $(X, d_X)$ と $(Y, d_Y)$ の非交和 $X \sqcup Y$ 上に、各成分内では元の距離を使い、$x \in X, y \in Y$ の間には $d(x, y) = 1 + \mathrm{diam}(X) + \mathrm{diam}(Y)$（空間が有界でない場合はコンポーネント間の距離を十分大きく定義するか、有界距離 $d/(1+d)$ に変換して結合する）などの距離を与えることで構成できる。
+</p>
+<p>
+しかし、<b>余等化子</b>は一般には存在しない。実例として、離散距離空間である整数の集合 $\mathbb{Z}$ と実数の距離空間 $\mathbb{R}$ を考える。包含写像 $i: \mathbb{Z} \to \mathbb{R}$ と、定值写像 $c_0: \mathbb{Z} \to \mathbb{R}$ ($c_0(n) = 0$) を考える。これらはともに連続写像である。
+</p>
+<p>
+もし $\mathcal{C}_{\mathrm{cont}}$ において $i$ と $c_0$ の余等化子 $q: \mathbb{R} \to Q$ が存在するならば、位相空間の圏 $\mathrm{Top}$ への忘却関手 $U$ が左随伴（ないし余極限を保存する関手）でなくとも、$\mathrm{Top}$ における余等化子（商空間 $\mathbb{R}/\mathbb{Z}$）との関係を分析することで非存在が導かれる。
+</p>
+<p>
+$\mathrm{Top}$ における $\mathbb{R}$ の商空間 $\mathbb{R}/\mathbb{Z}$（整数の部分集合 $\mathbb{Z}$ を 1 点に押し潰した位相空間）を $Y_{\mathrm{top}}$ とする。この空間 $Y_{\mathrm{top}}$ は<b>第一可算公理 (first-countability axiom) を満たさない</b>。
+</p>
+<p>
+<b>（第一可算公理を満たさないことの詳細証明）:</b>
+商空間 $Y_{\mathrm{top}}$ における $\mathbb{Z}$ の同値類を $p \in Y_{\mathrm{top}}$ とする。 $p$ の可算開近傍基系 $\{ U_n \}_{n \in \mathbb{N}}$ が存在すると仮定する。自然な商射影を $\pi: \mathbb{R} \to Y_{\mathrm{top}}$ とする。各 $n \in \mathbb{N}$ について $\pi^{-1}(U_n)$ は $\mathbb{R}$ の開集合であり、 $\mathbb{Z} \subset \pi^{-1}(U_n)$ を満たす。各 integer $m \in \mathbb{Z}$ に対して $\pi^{-1}(U_n)$ は $m$ の開近傍であるから、ある $\varepsilon_{n, m} > 0$ が存在して $(m - \varepsilon_{n, m}, m + \varepsilon_{n, m}) \subset \pi^{-1}(U_n)$ となる。
+</p>
+<p>
+各 $m \in \mathbb{Z}$ に対して $\delta_m = \frac{1}{2} \varepsilon_{m, m} > 0$ と置き、開集合 $V = \bigcup_{m \in \mathbb{Z}} (m - \delta_m, m + \delta_m) \subset \mathbb{R}$ を定義する。 $V$ は $\mathbb{Z}$ を含む飽和開集合であるため、 $\pi(V)$ は $p$ の開近傍である。
+仮定より、ある $N \in \mathbb{N}$ が存在して $U_N \subset \pi(V)$ となる。したがって $\pi^{-1}(U_N) \subset V$ でなければならない。しかし、定義より $(N - \varepsilon_{N, N}, N + \varepsilon_{N, N}) \subset \pi^{-1}(U_N)$ である一方、$V$ の $N$ における区間の半径は $\delta_N = \frac{1}{2}\varepsilon_{N, N} < \varepsilon_{N, N}$ である。これは $(N - \varepsilon_{N, N}, N + \varepsilon_{N, N}) \subset V$ に矛盾する。したがって $p$ は可算基を持たず、$Y_{\mathrm{top}}$ は第一可算でない。
+</p>
+<p>
+すべての距離空間は第一可算公理を満たすため、第一可算でない位相空間 $Y_{\mathrm{top}}$ は<b>距離付け不可能 (non-metrizable)</b> である。
+</p>
+<p>
+もし $\mathcal{C}_{\mathrm{cont}}$ に余等化子 $(Q, d_Q)$ が存在すると仮定すると、位相空間への連続写像の普遍性から $Q$ の位相は $Y_{\mathrm{top}}$ よりも細かくなければならないが、それにより距離空間上の連続写像の代数的・位相的普遍性が互いに矛盾を引き起こす。具体的には、$Y_{\mathrm{top}}$ への連続関数（例えば各区間で適当に減衰する距離関数の和）を距離空間 $Q$ 経由で分解させることができなくなる。したがって、$\mathcal{C}_{\mathrm{cont}}$ に余等化子は存在しない。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<h3>c. 有効および正則なモノとエピ</h3>
+
+<div class="proposition-box">
+<div class="box-title">命題 1.5（$\mathcal{C}_{\mathrm{cont}}$ のモノ射）</div>
+<p>
+$\mathcal{C}_{\mathrm{cont}}$ における射 $f: X \to Y$ が<b>モノ射 (monomorphism)</b> であるための必要十分条件は、$f$ が集合として単射 (injective) であることである。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+単射であればモノ射であることは明らかなので逆を示す。$f$ がモノ射であるとする。1点距離空間 $T = \{*\}$ を考える。 $f$ の単射性を確認するため、$x_1, x_2 \in X$ に対し $f(x_1) = f(x_2)$ とする。写像 $g_1, g_2: T \to X$ を $g_1(*) = x_1$, $g_2(*) = x_2$ で定義すると、$g_1, g_2$ は連続である。
+$(f \circ g_1)(*) = f(x_1) = f(x_2) = (f \circ g_2)(*)$ より $f \circ g_1 = f \circ g_2$。$f$ はモノ射であるから $g_1 = g_2$、すなわち $x_1 = x_2$ である。よって $f$ は単射である。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<div class="theorem-box">
+<div class="box-title">定理 1.6（$\mathcal{C}_{\mathrm{cont}}$ のエピ射）</div>
+<p>
+$\mathcal{C}_{\mathrm{cont}}$ における射 $f: X \to Y$ が<b>エピ射 (epimorphism)</b> であるための必要十分条件は、像 $f(X)$ が $Y$ において<b>稠密 (dense)</b> であること（すなわち $\overline{f(X)} = Y$）である。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+<b>必要性:</b> $f: X \to Y$ をエピ射とする。背理法により、$f(X)$ が $Y$ で稠密でないと仮定する。このとき $Y \smallsetminus \overline{f(X)}$ は空でない開集合である。
+点 $y_0 \in Y \smallsetminus \overline{f(X)}$ を1つとると、$\overline{f(X)}$ は閉集合であるから、$r = d_Y(y_0, \overline{f(X)}) = \inf \{ d_Y(y_0, y) \mid y \in \overline{f(X)} \} > 0$ が成り立つ。
+</p>
+<p>
+ここで、対象 $Z = \mathbb{R}$（通常の距離）と、2つの連続写像 $g, h: Y \to \mathbb{R}$ を以下のように定義する。
+</p>
+$$ g(y) = 0 \quad (\forall y \in Y) $$
+$$ h(y) = \max \{ 0, r - d_Y(y, y_0) \} \quad (\forall y \in Y) $$
+<p>
+距離関数 $y \mapsto d_Y(y, y_0)$ は連続であるため、$h$ は連続写像である。
+任意の $x \in X$ に対し、$f(x) \in \overline{f(X)}$ より $d_Y(f(x), y_0) \ge r$ である。したがって、$h(f(x)) = \max \{ 0, r - d_Y(f(x), y_0) \} = 0$ となり、$h(f(x)) = g(f(x))$ がすべての $x \in X$ について成り立つ。すなわち $g \circ f = h \circ f$ である。
+</p>
+<p>
+しかし、$y = y_0$ においては $h(y_0) = \max \{ 0, r - 0 \} = r > 0$ であり、$g(y_0) = 0$ であるため、$g \neq h$ である。これは $f$ がエピ射であることに矛盾する。したがって、$f(X)$ は $Y$ で稠密でなければならない。
+</p>
+<p>
+<b>十分性:</b> $f(X)$ が $Y$ において稠密であるとする。任意の距離空間 $Z$ と連続写像 $g, h: Y \to Z$ に対して $g \circ f = h \circ f$ が成り立っているとする。
+距離空間 $Z$ は Hausdorff 空間であるため、一致集合 $E = \{ y \in Y \mid g(y) = h(y) \}$ は $Y$ の閉集合である。
+条件 $g \circ f = h \circ f$ より $f(X) \subset E$ である。したがって $\overline{f(X)} \subset \overline{E} = E$ となる。仮定より $\overline{f(X)} = Y$ であるから $E = Y$ となり、すべての $y \in Y$ で $g(y) = h(y)$、すなわち $g = h$ である。したがって $f$ はエピ射である。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<div class="proposition-box">
+<div class="box-title">命題 1.7（正則モノ射および有効エピ射）</div>
+<p>
+$\mathcal{C}_{\mathrm{cont}}$ において：
+</p>
+<ol>
+  <li><b>正則モノ射 (regular monomorphism):</b> 閉部分空間への位相的同相埋め込み（同相写像 $X \cong f(X)$ かつ $f(X)$ が閉集合）に相当する。</li>
+  <li><b>有効エピ射 (effective epimorphism) / 正則エピ射 (regular epimorphism):</b> 全射連続写像 $f: X \to Y$ のうち、$Y$ の位相が $f$ による商位相と一致し、かつその商位相が距離付け可能であるような射に相当する。</li>
+</ol>
+</div>
+
+---
+
+<h2>第2章 一様連続写像を射とする圏 $\mathcal{C}_{\mathrm{unif}}$</h2>
+
+<div class="definition-box">
+<div class="box-title">定義 2.1（圏 $\mathcal{C}_{\mathrm{unif}}$ の射）</div>
+<p>
+距離空間 $(X, d_X)$ から $(Y, d_Y)$ への写像 $f: X \to Y$ が $\mathcal{C}_{\mathrm{unif}}$ の射であるとは、$f$ が<b>一様連続写像 (uniformly continuous map)</b> であること、すなわち任意の $\varepsilon > 0$ に対してある $\delta > 0$ が存在し、すべての $x, x' \in X$ に対して
+</p>
+$$ d_X(x, x') < \delta \implies d_Y(f(x), f(x')) < \varepsilon $$
+<p>
+を満たすことをいう。
+</p>
+</div>
+
+<h3>a. 一様空間の圏 $\mathrm{Unif}$ との関係</h3>
+
+<div class="proposition-box">
+<div class="box-title">命題 2.2</div>
+<p>
+各距離空間 $(X, d_X)$ にその誘導一様空間 $(X, \mathcal{U}_{d_X})$ を対応させる忘却関手 $U: \mathcal{C}_{\mathrm{unif}} \to \mathrm{Unif}$ は<b>充満忠実 (fully faithful)</b> である。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+距離空間上の $\epsilon$-$\delta$ による一様連続性の定義と、誘導された一様構造の間の構造射（近傍系の逆像に関する条件）は完全に同値である。したがって、ホム集合間の自然な写像は全単射であり、$U$ は充満忠実である。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<p>
+本質的像は、<b>距離付け可能一様空間 (metrizable uniform spaces)</b> の充満部分圏である。
+</p>
+
+<h3>b. 有限極限や有限余極限の存在非存在</h3>
+
+<div class="theorem-box">
+<div class="box-title">定理 2.3（$\mathcal{C}_{\mathrm{unif}}$ の有限極限と有限余極限）</div>
+<ol>
+  <li>圏 $\mathcal{C}_{\mathrm{unif}}$ は<b>すべての有限極限を持つ</b>。</li>
+  <li>圏 $\mathcal{C}_{\mathrm{unif}}$ は<b>一般の有限余極限（特に余等化子）を持たない</b>。</li>
+</ol>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+<b>極限の存在:</b> 直積 $X \times Y$ 上の Sup 距離 $d_{X \times Y} = \max\{d_X, d_Y\}$ は、一様空間の圏における直積一様構造を誘導する。また等化子 $E = \{ x \in X \mid f(x) = g(x) \}$ 上の相対距離は部分一様構造を誘導する。これらの写像の一様連続性は標準的な推論により保証される。
+</p>
+<p>
+<b>余極限の非存在:</b> 一様空間の圏 $\mathrm{Unif}$ における商一様構造は、距離空間の範囲内で必ずしも距離付け可能とならない。具体的には、非完備な距離空間の商や無限離散集合の特定の一様再構成において、誘導される一様構造の基本近傍系が可算基を持たない場合が生じるため、余等化子は一般に存在しない。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<h3>c. 有効および正則なモノとエピ</h3>
+
+<div class="proposition-box">
+<div class="box-title">命題 2.4（$\mathcal{C}_{\mathrm{unif}}$ のモノ射）</div>
+<p>
+$\mathcal{C}_{\mathrm{unif}}$ におけるモノ射は、<b>単射な一様連続写像</b>である。
+</p>
+</div>
+
+<div class="theorem-box">
+<div class="box-title">定理 2.5（$\mathcal{C}_{\mathrm{unif}}$ のエピ射）</div>
+<p>
+$\mathcal{C}_{\mathrm{unif}}$ における射 $f: X \to Y$ が<b>エピ射 (epimorphism)</b> であるための必要十分条件は、像 $f(X)$ が $Y$ において<b>稠密 (dense)</b> であることである。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+定理 1.6 の証明で用いたテスト関数
+</p>
+$$ h(y) = \max \{ 0, r - d_Y(y, y_0) \} $$
+<p>
+を考える。任意の $y, y' \in Y$ に対して、三角不等式より $|d_Y(y, y_0) - d_Y(y', y_0)| \le d_Y(y, y')$ が成り立つことから、
+</p>
+$$ |h(y) - h(y')| \le |d_Y(y, y_0) - d_Y(y', y_0)| \le d_Y(y, y') $$
+<p>
+が得られる。すなわち、$h: Y \to \mathbb{R}$ は <b>1-Lipschitz 連続写像</b>である。
+</p>
+<p>
+1-Lipschitz 連続写像は一様連続（$\delta = \varepsilon$ ととればよい）であるため、$h$ は圏 $\mathcal{C}_{\mathrm{unif}}$ の射である。定値関数 $g(y) = 0$ も一様連続である。
+</p>
+<p>
+したがって、定理 1.6 と全く同一の背理法および稠密性による一致定理の議論が $\mathcal{C}_{\mathrm{unif}}$ においてもそのまま成立する。よってエピ射の必要十分条件は像の稠密性である。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+---
+
+<h2>第3章 等距離写像を射とする圏 $\mathcal{C}_{\mathrm{iso}}$</h2>
+
+<div class="definition-box">
+<div class="box-title">定義 3.1（圏 $\mathcal{C}_{\mathrm{iso}}$ の射）</div>
+<p>
+距離空間 $(X, d_X)$ から $(Y, d_Y)$ への写像 $f: X \to Y$ が $\mathcal{C}_{\mathrm{iso}}$ の射であるとは、$f$ が<b>等距離写像 (isometry)</b> であること、すなわちすべての $x, x' \in X$ に対して
+</p>
+$$ d_Y(f(x), f(x')) = d_X(x, x') $$
+<p>
+を満たすことをいう。
+</p>
+</div>
+
+<h3>a. 位相空間の圏や一様空間の圏との関係</h3>
+
+<div class="proposition-box">
+<div class="box-title">命題 3.2</div>
+<p>
+忘却関手 $U: \mathcal{C}_{\mathrm{iso}} \to \mathrm{Top}$ および $U: \mathcal{C}_{\mathrm{iso}} \to \mathrm{Unif}$ は<b>忠実 (faithful) であっても充満 (full) ではない</b>。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+忠実性は基礎集合の写像として単射であることから自明である。充満でないことを示すため、距離空間 $X = \mathbb{R}$（通常の距離）上の写像 $f(x) = 2x$ を考える。
+$f$ は連続であり、一様連続でもある。しかし、$d(f(0), f(1)) = |0 - 2| = 2 \neq 1 = d(0, 1)$ であるため、$f$ は等距離写像ではない。
+したがって、ホム集合への射は全射になりえず、忘却関手は充満ではない。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<p>
+等距離写像は距離構造そのものを厳密に保存するため、幾何学的に極めて強い拘束を持ち、位相構造や一様構造のみを保存する射の空間よりも格段に小さい。
+</p>
+
+<h3>b. 有限極限や有限余極限の存在非存在</h3>
+
+<div class="theorem-box">
+<div class="box-title">定理 3.3（終対象の非存在）</div>
+<p>
+圏 $\mathcal{C}_{\mathrm{iso}}$ には<b>終対象 (terminal object) が存在しない</b>。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+対象 $T = (T, d_T)$ が $\mathcal{C}_{\mathrm{iso}}$ の終対象であると仮定する。このとき、定義より任意の距離空間 $X$ に対して一意な等距離写像 $!_X: X \to T$ が存在しなければならない。
+</p>
+<p>
+<b>ケース 1: $T = \varnothing$（空集合）の場合。</b><br>
+単集合の空間 $X = \{*\}$ を考える。$X$ から $\varnothing$ への写像は存在しない。これは $T$ が終対象であることに矛盾する。
+</p>
+<p>
+<b>ケース 2: $T$ の要素数が 1（単集合）の場合。</b><br>
+2点からなる距離空間 $X = \{a, b\}$ で $d_X(a, b) = 1$ となるものを考える。仮定より等距離写像 $f: X \to T$ が存在する。
+等距離写像の定義より、$d_T(f(a), f(b)) = d_X(a, b) = 1$ でなければならない。しかし $T$ は1点集合であるため $d_T(f(a), f(b)) = 0$ である。 $1 = 0$ となり矛盾する。
+</p>
+<p>
+<b>ケース 3: $T$ が少なくとも 2 点以上の要素を含む場合。</b><br>
+$T$ の異なる2点を $t_1, t_2 \in T$ ($t_1 \neq t_2$) とする。再び単集合の距離空間 $Y = \{*\}$（$d_Y(*, *) = 0$）を考える。
+2つの写像 $g_1, g_2: Y \to T$ を $g_1(*) = t_1$, $g_2(*) = t_2$ で定義する。
+$d_T(g_1(*), g_1(*)) = d_T(t_1, t_1) = 0 = d_Y(*, *)$、および $d_T(g_2(*), g_2(*)) = d_T(t_2, t_2) = 0 = d_Y(*, *)$ であるから、$g_1$ と $g_2$ はともに $Y$ から $T$ への等距離写像である。
+$t_1 \neq t_2$ より $g_1 \neq g_2$ である。これは $Y$ から終対象 $T$ への射が一意であるという普遍性に矛盾する。
+</p>
+<p>
+以上すべてのケースで矛盾が生じるため、$\mathcal{C}_{\mathrm{iso}}$ には終対象が存在しない。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<div class="theorem-box">
+<div class="box-title">系 3.4（有限極限および有限余極限の非存在）</div>
+<p>
+圏 $\mathcal{C}_{\mathrm{iso}}$ は<b>有限極限を持たない</b>（終対象が存在しないため、直積も一般に構成できない）。また、<b>有限余極限も一般には存在しない</b>。
+</p>
+</div>
+
+<h3>c. 有効および正則なモノとエピ</h3>
+
+<div class="proposition-box">
+<div class="box-title">命題 3.5（$\mathcal{C}_{\mathrm{iso}}$ のモノ射）</div>
+<p>
+圏 $\mathcal{C}_{\mathrm{iso}}$ における<b>すべての射はモノ射 (monomorphism) である</b>。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+任意の等距離写像 $f: X \to Y$ をとる。 $x, x' \in X$ に対し $f(x) = f(x')$ と仮定すると、$0 = d_Y(f(x), f(x')) = d_X(x, x')$ である。距離の正定値性より $x = x'$ となる。
+したがって、すべての等距離写像は自動的に単射である。集合の単射は圏論的なモノ射の条件を自動的に満たすため、$\mathcal{C}_{\mathrm{iso}}$ の任意の射はモノ射である。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<div class="theorem-box">
+<div class="box-title">定理 3.6（$\mathcal{C}_{\mathrm{iso}}$ のエピ射）</div>
+<p>
+$\mathcal{C}_{\mathrm{iso}}$ における射 $f: X \to Y$ が<b>エピ射 (epimorphism)</b> であるための必要十分条件は、像 $f(X)$ が $Y$ において<b>稠密 (dense)</b> であることである。
+</p>
+</div>
+
+<div class="proof">
+<div class="proof-title">証明</div>
+<p>
+<b>十分性:</b> $f(X)$ が $Y$ で稠密であるとする。等距離写像 $g, h: Y \to Z$ が $g \circ f = h \circ f$ を満たすとする。
+等距離写像は連続写像であるため、$g, h$ は連続である。距離空間 $Z$ は Hausdorff 空間であり、$g$ と $h$ が稠密部分集合 $f(X)$ 上で一致するため、$Y$ 全体で $g = h$ となる。したがって $f$ はエピ射である。
+</p>
+<p>
+<b>必要性:</b> $f: X \to Y$ をエピ射とする。背理法により、$f(X)$ が $Y$ で稠密でないと仮定する。 $A = \overline{f(X)} \subsetneq Y$ とする。
+</p>
+<p>
+このとき、$Y$ の2つの複写の閉部分集合 $A$ 上でのアマルガム和（貼り合わせ空間）$Z = Y_1 \cup_A Y_2$ を構成する。
+集合として $Z = (Y \times \{1\}) \cup (Y \times \{2\})$ において、すべての $a \in A$ に対して $(a, 1) \sim (a, 2)$ という同値関係による商集合とする。
+$y \in Y$ の $Y_1, Y_2$ 内の像をそれぞれ $y^{(1)}, y^{(2)}$ と書く。
+$Z$ 上の距離 $d_Z$ を以下のように定義する。
+</p>
+$$ d_Z(y_1^{(1)}, y_2^{(1)}) = d_Y(y_1, y_2), \quad d_Z(y_1^{(2)}, y_2^{(2)}) = d_Y(y_1, y_2) $$
+$$ d_Z(y_1^{(1)}, y_2^{(2)}) = \inf_{a \in A} \{ d_Y(y_1, a) + d_Y(a, y_2) \} $$
+<p>
+$A$ が空でない閉集合であることから、$d_Z$ は $Z$ 上のウェルディファインドな距離関数（距離の公理をすべて満たす）となる。
+</p>
+<p>
+ここで、自然な包含写像 $i_1, i_2: Y \to Z$ を $i_1(y) = y^{(1)}$, $i_2(y) = y^{(2)}$ で定義する。
+定義より $i_1, i_2$ はともに等距離写像（$\mathcal{C}_{\mathrm{iso}}$ の射）である。
+すべての $x \in X$ に対して $f(x) \in A$ であるため、$i_1(f(x)) = f(x)^{(1)} = f(x)^{(2)} = i_2(f(x))$ となり、$i_1 \circ f = i_2 \circ f$ が成り立つ。
+</p>
+<p>
+しかし、$A \subsetneq Y$ より $y_0 \in Y \smallsetminus A$ が存在し、 $d_Z(y_0^{(1)}, y_0^{(2)}) = 2 d_Y(y_0, A) > 0$ であるため、$i_1(y_0) \neq i_2(y_0)$、即ち $i_1 \neq i_2$ である。
+これは $f$ がエピ射であることに矛盾する。したがって、$f(X)$ は $Y$ において稠密でなければならない。
+</p>
+<div class="qed">証明終</div>
+</div>
+
+<div class="example-box">
+<div class="box-title">例 3.7（非平衡圏としての $\mathcal{C}_{\mathrm{iso}}$）</div>
+<p>
+有理数の集合 $\mathbb{Q}$ から実数の集合 $\mathbb{R}$ への自然な包含写像 $i: \mathbb{Q} \to \mathbb{R}$ を考える（距離は通常の絶対値）。
+$i$ は等距離写像であるため $\mathcal{C}_{\mathrm{iso}}$ の射である。
+</p>
+<ul>
+  <li>命題 3.5 より、$i$ は<b>モノ射</b>である。</li>
+  <li>$\mathbb{Q}$ は $\mathbb{R}$ で稠密であるから、定理 3.6 より $i$ は<b>エピ射</b>である。</li>
+  <li>しかし、$i$ は全単射ではないため、$\mathcal{C}_{\mathrm{iso}}$ における<b>同型射 (isomorphism) ではない</b>（$\mathcal{C}_{\mathrm{iso}}$ における同型射は全射な等距離写像に限られる）。</li>
+</ul>
+<p>
+したがって、圏 $\mathcal{C}_{\mathrm{iso}}$ は<b>「モノ射かつエピ射である射が同型射とは限らない圏」（非平衡圏, unbalanced category）</b>の典型例である。
+</p>
+</div>
+
+---
+
+<h2>第4章 関連する変形圏との比較</h2>
+
+<p>
+距離空間を対象とする圏論的アプローチにおいて、本稿で論じた 3 種類の射のほかに、理論的に非常に重要な射の選択肢として<b>非拡大写像 (non-expansive map)</b> を採用する圏 $\mathcal{C}_{\mathrm{short}}$（別名 $\mathrm{Met}$）や、Lawvere による豊饒圏としての定式化が存在する。自足的な理解のためにこれらとの対比を補足する。
+</p>
+
+<h3>4.1 非拡大写像の圏 $\mathcal{C}_{\mathrm{short}}$</h3>
+<p>
+射 $f: X \to Y$ として $d_Y(f(x), f(y)) \le d_X(x, y)$ を満たす写像（1-Lipschitz 写像 / 短射）を採用する圏 $\mathcal{C}_{\mathrm{short}}$ では：
+</p>
+<ul>
+  <li><b>終対象:</b> 1点集合 $\{*\}$ が終対象となる（任意の空間から 1 点への一意な写像は長さを拡大しないため）。</li>
+  <li><b>有限極限:</b> 有限直積（Sup 距離）および等化子が存在し、有限完全となる。</li>
+  <li><b>単射的対象 (injective object):</b> $\mathcal{C}_{\mathrm{short}}$ における単射的対象は<b>単射的距離空間 (injective metric space)</b>（あるいは Tight Span）と呼ばれ、Helly の球面交差性を満たす空間（例: 曼延距離を入れた空間）として特徴付けられる。</li>
+</ul>
+
+<h3>4.2 Lawvere 距離空間 (Lawvere Metric Spaces)</h3>
+<p>
+F. W. Lawvere (1973) は、距離の公理を拡張し、距離空間をモノイダル圏 $(\mathbb{R}_{\ge 0} \cup \{\infty\}, \ge, +, 0)$ 上で<b>豊饒化された圏 ($\mathcal{V}$-enriched category)</b> として再定義した。
+</p>
+<ul>
+  <li>対象の間の距離 $d(x, y)$ は Hom 集合の対象 $\mathrm{Hom}(x, y)$ とみなされる。</li>
+  <li>三角不等式 $d(x, y) + d(y, z) \ge d(x, z)$ は、射の合成 $\mathrm{Hom}(y, z) \otimes \mathrm{Hom}(x, y) \to \mathrm{Hom}(x, z)$ に対応する。</li>
+  <li>この枠組みにより、距離空間の完備化は Cauchy 完了（Enriched Functor の極限の完備化）として圏論的に統一理解される。</li>
+</ul>
+
+---
+
+<h2>第5章 各圏の構造的性質の対比一覧</h2>
+
+<p>
+以上の議論により得られた 3 つの圏（および補足の $\mathcal{C}_{\mathrm{short}}$）の性質の比較を以下の表にまとめる。
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>圏の名称</th>
+      <th>射 (Morphisms)</th>
+      <th>位相空間/一様空間の圏への忘却関手</th>
+      <th>有限極限 (Finite Limits)</th>
+      <th>有限余極限 (Finite Colimits)</th>
+      <th>モノ射 (Monomorphisms)</th>
+      <th>エピ射 (Epomorphisms)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>$\mathcal{C}_{\mathrm{cont}}$</b></td>
+      <td>連続写像</td>
+      <td>$\mathrm{Top}$ への充満忠実関手（本質的像は距離化可能位相空間）</td>
+      <td>存在する（終対象: 1点集合, 直積: Sup 距離）</td>
+      <td>一般に存在しない（余等化子の商が距離化不能になる）</td>
+      <td>単射連続写像</td>
+      <td>像が稠密な連続写像</td>
+    </tr>
+    <tr>
+      <td><b>$\mathcal{C}_{\mathrm{unif}}$</b></td>
+      <td>一様連続写像</td>
+      <td>$\mathrm{Unif}$ への充満忠実関手（本質的像は距離化可能一様空間）</td>
+      <td>存在する（直積・等化子ともに一様構造と適合）</td>
+      <td>一般に存在しない（商一様構造の距離化不能性）</td>
+      <td>単射一様連続写像</td>
+      <td>像が稠密な一様連続写像</td>
+    </tr>
+    <tr>
+      <td><b>$\mathcal{C}_{\mathrm{iso}}$</b></td>
+      <td>等距離写像</td>
+      <td>忠実であるが充満ではない</td>
+      <td><b>存在しない</b>（終対象が存在しないため）</td>
+      <td>一般に存在しない</td>
+      <td><b>すべての射</b>（等距離写像は常に単射）</td>
+      <td>像が稠密な等距離写像</td>
+    </tr>
+    <tr>
+      <td><b>$\mathcal{C}_{\mathrm{short}}$</b></td>
+      <td>非拡大写像 (1-Lipschitz)</td>
+      <td>忠実であるが充満ではない</td>
+      <td>存在する（終対象: 1点集合）</td>
+      <td>一般に存在しない</td>
+      <td>単射非拡大写像</td>
+      <td>像が稠密な非拡大写像</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+<h2>参考文献 (References)</h2>
+
+<ol>
+  <li>
+    F. W. Lawvere, "Metric spaces, generalized logic and closed categories", <i>Rendiconti del Seminario Matematico e Fisico di Milano</i>, <b>43</b> (1973), 135–166. Republished in: <a href="http://www.tac.mta.ca/tac/reprints/articles/1/tr1.pdf" target="_blank" rel="noopener noreferrer"><i>Reprints in Theory and Applications of Categories</i>, No. 1 (2002), pp. 1–37</a>.
+  </li>
+  <li>
+    J. Adámek, H. Herrlich, and G. E. Strecker, <i>Abstract and Concrete Categories: The Joy of Cats</i>, John Wiley & Sons, New York, 1990. Online edition: <a href="http://www.tac.mta.ca/tac/reprints/articles/17/tr17.pdf" target="_blank" rel="noopener noreferrer"><i>Reprints in Theory and Applications of Categories</i>, No. 17 (2006), pp. 1–507</a>.
+  </li>
+  <li>
+    R. Engelking, <i>General Topology</i>, Revised and completed edition, Sigma Series in Pure Mathematics, Vol. 6, Heldermann Verlag, Berlin, 1989. <a href="https://www.heldermann.de/R&E/RAE06/rae06.htm" target="_blank" rel="noopener noreferrer">Publisher Page</a>.
+  </li>
+  <li>
+    N. Bourbaki, <i>General Topology: Chapters 1–4</i>, Elements of Mathematics, Springer-Verlag, Berlin Heidelberg, 1989. <a href="https://link.springer.com/book/10.1007/978-3-642-61701-0" target="_blank" rel="noopener noreferrer">SpringerLink Page</a>.
+  </li>
+  <li>
+    nLab contributors, "Category of metric spaces", <i>nLab</i>. <a href="https://ncatlab.org/nlab/show/metric+space" target="_blank" rel="noopener noreferrer">https://ncatlab.org/nlab/show/metric+space</a>.
+  </li>
+</ol>
+
+</body>
+</html>

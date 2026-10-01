@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互いに素な整数から定まる $q$-行列の双対性：完全な証明と具体例</title>
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 40px;
+            background-color: #fdfdfd;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 3px solid #34495e;
+            padding-bottom: 15px;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+        h2 {
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 8px;
+            color: #2980b9;
+            margin-top: 50px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 30px;
+        }
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        .theorem, .lemma, .definition {
+            background-color: #f8f9fa;
+            border-left: 5px solid #2980b9;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .definition {
+            border-left-color: #8e44ad;
+            background-color: #f9f0fc;
+        }
+        .proof {
+            background-color: #ffffff;
+            border: 1px solid #dcdde1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .proof-title {
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .qed {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .example {
+            background-color: #f0fbf5;
+            border-left: 5px solid #27ae60;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .example-title {
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .references {
+            margin-top: 60px;
+            font-size: 0.95em;
+            background-color: #ecf0f1;
+            padding: 25px;
+            border-radius: 5px;
+            border-left: 5px solid #95a5a6;
+        }
+        .references a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        .references a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>互いに素な整数から定まる $q$-行列の双対性：完全な証明と具体例</h1>
+
+    <h2>1. 序文と数学的準備（基本概念の定義）</h2>
+    <p>
+        本稿では、ある代数 $\mathcal{A}_{m,n}$ に付随して構成される、互いに素な整数 $m, n$ から定まる $p$-行列および $q$-行列の厳密な定義と、それらが満たす美しい双対性（転置行列となる性質）について、一切の省略を排して self-contained に完全な証明を与えます。
+    </p>
+    <p>
+        議論を完全に追うことができるよう、まずは基盤となる初等整数論の基本概念を詳細に定義し、理解を助ける具体例を提示します。
+    </p>
+
+    <div class="definition">
+        <strong>【定義 1.1：合同式と剰余環 $\mathbb{Z}/m\mathbb{Z}$】</strong>
+        <p>
+            $m$ を正の整数とします。2つの整数 $a, b$ の差 $a - b$ が $m$ の倍数であるとき、$a$ と $b$ は法 $m$ に関して合同であるといい、
+            $$ a \equiv b \pmod m $$
+            と表します。法 $m$ で合同な整数の集合を剰余類と呼び、これらを集めた環を $\mathbb{Z}/m\mathbb{Z}$ と表記します。$\mathbb{Z}/m\mathbb{Z}$ の要素は $\{0, 1, \dots, m - 1\}$ で代表させることができます。
+        </p>
+    </div>
+
+    <div class="definition">
+        <strong>【定義 1.2：モジュラ逆元 (Modular Multiplicative Inverse)】</strong>
+        <p>
+            整数 $a, b$ が互いに素（最大公約数が $1$、すなわち $\gcd(a,b)=1$）であるとき、方程式
+            $$ ax \equiv 1 \pmod b $$
+            を満たす整数 $x$ が法 $b$ において一意に存在します。この $x$ を、法 $b$ における $a$ の逆元と呼びます。
+        </p>
+        <div class="example">
+            <div class="example-title">理解を助ける例：逆元の計算</div>
+            法 $5$ における $3$ の逆元を求めます。 $3 \times 1 = 3$, $3 \times 2 = 6 \equiv 1 \pmod 5$ となるため、法 $5$ における $3$ の逆元は $2$ です。
+        </div>
+    </div>
+
+    <div class="definition">
+        <strong>【定理 1.3：中国式剰余定理 (Chinese Remainder Theorem)】[1][2]</strong>
+        <p>
+            $m, n$ が互いに素な整数のとき、任意の整数 $\mu, \nu$ に対して、連立合同式
+            $$ k \equiv \mu \pmod m $$
+            $$ k \equiv \nu \pmod n $$
+            を満たす整数 $k$ が、法 $mn$ において一意に存在します。すなわち、写像
+            $$ \phi: \mathbb{Z}/mn\mathbb{Z} \xrightarrow{\sim} \mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}, \quad k \pmod{mn} \mapsto (k \pmod m, k \pmod n) $$
+            は環の同型対応（全単射）を与えます。
+        </p>
+        <div class="example">
+            <div class="example-title">理解を助ける例：中国式剰余定理の全単射</div>
+            $m=2, n=3$ とします。$mn = 6$ であり、 $k \in \{0, 1, 2, 3, 4, 5\}$ は以下のように組 $(\mu, \nu)$ に一対一に対応します：
+            <ul>
+                <li>$k = 0 \mapsto (0, 0)$</li>
+                <li>$k = 1 \mapsto (1, 1)$</li>
+                <li>$k = 2 \mapsto (0, 2)$</li>
+                <li>$k = 3 \mapsto (1, 0)$</li>
+                <li>$k = 4 \mapsto (0, 1)$</li>
+                <li>$k = 5 \mapsto (1, 2)$</li>
+            </ul>
+            このように、すべての可能なペア $(\mu \bmod 2, \nu \bmod 3)$ に対して、一意な代表元 $k \in \{0, \dots, 5\}$ が定まります。
+        </div>
+    </div>
+
+    <h2>2. 記号と設定の定義</h2>
+    <p>
+        $m, n$ を $m \ge 2, n \ge 2$ かつ $\gcd(m,n) = 1$ を満たす互いに素な整数とします。
+    </p>
+    <p>
+        $1 \le \tilde{m} \le n - 1$ および $1 \le \tilde{n} \le m - 1$ を、それぞれ $\bmod n$ における $m$ の逆元、および $\bmod m$ における $n$ の逆元と定義します。すなわち、以下の合同式が成り立ちます：
+        $$ \tilde{m}m \equiv 1 \pmod n, \quad \tilde{n}n \equiv 1 \pmod m $$
+    </p>
+
+    <p>
+        次に、特定の条件を満たす組の集合 $B^{(m,n)} \subset \mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}$ を次のように定めます：
+        $$ B^{(m,n)} = \{ (\mu \bmod m, \mu \bmod n) \in \mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z} \mid 0 \le \mu  <  \tilde{m}m \} $$
+    </p>
+
+    <p>
+        この集合を用いて、行列の各成分となる $p^{(m,n)}_{\mu\nu}$ を次のように定めます：
+        $$ p^{(m,n)}_{\mu\nu} = \begin{cases} q & \text{if } (\mu \bmod m, \nu \bmod n) \in B^{(m,n)}, \\ 1 & \text{otherwise.} \end{cases} $$
+        （ここで $q$ は任意の非零パラメータです。）
+    </p>
+
+    <p>
+        さらに、この $p$ の比の二乗として、 $q^{(m,n)}_{\mu\nu}$ を次のように定義します：
+        $$ q^{(m,n)}_{\mu\nu} = \left( \frac{p^{(m,n)}_{\mu\nu}}{p^{(m,n)}_{\mu-1,\nu}} \right)^2 $$
+        ※ ここで分母の添字は $\mu-1$ となっており、これは行列における「一つ上の行の同じ列の成分」との比をとる操作に相当します。
+    </p>
+
+    <p>
+        全く同様に、$m$ と $n$ の役割を完全に入れ替えた量も定義します。集合 $B^{(n,m)} \subset \mathbb{Z}/n\mathbb{Z} \times \mathbb{Z}/m\mathbb{Z}$、 $p^{(n,m)}_{\nu\mu}$、 $q^{(n,m)}_{\nu\mu}$ は、 $\tilde{n}$ を用いて次のように定義されます：
+        $$ B^{(n,m)} = \{ (\nu \bmod n, \nu \bmod m) \in \mathbb{Z}/n\mathbb{Z} \times \mathbb{Z}/m\mathbb{Z} \mid 0 \le \nu  <  \tilde{n}n \} $$
+        $$ p^{(n,m)}_{\nu\mu} = \begin{cases} q & \text{if } (\nu \bmod n, \mu \bmod m) \in B^{(n,m)}, \\ 1 & \text{otherwise.} \end{cases} $$
+        $$ q^{(n,m)}_{\nu\mu} = \left( \frac{p^{(n,m)}_{\nu\mu}}{p^{(n,m)}_{\nu-1,\mu}} \right)^2 $$
+    </p>
+
+    <h2>3. 補題の準備と詳細な証明</h2>
+    <p>
+        一般の互いに素な $m, n \ge 2$ に対する主定理の完全な証明のために、以下の3つの補題を準備し、いかなる飛躍もなく厳密に証明します。
+    </p>
+
+    <div class="lemma">
+        <strong>補題 1. (逆元と元の積の和の法則)</strong>
+        等式 $\tilde{m}m + \tilde{n}n = mn + 1$ が成立する。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明.</div>
+        <p>
+            逆元の定義より、 $\tilde{m}m \equiv 1 \pmod n$ が成り立ちます。また、自明に $\tilde{m}m \equiv 0 \pmod m$ です。
+            全く同様に、 $\tilde{n}n \equiv 1 \pmod m$ かつ $\tilde{n}n \equiv 0 \pmod n$ が成り立ちます。
+        </p>
+        <p>
+            したがって、和 $X = \tilde{m}m + \tilde{n}n$ について法 $m$ と法 $n$ でそれぞれ評価すると、
+            $$ X = \tilde{m}m + \tilde{n}n \equiv 0 + 1 = 1 \pmod m $$
+            $$ X = \tilde{m}m + \tilde{n}n \equiv 1 + 0 = 1 \pmod n $$
+            となります。
+        </p>
+        <p>
+            $m$ と $n$ は互いに素であるため、中国式剰余定理（定理 1.3）により、これらを同時に満たす整数は法 $mn$ において一意に定まります。すなわち、
+            $$ \tilde{m}m + \tilde{n}n \equiv 1 \pmod{mn} $$
+            が得られます。
+        </p>
+        <p>
+            次に、和 $X$ のとりうる値の範囲を評価します。
+            逆元は $1 \le \tilde{m} \le n - 1$ および $1 \le \tilde{n} \le m - 1$ の範囲でとるため、下限は
+            $$ \tilde{m}m + \tilde{n}n \ge 1 \cdot m + 1 \cdot n = m + n  >  1 $$
+            となります（$m \ge 2, n \ge 2$ より）。
+            上限については、
+            $$ \tilde{m}m + \tilde{n}n \le (n - 1)m + (m - 1)n = mn - m + mn - n = 2mn - (m + n)  <  2mn $$
+            が成り立ちます。
+        </p>
+        <p>
+            つまり、$1  <  \tilde{m}m + \tilde{n}n  <  2mn$ の範囲にあり、かつ $mn$ を法として $1$ と合同な整数です。
+            この条件を満たす整数は $mn + 1$ のみです。
+            したがって、 $\tilde{m}m + \tilde{n}n = mn + 1$ が成立します。
+        </p>
+        <div class="qed">■ (証明終)</div>
+    </div>
+
+    <div class="lemma">
+        <strong>補題 2. (代表元の特徴付け)</strong>
+        任意の $(\mu \bmod m, \nu \bmod n) \in \mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}$ に対し、中国式剰余定理により
+        $$ k \equiv \mu \pmod m, \quad k \equiv \nu \pmod n $$
+        を満たす整数 $k \in \{0, 1, \dots, mn - 1\}$ が一意に存在する。
+        このとき、以下が成り立つ：
+        <ol>
+            <li>$(\mu \bmod m, \nu \bmod n) \in B^{(m,n)} \iff 0 \le k  <  \tilde{m}m$</li>
+            <li>$(\nu \bmod n, \mu \bmod m) \in B^{(n,m)} \iff 0 \le k  <  \tilde{n}n$</li>
+        </ol>
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明.</div>
+        <p>
+            中国式剰余定理により、全単射
+            $$ \phi: \{0, 1, \dots, mn - 1\} \xrightarrow{\sim} \mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}, \quad x \mapsto (x \bmod m, x \bmod n) $$
+            が存在します。
+        </p>
+        <p>
+            集合 $B^{(m,n)}$ の定義より、
+            $$ B^{(m,n)} = \{ (x \bmod m, x \bmod n) \mid 0 \le x  <  \tilde{m}m \} $$
+            です。 $\phi$ は単射（一対一対応）であるから、組 $(k \bmod m, k \bmod n) \in B^{(m,n)}$ となるための必要十分条件は、条件 $0 \le x  <  \tilde{m}m$ を満たす $x$ であって $\phi(x) = (k \bmod m, k \bmod n)$ となるものが存在することです。
+            これはすなわち $x = k$ であり、 $0 \le k  <  \tilde{m}m$ となることと完全に同値です。これで 1 が示されました。
+        </p>
+        <p>
+            同様に、対 $(\nu \bmod n, \mu \bmod m)$ に対しても、中国式剰余定理による一意な代表元 $k' \in \{0, 1, \dots, mn - 1\}$ は
+            $$ k' \equiv \nu \pmod n, \quad k' \equiv \mu \pmod m $$
+            を満たしますが、これは最初に定義した $k$ の定義式（順序を入れ替えただけ）そのものであるから $k' = k$ です。
+        </p>
+        <p>
+            したがって、 $B^{(n,m)}$ の定義により、 $(\nu \bmod n, \mu \bmod m) \in B^{(n,m)} \iff 0 \le k  <  \tilde{n}n$ が成り立ちます。これで 2 が示されました。
+        </p>
+        <div class="qed">■ (証明終)</div>
+    </div>
+
+    <div class="lemma">
+        <strong>補題 3. (一つ前の行に対応する代表元の挙動)</strong>
+        $(\mu \bmod m, \nu \bmod n)$ に対応する代表元を $k \in \{0, 1, \dots, mn - 1\}$ とする。
+        <ol>
+            <li>$((\mu - 1) \bmod m, \nu \bmod n)$ に対応する代表元 $k_{prev} \in \{0, 1, \dots, mn - 1\}$ は $k_{prev} = (k - \tilde{n}n) \bmod{mn}$ と表され、 $0 \le k_{prev}  <  \tilde{m}m$ が成り立つための必要十分条件は $k = 0$ または $k \ge \tilde{n}n$ である。</li>
+            <li>$((\nu - 1) \bmod n, \mu \bmod m)$ に対応する代表元 $k'_{prev} \in \{0, 1, \dots, mn - 1\}$ は $k'_{prev} = (k - \tilde{m}m) \bmod{mn}$ と表され、 $0 \le k'_{prev}  <  \tilde{n}n$ が成り立つための必要十分条件は $k = 0$ または $k \ge \tilde{m}m$ である。</li>
+        </ol>
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明.</div>
+        <p><strong>1 の証明：</strong></p>
+        <p>
+            $k_{prev}$ の定義より、 $k_{prev} \equiv \mu - 1 \pmod m$ かつ $k_{prev} \equiv \nu \pmod n$ です。
+            一方で、元の代表元 $k$ は $k \equiv \mu \pmod m$ かつ $k \equiv \nu \pmod n$ を満たします。
+            逆元の性質 $\tilde{n}n \equiv 1 \pmod m$ かつ $\tilde{n}n \equiv 0 \pmod n$ を用いると、
+            $$ k - \tilde{n}n \equiv \mu - 1 \pmod m, \quad k - \tilde{n}n \equiv \nu - 0 = \nu \pmod n $$
+            が成り立ちます。よって中国式剰余定理の一意性より、$0 \le k_{prev}  <  mn$ に補正した値として $k_{prev} = (k - \tilde{n}n) \bmod{mn}$ が導かれます。
+        </p>
+        <p>ここで、$k \in \{0, 1, \dots, mn - 1\}$ の値について場合分けを行い、$0 \le k_{prev}  <  \tilde{m}m$ となる条件を探ります：</p>
+        <ul>
+            <li><strong>$k \ge \tilde{n}n$ のとき：</strong><br>
+                引き算 $k - \tilde{n}n$ は $0$ 以上となるため、そのまま $k_{prev} = k - \tilde{n}n$ となります。
+                このとき、 $k$ の上限は $k \le mn - 1$ であるため、
+                $$ 0 \le k_{prev} \le (mn - 1) - \tilde{n}n = (mn - \tilde{n}n) - 1 $$
+                ここで補題1（$mn - \tilde{n}n = \tilde{m}m - 1$）を代入すると、
+                $$ 0 \le k_{prev} \le (\tilde{m}m - 1) - 1 = \tilde{m}m - 2  <  \tilde{m}m $$
+                となり、常に $0 \le k_{prev}  <  \tilde{m}m$ が成立します。
+            </li>
+            <li><strong>$k  <  \tilde{n}n$ のとき：</strong><br>
+                $k - \tilde{n}n  <  0$ となるため、正の値に戻すために法 $mn$ を足して $k_{prev} = k - \tilde{n}n + mn$ となります。
+                補題1より $mn - \tilde{n}n = \tilde{m}m - 1$ なので、$k_{prev} = k + \tilde{m}m - 1$ と表せます。
+                <ul>
+                    <li>$k = 0$ のときは、$k_{prev} = 0 + \tilde{m}m - 1 = \tilde{m}m - 1  <  \tilde{m}m$ となり、条件 $0 \le k_{prev}  <  \tilde{m}m$ が成立します。</li>
+                    <li>$k \ge 1$ のときは、$k_{prev} \ge 1 + \tilde{m}m - 1 = \tilde{m}m$ となり、上限を越えるため条件は成立しません。</li>
+                </ul>
+            </li>
+        </ul>
+        <p>以上より、 $0 \le k_{prev}  <  \tilde{m}m \iff k = 0 \text{ または } k \ge \tilde{n}n$ が示されました。</p>
+
+        <p><strong>2 の証明：</strong></p>
+        <p>
+            1 の証明と対称的です。 $k'_{prev} \equiv \nu - 1 \pmod n$ かつ $k'_{prev} \equiv \mu \pmod m$ です。
+            $\tilde{m}m \equiv 1 \pmod n$ かつ $\tilde{m}m \equiv 0 \pmod m$ より、 $k'_{prev} \equiv k - \tilde{m}m \pmod{mn}$ が成り立ちます。
+        </p>
+        <ul>
+            <li>$k \ge \tilde{m}m$ のときは、 $k'_{prev} = k - \tilde{m}m$ となります。補題1より $mn - \tilde{m}m = \tilde{n}n - 1$ なので、$k'_{prev} \le (mn - 1) - \tilde{m}m = \tilde{n}n - 2  <  \tilde{n}n$ となり条件が成立します。</li>
+            <li>$k  <  \tilde{m}m$ のときは、 $k'_{prev} = k - \tilde{m}m + mn = k + \tilde{n}n - 1$ となります。したがって $k = 0$ のときのみ $k'_{prev} = \tilde{n}n - 1  <  \tilde{n}n$ となって成立し、$k \ge 1$ では成立しません。</li>
+        </ul>
+        <p>以上より、 $0 \le k'_{prev}  <  \tilde{n}n \iff k = 0 \text{ または } k \ge \tilde{m}m$ が示されました。</p>
+        <div class="qed">■ (証明終)</div>
+    </div>
+
+
+    <h2>4. 主定理とその証明</h2>
+    <div class="theorem">
+        <strong>定理 (行列の双対性).</strong>
+        任意の整数 $\mu, \nu$ に対して、 $q^{(m,n)}_{\mu,\nu} = q^{(n,m)}_{\nu,\mu}$ が成立する。すなわち、行列 $[q^{(n,m)}_{\nu\mu}]$ は行列 $[q^{(m,n)}_{\mu\nu}]$ の転置行列となる。
+    </div>
+    <div class="proof">
+        <div class="proof-title">証明.</div>
+        <p>
+            $(\mu \bmod m, \nu \bmod n)$ に対応する一意な代表元を $k \in \{0, 1, \dots, mn - 1\}$ とします。
+            補題2および補題3により、各 $p$ の値は代表元 $k$ の条件のみから以下のように完全に定まることが分かります：
+        </p>
+        $$ p^{(m,n)}_{\mu\nu} = \begin{cases} q & (0 \le k  <  \tilde{m}m) \\ 1 & (k \ge \tilde{m}m) \end{cases} $$
+        $$ p^{(m,n)}_{\mu-1,\nu} = \begin{cases} q & (k = 0 \text{ または } k \ge \tilde{n}n) \\ 1 & (1 \le k  <  \tilde{n}n) \end{cases} $$
+        $$ p^{(n,m)}_{\nu\mu} = \begin{cases} q & (0 \le k  <  \tilde{n}n) \\ 1 & (k \ge \tilde{n}n) \end{cases} $$
+        $$ p^{(n,m)}_{\nu-1,\mu} = \begin{cases} q & (k = 0 \text{ または } k \ge \tilde{m}m) \\ 1 & (1 \le k  <  \tilde{m}m) \end{cases} $$
+
+        <p>
+            $k \in \{0, 1, \dots, mn - 1\}$ の値に応じて、以下の5つのケースに場合分けして各比率 $q^{(m,n)}_{\mu\nu} = \left( p^{(m,n)}_{\mu\nu} / p^{(m,n)}_{\mu-1,\nu} \right)^2$ および $q^{(n,m)}_{\nu\mu} = \left( p^{(n,m)}_{\nu\mu} / p^{(n,m)}_{\nu-1,\mu} \right)^2$ を計算し、両者が一致することを確かめます。
+        </p>
+
+        <h3>ケース 1: $k = 0$ のとき</h3>
+        <ul>
+            <li>$p^{(m,n)}_{\mu\nu} = q$ （$0  <  \tilde{m}m$ のため）。 $p^{(m,n)}_{\mu-1,\nu} = q$ （$k=0$ のため）。<br>
+                $\implies \frac{p^{(m,n)}_{\mu\nu}}{p^{(m,n)}_{\mu-1,\nu}} = \frac{q}{q} = 1$
+            </li>
+            <li>$p^{(n,m)}_{\nu\mu} = q$ （$0  <  \tilde{n}n$ のため）。 $p^{(n,m)}_{\nu-1,\mu} = q$ （$k=0$ のため）。<br>
+                $\implies \frac{p^{(n,m)}_{\nu\mu}}{p^{(n,m)}_{\nu-1,\mu}} = \frac{q}{q} = 1$
+            </li>
+        </ul>
+        <p>したがって、 $q^{(m,n)}_{\mu\nu} = 1^2 = 1$ かつ $q^{(n,m)}_{\nu\mu} = 1^2 = 1$ となり一致します。</p>
+
+        <h3>ケース 2: $1 \le k  <  \min(\tilde{m}m, \tilde{n}n)$ のとき</h3>
+        <ul>
+            <li>$k  <  \tilde{m}m$ より $p^{(m,n)}_{\mu\nu} = q$。 $1 \le k  <  \tilde{n}n$ より $p^{(m,n)}_{\mu-1,\nu} = 1$。<br>
+            $\implies \frac{p^{(m,n)}_{\mu\nu}}{p^{(m,n)}_{\mu-1,\nu}} = \frac{q}{1} = q$。</li>
+            <li>$k  <  \tilde{n}n$ より $p^{(n,m)}_{\nu\mu} = q$。 $1 \le k  <  \tilde{m}m$ より $p^{(n,m)}_{\nu-1,\mu} = 1$。<br>
+            $\implies \frac{p^{(n,m)}_{\nu\mu}}{p^{(n,m)}_{\nu-1,\mu}} = \frac{q}{1} = q$。</li>
+        </ul>
+        <p>したがって、 $q^{(m,n)}_{\mu\nu} = q^2$ かつ $q^{(n,m)}_{\nu\mu} = q^2$ となり一致します。</p>
+
+        <h3>ケース 3: $\tilde{m}m \le k  <  \tilde{n}n$ のとき （※ $\tilde{m}m  <  \tilde{n}n$ の場合のみ存在）</h3>
+        <ul>
+            <li>$k \ge \tilde{m}m$ より $p^{(m,n)}_{\mu\nu} = 1$。 $1 \le k  <  \tilde{n}n$ より $p^{(m,n)}_{\mu-1,\nu} = 1$。<br>
+            $\implies \frac{p^{(m,n)}_{\mu\nu}}{p^{(m,n)}_{\mu-1,\nu}} = \frac{1}{1} = 1$。</li>
+            <li>$k  <  \tilde{n}n$ より $p^{(n,m)}_{\nu\mu} = q$。 $k \ge \tilde{m}m$ より $p^{(n,m)}_{\nu-1,\mu} = q$。<br>
+            $\implies \frac{p^{(n,m)}_{\nu\mu}}{p^{(n,m)}_{\nu-1,\mu}} = \frac{q}{q} = 1$。</li>
+        </ul>
+        <p>したがって、 $q^{(m,n)}_{\mu\nu} = 1^2 = 1$ かつ $q^{(n,m)}_{\nu\mu} = 1^2 = 1$ となり一致します。</p>
+
+        <h3>ケース 4: $\tilde{n}n \le k  <  \tilde{m}m$ のとき （※ $\tilde{n}n  <  \tilde{m}m$ の場合のみ存在）</h3>
+        <ul>
+            <li>$k  <  \tilde{m}m$ より $p^{(m,n)}_{\mu\nu} = q$。 $k \ge \tilde{n}n$ より $p^{(m,n)}_{\mu-1,\nu} = q$。<br>
+            $\implies \frac{p^{(m,n)}_{\mu\nu}}{p^{(m,n)}_{\mu-1,\nu}} = \frac{q}{q} = 1$。</li>
+            <li>$k \ge \tilde{n}n$ より $p^{(n,m)}_{\nu\mu} = 1$。 $1 \le k  <  \tilde{m}m$ より $p^{(n,m)}_{\nu-1,\mu} = 1$。<br>
+            $\implies \frac{p^{(n,m)}_{\nu\mu}}{p^{(n,m)}_{\nu-1,\mu}} = \frac{1}{1} = 1$。</li>
+        </ul>
+        <p>したがって、 $q^{(m,n)}_{\mu\nu} = 1^2 = 1$ かつ $q^{(n,m)}_{\nu\mu} = 1^2 = 1$ となり一致します。</p>
+
+        <h3>ケース 5: $\max(\tilde{m}m, \tilde{n}n) \le k \le mn - 1$ のとき</h3>
+        <ul>
+            <li>$k \ge \tilde{m}m$ より $p^{(m,n)}_{\mu\nu} = 1$。 $k \ge \tilde{n}n$ より $p^{(m,n)}_{\mu-1,\nu} = q$。<br>
+            $\implies \frac{p^{(m,n)}_{\mu\nu}}{p^{(m,n)}_{\mu-1,\nu}} = \frac{1}{q} = q^{-1}$。</li>
+            <li>$k \ge \tilde{n}n$ より $p^{(n,m)}_{\nu\mu} = 1$。 $k \ge \tilde{m}m$ より $p^{(n,m)}_{\nu-1,\mu} = q$。<br>
+            $\implies \frac{p^{(n,m)}_{\nu\mu}}{p^{(n,m)}_{\nu-1,\mu}} = \frac{1}{q} = q^{-1}$。</li>
+        </ul>
+        <p>したがって、 $q^{(m,n)}_{\mu\nu} = (q^{-1})^2 = q^{-2}$ かつ $q^{(n,m)}_{\nu\mu} = (q^{-1})^2 = q^{-2}$ となり一致します。</p>
+
+        <p>
+            以上の5つのケースは $k \in \{0, 1, \dots, mn - 1\}$ のすべての可能性を網羅しています。すべての可能なケースにおいて $q^{(m,n)}_{\mu\nu} = q^{(n,m)}_{\nu\mu}$ が成り立つことが完全に証明されました。
+        </p>
+        <div class="qed">■ (証明終)</div>
+    </div>
+
+
+    <h2>5. 具体例1： $(m,n) = (2,3)$ の場合</h2>
+    <div class="example">
+        <div class="example-title">最小の非自明な例での確認</div>
+        <p>
+            $m=2, n=3$ のとき、
+            $\bmod 3$ における $2$ の逆元は $\tilde{m} = 2$ （よって $\tilde{m}m = 4$）、
+            $\bmod 2$ における $3$ （すなわち $1$）の逆元は $\tilde{n} = 1$ （よって $\tilde{n}n = 3$）です。
+        </p>
+        <ul>
+            <li>$B^{(2,3)} = \{ (\mu \bmod 2, \mu \bmod 3) \mid 0 \le \mu  <  4 \} = \{ (0,0), (1,1), (0,2), (1,0) \}$</li>
+            <li>$B^{(3,2)} = \{ (\nu \bmod 3, \nu \bmod 2) \mid 0 \le \nu  <  3 \} = \{ (0,0), (1,1), (2,0) \}$</li>
+        </ul>
+        <p>それぞれの行列 $[p^{(2,3)}_{\mu\nu}]$ および $[p^{(3,2)}_{\nu\mu}]$ を計算すると次のようになります：</p>
+        $$ [p^{(2,3)}_{\mu\nu}] = \begin{bmatrix} q & 1 & q \\ q & q & 1 \end{bmatrix} \quad (\mu = 0, 1; \, \nu = 0, 1, 2) $$
+        $$ [p^{(3,2)}_{\nu\mu}] = \begin{bmatrix} q & 1 \\ 1 & q \\ q & 1 \end{bmatrix} \quad (\nu = 0, 1, 2; \, \mu = 0, 1) $$
+        
+        <p>これらから $q^{(2,3)}_{\mu\nu} = (p^{(2,3)}_{\mu\nu} / p^{(2,3)}_{\mu-1,\nu})^2$ および $q^{(3,2)}_{\nu\mu} = (p^{(3,2)}_{\nu\mu} / p^{(3,2)}_{\nu-1,\mu})^2$ を計算すると：</p>
+        $$ [q^{(2,3)}_{\mu\nu}] = \begin{bmatrix} 1 & q^{-2} & q^2 \\ 1 & q^2 & q^{-2} \end{bmatrix} $$
+        $$ [q^{(3,2)}_{\nu\mu}] = \begin{bmatrix} 1 & 1 \\ q^{-2} & q^2 \\ q^2 & q^{-2} \end{bmatrix} $$
+        
+        <p>
+            したがって、 $[q^{(3,2)}_{\nu\mu}]$ は $[q^{(2,3)}_{\mu\nu}]$ の転置行列となっており、すべての $(\mu, \nu)$ について双対性が成立していることが確認できます。
+        </p>
+    </div>
+
+    <h2>6. 具体例2： $(m,n) = (3,4)$ の場合</h2>
+    <div class="example">
+        <div class="example-title">理解を深めるための追加の例</div>
+        <p>
+            $m=3, n=4$ の場合を考えます。
+            $\bmod 4$ における $3$ の逆元は $\tilde{m} = 3$ （$3 \times 3 = 9 \equiv 1 \pmod 4$）、よって $\tilde{m}m = 9$。
+            $\bmod 3$ における $4$ （すなわち $1$）の逆元は $\tilde{n} = 1$、よって $\tilde{n}n = 4$。
+        </p>
+        <p>
+            代表元 $k \in \{0, 1, \dots, 11\}$ は合同式 $k \equiv \mu \pmod 3, k \equiv \nu \pmod 4$ を満たします。
+            $p^{(3,4)}_{\mu\nu}$ は $0 \le k  <  9$ なら $q$、 $9 \le k \le 11$ なら $1$ となります。
+            全成分を計算すると次のようになります：
+        </p>
+        $$ [p^{(3,4)}_{\mu\nu}] = \begin{bmatrix} q & 1 & q & q \\ q & q & 1 & q \\ q & q & q & 1 \end{bmatrix} $$
+        <p>
+            これを用いて $q^{(3,4)}_{\mu\nu} = \left( p^{(3,4)}_{\mu\nu} / p^{(3,4)}_{\mu-1,\nu} \right)^2$ を計算します（行は循環して一つ上と比較します）：
+        </p>
+        $$ [q^{(3,4)}_{\mu\nu}] = \begin{bmatrix} 1 & q^{-2} & 1 & q^2 \\ 1 & q^2 & q^{-2} & 1 \\ 1 & 1 & q^2 & q^{-2} \end{bmatrix} $$
+        <p>
+            これが $(m,n)=(4,3)$ から作られる行列の転置と一致することが保証されています。
+        </p>
+    </div>
+
+    <h2>7. 具体例3： $(m,n) = (3,5)$ の場合</h2>
+    <div class="example">
+        <div class="example-title">行列サイズの拡張による双対性の確認</div>
+        <p>
+            $(m,n) = (3,5)$ のとき、 $\bmod 5$ における $3$ の逆元は $\tilde{m} = 2$ です。
+            このとき、 $p^{(3,5)}_{\mu\nu}$ を成分とする行列は次のように与えられます：
+        </p>
+        $$ [p^{(3,5)}_{\mu\nu}] = \begin{bmatrix} q & 1 & 1 & q & 1 \\ 1 & q & 1 & 1 & q \\ q & 1 & q & 1 & 1 \end{bmatrix} \quad (\mu = 0, 1, 2; \, \nu = 0, 1, 2, 3, 4) $$
+
+        <p>
+            これを用いて $q^{(3,5)}_{\mu\nu}$ を計算すると、次の行列が得られます：
+        </p>
+        $$ [q^{(3,5)}_{\mu\nu}] = \begin{bmatrix} 1 & 1 & q^{-2} & q^2 & 1 \\ q^{-2} & q^2 & 1 & q^{-2} & q^2 \\ q^2 & q^{-2} & q^2 & 1 & q^{-2} \end{bmatrix} $$
+
+        <p>
+            一方、 $m$ と $n$ を入れ替えた $(m,n) = (5,3)$ のとき、 $\bmod 3$ における $5$ （すなわち $2$）の逆元は $\tilde{n} = 2$ です。
+            このとき得られる $q^{(5,3)}_{\nu\mu}$ の行列は次のようになります：
+        </p>
+        $$ [q^{(5,3)}_{\nu\mu}] = \begin{bmatrix} 1 & q^{-2} & q^2 \\ 1 & q^2 & q^{-2} \\ q^{-2} & 1 & q^2 \\ q^2 & q^{-2} & 1 \\ 1 & q^2 & q^{-2} \end{bmatrix} \quad (\nu = 0, 1, 2, 3, 4; \, \mu = 0, 1, 2) $$
+
+        <p>
+            これら２つの行列を見比べると、 $[q^{(5,3)}_{\nu\mu}]$ は $[q^{(3,5)}_{\mu\nu}]$ の転置行列となっていることが明確に確認できます。
+        </p>
+    </div>
+
+    <h2>8. 具体例4：詳細な行列表現 $(m,n) = (7,11)$ の場合</h2>
+    <div class="example">
+        <div class="example-title">大規模な行列による完全なデモンストレーション</div>
+        <p>
+            さらにサイズを大きくした $(m,n) = (7,11)$ の場合について、 $p$ と $q$ の行列の具体的な形を計算します。
+        </p>
+        <p>
+            まず、 $\bmod{11}$ における $7$ の逆元 $\tilde{m}$、および $\bmod 7$ における $11$ の逆元 $\tilde{n}$ を求めます。
+            $7 \times 8 = 56 \equiv 1 \pmod{11}$ より、 $\tilde{m} = 8$ であり、 $\tilde{m}m = 56$ です。
+            $11 \times 2 = 22 \equiv 1 \pmod 7$ より、 $\tilde{n} = 2$ であり、 $\tilde{n}n = 22$ です。
+            ここで、 $\tilde{m}m + \tilde{n}n = 56 + 22 = 78 = 7 \times 11 + 1$ が成立しており、補題1が成り立っていることが確認できます。
+        </p>
+
+        <h3>ステップ1：代表元 $k$ の具体的計算例</h3>
+        <p>
+            代表元 $k \in \{0, 1, \dots, 76\}$ は、中国式剰余定理に基づく構成式 $k = (22\mu + 56\nu) \bmod 77$ として計算できます。
+            例えば、 $\mu = 1, \nu = 2$ のセル（0-indexed で第1行・第2列）を計算してみましょう：
+            $$ k = (22(1) + 56(2)) \bmod 77 = (22 + 112) \bmod 77 = 134 \bmod 77 = 57 $$
+            $k = 57$ であり、条件 $0 \le k  <  56$ （$\tilde{m}m$ 未満）を満たさないため、$p^{(7,11)}_{1,2} = 1$ となるはずです。以下の行列で実際に確認できます。
+        </p>
+
+        <h3>ステップ2：$p$ の行列表現</h3>
+        <p>
+            すべての $\mu = 0, \dots, 6$ と $\nu = 0, \dots, 10$ について計算すると、以下のような $7 \times 11$ 行列が得られます：
+        </p>
+        $$
+        [p^{(7,11)}_{\mu\nu}] = 
+        \begin{bmatrix}
+        q & 1 & q & q & 1 & q & q & q & 1 & q & q \\
+        q & q & 1 & q & q & 1 & q & q & q & 1 & q \\
+        q & q & q & 1 & q & q & 1 & q & q & q & 1 \\
+        1 & q & q & q & 1 & q & q & 1 & q & q & q \\
+        q & 1 & q & q & q & 1 & q & q & 1 & q & q \\
+        q & q & 1 & q & q & q & 1 & q & q & 1 & q \\
+        q & q & q & 1 & q & q & q & 1 & q & q & 1
+        \end{bmatrix}
+        $$
+
+        <p>
+            同様に、 $m$ と $n$ の役割を入れ替えた $(m,n) = (11,7)$ の場合を考えます。
+            $p^{(11,7)}_{\nu\mu}$ は、同じ代表元 $k$ に対して $0 \le k  <  22$ のときに $q$ となり、 $22 \le k \le 76$ のときに $1$ となります。
+            これを計算すると、以下の $11 \times 7$ 行列となります：
+        </p>
+        $$
+        [p^{(11,7)}_{\nu\mu}] = 
+        \begin{bmatrix}
+        q & q & q & 1 & q & q & q \\
+        1 & q & q & q & 1 & q & q \\
+        q & 1 & q & q & q & 1 & q \\
+        q & q & 1 & q & q & q & 1 \\
+        1 & q & q & 1 & q & q & q \\
+        q & 1 & q & q & 1 & q & q \\
+        q & q & 1 & q & q & 1 & q \\
+        q & q & q & 1 & q & q & 1 \\
+        1 & q & q & q & 1 & q & q \\
+        q & 1 & q & q & q & 1 & q \\
+        q & q & 1 & q & q & q & 1
+        \end{bmatrix}
+        $$
+
+        <h3>ステップ3：$q$ の行列表現（双対性の確認）</h3>
+        <p>
+            定理の証明で分類した通り、代表元 $k$ の値に応じて $q^{(7,11)}_{\mu\nu}$ は以下のように決定されます：
+        </p>
+        <ul>
+            <li>$k = 0$ または $22 \le k \le 55$ のとき、 $q^{(7,11)}_{\mu\nu} = 1$</li>
+            <li>$1 \le k \le 21$ のとき、 $q^{(7,11)}_{\mu\nu} = q^2$</li>
+            <li>$56 \le k \le 76$ のとき、 $q^{(7,11)}_{\mu\nu} = q^{-2}$</li>
+        </ul>
+        <p>
+            $q^{(7,11)}_{\mu\nu} = \left( p^{(7,11)}_{\mu\nu} / p^{(7,11)}_{\mu-1,\nu} \right)^2$ を計算すると、以下の $7 \times 11$ 行列が得られます：
+        </p>
+        $$
+        [q^{(7,11)}_{\mu\nu}] = 
+        \begin{bmatrix}
+        1 & q^{-2} & 1 & q^2 & q^{-2} & 1 & 1 & q^2 & q^{-2} & 1 & q^2 \\
+        1 & q^2 & q^{-2} & 1 & q^2 & q^{-2} & 1 & 1 & q^2 & q^{-2} & 1 \\
+        1 & 1 & q^2 & q^{-2} & 1 & q^2 & q^{-2} & 1 & 1 & q^2 & q^{-2} \\
+        q^{-2} & 1 & 1 & q^2 & q^{-2} & 1 & q^2 & q^{-2} & 1 & 1 & q^2 \\
+        q^2 & q^{-2} & 1 & 1 & q^2 & q^{-2} & 1 & q^2 & q^{-2} & 1 & 1 \\
+        1 & q^2 & q^{-2} & 1 & 1 & q^2 & q^{-2} & 1 & q^2 & q^{-2} & 1 \\
+        1 & 1 & q^2 & q^{-2} & 1 & 1 & q^2 & q^{-2} & 1 & q^2 & q^{-2}
+        \end{bmatrix}
+        $$
+
+        <p>
+            一方、 $(m,n) = (11,7)$ の場合、得られる $11 \times 7$ 行列 $[q^{(11,7)}_{\nu\mu}]$ は、上記行列の行と列をそっくり入れ替えた転置行列となります：
+        </p>
+        $$
+        [q^{(11,7)}_{\nu\mu}] = 
+        \begin{bmatrix}
+        1 & 1 & 1 & q^{-2} & q^2 & 1 & 1 \\
+        q^{-2} & q^2 & 1 & 1 & q^{-2} & q^2 & 1 \\
+        1 & q^{-2} & q^2 & 1 & 1 & q^{-2} & q^2 \\
+        q^2 & 1 & q^{-2} & q^2 & 1 & 1 & q^{-2} \\
+        q^{-2} & q^2 & 1 & q^{-2} & q^2 & 1 & 1 \\
+        1 & q^{-2} & q^2 & 1 & q^{-2} & q^2 & 1 \\
+        1 & 1 & q^{-2} & q^2 & 1 & q^{-2} & q^2 \\
+        q^2 & 1 & 1 & q^{-2} & q^2 & 1 & q^{-2} \\
+        q^{-2} & q^2 & 1 & 1 & q^{-2} & q^2 & 1 \\
+        1 & q^{-2} & q^2 & 1 & 1 & q^{-2} & q^2 \\
+        q^2 & 1 & q^{-2} & q^2 & 1 & 1 & q^{-2}
+        \end{bmatrix}
+        $$
+
+        <p>
+            $p^{(m,n)}_{\mu\nu}$ の段階では互いに転置の関係にあるわけではありませんが、各列・各行ごとの比をとって二乗する操作を経ることで、最終的な $q$ の行列において完全な転置関係（双対性）が現れるという素晴らしい仕組みになっています。
+        </p>
+    </div>
+
+    <div class="references">
+        <strong>参考文献</strong>
+        <ul>
+            <li>[1] G. H. Hardy and E. M. Wright, <em>An Introduction to the Theory of Numbers</em>, 6th ed., Oxford University Press, 2008. モジュラ逆元および合同式の基礎事項について。 (<a href="https://global.oup.com/academic/product/an-introduction-to-the-theory-of-numbers-9780199219865" target="_blank">Oxford University Press</a>)</li>
+            <li>[2] "Chinese remainder theorem", Wikipedia, The Free Encyclopedia. 中国式剰余定理の定式化と同型対応に関する標準的なレファレンス。 (<a href="https://en.wikipedia.org/wiki/Chinese_remainder_theorem" target="_blank">Wikipedia</a>)</li>
+        </ul>
+    </div>
+
+</body>
+</html>
