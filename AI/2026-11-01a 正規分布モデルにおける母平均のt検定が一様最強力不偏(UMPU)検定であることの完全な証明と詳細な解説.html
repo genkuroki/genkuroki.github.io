@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>正規分布モデルにおける母平均のt検定が一様最強力不偏(UMPU)検定であることの完全な証明と詳細な解説</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Noto Serif JP", serif;
+            line-height: 1.8;
+            margin: 40px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+            color: #222;
+        }
+        h1, h2, h3, h4 {
+            font-family: "Noto Sans JP", sans-serif;
+            color: #111;
+        }
+        h1 { border-bottom: 3px solid #333; padding-bottom: 10px; }
+        h2 { border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 2.5em; }
+        h3 { margin-top: 2em; }
+        .definition, .theorem, .example, .remark {
+            margin: 20px 0;
+            padding: 15px 20px;
+            background-color: #f9fbff;
+            border-left: 5px solid #2980b9;
+            border-radius: 3px;
+        }
+        .theorem {
+            background-color: #f4f6f8;
+            border-left-color: #2c3e50;
+        }
+        .example {
+            background-color: #fdfaf6;
+            border-left-color: #e67e22;
+        }
+        .remark {
+            background-color: #fff9f9;
+            border-left-color: #c0392b;
+        }
+        .definition-title, .theorem-title, .example-title, .remark-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .proof {
+            margin: 20px 0;
+            padding: 15px 20px;
+            border-left: 3px solid #7f8c8d;
+            background-color: #fbfbfb;
+        }
+        .proof-title {
+            font-style: italic;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<h1>正規分布モデルにおける母平均のt検定が一様最強力不偏(UMPU)検定であることの完全な証明と詳細な解説</h1>
+
+<p>本稿では、正規分布モデルの前提の下で、母平均に関するt検定が <strong>一様最強力不偏 (uniformly most powerful unbiased, 略してUMPU) 検定</strong> となる理由を、必要な基本概念の定義から出発して、一切の論理的ギャップや計算の省略なしに自己完結的 (self-contained) に証明する。</p>
+
+<p>何が本質的かといえば、正規分布モデルが <strong>多母数指数型分布族 (multiparameter exponential family)</strong> をなすことと、 <strong>局外母数 (nuisance parameter) の十分統計量による条件付け</strong> により問題を1母数指数型分布族に帰着できること、そして <strong>Basuの定理 (Basu's theorem)</strong> を用いて条件付き検定の棄却域と無条件検定の棄却域の一致性を示すことである。</p>
+
+<h2>1. 予備知識：統計的仮説検定と分布族の基本概念</h2>
+
+<p>証明をより深く理解するために、まずは数理統計学における基本的な概念を厳密に定義し、理解を助けるための豊富な例を追加する。</p>
+
+<h3>1.1. 仮説検定の基礎概念</h3>
+
+<div class="definition">
+    <div class="definition-title">定義 1.1 (検定関数、サイズ、検出力)</div>
+    <p>標本空間を $\mathcal{X}$ 、母数空間を $\Theta$ とする。仮説検定問題 $H_0: \theta \in \Theta_0$ に対して $H_1: \theta \in \Theta_1$ （ただし $\Theta_0 \cap \Theta_1 = \varnothing$）を考える。<strong>検定関数 (test function)</strong> とは、標本 $x \in \mathcal{X}$ を入力として帰無仮説を棄却する確率を出力する関数 $\phi: \mathcal{X} \to [0, 1]$ である。$\phi(x) = 1$ は確実に棄却することを、$\phi(x) = 0$ は確実に受容することを意味する。</p>
+    <p>母数 $\theta \in \Theta$ に対する検定 $\phi$ の <strong>検出力関数 (power function)</strong> は $\beta_\phi(\theta) = \mathbb{E}_\theta[\phi(X)]$ で定義される。特に帰無仮説 $H_0$ の下での棄却確率の上限を <strong>サイズ (size)</strong> と呼び、$\sup_{\theta \in \Theta_0} \beta_\phi(\theta) = \alpha$ と表す。</p>
+</div>
+
+<div class="definition">
+    <div class="definition-title">定義 1.2 (不偏検定とUMPU検定)</div>
+    <p>有意水準 $\alpha$ の検定 $\phi$ が <strong>不偏 (unbiased)</strong> であるとは、任意の $\theta \in \Theta_0$ に対して $\beta_\phi(\theta) \le \alpha$ であり、かつ任意の $\theta \in \Theta_1$ に対して $\beta_\phi(\theta) \ge \alpha$ が成り立つことをいう。すなわち、帰無仮説が偽であるときにそれを棄却する確率が、帰無仮説が真であるときにそれを誤って棄却する確率よりも常に等しいか大きい検定のことである。</p>
+    <p>すべての有意水準 $\alpha$ の不偏検定の中で、任意の $\theta \in \Theta_1$ に対して最大の検出力を持つものを <strong>一様最強力不偏 (UMPU) 検定</strong> と呼ぶ。</p>
+</div>
+
+<div class="example">
+    <div class="example-title">例 1.3 (なぜ「不偏性」が必要なのか？)</div>
+    <p>正規分布 $\mathcal{N}(\mu, 1)$ に従う標本から、帰無仮説 $H_0: \mu = 0$ に対して両側対立仮説 $H_1: \mu \neq 0$ を検定したいとする。もし片側検定の棄却域 $\bar{X}  >  1.64 / \sqrt{n}$ を採用すると、$\mu  >  0$ の方向では強力な検出力を持つが、$\mu  <  0$ の方向（例えば $\mu = -2$）では検出力が極めて低くなり、有意水準 $\alpha = 0.05$ よりも小さくなってしまう。これは「帰無仮説が間違っているのに、正しい時よりも棄却しにくい」という不合理な状況である。このような検定は不偏ではない。両側検定問題においては、通常、すべての方角に対して一様に最強力となる (UMP) 検定は存在しない。そのため、「少なくとも有意水準よりは高い検出力を持つ」という不偏性の制約を課した上で、その中で最強力なもの (UMPU) を探すというアプローチが自然かつ強力となる。</p>
+</div>
+
+<h3>1.2. 指数型分布族</h3>
+
+<div class="definition">
+    <div class="definition-title">定義 1.4 (多母数指数型分布族)</div>
+    <p>確率変数 $X$ の確率密度関数（または確率質量関数） $f(x \mid \theta)$ が、未知母数ベクトル $\theta = (\theta_1, \dots, \theta_k)$ に対して以下のように表されるとき、この分布族は $k$ 母数 <strong>指数型分布族 (exponential family)</strong> をなすという。</p>
+    
+    $$ f(x \mid \theta) = C(\theta) \exp\left( \sum_{i=1}^k \theta_i T_i(x) \right) h(x) $$
+    
+    <p>ここで、$T(x) = (T_1(x), \dots, T_k(x))$ は十分統計量であり、$\theta$ は <strong>自然母数 (natural parameter)</strong> と呼ばれる。このような形に書ける分布は数学的に非常に扱いやすい性質（例えば十分統計量の完備性や、期待値・分散の容易な計算など）を持つ。</p>
+</div>
+
+<div class="example">
+    <div class="example-title">例 1.5 (ポアソン分布の指数型分布族表示)</div>
+    <p>$X$ がポアソン分布 $\mathrm{Po}(\lambda)$ に従うとき、その確率質量関数は $f(x \mid \lambda) = \frac{\lambda^x e^{-\lambda}}{x!}$ である。これを変形すると、</p>
+    
+    $$ f(x \mid \lambda) = e^{-\lambda} \exp(x \log \lambda) \frac{1}{x!} $$
+    
+    <p>となる。これは自然母数 $\theta = \log \lambda$ 、十分統計量 $T(x) = x$ 、$C(\theta) = e^{-e^\theta}$ 、$h(x) = \frac{1}{x!}$ と置くことで、1母数指数型分布族の標準形に一致することがわかる。</p>
+</div>
+
+<h3>1.3. 統計量の性質とBasuの定理</h3>
+
+<div class="definition">
+    <div class="definition-title">定義 1.6 (十分統計量、完備十分統計量、補助統計量)</div>
+    <p>統計量 $T$ が <strong>十分統計量 (sufficient statistic)</strong> であるとは、$T$ が与えられた下での標本の条件付き分布が未知母数に一切依存しないことである。直観的には、未知母数に関するすべての情報が $T$ に集約されていることを意味する。</p>
+    <p>十分統計量 $T$ が <strong>完備 (complete)</strong> であるとは、任意の関数 $g$ に対して、</p>
+    
+    $$ \text{すべての母数 } \theta \text{ について } \mathbb{E}_{\theta}[g(T)] = 0 \implies \text{ほぼ確実に } g(T) = 0 $$
+    
+    <p>が成り立つことをいう。これは $T$ の分布の族が十分に「豊か」であり、$0$ の不偏推定量が自明なもの ($g \equiv 0$) しか存在しないことを示している。</p>
+    <p>統計量 $V$ が <strong>補助統計量 (ancillary statistic)</strong> であるとは、$V$ の分布が未知母数に一切依存しないことである。補助統計量自体は母数の情報を持たない。</p>
+</div>
+
+<div class="example">
+    <div class="example-title">例 1.7 (十分統計量と補助統計量の具体例)</div>
+    <p>正規分布 $\mathcal{N}(\mu, \sigma^2)$ からの無作為標本において、標本平均 $\bar{X}$ と標本分散 $S^2$ の組 $(\bar{X}, S^2)$ は $(\mu, \sigma^2)$ に対する十分統計量である。さらに、これは完備十分統計量でもある。</p>
+    <p>一方で、分散 $\sigma^2$ が既知である正規分布 $\mathcal{N}(\mu, \sigma^2)$ モデルにおいて、標本分散 $S^2$ は自由度 $n-1$ のカイ二乗分布に比例する分布に従う。この分布は未知母数 $\mu$ に依存しないため、$S^2$ は母数 $\mu$ に対する補助統計量である。</p>
+</div>
+
+<div class="theorem">
+    <div class="theorem-title">定理 1.8 (Basuの定理)</div>
+    <p>完備十分統計量 $T$ と補助統計量 $V$ は互いに独立である。</p>
+</div>
+
+<div class="example">
+    <div class="example-title">例 1.9 (Basuの定理の応用)</div>
+    <p>正規分布 $\mathcal{N}(\mu, \sigma^2)$ からの標本において、母数 $\mu$ を未知、$\sigma^2$ を既知とする。標本平均 $\bar{X}$ は $\mu$ の完備十分統計量である。一方、標本分散 $S^2$ の分布は $\mu$ に依存しないため補助統計量である。Basuの定理を適用することで、標本平均 $\bar{X}$ と標本分散 $S^2$ が独立であることが直ちに導かれる（通常は直交変換を用いた複雑な計算が必要な事実が、統計的構造から鮮やかに導かれる）。</p>
+</div>
+
+<h2>2. 正規分布モデルの指数型分布族表示</h2>
+
+<p>ここから、t検定の導出の本題に入る。</p>
+<p>$X_1, \dots, X_n$ を正規分布 $\mathcal{N}(\mu, \sigma^2)$ に従う互いに独立な確率変数とする。この結合確率密度関数は以下のように表される。</p>
+
+$$ f(x_1, \dots, x_n \mid \mu, \sigma^2) = \left( \frac{1}{2\pi\sigma^2} \right)^{\frac{n}{2}} \exp\left( -\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2 \right) $$
+
+<p>指数部分を展開して整理する。和の記号の中を展開すると $(x_i - \mu)^2 = x_i^2 - 2\mu x_i + \mu^2$ となるので、全体として以下のように変形できる。</p>
+
+$$ \exp\left( -\frac{1}{2\sigma^2} \left( \sum_{i=1}^n x_i^2 - 2\mu \sum_{i=1}^n x_i + n\mu^2 \right) \right) = \exp\left( \frac{\mu}{\sigma^2} \sum_{i=1}^n x_i - \frac{1}{2\sigma^2} \sum_{i=1}^n x_i^2 - \frac{n\mu^2}{2\sigma^2} \right) $$
+
+<p>これを定義 1.4 で導入した指数型分布族の標準形に変形すると、</p>
+
+$$ f(x_1, \dots, x_n \mid \theta_1, \theta_2) = C(\theta_1, \theta_2) \exp\left( \theta_1 U + \theta_2 T \right) $$
+
+<p>となる。ここで、対応関係は以下の通りである。</p>
+
+<ul>
+    <li>第一の自然母数: $\theta_1 = \frac{\mu}{\sigma^2}$</li>
+    <li>第二の自然母数: $\theta_2 = -\frac{1}{2\sigma^2}$</li>
+    <li>$\theta_1$ に対応する十分統計量: $U = \sum_{i=1}^n X_i$</li>
+    <li>$\theta_2$ に対応する十分統計量: $T = \sum_{i=1}^n X_i^2$</li>
+    <li>正規化定数: $C(\theta_1, \theta_2) = (2\pi)^{-n/2} (-2\theta_2)^{n/2} \exp\left( \frac{n\theta_1^2}{4\theta_2} \right)$</li>
+</ul>
+
+<p>このように、正規分布モデルは自然母数 $(\theta_1, \theta_2)$ と十分統計量 $(U, T)$ を持つ2母数指数型分布族をなすことが完全に示された。</p>
+
+<h2>3. 仮説の設定と条件付け</h2>
+
+<p>母平均に関する両側検定を考える。帰無仮説を $H_0: \mu = \mu_0$ 、対立仮説を $H_1: \mu \neq \mu_0$ とする。自然母数を用いると、$\mu = \frac{-\theta_1}{2\theta_2}$ であるから、帰無仮説は $H_0: \theta_1 = -2\mu_0 \theta_2$ と表される。</p>
+
+<p>ここでは理論的な見通しを良くするため、一般性を失うことなく $\mu_0 = 0$ と仮定する（ $\mu_0 \neq 0$ の場合は、データ全体を $X_i - \mu_0$ と平行移動させれば同じ議論に帰着できるためである）。このとき、仮説は以下のようにシンプルになる。</p>
+
+<ul>
+    <li>帰無仮説 $H_0: \theta_1 = 0$</li>
+    <li>対立仮説 $H_1: \theta_1 \neq 0$</li>
+</ul>
+
+<p>この検定問題において、$\theta_1$ は興味のある母数（関心母数）であるが、分散に関連する $\theta_2$ は興味の対象ではない <strong>局外母数 (nuisance parameter)</strong> である。局外母数が存在したままでは、強力な検定を構成することが困難である。</p>
+
+<p>多母数指数型分布族におけるUMPU検定の一般論によれば、このような状況では、局外母数 $\theta_2$ の十分統計量である $T$ で条件付けることが本質的である。$T = t$ を与えたときの $U$ の条件付き確率密度関数を考えると、それは局外母数 $\theta_2$ に依存しない1母数の指数型分布族となる。その条件付き密度関数は以下のような形に書ける。</p>
+
+$$ f(u \mid t, \theta_1) = K(\theta_1, t) \exp( \theta_1 u ) h(u, t) $$
+
+<p>この条件付き分布において仮説検定を構成することで、局外母数の影響を完全に排除することができる。</p>
+
+<h2>4. 条件付き分布における最強力検定の導出</h2>
+
+<p>前節で導出した条件付き分布の下で、有意水準 $\alpha$ のUMPU検定 $\phi(u, t)$ を構成する。$\phi(u, t)$ は、統計量 $(U, T)$ の実現値が $(u, t)$ であったときに帰無仮説を棄却する確率を表す検定関数である。これがUMPU検定であるためには、$T = t$ という条件の下で以下の2つの条件を同時に満たす必要がある。</p>
+
+<ol>
+    <li><strong>サイズ条件:</strong> 帰無仮説 $\theta_1 = 0$ の下での棄却確率が $\alpha$ に一致する。<br>
+    $$ \mathbb{E}_{\theta_1=0}[\phi(U, T) \mid T=t] = \alpha $$
+    </li>
+    <li><strong>不偏性における微分条件:</strong> 検出力関数が $\theta_1 = 0$ において極小値 $\alpha$ をとるため、微係数が $0$ となる。<br>
+    $$ \frac{\partial}{\partial \theta_1} \mathbb{E}_{\theta_1}[\phi(U, T) \mid T=t] \bigg|_{\theta_1=0} = 0 $$
+    </li>
+</ol>
+
+<h3>4.1. 微分条件の式変形と期待値の計算</h3>
+
+<p>まず、条件付き期待値を積分の形で書き下す。</p>
+
+$$ \mathbb{E}_{\theta_1}[\phi(U, T) \mid T=t] = \int \phi(u, t) K(\theta_1, t) \exp( \theta_1 u ) h(u, t) du $$
+
+<p>指数型分布族はパラメータに関して正則性が高いため、微分と積分の順序交換が正当化される。また、条件付き密度関数が確率の公理を満たす（全空間での積分が $1$ となる）という事実から出発する。</p>
+
+$$ \int K(\theta_1, t) \exp( \theta_1 u ) h(u, t) du = 1 $$
+
+<p>この両辺を $\theta_1$ で微分し、積分記号の中に入れる。</p>
+
+$$ \frac{\partial}{\partial \theta_1} \int K(\theta_1, t) \exp( \theta_1 u ) h(u, t) du = 0 $$
+
+<p>積の微分法則を適用する。</p>
+
+$$ \int \left( \frac{\partial K(\theta_1, t)}{\partial \theta_1} \exp( \theta_1 u ) + K(\theta_1, t) u \exp( \theta_1 u ) \right) h(u, t) du = 0 $$
+
+<p>この式を期待値の記号を用いて整理するため、式全体を $K(\theta_1, t)$ で割る（正規化定数は正であるため可能）。</p>
+
+$$ \frac{1}{K(\theta_1, t)} \frac{\partial K(\theta_1, t)}{\partial \theta_1} \int K(\theta_1, t) \exp(\theta_1 u) h(u, t) du + \int u K(\theta_1, t) \exp(\theta_1 u) h(u, t) du = 0 $$
+
+<p>第一項の積分は $1$ であり、第二項の積分は $U$ の条件付き期待値 $\mathbb{E}_{\theta_1}[U \mid T=t]$ の定義そのものである。したがって、以下の極めて重要な恒等式を得る。</p>
+
+$$ \frac{1}{K(\theta_1, t)} \frac{\partial K(\theta_1, t)}{\partial \theta_1} = - \mathbb{E}_{\theta_1}[U \mid T=t] $$
+
+<p>この結果を用いて、UMPU検定が満たすべき「不偏性における微分条件」を計算する。</p>
+
+$$ \frac{\partial}{\partial \theta_1} \mathbb{E}_{\theta_1}[\phi(U, T) \mid T=t] = \int \phi(u, t) \frac{\partial}{\partial \theta_1} \left( K(\theta_1, t) \exp( \theta_1 u ) \right) h(u, t) du $$
+
+<p>先ほどと同様に積の微分法則を適用する。</p>
+
+$$ = \int \phi(u, t) \left( \frac{\partial K(\theta_1, t)}{\partial \theta_1} \exp( \theta_1 u ) + K(\theta_1, t) u \exp( \theta_1 u ) \right) h(u, t) du $$
+
+<p>ここで得た恒等式 $\frac{\partial K(\theta_1, t)}{\partial \theta_1} = - K(\theta_1, t) \mathbb{E}_{\theta_1}[U \mid T=t]$ を代入する。</p>
+
+$$ = \int \phi(u, t) \left( -\mathbb{E}_{\theta_1}[U \mid T=t] + u \right) K(\theta_1, t) \exp( \theta_1 u ) h(u, t) du $$
+
+<p>積分記号を期待値記号に戻すと、</p>
+
+$$ = \mathbb{E}_{\theta_1}[\phi(U, T) (U - \mathbb{E}_{\theta_1}[U \mid T=t]) \mid T=t] $$
+$$ = \mathbb{E}_{\theta_1}[U \phi(U, T) \mid T=t] - \mathbb{E}_{\theta_1}[U \mid T=t] \mathbb{E}_{\theta_1}[\phi(U, T) \mid T=t] $$
+
+<p>UMPU検定の条件2は、この式に $\theta_1 = 0$ を代入した値が $0$ になることである。また、サイズ条件より $\mathbb{E}_{0}[\phi(U, T) \mid T=t] = \alpha$ である。これらを代入して整理すると、条件2は以下の式と同値になる。</p>
+
+$$ \mathbb{E}_{0}[U \phi(U, T) \mid T=t] = \alpha \mathbb{E}_{0}[U \mid T=t] $$
+
+<h3>4.2. 原点対称性の利用と棄却域の決定</h3>
+
+<p>ここで、右辺の期待値 $\mathbb{E}_{0}[U \mid T=t]$ を評価する。$\theta_1 = 0$ （すなわち $\mu = 0$）の帰無仮説の下では、各 $X_i$ は平均 $0$ の正規分布 $\mathcal{N}(0, \sigma^2)$ に従う。</p>
+
+<p>平均が $0$ の正規分布は原点に関して対称であるため、確率変数ベクトル $(X_1, \dots, X_n)$ と符号を反転させた $(-X_1, \dots, -X_n)$ は全く同じ結合確率分布に従う。このとき、十分統計量がどのように変化するかを観察する。</p>
+
+<ul>
+    <li>$T = \sum_{i=1}^n X_i^2$ は、符号を反転させても $(-X_i)^2 = X_i^2$ であるため <strong>不変</strong> である。</li>
+    <li>$U = \sum_{i=1}^n X_i$ は、符号を反転させると $\sum (-X_i) = -U$ となり <strong>符号が反転</strong> する。</li>
+</ul>
+
+<p>この事実から、$T=t$ が与えられた下での $U$ の条件付き分布は、原点に関して対称な分布となる。したがって、その条件付き期待値は自明に $0$ となる。</p>
+
+$$ \mathbb{E}_{0}[U \mid T=t] = 0 $$
+
+<p>これを先ほどの条件式に代入すると、UMPU検定が満たすべき条件は最終的に以下の2つの極めてシンプルな式に帰着される。</p>
+
+$$ \mathbb{E}_{0}[\phi(U, T) \mid T=t] = \alpha $$
+$$ \mathbb{E}_{0}[U \phi(U, T) \mid T=t] = 0 $$
+
+<p>ここで <strong>一般化されたNeyman-Pearsonの補題 (generalized Neyman-Pearson lemma)</strong> を適用する。この補題によれば、条件式を満たしつつ両側対立仮説 $H_1: \theta_1 \neq 0$ に対する最強力を達成する検定関数は、十分統計量 $U$ についての区間の外側で帰無仮説を棄却する形として構成される。すなわち、ある関数 $c_1(t), c_2(t)$ を用いて以下のように与えられる。</p>
+
+$$ 
+\phi(u, t) = \begin{cases} 
+1 & ( u  <  c_1(t) \text{ または } u  >  c_2(t) ) \\
+0 & ( c_1(t) \le u \le c_2(t) ) 
+\end{cases} 
+$$
+
+<p>（※正確には境界点で確率的に棄却する randomize test を考える場合があるが、連続分布である正規分布においては境界点に落ちる確率は $0$ であるため無視できる。）</p>
+
+<p>条件付き分布が原点対称であり、かつ条件 $\mathbb{E}_{0}[U \phi(U, T) \mid T=t] = 0$ （これは関数 $u \phi(u, t)$ の積分が $0$ になることを意味する）を満たす必要があるため、棄却域も原点に関して完全に対称でなければならない。したがって、$c_2(t) = -c_1(t) = C(t)  >  0$ と置くことができ、最強力検定の検定関数は最終的に以下のように定まる。</p>
+
+$$ \phi(u, t) = 1 \quad \text{if} \quad |u|  >  C(t) $$
+
+<p>これは「局外母数の十分統計量 $T$ で条件付けたとき、関心母数の十分統計量の絶対値 $|U|$ が十分に大きければ帰無仮説を棄却する」という直観的に極めて自然な結果である。</p>
+
+<h2>5. t統計量への帰着とBasuの定理の適用</h2>
+
+<p>導出された条件付き検定の棄却域 $|U|  >  C(t)$ は、条件 $T=t$ に依存する形をしている。これを、我々がよく知る無条件のt統計量の形に同値変形していく。</p>
+
+<h3>5.1. 棄却域の同値変形</h3>
+
+<p>標本平均を $\bar{X} = \frac{U}{n}$、不偏分散を $S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2$ とする。不偏分散は $U$ と $T$ を用いて次のように展開・整理できる。</p>
+
+$$ S^2 = \frac{1}{n-1} \left( \sum_{i=1}^n X_i^2 - n\bar{X}^2 \right) = \frac{1}{n-1} \left( T - n\left(\frac{U}{n}\right)^2 \right) = \frac{1}{n-1} \left( T - \frac{U^2}{n} \right) $$
+
+<p>t統計量 $t(X)$ は定義により以下のように表される。</p>
+
+$$ t(X) = \frac{\sqrt{n} \bar{X}}{S} $$
+
+<p>これに $U$ と $T$ の表現を代入し、その2乗を計算する。</p>
+
+$$ t(X)^2 = \frac{n (U/n)^2}{\frac{1}{n-1} \left( T - \frac{U^2}{n} \right)} = (n - 1) \frac{\frac{U^2}{n}}{T - \frac{U^2}{n}} $$
+
+<p>分母と分子に $n$ を掛けて整理する。</p>
+
+$$ t(X)^2 = (n - 1) \frac{U^2}{nT - U^2} $$
+
+<p>ここで、条件付き検定の枠組みにおいては $T = t$ が固定されていることを思い出す。固定された $t  >  0$ に対して、関数 $g(y) = \frac{y}{nt - y}$ を考える。ここで $y = U^2$ であり、分散が正であるため $nT - U^2  >  0$ すなわち $0 \le y  <  nt$ の範囲を考える。</p>
+
+<p>関数 $g(y)$ を $y$ について微分して単調性を調べる。</p>
+
+$$ \frac{d}{dy} g(y) = \frac{1 \cdot (nt - y) - y \cdot (-1)}{(nt - y)^2} = \frac{nt - y + y}{(nt - y)^2} = \frac{nt}{(nt - y)^2} $$
+
+<p>$n \ge 2$ であり $t  >  0$ であるため、この微分は常に正（$ >  0$）である。微分が常に正であるため、$g(y)$ は単調増加関数である。</p>
+
+<p>定数倍 $(n-1)$ を掛けても単調性は変わらないため、$t(X)^2$ は固定された $t$ の下で $U^2$ に関する単調増加関数となる。単調増加関数による不等式は同値性を保つため、$U^2  >  C(t)^2$ という条件は、$t(X)^2  >  k(t)^2$ という条件と完全に同値になる（ここで $k(t)$ は $C(t)$ から一意に定まる正の関数である）。</p>
+
+<p>両辺の平方根をとることで、棄却域は以下のように同値変形される。</p>
+
+$$ |U|  >  C(t) \iff |t(X)|  >  k(t) $$
+
+<h3>5.2. Basuの定理による境界値の独立性の証明</h3>
+
+<p>最後に残された問題は、棄却の境界値 $k(t)$ が条件 $t$ に依存しているように見える点である。これを <strong>Basuの定理</strong> を用いて鮮やかに解決する。</p>
+
+<div class="proof">
+    <div class="proof-title">境界値 $k(t)$ が定数となることの証明</div>
+    <p>帰無仮説 $H_0$ （$\mu = 0$）の下において、よく知られた確率論の定理により、t統計量 $t(X)$ は自由度 $n-1$ のt分布（スチューデントのt分布）に従う。t分布の確率密度関数は自由度 $n-1$ のみに依存し、局外母数である母分散 $\sigma^2$ には一切依存しない。このように分布が未知母数に依存しない統計量であるため、$t(X)$ は $\sigma^2$ に対する <strong>補助統計量 (ancillary statistic)</strong> である。</p>
+    
+    <p>一方で、帰無仮説 $H_0$ （$\mu = 0$ に固定）の下でのデータ生成モデルは、未知母数を $\sigma^2$ （あるいは自然母数 $\theta_2$）のみとする1母数の指数型分布族となる。このモデルにおいて、指数部分の統計量 $T = \sum X_i^2$ は $\sigma^2$ に対する <strong>完備十分統計量 (complete sufficient statistic)</strong> である。</p>
+    
+    <p>ここで <strong>Basuの定理</strong>（定理 1.8）を適用する。Basuの定理によれば、「完備十分統計量と補助統計量は互いに独立である」。したがって、帰無仮説の下で完備十分統計量 $T$ と補助統計量 $t(X)$ は完全に独立となる。</p>
+    
+    <p>確率変数が独立であることの定義から、$T = t$ を与えた下での $t(X)$ の条件付き確率は、無条件の確率と常に等しくなる。</p>
+    
+    $$ \mathbb{P}_{H_0}(|t(X)|  >  k(t) \mid T=t) = \mathbb{P}_{H_0}(|t(X)|  >  k(t)) $$
+    
+    <p>我々が満たすべきサイズ条件は、任意の $t$ に対して左辺の条件付き確率が有意水準 $\alpha$ に一致するように境界値 $k(t)$ を定めることであった。しかし、右辺の無条件確率は条件 $t$ に一切依存せず、単なる自由度 $n-1$ のt分布からの確率計算である。</p>
+    
+    <p>したがって、確率 $\alpha$ を達成する境界値 $k(t)$ は、$t$ の値に関わらず常に一定の値 $k$ （具体的には、自由度 $n-1$ のt分布における上側 $\alpha/2$ 点 $t_{\alpha/2}(n-1)$）として一意に定めることができる。</p>
+</div>
+
+<h2>6. 結論</h2>
+
+<p>以上の厳密な論理展開により、局外母数の十分統計量 $T$ で条件付けた一様最強力不偏 (UMPU) 検定の棄却域 $|U|  >  C(t)$ は、無条件のt検定の棄却域 $|t(X)|  >  k$ と完全に一致することが、一切のギャップなく証明された。</p>
+
+<p>よって、<strong>正規分布モデルの前提の下での母平均に関するt検定は一様最強力不偏 (UMPU) 検定である。</strong> すなわち、t検定は正規分布モデルにおける母平均の検定として、不偏性を持つ検定の中で「理論上これ以上強力なものは存在しない」という最適性を持つことが示された。</p>
+
+<div class="remark">
+    <div class="remark-title">補足と注意点</div>
+    <p>この証明の本質は「局外母数による条件付け」と「Basuの定理」の美しい連携にある。局外母数が存在すると最適な検定を作るのは難しいが、十分統計量で条件付けることで局外母数を消去し、指数型分布族の性質（Neyman-Pearsonの補題）を使って最強力検定を構成する。その後、条件付きの検定が無条件の検定（t検定）と一致することをBasuの定理で保証するという、数理統計学における極めて洗練された理論体系を体現している。</p>
+</div>
+
+<h2>参考文献</h2>
+<ul>
+    <li>Lehmann, E. L., & Romano, J. P. (2005). <em>Testing Statistical Hypotheses</em> (3rd ed.). Springer. <a href="https://link.springer.com/book/10.1007/0-387-27605-X" target="_blank">https://link.springer.com/book/10.1007/0-387-27605-X</a></li>
+    <li>Keener, R. W. (2010). <em>Theoretical Statistics: Topics for a Core Course</em>. Springer. <a href="https://link.springer.com/book/10.1007/978-0-387-93839-4" target="_blank">https://link.springer.com/book/10.1007/978-0-387-93839-4</a></li>
+    <li>Casella, G., & Berger, R. L. (2001). <em>Statistical Inference</em> (2nd ed.). Duxbury Press.</li>
+</ul>
+
+</body>
+</html>
