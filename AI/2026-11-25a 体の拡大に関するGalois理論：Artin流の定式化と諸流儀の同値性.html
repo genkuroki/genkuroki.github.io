@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>体の拡大に関するGalois理論：Artin流の定式化と諸流儀の同値性</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --bg-color: #fcfcfd;
+      --text-color: #1f2328;
+      --muted-color: #57606a;
+      --accent-color: #1b4f72;
+      --accent-light: #ebf3fa;
+      --border-color: #d0d7de;
+      --def-bg: #f4f8fb;
+      --def-border: #2b6cb0;
+      --thm-bg: #fdf8f2;
+      --thm-border: #b7791f;
+      --ex-bg: #f3faf6;
+      --ex-border: #2f855a;
+      --proof-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+      line-height: 1.85;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.75rem 4.5rem;
+      background-color: #ffffff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    header.doc-header {
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    header.doc-header h1 {
+      font-size: 1.9rem;
+      line-height: 1.4;
+      color: var(--accent-color);
+      margin: 0 0 0.75rem 0;
+    }
+
+    header.doc-header p.subtitle {
+      font-size: 1rem;
+      color: var(--muted-color);
+      margin: 0;
+    }
+
+    nav.toc {
+      background-color: #f6f8fa;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 0.94rem;
+    }
+
+    nav.toc h2 {
+      font-size: 1.05rem;
+      margin: 0 0 0.75rem 0;
+      color: var(--accent-color);
+      border: none;
+      padding: 0;
+    }
+
+    nav.toc ol {
+      margin: 0;
+      padding-left: 1.4rem;
+    }
+
+    nav.toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    nav.toc a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    nav.toc a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--accent-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    h3 {
+      font-size: 1.18rem;
+      color: #24292f;
+      margin-top: 2rem;
+      margin-bottom: 0.85rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 1.1rem;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-top: 0.4rem;
+      margin-bottom: 1.2rem;
+      padding-left: 1.6rem;
+    }
+
+    li {
+      margin-bottom: 0.45rem;
+    }
+
+    .env-box {
+      border-left: 4px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .env-def {
+      background-color: var(--def-bg);
+      border-left-color: var(--def-border);
+    }
+
+    .env-thm {
+      background-color: var(--thm-bg);
+      border-left-color: var(--thm-border);
+    }
+
+    .env-ex {
+      background-color: var(--ex-bg);
+      border-left-color: var(--ex-border);
+    }
+
+    .env-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #1a202c;
+    }
+
+    .proof-box {
+      background-color: var(--proof-bg);
+      border: 1px solid #e1e4e8;
+      border-left: 4px solid #6e7781;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.75rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .proof-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.6rem;
+      display: block;
+      color: #32383f;
+    }
+
+    .qed {
+      text-align: right;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .math-display {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--accent-light);
+      color: #1a365d;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fafbfc;
+    }
+
+    .center-cell {
+      text-align: center;
+    }
+
+    .references ol {
+      padding-left: 1.6rem;
+      font-size: 0.95rem;
+    }
+
+    .references li {
+      margin-bottom: 0.75rem;
+    }
+
+    .references a {
+      color: var(--accent-color);
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="doc-header">
+      <h1>体の拡大に関するGalois理論：Artin流の定式化と諸流儀の同値性</h1>
+      <p class="subtitle">固定体 $L^G = K$ からの基本定理の構築、正規分離拡大・最小分解体・単拡大定理との同値性、および超越拡大における相違の完全解説</p>
+    </header>
+
+    <nav class="toc">
+      <h2>目次</h2>
+      <ol>
+        <li><a href="#sec-intro">序論：問題設定と本稿の構成</a></li>
+        <li><a href="#sec-foundations">基本概念とGalois対応の定式化</a></li>
+        <li><a href="#sec-artin">Dedekindの補題とArtinの定理</a></li>
+        <li><a href="#sec-ftgt">有限次Galois理論の基本定理</a></li>
+        <li><a href="#sec-algebraic">一般の代数拡大における特徴づけ：正規分離拡大との同値性</a></li>
+        <li><a href="#sec-transcendental">超越拡大における相違：$L^G = K$ が正規分離拡大を含意しない反例</a></li>
+        <li><a href="#sec-splitting-primitive">最小分解体と単拡大定理（原始元定理）による特徴づけ</a></li>
+        <li><a href="#sec-examples">具体例による徹底検証</a></li>
+        <li><a href="#sec-comparison">各流儀の理論構成上の違いと位置づけ</a></li>
+        <li><a href="#sec-references">参考文献</a></li>
+      </ol>
+    </nav>
+
+    <section id="sec-intro">
+      <h2>1. 序論：問題設定と本稿の構成</h2>
+      <p>体 $L$ は体 $K$ の拡大であるとし、 $L$ の $K$ 上での体としての自己同型全体のなす群を $G = \mathrm{Aut}(L/K)$ と書く。また、 $L$ の元で $G$ の作用によって固定されるもの全体のなす $L$ の部分体を $L^G$ と書く。このとき、 $L$ が $K$ のGalois拡大であることを</p>
+      <div class="math-display">
+        $$L^G = K$$
+      </div>
+      <p>という条件によって定義するアプローチは、Emil Artin によって定式化された現代的なGalois理論の出発点である（Artin [1]）。</p>
+      <p>本稿では、まずこのArtin流の定義から出発して有限次Galois理論の基本定理を完全にself-containedな形で証明する。続いて、Galois理論の教科書や歴史的発展において現れる他の主要な流儀—すなわち、</p>
+      <ul>
+        <li><strong>正規拡大かつ分離拡大</strong>によってGalois拡大を定義する流儀（一般の代数拡大・無限次拡大に適した定式化）、</li>
+        <li><strong>重根を持たない $K$ 係数の多項式の最小分解体</strong>として有限次Galois拡大を定義する古典的流儀、</li>
+        <li><strong>単拡大定理（原始元定理）</strong>を経由して単一の生成元の最小多項式の分解によって特徴づける流儀</li>
+      </ul>
+      <p>との論理的関係を明確にする。具体的には、一般の代数拡大において $L^G = K$ と正規分離拡大が完全に同値であること、超越拡大を許すと両者が同値でなくなること（反例として無限体上の有理関数体 $K(t)/K$ を詳しく解析する）、そして有限次拡大においては上記の4つの特徴づけがすべて同値であることを、ギャップのない完全な証明によって示す。</p>
+    </section>
+
+    <section id="sec-foundations">
+      <h2>2. 基本概念とGalois対応の定式化</h2>
+      <p>本稿全体を通じて用いる体論および群作用の基本概念を定義し、基本的な性質を証明する。本稿ではすべての環は単位元 $1 \neq 0$ を持つものとし、体準同型 $\sigma : E \to F$ は常に $\sigma(1) = 1$ を満たすものとする（したがって体準同型は自動的に単射である。実際、 $\ker \sigma$ は体 $E$ のイデアルであり、 $1 \notin \ker \sigma$ ゆえ $\ker \sigma = \{0\}$ である）。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 2.1（体の拡大と拡大次数）</span>
+        <p>体 $K$ が体 $L$ の部分集合であり、 $L$ の演算を制限して体となるとき、 $K$ を $L$ の<strong>部分体 (subfield)</strong> といい、 $L$ を $K$ の<strong>拡大体 (extension field)</strong> 、または $L/K$ を<strong>体の拡大 (field extension)</strong> という。</p>
+        <p>体の拡大 $L/K$ において、 $L$ を $K$ 上のベクトル空間とみなしたときの次元 $\dim_K L$ を、拡大 $L/K$ の<strong>拡大次数 (degree of extension)</strong> といい、 $[L : K]$ で表す。 $[L : K] < \infty$ であるとき、 $L/K$ は<strong>有限次拡大 (finite extension)</strong> であるといい、 $[L : K] = \infty$ であるとき<strong>無限次拡大 (infinite extension)</strong> であるという。</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 2.2（拡大次数の乗法性）</span>
+        <p>体の拡大の塔 $K \subset M \subset L$ に対して、拡大次数について</p>
+        <div class="math-display">
+          $$[L : K] = [L : M][M : K]$$
+        </div>
+        <p>が成り立つ（ただし無限大を含む等式として成り立ち、特に $[L : K] < \infty$ であることと $[L : M] < \infty$ かつ $[M : K] < \infty$ であることは同値である）。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>まず $[M : K] = r < \infty$ かつ $[L : M] = s < \infty$ の場合を示す。 $\{u_1, \dots, u_r\}$ を $M$ の $K$ 上の基底、 $\{v_1, \dots, v_s\}$ を $L$ の $M$ 上の基底とする。 $rs$ 個の元からなる族 $\{u_i v_j \mid 1 \le i \le r,\ 1 \le j \le s\}$ が $L$ の $K$ 上の基底をなすことを示す。</p>
+        <p>第一に、生成性を示す。任意の $x \in L$ をとると、 $\{v_1, \dots, v_s\}$ が $L$ の $M$ 上の基底であるから、 $b_1, \dots, b_s \in M$ が存在して $x = \sum_{j=1}^s b_j v_j$ と表される。さらに各 $b_j \in M$ に対し、 $\{u_1, \dots, u_r\}$ が $M$ の $K$ 上の基底であるから、 $a_{ij} \in K$ が存在して $b_j = \sum_{i=1}^r a_{ij} u_i$ と表される。これらを代入すると</p>
+        <div class="math-display">
+          $$x = \sum_{j=1}^s \left( \sum_{i=1}^r a_{ij} u_i \right) v_j = \sum_{i=1}^r \sum_{j=1}^s a_{ij} (u_i v_j)$$
+        </div>
+        <p>となり、 $\{u_i v_j\}$ は $L$ を $K$ 上生成する。</p>
+        <p>第二に、線形独立性を示す。 $a_{ij} \in K$ （ $1 \le i \le r,\ 1 \le j \le s$ ）が</p>
+        <div class="math-display">
+          $$\sum_{i=1}^r \sum_{j=1}^s a_{ij} (u_i v_j) = \sum_{j=1}^s \left( \sum_{i=1}^r a_{ij} u_i \right) v_j = 0$$
+        </div>
+        <p>を満たすとする。各 $j$ について $\sum_{i=1}^r a_{ij} u_i \in M$ であり、 $\{v_1, \dots, v_s\}$ は $L$ の $M$ 上の基底なので $M$ 上線形独立である。したがって、すべての $j = 1, \dots, s$ に対して $\sum_{i=1}^r a_{ij} u_i = 0$ が成り立つ。さらに $\{u_1, \dots, u_r\}$ は $M$ の $K$ 上の基底なので $K$ 上線形独立であり、すべての $i = 1, \dots, r$ と $j = 1, \dots, s$ に対して $a_{ij} = 0$ を得る。よって $\{u_i v_j\}$ は $L$ の $K$ 上の基底であり、 $[L : K] = rs = [L : M][M : K]$ である。</p>
+        <p>最後に、 $[M : K] = \infty$ または $[L : M] = \infty$ の場合を考える。 $M$ は $L$ の $K$ 部分空間であるから、 $[M : K] = \infty$ ならば $[L : K] = \infty$ である。また、 $[L : M] = \infty$ ならば、任意の自然数 $n$ に対して $M$ 上線形独立な $n$ 個の元 $v_1, \dots, v_n \in L$ が存在する。 $K \subset M$ よりこれらは $K$ 上でも線形独立であるから $[L : K] \ge n$ となり、 $n$ の任意性より $[L : K] = \infty$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 2.3（自己同型群と固定体）</span>
+        <p>体 $L$ から $L$ 自身への体としての同型写像全体のなす群（写像の合成を演算とする）を $\mathrm{Aut}(L)$ と書く。体の拡大 $L/K$ に対し、 $K$ のすべての元を固定する $L$ の自己同型全体のなす部分群を</p>
+        <div class="math-display">
+          $$\mathrm{Aut}(L/K) := \{\sigma \in \mathrm{Aut}(L) \mid \forall a \in K,\ \sigma(a) = a\}$$
+        </div>
+        <p>と書く。また、 $\mathrm{Aut}(L)$ の任意の部分群 $H$ に対し、</p>
+        <div class="math-display">
+          $$L^H := \{x \in L \mid \forall \sigma \in H,\ \sigma(x) = x\}$$
+        </div>
+        <p>を $H$ の<strong>固定体 (fixed field)</strong> という。</p>
+      </div>
+
+      <p>固定体 $L^H$ が実際に $L$ の部分体であることは直ちに確かめられる。任意の $\sigma \in H$ は体準同型であるから $\sigma(0) = 0$ かつ $\sigma(1) = 1$ であり、 $0, 1 \in L^H$ である。また任意の $x, y \in L^H$ と任意の $\sigma \in H$ に対して、</p>
+      <div class="math-display">
+        $$\sigma(x - y) = \sigma(x) - \sigma(y) = x - y$$
+      </div>
+      <p>が成り立ち、さらに $y \neq 0$ のときは $\sigma(y^{-1}) = \sigma(y)^{-1}$ より</p>
+      <div class="math-display">
+        $$\sigma(x y^{-1}) = \sigma(x) \sigma(y)^{-1} = x y^{-1}$$
+      </div>
+      <p>が成り立つ。よって $x - y \in L^H$ かつ $x y^{-1} \in L^H$ であり、 $L^H$ は $L$ の部分体である。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 2.4（中間体とGalois対応）</span>
+        <p>体の拡大 $L/K$ において、 $K \subset M \subset L$ を満たす $L$ の部分体 $M$ を $L/K$ の<strong>中間体 (intermediate field)</strong> という。 $L/K$ の中間体全体の集合を $\mathcal{M}$ とし、群 $G = \mathrm{Aut}(L/K)$ の部分群全体の集合を $\mathcal{H}$ とおく。このとき、2つの写像</p>
+        <div class="math-display">
+          $$\Phi : \mathcal{M} \to \mathcal{H}, \qquad M \mapsto \mathrm{Aut}(L/M)$$
+        </div>
+        <div class="math-display">
+          $$\Psi : \mathcal{H} \to \mathcal{M}, \qquad H \mapsto L^H$$
+        </div>
+        <p>が定まる（ここで $\mathrm{Aut}(L/M) = \{\sigma \in G \mid \forall x \in M,\ \sigma(x) = x\}$ であり、任意の $H \in \mathcal{H}$ に対して $H \subset G$ より $K \subset L^G \subset L^H \subset L$ となるので $L^H \in \mathcal{M}$ である）。この対応 $(\Phi, \Psi)$ を<strong>Galois対応 (Galois correspondence)</strong> という。</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 2.5（Galois対応の基本的性質）</span>
+        <p>任意の体の拡大 $L/K$ と $G = \mathrm{Aut}(L/K)$ に対して、以下が成り立つ。</p>
+        <ol>
+          <li>$M_1, M_2 \in \mathcal{M}$ が $M_1 \subset M_2$ を満たすならば、 $\Phi(M_2) \subset \Phi(M_1)$ である。</li>
+          <li>$H_1, H_2 \in \mathcal{H}$ が $H_1 \subset H_2$ を満たすならば、 $\Psi(H_2) \subset \Psi(H_1)$ である。</li>
+          <li>任意の $M \in \mathcal{M}$ に対して $M \subset \Psi(\Phi(M)) = L^{\mathrm{Aut}(L/M)}$ が成り立つ。</li>
+          <li>任意の $H \in \mathcal{H}$ に対して $H \subset \Phi(\Psi(H)) = \mathrm{Aut}(L/L^H)$ が成り立つ。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>(1) $M_1 \subset M_2$ とする。 $\sigma \in \Phi(M_2) = \mathrm{Aut}(L/M_2)$ ならば、すべての $x \in M_2$ に対して $\sigma(x) = x$ であるから、特にすべての $x \in M_1$ に対して $\sigma(x) = x$ となり、 $\sigma \in \mathrm{Aut}(L/M_1) = \Phi(M_1)$ である。</p>
+        <p>(2) $H_1 \subset H_2$ とする。 $x \in \Psi(H_2) = L^{H_2}$ ならば、すべての $\sigma \in H_2$ に対して $\sigma(x) = x$ であるから、特にすべての $\sigma \in H_1$ に対して $\sigma(x) = x$ となり、 $x \in L^{H_1} = \Psi(H_1)$ である。</p>
+        <p>(3) $x \in M$ を任意にとる。 $\mathrm{Aut}(L/M)$ の定義により、すべての $\sigma \in \mathrm{Aut}(L/M)$ に対して $\sigma(x) = x$ が成り立つ。これは $x \in L^{\mathrm{Aut}(L/M)} = \Psi(\Phi(M))$ を意味する。</p>
+        <p>(4) $\sigma \in H$ を任意にとる。 $L^H$ の定義により、すべての $x \in L^H$ に対して $\sigma(x) = x$ が成り立つ。これは $\sigma \in \mathrm{Aut}(L/L^H) = \Phi(\Psi(H))$ を意味する。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-artin">
+      <h2>3. Dedekindの補題とArtinの定理</h2>
+      <p>Galois理論の基本定理を証明するための核となるのは、体準同型の線形独立性を保証するDedekindの補題と、有限自己同型群の固定体上の拡大次数を決定するArtinの定理である。まず、以下の証明で繰り返し用いる線形代数の基本補題をself-containedな形で確認しておく。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 3.1（斉次連立一次方程式の非自明解の存在）</span>
+        <p>$F$ を体とし、 $m, n$ を $m < n$ を満たす正の整数とする。任意の行列 $A = (a_{ij}) \in M_{m, n}(F)$ に対して、 $F$ 上の斉次連立一次方程式</p>
+        <div class="math-display">
+          $$\sum_{j=1}^n a_{ij} y_j = 0 \qquad (i = 1, \dots, m)$$
+        </div>
+        <p>は非自明解 $(c_1, \dots, c_n) \in F^n \smallsetminus \{(0, \dots, 0)\}$ を持つ。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$n$ に関する数学的帰納法で証明する（ $m < n$ より $n \ge 2$ である）。行基本変形を行っても連立方程式の解空間は不変である。</p>
+        <p>$n = 2$ のとき、 $m = 1$ であるから方程式は $a_{11} y_1 + a_{12} y_2 = 0$ の1本である。 $a_{11} = 0$ ならば $(1, 0)$ が非自明解であり、 $a_{11} \neq 0$ ならば $(-a_{12}, a_{11})$ が非自明解である。</p>
+        <p>$n \ge 3$ とし、未知数が $n - 1$ 個以下の場合に主張が成り立つと仮定する。もし行列 $A$ のすべての成分が $0$ ならば $(1, 0, \dots, 0)$ が非自明解である。零でない成分が存在する場合、行と列を適切に入れ替える（列の入れ替えは未知数 $y_1, \dots, y_n$ の番号の付け替えに対応する）ことにより $a_{11} \neq 0$ として一般性を失わない。第 $1$ 行の $a_{1i} a_{11}^{-1}$ 倍を第 $i$ 行（ $i = 2, \dots, m$ ）から引く行基本変形により、方程式系は同値な形</p>
+        <div class="math-display">
+          $$a_{11} y_1 + \sum_{j=2}^n a_{1j} y_j = 0, \qquad \sum_{j=2}^n a'_{ij} y_j = 0 \quad (i = 2, \dots, m)$$
+        </div>
+        <p>に帰着される。もし $m = 1$ ならば $(y_2, \dots, y_n) = (1, 0, \dots, 0)$ 、 $y_1 = -a_{11}^{-1} a_{12}$ とおけば非自明解が得られる。 $m \ge 2$ のとき、後半の $m - 1$ 本の方程式は $n - 1$ 個の未知数 $y_2, \dots, y_n$ に関する斉次連立一次方程式であり、 $(m - 1) < (n - 1)$ を満たす。帰納法の仮定より、これは非自明解 $(c_2, \dots, c_n) \neq (0, \dots, 0)$ を持つ。そこで $c_1 := -a_{11}^{-1} \sum_{j=2}^n a_{1j} c_j \in F$ と定めれば、 $(c_1, c_2, \dots, c_n) \neq (0, \dots, 0)$ は元の方程式系の非自明解である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 3.2（Dedekindの補題）</span>
+        <p>$M, L$ を体とする。相異なる体準同型 $\sigma_1, \dots, \sigma_n : M \to L$ は、 $M$ から $L$ への写像全体のなす $L$ ベクトル空間において $L$ 上線形独立である。すなわち、 $c_1, \dots, c_n \in L$ がすべての $x \in M$ に対して</p>
+        <div class="math-display">
+          $$\sum_{i=1}^n c_i \sigma_i(x) = 0$$
+        </div>
+        <p>を満たすならば、 $c_1 = \dots = c_n = 0$ である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$n$ に関する数学的帰納法で証明する。 $n = 1$ のとき、すべての $x \in M$ に対して $c_1 \sigma_1(x) = 0$ が成り立つと仮定する。 $x = 1 \in M$ を代入すると $\sigma_1(1) = 1$ であるから $c_1 \cdot 1 = 0$ 、すなわち $c_1 = 0$ を得る。</p>
+        <p>$n \ge 2$ とし、 $n - 1$ 個以下の相異なる体準同型に対して主張が成り立つと仮定する。背理法により、少なくとも1つは $0$ でない係数 $c_1, \dots, c_n \in L$ が存在して、すべての $x \in M$ に対して</p>
+        <div class="math-display">
+          $$\sum_{i=1}^n c_i \sigma_i(x) = 0$$
+        </div>
+        <p>が成り立つと仮定する。帰納法の仮定より、すべての $i = 1, \dots, n$ について $c_i \neq 0$ でなければならない（もしある $k$ に対して $c_k = 0$ ならば、 $c_k \sigma_k(x)$ の項を除くことで $n - 1$ 個の相異なる体準同型に対する非自明な線形関係式が得られ、帰納法の仮定に矛盾する）。</p>
+        <p>$\sigma_1 \neq \sigma_n$ であるから、 $\sigma_1(a) \neq \sigma_n(a)$ を満たす元 $a \in M$ が存在する。任意の $x \in M$ に対して、上の関係式の $x$ を $a x \in M$ に置き換えた等式</p>
+        <div class="math-display">
+          $$\sum_{i=1}^n c_i \sigma_i(a x) = \sum_{i=1}^n c_i \sigma_i(a) \sigma_i(x) = 0$$
+        </div>
+        <p>から、元の等式の両辺に $\sigma_n(a)$ を掛けた等式</p>
+        <div class="math-display">
+          $$\sum_{i=1}^n c_i \sigma_n(a) \sigma_i(x) = 0$$
+        </div>
+        <p>を辺々引く。すると $i = n$ の項が相殺されて</p>
+        <div class="math-display">
+          $$\sum_{i=1}^{n-1} c_i (\sigma_i(a) - \sigma_n(a)) \sigma_i(x) = 0$$
+        </div>
+        <p>がすべての $x \in M$ に対して成り立つ。これは $n - 1$ 個の相異なる体準同型 $\sigma_1, \dots, \sigma_{n-1}$ に対する線形関係式であるから、帰納法の仮定より、すべての $i = 1, \dots, n - 1$ について</p>
+        <div class="math-display">
+          $$c_i (\sigma_i(a) - \sigma_n(a)) = 0$$
+        </div>
+        <p>が成り立つ。特に $i = 1$ のとき $c_1 (\sigma_1(a) - \sigma_n(a)) = 0$ となるが、 $c_1 \neq 0$ かつ $\sigma_1(a) - \sigma_n(a) \neq 0$ であり、 $L$ は体（したがって零因子を持たない整域）であるから、これは矛盾である。よって主張が成り立つ。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p>体の拡大 $M/K$ および $L/K$ に対し、 $K$ のすべての元を固定する体準同型 $M \to L$ （これを<strong> $K$ 準同型 ($K$-homomorphism)</strong> という）全体の集合を $\mathrm{Hom}_K(M, L)$ と書く。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">系 3.3（$K$ 準同型の個数の上界）</span>
+        <p>$M/K$ を有限次拡大、 $L/K$ を任意の体の拡大とする。このとき、</p>
+        <div class="math-display">
+          $$|\mathrm{Hom}_K(M, L)| \le [M : K]$$
+        </div>
+        <p>が成り立つ。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$m = [M : K]$ とおき、 $\{e_1, \dots, e_m\}$ を $M$ の $K$ 上の基底とする。背理法により、 $|\mathrm{Hom}_K(M, L)| > m$ であると仮定する。このとき、相異なる $m + 1$ 個の元 $\sigma_1, \dots, \sigma_{m+1} \in \mathrm{Hom}_K(M, L)$ を選ぶことができる。</p>
+        <p>$y_1, \dots, y_{m+1}$ を未知数とする $L$ 上の斉次連立一次方程式</p>
+        <div class="math-display">
+          $$\sum_{j=1}^{m+1} \sigma_j(e_i) y_j = 0 \qquad (i = 1, \dots, m)$$
+        </div>
+        <p>を考える。方程式の個数 $m$ は未知数の個数 $m + 1$ より真に小さい（ $m < m + 1$ ）ので、補題 3.1 によりこの連立方程式は $L$ に非自明解 $(c_1, \dots, c_{m+1}) \in L^{m+1} \smallsetminus \{(0, \dots, 0)\}$ を持つ。</p>
+        <p>任意の $x \in M$ は $a_1, \dots, a_m \in K$ を用いて $x = \sum_{i=1}^m a_i e_i$ と一意的に表される。各 $\sigma_j$ は $K$ 準同型であるから $\sigma_j(a_i) = a_i$ であり、</p>
+        <div class="math-display">
+          $$\sum_{j=1}^{m+1} c_j \sigma_j(x) = \sum_{j=1}^{m+1} c_j \sum_{i=1}^m a_i \sigma_j(e_i) = \sum_{i=1}^m a_i \left( \sum_{j=1}^{m+1} \sigma_j(e_i) c_j \right) = \sum_{i=1}^m a_i \cdot 0 = 0$$
+        </div>
+        <p>がすべての $x \in M$ に対して成り立つ。これは $(c_1, \dots, c_{m+1}) \neq (0, \dots, 0)$ とともに補題 3.2（Dedekindの補題）に矛盾する。ゆえに $|\mathrm{Hom}_K(M, L)| \le [M : K]$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 3.4（Artinの定理）</span>
+        <p>$L$ を体、 $H$ を $\mathrm{Aut}(L)$ の有限部分群とする。このとき、</p>
+        <div class="math-display">
+          $$[L : L^H] = |H|$$
+        </div>
+        <p>が成り立つ。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$n = |H|$ とおき、 $H = \{\sigma_1, \dots, \sigma_n\}$ と列挙する。</p>
+        <p><strong>第一段階：$[L : L^H] \le n$ の証明。</strong> 任意の $n + 1$ 個の元 $x_1, \dots, x_{n+1} \in L$ をとり、これらが $L^H$ 上線形従属であることを示せばよい。</p>
+        <p>$y_1, \dots, y_{n+1}$ を未知数とする $L$ 上の斉次連立一次方程式</p>
+        <div class="math-display">
+          $$\sum_{j=1}^{n+1} \sigma_i(x_j) y_j = 0 \qquad (i = 1, \dots, n)$$
+        </div>
+        <p>を考える。方程式の個数 $n$ は未知数の個数 $n + 1$ より真に小さい（ $n < n + 1$ ）ので、補題 3.1 によりこの連立方程式は $L$ に非自明解を持つ。非自明解全体の集合の中で、 $0$ でない成分の個数 $r \ge 1$ が最小となる解 $c = (c_1, \dots, c_{n+1}) \in L^{n+1}$ を1つ選ぶ。</p>
+        <p>$x_1, \dots, x_{n+1}$ の番号を適切に付け替えることにより、 $c_1, \dots, c_r \neq 0$ かつ $c_{r+1} = \dots = c_{n+1} = 0$ であるとして一般性を失わない。さらに、連立一次方程式の解の定数倍 $c_1^{-1} c$ も同じ個数 $r$ の非零成分を持つ非自明解であるから、最初から $c_1 = 1$ であるとしてよい。このとき、すべての $i = 1, \dots, n$ に対して</p>
+        <div class="math-display">
+          $$\sum_{j=1}^r \sigma_i(x_j) c_j = 0$$
+        </div>
+        <p>が成り立つ。ここで任意の $\tau \in H$ をとり、この等式の両辺に体自己同型 $\tau$ を作用させると、</p>
+        <div class="math-display">
+          $$\sum_{j=1}^r (\tau \circ \sigma_i)(x_j) \tau(c_j) = 0 \qquad (i = 1, \dots, n)$$
+        </div>
+        <p>となる。 $H$ は群であるから、 $\sigma_i$ が $H$ 全体を動くとき $\tau \circ \sigma_i$ も $H$ 全体を動く。したがって、ベクトル $\tau(c) := (\tau(c_1), \dots, \tau(c_r), 0, \dots, 0) \in L^{n+1}$ も元の連立方程式の解である。</p>
+        <p>斉次連立一次方程式の解の差も解であるから、</p>
+        <div class="math-display">
+          $$c - \tau(c) = (c_1 - \tau(c_1), \dots, c_r - \tau(c_r), 0, \dots, 0)$$
+        </div>
+        <p>も元の連立方程式の解である。ところが $c_1 = 1$ より第 $1$ 成分は $c_1 - \tau(c_1) = 1 - \tau(1) = 0$ であるから、 $c - \tau(c)$ の $0$ でない成分の個数は高々 $r - 1$ 個である。 $r$ の最小性より、 $c - \tau(c)$ は非自明解ではありえず、零ベクトルでなければならない。すなわち、すべての $j = 1, \dots, r$ とすべての $\tau \in H$ に対して $\tau(c_j) = c_j$ が成り立ち、 $c_1, \dots, c_r \in L^H$ である。</p>
+        <p>$H$ は群なので恒等写像 $\mathrm{id}_L$ を含む。 $\sigma_i = \mathrm{id}_L$ に対応する方程式を見ると、</p>
+        <div class="math-display">
+          $$\sum_{j=1}^r c_j x_j = 0$$
+        </div>
+        <p>であり、 $c_1, \dots, c_r \in L^H$ かつ $c_1 = 1 \neq 0$ である。よって $x_1, \dots, x_{n+1}$ は $L^H$ 上線形従属である。これにより $[L : L^H] \le n$ が示された。</p>
+        <p><strong>第二段階：$[L : L^H] \ge n$ の証明。</strong> 第一段階より $[L : L^H] \le n < \infty$ であるから、 $L / L^H$ は有限次拡大であり、系 3.3 を $M = L$ 、基礎体を $L^H$ として適用できる。 $H \subset \mathrm{Aut}(L / L^H) = \mathrm{Hom}_{L^H}(L, L)$ であるから、</p>
+        <div class="math-display">
+          $$n = |H| \le |\mathrm{Hom}_{L^H}(L, L)| \le [L : L^H]$$
+        </div>
+        <p>が成り立つ。以上より $[L : L^H] = n = |H|$ を得る。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">系 3.5（有限次拡大の自己同型群の位数とGalois性の特徴づけ）</span>
+        <p>$L/K$ を有限次拡大とし、 $G = \mathrm{Aut}(L/K)$ とおく。このとき $G$ は有限群であり、 $|G| \le [L : K]$ が成り立つ。さらに、等号 $|G| = [L : K]$ が成り立つための必要十分条件は、 $L/K$ がGalois拡大であること（すなわち $L^G = K$ ）である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>系 3.3 を $M = L$ に適用すると、 $|G| = |\mathrm{Hom}_K(L, L)| \le [L : K] < \infty$ であるから、 $G$ は有限群である。定理 3.4（Artinの定理）を $H = G$ に適用すると、 $[L : L^G] = |G|$ となる。</p>
+        <p>拡大の塔 $K \subset L^G \subset L$ に補題 2.2（拡大次数の乗法性）を適用すると、</p>
+        <div class="math-display">
+          $$[L : K] = [L : L^G][L^G : K] = |G|[L^G : K]$$
+        </div>
+        <p>が成り立つ。 $|G|$ は正の整数であるから、等号 $|G| = [L : K]$ が成り立つことは $[L^G : K] = 1$ と同値であり、これは $L^G = K$ と同値である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-ftgt">
+      <h2>4. 有限次Galois理論の基本定理</h2>
+      <p>以上の準備により、有限次Galois拡大 $L/K$ における中間体と部分群の一対一対応および正規部分群と中間体のGalois性の対応を記述する基本定理を完全に証明することができる。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 4.1（有限次Galois理論の基本定理）</span>
+        <p>$L/K$ を有限次Galois拡大（すなわち $[L : K] < \infty$ かつ $L^G = K$ ）とし、 $G = \mathrm{Aut}(L/K)$ とおく。このとき以下が成り立つ。</p>
+        <ol>
+          <li>定義 2.4 の写像 $\Phi : \mathcal{M} \to \mathcal{H}$ （ $M \mapsto \mathrm{Aut}(L/M)$ ）と $\Psi : \mathcal{H} \to \mathcal{M}$ （ $H \mapsto L^H$ ）は互いに逆写像であり、包含関係を逆転させる全単射である。</li>
+          <li>任意の中間体 $M \in \mathcal{M}$ に対して、 $L/M$ はGalois拡大であり、
+            <div class="math-display">
+              $$[L : M] = |\mathrm{Aut}(L/M)|, \qquad [M : K] = [G : \mathrm{Aut}(L/M)]$$
+            </div>
+            が成り立つ。
+          </li>
+          <li>中間体 $M \in \mathcal{M}$ と対応する部分群 $H = \mathrm{Aut}(L/M)$ について、 $M/K$ がGalois拡大であるための必要十分条件は、 $H$ が $G$ の正規部分群（ $H \triangleleft G$ ）であることである。このとき、制限写像 $\mathrm{res} : G \to \mathrm{Aut}(M/K)$ （ $\sigma \mapsto \sigma|_M$ ）は全射群準同型であり、核は $H$ であって、群の同型
+            <div class="math-display">
+              $$G / H \cong \mathrm{Aut}(M/K)$$
+            </div>
+            を誘導する。
+          </li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) および (2) の証明。</strong> 系 3.5 より $G$ は有限群であり、 $|G| = [L : K]$ である。</p>
+        <p>まず、任意の部分群 $H \in \mathcal{H}$ に対して $\Phi(\Psi(H)) = H$ すなわち $\mathrm{Aut}(L/L^H) = H$ を示す。定理 3.4（Artinの定理）より $[L : L^H] = |H|$ である。一方、命題 2.5 (4) より $H \subset \mathrm{Aut}(L/L^H)$ であり、系 3.5 より $|\mathrm{Aut}(L/L^H)| \le [L : L^H] = |H|$ となる。有限集合の包含関係と元の個数の比較から、 $\mathrm{Aut}(L/L^H) = H$ を得る。</p>
+        <p>次に、任意の中間体 $M \in \mathcal{M}$ をとり、 $H = \mathrm{Aut}(L/M)$ とおく。制限写像 $G \to \mathrm{Hom}_K(M, L)$ （ $\sigma \mapsto \sigma|_M$ ）を考える。2つの元 $\sigma, \tau \in G$ に対して、</p>
+        <div class="math-display">
+          $$\sigma|_M = \tau|_M \iff \forall x \in M,\ (\tau^{-1} \circ \sigma)(x) = x \iff \tau^{-1} \sigma \in H \iff \sigma H = \tau H$$
+        </div>
+        <p>が成り立つ。したがって、この制限写像は左剰余類集合 $G/H$ から $\mathrm{Hom}_K(M, L)$ への単射</p>
+        <div class="math-display">
+          $$\overline{\mathrm{res}} : G/H \hookrightarrow \mathrm{Hom}_K(M, L), \qquad \sigma H \mapsto \sigma|_M$$
+        </div>
+        <p>を誘導する。これと系 3.3 より、 $[G : H] = |G/H| \le |\mathrm{Hom}_K(M, L)| \le [M : K]$ を得る。また系 3.5 を拡大 $L/M$ に適用して $|H| = |\mathrm{Aut}(L/M)| \le [L : M]$ である。</p>
+        <p>これらとLagrangeの定理 $|G| = [G : H] |H|$ および補題 2.2（拡大次数の乗法性）を組み合わせると、次の不等式連鎖が成り立つ：</p>
+        <div class="math-display">
+          $$[L : K] = |G| = [G : H] |H| \le |\mathrm{Hom}_K(M, L)| \cdot |H| \le [M : K] [L : M] = [L : K]$$
+        </div>
+        <p>両端がともに $[L : K]$ に等しいため、途中のすべての不等号は等号でなければならない。したがって、</p>
+        <div class="math-display">
+          $$|H| = [L : M], \qquad [G : H] = |\mathrm{Hom}_K(M, L)| = [M : K]$$
+        </div>
+        <p>が成り立つ。 $|\mathrm{Aut}(L/M)| = |H| = [L : M]$ であるから、系 3.5 により $L/M$ はGalois拡大であり、 $\Psi(\Phi(M)) = L^H = M$ が従う。命題 2.5 (1), (2) と合わせて、 (1) と (2) がすべて証明された。</p>
+
+        <p><strong>(3) の証明。</strong> まず、任意の $\sigma \in G$ と中間体 $M \in \mathcal{M}$ に対して、 $\sigma(M)$ も $L/K$ の中間体であり、</p>
+        <div class="math-display">
+          $$\mathrm{Aut}(L/\sigma(M)) = \sigma \mathrm{Aut}(L/M) \sigma^{-1}$$
+        </div>
+        <p>が成り立つことを確認する。実際、任意の $\tau \in G$ に対して、</p>
+        <div class="math-display">
+          $$\tau \in \mathrm{Aut}(L/\sigma(M)) \iff \forall x \in M,\ \tau(\sigma(x)) = \sigma(x) \iff \forall x \in M,\ (\sigma^{-1} \tau \sigma)(x) = x \iff \sigma^{-1} \tau \sigma \in \mathrm{Aut}(L/M)$$
+        </div>
+        <p>であるから、 $\mathrm{Aut}(L/\sigma(M)) = \sigma H \sigma^{-1}$ （ここで $H = \mathrm{Aut}(L/M)$ ）である。</p>
+        <p>($\Rightarrow$) $M/K$ がGalois拡大であると仮定する。系 3.5 を拡大 $M/K$ に適用すると、 $|\mathrm{Aut}(M/K)| = [M : K]$ である。一方、 $\mathrm{Aut}(M/K) \subset \mathrm{Hom}_K(M, L)$ であり、(1) の証明中に得られた等式 $|\mathrm{Hom}_K(M, L)| = [M : K]$ と有限集合の比較から、</p>
+        <div class="math-display">
+          $$\mathrm{Aut}(M/K) = \mathrm{Hom}_K(M, L)$$
+        </div>
+        <p>が成り立つ。よって任意の $\sigma \in G$ に対し、その制限 $\sigma|_M \in \mathrm{Hom}_K(M, L)$ は $\mathrm{Aut}(M/K)$ に属し、特に $\sigma(M) = M$ である。したがって、</p>
+        <div class="math-display">
+          $$\sigma H \sigma^{-1} = \mathrm{Aut}(L/\sigma(M)) = \mathrm{Aut}(L/M) = H$$
+        </div>
+        <p>がすべての $\sigma \in G$ に対して成り立ち、 $H$ は $G$ の正規部分群である。</p>
+        <p>($\Leftarrow$) $H$ が $G$ の正規部分群であると仮定する。任意の $\sigma \in G$ に対し、</p>
+        <div class="math-display">
+          $$\mathrm{Aut}(L/\sigma(M)) = \sigma H \sigma^{-1} = H = \mathrm{Aut}(L/M)$$
+        </div>
+        <p>である。(1) により写像 $\Phi$ は単射であるから、 $\sigma(M) = M$ が従う。</p>
+        <p>これより、任意の $\sigma \in G$ の制限 $\sigma|_M$ は $M$ から $M$ への全単射 $K$ 準同型（すなわち $\mathrm{Aut}(M/K)$ の元）となり、制限写像</p>
+        <div class="math-display">
+          $$\mathrm{res} : G \to \mathrm{Aut}(M/K), \qquad \sigma \mapsto \sigma|_M$$
+        </div>
+        <p>がwell-definedな群準同型として定まる。</p>
+        <p>ここで $x \in M^{\mathrm{Aut}(M/K)}$ を任意にとる。任意の $\sigma \in G$ に対し $\sigma|_M \in \mathrm{Aut}(M/K)$ であるから、 $\sigma(x) = \sigma|_M(x) = x$ となる。よって $x \in L^G = K$ である。逆の包含関係 $K \subset M^{\mathrm{Aut}(M/K)}$ は明らかなので、 $M^{\mathrm{Aut}(M/K)} = K$ となり、 $M/K$ はGalois拡大である。</p>
+        <p>最後に同型 $G/H \cong \mathrm{Aut}(M/K)$ を示す。群準同型 $\mathrm{res} : G \to \mathrm{Aut}(M/K)$ の核は</p>
+        <div class="math-display">
+          $$\ker(\mathrm{res}) = \{\sigma \in G \mid \forall x \in M,\ \sigma(x) = x\} = \mathrm{Aut}(L/M) = H$$
+        </div>
+        <p>である。群の準同型定理より単射群準同型 $G/H \hookrightarrow \mathrm{Aut}(M/K)$ が誘導される。ここで (2) と系 3.5 より、</p>
+        <div class="math-display">
+          $$|G/H| = [G : H] = [M : K] = |\mathrm{Aut}(M/K)|$$
+        </div>
+        <p>であるから、有限群間の単射準同型は全単射であり、群の同型 $G/H \cong \mathrm{Aut}(M/K)$ を与える。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-algebraic">
+      <h2>5. 一般の代数拡大における特徴づけ：正規分離拡大との同値性</h2>
+      <p>前節までは Artin 流に $L^G = K$ をGalois拡大の定義として議論を進めたが、古典的・多項式論的な流儀では、Galois拡大を「正規拡大かつ分離拡大」として定義する（Lang [2], Morandi [3]）。結論から述べると、</p>
+      <ul>
+        <li>$L/K$ が<strong>代数拡大</strong>（特に有限次拡大）であるとき、2つの定義 $L^G = K$ と「正規拡大かつ分離拡大」は<strong>完全に同値</strong>である。</li>
+        <li>$L/K$ が<strong>超越拡大</strong>を許す一般の体の拡大であるとき、2つの定義は<strong>同値ではない</strong>。</li>
+      </ul>
+      <p>本節では、まず基本概念を定義したうえで、一般の（無限次を含む）代数拡大における両者の同値性を完全に証明する。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 5.1（代数拡大と最小多項式）</span>
+        <p>体の拡大 $L/K$ において、元 $\alpha \in L$ に対し、 $f(\alpha) = 0$ を満たす零でない多項式 $f(X) \in K[X]$ が存在するとき、 $\alpha$ は $K$ 上<strong>代数的 (algebraic)</strong> であるという。このとき、代入準同型 $\mathrm{ev}_\alpha : K[X] \to L$ （ $h(X) \mapsto h(\alpha)$ ）の核 $\ker(\mathrm{ev}_\alpha)$ は単項イデアル整域 $K[X]$ の零でない素イデアルであるから、最高次係数が $1$ （モニック）である既約多項式 $m_\alpha(X) \in K[X]$ によって $\ker(\mathrm{ev}_\alpha) = (m_\alpha(X))$ と一意に生成される。この $m_\alpha(X)$ を $\alpha$ の $K$ 上の<strong>最小多項式 (minimal polynomial)</strong> という。</p>
+        <p>$L$ のすべての元が $K$ 上代数的であるとき、 $L/K$ を<strong>代数拡大 (algebraic extension)</strong> という。</p>
+      </div>
+
+      <p>なお、任意の有限次拡大 $L/K$ は代数拡大である。実際、 $n = [L : K] < \infty$ とすると、任意の $\alpha \in L$ に対して $n + 1$ 個の元 $1, \alpha, \alpha^2, \dots, \alpha^n \in L$ は $K$ 上線形従属であり、 $c_0 + c_1 \alpha + \dots + c_n \alpha^n = 0$ を満たす非自明な係数 $c_0, \dots, c_n \in K$ が存在するため、 $f(X) = \sum_{i=0}^n c_i X^i \in K[X] \smallsetminus \{0\}$ が $f(\alpha) = 0$ を満たす。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 5.2（分離拡大）</span>
+        <p>$K$ 上の既約多項式 $f(X) \in K[X]$ が、 $K$ の代数閉包 $\overline{K}$ において重根を持たないとき、 $f(X)$ は<strong>分離多項式 (separable polynomial)</strong> であるという。代数拡大 $L/K$ の元 $\alpha \in L$ の $K$ 上の最小多項式が分離多項式であるとき、 $\alpha$ は $K$ 上<strong>分離的 (separable)</strong> であるという。 $L$ のすべての元が $K$ 上分離的であるとき、 $L/K$ を<strong>分離拡大 (separable extension)</strong> という。</p>
+      </div>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 5.3（正規拡大）</span>
+        <p>代数拡大 $L/K$ が次の条件を満たすとき、 $L/K$ を<strong>正規拡大 (normal extension)</strong> という：任意の既約多項式 $f(X) \in K[X]$ が $L$ に少なくとも1つの根を持つならば、 $f(X)$ は $L[X]$ において一次式の積に分解する。</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 5.4（代数拡大における $L^G = K$ と正規分離拡大の同値性）</span>
+        <p>$L/K$ を一般の（無限次を含む）代数拡大とし、 $G = \mathrm{Aut}(L/K)$ とおく。このとき、以下の2条件は同値である。</p>
+        <ol>
+          <li>$L^G = K$ である。</li>
+          <li>$L/K$ は正規拡大かつ分離拡大である。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) $\Rightarrow$ (2) の証明。</strong> 任意の元 $\alpha \in L$ をとる。 $L/K$ は代数拡大なので、 $\alpha$ の $K$ 上の最小多項式 $f(X) \in K[X]$ が存在する。任意の $\sigma \in G$ は $K$ の元を固定する体準同型であるから、</p>
+        <div class="math-display">
+          $$f(\sigma(\alpha)) = \sigma(f(\alpha)) = \sigma(0) = 0$$
+        </div>
+        <p>となる。したがって、 $G$ による $\alpha$ の軌道</p>
+        <div class="math-display">
+          $$O(\alpha) := \{\sigma(\alpha) \mid \sigma \in G\}$$
+        </div>
+        <p>は $f(X)$ の $L$ における根全体の集合に含まれる。体 $L$ 上の零でない多項式 $f(X)$ の根は高々 $\deg f$ 個であるから、 $O(\alpha)$ は有限集合である。</p>
+        <p>$O(\alpha)$ の相異なる元をすべて並べて $O(\alpha) = \{\alpha_1, \dots, \alpha_r\}$ とおき、多項式</p>
+        <div class="math-display">
+          $$g(X) := \prod_{i=1}^r (X - \alpha_i) \in L[X]$$
+        </div>
+        <p>を定義する。任意の $\sigma \in G$ は単射であり、任意の $\tau \in G$ に対して $\sigma(\tau(\alpha)) = (\sigma \circ \tau)(\alpha) \in O(\alpha)$ であるから、 $\sigma$ は有限集合 $O(\alpha)$ から $O(\alpha)$ への全単射を誘導する。したがって、 $g(X)$ の各係数に $\sigma$ を作用させて得られる多項式 $\sigma(g)(X)$ は</p>
+        <div class="math-display">
+          $$\sigma(g)(X) = \prod_{i=1}^r (X - \sigma(\alpha_i)) = \prod_{i=1}^r (X - \alpha_i) = g(X)$$
+        </div>
+        <p>を満たす。ゆえに $g(X)$ のすべての係数は $L^G$ に属する。仮定 (1) より $L^G = K$ であるから、 $g(X) \in K[X]$ である。</p>
+        <p>恒等写像 $\mathrm{id}_L \in G$ より $\alpha = \mathrm{id}_L(\alpha) \in O(\alpha)$ なので $g(\alpha) = 0$ である。 $f(X)$ は $\alpha$ の $K$ 上の最小多項式であるから、 $K[X]$ において $f(X)$ は $g(X)$ を割り切る。一方、 $g(X)$ の各根 $\alpha_1, \dots, \alpha_r$ は相異なり、かつすべて $f(X)$ の根であるから、因数定理を繰り返し適用することにより $L[X]$ において $g(X)$ は $f(X)$ を割り切る。 $f(X)$ と $g(X)$ はともにモニック多項式であるから、</p>
+        <div class="math-display">
+          $$f(X) = g(X) = \prod_{i=1}^r (X - \alpha_i)$$
+        </div>
+        <p>が成り立つ。</p>
+        <p>以上より、任意の $\alpha \in L$ の最小多項式 $f(X)$ は $L[X]$ において相異なる一次式の積に分解する（したがって $\overline{K}[X]$ においても重根を持たない）。よって $\alpha$ は $K$ 上分離的であり、 $L/K$ は分離拡大である。また、 $L$ に少なくとも1つの根 $\alpha$ を持つ任意の既約多項式 $p(X) \in K[X]$ は、 $\alpha$ の最小多項式 $f(X)$ の $K^\times$ 倍であるから、やはり $L[X]$ において一次式の積に分解する。ゆえに $L/K$ は正規拡大である。</p>
+
+        <p><strong>(2) $\Rightarrow$ (1) の証明。</strong> $K \subset L^G$ は明らかである。逆の包含関係 $L^G \subset K$ を示すため、任意の元 $\alpha \in L \smallsetminus K$ をとり、 $\sigma(\alpha) \neq \alpha$ を満たす $\sigma \in G$ が存在することを示せばよい。</p>
+        <p>$\alpha$ の $K$ 上の最小多項式を $f(X) \in K[X]$ とする。 $\alpha \notin K$ であるから $\deg f \ge 2$ である。 $L/K$ は正規拡大なので $f(X)$ は $L[X]$ において一次式の積に分解し、分離拡大なので重根を持たない。よって $L$ の中に $\alpha$ とは異なる $f(X)$ の根 $\beta \neq \alpha$ が存在する。</p>
+        <p>$f(X)$ は $K$ 上既約なので、 $K$ 上の体の同型</p>
+        <div class="math-display">
+          $$K(\alpha) \cong K[X]/(f(X)) \cong K(\beta)$$
+        </div>
+        <p>が存在し、これにより $\tau(\alpha) = \beta$ を満たす $K$ 準同型 $\tau : K(\alpha) \to L$ が定まる。</p>
+        <p>次に、Zornの補題を用いてこの $\tau$ を $L$ 全体への $K$ 準同型に延長する。 $K(\alpha) \subset M \subset L$ なる中間体 $M$ と、 $\varphi|_{K(\alpha)} = \tau$ を満たす $K$ 準同型 $\varphi : M \to L$ の組 $(M, \varphi)$ 全体の集合を $\mathcal{P}$ とおく。 $(K(\alpha), \tau) \in \mathcal{P}$ より $\mathcal{P} \neq \varnothing$ である。 $\mathcal{P}$ に半順序を</p>
+        <div class="math-display">
+          $$(M_1, \varphi_1) \le (M_2, \varphi_2) \iff M_1 \subset M_2 \text{ かつ } \varphi_2|_{M_1} = \varphi_1$$
+        </div>
+        <p>で定める。 $\mathcal{P}$ の任意の空でない全順序部分集合 $\{(M_i, \varphi_i)\}_{i \in I}$ に対し、 $M' := \bigcup_{i \in I} M_i$ は中間体となり、 $\varphi'(x) := \varphi_i(x)$ （ $x \in M_i$ ）はwell-definedな $K$ 準同型 $\varphi' : M' \to L$ を与えて上界 $(M', \varphi') \in \mathcal{P}$ となる（空な全順序部分集合に対しては $(K(\alpha), \tau)$ が上界である）。</p>
+        <p>Zornの補題より、 $\mathcal{P}$ は極大元 $(M_0, \varphi_0)$ を持つ。ここで $M_0 = L$ であることを背理法で示す。もし $M_0 \neq L$ ならば、 $\gamma \in L \smallsetminus M_0$ が存在する。 $\gamma$ は $K$ 上代数的であるから $M_0$ 上でも代数的であり、 $\gamma$ の $M_0$ 上の最小多項式を $h(X) \in M_0[X]$ 、 $K$ 上の最小多項式を $p(X) \in K[X]$ とする。 $p(\gamma) = 0$ より $M_0[X]$ において $h(X)$ は $p(X)$ を割り切る。</p>
+        <p>$\varphi_0$ を各係数に作用させた多項式 $\varphi_0(h)(X) \in \varphi_0(M_0)[X]$ は、 $\varphi_0(p)(X) = p(X)$ を $L[X]$ において割り切る。 $L/K$ は正規拡大なので $p(X)$ は $L[X]$ で一次式の積に分解し、したがってその約数である $\varphi_0(h)(X)$ も $L$ に少なくとも1つの根 $\delta \in L$ を持つ。 $\varphi_0 : M_0 \xrightarrow{\sim} \varphi_0(M_0)$ は体の同型であるから、 $\varphi_0(h)(X)$ は $\varphi_0(M_0)$ 上既約である。よって同型の合成</p>
+        <div class="math-display">
+          $$M_0(\gamma) \cong M_0[X]/(h(X)) \xrightarrow{\ \sim\ } \varphi_0(M_0)[X]/(\varphi_0(h)(X)) \cong \varphi_0(M_0)(\delta) \subset L$$
+        </div>
+        <p>により、 $\varphi_0$ を $M_0(\gamma)$ に延長する $K$ 準同型 $\tilde{\varphi}_0 : M_0(\gamma) \to L$ が得られる。 $M_0 \subsetneq M_0(\gamma)$ ゆえこれは $(M_0, \varphi_0)$ の極大性に矛盾する。したがって $M_0 = L$ であり、 $\sigma := \varphi_0 : L \to L$ は $\sigma(\alpha) = \beta \neq \alpha$ を満たす $K$ 準同型である。</p>
+        <p>最後に $\sigma$ が全射であること（すなわち $\sigma \in G = \mathrm{Aut}(L/K)$ であること）を示す。任意の $x \in L$ をとり、 $x$ の $K$ 上の最小多項式 $q(X) \in K[X]$ の $L$ における根の集合を $R$ とおく。 $R$ は有限集合であり、任意の $y \in R$ に対し $q(\sigma(y)) = \sigma(q(y)) = 0$ なので $\sigma(R) \subset R$ である。体の準同型 $\sigma$ は単射であるから、有限集合 $R$ からそれ自身への単射 $\sigma|_R : R \to R$ は全単射である。特に $x \in R = \sigma(R) \subset \sigma(L)$ となり、 $\sigma$ は全射である。</p>
+        <p>以上より $\sigma \in G$ かつ $\sigma(\alpha) \neq \alpha$ が得られ、 $\alpha \notin L^G$ が示された。よって $L^G = K$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-transcendental">
+      <h2>6. 超越拡大における相違：$L^G = K$ が正規分離拡大を含意しない反例</h2>
+      <p>拡大 $L/K$ が代数拡大であることを仮定しない場合、条件 $L^G = K$ は $L/K$ が正規分離拡大であることを含意しない（正規拡大および分離拡大は定義上代数拡大に限られるためである）。以下では、 $L^G = K$ を満たす超越拡大の典型例を与える。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 6.1（$L^G = K$ を満たす超越拡大）</span>
+        <p>$K$ を無限体とし、 $L = K(t)$ を $K$ 上の $1$ 変数有理関数体とする。 $G = \mathrm{Aut}(K(t)/K)$ とおくとき、 $L^G = K$ が成り立つ。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>任意の $a \in K$ に対し、多項式環の $K$ 自己同型 $K[t] \xrightarrow{\sim} K[t]$ （ $P(t) \mapsto P(t + a)$ ）を商体 $K(t)$ に一意に延長することで、 $\sigma_a(t) = t + a$ を満たす $K$ 自己同型 $\sigma_a \in G$ が得られる（逆写像は $\sigma_{-a}$ である）。</p>
+        <p>$f(t) \in L^G$ を任意にとる。 $f(t)$ は互いに素な多項式 $P(t), Q(t) \in K[t]$ （ただし $Q(t)$ はモニック）を用いて既約分数表示 $f(t) = P(t)/Q(t)$ と表せる。任意の $a \in K$ に対して $\sigma_a(f(t)) = f(t)$ であるから、</p>
+        <div class="math-display">
+          $$\frac{P(t + a)}{Q(t + a)} = \frac{P(t)}{Q(t)}$$
+        </div>
+        <p>すなわち $K[t]$ において</p>
+        <div class="math-display">
+          $$P(t + a) Q(t) = P(t) Q(t + a)$$
+        </div>
+        <p>が成り立つ。一意分解整域 $K[t]$ において $P(t)$ と $Q(t)$ は互いに素であるから、 $Q(t)$ は $Q(t + a)$ を割り切る。両者の次数は等しく、かつともにモニックであるから、</p>
+        <div class="math-display">
+          $$Q(t + a) = Q(t)$$
+        </div>
+        <p>がすべての $a \in K$ に対して成り立つ。したがって $P(t + a) = P(t)$ も成り立つ。</p>
+        <p>ここで多項式 $R(X) := Q(X) - Q(0) \in K[X]$ を考える。任意の $a \in K$ に対して</p>
+        <div class="math-display">
+          $$R(a) = Q(a) - Q(0) = Q(0 + a) - Q(0) = 0$$
+        </div>
+        <p>である。 $K$ は無限体であるから、多項式 $R(X)$ は無限個の根を持ち、零多項式でなければならない。よって $Q(t) = Q(0) \in K$ である。全く同様の議論を $P(t)$ に適用すると $P(t) = P(0) \in K$ となる。ゆえに $f(t) = P(t)/Q(t) \in K$ であり、 $L^G = K$ が示された。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p><strong>注意 6.2（有限体上の有理関数体との対比）：</strong> 例 6.1 において基礎体が無限体であるという仮定は本質的である。実際、 $K = \mathbb{F}_q$ が位数 $q$ の有限体であるとき、 $\mathbb{F}_q(t)$ の $\mathbb{F}_q$ 自己同型群は分数一次変換全体のなす射影一般線形群</p>
+      <div class="math-display">
+        $$\mathrm{Aut}(\mathbb{F}_q(t)/\mathbb{F}_q) \cong \mathrm{PGL}_2(\mathbb{F}_q)$$
+      </div>
+      <p>に同型であり、その位数は $|G| = q(q^2 - 1) < \infty$ と有限である。したがって定理 3.4（Artinの定理）より $[\mathbb{F}_q(t) : \mathbb{F}_q(t)^G] = q(q^2 - 1) < \infty$ となり、 $\mathbb{F}_q(t)^G \neq \mathbb{F}_q$ である。</p>
+    </section>
+
+    <section id="sec-splitting-primitive">
+      <h2>7. 最小分解体と単拡大定理（原始元定理）による特徴づけ</h2>
+      <p>有限次拡大 $L/K$ においては、これまでに述べた2つの定義に加えて、多項式の根の添加による古典的・構成的な特徴づけが重要である。本節では、最小分解体の同型延長補題および単拡大定理（原始元定理）を完全に証明したうえで、有限次Galois拡大の4つの特徴づけがすべて同値であることを示す。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 7.1（重根を持たない多項式）</span>
+        <p>零でない多項式 $f(X) \in K[X]$ が、 $K$ の代数閉包 $\overline{K}$ において重根を持たないとき、 $f(X)$ は $K$ 上<strong>重根を持たない</strong>（または<strong>無平方な分離多項式 (square-free separable polynomial)</strong> である）という。</p>
+      </div>
+
+      <p>$f(X) = \sum_{i=0}^n a_i X^i \in K[X]$ の形式微分を $f'(X) := \sum_{i=1}^n i a_i X^{i-1} \in K[X]$ とおくとき、 $\alpha \in \overline{K}$ が $f(X)$ の重根であることは $f(\alpha) = f'(\alpha) = 0$ と同値である（実際、 $f(X) = (X - \alpha) q(X)$ と書けば $f'(X) = q(X) + (X - \alpha) q'(X)$ より $f'(\alpha) = q(\alpha)$ である）。したがって、 $f(X)$ が重根を持たないことは $\overline{K}[X]$ において $\gcd(f(X), f'(X)) = 1$ であることと同値であり、最大公約多項式は係数体の拡大で不変なので $K[X]$ において $\gcd(f(X), f'(X)) = 1$ であることと同値である。</p>
+      <p>また、各既約因子が重根を持たない任意の分離多項式 $f(X) \in K[X]$ に対し、その相異なるモニック既約因子の積 $f_{\mathrm{red}}(X)$ をとれば、 $f(X)$ と $f_{\mathrm{red}}(X)$ の根の集合は完全に一致し、かつ $f_{\mathrm{red}}(X)$ は定義 7.1 の意味で重根を持たない。したがって、「分離多項式の最小分解体」と「重根を持たない $K$ 係数の多項式の最小分解体」は全く同じ体の拡大を定める。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 7.2（最小分解体）</span>
+        <p>零でない多項式 $f(X) \in K[X]$ に対し、体の拡大 $L/K$ が次の2条件を満たすとき、 $L$ を $f(X)$ の $K$ 上の<strong>最小分解体 (splitting field)</strong> という。</p>
+        <ol>
+          <li>$f(X)$ は $L[X]$ において一次式の積に分解する。すなわち、 $c \in K^\times$ と $\alpha_1, \dots, \alpha_n \in L$ が存在して $f(X) = c \prod_{i=1}^n (X - \alpha_i)$ と書ける。</li>
+          <li>$L = K(\alpha_1, \dots, \alpha_n)$ が成り立つ。</li>
+        </ol>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 7.3（最小分解体の同型延長補題）</span>
+        <p>$\tau : K_1 \xrightarrow{\sim} K_2$ を体の同型とする。零でない多項式 $f_1(X) \in K_1[X]$ に対し、 $\tau$ を各係数に作用させて得られる多項式を $f_2(X) := \tau(f_1)(X) \in K_2[X]$ とおく。 $L_1$ を $f_1(X)$ の $K_1$ 上の最小分解体、 $L_2$ を $f_2(X)$ の $K_2$ 上の最小分解体とするとき、 $\sigma|_{K_1} = \tau$ を満たす体の同型 $\sigma : L_1 \xrightarrow{\sim} L_2$ が存在する。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>拡大次数 $[L_1 : K_1]$ に関する数学的帰納法で証明する（ $f_1(X)$ の根を順次添加していくことで $[L_1 : K_1] \le (\deg f_1)! < \infty$ であることに注意する）。</p>
+        <p>$[L_1 : K_1] = 1$ のとき、 $L_1 = K_1$ であり $f_1(X)$ は $K_1[X]$ において一次式の積に分解する。体の同型 $\tau : K_1 \xrightarrow{\sim} K_2$ は多項式環の同型 $K_1[X] \xrightarrow{\sim} K_2[X]$ を誘導するので、 $f_2(X) = \tau(f_1)(X)$ も $K_2[X]$ において一次式の積に分解し、最小分解体の定義より $L_2 = K_2$ である。よって $\sigma := \tau : L_1 \xrightarrow{\sim} L_2$ が求める同型である。</p>
+        <p>$[L_1 : K_1] > 1$ とし、拡大次数が $[L_1 : K_1]$ 未満の最小分解体に対して主張が成り立つと仮定する。 $f_1(X)$ は $K_1[X]$ で一次式の積には分解しないので、次数が $2$ 以上の $K_1$ 上既約因子 $p_1(X) \in K_1[X]$ を持つ。 $p_2(X) := \tau(p_1)(X) \in K_2[X]$ とおくと、 $\tau$ は体の同型であるから $p_2(X)$ は $K_2$ 上既約であり、かつ $f_2(X)$ を割り切る。</p>
+        <p>$f_1(X)$ は $L_1[X]$ で一次式の積に分解するので、その約数 $p_1(X)$ も $L_1$ に根 $\alpha_1 \in L_1$ を持つ。同様に $p_2(X)$ も $L_2$ に根 $\alpha_2 \in L_2$ を持つ。多項式環の同型 $\tau : K_1[X] \xrightarrow{\sim} K_2[X]$ はイデアル $(p_1(X))$ を $(p_2(X))$ に写すので、剰余体の標準同型を合成して体の同型</p>
+        <div class="math-display">
+          $$\tilde{\tau} : K_1(\alpha_1) \cong K_1[X]/(p_1(X)) \xrightarrow{\ \sim\ } K_2[X]/(p_2(X)) \cong K_2(\alpha_2)$$
+        </div>
+        <p>を得る。構成より $\tilde{\tau}|_{K_1} = \tau$ かつ $\tilde{\tau}(\alpha_1) = \alpha_2$ である。</p>
+        <p>ここで $L_1$ は $f_1(X)$ の $K_1(\alpha_1)$ 上の最小分解体であり、 $L_2$ は $f_2(X) = \tilde{\tau}(f_1)(X)$ の $K_2(\alpha_2)$ 上の最小分解体である。さらに $[K_1(\alpha_1) : K_1] = \deg p_1 \ge 2$ であるから、補題 2.2 より</p>
+        <div class="math-display">
+          $$[L_1 : K_1(\alpha_1)] = \frac{[L_1 : K_1]}{\deg p_1} < [L_1 : K_1]$$
+        </div>
+        <p>が成り立つ。したがって帰納法の仮定を体の同型 $\tilde{\tau} : K_1(\alpha_1) \xrightarrow{\sim} K_2(\alpha_2)$ に適用することができ、 $\tilde{\tau}$ を延長する体の同型 $\sigma : L_1 \xrightarrow{\sim} L_2$ が存在する。このとき $\sigma|_{K_1} = \tilde{\tau}|_{K_1} = \tau$ であるから、主張が示された。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 7.4（単拡大と原始元）</span>
+        <p>体の拡大 $L/K$ に対し、ある元 $\theta \in L$ が存在して $L = K(\theta)$ と表されるとき、 $L/K$ を<strong>単拡大 (simple extension)</strong> といい、 $\theta$ を $L/K$ の<strong>原始元 (primitive element)</strong> という。</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 7.5（単拡大定理 / 原始元定理）</span>
+        <p>$L/K$ を有限次分離拡大とする。このとき $L/K$ は単拡大である。すなわち、 $L = K(\theta)$ を満たす $\theta \in L$ が存在する。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>基礎体 $K$ が有限体である場合と無限体である場合に分けて証明する。</p>
+        <p><strong>場合 1：$K$ が有限体である場合。</strong> $q = |K|$ 、 $n = [L : K] < \infty$ とおく。 $L$ は $K$ 上 $n$ 次元ベクトル空間であるから有限体であり、 $|L| = q^n$ である。乗法群 $L^\times := L \smallsetminus \{0\}$ は位数 $m := q^n - 1$ の有限アーベル群である。 $L^\times$ が巡回群であることを示す。</p>
+        <p>$L^\times$ の元の位数の最大値を $e$ とし、位数 $e$ の元 $y \in L^\times$ を1つとる。任意の元 $x \in L^\times$ の位数 $d$ が $e$ を割り切ることを背理法で示す。もし $d \nmid e$ ならば、ある素数 $p$ と整数 $r \ge 1$ が存在して $p^r \mid d$ かつ $p^r \nmid e$ となる。 $e$ を割り切る最大の $p$ 冪を $p^s$ とおくと $0 \le s < r$ である。このとき、 $x_1 := x^{d/p^r} \in L^\times$ の位数は $p^r$ であり、 $y_1 := y^{p^s} \in L^\times$ の位数は $e / p^s$ である。 $\gcd(p^r, e/p^s) = 1$ であるから、可換群 $L^\times$ における積 $x_1 y_1 \in L^\times$ の位数は</p>
+        <div class="math-display">
+          $$p^r \cdot \frac{e}{p^s} = e \cdot p^{r-s} > e$$
+        </div>
+        <p>となり、 $e$ の最大性に矛盾する。よってすべての $x \in L^\times$ に対して $d \mid e$ すなわち $x^e = 1$ が成り立つ。</p>
+        <p>これは体 $L$ における $e$ 次多項式 $X^e - 1 \in L[X]$ が $L^\times$ のすべての元を根に持つことを意味する。体上の $e$ 次多項式の根の個数は高々 $e$ 個であるから $m = |L^\times| \le e$ である。一方、Lagrangeの定理より $e \le m$ であるから $e = m$ を得る。したがって $L^\times = \langle y \rangle$ は位数 $m$ の巡回群であり、 $\theta := y$ とおけば $L = L^\times \cup \{0\} \subset K(\theta) \subset L$ より $L = K(\theta)$ となる。</p>
+
+        <p><strong>場合 2：$K$ が無限体である場合。</strong> まず、任意の2元 $\alpha, \beta \in L$ に対して $K(\alpha, \beta) = K(\theta)$ を満たす $\theta \in L$ が存在することを示す。 $\alpha, \beta$ の $K$ 上の最小多項式をそれぞれ $f(X), g(X) \in K[X]$ とする。 $L/K$ は分離拡大であるから、 $f(X)$ と $g(X)$ は $K$ の代数閉包 $\overline{K}$ において重根を持たない。 $\overline{K}$ における $f(X)$ の相異なる根を $\alpha_1, \dots, \alpha_r$ （ただし $\alpha_1 = \alpha$ ）、 $g(X)$ の相異なる根を $\beta_1, \dots, \beta_s$ （ただし $\beta_1 = \beta$ ）とする。</p>
+        <p>$1 \le i \le r$ および $2 \le j \le s$ を満たす各組 $(i, j)$ について、 $\beta_j \neq \beta_1$ であるから、 $\overline{K}$ における1次方程式 $\alpha_i + X \beta_j = \alpha_1 + X \beta_1$ はただ1つの解 $X = (\alpha_1 - \alpha_i)(\beta_j - \beta_1)^{-1} \in \overline{K}$ を持つ。そのような解全体の集合は高々 $r(s - 1)$ 個の元からなる有限集合である。 $K$ は無限体であるから、この有限集合に属さない元 $c \in K$ を選ぶことができる。すなわち、すべての $1 \le i \le r$ と $2 \le j \le s$ に対して</p>
+        <div class="math-display">
+          $$\alpha_i + c \beta_j \neq \alpha_1 + c \beta_1$$
+        </div>
+        <p>が成り立つ。</p>
+        <p>$\theta := \alpha + c \beta = \alpha_1 + c \beta_1 \in K(\alpha, \beta)$ とおく。 $K(\theta) \subset K(\alpha, \beta)$ は明らかである。逆の包含関係を示すため、多項式</p>
+        <div class="math-display">
+          $$h(X) := f(\theta - c X) \in K(\theta)[X]$$
+        </div>
+        <p>を定義する。 $h(\beta) = f(\theta - c\beta) = f(\alpha) = 0$ かつ $g(\beta) = 0$ であるから、 $\overline{K}[X]$ において $X - \beta$ は $g(X)$ と $h(X)$ をともに割り切る。一方、 $g(X)$ の $\overline{K}$ における根は $\beta_1, \dots, \beta_s$ であるが、 $j \ge 2$ に対しては $\theta - c \beta_j = \alpha_1 + c \beta_1 - c \beta_j \neq \alpha_i$ （すべての $1 \le i \le r$ に対して）であるため、 $h(\beta_j) = f(\theta - c \beta_j) \neq 0$ である。また $g(X)$ は重根を持たないため、 $\overline{K}[X]$ における $g(X)$ と $h(X)$ のモニック最大公約多項式は $X - \beta$ に一致する。</p>
+        <p>Euclidの互除法により計算されるモニック最大公約多項式は係数体の拡大に対して不変であるから、 $K(\theta)[X]$ においても $g(X)$ と $h(X)$ のモニック最大公約多項式は $X - \beta$ である。特に $X - \beta \in K(\theta)[X]$ であるから、その定数項を比較して $\beta \in K(\theta)$ を得る。ゆえに $\alpha = \theta - c\beta \in K(\theta)$ となり、 $K(\alpha, \beta) = K(\theta)$ が示された。</p>
+        <p>最後に、一般の有限次分離拡大 $L/K$ に対し、 $L$ の $K$ 上の基底 $e_1, \dots, e_n$ をとると $L = K(e_1, \dots, e_n)$ である。 $k = 1, \dots, n$ に関する帰納法により $K(e_1, \dots, e_k) = K(\theta_k)$ と書ける（ $k = 1$ では $\theta_1 = e_1$ とし、 $k \ge 2$ では $K(e_1, \dots, e_k) = K(\theta_{k-1}, e_k)$ に上の2元の場合の結果を適用すればよい）。したがって $k = n$ として $L = K(\theta_n)$ を得る。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 7.6（有限次Galois拡大の4つの特徴づけの同値性）</span>
+        <p>$L/K$ を有限次拡大とし、 $G = \mathrm{Aut}(L/K)$ とおく。このとき、以下の4条件はすべて同値である。</p>
+        <ol>
+          <li><strong>（固定体による特徴づけ）</strong> $L^G = K$ である。</li>
+          <li><strong>（正規分離拡大による特徴づけ）</strong> $L/K$ は正規拡大かつ分離拡大である。</li>
+          <li><strong>（最小分解体による特徴づけ）</strong> $L$ は重根を持たないある多項式 $f(X) \in K[X]$ の $K$ 上の最小分解体である。</li>
+          <li><strong>（原始元による特徴づけ）</strong> ある元 $\theta \in L$ が存在して $L = K(\theta)$ と表され、かつ $\theta$ の $K$ 上の最小多項式 $m_\theta(X) \in K[X]$ は重根を持たず、 $L[X]$ において一次式の積に分解する。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>循環証明 $(3) \Rightarrow (1) \Rightarrow (2) \Rightarrow (4) \Rightarrow (3)$ により同値性を示す。</p>
+        <p><strong>(3) $\Rightarrow$ (1) の証明。</strong> $L$ を重根を持たない多項式 $f(X) \in K[X]$ の $K$ 上の最小分解体とする。拡大次数 $[L : K]$ に関する帰納法で $|G| = [L : K]$ を証明する。</p>
+        <p>$[L : K] = 1$ のときは $L = K$ であり、 $|G| = |\mathrm{Aut}(K/K)| = 1 = [K : K]$ が成り立つ。</p>
+        <p>$[L : K] > 1$ とし、拡大次数が $[L : K]$ 未満の最小分解体に対して主張が成り立つと仮定する。 $f(X)$ は $K[X]$ で一次式の積に分解しないので、次数 $d \ge 2$ の $K$ 上モニック既約因子 $p(X) \in K[X]$ を持つ。 $f(X)$ は重根を持たず $p(X) \mid f(X)$ であるから、 $p(X)$ も重根を持たない。また $f(X)$ は $L[X]$ で一次式の積に分解するので、 $p(X)$ も $L[X]$ で相異なる一次式の積に分解する。その根を $\alpha_1, \dots, \alpha_d \in L$ とおく。</p>
+        <p>中間体 $M := K(\alpha_1)$ を考えると、 $[M : K] = \deg p = d \ge 2$ であり、 $[L : M] = [L : K]/d < [L : K]$ である。 $L$ は $f(X) \in M[X]$ の $M$ 上の最小分解体であり、 $f(X)$ は $M$ 上でも重根を持たないから、帰納法の仮定により $|\mathrm{Aut}(L/M)| = [L : M]$ が成り立つ。</p>
+        <p>各 $i = 1, \dots, d$ に対し、 $p(X)$ は $K$ 上既約なので、 $\tau_i(\alpha_1) = \alpha_i$ を満たす体の同型 $\tau_i : K(\alpha_1) \xrightarrow{\sim} K(\alpha_i)$ が存在する。 $L$ は $f(X)$ の $K(\alpha_1)$ 上の最小分解体であると同時に、 $\tau_i(f)(X) = f(X)$ の $K(\alpha_i)$ 上の最小分解体でもあるから、補題 7.3 により $\tau_i$ を延長する自己同型 $\sigma_i \in G = \mathrm{Aut}(L/K)$ が存在する。</p>
+        <p>任意の $\sigma \in G$ に対して $p(\sigma(\alpha_1)) = \sigma(p(\alpha_1)) = 0$ であるから、 $\sigma(\alpha_1) = \alpha_i$ となる $i \in \{1, \dots, d\}$ が一意に定まる。このとき $\sigma|_M = \tau_i = \sigma_i|_M$ であり、 $\sigma_i^{-1}\sigma \in \mathrm{Aut}(L/M)$ すなわち $\sigma \in \sigma_i \mathrm{Aut}(L/M)$ となる。また $i \neq j$ ならば $\sigma_i(\alpha_1) = \alpha_i \neq \alpha_j = \sigma_j(\alpha_1)$ より $\sigma_i \mathrm{Aut}(L/M) \cap \sigma_j \mathrm{Aut}(L/M) = \varnothing$ である。よって $G$ は左剰余類に直和分解される：</p>
+        <div class="math-display">
+          $$G = \bigsqcup_{i=1}^d \sigma_i \mathrm{Aut}(L/M)$$
+        </div>
+        <p>両辺の元の個数を比較すると、</p>
+        <div class="math-display">
+          $$|G| = \sum_{i=1}^d |\mathrm{Aut}(L/M)| = d [L : M] = [M : K][L : M] = [L : K]$$
+        </div>
+        <p>を得る。系 3.5 より $|G| = [L : K]$ は $L^G = K$ と同値であるから、 (1) が従う。</p>
+
+        <p><strong>(1) $\Rightarrow$ (2) の証明。</strong> 有限次拡大は代数拡大であるから、定理 5.4 の $(1) \Rightarrow (2)$ より直ちに従う。</p>
+
+        <p><strong>(2) $\Rightarrow$ (4) の証明。</strong> $L/K$ は有限次分離拡大であるから、定理 7.5（単拡大定理）より $L = K(\theta)$ を満たす $\theta \in L$ が存在する。 $L/K$ は分離拡大なので $\theta$ の最小多項式 $m_\theta(X) \in K[X]$ は重根を持たず、正規拡大なので $m_\theta(X)$ は $L[X]$ において一次式の積に分解する。</p>
+
+        <p><strong>(4) $\Rightarrow$ (3) の証明。</strong> $f(X) := m_\theta(X) \in K[X]$ とおく。仮定より $f(X)$ は重根を持たず、 $L[X]$ において $f(X) = \prod_{i=1}^d (X - \theta_i)$ （ $\theta_1, \dots, \theta_d \in L$ ）と一次式の積に分解する。 $\theta$ は $f(X)$ の根なので $\theta \in \{\theta_1, \dots, \theta_d\}$ であり、</p>
+        <div class="math-display">
+          $$L = K(\theta) \subset K(\theta_1, \dots, \theta_d) \subset L$$
+        </div>
+        <p>より $L = K(\theta_1, \dots, \theta_d)$ である。したがって $L$ は $f(X)$ の $K$ 上の最小分解体である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-examples">
+      <h2>8. 具体例による徹底検証</h2>
+      <p>定理 4.1（Galois理論の基本定理）および定理 7.6（4つの特徴づけの同値性）の具体的な振る舞いを、典型的な3つのGalois拡大を通じて検証する。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 8.1（非可換Galois群：$X^3 - 2 \in \mathbb{Q}[X]$ の最小分解体）</span>
+        <p>$K = \mathbb{Q}$ とし、 $\sqrt[3]{2} \in \mathbb{R}$ を $2$ の実 $3$ 乗根、 $\omega = \frac{-1 + \sqrt{-3}}{2} \in \mathbb{C}$ を $1$ の原始 $3$ 乗根として、 $L = \mathbb{Q}(\sqrt[3]{2}, \omega) \subset \mathbb{C}$ を考える。</p>
+      </div>
+
+      <p><strong>拡大次数の計算：</strong> 多項式 $X^3 - 2 \in \mathbb{Q}[X]$ は素数 $p = 2$ に関するEisensteinの既約判定法より $\mathbb{Q}$ 上既約であるから、 $[\mathbb{Q}(\sqrt[3]{2}) : \mathbb{Q}] = 3$ である。また $\omega$ は $X^2 + X + 1 = 0$ の根であり、 $\mathbb{Q}(\sqrt[3]{2}) \subset \mathbb{R}$ かつ $\omega \notin \mathbb{R}$ なので、 $X^2 + X + 1$ は $\mathbb{Q}(\sqrt[3]{2})$ 上に根を持たず、したがって既約である。よって $[L : \mathbb{Q}(\sqrt[3]{2})] = 2$ となり、補題 2.2 より</p>
+      <div class="math-display">
+        $$[L : \mathbb{Q}] = [L : \mathbb{Q}(\sqrt[3]{2})][\mathbb{Q}(\sqrt[3]{2}) : \mathbb{Q}] = 2 \cdot 3 = 6$$
+      </div>
+      <p>である。</p>
+
+      <p><strong>Galois群の構造：</strong> $L$ の $\mathbb{Q}$ 上の自己同型は、生成元 $\sqrt[3]{2}$ と $\omega$ の行き先によって完全に決定される。 $\sqrt[3]{2}$ の行き先は $X^3 - 2$ の根 $\{\sqrt[3]{2}, \omega\sqrt[3]{2}, \omega^2\sqrt[3]{2}\}$ のいずれかであり、 $\omega$ の行き先は $X^2 + X + 1$ の根 $\{\omega, \omega^2\}$ のいずれかである。実際に以下の2つの $\mathbb{Q}$ 自己同型 $\sigma, \tau \in G = \mathrm{Aut}(L/\mathbb{Q})$ が存在する（ $\tau$ は複素共役の $L$ への制限であり、 $\sigma$ は $\mathbb{Q}(\omega)$ 上の同型 $\mathbb{Q}(\omega)[X]/(X^3 - 2) \cong L$ において $X \mapsto \omega X$ に対応する）：</p>
+      <div class="math-display">
+        $$\sigma(\sqrt[3]{2}) = \omega\sqrt[3]{2}, \quad \sigma(\omega) = \omega$$
+      </div>
+      <div class="math-display">
+        $$\tau(\sqrt[3]{2}) = \sqrt[3]{2}, \quad \tau(\omega) = \omega^2$$
+      </div>
+      <p>直接の計算により $\sigma^3 = \mathrm{id}_L$ 、 $\tau^2 = \mathrm{id}_L$ 、および</p>
+      <div class="math-display">
+        $$(\tau \sigma \tau^{-1})(\sqrt[3]{2}) = \tau(\omega \sqrt[3]{2}) = \omega^2 \sqrt[3]{2} = \sigma^2(\sqrt[3]{2}), \qquad (\tau \sigma \tau^{-1})(\omega) = \tau(\omega) = \omega^2 \text{ ではなく } \tau(\sigma(\omega^2)) = \tau(\omega^2) = \omega = \sigma^2(\omega)$$
+      </div>
+      <p>より $\tau \sigma \tau^{-1} = \sigma^2$ が確かめられる。よって $G$ は $6$ 個の相異なる元 $\{\mathrm{id}_L, \sigma, \sigma^2, \tau, \tau\sigma, \tau\sigma^2\}$ を含み、 $3$ 次対称群 $S_3$ に同型である。系 3.5 より $|G| = 6 = [L : \mathbb{Q}]$ であるから、 $L/\mathbb{Q}$ はGalois拡大（すなわち $L^G = \mathbb{Q}$ ）である。</p>
+
+      <p><strong>部分群と中間体の対応：</strong> $G \cong S_3$ の部分群は、自明な部分群 $\{\mathrm{id}_L\}$ と $G$ 自身のほかに、位数 $3$ の部分群が $1$ 個、位数 $2$ の部分群が $3$ 個存在する。定理 4.1 により、これらが $L/\mathbb{Q}$ のすべての中間体と一対一に対応する。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>部分群 $H \subset G$</th>
+            <th class="center-cell">位数 $|H|$</th>
+            <th>対応する固定体 $L^H$</th>
+            <th class="center-cell">拡大次数 $[L^H : \mathbb{Q}]$</th>
+            <th class="center-cell">$H \triangleleft G$ か（ $L^H/\mathbb{Q}$ がGalois拡大か）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$G$</td>
+            <td class="center-cell">$6$</td>
+            <td>$\mathbb{Q}$</td>
+            <td class="center-cell">$1$</td>
+            <td class="center-cell">はい</td>
+          </tr>
+          <tr>
+            <td>$\langle \sigma \rangle$</td>
+            <td class="center-cell">$3$</td>
+            <td>$\mathbb{Q}(\omega)$</td>
+            <td class="center-cell">$2$</td>
+            <td class="center-cell">はい（ $\mathrm{Aut}(\mathbb{Q}(\omega)/\mathbb{Q}) \cong G/\langle \sigma \rangle \cong \mathbb{Z}/2\mathbb{Z}$ ）</td>
+          </tr>
+          <tr>
+            <td>$\langle \tau \rangle$</td>
+            <td class="center-cell">$2$</td>
+            <td>$\mathbb{Q}(\sqrt[3]{2})$</td>
+            <td class="center-cell">$3$</td>
+            <td class="center-cell">いいえ</td>
+          </tr>
+          <tr>
+            <td>$\langle \tau\sigma \rangle$</td>
+            <td class="center-cell">$2$</td>
+            <td>$\mathbb{Q}(\omega^2\sqrt[3]{2})$</td>
+            <td class="center-cell">$3$</td>
+            <td class="center-cell">いいえ</td>
+          </tr>
+          <tr>
+            <td>$\langle \tau\sigma^2 \rangle$</td>
+            <td class="center-cell">$2$</td>
+            <td>$\mathbb{Q}(\omega\sqrt[3]{2})$</td>
+            <td class="center-cell">$3$</td>
+            <td class="center-cell">いいえ</td>
+          </tr>
+          <tr>
+            <td>$\{\mathrm{id}_L\}$</td>
+            <td class="center-cell">$1$</td>
+            <td>$L = \mathbb{Q}(\sqrt[3]{2}, \omega)$</td>
+            <td class="center-cell">$6$</td>
+            <td class="center-cell">はい</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>例えば、中間体 $M = \mathbb{Q}(\sqrt[3]{2})$ に対応する部分群 $\langle \tau \rangle$ は $G$ の正規部分群ではない（ $\sigma \tau \sigma^{-1} = \tau\sigma^2 \notin \langle \tau \rangle$ ）。定理 4.1 (3) が示す通り、 $M/\mathbb{Q}$ はGalois拡大ではない。実際、 $M \subset \mathbb{R}$ において $X^3 - 2 = 0$ の根は $\sqrt[3]{2}$ のみであるため、 $\mathrm{Aut}(M/\mathbb{Q}) = \{\mathrm{id}_M\}$ となり、固定体は $M^{\mathrm{Aut}(M/\mathbb{Q})} = M \neq \mathbb{Q}$ である。</p>
+
+      <p><strong>4つの流儀による記述の対比：</strong></p>
+      <ul>
+        <li><strong>流儀 (1)（固定体 $L^G = K$ ）：</strong> 群 $G = \langle \sigma, \tau \rangle \cong S_3$ による不変体として $L^G = \mathbb{Q}$ が成り立つ。</li>
+        <li><strong>流儀 (2)（正規分離拡大）：</strong> 標数 $0$ の体上の代数拡大は自動的に分離拡大であり、 $L$ の任意の元の $\mathbb{Q}$ 上の共役元がすべて $L$ に含まれるため正規拡大である。</li>
+        <li><strong>流儀 (3)（最小分解体）：</strong> 重根を持たない多項式 $f(X) = X^3 - 2 \in \mathbb{Q}[X]$ の $3$ つの根 $\sqrt[3]{2}, \omega\sqrt[3]{2}, \omega^2\sqrt[3]{2}$ をすべて添加した最小分解体 $L = \mathbb{Q}(\sqrt[3]{2}, \omega\sqrt[3]{2}, \omega^2\sqrt[3]{2})$ として定義される。</li>
+        <li><strong>流儀 (4)（原始元定理）：</strong> 定理 7.5 の構成に従い $\theta := \sqrt[3]{2} + \omega \in L$ をとると、 $G$ の $6$ 個の元による $\theta$ の像はすべて相異なる（実際、 $\sqrt[3]{2} + \omega$ 、 $\omega\sqrt[3]{2} + \omega$ 、 $\omega^2\sqrt[3]{2} + \omega$ 、 $\sqrt[3]{2} + \omega^2$ 、 $\omega^2\sqrt[3]{2} + \omega^2$ 、 $\omega\sqrt[3]{2} + \omega^2$ は互いに異なる）。したがって $L = \mathbb{Q}(\sqrt[3]{2} + \omega)$ であり、 $\theta$ の $\mathbb{Q}$ 上の最小多項式は
+          <div class="math-display">
+            $$m_\theta(X) = \prod_{g \in G} (X - g(\theta)) = \prod_{k=0}^2 (X - \omega - \omega^k\sqrt[3]{2}) \prod_{k=0}^2 (X - \omega^2 - \omega^k\sqrt[3]{2}) = ((X - \omega)^3 - 2)((X - \omega^2)^3 - 2)$$
+          </div>
+          これを展開すると $(X - \omega)^3 - 2 = X^3 - 3\omega X^2 + 3\omega^2 X - 3$ となるので、 $\omega + \omega^2 = -1$ と $\omega^3 = 1$ を用いて
+          <div class="math-display">
+            $$m_\theta(X) = X^6 + 3X^5 + 6X^4 + 3X^3 + 9X + 9 \in \mathbb{Q}[X]$$
+          </div>
+          を得る。これは $\mathbb{Q}$ 上既約かつ重根を持たず、 $L[X]$ において一次式の積に分解する。
+        </li>
+      </ul>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 8.2（可換Galois群・双二次拡大：$L = \mathbb{Q}(\sqrt{2}, \sqrt{3})/\mathbb{Q}$ ）</span>
+        <p>$K = \mathbb{Q}$ 、 $L = \mathbb{Q}(\sqrt{2}, \sqrt{3}) \subset \mathbb{R}$ を考える。まず $\sqrt{3} \notin \mathbb{Q}(\sqrt{2})$ を確認する。もし $\sqrt{3} = a + b\sqrt{2}$ （ $a, b \in \mathbb{Q}$ ）ならば $3 = (a^2 + 2b^2) + 2ab\sqrt{2}$ となり、 $\sqrt{2} \notin \mathbb{Q}$ より $ab = 0$ である。 $b = 0$ ならば $a^2 = 3$ 、 $a = 0$ ならば $2b^2 = 3$ となりいずれも有理数解を持たず矛盾である。よって $[L : \mathbb{Q}(\sqrt{2})] = 2$ であり、 $[L : \mathbb{Q}] = 4$ である。</p>
+      </div>
+
+      <p>$L$ は重根を持たない多項式 $f(X) = (X^2 - 2)(X^2 - 3) \in \mathbb{Q}[X]$ の最小分解体であるから、定理 7.6 により $L/\mathbb{Q}$ はGalois拡大である。Galois群 $G = \mathrm{Aut}(L/\mathbb{Q})$ は、</p>
+      <div class="math-display">
+        $$\sigma(\sqrt{2}) = -\sqrt{2}, \quad \sigma(\sqrt{3}) = \sqrt{3}$$
+      </div>
+      <div class="math-display">
+        $$\tau(\sqrt{2}) = \sqrt{2}, \quad \tau(\sqrt{3}) = -\sqrt{3}$$
+      </div>
+      <p>で定まる位数 $2$ の2つの自己同型によって生成され、 Klein の四元群 $V_4 \cong (\mathbb{Z}/2\mathbb{Z}) \times (\mathbb{Z}/2\mathbb{Z})$ に同型である。 $G$ はアーベル群であるから、すべての部分群は正規部分群であり、したがって定理 4.1 (3) により $L/\mathbb{Q}$ のすべての中間体は $\mathbb{Q}$ のGalois拡大である。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>部分群 $H \subset G$</th>
+            <th class="center-cell">位数 $|H|$</th>
+            <th>対応する固定体 $L^H$</th>
+            <th class="center-cell">拡大次数 $[L^H : \mathbb{Q}]$</th>
+            <th class="center-cell">$L^H/\mathbb{Q}$ がGalois拡大か</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$G$</td>
+            <td class="center-cell">$4$</td>
+            <td>$\mathbb{Q}$</td>
+            <td class="center-cell">$1$</td>
+            <td class="center-cell">はい</td>
+          </tr>
+          <tr>
+            <td>$\langle \tau \rangle$</td>
+            <td class="center-cell">$2$</td>
+            <td>$\mathbb{Q}(\sqrt{2})$</td>
+            <td class="center-cell">$2$</td>
+            <td class="center-cell">はい</td>
+          </tr>
+          <tr>
+            <td>$\langle \sigma \rangle$</td>
+            <td class="center-cell">$2$</td>
+            <td>$\mathbb{Q}(\sqrt{3})$</td>
+            <td class="center-cell">$2$</td>
+            <td class="center-cell">はい</td>
+          </tr>
+          <tr>
+            <td>$\langle \sigma\tau \rangle$</td>
+            <td class="center-cell">$2$</td>
+            <td>$\mathbb{Q}(\sqrt{6})$</td>
+            <td class="center-cell">$2$</td>
+            <td class="center-cell">はい</td>
+          </tr>
+          <tr>
+            <td>$\{\mathrm{id}_L\}$</td>
+            <td class="center-cell">$1$</td>
+            <td>$L = \mathbb{Q}(\sqrt{2}, \sqrt{3})$</td>
+            <td class="center-cell">$4$</td>
+            <td class="center-cell">はい</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>また、原始元としては $\theta = \sqrt{2} + \sqrt{3}$ をとることができ、その最小多項式は $m_\theta(X) = X^4 - 10X^2 + 1 \in \mathbb{Q}[X]$ であって $L = \mathbb{Q}(\sqrt{2} + \sqrt{3})$ が成り立つ。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 8.3（有限体のGalois拡大：$\mathbb{F}_{p^n}/\mathbb{F}_p$ ）</span>
+        <p>$p$ を素数、 $n \ge 1$ を整数とし、 $K = \mathbb{F}_p$ 、 $L = \mathbb{F}_{p^n}$ を位数 $p^n$ の有限体とする。 $L$ は多項式 $f(X) = X^{p^n} - X \in \mathbb{F}_p[X]$ の最小分解体である。形式微分を計算すると標数 $p$ において $f'(X) = p^n X^{p^n - 1} - 1 = -1$ であるから $\gcd(f(X), f'(X)) = 1$ であり、 $f(X)$ は重根を持たない。したがって定理 7.6 より $\mathbb{F}_{p^n}/\mathbb{F}_p$ は拡大次数 $n$ のGalois拡大である。</p>
+      </div>
+
+      <p>Frobenius自己同型 $\varphi \in G = \mathrm{Aut}(\mathbb{F}_{p^n}/\mathbb{F}_p)$ を $\varphi(x) := x^p$ で定義する。任意の $x \in \mathbb{F}_{p^n}$ に対して $x^{p^n} = x$ であるから $\varphi^n = \mathrm{id}_L$ であり、 $1 \le k < n$ に対しては多項式 $X^{p^k} - X$ の根は高々 $p^k < p^n$ 個であるため $\varphi^k \neq \mathrm{id}_L$ である。よって $G = \langle \varphi \rangle \cong \mathbb{Z}/n\mathbb{Z}$ は位数 $n$ の巡回群である。巡回群 $\mathbb{Z}/n\mathbb{Z}$ の部分群は $n$ の各正の約数 $d \mid n$ に対してただ1つ存在する位数 $n/d$ の部分群 $\langle \varphi^d \rangle$ に限られ、対応する固定体は $\mathbb{F}_{p^n}^{\langle \varphi^d \rangle} = \{x \in \mathbb{F}_{p^n} \mid x^{p^d} = x\} = \mathbb{F}_{p^d}$ となる。</p>
+    </section>
+
+    <section id="sec-comparison">
+      <h2>9. 各流儀の理論構成上の違いと位置づけ</h2>
+      <p>有限次拡大においては定理 7.6 で証明した4つの流儀はすべて同値であるが、Galois理論を構築する際の論理的出発点、技術的道具立て、および一般化可能性において明確な違いを持つ。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>流儀</th>
+            <th>Galois群 $G = \mathrm{Aut}(L/K)$ の捉え方</th>
+            <th>強みと主な適用場面</th>
+            <th>制約・注意点</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>(1) 固定体 $L^G = K$ （Artin流）</strong></td>
+            <td>群の作用と線形代数（Dedekindの補題・Artinの定理）から $|G| = [L : K]$ を直接導く</td>
+            <td>多項式の既約性や最小分解体の存在定理を使わず、基本定理全体を最短距離で証明できる</td>
+            <td>超越拡大を許すと正規分離拡大とは一致しなくなるため（例 6.1）、有限次または代数拡大の仮定が必要</td>
+          </tr>
+          <tr>
+            <td><strong>(2) 正規分離拡大</strong></td>
+            <td>拡大の内在的性質として特徴づけ、同型延長（Zornの補題）や軌道多項式で自己同型を構成する</td>
+            <td>特定の多項式や生成元の選び方に依存せず、無限次代数拡大（Krull位相によるGalois理論）や絶対Galois群へそのまま拡張できる</td>
+            <td>具体的な拡大がGalois拡大であるかを判定する際は、実用的には (3) や (4) の判定法と併用される</td>
+          </tr>
+          <tr>
+            <td><strong>(3) 最小分解体</strong></td>
+            <td>多項式 $f(X)$ の相異なる $n$ 個の根への置換作用を通じて、 $G$ を対称群 $S_n$ の部分群として実現する</td>
+            <td>具体的な代数方程式 $f(X) = 0$ の可解性（冪根拡大と可解群の対応）を扱うのに最も直接的</td>
+            <td>同じ体 $L$ を与える多項式 $f(X)$ が一意ではないため、体論としての不変性が見えにくい</td>
+          </tr>
+          <tr>
+            <td><strong>(4) 単拡大（原始元）</strong></td>
+            <td>原始元 $\theta$ の最小多項式 $m_\theta(X)$ の $d = [L : K]$ 個の根と $G$ の元を一対一に対応させる</td>
+            <td>多変数の問題（複数の根の添加）を $1$ 変数多項式環 $K[X]/(m_\theta(X))$ の構造に還元できる</td>
+            <td>有限体と無限体で証明が分かれるほか、非分離拡大や無限次拡大には一般には適用できない</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>これら4つの視点は互いに排他的なものではなく、<strong>抽象的な対称性の理論としての明快さ（Artin流）</strong>、<strong>一般の代数拡大・無限次拡大への拡張性（正規分離拡大）</strong>、そして<strong>具体的な方程式の根の置換としての計算可能性（最小分解体・原始元）</strong>という異なる側面から、同一の数学的実体を照らし出している。</p>
+    </section>
+
+    <section id="sec-references" class="references">
+      <h2>10. 参考文献</h2>
+      <ol>
+        <li>
+          E. Artin, <em>Galois Theory: Lectures Delivered at the University of Notre Dame</em>, edited by A. N. Milgram, Notre Dame Mathematical Lectures, Vol. 2, University of Notre Dame Press, Notre Dame, IN, 1942.
+          <a href="https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197001" target="_blank" rel="noopener noreferrer">https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197001</a>
+        </li>
+        <li>
+          S. Lang, <em>Algebra</em>, Revised Third Edition, Graduate Texts in Mathematics, Vol. 211, Springer-Verlag, New York, 2002.
+          <a href="https://link.springer.com/book/10.1007/978-1-4613-0041-0" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4613-0041-0</a>
+        </li>
+        <li>
+          D. S. Dummit and R. M. Foote, <em>Abstract Algebra</em>, Third Edition, John Wiley &amp; Sons, Inc., Hoboken, NJ, 2004.
+          <a href="https://www.wiley.com/en-us/shop/general-introductory-mathematics/abstract-algebra-3rd-edition-p-9780471433347" target="_blank" rel="noopener noreferrer">https://www.wiley.com/en-us/shop/general-introductory-mathematics/abstract-algebra-3rd-edition-p-9780471433347</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>
