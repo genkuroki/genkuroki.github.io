@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>囲碁における Benson のアルゴリズム：無条件生存のグラフ理論的定式化、健全性・完全性の証明および具体例</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --bg: #fcfcfa;
+      --surface: #ffffff;
+      --text: #1f2428;
+      --muted: #555e67;
+      --accent: #1b4f72;
+      --accent-soft: #eef5fa;
+      --border: #d8dee4;
+      --def-bg: #f6f9fc;
+      --thm-bg: #f8f6fc;
+      --thm-border: #5b3e96;
+      --ex-bg: #f7faf7;
+      --ex-border: #2e7d32;
+      --rem-bg: #fffaf0;
+      --rem-border: #b7791f;
+      --code-bg: #f3f4f6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.85;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.75rem 4rem;
+    }
+
+    header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+
+    h1 {
+      font-size: 1.95rem;
+      line-height: 1.35;
+      color: var(--accent);
+      margin: 0 0 0.75rem 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.98rem;
+      margin: 0;
+    }
+
+    nav.toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    nav.toc h2 {
+      font-size: 1.05rem;
+      margin: 0 0 0.75rem 0;
+      border: none;
+      padding: 0;
+      color: var(--accent);
+    }
+
+    nav.toc ol {
+      margin: 0;
+      padding-left: 1.4rem;
+    }
+
+    nav.toc li {
+      margin: 0.25rem 0;
+    }
+
+    nav.toc a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    nav.toc a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.35rem;
+      margin-top: 2.75rem;
+      margin-bottom: 1.1rem;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: #2c3e50;
+      margin-top: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      margin: 0.85rem 0;
+    }
+
+    ul, ol {
+      margin: 0.75rem 0 0.9rem 0;
+      padding-left: 1.65rem;
+    }
+
+    li {
+      margin: 0.4rem 0;
+    }
+
+    .env {
+      border-radius: 6px;
+      padding: 1.1rem 1.35rem;
+      margin: 1.4rem 0;
+      border: 1px solid var(--border);
+      border-left-width: 4px;
+    }
+
+    .env-def {
+      background: var(--def-bg);
+      border-left-color: var(--accent);
+    }
+
+    .env-thm {
+      background: var(--thm-bg);
+      border-left-color: var(--thm-border);
+    }
+
+    .env-ex {
+      background: var(--ex-bg);
+      border-left-color: var(--ex-border);
+    }
+
+    .env-rem {
+      background: var(--rem-bg);
+      border-left-color: var(--rem-border);
+    }
+
+    .env-title {
+      font-weight: 700;
+      margin: 0 0 0.55rem 0;
+      color: #16202a;
+    }
+
+    .proof {
+      margin: 0.9rem 0 1.6rem 0;
+      padding: 0.2rem 0 0.2rem 1.15rem;
+      border-left: 2px solid #cbd5e1;
+    }
+
+    .proof-title {
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      color: #334155;
+    }
+
+    .qed {
+      text-align: right;
+      margin-top: 0.4rem;
+    }
+
+    pre.board {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .board-pair {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin: 1rem 0;
+    }
+
+    .board-pair pre.board {
+      margin: 0;
+      flex: 1 1 240px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2rem 0;
+      background: var(--surface);
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .ref-list {
+      padding-left: 1.6rem;
+    }
+
+    .ref-list li {
+      margin: 0.65rem 0;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem 1rem 3rem;
+      }
+      h1 {
+        font-size: 1.55rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>囲碁における Benson のアルゴリズム</h1>
+      <p class="subtitle">無条件生存のグラフ理論的定式化、健全性・完全性の完全証明、および具体的盤面配置による解析</p>
+    </header>
+
+    <p>
+      囲碁における <strong>Benson のアルゴリズム</strong>（David B. Benson, 1976）は、与えられた盤面において、一方のプレイヤーの石の連（連結した同色の石の塊）の集合が、相手プレイヤーがどのような合法手列を打っても（たとえ自分が以後すべてパスを選択し続けたとしても）決して打ち上げられることのない<strong>無条件生存 (unconditional life)</strong> の状態にあるかどうかを判定する多項式時間アルゴリズムです。
+    </p>
+    <p>
+      本稿では、集合と写像の言葉を用いて囲碁の盤面および着手規則を厳密に定式化した上で、Benson のアルゴリズムの定義、well-defined 性・停止性・計算量、およびアルゴリズムが出力する黒の連の集合が無条件生存な黒の連全体の集合と正確に一致すること（<strong>健全性 (soundness)</strong> および<strong>完全性 (completeness)</strong>）の完全な証明を与えます。さらに後半では、具体的な碁盤配置を用いた複数の例によって、アルゴリズムの反復除去の連鎖、連同士の相互依存、領域内白石の扱い、交互着手における生存との違い、およびアルゴリズムの適用範囲を詳細に検証します。
+    </p>
+
+    <nav class="toc" aria-label="目次">
+      <h2>目次</h2>
+      <ol>
+        <li><a href="#sec1">盤面と囲碁のルールの数学的定式化</a></li>
+        <li><a href="#sec2">黒囲い領域と不可欠性の定義</a></li>
+        <li><a href="#sec3">Benson のアルゴリズムの定式化、計算量および極大性</a></li>
+        <li><a href="#sec4">アルゴリズムの健全性と完全性の完全証明</a></li>
+        <li><a href="#sec5">具体的な碁盤配置による追跡とアルゴリズムの適用範囲</a></li>
+        <li><a href="#sec6">参照文献</a></li>
+      </ol>
+    </nav>
+
+    <!-- ================================================================ -->
+    <section id="sec1">
+      <h2>1. 盤面と囲碁のルールの数学的定式化</h2>
+      <p>
+        以下、議論の対称性により、生存を判定する対象のプレイヤーを「黒 ($B$)」、相手プレイヤーを「白 ($W$)」に固定する。
+      </p>
+
+      <div class="env env-def">
+        <div class="env-title">定義 1.1（盤面グラフと基本集合演算）</div>
+        <p>
+          囲碁の盤面は有限単純無向グラフ $G = (V, E)$ として定義される。標準的な $19 \times 19$ 路盤（あるいは一般の $m \times n$ 長方形格子盤）においては、頂点集合を
+        </p>
+        $$
+        V = \{1, 2, \dots, m\} \times \{1, 2, \dots, n\}
+        $$
+        <p>
+          とし、相異なる2頂点 $u = (r_1, c_1), v = (r_2, c_2) \in V$ について $\{u, v\} \in E \iff |r_1 - r_2| + |c_1 - c_2| = 1$ と定める。以下のすべての定義と定理は、任意の有限単純無向グラフ $G = (V, E)$ 上で成立する。
+        </p>
+        <ol>
+          <li>
+            頂点 $v \in V$ の<strong>隣接点集合 (neighborhood)</strong> を
+            $$
+            N(v) = \{u \in V \mid \{u, v\} \in E\}
+            $$
+            と定義する。
+          </li>
+          <li>
+            部分集合 $A \subset V$ の<strong>外部境界 (external boundary)</strong> $\partial A$ を
+            $$
+            \partial A = \left( \bigcup_{v \in A} N(v) \right) \smallsetminus A
+            $$
+            と定義する。
+          </li>
+          <li>
+            空でない部分集合 $A \subset V$ が<strong>連結 (connected)</strong> であるとは、 $A$ によって誘導される部分グラフ
+            $$
+            G[A] = (A, \{\{u, v\} \in E \mid u, v \in A\})
+            $$
+            がグラフとして連結であることをいう（すなわち、任意の2頂点 $u, v \in A$ に対して $A$ の元のみからなる歩道 $w_0, w_1, \dots, w_t \in A$ で $w_0 = u$ 、 $w_t = v$ 、 $\{w_j, w_{j+1}\} \in E$ （ $0 \le j < t$ ）を満たすものが存在すること）。任意の部分集合 $A \subset V$ に対して、 $G[A]$ の連結成分（極大な連結部分集合）の頂点集合全体からなる集合族を $\mathcal{C}(A)$ と記す（ $A = \varnothing$ のときは $\mathcal{C}(\varnothing) = \varnothing$ とする）。
+          </li>
+        </ol>
+      </div>
+
+      <p>
+        定義 1.1 の連結成分の定義から、任意の部分集合 $A \subset V$ について、 $\mathcal{C}(A)$ の元はすべて空でない互いに素な部分集合であり、 $A = \bigsqcup_{C \in \mathcal{C}(A)} C$ （非交和）が成り立つ。また、相異なる2つの連結成分 $C_1, C_2 \in \mathcal{C}(A)$ の間には辺が存在しない（すなわち $\partial C_1 \cap C_2 = \varnothing$ ）。さらに、任意の $C \in \mathcal{C}(A)$ について $\partial C \cap A = \varnothing$ である。
+      </p>
+
+      <div class="env env-def">
+        <div class="env-title">定義 1.2（盤面状態・連・呼吸点）</div>
+        <p>
+          <strong>盤面状態 (board position)</strong> とは、写像 $s : V \to \{B, W, \varnothing\}$ のことである。各 $v \in V$ に対し、 $s(v) = B$ は頂点 $v$ に黒石が置かれていること、 $s(v) = W$ は白石が置かれていること、 $s(v) = \varnothing$ は $v$ が空点であることを表す。
+        </p>
+        <p>
+          盤面状態 $s$ に対して、黒石集合、白石集合、空点集合をそれぞれ
+        </p>
+        $$
+        V_B(s) = s^{-1}(B), \qquad V_W(s) = s^{-1}(W), \qquad V_\varnothing(s) = s^{-1}(\varnothing)
+        $$
+        <p>
+          と定める。定義より $V = V_B(s) \sqcup V_W(s) \sqcup V_\varnothing(s)$ （非交和）が成り立つ。
+        </p>
+        <ol>
+          <li>
+            <strong>黒の連 (black block)</strong> とは $\mathcal{C}(V_B(s))$ の元のことであり、<strong>白の連 (white block)</strong> とは $\mathcal{C}(V_W(s))$ の元のことである。以下、 $\mathcal{B}(s) = \mathcal{C}(V_B(s))$ および $\mathcal{W}(s) = \mathcal{C}(V_W(s))$ と記す。
+          </li>
+          <li>
+            連 $X \in \mathcal{B}(s) \cup \mathcal{W}(s)$ に対して、 $X$ の<strong>呼吸点 (liberty)</strong> の集合を
+            $$
+            L_s(X) = \partial X \cap V_\varnothing(s)
+            $$
+            と定義する。
+          </li>
+          <li>
+            盤面状態 $s$ が<strong>合法な盤面状態 (legal board position)</strong> であるとは、すべての $X \in \mathcal{B}(s) \cup \mathcal{W}(s)$ に対して $L_s(X) \neq \varnothing$ が成り立つことをいう。
+          </li>
+        </ol>
+      </div>
+
+      <div class="env env-def">
+        <div class="env-title">定義 1.3（着手による状態遷移と合法手の条件）</div>
+        <p>
+          合法な盤面状態 $s$ において、色 $c \in \{B, W\}$ のプレイヤー（相手色を $\bar{c}$ とする）の着手は、<strong>パス (pass)</strong> またはある空点 $v \in V_\varnothing(s)$ への石の配置である。
+        </p>
+        <ul>
+          <li>
+            パスの場合、盤面状態は変化せず $s'' = s$ となる。
+          </li>
+          <li>
+            空点 $v \in V_\varnothing(s)$ に色 $c$ の石を配置する場合、まず中間状態 $s' : V \to \{B, W, \varnothing\}$ を
+            $$
+            s'(u) = \begin{cases} c & (u = v) \\ s(u) & (u \neq v) \end{cases}
+            $$
+            と定める。次に、呼吸点を失った相手色の連の和集合
+            $$
+            D = \bigcup \left\{ Y \in \mathcal{C}(V_{\bar{c}}(s')) \;\middle|\; \partial Y \cap V_\varnothing(s') = \varnothing \right\}
+            $$
+            を盤面から除去し、遷移後の盤面状態 $s'' : V \to \{B, W, \varnothing\}$ を
+            $$
+            s''(u) = \begin{cases} \varnothing & (u \in D) \\ s'(u) & (u \notin D) \end{cases}
+            $$
+            と定義する。
+          </li>
+        </ul>
+        <p>
+          この着手 $v \in V_\varnothing(s)$ が色 $c$ にとって<strong>合法手 (legal move)</strong> であるための必要十分条件は、以下の2条件がともに成立することである。
+        </p>
+        <ol>
+          <li>
+            <strong>非自殺条件 (no-suicide condition)</strong>： $v$ を含む色 $c$ の連 $X_v \in \mathcal{C}(V_c(s'))$ について、
+            $$
+            L_{s''}(X_v) = \partial X_v \cap V_\varnothing(s'') \neq \varnothing
+            $$
+            が成り立つこと（すなわち、 $D$ の元が $X_v$ に隣接するか、または $\partial X_v \cap V_\varnothing(s') \neq \varnothing$ であること）。
+          </li>
+          <li>
+            <strong>コウの禁止規則 (ko rule)</strong>：遷移後の状態 $s''$ がコウの禁止規則（直前の盤面状態への反復禁止、または過去に出現したすべての盤面状態への反復禁止である超コウ規則）に違反しないこと。
+          </li>
+        </ol>
+      </div>
+
+      <div class="env env-thm">
+        <div class="env-title">命題 1.4（合法手による盤面状態の合法性の保存）</div>
+        <p>
+          合法な盤面状態 $s$ から色 $c \in \{B, W\}$ の合法手によって遷移した盤面状態 $s''$ は、再び合法な盤面状態である。
+        </p>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          パスの場合は $s'' = s$ であるから自明である。空点 $v \in V_\varnothing(s)$ への合法手の場合を考える。中間状態 $s'$ および除去集合 $D$ について、 $D \subset V_{\bar{c}}(s')$ は $V_c(s')$ と互いに素であるから、
+        </p>
+        $$
+        V_c(s'') = V_c(s'), \qquad V_{\bar{c}}(s'') = V_{\bar{c}}(s') \smallsetminus D, \qquad V_\varnothing(s'') = V_\varnothing(s') \sqcup D
+        $$
+        <p>
+          が成り立つ。
+        </p>
+        <p>
+          まず、相手色の連 $Y \in \mathcal{C}(V_{\bar{c}}(s''))$ を任意にとる。 $D$ は $G[V_{\bar{c}}(s')]$ の連結成分族の部分族
+        </p>
+        $$
+        \mathcal{D} = \left\{ Z \in \mathcal{C}(V_{\bar{c}}(s')) \;\middle|\; \partial Z \cap V_\varnothing(s') = \varnothing \right\}
+        $$
+        <p>
+          に属する元の和集合である。 $G[V_{\bar{c}}(s')]$ の相異なる連結成分の間には辺が存在しないから、 $D$ を除去した残りの誘導部分グラフ $G[V_{\bar{c}}(s') \smallsetminus D]$ の連結成分の集合は $\mathcal{C}(V_{\bar{c}}(s')) \smallsetminus \mathcal{D}$ に一致する。したがって $Y \in \mathcal{C}(V_{\bar{c}}(s')) \smallsetminus \mathcal{D}$ であり、 $\partial Y \cap V_\varnothing(s') \neq \varnothing$ が成り立つ。 $V_\varnothing(s') \subset V_\varnothing(s'')$ であるから、
+        </p>
+        $$
+        L_{s''}(Y) = \partial Y \cap V_\varnothing(s'') \supset \partial Y \cap V_\varnothing(s') \neq \varnothing
+        $$
+        <p>
+          を得る。
+        </p>
+        <p>
+          次に、色 $c$ の連 $X \in \mathcal{C}(V_c(s'')) = \mathcal{C}(V_c(s'))$ を任意にとる。 $X = X_v$ （ $v$ を含む連）のときは、定義 1.3 の非自殺条件そのものより $L_{s''}(X_v) \neq \varnothing$ である。
+        </p>
+        <p>
+          $X \neq X_v$ のときを考える。 $X$ と $X_v$ は $G[V_c(s')]$ の相異なる連結成分であり $v \in X_v$ であるから、 $v \notin X$ かつ $v \notin \partial X$ である（もし $v \in \partial X$ ならば $v$ は $X$ のある頂点と辺で結ばれており、 $X \cup \{v\} \subset V_c(s')$ が連結となるため $X$ と $X_v$ が同一の連結成分に属することになり矛盾する）。よって $X \subset V_c(s') \smallsetminus \{v\} = V_c(s)$ であり、 $X$ は $G[V_c(s)]$ における連結成分（すなわち $X \in \mathcal{C}(V_c(s))$ ）である。元の状態 $s$ は合法であるから $L_s(X) = \partial X \cap V_\varnothing(s) \neq \varnothing$ である。さらに $v \notin \partial X$ より $\partial X \cap V_\varnothing(s) = \partial X \cap (V_\varnothing(s) \smallsetminus \{v\}) = \partial X \cap V_\varnothing(s')$ であり、 $V_\varnothing(s') \subset V_\varnothing(s'')$ であるから、
+        </p>
+        $$
+        L_{s''}(X) = \partial X \cap V_\varnothing(s'') \supset \partial X \cap V_\varnothing(s') = \partial X \cap V_\varnothing(s) = L_s(X) \neq \varnothing
+        $$
+        <p>
+          が成り立つ。以上より、 $s''$ におけるすべての連が少なくとも1つの呼吸点を持つため、 $s''$ は合法な盤面状態である。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+
+      <div class="env env-def">
+        <div class="env-title">定義 1.5（無条件生存 (unconditional life)）</div>
+        <p>
+          合法な盤面状態 $s_0$ における黒の連の集合 $\mathcal{X} \subset \mathcal{B}(s_0)$ が<strong>無条件生存 (unconditional life)</strong> であるとは、黒が常にパスを選択し、白が任意の有限個の合法手列 $m_1, m_2, \dots, m_k$ （ $0 \le k$ ）を実行して得られる任意の盤面状態列 $s_0, s_1, \dots, s_k$ において、すべての $i \in \{0, 1, \dots, k\}$ とすべての $X \in \mathcal{X}$ に対して
+        </p>
+        $$
+        X \subset V_B(s_i)
+        $$
+        <p>
+          が成り立つことをいう。単一の連 $X \in \mathcal{B}(s_0)$ については、 $\{X\}$ が無条件生存であるとき $X$ は無条件生存であるという。
+        </p>
+      </div>
+
+      <p>
+        定義 1.5 より直ちに、 $\mathcal{X} \subset \mathcal{B}(s_0)$ が無条件生存であるための必要十分条件は、すべての $X \in \mathcal{X}$ が個別に無条件生存であることである。したがって、無条件生存な黒の連全体の集合（すなわち最大の無条件生存集合）が一意に定まる。
+      </p>
+    </section>
+
+    <!-- ================================================================ -->
+    <section id="sec2">
+      <h2>2. 黒囲い領域と不可欠性の定義</h2>
+      <p>
+        以下、初期盤面として合法な盤面状態 $s_0 : V \to \{B, W, \varnothing\}$ を1つ固定する。
+      </p>
+
+      <div class="env env-def">
+        <div class="env-title">定義 2.1（黒囲い領域 (black-enclosed region)）</div>
+        <p>
+          初期盤面状態 $s_0$ において、黒石以外の頂点集合 $V \smallsetminus V_B(s_0) = V_W(s_0) \sqcup V_\varnothing(s_0)$ の連結成分 $R \in \mathcal{C}(V \smallsetminus V_B(s_0))$ が<strong>黒囲い領域 (black-enclosed region)</strong> であるとは、 $\partial R \neq \varnothing$ が成り立つことをいう。初期盤面 $s_0$ における黒囲い領域全体の集合を
+        </p>
+        $$
+        \mathcal{R}_0 = \left\{ R \in \mathcal{C}(V \smallsetminus V_B(s_0)) \;\middle|\; \partial R \neq \varnothing \right\}
+        $$
+        <p>
+          と記す（異なる盤面状態 $s$ を区別する必要があるときは $\mathcal{R}_0(s)$ と記す）。
+        </p>
+      </div>
+
+      <p>
+        なお、グラフ $G$ が連結（通常の囲碁盤など）であり $V_B(s_0) \neq \varnothing$ であるならば、 $V \smallsetminus V_B(s_0)$ の任意の連結成分 $R$ は必然的に $\partial R \neq \varnothing$ を満たすため、 $\mathcal{R}_0 = \mathcal{C}(V \smallsetminus V_B(s_0))$ である。定義 2.1 の条件 $\partial R \neq \varnothing$ は、黒石が盤面に1つも存在しない場合や $G$ が非連結な一般の有限グラフである場合にも破綻なく議論を進めるための条件である。
+      </p>
+
+      <div class="env env-thm">
+        <div class="env-title">補題 2.2（黒囲い領域の境界および空点の存在）</div>
+        <p>
+          合法な初期盤面状態 $s_0$ における任意の黒囲い領域 $R \in \mathcal{R}_0$ に対して、以下の2つが成り立つ。
+        </p>
+        <ol>
+          <li>$\partial R \subset V_B(s_0)$ である。</li>
+          <li>$R \cap V_\varnothing(s_0) \neq \varnothing$ である（すなわち、 $R$ は初期盤面において少なくとも1つの空点を含む）。</li>
+        </ol>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          まず 1 を示す。任意の $u \in \partial R$ をとる。外部境界の定義より、 $u \notin R$ であり、かつある $v \in R$ が存在して $\{u, v\} \in E$ を満たす。背理法により $u \notin V_B(s_0)$ と仮定すると、 $u \in V \smallsetminus V_B(s_0)$ である。 $v \in R \subset V \smallsetminus V_B(s_0)$ であり、 $u$ と $v$ は誘導部分グラフ $G[V \smallsetminus V_B(s_0)]$ において辺 $\{u, v\}$ で結ばれている。したがって $u$ は $v$ と同一の連結成分に属し $u \in R$ となるが、これは $u \notin R$ に矛盾する。よって $u \in V_B(s_0)$ であり、 $\partial R \subset V_B(s_0)$ が示された。
+        </p>
+        <p>
+          次に 2 を示す。背理法により $R \cap V_\varnothing(s_0) = \varnothing$ と仮定する。 $R \in \mathcal{C}(V \smallsetminus V_B(s_0))$ であるから $R \neq \varnothing$ かつ $R \subset V \smallsetminus V_B(s_0) = V_W(s_0) \sqcup V_\varnothing(s_0)$ であり、仮定と合わせて $R \subset V_W(s_0)$ を得る。さらに 1 より $\partial R \subset V_B(s_0)$ であり $V_B(s_0) \cap V_W(s_0) = \varnothing$ であるから、 $\partial R \cap V_W(s_0) = \varnothing$ である。誘導部分グラフ $G[R]$ は連結であり $R$ の外部の白石と辺を持たないから、 $R$ は $G[V_W(s_0)]$ における連結成分、すなわち白の連 $R \in \mathcal{W}(s_0)$ である。ところが 1 より
+        </p>
+        $$
+        L_{s_0}(R) = \partial R \cap V_\varnothing(s_0) \subset V_B(s_0) \cap V_\varnothing(s_0) = \varnothing
+        $$
+        <p>
+          となり、初期盤面 $s_0$ の合法性（定義 1.2 の 3）に矛盾する。したがって $R \cap V_\varnothing(s_0) \neq \varnothing$ が成り立つ。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+
+      <p>
+        次に、黒の連の集合 $\mathcal{X} \subset \mathcal{B}(s_0)$ に対して、領域の「小ささ」と「不可欠性」を定義する。
+      </p>
+
+      <div class="env env-def">
+        <div class="env-title">定義 2.3（小黒囲い領域 (small black-enclosed region) と不可欠性 (vitality)）</div>
+        <p>
+          黒の連の部分集合 $\mathcal{X} \subset \mathcal{B}(s_0)$ および黒囲い領域の部分集合 $\mathcal{R} \subset \mathcal{R}_0$ を任意にとる。
+        </p>
+        <ol>
+          <li>
+            黒囲い領域 $R \in \mathcal{R}_0$ が $\mathcal{X}$ に関して<strong>小黒囲い領域 (small black-enclosed region)</strong> であるとは、 $R$ の外部境界に含まれるすべての黒石が $\mathcal{X}$ の連に属すること、すなわち
+            $$
+            \partial R \subset \bigcup_{X \in \mathcal{X}} X
+            $$
+            が成り立つことをいう。
+          </li>
+          <li>
+            黒の連 $X \in \mathcal{X}$ と黒囲い領域 $R \in \mathcal{R}_0$ に対して、 $R$ が $(\mathcal{X}, \mathcal{R})$ において $X$ に対して<strong>不可欠 (vital)</strong> であるとは、以下の3条件がすべて成り立つことをいう。
+            <ul>
+              <li><strong>(V1)</strong> $R \in \mathcal{R}$ であり、かつ $R$ は $\mathcal{X}$ に関して小黒囲い領域である（すなわち $\partial R \subset \bigcup_{X' \in \mathcal{X}} X'$ ）。</li>
+              <li><strong>(V2)</strong> 初期盤面 $s_0$ において、 $R$ は少なくとも1つの空点を含む（すなわち $R \cap V_\varnothing(s_0) \neq \varnothing$ ）。</li>
+              <li><strong>(V3)</strong> 初期盤面 $s_0$ において、 $R$ に含まれるすべての空点が $X$ の外部境界に属する（すなわち $R \cap V_\varnothing(s_0) \subset \partial X$ ）。</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <p>
+        補題 2.2 の 2 により、初期盤面 $s_0$ が合法である限り条件 (V2) はすべての $R \in \mathcal{R}_0$ に対して自動的に成立する（Benson (1976) の原論文の定式化に合わせて (V2) を明示的に残している）。また、条件 (V2) と (V3) から、 $R$ が $X$ に対して不可欠であるとき $R \cap V_\varnothing(s_0) \subset R \cap \partial X$ かつ $R \cap V_\varnothing(s_0) \neq \varnothing$ であるから、特に $R \cap \partial X \neq \varnothing$ （すなわち $X$ は $R$ に隣接し、 $R$ 内に少なくとも1つの呼吸点を持つ）が従う。
+      </p>
+    </section>
+
+    <!-- ================================================================ -->
+    <section id="sec3">
+      <h2>3. Benson のアルゴリズムの定式化、計算量および極大性</h2>
+      <p>
+        Benson のアルゴリズムは、黒の連の集合と黒囲い領域の集合の対 $(\mathcal{X}_k, \mathcal{R}_k)$ に対する単調な篩い落とし（反復的な不動点計算）として定義される。
+      </p>
+
+      <div class="env env-def">
+        <div class="env-title">定義 3.1（Benson のアルゴリズム）</div>
+        <p>
+          合法な初期盤面状態 $s_0$ に対し、集合列 $\{(\mathcal{X}_k, \mathcal{R}_k)\}_{k = 0, 1, 2, \dots}$ を次のように帰納的に定義する。
+        </p>
+        <ul>
+          <li>
+            <strong>初期化 ($k = 0$)</strong>：
+            $$
+            \mathcal{X}_0 = \mathcal{B}(s_0), \qquad \mathcal{R}_0 = \left\{ R \in \mathcal{C}(V \smallsetminus V_B(s_0)) \;\middle|\; \partial R \neq \varnothing \right\}
+            $$
+          </li>
+          <li>
+            <strong>反復ステップ ($k \mapsto k + 1$)</strong>：各 $X \in \mathcal{X}_k$ に対して、 $(\mathcal{X}_k, \mathcal{R}_k)$ において $X$ に対して不可欠な黒囲い領域の集合を
+            $$
+            \mathrm{Vital}_k(X) = \left\{ R \in \mathcal{R}_k \;\middle|\; \partial R \subset \bigcup_{X' \in \mathcal{X}_k} X', \; R \cap V_\varnothing(s_0) \neq \varnothing, \; R \cap V_\varnothing(s_0) \subset \partial X \right\}
+            $$
+            と定める。このとき、 $\mathcal{X}_{k+1}$ および $\mathcal{R}_{k+1}$ を
+            $$
+            \mathcal{X}_{k+1} = \left\{ X \in \mathcal{X}_k \;\middle|\; |\mathrm{Vital}_k(X)| \ge 2 \right\}
+            $$
+            $$
+            \mathcal{R}_{k+1} = \left\{ R \in \mathcal{R}_k \;\middle|\; \partial R \subset \bigcup_{X \in \mathcal{X}_{k+1}} X \right\}
+            $$
+            と定義する。
+          </li>
+          <li>
+            <strong>終了条件</strong>： $\mathcal{X}_{k+1} = \mathcal{X}_k$ かつ $\mathcal{R}_{k+1} = \mathcal{R}_k$ となった最小の非負整数 $k = k^*$ においてアルゴリズムを停止し、 $\mathcal{X}^* = \mathcal{X}_{k^*}$ （および $\mathcal{R}^* = \mathcal{R}_{k^*}$ ）を出力する。初期盤面 $s_0$ への依存を明示するときは $\mathcal{X}^*(s_0), \mathcal{R}^*(s_0)$ と記す。
+          </li>
+        </ul>
+      </div>
+
+      <p>
+        なお、すべての $k \ge 1$ に対して、 $\mathcal{R}_k$ の定義自体によりすべての $R \in \mathcal{R}_k$ が $\partial R \subset \bigcup_{X' \in \mathcal{X}_k} X'$ を満たし、 $k = 0$ の場合も補題 2.2 の 1 によりすべての $R \in \mathcal{R}_0$ が $\partial R \subset V_B(s_0) = \bigcup_{X' \in \mathcal{X}_0} X'$ を満たす。したがって各ステップ $k \ge 0$ において、 $\mathrm{Vital}_k(X)$ の定義中の条件 $\partial R \subset \bigcup_{X' \in \mathcal{X}_k} X'$ はすでに $\mathcal{R}_k$ の定義に折り込まれている。
+      </p>
+
+      <div class="env env-thm">
+        <div class="env-title">命題 3.2（アルゴリズムの well-defined 性、停止性および計算量）</div>
+        <p>
+          定義 3.1 の集合列 $\{(\mathcal{X}_k, \mathcal{R}_k)\}_{k \ge 0}$ は well-defined であり、高々 $|V|$ 回の反復で停止する。さらに、盤面の頂点数を $n = |V|$ 、辺数を $m = |E|$ とするとき、アルゴリズム全体の時間計算量は $O(n(n + m))$ （平面格子グラフである囲碁盤では $m \le 2n$ であるから $O(n^2)$ ）である。
+        </p>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          定義 3.1 の式より、すべての $k \ge 0$ に対して $\mathcal{X}_{k+1} \subset \mathcal{X}_k$ および $\mathcal{R}_{k+1} \subset \mathcal{R}_k$ が成り立つため、列は単調減少列である。各ステップにおいて、集合の内包表記は有限集合の部分集合として一意に定まるから、列 $\{(\mathcal{X}_k, \mathcal{R}_k)\}_{k \ge 0}$ は well-defined である。
+        </p>
+        <p>
+          次に停止性を示す。 $k < k^*$ を満たす任意の非負整数 $k$ に対しては、 $(\mathcal{X}_{k+1}, \mathcal{R}_{k+1}) \neq (\mathcal{X}_k, \mathcal{R}_k)$ である。包含関係 $\mathcal{X}_{k+1} \subset \mathcal{X}_k$ および $\mathcal{R}_{k+1} \subset \mathcal{R}_k$ より、これは
+        </p>
+        $$
+        |\mathcal{X}_{k+1}| + |\mathcal{R}_{k+1}| < |\mathcal{X}_k| + |\mathcal{R}_k|
+        $$
+        <p>
+          を意味する。一方、 $\mathcal{X}_0$ の元は $V_B(s_0)$ の互いに素な空でない部分集合であり、 $\mathcal{R}_0$ の元は $V \smallsetminus V_B(s_0)$ の互いに素な空でない部分集合である。したがって
+        </p>
+        $$
+        |\mathcal{X}_0| + |\mathcal{R}_0| \le |V_B(s_0)| + |V \smallsetminus V_B(s_0)| = |V| = n
+        $$
+        <p>
+          が成り立つ。非負整数値関数 $k \mapsto |\mathcal{X}_k| + |\mathcal{R}_k|$ は $n$ 以下であり、停止するまで毎ステップ少なくとも $1$ ずつ厳密に減少するから、反復回数 $k^*$ は $k^* \le n$ を満たす。
+        </p>
+        <p>
+          最後に計算量を評価する。初期化において、グラフ $G$ 上の幅優先探索または深さ優先探索により、連結成分分解 $\mathcal{X}_0 = \mathcal{B}(s_0)$ と $\mathcal{R}_0$ 、各 $R \in \mathcal{R}_0$ の境界 $\partial R$ に隣接する黒の連の集合 $\mathcal{N}_B(R) = \{X \in \mathcal{X}_0 \mid \partial R \cap X \neq \varnothing\}$ 、および各 $R \in \mathcal{R}_0$ の空点集合 $E(R) = R \cap V_\varnothing(s_0)$ を $O(n + m)$ 時間で構築できる。また、各ペア $(X, R) \in \mathcal{X}_0 \times \mathcal{R}_0$ について条件「 $E(R) \neq \varnothing$ かつ $E(R) \subset \partial X$ 」が成立するか否かは、各 $X \in \mathcal{X}_0$ ごとに $\partial X$ を $O(n + m)$ 時間でマークして全領域 $R \in \mathcal{R}_0$ を走査することで、全体 $O(n(n + m))$ 時間で事前計算して真理値表に保存できる。
+        </p>
+        <p>
+          各反復ステップ $k$ では、 $|\mathcal{X}_k| \le n$ および $|\mathcal{R}_k| \le n$ であり、 $\mathrm{Vital}_k(X)$ の要素数のカウントおよび $\mathcal{R}_{k+1}$ の更新はそれぞれ $O(n^2)$ 時間（隣接リストとカウンタの差分更新を用いれば全反復の合計でも $O(n + m)$ 時間）で実行できる。反復回数は高々 $n$ 回であるため、全体の計算量は $O(n(n + m))$ （格子盤では $m \le 2n$ より $O(n^2)$ ）である。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+
+      <p>
+        次に、Benson のアルゴリズムの出力 $(\mathcal{X}^*, \mathcal{R}^*)$ が、不可欠性の条件を満たす最大の対であることを特徴づける。この性質は第 4 節でアルゴリズムの完全性を証明する際の要となる。
+      </p>
+
+      <div class="env env-thm">
+        <div class="env-title">命題 3.3（不動点 $(\mathcal{X}^*, \mathcal{R}^*)$ の極大性）</div>
+        <p>
+          合法な盤面状態 $s_0$ において、部分集合の対 $(\mathcal{X}, \mathcal{R})$ （ $\mathcal{X} \subset \mathcal{B}(s_0)$ 、 $\mathcal{R} \subset \mathcal{R}_0$ ）が次の2条件を満たすとする。
+        </p>
+        <ul>
+          <li>
+            <strong>(S1)</strong> すべての $X \in \mathcal{X}$ に対して、
+            $$
+            \left|\left\{ R \in \mathcal{R} \;\middle|\; R \cap V_\varnothing(s_0) \neq \varnothing \text{ かつ } R \cap V_\varnothing(s_0) \subset \partial X \right\}\right| \ge 2
+            $$
+            が成り立つ。
+          </li>
+          <li>
+            <strong>(S2)</strong> すべての $R \in \mathcal{R}$ に対して、 $\partial R \subset \bigcup_{X \in \mathcal{X}} X$ が成り立つ。
+          </li>
+        </ul>
+        <p>
+          このとき、 $\mathcal{X} \subset \mathcal{X}^*$ かつ $\mathcal{R} \subset \mathcal{R}^*$ が成り立つ。
+        </p>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          非負整数 $k$ に関する数学的帰納法により、すべての $k \ge 0$ に対して $\mathcal{X} \subset \mathcal{X}_k$ かつ $\mathcal{R} \subset \mathcal{R}_k$ が成り立つことを示す。
+        </p>
+        <p>
+          <strong>基底段階 ($k = 0$)</strong>：仮定より $\mathcal{X} \subset \mathcal{B}(s_0) = \mathcal{X}_0$ および $\mathcal{R} \subset \mathcal{R}_0$ である。
+        </p>
+        <p>
+          <strong>帰納段階 ($k \mapsto k + 1$)</strong>：ある $k \ge 0$ について $\mathcal{X} \subset \mathcal{X}_k$ かつ $\mathcal{R} \subset \mathcal{R}_k$ が成り立つと仮定する。任意の $X \in \mathcal{X}$ をとる。条件 (S1) より、 $R \cap V_\varnothing(s_0) \neq \varnothing$ かつ $R \cap V_\varnothing(s_0) \subset \partial X$ を満たす相異なる領域 $R \in \mathcal{R}$ が少なくとも2つ存在する。各そのような $R$ について、帰納法の仮定より $R \in \mathcal{R} \subset \mathcal{R}_k$ であり、条件 (S2) と帰納法の仮定より
+        </p>
+        $$
+        \partial R \subset \bigcup_{X' \in \mathcal{X}} X' \subset \bigcup_{X' \in \mathcal{X}_k} X'
+        $$
+        <p>
+          が成り立つ。したがって $R \in \mathrm{Vital}_k(X)$ である。ゆえに $|\mathrm{Vital}_k(X)| \ge 2$ であり、 $X \in \mathcal{X}_{k+1}$ を得る。 $X \in \mathcal{X}$ は任意であったから $\mathcal{X} \subset \mathcal{X}_{k+1}$ である。
+        </p>
+        <p>
+          続いて任意の $R \in \mathcal{R}$ をとる。帰納法の仮定より $R \in \mathcal{R}_k$ であり、条件 (S2) と上で示した $\mathcal{X} \subset \mathcal{X}_{k+1}$ より
+        </p>
+        $$
+        \partial R \subset \bigcup_{X \in \mathcal{X}} X \subset \bigcup_{X \in \mathcal{X}_{k+1}} X
+        $$
+        <p>
+          が成り立つ。ゆえに $R \in \mathcal{R}_{k+1}$ であり、 $\mathcal{R} \subset \mathcal{R}_{k+1}$ を得る。
+        </p>
+        <p>
+          以上によりすべての $k \ge 0$ に対して $\mathcal{X} \subset \mathcal{X}_k$ かつ $\mathcal{R} \subset \mathcal{R}_k$ が示された。特に $k = k^*$ とおけば $\mathcal{X} \subset \mathcal{X}^*$ および $\mathcal{R} \subset \mathcal{R}^*$ を得る。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <section id="sec4">
+      <h2>4. アルゴリズムの健全性と完全性の完全証明</h2>
+      <p>
+        本節では、Benson のアルゴリズムが出力する集合 $\mathcal{X}^*$ が無条件生存であること（<strong>健全性</strong>、定理 4.3）、および逆に $\mathcal{B}(s_0) \smallsetminus \mathcal{X}^*$ に属するすべての黒の連が白の合法手列によって打ち上げ可能であること（<strong>完全性</strong>、定理 4.5）を完全に証明する。
+      </p>
+
+      <p>
+        まず、黒が常にパスを選択し続ける場合の盤面状態列の単調性と基本性質を確立する。
+      </p>
+
+      <div class="env env-thm">
+        <div class="env-title">補題 4.1（黒のパス戦略下での盤面状態の単調性）</div>
+        <p>
+          合法な初期盤面状態 $s_0$ から出発し、黒が常にパスを選択し、白が任意の合法手列 $m_1, m_2, \dots, m_k$ （ $0 \le k$ ）を実行して得られる盤面状態列を $s_0, s_1, \dots, s_k$ とする。このとき、すべての $i \in \{0, 1, \dots, k\}$ に対して以下が成り立つ。
+        </p>
+        <ol>
+          <li>$V_B(s_i) \subset V_B(s_0)$ かつ $\mathcal{B}(s_i) \subset \mathcal{B}(s_0)$ である（各黒の連はそのまま残るか、連全体として除去されるかのいずれかである）。</li>
+          <li>$V_W(s_0) \subset V_W(s_i)$ である。さらに $m_{i+1}$ がパスでない着手（空点への白石の配置）であるとき、 $|V_W(s_{i+1})| = |V_W(s_i)| + 1$ が成り立つ。</li>
+          <li>パスでない白の着手列のみからなる遷移においては、すべての盤面状態は互いに相異なる（したがってコウの禁止規則および超コウ規則に違反することは決してない）。</li>
+        </ol>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          1 および 2 を $i$ に関する数学的帰納法で示す。 $i = 0$ のときは等号が成り立つため自明である。
+        </p>
+        <p>
+          ある $i \in \{0, 1, \dots, k - 1\}$ について $V_B(s_i) \subset V_B(s_0)$ 、 $\mathcal{B}(s_i) \subset \mathcal{B}(s_0)$ および $V_W(s_0) \subset V_W(s_i)$ が成り立つと仮定し、 $i + 1$ について示す。白の着手 $m_{i+1}$ がパスの場合は $s_{i+1} = s_i$ であるから成り立つ。
+        </p>
+        <p>
+          $m_{i+1}$ が空点 $v \in V_\varnothing(s_i)$ への白石の配置であるとする。定義 1.3 に従い、中間状態 $s'$ では $V_B(s') = V_B(s_i)$ および $V_W(s') = V_W(s_i) \sqcup \{v\}$ となる。したがって $\mathcal{C}(V_B(s')) = \mathcal{B}(s_i)$ である。除去される黒石の集合 $D$ は部分族 $\mathcal{D} = \{Y \in \mathcal{B}(s_i) \mid \partial Y \cap V_\varnothing(s') = \varnothing\}$ に属する連の和集合 $D = \bigcup_{Y \in \mathcal{D}} Y$ である。相異なる黒の連の間には辺が存在しないから、 $D$ を除去した後の連結成分分解は
+        </p>
+        $$
+        \mathcal{B}(s_{i+1}) = \mathcal{C}(V_B(s_i) \smallsetminus D) = \mathcal{B}(s_i) \smallsetminus \mathcal{D} \subset \mathcal{B}(s_i) \subset \mathcal{B}(s_0)
+        $$
+        <p>
+          であり、したがって $V_B(s_{i+1}) = V_B(s_i) \smallsetminus D \subset V_B(s_i) \subset V_B(s_0)$ が成り立つ。また、 $D \subset V_B(s')$ は $V_W(s')$ と互いに素であるから、
+        </p>
+        $$
+        V_W(s_{i+1}) = V_W(s') = V_W(s_i) \sqcup \{v\} \supset V_W(s_i) \supset V_W(s_0)
+        $$
+        <p>
+          であり、 $|V_W(s_{i+1})| = |V_W(s_i)| + 1$ が成り立つ。これで 1 と 2 が証明された。
+        </p>
+        <p>
+          3 は 2 の後半から直ちに従う。すなわち、パスでない白の着手列では白石の個数 $|V_W(s_i)|$ が毎手 $1$ ずつ狭義単調増加するため、 $i < j$ ならば $|V_W(s_i)| < |V_W(s_j)|$ となり $s_i \neq s_j$ である。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+
+      <h3>4.1 健全性（Soundness）の証明</h3>
+      <p>
+        アルゴリズムの不動点 $(\mathcal{X}^*, \mathcal{R}^*)$ に着目する。生き残るべき黒石の和集合を
+      </p>
+      $$
+      U^* = \bigcup_{X \in \mathcal{X}^*} X
+      $$
+      <p>
+        と記す。不動点の定義（定義 3.1）より、 $(\mathcal{X}^*, \mathcal{R}^*)$ は以下の2条件を満たす。
+      </p>
+      <ul>
+        <li>
+          <strong>条件 (F1)</strong>：すべての $X \in \mathcal{X}^*$ に対して $|\mathrm{Vital}^*(X)| \ge 2$ である。ここで
+          $$
+          \mathrm{Vital}^*(X) = \left\{ R \in \mathcal{R}^* \;\middle|\; \partial R \subset U^*, \; R \cap V_\varnothing(s_0) \neq \varnothing, \; R \cap V_\varnothing(s_0) \subset \partial X \right\}
+          $$
+          である。
+        </li>
+        <li>
+          <strong>条件 (F2)</strong>：すべての $R \in \mathcal{R}^*$ に対して $\partial R \subset U^*$ が成り立つ。
+        </li>
+      </ul>
+
+      <div class="env env-thm">
+        <div class="env-title">補題 4.2（不動点領域における呼吸点の保存と最後の空点への着手の不可能性）</div>
+        <p>
+          黒が常にパスし、白が合法手列を打って到達したある盤面状態 $s_i$ において、以下の2つの仮定がともに成り立っているとする。
+        </p>
+        <ul>
+          <li><strong>(H1)</strong> $U^* \subset V_B(s_i)$ である。</li>
+          <li><strong>(H2)</strong> すべての $R \in \mathcal{R}^*$ に対して $R \cap V_\varnothing(s_i) \neq \varnothing$ である。</li>
+        </ul>
+        <p>
+          このとき、以下の 1 から 4 がすべて成り立つ。
+        </p>
+        <ol>
+          <li>任意の $R \in \mathcal{R}^*$ に対して、 $R \cap V_B(s_i) = \varnothing$ すなわち $R = (R \cap V_W(s_i)) \sqcup (R \cap V_\varnothing(s_i))$ であり、かつ $R \cap V_\varnothing(s_i) \subset R \cap V_\varnothing(s_0)$ である。</li>
+          <li>任意の $X \in \mathcal{X}^*$ に対して、 $X \in \mathcal{B}(s_i)$ であり、かつ $|L_{s_i}(X)| \ge 2$ である。</li>
+          <li>状態 $s_i$ において白が任意の空点 $v \in V_\varnothing(s_i)$ に石を配置したときの中間状態を $s'$ 、除去される黒石集合を $D$ 、遷移後状態を $s''$ とすると、 $U^* \cap D = \varnothing$ すなわち $U^* \subset V_B(s'')$ が成り立つ。</li>
+          <li>任意の $R \in \mathcal{R}^*$ に対して、もし $R \cap V_\varnothing(s_i) = \{v\}$ （ $R$ 内の空点がただ1点 $v$ のみ）であるならば、状態 $s_i$ において白が空点 $v$ に着手することは非自殺条件に違反するため合法手ではない。</li>
+        </ol>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          <strong>1 の証明</strong>： $R \in \mathcal{R}^* \subset \mathcal{R}_0 \subset \mathcal{C}(V \smallsetminus V_B(s_0))$ であるから $R \cap V_B(s_0) = \varnothing$ である。補題 4.1 の 1 より $V_B(s_i) \subset V_B(s_0)$ であるから、
+        </p>
+        $$
+        R \cap V_B(s_i) \subset R \cap V_B(s_0) = \varnothing
+        $$
+        <p>
+          を得る。ゆえに $R \subset V \smallsetminus V_B(s_i) = V_W(s_i) \sqcup V_\varnothing(s_i)$ であり、 $R \cap V_\varnothing(s_i) = R \smallsetminus V_W(s_i)$ である。さらに補題 4.1 の 2 より $V_W(s_0) \subset V_W(s_i)$ であるから、
+        </p>
+        $$
+        R \cap V_\varnothing(s_i) = R \smallsetminus V_W(s_i) \subset R \smallsetminus V_W(s_0) = R \cap V_\varnothing(s_0)
+        $$
+        <p>
+          が成り立つ。
+        </p>
+        <p>
+          <strong>2 の証明</strong>：任意の $X \in \mathcal{X}^*$ をとる。仮定 (H1) より $X \subset U^* \subset V_B(s_i)$ である。補題 4.1 の 1 より $\mathcal{B}(s_i) \subset \mathcal{B}(s_0)$ であり、 $X$ は $\mathcal{B}(s_0)$ の元であって $V_B(s_i)$ に含まれているから、 $X$ はそのまま $G[V_B(s_i)]$ の連結成分である（すなわち $X \in \mathcal{B}(s_i)$ ）。
+        </p>
+        <p>
+          次に、条件 (F1) より $|\mathrm{Vital}^*(X)| \ge 2$ であるから、相異なる2つの領域 $R_1, R_2 \in \mathrm{Vital}^*(X) \subset \mathcal{R}^*$ を選ぶことができる。仮定 (H2) より $R_1 \cap V_\varnothing(s_i) \neq \varnothing$ および $R_2 \cap V_\varnothing(s_i) \neq \varnothing$ であるから、空点 $u_1 \in R_1 \cap V_\varnothing(s_i)$ と $u_2 \in R_2 \cap V_\varnothing(s_i)$ が存在する。各 $j \in \{1, 2\}$ について、上で示した 1 と $R_j \in \mathrm{Vital}^*(X)$ の条件 (V3) より、
+        </p>
+        $$
+        u_j \in R_j \cap V_\varnothing(s_i) \subset R_j \cap V_\varnothing(s_0) \subset \partial X
+        $$
+        <p>
+          を得る。ゆえに $u_j \in \partial X \cap V_\varnothing(s_i) = L_{s_i}(X)$ である。さらに $R_1, R_2 \in \mathcal{R}_0$ は $V \smallsetminus V_B(s_0)$ の相異なる連結成分であるから $R_1 \cap R_2 = \varnothing$ であり、したがって $u_1 \neq u_2$ である。以上より $|L_{s_i}(X)| \ge |\{u_1, u_2\}| = 2$ が示された。
+        </p>
+        <p>
+          <strong>3 の証明</strong>：任意の空点 $v \in V_\varnothing(s_i)$ に白石を配置した場合を考える。中間状態 $s'$ において $V_B(s') = V_B(s_i)$ かつ $V_\varnothing(s') = V_\varnothing(s_i) \smallsetminus \{v\}$ であるから、 $\mathcal{C}(V_B(s')) = \mathcal{B}(s_i)$ である。任意の $X \in \mathcal{X}^*$ に対して、 2 より $X \in \mathcal{B}(s_i) = \mathcal{C}(V_B(s'))$ かつ $|L_{s_i}(X)| \ge 2$ である。よって
+        </p>
+        $$
+        \partial X \cap V_\varnothing(s') = \partial X \cap (V_\varnothing(s_i) \smallsetminus \{v\}) = L_{s_i}(X) \smallsetminus \{v\}
+        $$
+        <p>
+          は少なくとも $2 - 1 = 1$ 個の元を含み、空でない。したがって定義 1.3 の除去集合
+        </p>
+        $$
+        D = \bigcup \left\{ Y \in \mathcal{C}(V_B(s')) \;\middle|\; \partial Y \cap V_\varnothing(s') = \varnothing \right\}
+        $$
+        <p>
+          の和に $X$ は含まれない。 $\mathcal{C}(V_B(s'))$ の相異なる元は互いに素であるから $X \cap D = \varnothing$ である。すべての $X \in \mathcal{X}^*$ について和集合をとれば $U^* \cap D = \varnothing$ となり、仮定 (H1) と合わせて
+        </p>
+        $$
+        U^* \subset V_B(s_i) \smallsetminus D = V_B(s') \smallsetminus D = V_B(s'')
+        $$
+        <p>
+          を得る。
+        </p>
+        <p>
+          <strong>4 の証明</strong>：ある $R \in \mathcal{R}^*$ について $R \cap V_\varnothing(s_i) = \{v\}$ と仮定し、白が空点 $v$ に着手したときの中間状態 $s'$ 、除去集合 $D$ および遷移後状態 $s''$ を考える。 1 より $R = (R \cap V_W(s_i)) \sqcup \{v\}$ であり、 $V_W(s') = V_W(s_i) \sqcup \{v\}$ であるから、 $R \subset V_W(s')$ が成り立つ。
+        </p>
+        <p>
+          ここで $R \in \mathcal{R}_0$ は $V \smallsetminus V_B(s_0)$ の連結成分であるから誘導部分グラフ $G[R]$ は連結である。さらに条件 (F2) と仮定 (H1) より、
+        </p>
+        $$
+        \partial R \subset U^* \subset V_B(s_i) = V_B(s')
+        $$
+        <p>
+          が成り立つ。 $V_B(s') \cap V_W(s') = \varnothing$ であるから $\partial R \cap V_W(s') = \varnothing$ であり、 $R$ の頂点と $V_W(s') \smallsetminus R$ の頂点を結ぶ辺は存在しない。したがって $R$ は $G[V_W(s')]$ の連結成分として極大であり、 $v$ を含む白の連 $Y_v \in \mathcal{C}(V_W(s'))$ は $Y_v = R$ に一致する。
+        </p>
+        <p>
+          次に、上で証明した 3 より $U^* \subset V_B(s'')$ が成り立つ。これを条件 (F2) と組み合わせると
+        </p>
+        $$
+        \partial Y_v = \partial R \subset U^* \subset V_B(s'')
+        $$
+        <p>
+          を得る。 $V_B(s'') \cap V_\varnothing(s'') = \varnothing$ であるから、状態 $s''$ における $Y_v$ の呼吸点集合は
+        </p>
+        $$
+        L_{s''}(Y_v) = \partial Y_v \cap V_\varnothing(s'') \subset V_B(s'') \cap V_\varnothing(s'') = \varnothing
+        $$
+        <p>
+          となる。これは定義 1.3 の非自殺条件 $L_{s''}(Y_v) \neq \varnothing$ に違反する。ゆえに状態 $s_i$ において白が空点 $v$ に着手することは合法手ではない。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+
+      <div class="env env-thm">
+        <div class="env-title">定理 4.3（Benson のアルゴリズムの健全性 (soundness)）</div>
+        <p>
+          合法な初期盤面状態 $s_0$ に対して、Benson のアルゴリズム（定義 3.1）が出力する黒の連の集合 $\mathcal{X}^*$ は無条件生存である。すなわち、黒が常にパスを選択し、白が任意の合法手列 $m_1, m_2, \dots, m_k$ （ $0 \le k$ ）を実行して到達する任意の盤面状態列 $s_0, s_1, \dots, s_k$ において、すべての $i \in \{0, 1, \dots, k\}$ とすべての $X \in \mathcal{X}^*$ に対して $X \subset V_B(s_i)$ が成り立つ。
+        </p>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          $\mathcal{X}^* = \varnothing$ の場合は主張は空虚に真である。以下、 $\mathcal{X}^* \neq \varnothing$ とする。
+        </p>
+        <p>
+          盤面状態の添字 $i \in \{0, 1, \dots, k\}$ に関する数学的帰納法により、次の2つの命題 $\mathrm{(P1)}_i$ と $\mathrm{(P2)}_i$ がすべての $i \in \{0, 1, \dots, k\}$ について同時に成立することを示す。
+        </p>
+        <ul>
+          <li>$\mathrm{(P1)}_i$ ： $U^* \subset V_B(s_i)$ （すなわち、すべての $X \in \mathcal{X}^*$ に対して $X \subset V_B(s_i)$ ）が成り立つ。</li>
+          <li>$\mathrm{(P2)}_i$ ：すべての $R \in \mathcal{R}^*$ に対して $R \cap V_\varnothing(s_i) \neq \varnothing$ が成り立つ。</li>
+        </ul>
+        <p>
+          <strong>基底段階 ($i = 0$)</strong>： $\mathcal{X}^* \subset \mathcal{B}(s_0)$ であるから $U^* \subset V_B(s_0)$ であり、 $\mathrm{(P1)}_0$ が成り立つ。また、 $\mathcal{R}^* \subset \mathcal{R}_0$ であり $s_0$ は合法な盤面状態であるから、補題 2.2 の 2 によりすべての $R \in \mathcal{R}^*$ に対して $R \cap V_\varnothing(s_0) \neq \varnothing$ であり、 $\mathrm{(P2)}_0$ も成り立つ。
+        </p>
+        <p>
+          <strong>帰納段階 ($i \mapsto i + 1$)</strong>：ある $i \in \{0, 1, \dots, k - 1\}$ に対して $\mathrm{(P1)}_i$ および $\mathrm{(P2)}_i$ が成立すると仮定する。これはまさに補題 4.2 の仮定 (H1) および (H2) が状態 $s_i$ において満たされていることにほかならない。
+        </p>
+        <p>
+          白の合法手 $m_{i+1}$ がパスの場合は $s_{i+1} = s_i$ であるから、 $\mathrm{(P1)}_{i+1}$ と $\mathrm{(P2)}_{i+1}$ は直ちに成り立つ。以下、 $m_{i+1}$ が空点 $v \in V_\varnothing(s_i)$ への白の合法手であるとする。
+        </p>
+        <ol>
+          <li>
+            <strong>$\mathrm{(P1)}_{i+1}$ の検証</strong>：補題 4.2 の 3 より直ちに $U^* \subset V_B(s_{i+1})$ が成り立つ。
+          </li>
+          <li>
+            <strong>$\mathrm{(P2)}_{i+1}$ の検証</strong>：任意の $R \in \mathcal{R}^*$ をとる。帰納法の仮定 $\mathrm{(P2)}_i$ より $R \cap V_\varnothing(s_i) \neq \varnothing$ である。
+            <ul>
+              <li>
+                もし $v \notin R$ ならば、空点集合は $V_\varnothing(s_{i+1}) = (V_\varnothing(s_i) \smallsetminus \{v\}) \sqcup D$ であるから $R \cap V_\varnothing(s_{i+1}) \supset R \cap V_\varnothing(s_i) \neq \varnothing$ である。
+              </li>
+              <li>
+                もし $v \in R$ ならば、 $m_{i+1}$ は合法手であるから、補題 4.2 の 4 の対偶により $R \cap V_\varnothing(s_i) \neq \{v\}$ である。 $v \in R \cap V_\varnothing(s_i)$ かつ $R \cap V_\varnothing(s_i) \neq \{v\}$ であるから $|R \cap V_\varnothing(s_i)| \ge 2$ である。したがって
+                $$
+                R \cap V_\varnothing(s_{i+1}) \supset (R \cap V_\varnothing(s_i)) \smallsetminus \{v\} \neq \varnothing
+                $$
+                が成り立つ。
+              </li>
+            </ul>
+            いずれの場合も $R \cap V_\varnothing(s_{i+1}) \neq \varnothing$ であり、 $\mathrm{(P2)}_{i+1}$ が成立する。
+          </li>
+        </ol>
+        <p>
+          以上により数学的帰納法が完結し、すべての $i \in \{0, 1, \dots, k\}$ に対して $\mathrm{(P1)}_i$ すなわち $X \subset V_B(s_i)$ （ $\forall X \in \mathcal{X}^*$ ）が証明された。よって $\mathcal{X}^*$ は無条件生存である。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+
+      <h3>4.2 完全性（Completeness）の証明</h3>
+      <p>
+        さらに強い事実として、定義 1.3 の非自殺条件のもとでは、Benson のアルゴリズムは<strong>完全 (complete)</strong> である。すなわち、 $\mathcal{X}^*$ に含まれない黒の連は1つ残らず白の合法手列によって打ち上げることができ、 $\mathcal{X}^*$ は無条件生存な黒の連全体の集合と完全に一致する（Benson, 1976）。この事実を次の補題と定理によって完全に証明する。
+      </p>
+
+      <div class="env env-thm">
+        <div class="env-title">補題 4.4（第 1 反復で脱落する連の捕獲と不動点の単調性）</div>
+        <p>
+          合法な初期盤面状態 $s_0$ において、第 1 反復で脱落する黒の連 $X_0 \in \mathcal{X}_0 \smallsetminus \mathcal{X}_1$ が存在すると仮定する。このとき、黒が常にパスを選択する下で、空点集合 $\partial X_0 \cap V_\varnothing(s_0)$ に属する頂点のみを着手先とする有限個の白の合法手列が存在して、到達する合法な盤面状態 $s_1$ について以下が成り立つ。
+        </p>
+        <ol>
+          <li>$X_0$ は状態 $s_1$ に到達する過程で打ち上げられており（すなわち $X_0 \cap V_B(s_1) = \varnothing$ ）、 $|\mathcal{B}(s_1)| < |\mathcal{B}(s_0)|$ である。</li>
+          <li>状態 $s_1$ に対して Benson のアルゴリズムを実行して得られる出力 $\mathcal{X}^*(s_1)$ は、 $\mathcal{X}^*(s_1) \subset \mathcal{X}^*(s_0)$ を満たす。</li>
+        </ol>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          まず、白の着手列を構成する際の基本補題（<strong>領域充填の合法性</strong>）を確認しておく。黒が常にパスし、白の合法手列によって $s_0$ から到達した任意の盤面状態 $s$ を考え、 $R \in \mathcal{R}_0(s_0)$ と相異なる2つの空点 $v, p \in R \cap V_\varnothing(s)$ をとる。このとき、状態 $s$ において白が空点 $v$ に着手することは常に合法手である。実際、 $G[R]$ は連結であるから、 $R$ 内に $w_0 = v$ から $w_t = p$ （ $t \ge 1$ ）に至る道 $w_0, w_1, \dots, w_t$ が存在する。補題 4.1 の 1 より $V_B(s) \subset V_B(s_0)$ であり $R \cap V_B(s_0) = \varnothing$ であるから $R \cap V_B(s) = \varnothing$ であり、道の各頂点は $s$ において白石か空点である。 $w_t = p \in V_\varnothing(s)$ であるから、 $w_j \in V_\varnothing(s)$ となる最小の添字 $j \in \{1, \dots, t\}$ をとれば、 $w_1, \dots, w_{j-1} \in V_W(s)$ である。白が $v = w_0$ に着手した中間状態 $s'$ では、 $w_0, w_1, \dots, w_{j-1}$ はすべて白石であって道で結ばれているため $v$ を含む白の連 $Y_v \in \mathcal{C}(V_W(s'))$ に属し、 $w_j \in V_\varnothing(s') \subset V_\varnothing(s'')$ が $w_{j-1} \in Y_v$ に隣接する。よって $w_j \in L_{s''}(Y_v) \neq \varnothing$ （非自殺条件成立）であり、補題 4.1 の 3 よりコウの禁止規則にも違反しない。
+        </p>
+        <p>
+          また、任意の盤面状態 $s$ （黒が常にパスして $s_0$ から到達した状態）において $X_0 \subset V_B(s)$ が保たれている間は、 $L_s(X_0) \subset L_{s_0}(X_0)$ が成り立つ。なぜなら、任意の $u \in \partial X_0$ について、 $X_0 \in \mathcal{C}(V_B(s_0))$ の極大性より $u \notin V_B(s_0)$ （すなわち $u \in V_W(s_0) \sqcup V_\varnothing(s_0)$ ）である。補題 4.1 の 2 より $V_W(s_0) \subset V_W(s)$ であるから、 $u \in V_\varnothing(s)$ ならば $u \notin V_W(s_0)$ ゆえ $u \in V_\varnothing(s_0)$ であり、 $L_s(X_0) = \partial X_0 \cap V_\varnothing(s) \subset \partial X_0 \cap V_\varnothing(s_0) = L_{s_0}(X_0)$ が従う（言い換えれば、 $X_0$ 以外の黒の連が打ち上げられても、それらは $X_0$ に隣接していないため $X_0$ の新たな呼吸点にはなり得ない）。
+        </p>
+        <p>
+          ここで、 $X_0$ に隣接する初期盤面の黒囲い領域の集合を $\mathcal{R}(X_0) = \{R \in \mathcal{R}_0(s_0) \mid \partial R \cap X_0 \neq \varnothing\}$ とおく。 $X_0$ の任意の初期呼吸点 $u \in L_{s_0}(X_0) = \partial X_0 \cap V_\varnothing(s_0)$ は $V \smallsetminus V_B(s_0)$ のある連結成分 $R$ に属し、 $u$ に隣接する $X_0$ の頂点が $\partial R \cap X_0$ に属するため $R \in \mathcal{R}(X_0)$ である。よって
+        </p>
+        $$
+        L_{s_0}(X_0) = \bigsqcup_{R \in \mathcal{R}(X_0)} \left( R \cap \partial X_0 \cap V_\varnothing(s_0) \right)
+        $$
+        <p>
+          が成り立つ。さて、 $X_0 \in \mathcal{X}_0 \smallsetminus \mathcal{X}_1$ の仮定より $|\mathrm{Vital}_0(X_0)| \le 1$ である。各 $R \in \mathcal{R}(X_0) \smallsetminus \mathrm{Vital}_0(X_0)$ については、補題 2.2 より条件 (V1)（ $\partial R \subset V_B(s_0) = \bigcup_{X \in \mathcal{X}_0} X$ ）および条件 (V2)（ $R \cap V_\varnothing(s_0) \neq \varnothing$ ）は自動的に満たされているため、条件 (V3) が必ず破れている。したがって各 $R \in \mathcal{R}(X_0) \smallsetminus \mathrm{Vital}_0(X_0)$ に対して、空点
+        </p>
+        $$
+        p_R \in (R \cap V_\varnothing(s_0)) \smallsetminus \partial X_0
+        $$
+        <p>
+          を1つ固定できる。以下、2段階で白の合法手列を構成する（途中で $X_0$ が打ち上げられた時点で直ちに構成を終了し、その状態を $s_1$ とする）。
+        </p>
+        <p>
+          <strong>第 1 段階</strong>：各 $R \in \mathcal{R}(X_0) \smallsetminus \mathrm{Vital}_0(X_0)$ について、 $R \cap \partial X_0 \cap V_\varnothing(s_0)$ に属する各空点 $v$ に白が順に1手ずつ着手する。この過程の任意の時点の状態 $s$ において、 $p_R \notin \partial X_0$ であるため $p_R$ には一度も着手されておらず、黒石の除去は空点を増やすのみであるから $p_R \in R \cap V_\varnothing(s)$ が保たれている。 $v \neq p_R$ かつ $v, p_R \in R \cap V_\varnothing(s)$ であるから、冒頭の領域充填の合法性より、 $v$ への白の着手はすべて合法手である。
+        </p>
+        <p>
+          <strong>第 2 段階</strong>：第 1 段階を終えた状態 $s$ においてまだ $X_0$ が盤面に残っているとする。このとき $L_s(X_0) \subset L_{s_0}(X_0)$ であるが、すべての $R \in \mathcal{R}(X_0) \smallsetminus \mathrm{Vital}_0(X_0)$ について $R \cap \partial X_0 \cap V_\varnothing(s_0)$ の点はすべて白石で埋められているため、 $L_s(X_0)$ の元は $\mathrm{Vital}_0(X_0)$ に属する領域内にしか存在し得ない。命題 1.4 より $s$ は合法な盤面状態であって $L_s(X_0) \neq \varnothing$ であるから、 $\mathrm{Vital}_0(X_0)$ は空ではなく、 $|\mathrm{Vital}_0(X_0)| \le 1$ と合わせてただ1つの領域 $R_0 \in \mathcal{R}_0(s_0)$ からなる（ $\mathrm{Vital}_0(X_0) = \{R_0\}$ ）。しかも $R_0 \in \mathrm{Vital}_0(X_0)$ の条件 (V3) より $R_0 \cap V_\varnothing(s_0) \subset \partial X_0$ であり、 $R_0 \cap V_\varnothing(s) = R_0 \smallsetminus V_W(s) \subset R_0 \smallsetminus V_W(s_0) = R_0 \cap V_\varnothing(s_0) \subset \partial X_0$ であるから、
+        </p>
+        $$
+        L_s(X_0) = R_0 \cap V_\varnothing(s) \subset \partial X_0 \cap V_\varnothing(s_0)
+        $$
+        <p>
+          が正確に成り立つ。ここで白は $R_0 \cap V_\varnothing(s)$ の空点に順に1手ずつ着手する。 $|R_0 \cap V_\varnothing(s)| \ge 2$ である間は、着手点 $v \in R_0 \cap V_\varnothing(s)$ 以外に別の空点 $p \in (R_0 \cap V_\varnothing(s)) \smallsetminus \{v\}$ が存在するため、領域充填の合法性より $v$ への着手は合法手である。 $X_0$ がそれ以前に打ち上げられずに $|R_0 \cap V_\varnothing(s)| = 1$ （すなわち $L_s(X_0) = R_0 \cap V_\varnothing(s) = \{v\}$ ）に到達したならば、白は最後に $v$ に着手する。このとき中間状態 $s'$ において $\partial X_0 \cap V_\varnothing(s') = L_s(X_0) \smallsetminus \{v\} = \varnothing$ となり、補題 4.1 の 1 より $X_0 \in \mathcal{B}(s) = \mathcal{C}(V_B(s'))$ であるから $X_0 \subset D$ となって $X_0$ が打ち上げられる。さらに $v \in L_s(X_0) \subset \partial X_0$ より $v$ に隣接するある頂点 $w \in X_0$ が存在し、 $w \in D \subset V_\varnothing(s'')$ かつ $w \notin Y_v$ より $w \in L_{s''}(Y_v) \neq \varnothing$ であるから非自殺条件を満たし、補題 4.1 の 3 よりコウの禁止規則にも違反しない。ゆえにこの最終手も合法手であり、確実に $X_0$ を打ち上げる。
+        </p>
+        <p>
+          到達した盤面状態 $s_1$ について、 1 の成立は明らかである（ $\mathcal{B}(s_1) \subset \mathcal{B}(s_0) \smallsetminus \{X_0\}$ より $|\mathcal{B}(s_1)| \le |\mathcal{B}(s_0)| - 1 < |\mathcal{B}(s_0)|$ ）。さらに上の構成において、白が着手した頂点はすべて $\partial X_0 \cap V_\varnothing(s_0)$ に属するため、以下の2つの包含関係が成り立つ。
+        </p>
+        $$
+        V_W(s_1) \smallsetminus V_W(s_0) \subset \partial X_0 \cap V_\varnothing(s_0), \qquad V_B(s_0) \smallsetminus V_B(s_1) \subset V_\varnothing(s_1)
+        $$
+        <p>
+          （第2の包含関係は、白が $V_B(s_0)$ の頂点には一度も着手しておらず、除去された黒石の跡地はすべて状態 $s_1$ において空点のまま残っていることによる）。
+        </p>
+        <p>
+          <strong>2 の証明</strong>：状態 $s_1$ における Benson のアルゴリズムの出力を $\mathcal{X}' = \mathcal{X}^*(s_1)$ とおき、状態 $s_1$ において $\mathcal{X}'$ の少なくとも1つの連に対して不可欠な領域全体の集合を
+        </p>
+        $$
+        \widetilde{\mathcal{R}}' = \bigcup_{X \in \mathcal{X}'} \mathrm{Vital}^*_{s_1}(X) \subset \mathcal{R}^*(s_1)
+        $$
+        <p>
+          と定める。補題 4.1 の 1 より $\mathcal{X}' \subset \mathcal{B}(s_1) \subset \mathcal{B}(s_0)$ である。以下、任意の $R' \in \widetilde{\mathcal{R}}'$ が初期状態 $s_0$ の黒囲い領域に属し（ $R' \in \mathcal{R}_0(s_0)$ ）、かつ $R' \cap V_\varnothing(s_0) = R' \cap V_\varnothing(s_1)$ を満たすことを示す。
+        </p>
+        <p>
+          $R' \in \widetilde{\mathcal{R}}'$ の定義より、ある $X \in \mathcal{X}'$ が存在して $R' \in \mathrm{Vital}^*_{s_1}(X)$ を満たす。よって $R' \in \mathcal{R}_0(s_1)$ 、 $\partial R' \subset \bigcup_{Y \in \mathcal{X}'} Y \subset V_B(s_1) \subset V_B(s_0)$ 、および $R' \cap V_\varnothing(s_1) \subset \partial X$ である。
+        </p>
+        <ul>
+          <li>
+            <strong>主張 (a)</strong>： $R' \cap (V_B(s_0) \smallsetminus V_B(s_1)) = \varnothing$ である。もし $w \in R' \cap (V_B(s_0) \smallsetminus V_B(s_1))$ が存在したと仮定すると、 $V_B(s_0) \smallsetminus V_B(s_1) \subset V_\varnothing(s_1)$ より $w \in R' \cap V_\varnothing(s_1) \subset \partial X$ となる。すなわち $w \in V_B(s_0)$ が $X \in \mathcal{B}(s_0)$ のある頂点と辺で結ばれるため $w \in X \subset V_B(s_1)$ となり、 $w \notin V_B(s_1)$ に矛盾する。
+          </li>
+          <li>
+            <strong>主張 (b)</strong>： $R' \cap (V_W(s_1) \smallsetminus V_W(s_0)) = \varnothing$ である。もし $v \in R' \cap (V_W(s_1) \smallsetminus V_W(s_0))$ が存在したと仮定すると、 $V_W(s_1) \smallsetminus V_W(s_0) \subset \partial X_0$ より $v$ に隣接する頂点 $w \in X_0$ が存在する。 $X_0 \subset V_B(s_0) \smallsetminus V_B(s_1) \subset V_\varnothing(s_1) \subset V \smallsetminus V_B(s_1)$ であり、 $R'$ は $G[V \smallsetminus V_B(s_1)]$ の連結成分であって $v \in R'$ であるから、 $w \in R'$ が従う。これは $w \in R' \cap (V_B(s_0) \smallsetminus V_B(s_1))$ を意味し、主張 (a) に矛盾する。
+          </li>
+        </ul>
+        <p>
+          主張 (a) と $R' \subset V \smallsetminus V_B(s_1)$ より $R' \subset V \smallsetminus V_B(s_0)$ である。 $G[R']$ は連結であり、 $\partial R' \subset V_B(s_0)$ （かつ $\partial R' \neq \varnothing$ ）より $\partial R' \cap (V \smallsetminus V_B(s_0)) = \varnothing$ であるから、 $R'$ は $G[V \smallsetminus V_B(s_0)]$ の連結成分、すなわち $R' \in \mathcal{R}_0(s_0)$ である。さらに主張 (b) と $V_W(s_0) \subset V_W(s_1)$ より $R' \cap V_W(s_1) = R' \cap V_W(s_0)$ であり、 $R' \cap V_B(s_0) = R' \cap V_B(s_1) = \varnothing$ であるから、
+        </p>
+        $$
+        R' \cap V_\varnothing(s_0) = R' \smallsetminus V_W(s_0) = R' \smallsetminus V_W(s_1) = R' \cap V_\varnothing(s_1)
+        $$
+        <p>
+          が成り立つ。したがって、すべての $X \in \mathcal{X}'$ に対して $|\mathrm{Vital}^*_{s_1}(X)| \ge 2$ の各元 $R' \in \mathrm{Vital}^*_{s_1}(X) \subset \widetilde{\mathcal{R}}'$ が $s_0$ においても $R' \cap V_\varnothing(s_0) \neq \varnothing$ かつ $R' \cap V_\varnothing(s_0) \subset \partial X$ を満たし、またすべての $R' \in \widetilde{\mathcal{R}}'$ が $\partial R' \subset \bigcup_{Y \in \mathcal{X}'} Y$ を満たす。すなわち対 $(\mathcal{X}', \widetilde{\mathcal{R}}')$ は初期盤面 $s_0$ における命題 3.3 の条件 (S1) および (S2) を満たす。よって命題 3.3 より $\mathcal{X}^*(s_1) = \mathcal{X}' \subset \mathcal{X}^*(s_0)$ が従う。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+
+      <div class="env env-thm">
+        <div class="env-title">定理 4.5（Benson のアルゴリズムの完全性 (completeness)）</div>
+        <p>
+          合法な初期盤面状態 $s_0$ に対して、黒が常にパスを選択する下で、 $\mathcal{B}(s_0) \smallsetminus \mathcal{X}^*(s_0)$ に属するすべての黒の連を打ち上げる有限個の白の合法手列が存在する。したがって、定理 4.3 と合わせて、Benson のアルゴリズムの出力 $\mathcal{X}^*(s_0)$ は初期盤面 $s_0$ における無条件生存な黒の連全体の集合と完全に一致する。
+        </p>
+      </div>
+
+      <div class="proof">
+        <div class="proof-title">証明</div>
+        <p>
+          黒の連の総数 $|\mathcal{B}(s_0)|$ に関する強い数学的帰納法を用いる。
+        </p>
+        <p>
+          $\mathcal{B}(s_0) \smallsetminus \mathcal{X}^*(s_0) = \varnothing$ のとき（特に $|\mathcal{B}(s_0)| = 0$ の場合を含む）は、長さ $0$ の空の着手列によって主張が自明に成り立つ。
+        </p>
+        <p>
+          以下、 $\mathcal{B}(s_0) \smallsetminus \mathcal{X}^*(s_0) \neq \varnothing$ とする。このとき第 1 反復で必ず少なくとも1つの連が脱落する（すなわち $\mathcal{X}_0 \smallsetminus \mathcal{X}_1 \neq \varnothing$ ）。なぜなら、仮に $\mathcal{X}_1 = \mathcal{X}_0$ であったとすると、補題 2.2 の 1 よりすべての $R \in \mathcal{R}_0$ に対して $\partial R \subset V_B(s_0) = \bigcup_{X \in \mathcal{X}_1} X$ であるから $\mathcal{R}_1 = \mathcal{R}_0$ となり、アルゴリズムは $k^* = 0$ で停止して $\mathcal{X}^*(s_0) = \mathcal{X}_0 = \mathcal{B}(s_0)$ となるため仮定に矛盾するからである。
+        </p>
+        <p>
+          よって $X_0 \in \mathcal{X}_0 \smallsetminus \mathcal{X}_1$ を1つ選ぶことができる。補題 4.4 を適用すると、パスを含まない有限個の白の合法手列 $\sigma_1$ によって $s_0$ から合法な盤面状態 $s_1$ へ遷移でき、 $|\mathcal{B}(s_1)| < |\mathcal{B}(s_0)|$ かつ $\mathcal{X}^*(s_1) \subset \mathcal{X}^*(s_0)$ が成り立つ。
+        </p>
+        <p>
+          $|\mathcal{B}(s_1)| < |\mathcal{B}(s_0)|$ であるから、状態 $s_1$ に帰納法の仮定を適用できる。これにより、パスを含まない有限個の白の合法手列 $\sigma_2$ が存在して、 $s_1$ から到達する盤面状態 $s_2$ において $\mathcal{B}(s_1) \smallsetminus \mathcal{X}^*(s_1)$ に属するすべての黒の連が打ち上げられている（すなわち $\mathcal{B}(s_2) \subset \mathcal{X}^*(s_1)$ ）。
+        </p>
+        <p>
+          ここで2つの着手列を連結した列 $\sigma_1 \sigma_2$ を考える。 $\sigma_1$ と $\sigma_2$ はいずれもパスを含まない白の着手列であり、補題 4.1 の 3 より全状態列を通じて白石の総数 $|V_W|$ が狭義単調増加するから、 $\sigma_2$ のいかなる盤面状態も $\sigma_1$ 中の盤面状態と一致せず、コウの禁止規則（超コウ規則を含む）に違反しない。また非自殺条件は直前の盤面状態のみに依存するため、 $\sigma_1 \sigma_2$ は $s_0$ から $s_2$ への白の合法手列である。最後に、
+        </p>
+        $$
+        \mathcal{B}(s_2) \subset \mathcal{X}^*(s_1) \subset \mathcal{X}^*(s_0)
+        $$
+        <p>
+          であるから、 $\mathcal{B}(s_0) \smallsetminus \mathcal{X}^*(s_0)$ に属するすべての黒の連は状態 $s_2$ までに打ち上げられている（なお定理 4.3 より $\mathcal{X}^*(s_0) \subset \mathcal{B}(s_2)$ であるから、実際には $\mathcal{B}(s_2) = \mathcal{X}^*(s_0)$ が成り立つ）。以上により完全性が証明された。
+        </p>
+        <div class="qed">$\blacksquare$</div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <section id="sec5">
+      <h2>5. 具体的な碁盤配置による追跡とアルゴリズムの適用範囲</h2>
+      <p>
+        以下の各例では、盤面を $m \times n$ の長方形格子グラフ $G = (V, E)$ とし、第 $r$ 行・第 $c$ 列の交点を $(r, c) \in \{1, \dots, m\} \times \{1, \dots, n\}$ で表す。2点 $(r, c), (r', c') \in V$ が隣接するのは $|r - r'| + |c - c'| = 1$ のときに限る。盤面図では黒石を <code>B</code> 、白石を <code>W</code> 、空点を <code>.</code> で表記する。
+      </p>
+
+      <!-- Example 5.1 -->
+      <div class="env env-ex">
+        <div class="env-title">例 5.1（反復除去が連鎖（カスケード）する盤面）</div>
+        <p>
+          Benson のアルゴリズムが1回限りの局所判定ではなく、小黒囲い領域の崩壊を通じた<strong>反復的な不動点計算</strong>を必要とすることを示す。次の $4 \times 5$ 盤面 $s_0$ を考える。
+        </p>
+<pre class="board">    1 2 3 4 5
+  1 B . B . .
+  2 B B B . .
+  3 . B . B .
+  4 B B B . B</pre>
+
+        <h3>1. 初期状態（ $k = 0$ ）の構成</h3>
+        <p>
+          黒石の集合 $V_B(s_0)$ は、互いに隣接しない3つの連に分解される。
+        </p>
+        <ul>
+          <li>$X_1 = \{(1,1), (1,3), (2,1), (2,2), (2,3), (3,2), (4,1), (4,2), (4,3)\}$</li>
+          <li>$X_2 = \{(3,4)\}$</li>
+          <li>$X_3 = \{(4,5)\}$</li>
+        </ul>
+        <p>
+          白石は存在せず、補集合 $V \smallsetminus V_B(s_0) = V_\varnothing(s_0)$ は次の5つの連結成分（黒囲い領域）に分解される。
+        </p>
+        <ul>
+          <li>$R_1 = \{(1,2)\}$ ： $\partial R_1 = \{(1,1), (2,2), (1,3)\} \subset X_1$</li>
+          <li>$R_2 = \{(3,1)\}$ ： $\partial R_2 = \{(2,1), (3,2), (4,1)\} \subset X_1$</li>
+          <li>$R_3 = \{(3,3)\}$ ： $\partial R_3 = \{(2,3), (3,2), (4,3), (3,4)\} \subset X_1 \cup X_2$</li>
+          <li>$R_4 = \{(4,4)\}$ ： $\partial R_4 = \{(4,3), (3,4), (4,5)\} \subset X_1 \cup X_2 \cup X_3$</li>
+          <li>$R_5 = \{(1,4), (1,5), (2,4), (2,5), (3,5)\}$ ： $\partial R_5 = \{(1,3), (2,3), (3,4), (4,5)\} \subset X_1 \cup X_2 \cup X_3$</li>
+        </ul>
+        <p>
+          よって $\mathcal{X}_0 = \{X_1, X_2, X_3\}$ 、 $\mathcal{R}_0 = \{R_1, R_2, R_3, R_4, R_5\}$ である。
+        </p>
+
+        <h3>2. アルゴリズムの反復追跡</h3>
+        <p>
+          <strong>第 1 反復（ $k = 0 \to 1$ ）：</strong> $\mathcal{X}_0 = \mathcal{B}(s_0)$ なので、すべての $R \in \mathcal{R}_0$ は条件 (V1) および (V2) を自動的に満たす。条件 (V3) （ $R \cap V_\varnothing(s_0) \subset \partial X$ ）を各連について判定すると、
+        </p>
+        <ul>
+          <li>$X_1$ ：1点領域 $R_1, R_2, R_3, R_4$ の各点はすべて $X_1$ に隣接する。一方 $R_5$ は $(1,5) \notin \partial X_1$ を含むため不可欠でない。したがって $\mathrm{Vital}_0(X_1) = \{R_1, R_2, R_3, R_4\}$ （個数 $4 \ge 2$ ）。</li>
+          <li>$X_2$ ： $(3,3) \in \partial X_2$ および $(4,4) \in \partial X_2$ であり、 $R_5$ は $(1,5) \notin \partial X_2$ を含む。したがって $\mathrm{Vital}_0(X_2) = \{R_3, R_4\}$ （個数 $2 \ge 2$ ）。<strong>この段階では $X_2$ はまだ脱落しない。</strong></li>
+          <li>$X_3$ ： $(4,4) \in \partial X_3$ であるが、 $R_5$ は $(1,5) \notin \partial X_3$ を含む。したがって $\mathrm{Vital}_0(X_3) = \{R_4\}$ （個数 $1 < 2$ ）。</li>
+        </ul>
+        <p>
+          これにより $X_3$ のみが除去され $\mathcal{X}_1 = \{X_1, X_2\}$ となる。次に $\mathcal{R}_1 = \{R \in \mathcal{R}_0 \mid \partial R \subset X_1 \cup X_2\}$ を計算すると、 $\partial R_4$ と $\partial R_5$ はいずれも $(4,5) \in X_3$ を含むため除去され、 $\mathcal{R}_1 = \{R_1, R_2, R_3\}$ を得る（ $X_3$ の脱落により、 $X_2$ の眼であった $R_4$ が小黒囲い領域でなくなった）。
+        </p>
+        <p>
+          <strong>第 2 反復（ $k = 1 \to 2$ ）：</strong> $(\mathcal{X}_1, \mathcal{R}_1)$ において不可欠領域を再計算する。
+        </p>
+        <ul>
+          <li>$\mathrm{Vital}_1(X_1) = \{R_1, R_2, R_3\}$ （個数 $3 \ge 2$ ）</li>
+          <li>$\mathrm{Vital}_1(X_2) = \{R_3\}$ （個数 $1 < 2$ ）</li>
+        </ul>
+        <p>
+          $R_4$ を失ったことでここで初めて $X_2$ が脱落し $\mathcal{X}_2 = \{X_1\}$ となる。続いて $\mathcal{R}_2 = \{R \in \mathcal{R}_1 \mid \partial R \subset X_1\}$ を計算すると、 $\partial R_3$ は $(3,4) \in X_2$ を含むため除去され、 $\mathcal{R}_2 = \{R_1, R_2\}$ となる。
+        </p>
+        <p>
+          <strong>第 3 反復（ $k = 2 \to 3$ ）：</strong> $(\mathcal{X}_2, \mathcal{R}_2)$ において $\mathrm{Vital}_2(X_1) = \{R_1, R_2\}$ （個数 $2 \ge 2$ ）であるから、 $\mathcal{X}_3 = \{X_1\} = \mathcal{X}_2$ および $\mathcal{R}_3 = \{R_1, R_2\} = \mathcal{R}_2$ となり不動点に到達する。最終出力は $\mathcal{X}^* = \{X_1\}$ である。
+        </p>
+
+        <h3>3. 盤面上の具体的な検証（補題 4.4 の構成に対応）</h3>
+        <p>
+          脱落した $X_3, X_2$ は、黒がパスし続ける限り白の次の4手で確実に打ち上げられる（これはまさに補題 4.4 の証明における着手列の構成に一致している）。
+        </p>
+        <ol>
+          <li>白 $(3,5)$ ： $R_5$ 内の空点 $(2,5)$ を呼吸点に持つ合法手。これにより $X_3 = \{(4,5)\}$ の呼吸点は $(4,4)$ のみになる。</li>
+          <li>白 $(4,4)$ ： $X_3$ の呼吸点が $0$ となり、 $X_3$ を打ち上げる（跡地 $(4,5)$ は空点となる）。</li>
+          <li>白 $(2,4)$ ：空点 $(1,4), (2,5)$ を呼吸点に持つ合法手。すでに $(3,5), (4,4)$ に白石があるため、 $X_2 = \{(3,4)\}$ の呼吸点は $(3,3)$ のみになる。</li>
+          <li>白 $(3,3)$ ： $X_2$ の呼吸点が $0$ となり、 $X_2$ を打ち上げる。</li>
+        </ol>
+        <p>
+          一方、 $X_1$ は $(1,2)$ と $(3,1)$ の2点の呼吸点を常に保持し、白がどちらに打とうとしても隣接点はすべて $X_1$ に属し、もう一方の呼吸点が残っているため自殺手となる。よって $X_1$ は無条件生存である。
+        </p>
+      </div>
+
+      <!-- Example 5.2 -->
+      <div class="env env-ex">
+        <div class="env-title">例 5.2（単独では生きられない2つの連が互いに支え合う盤面）</div>
+        <p>
+          どの連も「自分だけで囲んだ眼」を1つも持たないにもかかわらず、複数の連が小黒囲い領域を共有することで、<strong>集合全体として不動点になり無条件生存する</strong>現象を示す。次の $3 \times 4$ 盤面 $s_0$ を考える。
+        </p>
+<pre class="board">    1 2 3 4
+  1 . B B .
+  2 B . B .
+  3 B B . .</pre>
+
+        <h3>1. 連と黒囲い領域の分解</h3>
+        <p>
+          黒石は互いに隣接しない2つの連からなる。
+        </p>
+        <ul>
+          <li>$X_1 = \{(1,2), (1,3), (2,3)\}$</li>
+          <li>$X_2 = \{(2,1), (3,1), (3,2)\}$</li>
+        </ul>
+        <p>
+          空点集合 $V_\varnothing(s_0)$ は3つの連結成分に分解される。
+        </p>
+        <ul>
+          <li>$R_1 = \{(1,1)\}$ ： $\partial R_1 = \{(1,2), (2,1)\} \subset X_1 \cup X_2$</li>
+          <li>$R_2 = \{(2,2)\}$ ： $\partial R_2 = \{(1,2), (2,3), (2,1), (3,2)\} \subset X_1 \cup X_2$</li>
+          <li>$R_3 = \{(1,4), (2,4), (3,4), (3,3)\}$ ： $\partial R_3 = \{(1,3), (2,3), (3,2)\} \subset X_1 \cup X_2$</li>
+        </ul>
+
+        <h3>2. アルゴリズムの動作と集合全体で判定する必然性</h3>
+        <p>
+          $\mathcal{X}_0 = \{X_1, X_2\}$ 、 $\mathcal{R}_0 = \{R_1, R_2, R_3\}$ について不可欠領域を計算する。
+        </p>
+        <ul>
+          <li>$R_1, R_2$ はともに1空点領域であり、その唯一の空点が $X_1$ と $X_2$ の双方に隣接する。よって $R_1, R_2$ は $X_1$ に対しても $X_2$ に対しても条件 (V1)–(V3) をすべて満たす。</li>
+          <li>$R_3$ は $(3,4) \in R_3$ を含み、 $(3,4)$ の隣接点は $(2,4), (3,3)$ のみで黒石を含まない（すなわち $(3,4) \notin \partial X_1$ かつ $(3,4) \notin \partial X_2$ ）。よって条件 (V3) が破れ、 $R_3$ はどちらの連に対しても不可欠でない。</li>
+        </ul>
+        <p>
+          したがって $\mathrm{Vital}_0(X_1) = \{R_1, R_2\}$ （個数 $2 \ge 2$ ）および $\mathrm{Vital}_0(X_2) = \{R_1, R_2\}$ （個数 $2 \ge 2$ ）となり、第 1 反復で1つの連も脱落せず直ちに不動点 $\mathcal{X}^* = \{X_1, X_2\}$ 、 $\mathcal{R}^* = \{R_1, R_2, R_3\}$ に到達する。
+        </p>
+        <p>
+          注目すべき点は、もし $X_1$ 単独の集合 $\{X_1\}$ だけを切り出して判定しようとすると、 $\partial R_1$ も $\partial R_2$ も $X_2$ の頂点を含むため $\{X_1\}$ に関する小黒囲い領域は1つも存在しなくなる点である（ $X_2$ についても同様）。しかし連の集合 $\{X_1, X_2\}$ 全体で考えれば、白が外部領域 $R_3$ の空点を埋めようとしても $(1,4), (2,4), (3,3)$ の3点までしか打てず（最後の1点は $\partial R_3 \subset X_1 \cup X_2$ より自殺手となる）、 $X_1, X_2$ はともに呼吸点 $(1,1), (2,2)$ を共有して保持し続ける。この状態で白が $(1,1)$ に打つと、隣接する $X_1, X_2$ のいずれも $(2,2)$ に呼吸点を残しているため打ち上げられず、自殺手となる（ $(2,2)$ も同様）。このように、連同士の相互依存関係を捉えるためには、連の集合と領域の集合の対 $(\mathcal{X}, \mathcal{R})$ に対する不動点演算が不可欠である。
+        </p>
+      </div>
+
+      <!-- Example 5.3 -->
+      <div class="env env-ex">
+        <div class="env-title">例 5.3（共有眼による両生きと外側の孤立連の除外： $5 \times 7$ 盤面）</div>
+        <p>
+          自身の単独の眼を持つ骨格連 $X_1$ 、単独の眼を1つも持たず $X_1$ との共有眼のみで生きる連 $X_2$ 、および外側の大きな領域に孤立して脱落する連 $X_3$ が混在する $5 \times 7$ 盤面 $s_0$ を考える。
+        </p>
+<pre class="board">    1 2 3 4 5 6 7
+  1 . B . B B . .
+  2 B B B . B . B
+  3 . B . B B . B
+  4 B B B . B . B
+  5 . B . B B . .</pre>
+
+        <h3>1. 初期状態（ $k = 0$ ）の分解</h3>
+        <p>
+          黒石集合 $V_B(s_0)$ （計20石）は次の互いに隣接しない3つの連に分解される。
+        </p>
+        <ul>
+          <li>$X_1 = \{(1,2), (2,1), (2,2), (2,3), (3,2), (4,1), (4,2), (4,3), (5,2)\}$ （9石、左側の骨格連）</li>
+          <li>$X_2 = \{(1,4), (1,5), (2,5), (3,4), (3,5), (4,5), (5,4), (5,5)\}$ （8石、中央の縦壁連）</li>
+          <li>$X_3 = \{(2,7), (3,7), (4,7)\}$ （3石、右側の孤立連）</li>
+        </ul>
+        <p>
+          白石は存在せず、空点集合 $V_\varnothing(s_0)$ （計15点）は次の9つの黒囲い領域に分解される。
+        </p>
+        <ul>
+          <li>$R_1 = \{(1,1)\}, \; R_2 = \{(3,1)\}, \; R_3 = \{(5,1)\}$ ：いずれも $\partial R_j \subset X_1$</li>
+          <li>$R_4 = \{(1,3)\}, \; R_5 = \{(2,4)\}, \; R_6 = \{(3,3)\}, \; R_7 = \{(4,4)\}, \; R_8 = \{(5,3)\}$ ：いずれも1空点領域であり、その唯一の空点が $X_1$ と $X_2$ の双方に隣接し $\partial R_j \subset X_1 \cup X_2$ を満たす。</li>
+          <li>$R_9 = \{(1,6), (2,6), (3,6), (4,6), (5,6), (1,7), (5,7)\}$ ：右側の大領域であり、 $\partial R_9 \subset X_2 \cup X_3$ （ $X_2$ と $X_3$ の双方に隣接する）。</li>
+        </ul>
+
+        <h3>2. アルゴリズムの追跡</h3>
+        <ol>
+          <li>
+            <strong>第 1 反復（ $k = 0 \to 1$ ）</strong>：
+            <ul>
+              <li>$\mathrm{Vital}_0(X_1) = \{R_1, R_2, R_3, R_4, R_5, R_6, R_7, R_8\}$ （個数 $8 \ge 2$ ）</li>
+              <li>$\mathrm{Vital}_0(X_2) = \{R_4, R_5, R_6, R_7, R_8\}$ （個数 $5 \ge 2$ 。 $R_9$ は $(1,7) \notin \partial X_2$ を含むため不可欠でない）</li>
+              <li>$\mathrm{Vital}_0(X_3) = \varnothing$ （個数 $0 < 2$ 。 $X_3$ が隣接する唯一の領域 $R_9$ は $(1,6) \notin \partial X_3$ を含むため不可欠でない）</li>
+            </ul>
+            したがって $\mathcal{X}_1 = \{X_1, X_2\}$ となって $X_3$ が除外される。次に $\mathcal{R}_1$ を更新すると、 $\partial R_9$ は $X_3$ を含み $\partial R_9 \not\subset X_1 \cup X_2$ となるため $R_9$ が除外され、 $\mathcal{R}_1 = \{R_1, \dots, R_8\}$ となる。
+          </li>
+          <li>
+            <strong>第 2 反復（ $k = 1 \to 2$ ）</strong>： $\mathrm{Vital}_1(X_1) = \{R_1, \dots, R_8\}$ （個数 $8 \ge 2$ ）、 $\mathrm{Vital}_1(X_2) = \{R_4, \dots, R_8\}$ （個数 $5 \ge 2$ ）となり、 $\mathcal{X}_2 = \{X_1, X_2\} = \mathcal{X}_1$ かつ $\mathcal{R}_2 = \mathcal{R}_1$ で不動点に到達して停止する。出力 $\mathcal{X}^* = \{X_1, X_2\}$ が無条件生存であり、一方 $X_3$ は白が $R_9$ 内の呼吸点 $(1,7), (2,6), (3,6), (4,6), (5,7)$ を埋めることで打ち上げられる。
+          </li>
+        </ol>
+      </div>
+
+      <!-- Example 5.4 -->
+      <div class="env env-ex">
+        <div class="env-title">例 5.4（領域内に白石を含む場合と条件 (V3) の役割：生存と死亡の対比）</div>
+        <p>
+          不可欠性の条件 (V3) が「 $R \subset \partial X$ 」ではなく「 $R \cap V_\varnothing(s_0) \subset \partial X$ （ $R$ 内の<strong>空点</strong>のみが $X$ に隣接していればよく、 $R$ 内の<strong>白石</strong>は $X$ に隣接していなくても構わない）」と定式化されている理由を、<strong>たった1点 $(1,5)$ だけが異なる</strong>2つの $3 \times 5$ 盤面 (A) と (B) の対比で確認する。
+        </p>
+        <div class="board-pair">
+<pre class="board">配置 (A):
+    1 2 3 4 5
+  1 B B B W W
+  2 B . B . W
+  3 B B B B B</pre>
+<pre class="board">配置 (B):
+    1 2 3 4 5
+  1 B B B W .
+  2 B . B . W
+  3 B B B B B</pre>
+        </div>
+
+        <p>
+          いずれの配置でも、黒石は計10石が連結したただ1つの連
+        </p>
+        $$
+        X = \{(1,1), (1,2), (1,3), (2,1), (2,3), (3,1), (3,2), (3,3), (3,4), (3,5)\}
+        $$
+        <p>
+          をなし、補集合 $V \smallsetminus V_B(s_0)$ は次の2つの黒囲い領域に分解される。
+        </p>
+        <ul>
+          <li>$R_1 = \{(2,2)\}$ （ $\partial R_1 = \{(1,2), (2,1), (2,3), (3,2)\} \subset X$ ）</li>
+          <li>$R_2 = \{(1,4), (1,5), (2,4), (2,5)\}$ （ $\partial R_2 = \{(1,3), (2,3), (3,4), (3,5)\} \subset X$ ）</li>
+        </ul>
+        <p>
+          どちらの配置でも初期盤面のすべての白の連は $(2,4)$ に呼吸点を持つため、合法な盤面状態である。また $R_1$ はどちらの配置でも $X$ に対して不可欠である。違いは $R_2$ における条件 (V3) の成否に現れる。
+        </p>
+
+        <h3>配置 (A)：内部に白石を含みつつ無条件生存する</h3>
+        <p>
+          配置 (A) では $(1,5) \in V_W(s_0)$ であるため、 $R_2$ に含まれる空点は $(2,4)$ のただ1点のみである。
+        </p>
+        $$
+        R_2 \cap V_\varnothing(s_0) = \{(2,4)\}
+        $$
+        <p>
+          $(2,4)$ は $(2,3), (3,4) \in X$ に隣接するので $(2,4) \in \partial X$ であり、 $R_2$ は条件 (V1)–(V3) をすべて満たす（白石 $(1,5)$ は $X$ に隣接していないが、空点でないため条件 (V3) を妨げない）。したがって $\mathrm{Vital}_0(X) = \{R_1, R_2\}$ （個数 $2 \ge 2$ ）となり、 $\mathcal{X}^* = \{X\}$ （無条件生存）と判定される。
+        </p>
+        <p>
+          実際、白が $(2,4)$ に着手すると、既存の白の連 $\{(1,4), (1,5), (2,5)\}$ と合体して4石の白の連 $R_2$ 全体を形成するが、 $\partial R_2 \subset X$ であり $X$ には $(2,2)$ の呼吸点が残っているため $X$ を打ち上げられず、白の連の呼吸点が $0$ となる（複数石の自殺手）。 $(2,2)$ への着手も同様に自殺手であるため、白は $X$ を取れない。
+        </p>
+
+        <h3>配置 (B)： $X$ に隣接しない空点が存在し死亡する</h3>
+        <p>
+          配置 (B) では $(1,5) \in V_\varnothing(s_0)$ であるため、 $R_2$ に含まれる空点は2点となる。
+        </p>
+        $$
+        R_2 \cap V_\varnothing(s_0) = \{(2,4), (1,5)\}
+        $$
+        <p>
+          ここで $(1,5)$ の隣接点は $(1,4)$ と $(2,5)$ （いずれも白石）のみであり、黒石を含まない。すなわち $(1,5) \notin \partial X$ であるため、 $R_2 \cap V_\varnothing(s_0) \not\subset \partial X$ となり<strong>条件 (V3) が破れる</strong>。その結果、 $\mathrm{Vital}_0(X) = \{R_1\}$ （個数 $1 < 2$ ）となって第 1 反復で $X$ が脱落し、 $\mathcal{X}^* = \varnothing$ と判定される。
+        </p>
+        <p>
+          実際、白は次の2手で黒連 $X$ 全体を打ち上げられる。
+        </p>
+        <ol>
+          <li>白 $(2,4)$ ：白の連 $\{(1,4), (2,4), (2,5)\}$ は空点 $(1,5)$ を呼吸点として持つため、自殺手にならず合法手である。これにより $X$ の呼吸点は $(2,2)$ のみになる。</li>
+          <li>白 $(2,2)$ ： $X$ の呼吸点が $0$ となり、黒10石すべてを打ち上げる。</li>
+        </ol>
+        <p>
+          直観に反して白石が1個少ない配置 (B) のほうが黒にとって致命的であるのは、空点 $(1,5)$ が「 $X$ の呼吸点を増やすことなく白石の連に呼吸点を与える逃げ場」として機能するためである。条件 (V3) はまさにこの逃げ場の不在を要求している。
+        </p>
+      </div>
+
+      <div class="env env-rem">
+        <div class="env-title">注意（非自殺条件の不可欠性：複数石の自殺手を許すルールとの違い）</div>
+        <p>
+          例 5.4 の配置 (A) は、定義 1.3 の<strong>非自殺条件</strong>が定理 4.3 の成立にとって不可欠であることを明確に示す反例にもなっている。仮に複数石の自殺手を合法とするルール（ニュージーランドルールや Tromp-Taylor ルールなど）を採用すると、配置 (A) において白は以下の手順で黒連 $X$ を打ち上げることができる。
+        </p>
+        <ol>
+          <li>白 $(2,4)$ ：白の連 $R_2$ 全体が自殺手として盤面から取り除かれ、 $R_2$ の4点すべてが空点となる。</li>
+          <li>白 $(1,4)$ 、白 $(2,5)$ 、白 $(2,4)$ ：空点 $(1,5)$ を白の呼吸点として残しつつ、 $R_2$ 内にある $X$ の呼吸点をすべて埋める（配置 (B) で白が $(2,4)$ に打った直後と同一の状態となる）。</li>
+          <li>白 $(2,2)$ ： $X$ の最後の呼吸点を埋め、黒10石すべてを打ち上げる。</li>
+        </ol>
+        <p>
+          このように、自殺手を許容するルールのもとでは「白石集合の単調増加性 $V_W(s_0) \subset V_W(s_i)$ 」（補題 4.1 の 2）が崩れるため、条件 (V3) を「 $R \subset \partial X$ （空点だけでなく $R$ 内の白石も含めてすべての頂点が $X$ に隣接する）」に強めなければ健全性は保証されない。
+        </p>
+      </div>
+
+      <!-- Example 5.5 -->
+      <div class="env env-ex">
+        <div class="env-title">例 5.5（通常の対局での「生き」と無条件生存の区別：直四）</div>
+        <p>
+          Benson のアルゴリズムが判定するのはあくまで「黒が常にパスし続ける」というモデルにおける無条件生存であり、通常の交互着手における生存とは区別される。典型例として、次の $3 \times 6$ 盤面（いわゆる直四）を考える。
+        </p>
+<pre class="board">    1 2 3 4 5 6
+  1 B B B B B B
+  2 B . . . . B
+  3 B B B B B B</pre>
+
+        <h3>1. 初期状態でのアルゴリズムの出力</h3>
+        <p>
+          黒石14石は連結なただ1つの連 $X$ をなし、空点集合はただ1つの黒囲い領域
+        </p>
+        $$
+        R_1 = \{(2,2), (2,3), (2,4), (2,5)\}
+        $$
+        <p>
+          からなる。 $R_1$ のすべての空点は $X$ に隣接しているため $R_1$ は $X$ に対して不可欠（ (V1)–(V3) 成立）であるが、黒囲い領域自体が1つしかないため $\mathrm{Vital}_0(X) = \{R_1\}$ （個数 $1 < 2$ ）となる。したがって第 1 反復で $X$ は除去され、 $\mathcal{X}^* = \varnothing$ となる。
+        </p>
+        <p>
+          実際、黒が常にパスし続けるならば、白は $(2,2) \to (2,3) \to (2,4) \to (2,5)$ の順に4手連続で打つことができる。3手目 $(2,4)$ までは常に $(2,5)$ が白の呼吸点として残るためすべて合法手であり、4手目 $(2,5)$ で $X$ の呼吸点が $0$ となって黒14石すべてが打ち上げられる。よって $X$ は無条件生存ではない。
+        </p>
+
+        <h3>2. 黒の1手の応手による無条件生存への到達</h3>
+        <p>
+          通常の交互着手では、白が例えば $(2,3)$ に打ったとき、黒が $(2,4)$ に応手することで盤面は次の状態 $s'$ に遷移する。
+        </p>
+<pre class="board">    1 2 3 4 5 6
+  1 B B B B B B
+  2 B . W B . B
+  3 B B B B B B</pre>
+        <p>
+          この盤面 $s'$ では、黒石15石がただ1つの連 $X'$ をなし、補集合 $V \smallsetminus V_B(s')$ は2つの黒囲い領域に分割される。
+        </p>
+        <ul>
+          <li>$R_1' = \{(2,2), (2,3)\}$ ：白石 $(2,3)$ を含むが、空点集合 $R_1' \cap V_\varnothing(s') = \{(2,2)\} \subset \partial X'$ を満たすため不可欠である（例 5.4 の配置 (A) と同型）。</li>
+          <li>$R_2' = \{(2,5)\}$ ：空点集合 $\{(2,5)\} \subset \partial X'$ を満たすため不可欠である。</li>
+        </ul>
+        <p>
+          したがって $\mathrm{Vital}_0(X') = \{R_1', R_2'\}$ （個数 $2 \ge 2$ ）となり、この段階で初めて $\mathcal{X}^* = \{X'\}$ （無条件生存）に到達する。すなわち、実戦や詰碁プログラムにおける死活探索では、「黒の応手によって Benson のアルゴリズムが $\mathcal{X}^* \ni X$ を出力する盤面へ導けるか否か」という終端判定器としてこのアルゴリズムが機能する。
+        </p>
+      </div>
+
+      <!-- Example 5.6 -->
+      <div class="env env-ex">
+        <div class="env-title">例 5.6（セキ、輪状共有構造、およびアルゴリズムの真の適用範囲）</div>
+        <p>
+          定理 4.3 および定理 4.5 が示すとおり、非自殺条件の下での<strong>無条件生存</strong>に関しては、Benson のアルゴリズムは漏れなく過不足なくすべての無条件生存連を検出する（完全である）。以下では、実戦上の重要な2つの構造である「セキ」と「輪状に眼を共有する複数の連」について、具体的な盤面上でアルゴリズムの振る舞いを検証する。
+        </p>
+
+        <h3>1. セキ (seki) は交互着手では生きているが無条件生存ではない</h3>
+        <p>
+          次の $3 \times 5$ 盤面 $s_0$ を考える。
+        </p>
+<pre class="board">    1 2 3 4 5
+  1 B B . W W
+  2 B . W W B
+  3 B B B B B</pre>
+        <p>
+          黒石は9石の連 $X = \{(1,1), (1,2), (2,1), (3,1), (3,2), (3,3), (3,4), (3,5), (2,5)\}$ 、白石は4石の連 $Y = \{(1,4), (1,5), (2,3), (2,4)\}$ をなし、双方の呼吸点集合はいずれも
+        </p>
+        $$
+        L_{s_0}(X) = L_{s_0}(Y) = \{(1,3), (2,2)\}
+        $$
+        <p>
+          である。通常の交互着手では、白が $(1,3)$ （または $(2,2)$ ）に打てば黒がもう一方の空点に打って白5石を打ち上げて生き、逆に黒が先に打てば白がもう一方に打って黒10石を打ち上げる。したがって双方とも手を出せない典型的な<strong>セキ (seki)</strong> であり、交互着手の意味では $X$ は生きている。
+        </p>
+        <p>
+          ところが、補集合 $V \smallsetminus V_B(s_0) = \{(2,2), (1,3), (2,3), (2,4), (1,4), (1,5)\}$ はただ1つの連結成分 $R_1$ をなすため、 $|\mathrm{Vital}_0(X)| = 1 < 2$ となり、Benson のアルゴリズムは $\mathcal{X}^* = \varnothing$ を出力する。これはアルゴリズムの見落としではなく、実際に黒が常にパスし続けるモデルにおいては、白が 1 手目 $(1,3)$ （ $(2,2)$ が白の呼吸点となるため合法）、2 手目 $(2,2)$ と連続着手して黒9石すべてを打ち上げられるため、 $X$ は<strong>無条件生存ではない</strong>という正確な判定である。
+        </p>
+
+        <h3>2. 輪状に眼を共有する複数の連（4連サイクル）は正しく検出される</h3>
+        <p>
+          次の $4 \times 4$ 盤面 $s_0$ を考える。
+        </p>
+<pre class="board">    1 2 3 4
+  1 . B B .
+  2 B . . B
+  3 B . . B
+  4 . B B .</pre>
+        <p>
+          黒石は互いに隣接しない4つの連 $X_1 = \{(1,2), (1,3)\}$ 、 $X_2 = \{(2,4), (3,4)\}$ 、 $X_3 = \{(4,2), (4,3)\}$ 、 $X_4 = \{(2,1), (3,1)\}$ に分解される。補集合 $V \smallsetminus V_B(s_0)$ は5つの黒囲い領域、すなわち四隅の1空点領域
+        </p>
+        $$
+        R_1 = \{(1,1)\}, \quad R_2 = \{(1,4)\}, \quad R_3 = \{(4,4)\}, \quad R_4 = \{(4,1)\}
+        $$
+        <p>
+          および中央の $2 \times 2$ 領域 $R_5 = \{(2,2), (2,3), (3,2), (3,3)\}$ からなる。 $R_5$ はどの連に対しても隣接しない空点を含むため、いずれの連に対しても不可欠ではない。一方、四隅の4領域については
+        </p>
+        $$
+        \mathrm{Vital}_0(X_1) = \{R_1, R_2\}, \quad \mathrm{Vital}_0(X_2) = \{R_2, R_3\}, \quad \mathrm{Vital}_0(X_3) = \{R_3, R_4\}, \quad \mathrm{Vital}_0(X_4) = \{R_4, R_1\}
+        $$
+        <p>
+          となり、すべての連 $X_j$ がちょうど2つの不可欠領域を持つ。したがって第 1 反復で直ちに不動点 $\mathcal{X}^* = \{X_1, X_2, X_3, X_4\}$ に到達し、どの連も単独の眼を持たず4つの連が輪状に支え合う構造であっても、Benson のアルゴリズムによって漏れなく無条件生存と判定される。
+        </p>
+      </div>
+
+      <h3>アルゴリズムの意義とコンピュータ囲碁における位置づけ</h3>
+      <p>
+        以上の結果を表にまとめると、Benson のアルゴリズムの数学的性格が明確になる。
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>生存の概念・ルール条件</th>
+            <th>Benson のアルゴリズムの性質</th>
+            <th>代表例・備考</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>無条件生存（黒常にパス、非自殺条件あり）</td>
+            <td><strong>健全かつ完全</strong>（必要十分条件、定理 4.3・4.5）</td>
+            <td>例 5.1–5.3、例 5.4(A)、例 5.6(2)</td>
+          </tr>
+          <tr>
+            <td>無条件生存（複数石の自殺手を許容するルール）</td>
+            <td>条件 (V3) のままでは<strong>不健全</strong></td>
+            <td>例 5.4(A) の注意（白が自殺手で空間を空けられる）</td>
+          </tr>
+          <tr>
+            <td>交互着手下での生存（通常対局の「生き」）</td>
+            <td><strong>十分条件だが非必要</strong></td>
+            <td>例 5.5（直四）、例 5.6(1)（セキ）、コウ絡みの生き</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Benson のアルゴリズムはゲーム木探索を一切展開することなく、純粋に静的グラフ構造の反復的な縮約のみによって無条件生存を $O(n^2)$ 時間で完全に判定できる点に大きな価値があります。一方で、実戦の終局前や死活解析で頻繁に現れる「直四」や「セキ」などの交互着手下での安全地帯を認識するためには、Benson のアルゴリズムを基礎として局所的な静的規則や探索を組み合わせる拡張（Müller, 1997; Müller, 2002 など）が研究・実装されています。
+      </p>
+    </section>
+
+    <!-- ================================================================ -->
+    <section id="sec6">
+      <h2>6. 参照文献</h2>
+      <ol class="ref-list">
+        <li>
+          D. B. Benson, "Life in the game of Go", <em>Information Sciences</em>, Vol. 10, No. 1, pp. 17–29, 1976.
+          DOI: <a href="https://doi.org/10.1016/S0020-0255(76)90554-5" target="_blank" rel="noopener noreferrer">https://doi.org/10.1016/S0020-0255(76)90554-5</a>
+        </li>
+        <li>
+          M. Müller, "Playing it safe: Recognizing secure territories in Computer Go by using static rules and search", in H. Matsubara (ed.), <em>Proceedings of the Game Programming Workshop in Japan '97</em>, pp. 80–86, Computer Shogi Association, Tokyo, 1997.
+          （関連アーカイブ：<a href="https://www.researchgate.net/publication/383345109_Martin_Muller" target="_blank" rel="noopener noreferrer">ResearchGate</a>）
+        </li>
+        <li>
+          M. Müller, "Computer Go", <em>Artificial Intelligence</em>, Vol. 134, Nos. 1–2, pp. 145–179, 2002.
+          DOI: <a href="https://doi.org/10.1016/S0004-3702(01)00121-7" target="_blank" rel="noopener noreferrer">https://doi.org/10.1016/S0004-3702(01)00121-7</a>
+        </li>
+        <li>
+          Wikipedia, "Benson's algorithm (Go)",
+          <a href="https://en.wikipedia.org/wiki/Benson%27s_algorithm_(Go)" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Benson%27s_algorithm_(Go)</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>
