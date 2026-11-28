@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brauer群と2次Galoisコホモロジーの同型、局所・大域体のBrauer群、および平方剰余の相互法則への応用</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --bg-color: #fcfcfd;
+      --text-color: #1f2328;
+      --muted-color: #57606a;
+      --accent-color: #1b4f72;
+      --accent-light: #ebf3fa;
+      --border-color: #d0d7de;
+      --def-bg: #f4f8fb;
+      --def-border: #2b6cb0;
+      --thm-bg: #fdf8f2;
+      --thm-border: #b7791f;
+      --ex-bg: #f3faf6;
+      --ex-border: #2f855a;
+      --proof-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+      line-height: 1.85;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2.5rem 1.75rem 4.5rem;
+      background-color: #ffffff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    header.doc-header {
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    header.doc-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.4;
+      color: var(--accent-color);
+      margin: 0 0 0.75rem 0;
+    }
+
+    header.doc-header p.subtitle {
+      font-size: 1rem;
+      color: var(--muted-color);
+      margin: 0;
+    }
+
+    nav.toc {
+      background-color: #f6f8fa;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 0.94rem;
+    }
+
+    nav.toc h2 {
+      font-size: 1.05rem;
+      margin: 0 0 0.75rem 0;
+      color: var(--accent-color);
+      border: none;
+      padding: 0;
+    }
+
+    nav.toc ol {
+      margin: 0;
+      padding-left: 1.4rem;
+    }
+
+    nav.toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    nav.toc a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    nav.toc a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--accent-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    h3 {
+      font-size: 1.18rem;
+      color: #24292f;
+      margin-top: 2rem;
+      margin-bottom: 0.85rem;
+    }
+
+    h4 {
+      font-size: 1.04rem;
+      color: #24292f;
+      margin-top: 1.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 1.1rem;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-top: 0.4rem;
+      margin-bottom: 1.2rem;
+      padding-left: 1.6rem;
+    }
+
+    li {
+      margin-bottom: 0.45rem;
+    }
+
+    .env-box {
+      border-left: 4px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .env-def {
+      background-color: var(--def-bg);
+      border-left-color: var(--def-border);
+    }
+
+    .env-thm {
+      background-color: var(--thm-bg);
+      border-left-color: var(--thm-border);
+    }
+
+    .env-ex {
+      background-color: var(--ex-bg);
+      border-left-color: var(--ex-border);
+    }
+
+    .env-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #1a202c;
+    }
+
+    .proof-box {
+      background-color: var(--proof-bg);
+      border: 1px solid #e1e4e8;
+      border-left: 4px solid #6e7781;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.75rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .proof-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.6rem;
+      display: block;
+      color: #32383f;
+    }
+
+    .qed {
+      text-align: right;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .math-display {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--accent-light);
+      color: #1a365d;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fafbfc;
+    }
+
+    .center-cell {
+      text-align: center;
+    }
+
+    .references ol {
+      padding-left: 1.6rem;
+      font-size: 0.95rem;
+    }
+
+    .references li {
+      margin-bottom: 0.75rem;
+    }
+
+    .references a {
+      color: var(--accent-color);
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="doc-header">
+      <h1>Brauer群と2次Galoisコホモロジーの同型、局所・大域体のBrauer群、および平方剰余の相互法則への応用</h1>
+      <p class="subtitle">中心的単純多元環のGalois降下と接合積による同型 $\mathrm{Br}(K) \cong H^2(G_K, (K^{\mathrm{sep}})^\times)$ の完全証明、 $K = \mathbb{R}, \mathbb{Q}_p, \mathbb{Q}$ のBrauer群の決定（Frobeniusの定理・Hasse不変量・Albert–Brauer–Hasse–Noetherの定理）、およびHilbert記号を通じた平方剰余の相互法則の導出</p>
+    </header>
+
+    <nav class="toc">
+      <h2>目次</h2>
+      <ol>
+        <li><a href="#sec-intro">序論：主定理と本稿の構成</a></li>
+        <li><a href="#sec-csa-brauer">中心的単純多元環、Brauer群、二重中心化定理、および分離分解体の存在</a></li>
+        <li><a href="#sec-galois-descent">Galois降下による $\mathrm{CSA}_n(L/K) \cong H^1(G, \mathrm{PGL}_n(L))$ の構成</a></li>
+        <li><a href="#sec-injection">単射群準同型 $\mathrm{Br}(L/K) \hookrightarrow H^2(G, L^\times)$ の構成</a></li>
+        <li><a href="#sec-crossed-product">接合積と巡回多元環による全射性の証明および絶対Galois群への移行</a></li>
+        <li><a href="#sec-real">具体計算 I：$K = \mathbb{R}$ の場合（Frobeniusの定理）と自明な例（ $\mathbb{C}, \mathbb{F}_q$ ）</a></li>
+        <li><a href="#sec-padic">具体計算 II：$K = \mathbb{Q}_p$ の場合（Wedderburnの小定理とHasse不変量）</a></li>
+        <li><a href="#sec-rational">具体計算 III：$K = \mathbb{Q}$ の場合（Albert–Brauer–Hasse–Noetherの定理）</a></li>
+        <li><a href="#sec-reciprocity">応用：四元数環、Hilbert記号、Hasse–Minkowskiの定理、および平方剰余の相互法則</a></li>
+        <li><a href="#sec-references">参考文献</a></li>
+      </ol>
+    </nav>
+
+    <section id="sec-intro">
+      <h2>1. 序論：主定理と本稿の構成</h2>
+      <p>体 $K$ に対し、 $K$ の分離閉包を $K^{\mathrm{sep}}$ 、絶対Galois群を $G_K := \mathrm{Gal}(K^{\mathrm{sep}}/K)$ とおく。本稿の第一の主定理は、 $K$ 上の中心的単純多元環 (central simple algebra) をBrauer同値で分類するアーベル群である<strong>Brauer群 (Brauer group)</strong> $\mathrm{Br}(K)$ と、射有限群 $G_K$ の連続2次Galoisコホモロジー群 $H^2(G_K, (K^{\mathrm{sep}})^\times)$ の間に自然な群の同型</p>
+      <div class="math-display">
+        $$\mathrm{Br}(K) \cong H^2(G_K, (K^{\mathrm{sep}})^\times)$$
+      </div>
+      <p>が成り立つことである（Gille–Szamuely [1], Serre [2]）。証明は、まず任意の有限次Galois拡大 $L/K$ に対して相対Brauer群の同型 $\mathrm{Br}(L/K) \cong H^2(\mathrm{Gal}(L/K), L^\times)$ をGalois降下（非可換1次コホモロジー）と接合積 (crossed product) を用いて確立し、その後すべての有限次Galois拡大にわたる帰納極限をとることによって完遂される。</p>
+      <p>第二の目的は、この同型を具体的な基礎体 $K = \mathbb{R}$ 、 $K = \mathbb{Q}_p$ 、および $K = \mathbb{Q}$ に適用し、それぞれのBrauer群の構造を完全に決定することである。具体的には、</p>
+      <ul>
+        <li>$\mathrm{Br}(\mathbb{R}) \cong \mathbb{Z}/2\mathbb{Z}$ （Hamiltonの四元数体 $\mathbb{H}$ の唯一性・Frobeniusの定理）、および比較としての $\mathrm{Br}(\mathbb{C}) = 0$ 、 $\mathrm{Br}(\mathbb{F}_q) = 0$ 、</li>
+        <li>$\mathrm{Br}(\mathbb{Q}_p) \cong \mathbb{Q}/\mathbb{Z}$ （Hasse不変量 $\mathrm{inv}_p$ による同型と巡回多元環の不変量の明示計算）、</li>
+        <li>短完全列 $0 \to \mathrm{Br}(\mathbb{Q}) \to \bigoplus_{v} \mathrm{Br}(\mathbb{Q}_v) \xrightarrow{\sum_v \mathrm{inv}_v} \mathbb{Q}/\mathbb{Z} \to 0$ （Albert–Brauer–Hasse–Noetherの定理）</li>
+      </ul>
+      <p>を順に証明する。</p>
+      <p>第三の目的として、Albert–Brauer–Hasse–Noetherの定理の最も美しい数論的応用を詳説する。すなわち、四元数環 $(a, b)_{\mathbb{Q}}$ の各素点でのHasse不変量として<strong>Hilbert記号 (Hilbert symbol)</strong> $(a, b)_v \in \{\pm 1\}$ を定義し、相互律 $\sum_v \mathrm{inv}_v = 0$ から<strong>Hilbertの相互律 (Hilbert reciprocity law)</strong> $\prod_v (a, b)_v = 1$ を導く。さらに各素点 $v = \infty, p, 2$ におけるHilbert記号の明示公式を完全に証明することで、初等整数論の金字塔である<strong>平方剰余の相互法則 (quadratic reciprocity law)</strong> と第1・第2補充法則、ならびに3変数2次形式に対する<strong>Hasse–Minkowskiの定理 (Hasse–Minkowski theorem)</strong> がBrauer群の理論から統一的に得られることを示す。</p>
+    </section>
+
+    <section id="sec-csa-brauer">
+      <h2>2. 中心的単純多元環、Brauer群、二重中心化定理、および分離分解体の存在</h2>
+      <p>本稿を通じて、環および多元環はすべて単位元 $1 \neq 0$ を持つ結合的なものとし、環準同型および多元環準同型は単位元を保つものとする。</p>
+
+      <h3>2.1 中心的単純多元環とWedderburnの定理</h3>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 2.1（中心的単純多元環）</span>
+        <p>体 $K$ 上の有限次元多元環 $A$ が次の2条件を満たすとき、 $A$ を $K$ 上の<strong>中心的単純多元環 (central simple algebra, CSA)</strong> という。</p>
+        <ol>
+          <li><strong>単純性 (simplicity)：</strong> $A$ の両側イデアルは $\{0\}$ と $A$ のみである。</li>
+          <li><strong>中心性 (centrality)：</strong> $A$ の中心 $Z(A) := \{x \in A \mid \forall y \in A,\ xy = yx\}$ が $K \cdot 1_A$ （これを $K$ と同一視する）に一致する。</li>
+        </ol>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 2.2（中心的単純多元環の基本例）</span>
+        <ul>
+          <li><strong>行列環 $M_n(K)$ ：</strong> 任意の体 $K$ と正の整数 $n$ に対し、 $n \times n$ 行列環 $M_n(K)$ は $K$ 上の中心的単純多元環である。実際、零でない行列 $X = (x_{ij}) \in I$ （ $x_{ab} \neq 0$ ）に対し、行列単位 $E_{pq}$ を用いて $E_{ia} X E_{bj} = x_{ab} E_{ij} \in I$ となるため両側イデアル $I$ は $M_n(K)$ 全体に一致し、またすべての行列単位と可換な行列はスカラー行列 $K \cdot I_n$ に限られる。</li>
+          <li><strong>Hamiltonの四元数体 $\mathbb{H}$ ：</strong> $K = \mathbb{R}$ 上の4次元多元環 $\mathbb{H} = \mathbb{R} \oplus \mathbb{R}i \oplus \mathbb{R}j \oplus \mathbb{R}k$ （ $i^2 = j^2 = k^2 = ijk = -1$ ）は、任意の零でない元 $q = a + bi + cj + dk$ が逆元 $q^{-1} = (a - bi - cj - dk)/(a^2 + b^2 + c^2 + d^2)$ を持つため斜体（したがって単純環）であり、 $i, j$ の両方と可換な元は実数のみなので $Z(\mathbb{H}) = \mathbb{R}$ である。</li>
+          <li><strong>中心的単純多元環でない例：</strong> $\mathbb{C}$ を $\mathbb{R}$ 上の多元環とみなすと、斜体なので単純であるが中心は $Z(\mathbb{C}) = \mathbb{C} \neq \mathbb{R}$ なので $\mathbb{R}$ 上中心的ではない。また直積 $\mathbb{R} \times \mathbb{R}$ は単純でも中心的でもない。</li>
+        </ul>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 2.3（Wedderburnの定理）</span>
+        <p>体 $K$ 上の任意の中心的単純多元環 $A$ に対し、正の整数 $r$ と $K$ 上の有限次元中心的斜体（すなわち $Z(D) = K$ を満たす斜体） $D$ が存在して、 $K$ 多元環の同型</p>
+        <div class="math-display">
+          $$A \cong M_r(D)$$
+        </div>
+        <p>が成り立つ。さらに $r$ は一意に定まり、 $D$ も $K$ 多元環の同型を除いて一意に定まる。また、 $A$ の任意の単純左 $A$ 加群は互いに同型であり、任意の有限生成左 $A$ 加群 $M$ は単純左 $A$ 加群 $S$ の有限直和 $M \cong S^{\oplus k}$ に同型であって、自己準同型環は $\mathrm{End}_A(M) \cong M_k(D^{\mathrm{op}})$ を満たす。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$A$ は $K$ 上有限次元であるから、零でない極小左イデアル $S \subset A$ が存在する。 $S$ は単純左 $A$ 加群である。Schurの補題により、 $D^{\mathrm{op}} := \mathrm{End}_A(S)$ は斜体であり（任意の零でない $A$ 加群準同型 $f : S \to S$ は $\ker f = \{0\}$ かつ $\mathrm{Im}(f) = S$ より同型である）、その反対斜体を $D := (D^{\mathrm{op}})^{\mathrm{op}}$ とおく。 $S$ には右から $D$ が作用し、 $D$ の右乗法は $A$ の左乗法と可換である。</p>
+        <p>和 $\sum_{a \in A} S a$ は $A$ の零でない両側イデアルであるから、 $A$ の単純性より $A = \sum_{a \in A} S a$ である。各 $S a$ は $S$ の準同型像なので $\{0\}$ または $S$ に同型な単純左 $A$ 加群である。したがって $A$ は有限個の $S$ の直和 $A \cong S^{\oplus r}$ として表される。特に任意の単純左 $A$ 加群 $T$ に対し、零でない元 $t \in T$ が定める全射 $A \to T$ （ $a \mapsto a t$ ）を直和因子 $S$ に制限すると、少なくとも1つの因子で零でなく同型 $S \xrightarrow{\sim} T$ を与える。よって単純左 $A$ 加群は同型を除いて $S$ のみであり、任意の有限生成左 $A$ 加群は $S^{\oplus k}$ の形となる。</p>
+        <p>左 $A$ 加群の自己準同型環をとると、 $A^{\mathrm{op}} \cong \mathrm{End}_A(A) \cong \mathrm{End}_A(S^{\oplus r}) \cong M_r(\mathrm{End}_A(S)) = M_r(D^{\mathrm{op}})$ である。両辺の反対環をとり、転置による同型 $(M_r(D^{\mathrm{op}}))^{\mathrm{op}} \cong M_r(D)$ を用いれば $A \cong M_r(D)$ を得る。中心を比較すると $K = Z(A) \cong Z(M_r(D)) = Z(D)$ なので $D$ は $K$ 上の中心的斜体である。一意性は、 $S$ が $A$ の唯一の単純左加群であることから $D^{\mathrm{op}} = \mathrm{End}_A(S)$ が一意に定まり、 $r = \dim_K A / \dim_K S$ も一意に定まることから従う。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 2.4（中心的単純多元環のテンソル積と係数拡大）</span>
+        <p>$A, B$ を $K$ 上の中心的単純多元環とする。</p>
+        <ol>
+          <li>任意の体の拡大 $L/K$ に対し、 $A \otimes_K L$ は $L$ 上の中心的単純多元環である。逆に、 $A$ が $K$ 上の有限次元多元環であり、ある拡大 $L/K$ に対して $A \otimes_K L$ が $L$ 上の中心的単純多元環ならば、 $A$ は $K$ 上の中心的単純多元環である。</li>
+          <li>テンソル積 $A \otimes_K B$ は $K$ 上の中心的単純多元環である。</li>
+          <li>$A$ の反対環 (opposite algebra) $A^{\mathrm{op}}$ （台 $K$ ベクトル空間は $A$ と同じで、積を $a \cdot_{\mathrm{op}} b := ba$ で定めたもの）は $K$ 上の中心的単純多元環であり、 $N := \dim_K A$ とおくとき、自然な写像
+            <div class="math-display">
+              $$\mu : A \otimes_K A^{\mathrm{op}} \longrightarrow \mathrm{End}_K(A) \cong M_N(K), \qquad a \otimes b \longmapsto (x \mapsto axb)$$
+            </div>
+            は $K$ 多元環の同型である。
+          </li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) の証明。</strong> $A$ が $K$ 上の中心的単純多元環であるとする。 $L$ の $K$ 上の基底 $\{e_i\}$ をとると、 $u = \sum a_i \otimes e_i \in Z(A \otimes_K L)$ であることはすべての $x \in A$ に対して $(x \otimes 1)u = u(x \otimes 1)$ すなわち $x a_i = a_i x$ が成り立つことと同値ゆえ $a_i \in Z(A) = K$ となり、 $Z(A \otimes_K L) = L$ である。</p>
+        <p>単純性を示すため、 $I \subset A \otimes_K L$ を零でない両側イデアルとする。 $I$ の零でない元を基底 $\{e_i\}$ で $u = \sum_{j=1}^m a_j \otimes e_{i_j}$ （ $a_j \in A \smallsetminus \{0\}$ ）と表したとき、項数 $m \ge 1$ が最小となる元を選ぶ。 $A$ は単純なので $A a_1 A = A$ であり、 $x_k, y_k \in A$ が存在して $\sum_k x_k a_1 y_k = 1$ となる。そこで $u' := \sum_k (x_k \otimes 1) u (y_k \otimes 1) \in I$ を作ると、</p>
+        <div class="math-display">
+          $$u' = 1 \otimes e_{i_1} + \sum_{j=2}^m a'_j \otimes e_{i_j} \in I$$
+        </div>
+        <p>となる。任意の $x \in A$ に対し $(x \otimes 1) u' - u' (x \otimes 1) = \sum_{j=2}^m (x a'_j - a'_j x) \otimes e_{i_j} \in I$ は項数が $m - 1$ 以下であるから、 $m$ の最小性より $0$ でなければならない。ゆえにすべての $j \ge 2$ で $a'_j \in Z(A) = K$ となり、 $u' = 1 \otimes (e_{i_1} + \sum_{j=2}^m a'_j e_{i_j}) \in I$ である。 $\{e_i\}$ の線形独立性より括弧内の元は $L^\times$ に属するため $1 \otimes 1 \in I$ となり、 $I = A \otimes_K L$ である。</p>
+        <p>逆に $A \otimes_K L$ が $L$ 上の中心的単純多元環ならば、 $A$ の任意の非自明両側イデアル $J$ は $A \otimes_K L$ の非自明両側イデアル $J \otimes_K L$ を与えるため $A$ は単純であり、 $Z(A) \otimes_K L \subset Z(A \otimes_K L) = L$ より $\dim_K Z(A) = 1$ すなわち $Z(A) = K$ となる。</p>
+
+        <p><strong>(2) の証明。</strong> (1) の証明において $L$ の代わりに $B$ 、 $L$ の $K$ 基底の代わりに $B$ の $K$ 基底をとって全く同じ議論を行えば、任意の零でない両側イデアル $I \subset A \otimes_K B$ が $1 \otimes b$ （ $b \in B \smallsetminus \{0\}$ ）の形の元を含むことがわかる。 $B$ は単純なので $B b B = B$ より $1 \otimes 1 \in I$ となり、 $A \otimes_K B$ は単純である。また $Z(A \otimes_K B) = Z(A) \otimes_K Z(B) = K$ も基底比較により直ちに従う。</p>
+
+        <p><strong>(3) の証明。</strong> $A^{\mathrm{op}}$ が中心的単純多元環であることは明らかである。写像 $\mu : A \otimes_K A^{\mathrm{op}} \to \mathrm{End}_K(A)$ は $\mu((a_1 \otimes b_1)(a_2 \otimes b_2))(x) = \mu(a_1 a_2 \otimes b_2 b_1)(x) = a_1 a_2 x b_2 b_1 = \mu(a_1 \otimes b_1)(\mu(a_2 \otimes b_2)(x))$ より $K$ 多元環準同型であり、 $\mu(1 \otimes 1) = \mathrm{id}_A \neq 0$ である。 (2) より $A \otimes_K A^{\mathrm{op}}$ は単純なので $\ker \mu = \{0\}$ 、すなわち $\mu$ は単射である。両辺の $K$ 次元はともに $(\dim_K A)^2 = N^2$ に等しいから、 $\mu$ は同型である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>2.2 Brauer群と相対Brauer群</h3>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 2.5（Brauer同値とBrauer群）</span>
+        <p>$K$ 上の2つの中心的単純多元環 $A, B$ に対し、ある正の整数 $r, s$ が存在して $K$ 多元環の同型 $M_r(A) \cong M_s(B)$ （同値なこととして $A \otimes_K M_r(K) \cong B \otimes_K M_s(K)$ ）が成り立つとき、 $A$ と $B$ は<strong>Brauer同値 (Brauer equivalent)</strong> であるといい、 $A \sim B$ と書く。</p>
+        <p>Brauer同値は $K$ 上の中心的単純多元環の同型類全体の集合上の同値関係であり（推移律は $M_r(A) \cong M_s(B)$ かつ $M_t(B) \cong M_u(C)$ のとき $M_{rt}(A) \cong M_{st}(B) \cong M_{su}(C)$ となることから従う）、その同値類 $[A]$ 全体の集合を $\mathrm{Br}(K)$ と書く。 $\mathrm{Br}(K)$ に演算</p>
+        <div class="math-display">
+          $$[A] \cdot [B] := [A \otimes_K B]$$
+        </div>
+        <p>を定めると、命題 2.4 (2), (3) および同型 $M_r(K) \otimes_K M_s(K) \cong M_{rs}(K)$ により、これは単位元 $[K] = [M_n(K)]$ 、逆元 $[A]^{-1} = [A^{\mathrm{op}}]$ を持つアーベル群となる。この群 $\mathrm{Br}(K)$ を体 $K$ の<strong>Brauer群 (Brauer group)</strong> という。</p>
+      </div>
+
+      <p>定理 2.3（Wedderburnの定理）により、各Brauer類 $[A] \in \mathrm{Br}(K)$ は $K$ 上の中心的斜体 $D$ の同型類をただ1つ代表元として持つ。すなわち、 $\mathrm{Br}(K)$ の元は $K$ 上の有限次元中心的斜体の同型類全体と一対一に対応する。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 2.6（分解体と相対Brauer群）</span>
+        <p>$A$ を $K$ 上の中心的単純多元環、 $L/K$ を体の拡大とする。ある正の整数 $n$ に対して $L$ 多元環の同型 $A \otimes_K L \cong M_n(L)$ が成り立つとき、 $L$ は $A$ を<strong>分解する (split)</strong> といい、 $L$ を $A$ の<strong>分解体 (splitting field)</strong> という。</p>
+        <p>命題 2.4 (1) より、拡大 $L/K$ は群準同型 $\mathrm{Res}_{L/K} : \mathrm{Br}(K) \to \mathrm{Br}(L)$ （ $[A] \mapsto [A \otimes_K L]$ ）を誘導する。その核</p>
+        <div class="math-display">
+          $$\mathrm{Br}(L/K) := \ker(\mathrm{Br}(K) \to \mathrm{Br}(L)) = \{[A] \in \mathrm{Br}(K) \mid \exists n \ge 1,\ A \otimes_K L \cong M_n(L)\}$$
+        </div>
+        <p>を拡大 $L/K$ の<strong>相対Brauer群 (relative Brauer group)</strong> という。</p>
+      </div>
+
+      <p>任意の中心的単純多元環 $A$ を $K$ の代数閉包 $\overline{K}$ に係数拡大すると、 $\overline{K}$ 上の有限次元斜体は $\overline{K}$ 自身しかないため（任意の元は $\overline{K}$ 上代数的であり最小多項式は1次式となるため）、定理 2.3 より $A \otimes_K \overline{K} \cong M_n(\overline{K})$ となる。したがって任意の中心的単純多元環 $A$ の $K$ 次元は必ず平方数 $\dim_K A = n^2$ である。この $n = \sqrt{\dim_K A}$ を $A$ の<strong>次数 (degree)</strong> という。</p>
+
+      <h3>2.3 二重中心化定理と分離分解体の存在</h3>
+      <p>任意の中心的単純多元環が有限次Galois拡大で分解されることを完全にself-containedに証明するため、まず構造論の基本定理である二重中心化定理を証明する。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 2.7（二重中心化定理 / Double Centralizer Theorem）</span>
+        <p>$A$ を体 $K$ 上の中心的単純多元環とし、 $B \subset A$ を $K$ を含む単純部分多元環とする。 $A$ における $B$ の中心化群を $Z_A(B) := \{a \in A \mid \forall b \in B,\ ab = ba\}$ とおく。このとき以下が成り立つ。</p>
+        <ol>
+          <li>$Z_A(B)$ は $K$ 上の単純多元環である。</li>
+          <li>$\dim_K B \cdot \dim_K Z_A(B) = \dim_K A$ が成り立つ。</li>
+          <li>$Z_A(Z_A(B)) = B$ が成り立つ。</li>
+          <li>特に $B$ が可換体（すなわち $K \subset B \subset A$ なる部分体）であるとき、 $Z_A(B)$ は $B$ 上の中心的単純多元環であり、 $B$ が $A$ の極大可換部分体であることと $Z_A(B) = B$ であることは同値である。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$C := A \otimes_K B^{\mathrm{op}}$ とおく。 $B$ は単純多元環（中心 $F := Z(B)$ は $K$ の有限次拡大体）であるから、 $B^{\mathrm{op}}$ も単純多元環である。命題 2.4 (2) の証明と同じ最小項数論法（ $A$ が中心的単純であることのみを使う）により、 $C = A \otimes_K B^{\mathrm{op}}$ は単純多元環である（実際、零でない両側イデアル $I \subset A \otimes_K B^{\mathrm{op}}$ は $1 \otimes b$ の形の元を含み、 $B^{\mathrm{op}}$ の単純性より $1 \otimes 1 \in I$ となる）。</p>
+        <p>定理 2.3（Wedderburnの定理は単純環一般に成り立つ）より、単純環 $C$ に対して $C \cong M_m(\Delta)$ （ $\Delta$ は有限次元斜体）と書け、単純左 $C$ 加群は同型を除いて唯一である。いま $A$ は左乗法と右乗法 $(a \otimes b) \cdot x := a x b$ によって左 $C$ 加群となる。この $C$ 加群としての自己準同型環 $\mathrm{End}_C(A)$ を計算する。</p>
+        <p>$f \in \mathrm{End}_C(A)$ はすべての $a \in A$ 、 $b \in B$ 、 $x \in A$ に対して $f(a x b) = a f(x) b$ を満たす $K$ 線形写像である。 $x = 1, b = 1$ とおけば $f(a) = a f(1)$ であり、 $c := f(1) \in A$ とおくと、任意の $b \in B$ に対して $b c = f(b) = f(1 \cdot 1 \cdot b) = f(1) b = c b$ なので $c \in Z_A(B)$ である。逆に任意の $c \in Z_A(B)$ に対し右乗法 $x \mapsto x c$ は $\mathrm{End}_C(A)$ の元を与えるから、環の同型</p>
+        <div class="math-display">
+          $$\mathrm{End}_C(A) \cong Z_A(B)^{\mathrm{op}}$$
+        </div>
+        <p>が成り立つ。</p>
+        <p>単純環 $C \cong M_m(\Delta)$ 上の有限次元左加群 $A$ は単純加群 $S = \Delta^m$ の直和 $A \cong S^{\oplus k}$ に分解するため、定理 2.3 より $\mathrm{End}_C(A) \cong M_k(\Delta^{\mathrm{op}})$ である。よって $Z_A(B) \cong M_k(\Delta)$ は単純環であり、 (1) が示された。</p>
+        <p>次に次元を計算する。 $\dim_K S = m \dim_K \Delta$ 、 $\dim_K C = m^2 \dim_K \Delta$ 、 $\dim_K A = k \dim_K S = k m \dim_K \Delta$ 、および $\dim_K Z_A(B) = k^2 \dim_K \Delta$ である。したがって</p>
+        <div class="math-display">
+          $$\dim_K C \cdot \dim_K Z_A(B) = (m^2 \dim_K \Delta)(k^2 \dim_K \Delta) = (k m \dim_K \Delta)^2 = (\dim_K A)^2$$
+        </div>
+        <p>となる。一方 $\dim_K C = \dim_K A \cdot \dim_K B$ であるから、両辺を $\dim_K A$ で割って $\dim_K B \cdot \dim_K Z_A(B) = \dim_K A$ を得、 (2) が示された。</p>
+        <p>(3) については、 (1) より $Z_A(B)$ も $A$ の単純部分多元環であるから、 (2) を $Z_A(B)$ に適用すると $\dim_K Z_A(B) \cdot \dim_K Z_A(Z_A(B)) = \dim_K A = \dim_K Z_A(B) \cdot \dim_K B$ を得る。よって $\dim_K Z_A(Z_A(B)) = \dim_K B$ である。明らかな包含関係 $B \subset Z_A(Z_A(B))$ と次元比較から $Z_A(Z_A(B)) = B$ が従う。</p>
+        <p>(4) $B$ が可換体ならば、 $Z(Z_A(B)) = Z_A(B) \cap Z_A(Z_A(B)) = Z_A(B) \cap B = B$ である。よって $Z_A(B)$ は $B$ 上の中心的単純多元環である。後半は、 $B \subsetneq B'$ なる可換部分体 $B' \subset A$ の存在が $Z_A(B) \neq B$ と同値であることから明らかである。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 2.8（分離分解体の存在）</span>
+        <p>$K$ 上の任意の中心的単純多元環 $A$ に対し、 $A$ を分解する有限次Galois拡大 $L/K$ が存在する。したがって、</p>
+        <div class="math-display">
+          $$\mathrm{Br}(K) = \bigcup_{L/K \text{ 有限次Galois}} \mathrm{Br}(L/K)$$
+        </div>
+        <p>が成り立つ（合併は固定された分離閉包 $K^{\mathrm{sep}}$ 内のすべての有限次Galois拡大 $L/K$ にわたる）。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>定理 2.3 より $A \cong M_r(D)$ （ $D$ は $K$ 上の中心的斜体、 $\dim_K D = d^2$ ）と書ける。有限次分離拡大 $E/K$ が $D$ を分解すれば、 $E/K$ の $K^{\mathrm{sep}}$ におけるGalois閉包 $L$ は有限次Galois拡大であり、 $A \otimes_K L \cong M_r(D \otimes_K E \otimes_E L) \cong M_{rd}(L)$ となって $L$ は $A$ を分解する。したがって、 $D$ を分解する有限次分離拡大 $E/K$ の存在を示せば十分である。</p>
+
+        <p><strong>第一段階：極大可換部分体による分解。</strong> $E \subset D$ を $D$ の極大可換部分体とする。定理 2.7 (2), (4) より $Z_D(E) = E$ かつ $[E : K]^2 = \dim_K E \cdot \dim_K Z_D(E) = \dim_K D = d^2$ 、すなわち $[E : K] = d$ である。 $D$ を右 $E$ 乗法により $d$ 次元 $E$ ベクトル空間とみなし、 $E$ 多元環準同型</p>
+        <div class="math-display">
+          $$\psi : D \otimes_K E \longrightarrow \mathrm{End}_E(D) \cong M_d(E), \qquad x \otimes e \longmapsto (y \mapsto x y e)$$
+        </div>
+        <p>を考える。命題 2.4 (1) より $D \otimes_K E$ は単純環であり $\psi(1 \otimes 1) = \mathrm{id}_D \neq 0$ なので $\psi$ は単射である。両辺の $E$ 次元はともに $\dim_K D = d^2$ であるから $\psi$ は同型である。すなわち、<strong>$D$ の任意の極大可換部分体 $E$ は $D$ を分解する</strong>。</p>
+
+        <p><strong>第二段階：分離的な極大可換部分体の存在（Noether–Kötheの補題）。</strong> $D$ の部分体 $E \subset D$ で $E/K$ が分離拡大であるものの中で拡大次数 $[E : K]$ が最大のものを1つ選ぶ（ $K \subset D$ なので存在する）。 $D' := Z_D(E)$ とおく。定理 2.7 (4) より $D'$ は $E$ 上の中心的斜体（すなわち $Z(D') = E$ ）である。 $D' = E$ すなわち $E$ が $D$ の極大可換部分体であることを背理法で示す。</p>
+        <p>もし $D' \neq E$ であると仮定する。任意の $u \in D' \smallsetminus E$ に対し、拡大 $E(u)/E$ は純非分離拡大でなければならない（もし $E(u)/E$ が非自明な分離部分拡大 $F/E$ を含めば、分離拡大の推移性より $F/K$ も分離拡大となり、 $[F : K] > [E : K]$ が $[E : K]$ の最大性に矛盾する）。特に $\mathrm{char}(K) = p > 0$ である。</p>
+        <p>そこで $x \in D' \smallsetminus E$ をとると $x^{p^m} \in E$ となる最小の整数 $m \ge 1$ が存在する。 $x$ を $x^{p^{m-1}}$ に置き換えることで、最初から $x \in D' \smallsetminus E$ かつ $x^p \in E$ であるとしてよい。 $D'$ 上の $E$ 線形写像 $\delta : D' \to D'$ を内部微分 $\delta(y) := xy - yx$ で定義する。 $x \notin E = Z(D')$ より $\delta \neq 0$ である。一方、二項定理と $\mathrm{char}(E) = p$ および $x^p \in E = Z(D')$ より、任意の $y \in D'$ に対して</p>
+        <div class="math-display">
+          $$\delta^p(y) = \sum_{k=0}^p (-1)^k \binom{p}{k} x^{p-k} y x^k = x^p y - y x^p = 0$$
+        </div>
+        <p>が成り立つ。</p>
+        <p>$\delta(z) \neq 0$ を満たす $z \in D'$ をとり、 $\delta^r(z) \neq 0$ かつ $\delta^{r+1}(z) = 0$ となる最大の整数 $r \ge 1$ をとる。 $y := \delta^{r-1}(z) \in D'$ 、 $c := \delta^r(z) \in D' \smallsetminus \{0\}$ とおけば、 $\delta(y) = c \neq 0$ かつ $\delta(c) = 0$ （すなわち $xc = cx$ ）である。ここで $u := x c^{-1} y \in D'$ とおく。 $x c^{-1} = c^{-1} x$ より</p>
+        <div class="math-display">
+          $$x u - u x = x (x c^{-1} y) - (x c^{-1} y) x = x c^{-1} (xy - yx) = x c^{-1} c = x$$
+        </div>
+        <p>すなわち $x^{-1} u x = u - 1$ を得る。特に $u \notin E$ であり、任意の整数 $k$ に対して $x^{-k} u x^k = u - k$ である。よって $u$ の $E$ 上の最小多項式 $m_u(X) \in E[X]$ は $u$ と $u - 1$ の両方を根に持つ（実際 $m_u(u - 1) = m_u(x^{-1} u x) = x^{-1} m_u(u) x = 0$ ）。ところが $u$ は $E$ 上純非分離的であるから $m_u(X) = X^{p^s} - a$ （ $a \in E$ ）の形をしており、 $u^{p^s} = (u - 1)^{p^s} = u^{p^s} - 1$ となって $0 = -1$ の矛盾を得る。</p>
+        <p>以上より $Z_D(E) = D' = E$ であり、 $E$ は $D$ の分離的な極大可換部分体である。第一段階と合わせて $E$ は $D$ を分解する有限次分離拡大である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-galois-descent">
+      <h2>3. Galois降下による $\mathrm{CSA}_n(L/K) \cong H^1(G, \mathrm{PGL}_n(L))$ の構成</h2>
+      <p>以下、第 3 節から第 5 節の半ばまで、 $L/K$ を有限次Galois拡大とし、 $G := \mathrm{Gal}(L/K)$ とおく。 $L$ によって分解される次数 $n$ （すなわち $K$ 次元 $n^2$ ）の $K$ 上の中心的単純多元環の同型類全体の集合を $\mathrm{CSA}_n(L/K)$ と書く。</p>
+
+      <h3>3.1 $M_n(L)$ の自己同型群（Skolem–Noetherの定理の特殊形）</h3>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 3.1（行列環の自己同型群）</span>
+        <p>任意の体 $L$ と正の整数 $n$ に対し、 $M_n(L)$ の任意の $L$ 多元環自己同型 $\varphi \in \mathrm{Aut}_L(M_n(L))$ は内部自己同型である。すなわち、ある $P \in \mathrm{GL}_n(L)$ が存在して、すべての $X \in M_n(L)$ に対して $\varphi(X) = P X P^{-1}$ が成り立つ。これにより群の同型</p>
+        <div class="math-display">
+          $$\mathrm{Aut}_L(M_n(L)) \cong \mathrm{PGL}_n(L) := \mathrm{GL}_n(L) / L^\times$$
+        </div>
+        <p>が得られる（ここで $L^\times$ はスカラー行列 $L^\times \cdot I_n$ と同一視する）。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>列ベクトル空間 $V := L^n$ に、通常の行列積による左 $M_n(L)$ 加群構造と、 $\varphi$ でひねった左 $M_n(L)$ 加群構造 $X \cdot_\varphi v := \varphi(X) v$ （これを $V_\varphi$ と書く）の2つを考える。 $V$ と $V_\varphi$ はともに単純左 $M_n(L)$ 加群である。定理 2.3 より単純左 $M_n(L)$ 加群は同型を除いて唯一であるから、左 $M_n(L)$ 加群の同型 $P : V \xrightarrow{\sim} V_\varphi$ が存在する。特に $P$ は $L$ 線形同型（すなわち $P \in \mathrm{GL}_n(L)$ ）であり、すべての $X \in M_n(L)$ と $v \in V$ に対して $P(Xv) = X \cdot_\varphi P(v) = \varphi(X) P(v)$ を満たす。よって $\varphi(X) = P X P^{-1}$ である。</p>
+        <p>したがって群準同型 $\mathrm{GL}_n(L) \to \mathrm{Aut}_L(M_n(L))$ （ $P \mapsto (X \mapsto P X P^{-1})$ ）は全射であり、その核は $M_n(L)$ の中心の可逆元全体 $Z(M_n(L))^\times = L^\times \cdot I_n$ であるから、準同型定理より $\mathrm{PGL}_n(L) \cong \mathrm{Aut}_L(M_n(L))$ を得る。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>3.2 非可換1次コホモロジーとSpeiserの補題</h3>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 3.2（非可換1次コホモロジー集合）</span>
+        <p>$G$ を有限群、 $\Gamma$ を左 $G$ 群（すなわち $G$ が群自己同型として左から作用する群。作用を $(\sigma, \gamma) \mapsto \sigma(\gamma)$ と書く）とする。</p>
+        <ol>
+          <li>写像 $a : G \to \Gamma$ （ $\sigma \mapsto a_\sigma$ ）がすべての $\sigma, \tau \in G$ に対して<strong>1コサイクル条件 (1-cocycle condition)</strong>
+            <div class="math-display">
+              $$a_{\sigma\tau} = a_\sigma \cdot \sigma(a_\tau)$$
+            </div>
+            を満たすとき、 $a = (a_\sigma)$ を $G$ の $\Gamma$ 値<strong>1コサイクル (1-cocycle)</strong> といい、その全体を $Z^1(G, \Gamma)$ と書く。
+          </li>
+          <li>2つの1コサイクル $a, a' \in Z^1(G, \Gamma)$ に対し、ある $b \in \Gamma$ が存在してすべての $\sigma \in G$ に対して
+            <div class="math-display">
+              $$a'_\sigma = b \cdot a_\sigma \cdot \sigma(b)^{-1}$$
+            </div>
+            が成り立つとき、 $a$ と $a'$ は<strong>コホモローグ (cohomologous)</strong> であるという。これは $Z^1(G, \Gamma)$ 上の同値関係である。
+          </li>
+          <li>この同値関係による商集合を $H^1(G, \Gamma)$ と書き、自明な1コサイクル $a_\sigma \equiv 1$ の類を基点 $1$ とする基点付き集合 (pointed set) とみなす（ $\Gamma$ が可換群のときは点ごとの積によりアーベル群となる）。</li>
+        </ol>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 3.3（Speiserの補題 / 線形Galois降下）</span>
+        <p>$L/K$ を有限次Galois拡大、 $G = \mathrm{Gal}(L/K)$ とする。 $V$ を $L$ ベクトル空間とし、 $G$ が $V$ に<strong>半線形 (semilinear)</strong> に左から作用しているとする。すなわち、任意の $\sigma \in G$ 、 $\lambda \in L$ 、 $v, w \in V$ に対して</p>
+        <div class="math-display">
+          $$\sigma(v + w) = \sigma(v) + \sigma(w), \qquad \sigma(\lambda v) = \sigma(\lambda) \sigma(v)$$
+        </div>
+        <p>が成り立つとする。不変部分 $K$ ベクトル空間 $V^G := \{v \in V \mid \forall \sigma \in G,\ \sigma(v) = v\}$ に対し、自然な $L$ 線形写像</p>
+        <div class="math-display">
+          $$\alpha : V^G \otimes_K L \longrightarrow V, \qquad v \otimes \lambda \longmapsto \lambda v$$
+        </div>
+        <p>は $L$ ベクトル空間の同型である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>単射性の証明。</strong> $V^G$ の $K$ 上線形独立な有限個の元 $v_1, \dots, v_m \in V^G$ が $V$ において $L$ 上線形独立であることを背理法で示す。もし $L$ 上線形従属な組が存在すれば、個数 $m \ge 1$ が最小のものをとり、 $\sum_{i=1}^m \lambda_i v_i = 0$ （ $\lambda_i \in L$ 、すべては $0$ でない）とする。 $m$ の最小性よりすべての $\lambda_i \neq 0$ であり、 $\lambda_1$ で割って $\lambda_1 = 1$ としてよい。</p>
+        <p>任意の $\sigma \in G$ を作用させると $v_i \in V^G$ より $\sum_{i=1}^m \sigma(\lambda_i) v_i = 0$ を得る。元の関係式との差をとると $\lambda_1 - \sigma(\lambda_1) = 0$ が消えて $\sum_{i=2}^m (\lambda_i - \sigma(\lambda_i)) v_i = 0$ となる。 $m$ の最小性よりすべての $i = 2, \dots, m$ とすべての $\sigma \in G$ に対して $\sigma(\lambda_i) = \lambda_i$ 、すなわち $\lambda_i \in L^G = K$ となり、 $v_1, \dots, v_m$ の $K$ 線形独立性に矛盾する。よって $\alpha$ は単射である。</p>
+
+        <p><strong>全射性の証明。</strong> 任意の $v \in V$ をとる。 $G = \{\sigma_1, \dots, \sigma_d\}$ （ $d = [L : K]$ ）とおく。任意の $x \in L$ に対し、 $w(x) := \sum_{\sigma \in G} \sigma(x v) = \sum_{\sigma \in G} \sigma(x) \sigma(v)$ は任意の $\tau \in G$ に対して $\tau(w(x)) = w(x)$ を満たすため $w(x) \in V^G$ である。</p>
+        <p>$L$ の $K$ 基底 $\{e_1, \dots, e_d\}$ をとる。行列 $M := (\sigma_i(e_j))_{1 \le i, j \le d} \in M_d(L)$ が正則であることを確認する。もし $c_1, \dots, c_d \in L$ がすべての $j$ で $\sum_{i=1}^d c_i \sigma_i(e_j) = 0$ を満たせば、 $K$ 線形性よりすべての $x \in L$ で $\sum_{i=1}^d c_i \sigma_i(x) = 0$ となり、Dedekindの補題（相異なる体準同型の線形独立性）より $c_1 = \dots = c_d = 0$ である。よって $M$ は正則である。</p>
+        <p>したがって連立一次方程式 $\sum_{j=1}^d \sigma_i(e_j) \mu_j = \delta_{\sigma_i, \mathrm{id}_L}$ （ $i = 1, \dots, d$ ）は解 $(\mu_1, \dots, \mu_d) \in L^d$ を持ち、</p>
+        <div class="math-display">
+          $$\sum_{j=1}^d \mu_j w(e_j) = \sum_{i=1}^d \left( \sum_{j=1}^d \sigma_i(e_j) \mu_j \right) \sigma_i(v) = \mathrm{id}_L(v) = v$$
+        </div>
+        <p>となる。 $w(e_j) \in V^G$ より $v \in \mathrm{Im}(\alpha)$ であるから、 $\alpha$ は同型である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>3.3 $\mathrm{CSA}_n(L/K) \xrightarrow{\sim} H^1(G, \mathrm{PGL}_n(L))$ の構成と全単射性</h3>
+      <p>行列環 $M_n(L)$ には $G = \mathrm{Gal}(L/K)$ が各成分への作用 $\sigma((x_{ij})) := (\sigma(x_{ij}))$ によって半線形に作用しており、これにより $\mathrm{GL}_n(L)$ および $\mathrm{PGL}_n(L)$ は左 $G$ 群となる。</p>
+      <p>$[A] \in \mathrm{CSA}_n(L/K)$ をとり、 $L$ 多元環同型 $\phi : A \otimes_K L \xrightarrow{\sim} M_n(L)$ を1つ固定する。任意の $\sigma \in G$ に対し、</p>
+      <div class="math-display">
+        $$a_\sigma := \phi \circ (\mathrm{id}_A \otimes \sigma) \circ \phi^{-1} \circ \sigma^{-1} \in \mathrm{Aut}_L(M_n(L)) \cong \mathrm{PGL}_n(L)$$
+      </div>
+      <p>と定義する。 $M_n(L)$ 上の $G$ の共役作用は $\sigma(a_\tau) = \sigma \circ a_\tau \circ \sigma^{-1}$ で与えられるため、</p>
+      <div class="math-display">
+        $$a_\sigma \circ \sigma(a_\tau) = \left(\phi \circ (\mathrm{id}_A \otimes \sigma) \circ \phi^{-1} \circ \sigma^{-1}\right) \circ \sigma \circ \left(\phi \circ (\mathrm{id}_A \otimes \tau) \circ \phi^{-1} \circ \tau^{-1}\right) \circ \sigma^{-1} = \phi \circ (\mathrm{id}_A \otimes \sigma\tau) \circ \phi^{-1} \circ (\sigma\tau)^{-1} = a_{\sigma\tau}$$
+      </div>
+      <p>となり、 $(a_\sigma) \in Z^1(G, \mathrm{PGL}_n(L))$ である。また同型 $\phi$ を別の $\phi'$ に変えると、 $b := \phi' \circ \phi^{-1} \in \mathrm{PGL}_n(L)$ に対して $a'_\sigma = b \cdot a_\sigma \cdot \sigma(b)^{-1}$ とコホモローグになるため、コホモロジー類 $[(a_\sigma)] \in H^1(G, \mathrm{PGL}_n(L))$ は $[A]$ のみに依存してwell-definedである。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 3.4（中心的単純多元環のGalois降下）</span>
+        <p>写像</p>
+        <div class="math-display">
+          $$\Psi_n : \mathrm{CSA}_n(L/K) \longrightarrow H^1(G, \mathrm{PGL}_n(L)), \qquad [A] \longmapsto [(a_\sigma)]$$
+        </div>
+        <p>は基点付き集合の全単射である（ただし $\mathrm{CSA}_n(L/K)$ の基点は $[M_n(K)]$ ）。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>単射性の証明。</strong> $\Psi_n([A]) = \Psi_n([B])$ とし、分解同型 $\phi_A : A \otimes_K L \xrightarrow{\sim} M_n(L)$ 、 $\phi_B : B \otimes_K L \xrightarrow{\sim} M_n(L)$ の1コサイクルを $a_\sigma, b_\sigma$ とする。 $b_\sigma = p \circ a_\sigma \circ \sigma(p)^{-1}$ （ $p \in \mathrm{Aut}_L(M_n(L))$ ）であるから、 $\phi_A$ を $p \circ \phi_A$ に置き換えて $a_\sigma = b_\sigma$ としてよい。このとき $f := \phi_B^{-1} \circ \phi_A : A \otimes_K L \xrightarrow{\sim} B \otimes_K L$ はすべての $\sigma \in G$ に対し</p>
+        <div class="math-display">
+          $$(\mathrm{id}_B \otimes \sigma) \circ f = \phi_B^{-1} \circ b_\sigma \circ \sigma \circ \phi_A = \phi_B^{-1} \circ a_\sigma \circ \sigma \circ \phi_A = f \circ (\mathrm{id}_A \otimes \sigma)$$
+        </div>
+        <p>を満たすため、 $G$ 不変部分 $A = (A \otimes_K L)^G$ と $B = (B \otimes_K L)^G$ の間の $K$ 多元環同型 $A \xrightarrow{\sim} B$ を誘導する。よって $[A] = [B]$ である。</p>
+
+        <p><strong>全射性の証明。</strong> 任意の $(a_\sigma) \in Z^1(G, \mathrm{PGL}_n(L))$ に対し、 $M_n(L)$ 上のねじり作用を $\sigma * X := a_\sigma(\sigma(X))$ で定義する。1コサイクル条件より $\sigma * (\tau * X) = (a_\sigma \circ \sigma(a_\tau))((\sigma\tau)(X)) = (\sigma\tau) * X$ であり、これは半線形な環自己同型による左 $G$ 作用を定める。不変部分環 $A := \{X \in M_n(L) \mid \forall \sigma \in G,\ \sigma * X = X\}$ をとると、補題 3.3（Speiserの補題）より自然な写像 $\phi : A \otimes_K L \xrightarrow{\sim} M_n(L)$ （ $X \otimes \lambda \mapsto \lambda X$ ）は $L$ 多元環の同型である。</p>
+        <p>命題 2.4 (1) より $A$ は $K$ 上の中心的単純多元環（ $[A] \in \mathrm{CSA}_n(L/K)$ ）であり、任意の $X \in A, \lambda \in L, \sigma \in G$ に対して</p>
+        <div class="math-display">
+          $$\phi((\mathrm{id}_A \otimes \sigma)(X \otimes \lambda)) = \sigma(\lambda) X = \sigma(\lambda) a_\sigma(\sigma(X)) = (a_\sigma \circ \sigma \circ \phi)(X \otimes \lambda)$$
+        </div>
+        <p>を満たすため $\Psi_n([A]) = [(a_\sigma)]$ となる。ゆえに $\Psi_n$ は全射である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-injection">
+      <h2>4. 単射群準同型 $\mathrm{Br}(L/K) \hookrightarrow H^2(G, L^\times)$ の構成</h2>
+
+      <h3>4.1 2次群コホモロジーと一般化されたHilbertの定理90</h3>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 4.1（2次群コホモロジー群）</span>
+        <p>$G$ を有限群、 $M$ を乗法的に書かれた左 $G$ 加群（すなわち $G$ が群自己同型として左から作用するアーベル群）とする。</p>
+        <ol>
+          <li>写像 $c : G \times G \to M$ がすべての $\sigma, \tau, \rho \in G$ に対して<strong>2コサイクル条件 (2-cocycle condition)</strong>
+            <div class="math-display">
+              $$\sigma(c(\tau, \rho)) \cdot c(\sigma, \tau\rho) = c(\sigma, \tau) \cdot c(\sigma\tau, \rho)$$
+            </div>
+            を満たすとき、 $c$ を<strong>2コサイクル (2-cocycle)</strong> といい、そのなすアーベル群を $Z^2(G, M)$ と書く。
+          </li>
+          <li>ある写像 $b : G \to M$ を用いて
+            <div class="math-display">
+              $$c(\sigma, \tau) = b(\sigma) \cdot \sigma(b(\tau)) \cdot b(\sigma\tau)^{-1}$$
+            </div>
+            と表される2コサイクルを<strong>2コバウンダリ (2-coboundary)</strong> といい、そのなす部分群を $B^2(G, M)$ と書く。
+          </li>
+          <li>商群 $H^2(G, M) := Z^2(G, M) / B^2(G, M)$ を $G$ の $M$ 係数<strong>2次コホモロジー群 (second cohomology group)</strong> という。</li>
+        </ol>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 4.2（一般化されたHilbertの定理90）</span>
+        <p>任意の有限次Galois拡大 $L/K$ （ $G = \mathrm{Gal}(L/K)$ ）と任意の正の整数 $n \ge 1$ に対し、</p>
+        <div class="math-display">
+          $$H^1(G, \mathrm{GL}_n(L)) = \{1\}$$
+        </div>
+        <p>が成り立つ。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>任意の1コサイクル $(A_\sigma) \in Z^1(G, \mathrm{GL}_n(L))$ をとる。列ベクトル空間 $V := L^n$ に半線形な左 $G$ 作用を $\sigma * v := A_\sigma \sigma(v)$ で定める。補題 3.3（Speiserの補題）より $V^G \otimes_K L \xrightarrow{\sim} L^n$ なので $\dim_K V^G = n$ である。 $V^G$ の $K$ 基底 $\{v_1, \dots, v_n\}$ を列に並べた行列 $P := (v_1 \ \cdots \ v_n)$ は $L^n$ の $L$ 基底でもあるから $P \in \mathrm{GL}_n(L)$ であり、各列が $A_\sigma \sigma(v_j) = v_j$ を満たすことから $A_\sigma \sigma(P) = P$ 、すなわち $A_\sigma = P \cdot 1 \cdot \sigma(P)^{-1}$ を得る。よって $[(A_\sigma)] = 1$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>4.2 連結写像 $\delta_n$ と単射準同型 $\delta : \mathrm{Br}(L/K) \hookrightarrow H^2(G, L^\times)$</h3>
+      <p>$G$ 群の短完全列</p>
+      <div class="math-display">
+        $$1 \longrightarrow L^\times \longrightarrow \mathrm{GL}_n(L) \stackrel{\pi}{\longrightarrow} \mathrm{PGL}_n(L) \longrightarrow 1$$
+      </div>
+      <p>において $L^\times$ は $\mathrm{GL}_n(L)$ の中心に含まれる。任意の $(a_\sigma) \in Z^1(G, \mathrm{PGL}_n(L))$ に対し、リフト $A_\sigma \in \mathrm{GL}_n(L)$ （ $\pi(A_\sigma) = a_\sigma$ ）を選ぶと、 $a_\sigma \sigma(a_\tau) = a_{\sigma\tau}$ よりスカラー $c(\sigma, \tau) \in L^\times$ が一意に存在して</p>
+      <div class="math-display">
+        $$A_\sigma \sigma(A_\tau) = c(\sigma, \tau) A_{\sigma\tau}$$
+      </div>
+      <p>となる。結合律 $(A_\sigma \sigma(A_\tau)) (\sigma\tau)(A_\rho) = A_\sigma \sigma(A_\tau \tau(A_\rho))$ を比較すると、</p>
+      <div class="math-display">
+        $$c(\sigma, \tau) c(\sigma\tau, \rho) A_{\sigma\tau\rho} = \sigma(c(\tau, \rho)) c(\sigma, \tau\rho) A_{\sigma\tau\rho}$$
+      </div>
+      <p>となり、 $A_{\sigma\tau\rho}$ が正則なので $c \in Z^2(G, L^\times)$ である。またコホモローグな別の1コサイクル $a'_\sigma = \pi(B) a_\sigma \sigma(\pi(B))^{-1}$ のリフト $A'_\sigma = \lambda_\sigma B A_\sigma \sigma(B)^{-1}$ （ $\lambda_\sigma \in L^\times$ ）をとれば、対応する2コサイクルは $c'(\sigma, \tau) = (\lambda_\sigma \sigma(\lambda_\tau) \lambda_{\sigma\tau}^{-1}) c(\sigma, \tau)$ となり $[c'] = [c]$ である。よって連結写像</p>
+      <div class="math-display">
+        $$\delta_n : H^1(G, \mathrm{PGL}_n(L)) \longrightarrow H^2(G, L^\times), \qquad [(a_\sigma)] \longmapsto [c]$$
+      </div>
+      <p>がwell-definedに定まる。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 4.3（相対Brauer群から2次コホモロジーへの単射群準同型）</span>
+        <p>合成写像 $\delta_n \circ \Psi_n : \mathrm{CSA}_n(L/K) \to H^2(G, L^\times)$ はすべての $n \ge 1$ にわたりBrauer同値と整合し、単射群準同型</p>
+        <div class="math-display">
+          $$\delta : \mathrm{Br}(L/K) \hookrightarrow H^2(G, L^\times), \qquad [A] \longmapsto (\delta_n \circ \Psi_n)([A])$$
+        </div>
+        <p>を誘導する。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>第一段階：テンソル積とBrauer同値との整合性。</strong> $[A] \in \mathrm{CSA}_n(L/K)$ と $[B] \in \mathrm{CSA}_m(L/K)$ のリフトをそれぞれ $A_\sigma \in \mathrm{GL}_n(L)$ 、 $B_\sigma \in \mathrm{GL}_m(L)$ 、2コサイクルを $c_A, c_B$ とする。 $(A \otimes_K B) \otimes_K L \cong M_n(L) \otimes_L M_m(L) \cong M_{nm}(L)$ （Kronecker積）を用いると、 $A \otimes_K B$ のリフトは $A_\sigma \otimes B_\sigma \in \mathrm{GL}_{nm}(L)$ で与えられ、</p>
+        <div class="math-display">
+          $$(A_\sigma \otimes B_\sigma) \sigma(A_\tau \otimes B_\tau) = c_A(\sigma, \tau) c_B(\sigma, \tau) (A_{\sigma\tau} \otimes B_{\sigma\tau})$$
+        </div>
+        <p>より $(\delta_{nm} \circ \Psi_{nm})([A \otimes_K B]) = (\delta_n \circ \Psi_n)([A]) \cdot (\delta_m \circ \Psi_m)([B])$ である。行列環 $M_m(K)$ は自明なリフト $I_m$ を持つため $(\delta_m \circ \Psi_m)([M_m(K)]) = 1$ であり、ゆえに $(\delta_{nm} \circ \Psi_{nm})([M_m(A)]) = (\delta_n \circ \Psi_n)([A])$ となる。したがって群準同型 $\delta : \mathrm{Br}(L/K) \to H^2(G, L^\times)$ がwell-definedに定まる。</p>
+
+        <p><strong>第二段階：単射性の証明。</strong> $[A] \in \ker(\delta)$ （ $A \in \mathrm{CSA}_n(L/K)$ ）とする。 $A$ の1コサイクル $(a_\sigma)$ のリフト $A_\sigma$ の2コサイクル $c(\sigma, \tau)$ が2コバウンダリ $\lambda_\sigma \sigma(\lambda_\tau) \lambda_{\sigma\tau}^{-1}$ （ $\lambda_\sigma \in L^\times$ ）であるから、 $\tilde{A}_\sigma := \lambda_\sigma^{-1} A_\sigma \in \mathrm{GL}_n(L)$ とおけば $\tilde{A}_\sigma \sigma(\tilde{A}_\tau) = \tilde{A}_{\sigma\tau}$ 、すなわち $(\tilde{A}_\sigma) \in Z^1(G, \mathrm{GL}_n(L))$ となる。定理 4.2（一般化されたHilbertの定理90）より $P \in \mathrm{GL}_n(L)$ が存在して $\tilde{A}_\sigma = P \sigma(P)^{-1}$ である。 $\mathrm{PGL}_n(L)$ に射影して $a_\sigma = \pi(P) \sigma(\pi(P))^{-1}$ 、すなわち $\Psi_n([A]) = 1 = \Psi_n([M_n(K)])$ を得る。定理 3.4 より $A \cong M_n(K)$ 、ゆえに $\mathrm{Br}(L/K)$ で $[A] = 1$ であり、 $\delta$ は単射である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-crossed-product">
+      <h2>5. 接合積と巡回多元環による全射性の証明および絶対Galois群への移行</h2>
+
+      <h3>5.1 接合積多元環 $(L/K, G, c)$ と相対Brauer群の同型</h3>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 5.1（接合積多元環）</span>
+        <p>$L/K$ を次数 $n = [L : K]$ の有限次Galois拡大、 $G = \mathrm{Gal}(L/K)$ とし、 $c \in Z^2(G, L^\times)$ を2コサイクルとする。基底 $\{e_\sigma\}_{\sigma \in G}$ を持つ $n$ 次元左 $L$ ベクトル空間</p>
+        <div class="math-display">
+          $$A = (L/K, G, c) := \bigoplus_{\sigma \in G} L e_\sigma$$
+        </div>
+        <p>に、積を $(x e_\sigma)(y e_\tau) := x \sigma(y) c(\sigma, \tau) e_{\sigma\tau}$ （すなわち $e_\sigma y = \sigma(y) e_\sigma$ かつ $e_\sigma e_\tau = c(\sigma, \tau) e_{\sigma\tau}$ ）および分配律によって定めた $K$ 多元環を、 $c$ に付随する<strong>接合積多元環 (crossed product algebra)</strong> という。</p>
+      </div>
+
+      <p>$c$ の2コサイクル条件 $c(\sigma, \tau) c(\sigma\tau, \rho) = \sigma(c(\tau, \rho)) c(\sigma, \tau\rho)$ は積の結合律 $((x e_\sigma)(y e_\tau))(z e_\rho) = (x e_\sigma)((y e_\tau)(z e_\rho))$ と同値である。また2コサイクル条件に $(1, 1, \rho)$ と $(\sigma, 1, 1)$ を代入すると $c(1, \rho) = c(1, 1)$ および $c(\sigma, 1) = \sigma(c(1, 1))$ が得られるため、 $1_A := c(1, 1)^{-1} e_1$ が $A$ の両側単位元となる。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 5.2（相対Brauer群と2次Galoisコホモロジーの同型）</span>
+        <p>任意の有限次Galois拡大 $L/K$ （ $G = \mathrm{Gal}(L/K)$ ）と任意の2コサイクル $c \in Z^2(G, L^\times)$ に対し、接合積 $A = (L/K, G, c)$ は $L$ で分解する次数 $n = [L : K]$ の $K$ 上の中心的単純多元環であり、命題 4.3 の単射群準同型 $\delta : \mathrm{Br}(L/K) \hookrightarrow H^2(G, L^\times)$ に関して</p>
+        <div class="math-display">
+          $$\delta([A]) = [c]^{-1}$$
+        </div>
+        <p>を満たす。特に、任意の $[c] \in H^2(G, L^\times)$ は $[(L/K, G, c^{-1})]$ の像として得られるから、</p>
+        <div class="math-display">
+          $$\delta : \mathrm{Br}(L/K) \xrightarrow{\ \sim\ } H^2(G, L^\times)$$
+        </div>
+        <p>は群の同型である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>第一段階：分解同型 $\phi : A \otimes_K L \xrightarrow{\sim} \mathrm{End}_L(V)$ の構成。</strong> $V := \mathrm{Map}(G, L)$ （ $n$ 次元 $L$ ベクトル空間）とおき、 $L$ 線形写像 $\phi : A \otimes_K L \to \mathrm{End}_L(V)$ を</p>
+        <div class="math-display">
+          $$(\phi(x e_\sigma \otimes \lambda)(f))(\tau) := \tau(x) \lambda c(\tau, \sigma) f(\tau\sigma) \qquad (x, \lambda \in L,\ f \in V,\ \sigma, \tau \in G)$$
+        </div>
+        <p>で定める。任意の $x, y, \lambda, \mu \in L$ と $\sigma, \rho \in G$ に対し、</p>
+        <div class="math-display">
+          $$(\phi(x e_\sigma \otimes \lambda)(\phi(y e_\rho \otimes \mu)(f)))(\tau) = \tau(x) \lambda c(\tau, \sigma) \cdot (\tau\sigma)(y) \mu c(\tau\sigma, \rho) f(\tau\sigma\rho)$$
+        </div>
+        <p>であり、2コサイクル条件 $c(\tau, \sigma) c(\tau\sigma, \rho) = \tau(c(\sigma, \rho)) c(\tau, \sigma\rho)$ よりこれは $(\phi((x e_\sigma \otimes \lambda)(y e_\rho \otimes \mu))(f))(\tau)$ に等しい。また $c(\tau, 1) = \tau(c(1, 1))$ より $\phi(1_A \otimes 1) = \mathrm{id}_V$ なので、 $\phi$ は $L$ 多元環準同型である。</p>
+        <p>単射性を示すため、 $L$ の $K$ 基底 $\{u_1, \dots, u_n\}$ をとり、 $A \otimes_K L$ の元 $w = \sum_{\sigma \in G} \sum_{j=1}^n (u_j e_\sigma) \otimes \lambda_{\sigma, j}$ （ $\lambda_{\sigma, j} \in L$ ）が $\phi(w) = 0$ を満たすとする。任意の $\tau, \sigma_0 \in G$ に対し、関数 $f \in V$ として $\tau\sigma_0$ で $1$ 、他で $0$ となる関数を代入すると、</p>
+        <div class="math-display">
+          $$0 = (\phi(w)(f))(\tau) = \left( \sum_{j=1}^n \tau(u_j) \lambda_{\sigma_0, j} \right) c(\tau, \sigma_0)$$
+        </div>
+        <p>となる。 $c(\tau, \sigma_0) \neq 0$ であり、補題 3.3 の証明で示した通り行列 $(\tau(u_j))_{\tau \in G, 1 \le j \le n}$ はDedekindの補題より正則であるから、すべての $\sigma_0, j$ で $\lambda_{\sigma_0, j} = 0$ を得る。よって $\phi$ は単射であり、両辺の $L$ 次元はともに $n^2$ なので同型 $\phi : A \otimes_K L \xrightarrow{\sim} \mathrm{End}_L(V) \cong M_n(L)$ を得る。命題 2.4 (1) より $[A] \in \mathrm{CSA}_n(L/K)$ である。</p>
+
+        <p><strong>第二段階：$\delta([A]) = [c]^{-1}$ の直接計算。</strong> $V = \mathrm{Map}(G, L)$ の成分ごとの半線形 $G$ 作用を $(\sigma_V(f))(\tau) := \sigma(f(\tau))$ で定め、各 $\sigma \in G$ に対して $A_\sigma \in \mathrm{GL}_L(V)$ を</p>
+        <div class="math-display">
+          $$(A_\sigma f)(\tau) := c(\sigma, \sigma^{-1}\tau)^{-1} f(\sigma^{-1}\tau)$$
+        </div>
+        <p>と定義し、半線形同型 $S_\sigma := A_\sigma \circ \sigma_V : V \to V$ とおく。任意の生成元 $u = x e_\rho \otimes \lambda \in A \otimes_K L$ に対して、</p>
+        <div class="math-display">
+          $$(\phi((\mathrm{id}_A \otimes \sigma)(u))(S_\sigma f))(\tau) = \tau(x) \sigma(\lambda) c(\tau, \rho) c(\sigma, \sigma^{-1}\tau\rho)^{-1} \sigma(f(\sigma^{-1}\tau\rho))$$
+        </div>
+        <div class="math-display">
+          $$(S_\sigma(\phi(u)(f)))(\tau) = \tau(x) \sigma(\lambda) c(\sigma, \sigma^{-1}\tau)^{-1} \sigma(c(\sigma^{-1}\tau, \rho)) \sigma(f(\sigma^{-1}\tau\rho))$$
+        </div>
+        <p>であり、2コサイクル条件 $\sigma(c(\sigma^{-1}\tau, \rho)) c(\sigma, \sigma^{-1}\tau\rho) = c(\sigma, \sigma^{-1}\tau) c(\tau, \rho)$ より両辺は完全に一致する。ゆえに $A_\sigma$ は $A$ の1コサイクルのリフトである。</p>
+        <p>さらに $S_\sigma S_\rho = A_\sigma \sigma(A_\rho) (\sigma\rho)_V$ を計算すると、</p>
+        <div class="math-display">
+          $$(S_\sigma(S_\rho f))(\tau) = c(\sigma, \sigma^{-1}\tau)^{-1} \sigma(c(\rho, (\sigma\rho)^{-1}\tau))^{-1} (\sigma\rho)(f((\sigma\rho)^{-1}\tau))$$
+        </div>
+        <p>であり、2コサイクル条件 $\sigma(c(\rho, (\sigma\rho)^{-1}\tau)) c(\sigma, \sigma^{-1}\tau) = c(\sigma, \rho) c(\sigma\rho, (\sigma\rho)^{-1}\tau)$ より $S_\sigma S_\rho = c(\sigma, \rho)^{-1} S_{\sigma\rho}$ 、すなわち $A_\sigma \sigma(A_\rho) = c(\sigma, \rho)^{-1} A_{\sigma\rho}$ を得る。ゆえに $\delta([A]) = [c]^{-1}$ であり、 $\delta : \mathrm{Br}(L/K) \xrightarrow{\sim} H^2(G, L^\times)$ は同型である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>5.2 巡回多元環と四元数環（接合積の最重要具体例）</h3>
+      <p>定理 5.2 の最も具体的で扱いやすい特殊ケースが、Galois群 $G = \mathrm{Gal}(L/K)$ が巡回群である場合の<strong>巡回多元環 (cyclic algebra)</strong> である。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 5.3（巡回多元環と四元数環）</span>
+        <ol>
+          <li>$L/K$ を次数 $n$ の巡回Galois拡大とし、 $G = \mathrm{Gal}(L/K) = \langle \sigma \rangle$ と生成元 $\sigma$ を固定する。任意の $a \in K^\times$ に対し、2コサイクル $c_a \in Z^2(G, L^\times)$ を
+            <div class="math-display">
+              $$c_a(\sigma^i, \sigma^j) := \begin{cases} 1 & (i + j < n) \\ a & (i + j \ge n) \end{cases} \qquad (0 \le i, j < n)$$
+            </div>
+            で定めると、対応する接合積多元環 $(L/K, \sigma, a) := (L/K, G, c_a)$ は、 $L$ に1つの元 $e = e_\sigma$ を関係式
+            <div class="math-display">
+              $$e x = \sigma(x) e \quad (\forall x \in L), \qquad e^n = a$$
+            </div>
+            で添加した $n^2$ 次元 $K$ 多元環 $\bigoplus_{i=0}^{n-1} L e^i$ となる。これを<strong>巡回多元環 (cyclic algebra)</strong> という。
+          </li>
+          <li>特に $\mathrm{char}(K) \neq 2$ のとき、 $a, b \in K^\times$ に対し、基底 $1, i, j, k$ と関係式
+            <div class="math-display">
+              $$i^2 = a, \qquad j^2 = b, \qquad ij = -ji = k$$
+            </div>
+            で定まる4次元 $K$ 多元環を<strong>四元数環 (quaternion algebra)</strong> といい、 $(a, b)_K$ と書く。 $a \notin (K^\times)^2$ のとき、 $L = K(\sqrt{a})$ は2次巡回拡大（ $\sigma(\sqrt{a}) = -\sqrt{a}$ ）であり、 $(a, b)_K \cong (K(\sqrt{a})/K, \sigma, b)$ は巡回多元環である（ $a \in (K^\times)^2$ のときは $(a, b)_K \cong M_2(K)$ ）。
+          </li>
+        </ol>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 5.4（巡回多元環の分解判定法）</span>
+        <p>$L/K$ を次数 $n$ の巡回拡大（ $G = \langle \sigma \rangle$ ）、 $a \in K^\times$ とする。巡回多元環 $(L/K, \sigma, a)$ が $K$ 上で分解する（すなわち $(L/K, \sigma, a) \cong M_n(K)$ ）ための必要十分条件は、 $a \in N_{L/K}(L^\times)$ である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>後述の補題 6.1 (2)（有限巡回群の2次コホモロジー $H^2(G, L^\times) \cong K^\times / N_{L/K}(L^\times)$ ）において、 $a \in K^\times$ の剰余類 $a N_{L/K}(L^\times)$ に対応する2コサイクルがちょうど定義 5.3 の $c_a$ である（実際、 $c_a$ が2コバウンダリ $b(\sigma^i) \sigma^i(b(\sigma^j)) b(\sigma^{i+j})^{-1}$ であることと、 $b(1) = 1$ と正規化したとき $x := b(\sigma) \in L^\times$ に対して $N_{L/K}(x) = x \sigma(x) \cdots \sigma^{n-1}(x) = a$ が成り立つことは同値である）。定理 5.2 より $[(L/K, \sigma, a)] = 1 \in \mathrm{Br}(L/K) \iff [c_a] = 1 \in H^2(G, L^\times) \iff a \in N_{L/K}(L^\times)$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.5（四元数環の分解と2次方程式の可解性）</span>
+        <p>$\mathrm{char}(K) \neq 2$ とし、 $a, b \in K^\times$ とする。命題 5.4 より、四元数環 $(a, b)_K$ が $M_2(K)$ に同型であることは、 $b \in N_{K(\sqrt{a})/K}(K(\sqrt{a})^\times)$ であること、すなわち $x, y \in K$ が存在して $x^2 - a y^2 = b$ が解を持つことと同値である（ $a \in (K^\times)^2$ のときは $(a, b)_K \cong M_2(K)$ かつ $x = \frac{b+1}{2}, y = \frac{b-1}{2\sqrt{a}}$ が解を与える）。斉次化すれば、以下はすべて同値である：</p>
+        <div class="math-display">
+          $$(a, b)_K \cong M_2(K) \iff \exists (x, y, z) \in K^3 \smallsetminus \{(0, 0, 0)\},\ a x^2 + b y^2 = z^2$$
+        </div>
+        <p>（実際、 $z \neq 0$ なら $(z/y)^2 - a(x/y)^2 = b$ 、 $z = 0$ なら $b/(-a) = (x/y)^2$ となり $a$ と $-b$ の比が平方数なので $x_1^2 - a y_1^2 = b$ にも解が存在する）。</p>
+      </div>
+
+      <h3>5.3 絶対Galois群への移行（帰納極限）</h3>
+      <p>射有限群 $G_K = \mathrm{Gal}(K^{\mathrm{sep}}/K)$ と連続離散 $G_K$ 加群 $(K^{\mathrm{sep}})^\times$ に対し、連続Galoisコホモロジー群は $K^{\mathrm{sep}}$ 内のすべての有限次Galois拡大 $L/K$ にわたる帰納極限</p>
+      <div class="math-display">
+        $$H^2(G_K, (K^{\mathrm{sep}})^\times) = \varinjlim_{L/K} H^2(\mathrm{Gal}(L/K), L^\times)$$
+      </div>
+      <p>として与えられる（遷移写像はインフレーション写像 $\mathrm{Inf}_{L'/L} : H^2(\mathrm{Gal}(L/K), L^\times) \to H^2(\mathrm{Gal}(L'/K), (L')^\times)$ 、 $[c] \mapsto [(\sigma', \tau') \mapsto c(\pi(\sigma'), \pi(\tau'))]$ 。Neukirch–Schmidt–Wingberg [4, Proposition 1.2.5] 参照）。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 5.6（Brauer群と2次Galoisコホモロジーの同型）</span>
+        <p>任意の体 $K$ に対し、自然な群の同型</p>
+        <div class="math-display">
+          $$\mathrm{Br}(K) \cong H^2(G_K, (K^{\mathrm{sep}})^\times)$$
+        </div>
+        <p>が成り立つ。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>任意の有限次Galois拡大の塔 $K \subset L \subset L' \subset K^{\mathrm{sep}}$ に対し、制限写像を $\pi : \mathrm{Gal}(L'/K) \twoheadrightarrow \mathrm{Gal}(L/K)$ とおく。 $[A] \in \mathrm{Br}(L/K)$ の分解同型 $\phi : A \otimes_K L \xrightarrow{\sim} M_n(L)$ に $\otimes_L L'$ を施した $\phi' : A \otimes_K L' \xrightarrow{\sim} M_n(L')$ をとれば、 $A$ の $\mathrm{Gal}(L'/K)$ に関する1コサイクルのリフトは $A'_{\sigma'} := A_{\pi(\sigma')} \in \mathrm{GL}_n(L) \subset \mathrm{GL}_n(L')$ で与えられる。よって</p>
+        <div class="math-display">
+          $$A'_{\sigma'} \sigma'(A'_{\tau'}) = A_{\pi(\sigma')} \pi(\sigma')(A_{\pi(\tau')}) = c(\pi(\sigma'), \pi(\tau')) A'_{\sigma'\tau'}$$
+        </div>
+        <p>となり、次の図式は可換である：</p>
+        <div class="math-display">
+          $$\begin{array}{ccc}
+          \mathrm{Br}(L/K) & \xrightarrow{\ \delta_{L/K}\ } & H^2(\mathrm{Gal}(L/K), L^\times) \\
+          \downarrow{\text{包含}} & & \downarrow{\mathrm{Inf}_{L'/L}} \\
+          \mathrm{Br}(L'/K) & \xrightarrow{\ \delta_{L'/K}\ } & H^2(\mathrm{Gal}(L'/K), (L')^\times)
+          \end{array}$$
+        </div>
+        <p>補題 2.8 より $\mathrm{Br}(K) = \varinjlim_{L/K} \mathrm{Br}(L/K)$ であり、定理 5.2 より各 $\delta_{L/K}$ は同型であるから、帰納極限をとることで同型</p>
+        <div class="math-display">
+          $$\mathrm{Br}(K) = \varinjlim_{L/K} \mathrm{Br}(L/K) \xrightarrow{\ \sim\ } \varinjlim_{L/K} H^2(\mathrm{Gal}(L/K), L^\times) = H^2(G_K, (K^{\mathrm{sep}})^\times)$$
+        </div>
+        <p>が得られる。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-real">
+      <h2>6. 具体計算 I：$K = \mathbb{R}$ の場合（Frobeniusの定理）と自明な例（ $\mathbb{C}, \mathbb{F}_q$ ）</h2>
+      <p>まず、以下のすべての具体計算の基礎となる有限巡回群のコホモロジー公式を証明する。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 6.1（有限巡回群のコホモロジーの周期性）</span>
+        <p>$G = \langle \sigma \rangle$ を位数 $n$ の有限巡回群、 $M$ を乗法的に書かれた左 $G$ 加群とする。ノルム写像を $N_G(m) := \prod_{k=0}^{n-1} \sigma^k(m)$ と定めるとき、以下が成り立つ。</p>
+        <ol>
+          <li>$H^1(G, M) \cong \ker(N_G) / \{\sigma(m) m^{-1} \mid m \in M\}$ 。</li>
+          <li>$H^2(G, M) \cong M^G / N_G(M)$ 。</li>
+          <li>すべての $q \ge 1$ に対して $H^{q+2}(G, M) \cong H^q(G, M)$ である。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>群環 $\mathbb{Z}[G]$ において $D := \sigma - 1$ 、 $N := 1 + \sigma + \dots + \sigma^{n-1}$ とおく。増大写像 $\varepsilon(\sum a_k \sigma^k) = \sum a_k$ と合わせて、 $\mathbb{Z}$ の $\mathbb{Z}[G]$ 上の周期的な自由分解</p>
+        <div class="math-display">
+          $$\cdots \xrightarrow{\ N\ } \mathbb{Z}[G] \xrightarrow{\ D\ } \mathbb{Z}[G] \xrightarrow{\ N\ } \mathbb{Z}[G] \xrightarrow{\ D\ } \mathbb{Z}[G] \xrightarrow{\ \varepsilon\ } \mathbb{Z} \longrightarrow 0$$
+        </div>
+        <p>が完全列をなす（実際 $\ker \varepsilon = D \mathbb{Z}[G]$ 、 $\ker D = N \mathbb{Z}[G]$ 、 $\ker N = \ker \varepsilon = D \mathbb{Z}[G]$ ）。これに $\mathrm{Hom}_{\mathbb{Z}[G]}(-, M)$ を適用し $\mathrm{Hom}_{\mathbb{Z}[G]}(\mathbb{Z}[G], M) \cong M$ と同一視すれば、コチェイン複体</p>
+        <div class="math-display">
+          $$0 \longrightarrow M \xrightarrow{\ D\ } M \xrightarrow{\ N\ } M \xrightarrow{\ D\ } M \xrightarrow{\ N\ } \cdots$$
+        </div>
+        <p>（乗法記法で $D(m) = \sigma(m) m^{-1}$ 、 $N(m) = N_G(m)$ ）を得る。よって $q = 2k - 1 \ge 1$ で $H^q(G, M) \cong \ker(N_G)/\mathrm{Im}(D)$ 、 $q = 2k \ge 2$ で $H^q(G, M) \cong \ker(D)/\mathrm{Im}(N_G) = M^G / N_G(M)$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 6.2（実数体のBrauer群とFrobeniusの定理）</span>
+        <p>実数体 $\mathbb{R}$ のBrauer群は位数 $2$ の巡回群に同型である：</p>
+        <div class="math-display">
+          $$\mathrm{Br}(\mathbb{R}) \cong \mathbb{Z}/2\mathbb{Z}$$
+        </div>
+        <p>特に、 $\mathbb{R}$ 上の有限次元中心的斜体は、同型を除いて実数体 $\mathbb{R}$ とHamiltonの四元数体 $\mathbb{H}$ の2種類に限られる。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$\mathbb{R}$ の分離閉包は $\mathbb{C}$ であり、絶対Galois群は複素共役 $\sigma$ で生成される $G = \mathrm{Gal}(\mathbb{C}/\mathbb{R}) = \{1, \sigma\} \cong \mathbb{Z}/2\mathbb{Z}$ である。定理 5.6 および補題 6.1 (2) より</p>
+        <div class="math-display">
+          $$\mathrm{Br}(\mathbb{R}) \cong H^2(G, \mathbb{C}^\times) \cong (\mathbb{C}^\times)^G / N_{\mathbb{C}/\mathbb{R}}(\mathbb{C}^\times)$$
+        </div>
+        <p>である。 $(\mathbb{C}^\times)^G = \mathbb{R}^\times$ であり、任意の $z = a + bi \in \mathbb{C}^\times$ に対し $N_{\mathbb{C}/\mathbb{R}}(z) = z \sigma(z) = a^2 + b^2 > 0$ 、逆に任意の $r > 0$ は $r = N_{\mathbb{C}/\mathbb{R}}(\sqrt{r})$ なので $N_{\mathbb{C}/\mathbb{R}}(\mathbb{C}^\times) = \mathbb{R}_{ > 0}^\times$ である。ゆえに</p>
+        <div class="math-display">
+          $$\mathrm{Br}(\mathbb{R}) \cong \mathbb{R}^\times / \mathbb{R}_{ > 0}^\times \cong \{\pm 1\} \cong \mathbb{Z}/2\mathbb{Z}$$
+        </div>
+        <p>を得る。非自明な元 $-1 \in \mathbb{R}^\times / \mathbb{R}_{ > 0}^\times$ に対応する巡回多元環 $(\mathbb{C}/\mathbb{R}, \sigma, -1) = (-1, -1)_{\mathbb{R}}$ はHamiltonの四元数体 $\mathbb{H}$ であり、定理 2.3 より $\mathbb{R}$ 上の有限次元中心的斜体は $\mathbb{R}$ と $\mathbb{H}$ の2種類に限られる。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 6.3（Brauer群が自明となる体：代数閉体 $\mathbb{C}$ と有限体 $\mathbb{F}_q$ ）</span>
+        <ul>
+          <li><strong>代数閉体 $K = \mathbb{C}$ ：</strong> $G_{\mathbb{C}} = \{1\}$ であるから、定理 5.6 より $\mathrm{Br}(\mathbb{C}) \cong H^2(\{1\}, \mathbb{C}^\times) = 0$ である。</li>
+          <li><strong>有限体 $K = \mathbb{F}_q$ ：</strong> 任意の有限次拡大 $\mathbb{F}_{q^n}/\mathbb{F}_q$ は巡回拡大（ $G = \langle \mathrm{Frob}_q \rangle$ ）であり、ノルム写像 $N_{\mathbb{F}_{q^n}/\mathbb{F}_q} : \mathbb{F}_{q^n}^\times \to \mathbb{F}_q^\times$ （ $x \mapsto x^{(q^n - 1)/(q - 1)}$ ）は全射である（核の位数は高々 $(q^n - 1)/(q - 1)$ なので像の位数は少なくとも $q - 1 = |\mathbb{F}_q^\times|$ ）。したがって補題 6.1 (2) よりすべての $n \ge 1$ で $H^2(\mathrm{Gal}(\mathbb{F}_{q^n}/\mathbb{F}_q), \mathbb{F}_{q^n}^\times) = 0$ となり、帰納極限をとって $\mathrm{Br}(\mathbb{F}_q) = 0$ を得る。これは「有限斜体はすべて可換体である」という<strong>Wedderburnの小定理</strong>のコホモロジー的証明を与える（もっとも、補題 2.8 の証明で有限斜体の極大可換部分体を使えば、Wedderburnの小定理を循環論法なしで証明できる。次節で独立した直接証明も与える）。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="sec-padic">
+      <h2>7. 具体計算 II：$K = \mathbb{Q}_p$ の場合（Wedderburnの小定理とHasse不変量）</h2>
+      <p>$p$ を素数、 $\mathbb{Q}_p$ を $p$ 進数体、 $v_p : \mathbb{Q}_p^\times \twoheadrightarrow \mathbb{Z}$ を正規化された $p$ 進付値（ $v_p(p) = 1$ ）とする。 $\mathbb{Q}_p$ の最大不分岐拡大を $\mathbb{Q}_p^{\mathrm{ur}}$ 、その付値環を $\mathcal{O}_{\mathrm{ur}}$ 、Galois群を $G^{\mathrm{ur}} := \mathrm{Gal}(\mathbb{Q}_p^{\mathrm{ur}}/\mathbb{Q}_p) \cong \widehat{\mathbb{Z}}$ とおく。 $G^{\mathrm{ur}}$ はFrobenius自己同型 $\mathrm{Frob}_p$ で位相的に生成される。</p>
+
+      <h3>7.1 Wedderburnの小定理と不分岐拡大による分解</h3>
+      <p>まず、補題 7.2 の証明で用いるWedderburnの小定理を、円分多項式を用いたWittの簡潔な証明で完全に示しておく。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 7.1（Wedderburnの小定理）</span>
+        <p>任意の有限斜体 $D$ は可換体である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$K := Z(D)$ とおくと $K$ は有限体である。 $q := |K|$ 、 $n := \dim_K D$ とおく（ $|D| = q^n$ ）。 $n = 1$ を背理法で示す。もし $n > 1$ と仮定する。乗法群 $D^\times$ の共役類分解（類等式）を考える。各元 $x \in D^\times$ の中心化群 $C_{D^\times}(x)$ は $D$ の部分斜体 $Z_D(x)$ の乗法群 $Z_D(x)^\times$ であるから、 $d_x := \dim_K Z_D(x)$ は $n$ の約数であり $|C_{D^\times}(x)| = q^{d_x} - 1$ である。 $x \notin K^\times$ ならば $d_x < n$ であるから、類等式は</p>
+        <div class="math-display">
+          $$q^n - 1 = (q - 1) + \sum_{i} \frac{q^n - 1}{q^{d_i} - 1}$$
+        </div>
+        <p>の形をとる（ここで各 $d_i$ は $d_i \mid n$ かつ $1 \le d_i < n$ を満たす）。</p>
+        <p>$n$ 次円分多項式 $\Phi_n(X) := \prod_{\gcd(k, n) = 1} (X - e^{2\pi i k/n}) \in \mathbb{Z}[X]$ を考える。 $X^n - 1 = \prod_{d \mid n} \Phi_d(X)$ より、各真約数 $d_i < n$ に対して $\Phi_n(X)$ は $\frac{X^n - 1}{X^{d_i} - 1}$ を $\mathbb{Z}[X]$ において割り切る。したがって $X = q$ を代入すると、整数 $\Phi_n(q)$ は $q^n - 1$ およびすべての $\frac{q^n - 1}{q^{d_i} - 1}$ を割り切る。類等式より $\Phi_n(q)$ は $q - 1$ も割り切らねばならない。</p>
+        <p>ところが $n > 1$ のとき、1の原始 $n$ 乗根 $\zeta \neq 1$ に対して $|q - \zeta| > q - 1$ （三角不等式で等号が成り立たないため）であるから、 $|\Phi_n(q)| = \prod_{\zeta} |q - \zeta| > q - 1$ となり、 $\Phi_n(q) \mid (q - 1)$ に矛盾する。よって $n = 1$ すなわち $D = K$ は可換体である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 7.2（$\mathbb{Q}_p$ 上の中心的斜体の不分岐分解）</span>
+        <p>$\mathbb{Q}_p$ 上の任意の有限次元中心的斜体 $D$ （ $\dim_{\mathbb{Q}_p} D = n^2$ ）は、次数 $n$ の不分岐拡大 $L_n/\mathbb{Q}_p$ を極大可換部分体として含み、したがって $L_n$ によって分解される。特に、</p>
+        <div class="math-display">
+          $$\mathrm{Br}(\mathbb{Q}_p) = \mathrm{Br}(\mathbb{Q}_p^{\mathrm{ur}}/\mathbb{Q}_p) \cong H^2(G^{\mathrm{ur}}, (\mathbb{Q}_p^{\mathrm{ur}})^\times)$$
+        </div>
+        <p>が成り立つ。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>分解同型 $D \otimes_{\mathbb{Q}_p} \overline{\mathbb{Q}_p} \xrightarrow{\sim} M_n(\overline{\mathbb{Q}_p})$ を通じて、 $x \in D^\times$ の行列式として<strong>被約ノルム (reduced norm)</strong> $\mathrm{Nrd}_{D/\mathbb{Q}_p}(x) \in \mathbb{Q}_p^\times$ を定義する（これは $\mathrm{Nrd}_{D/\mathbb{Q}_p}(x)^n = N_{D/\mathbb{Q}_p}(x)$ を満たし、可換部分体 $F = \mathbb{Q}_p(x) \subset D$ 上では $N_{F/\mathbb{Q}_p}(x)^{n/[F:\mathbb{Q}_p]} = \mathrm{Nrd}_{D/\mathbb{Q}_p}(x)$ を満たす）。そこで</p>
+        <div class="math-display">
+          $$w(x) := \frac{1}{n} v_p(\mathrm{Nrd}_{D/\mathbb{Q}_p}(x)) \qquad (x \in D^\times)$$
+        </div>
+        <p>と定める。任意の $x \in D^\times$ に対し $w|_{\mathbb{Q}_p(x)}$ は完備離散付値体 $\mathbb{Q}_p$ の有限次拡大 $\mathbb{Q}_p(x)$ 上の一意延長付値に一致するため、 $w$ は $w(xy) = w(x) + w(y)$ および三角不等式 $w(x + y) \ge \min\{w(x), w(y)\}$ を満たす $D$ 上の離散付値である。</p>
+        <p>付値環 $\mathcal{O}_D := \{x \in D \mid w(x) \ge 0\}$ とその唯一の極大両側イデアル $\mathfrak{m}_D := \{x \in D \mid w(x) > 0\}$ をとる。剰余環 $\bar{D} := \mathcal{O}_D / \mathfrak{m}_D$ は $\mathbb{F}_p$ 上の有限斜体であるから、補題 7.1（Wedderburnの小定理）より可換体 $\bar{D} \cong \mathbb{F}_{p^f}$ （ $f := [\bar{D} : \mathbb{F}_p]$ ）である。</p>
+        <p>分岐指数を $e := [w(D^\times) : \mathbb{Z}]$ とし、素元 $\pi_D \in \mathfrak{m}_D$ （ $w(\pi_D) = 1/e$ ）および $\bar{D}$ の $\mathbb{F}_p$ 基底の持ち上げ $u_1, \dots, u_f \in \mathcal{O}_D$ をとる。すると $\{u_i \pi_D^j \mid 1 \le i \le f,\ 0 \le j < e\}$ は $D$ の $\mathbb{Q}_p$ 上の基底をなす（実際、線形独立性は付値 $w$ の値と剰余類を比較して直ちに従い、生成性は任意の $x \in \mathcal{O}_D$ を $\pi_D$ 進展開して完備性を用いることで従う）。ゆえに</p>
+        <div class="math-display">
+          $$e f = \dim_{\mathbb{Q}_p} D = n^2$$
+        </div>
+        <p>が成り立つ。</p>
+        <p>$w(x) \in \frac{1}{n}\mathbb{Z}$ より $e \le n$ である。一方、 $\bar{D} = \mathbb{F}_{p^f}$ の原始元（ $1$ の原始 $(p^f - 1)$ 乗根） $\bar{\alpha}$ の持ち上げ $\tilde{\alpha} \in \mathcal{O}_D$ をとり、可換完備体 $E_0 := \mathbb{Q}_p(\tilde{\alpha}) \subset D$ において多項式 $X^{p^f - 1} - 1$ にHenselの補題を適用すれば、 $1$ の原始 $(p^f - 1)$ 乗根 $\alpha \in E_0 \subset D$ が得られる。部分体 $E := \mathbb{Q}_p(\alpha) \subset D$ は次数 $f$ の不分岐拡大である。定理 2.7 より $D$ の任意の可換部分体の次数は $n$ 以下なので $f = [E : \mathbb{Q}_p] \le n$ である。</p>
+        <p>以上より $n^2 = ef \le n \cdot n = n^2$ となり、 $e = f = n$ を得る。よって $E \cong L_n$ は $D$ の極大可換部分体であり、補題 2.8 の第一段階より $L_n$ は $D$ を分解する。ゆえに $\mathrm{Br}(\mathbb{Q}_p) = \bigcup_{n \ge 1} \mathrm{Br}(L_n/\mathbb{Q}_p) = \mathrm{Br}(\mathbb{Q}_p^{\mathrm{ur}}/\mathbb{Q}_p)$ であり、定理 5.2 の帰納極限をとって $\mathrm{Br}(\mathbb{Q}_p) \cong H^2(G^{\mathrm{ur}}, (\mathbb{Q}_p^{\mathrm{ur}})^\times)$ を得る。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>7.2 単数群のコホモロジーの消滅</h3>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 7.3（不分岐拡大の単数群のコホモロジー消滅）</span>
+        <p>任意の有限次不分岐拡大 $L/\mathbb{Q}_p$ （次数 $n$ 、 $G_L := \mathrm{Gal}(L/\mathbb{Q}_p) \cong \mathbb{Z}/n\mathbb{Z}$ ）とその整数環の単数群 $\mathcal{O}_L^\times$ に対し、すべての整数 $q \ge 1$ について</p>
+        <div class="math-display">
+          $$H^q(G_L, \mathcal{O}_L^\times) = 0$$
+        </div>
+        <p>が成り立つ。したがって帰納極限をとることで、すべての $q \ge 1$ について $H^q(G^{\mathrm{ur}}, \mathcal{O}_{\mathrm{ur}}^\times) = 0$ である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>補題 6.1 (3) より $H^1(G_L, \mathcal{O}_L^\times) = 0$ と $H^2(G_L, \mathcal{O}_L^\times) \cong \mathbb{Z}_p^\times / N_{L/\mathbb{Q}_p}(\mathcal{O}_L^\times) = 0$ を示せばよい。各 $k \ge 1$ に対し高次単数群 $U_L^{(k)} := 1 + p^k \mathcal{O}_L$ を定める。</p>
+
+        <p><strong>第一段階：商群のコホモロジー消滅。</strong></p>
+        <ol>
+          <li>$\mathcal{O}_L^\times / U_L^{(1)} \cong \mathbb{F}_{p^n}^\times$ ：定理 4.2（Hilbertの定理90、 $n = 1$ ）より $H^1(G_L, \mathbb{F}_{p^n}^\times) = 0$ であり、例 6.3 の通りノルム写像 $N_{\mathbb{F}_{p^n}/\mathbb{F}_p} : \mathbb{F}_{p^n}^\times \to \mathbb{F}_p^\times$ は全射なので $H^2(G_L, \mathbb{F}_{p^n}^\times) = 0$ である。</li>
+          <li>各 $k \ge 1$ に対する $U_L^{(k)} / U_L^{(k+1)} \cong \mathbb{F}_{p^n}$ （加法群）：写像 $1 + p^k a \mapsto a \bmod p$ は $(1 + p^k a)(1 + p^k b) = 1 + p^k(a + b) + p^{2k} ab \equiv 1 + p^k(a + b) \pmod{p^{k+1}}$ および $\sigma(1 + p^k a) = 1 + p^k \sigma(a)$ より $G_L$ 加群の同型である。有限次Galois拡大 $\mathbb{F}_{p^n}/\mathbb{F}_p$ には正規基底が存在する（すなわち $\mathbb{F}_{p^n} \cong \mathbb{F}_p[G_L]$ は自由 $\mathbb{F}_p[G_L]$ 加群である。あるいはトレース写像 $\mathrm{Tr} : \mathbb{F}_{p^n} \to \mathbb{F}_p$ はDedekindの補題より非零ゆえ全射であり、また加法版Hilbertの定理90より $\ker(\mathrm{Tr}) = (\mathrm{Frob}_p - 1)(\mathbb{F}_{p^n})$ である）。よって補題 6.1 より $H^1(G_L, \mathbb{F}_{p^n}) = H^2(G_L, \mathbb{F}_{p^n}) = 0$ である。</li>
+        </ol>
+
+        <p><strong>第二段階：完備性による $H^1(G_L, U_L^{(1)}) = H^2(G_L, U_L^{(1)}) = 0$ 。</strong></p>
+        <p>まず任意の $a \in \mathcal{O}_L$ と $k \ge 1$ に対し、</p>
+        <div class="math-display">
+          $$N_{L/\mathbb{Q}_p}(1 + p^k a) = \prod_{\sigma \in G_L} (1 + p^k \sigma(a)) \equiv 1 + p^k \mathrm{Tr}_{L/\mathbb{Q}_p}(a) \pmod{p^{k+1}}$$
+        </div>
+        <p>が成り立つ。任意の $u_1 \in 1 + p \mathbb{Z}_p$ に対し、第一段階 (2) のトレース全射性を用いて帰納的に $x_k \in U_L^{(k)}$ を $u_k \equiv N_{L/\mathbb{Q}_p}(x_k) \pmod{p^{k+1}}$ となるように選び、 $u_{k+1} := u_k N_{L/\mathbb{Q}_p}(x_k)^{-1} \in 1 + p^{k+1} \mathbb{Z}_p$ とおく。 $L$ の完備性より無限積 $x := \prod_{k=1}^\infty x_k \in U_L^{(1)}$ は収束し $N_{L/\mathbb{Q}_p}(x) = u_1$ を満たす。よって $H^2(G_L, U_L^{(1)}) = 0$ である。</p>
+        <p>同様に、任意の $a^{(1)} \in Z^1(G_L, U_L^{(1)})$ に対し、 $H^1(G_L, U_L^{(k)}/U_L^{(k+1)}) = 0$ より帰納的に $y_k \in U_L^{(k)}$ を選んで $a^{(k+1)}_\sigma := a^{(k)}_\sigma y_k^{-1} \sigma(y_k) \in U_L^{(k+1)}$ とおけば、無限積 $y := \prod_{k=1}^\infty y_k \in U_L^{(1)}$ が $a^{(1)}_\sigma = y \sigma(y)^{-1}$ を満たす。よって $H^1(G_L, U_L^{(1)}) = 0$ である。</p>
+
+        <p><strong>第三段階：短完全列の接続。</strong> 短完全列 $1 \to U_L^{(1)} \to \mathcal{O}_L^\times \to \mathbb{F}_{p^n}^\times \to 1$ のコホモロジー長完全列 $H^q(G_L, U_L^{(1)}) \to H^q(G_L, \mathcal{O}_L^\times) \to H^q(G_L, \mathbb{F}_{p^n}^\times)$ において両端が $0$ なので、すべての $q \ge 1$ で $H^q(G_L, \mathcal{O}_L^\times) = 0$ を得る。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>7.3 Hasse不変量による同型 $\mathrm{Br}(\mathbb{Q}_p) \cong \mathbb{Q}/\mathbb{Z}$ と明示計算</h3>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 7.4（$p$ 進数体のBrauer群とHasse不変量）</span>
+        <p>任意の素数 $p$ に対し、<strong>Hasse不変量 (Hasse invariant)</strong> と呼ばれる自然な群の同型</p>
+        <div class="math-display">
+          $$\mathrm{inv}_p : \mathrm{Br}(\mathbb{Q}_p) \xrightarrow{\ \sim\ } \mathbb{Q}/\mathbb{Z}$$
+        </div>
+        <p>が存在する。さらに、次数 $n$ の不分岐拡大 $L_n/\mathbb{Q}_p$ （ $G = \langle \mathrm{Frob}_p \rangle$ ）と $a \in \mathbb{Q}_p^\times$ に対する巡回多元環 $(L_n/\mathbb{Q}_p, \mathrm{Frob}_p, a)$ のHasse不変量は</p>
+        <div class="math-display">
+          $$\mathrm{inv}_p([(L_n/\mathbb{Q}_p, \mathrm{Frob}_p, a)]) = \frac{v_p(a)}{n} \bmod \mathbb{Z}$$
+        </div>
+        <p>で与えられる（符号の規約は連結準同型の定義に依存するが、標準的にはこのように正規化する）。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>補題 7.2 より $\mathrm{Br}(\mathbb{Q}_p) \cong H^2(G^{\mathrm{ur}}, (\mathbb{Q}_p^{\mathrm{ur}})^\times)$ である。不分岐拡大では $p$ が素元のままなので、付値写像による短完全列</p>
+        <div class="math-display">
+          $$1 \longrightarrow \mathcal{O}_{\mathrm{ur}}^\times \longrightarrow (\mathbb{Q}_p^{\mathrm{ur}})^\times \xrightarrow{\ v_p\ } \mathbb{Z} \longrightarrow 0$$
+        </div>
+        <p>のコホモロジー長完全列において、補題 7.3 より $H^2(G^{\mathrm{ur}}, \mathcal{O}_{\mathrm{ur}}^\times) = H^3(G^{\mathrm{ur}}, \mathcal{O}_{\mathrm{ur}}^\times) = 0$ であるから、 $v_{p*} : H^2(G^{\mathrm{ur}}, (\mathbb{Q}_p^{\mathrm{ur}})^\times) \xrightarrow{\sim} H^2(G^{\mathrm{ur}}, \mathbb{Z})$ は同型である。</p>
+        <p>次に自明な $G^{\mathrm{ur}}$ 作用を持つ短完全列 $0 \to \mathbb{Z} \to \mathbb{Q} \to \mathbb{Q}/\mathbb{Z} \to 0$ を考える。任意の有限群 $G_L$ （位数 $n$ ）に対し、任意の2コサイクル $c \in Z^2(G_L, \mathbb{Q})$ について $b(\sigma) := -\frac{1}{n} \sum_{\tau \in G_L} c(\sigma, \tau) \in \mathbb{Q}$ とおくと、2コサイクル条件 $c(\sigma, \tau) = c(\tau, \rho) - c(\sigma\tau, \rho) + c(\sigma, \tau\rho)$ を $\rho \in G_L$ について総和して $n$ で割ることで $c(\sigma, \tau) = b(\sigma) + b(\tau) - b(\sigma\tau)$ が得られ、 $H^2(G_L, \mathbb{Q}) = 0$ である（同様に $H^1(G_L, \mathbb{Q}) = \mathrm{Hom}(G_L, \mathbb{Q}) = 0$ ）。帰納極限をとって $H^1(G^{\mathrm{ur}}, \mathbb{Q}) = H^2(G^{\mathrm{ur}}, \mathbb{Q}) = 0$ を得る。</p>
+        <p>したがって長完全列の連結準同型 $\partial : H^1(G^{\mathrm{ur}}, \mathbb{Q}/\mathbb{Z}) \xrightarrow{\sim} H^2(G^{\mathrm{ur}}, \mathbb{Z})$ は同型である。 $G^{\mathrm{ur}}$ の作用は自明なので $H^1(G^{\mathrm{ur}}, \mathbb{Q}/\mathbb{Z}) = \mathrm{Hom}_{\mathrm{cont}}(G^{\mathrm{ur}}, \mathbb{Q}/\mathbb{Z})$ であり、位相生成元 $\mathrm{Frob}_p$ での評価 $\chi \mapsto \chi(\mathrm{Frob}_p)$ は同型 $\mathrm{Hom}_{\mathrm{cont}}(G^{\mathrm{ur}}, \mathbb{Q}/\mathbb{Z}) \xrightarrow{\sim} \mathbb{Q}/\mathbb{Z}$ を与える。これらを合成して同型 $\mathrm{inv}_p : \mathrm{Br}(\mathbb{Q}_p) \xrightarrow{\sim} \mathbb{Q}/\mathbb{Z}$ を得る。</p>
+        <p>最後に巡回多元環の明示公式を確認する。準同型 $\chi : G_n = \mathrm{Gal}(L_n/\mathbb{Q}_p) \to \mathbb{Q}/\mathbb{Z}$ を $\chi(\mathrm{Frob}_p^i) := \frac{i r}{n} \bmod \mathbb{Z}$ （ $0 \le i < n$ 、 $r = v_p(a)$ ）とし、 $\mathbb{Q}$ へのリフトを $\tilde{\chi}(\mathrm{Frob}_p^i) := \frac{i r}{n} \in \mathbb{Q}$ ととる。連結準同型 $\partial(\chi) \in Z^2(G_n, \mathbb{Z})$ は</p>
+        <div class="math-display">
+          $$(\partial \chi)(\mathrm{Frob}_p^i, \mathrm{Frob}_p^j) = \tilde{\chi}(\mathrm{Frob}_p^i) + \tilde{\chi}(\mathrm{Frob}_p^j) - \tilde{\chi}(\mathrm{Frob}_p^{i+j \bmod n}) = \begin{cases} 0 & (i + j < n) \\ r & (i + j \ge n) \end{cases}$$
+        </div>
+        <p>となる。これはちょうど定義 5.3 の2コサイクル $c_a$ に付値 $v_p$ を施した2コサイクル $v_p(c_a)$ に一致する（ $\mathbb{Z}$ の加法記法と $L_n^\times$ の乗法記法の対応）。したがって巡回多元環 $(L_n/\mathbb{Q}_p, \mathrm{Frob}_p, a)$ のHasse不変量は $\chi(\mathrm{Frob}_p) = \frac{v_p(a)}{n} \bmod \mathbb{Z}$ である（ここで定理 5.2 の符号規約に合わせる場合は $\mathrm{inv}_p$ の定義で符号を調整しておく）。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 7.5（$\mathbb{Q}_p$ 上の四元数斜体と3次巡回斜体の具体例）</span>
+        <ul>
+          <li><strong>位数 $2$ の元（四元数斜体）：</strong> 定理 7.4 より $\mathrm{Br}(\mathbb{Q}_p)[2] \cong \{0, \frac{1}{2} \bmod \mathbb{Z}\} \cong \mathbb{Z}/2\mathbb{Z}$ であるから、 $\mathbb{Q}_p$ 上の四元数環は $M_2(\mathbb{Q}_p)$ と唯一の四元数斜体 $D_p$ （不変量 $\frac{1}{2}$ ）の2種類のみである。奇素数 $p$ に対して平方非剰余 $u \in \mathbb{Z}_p^\times$ をとれば $L_2 = \mathbb{Q}_p(\sqrt{u})$ は不分岐2次拡大であり、 $D_p \cong (u, p)_{\mathbb{Q}_p} = (L_2/\mathbb{Q}_p, \mathrm{Frob}_p, p)$ は $v_p(p) = 1$ より $\mathrm{inv}_p([D_p]) = \frac{1}{2} \bmod \mathbb{Z}$ を持つ。 $p = 2$ では $L_2 = \mathbb{Q}_2(\sqrt{5})$ を用いて $(5, 2)_{\mathbb{Q}_2} \cong (-1, -1)_{\mathbb{Q}_2}$ が唯一の四元数斜体を与える。</li>
+          <li><strong>位数 $3$ の元（9次元中心的斜体）：</strong> 不分岐3次拡大 $L_3/\mathbb{Q}_p$ に対し、巡回多元環 $D_{p, 1/3} := (L_3/\mathbb{Q}_p, \mathrm{Frob}_p, p)$ は $\mathrm{inv}_p([D_{p, 1/3}]) = \frac{1}{3} \bmod \mathbb{Z}$ を持ち、 $D_{p, 2/3} := (L_3/\mathbb{Q}_p, \mathrm{Frob}_p, p^2)$ は $\mathrm{inv}_p([D_{p, 2/3}]) = \frac{2}{3} \bmod \mathbb{Z}$ を持つ。これらは $\mathbb{Q}_p$ 上の互いに非同型な9次元中心的斜体であり（互いに反対環 $D_{p, 1/3}^{\mathrm{op}} \cong D_{p, 2/3}$ である）、 $\mathrm{Br}(\mathbb{Q}_p)$ の位数 $3$ の元をすべて尽くす。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="sec-rational">
+      <h2>8. 具体計算 III：$K = \mathbb{Q}$ の場合（Albert–Brauer–Hasse–Noetherの定理）</h2>
+      <p>有理数体 $\mathbb{Q}$ の素点 (place) 全体の集合を $\Omega_{\mathbb{Q}} := \{2, 3, 5, \dots\} \cup \{\infty\}$ とおく。各素点 $v \in \Omega_{\mathbb{Q}}$ での完備化を $\mathbb{Q}_v$ と書き、無限素点でのHasse不変量 $\mathrm{inv}_\infty : \mathrm{Br}(\mathbb{R}) \hookrightarrow \mathbb{Q}/\mathbb{Z}$ を $[\mathbb{R}] \mapsto 0$ 、 $[\mathbb{H}] \mapsto \frac{1}{2} \bmod \mathbb{Z}$ で定める。</p>
+
+      <h3>8.1 イデール類群と大域類体論の主結果</h3>
+      <p>有限次Galois拡大 $L/\mathbb{Q}$ （ $G := \mathrm{Gal}(L/\mathbb{Q})$ ）に対し、 $L$ の<strong>イデール群 (idèle group)</strong> を制限直積</p>
+      <div class="math-display">
+        $$\mathbb{A}_L^\times := \prod_{w}' L_w^\times = \left\{ (x_w)_w \in \prod_{w} L_w^\times \ \middle|\ \text{ほとんどすべての有限素点 } w \text{ について } x_w \in \mathcal{O}_{L_w}^\times \right\}$$
+      </div>
+      <p>で定義し、 $L^\times$ の対角埋め込みによる商群 $C_L := \mathbb{A}_L^\times / L^\times$ を<strong>イデール類群 (idèle class group)</strong> という。これらには $G$ が自然に作用し、短完全列 $1 \to L^\times \to \mathbb{A}_L^\times \to C_L \to 1$ が成り立つ。</p>
+      <p>以下の証明では、大域類体論のコホモロジー的主定理である次の2事実を用いる（Milne [3, Chapter VII–VIII], Neukirch–Schmidt–Wingberg [4, Chapter VIII]）：</p>
+      <ul>
+        <li><strong>(G1) $H^1(G, C_L) = 0$ ：</strong> 大域類体論の第1・第2不等式から導かれるイデール類群の1次コホモロジー消滅。</li>
+        <li><strong>(G2) 大域不変量と相互律：</strong> 標準的な同型 $\mathrm{inv}_{L/\mathbb{Q}} : H^2(G, C_L) \xrightarrow{\sim} \frac{1}{[L:\mathbb{Q}]}\mathbb{Z}/\mathbb{Z}$ が存在し、自然な写像 $H^2(G, \mathbb{A}_L^\times) \to H^2(G, C_L)$ と $\mathrm{inv}_{L/\mathbb{Q}}$ の合成は、各素点の局所Hasse不変量の和 $\sum_{v \in \Omega_{\mathbb{Q}}} \mathrm{inv}_v$ に一致する。</li>
+      </ul>
+
+      <h3>8.2 Albert–Brauer–Hasse–Noetherの定理</h3>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 8.1（Albert–Brauer–Hasse–Noetherの定理）</span>
+        <p>有理数体 $\mathbb{Q}$ のBrauer群に関して、自然な局所化写像 $[A] \mapsto ([A \otimes_{\mathbb{Q}} \mathbb{Q}_v])_v$ とHasse不変量の和は短完全列</p>
+        <div class="math-display">
+          $$0 \longrightarrow \mathrm{Br}(\mathbb{Q}) \longrightarrow \bigoplus_{v \in \Omega_{\mathbb{Q}}} \mathrm{Br}(\mathbb{Q}_v) \xrightarrow{\ \sum_v \mathrm{inv}_v\ } \mathbb{Q}/\mathbb{Z} \longrightarrow 0$$
+        </div>
+        <p>をなす。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>第一段階：長完全列と単射性。</strong> 有限次Galois拡大 $L/\mathbb{Q}$ （ $G = \mathrm{Gal}(L/\mathbb{Q})$ ）に対し、短完全列 $1 \to L^\times \to \mathbb{A}_L^\times \to C_L \to 1$ のコホモロジー長完全列</p>
+        <div class="math-display">
+          $$H^1(G, C_L) \longrightarrow H^2(G, L^\times) \longrightarrow H^2(G, \mathbb{A}_L^\times) \longrightarrow H^2(G, C_L)$$
+        </div>
+        <p>において (G1) より $H^1(G, C_L) = 0$ なので、 $\mathrm{Br}(L/\mathbb{Q}) = H^2(G, L^\times) \hookrightarrow H^2(G, \mathbb{A}_L^\times)$ は単射である。</p>
+
+        <p><strong>第二段階：$H^2(G, \mathbb{A}_L^\times)$ の計算（Shapiroの補題）。</strong> $\infty$ および $L/\mathbb{Q}$ で分岐するすべての素点を含む有限集合 $S \subset \Omega_{\mathbb{Q}}$ をとり、</p>
+        <div class="math-display">
+          $$\mathbb{A}_{L, S}^\times := \prod_{v \in S} \left( \prod_{w \mid v} L_w^\times \right) \times \prod_{v \notin S} \left( \prod_{w \mid v} \mathcal{O}_{L_w}^\times \right)$$
+        </div>
+        <p>とおく。有限群 $G$ のコホモロジーは直積および帰納極限と交換する。各素点 $v$ に対し $w \mid v$ を1つ選び分解群を $G_w \cong \mathrm{Gal}(L_w/\mathbb{Q}_v)$ とおくと、 $G$ 加群として $\prod_{w' \mid v} L_{w'}^\times \cong \mathrm{Ind}_{G_w}^G(L_w^\times)$ および $\prod_{w' \mid v} \mathcal{O}_{L_{w'}}^\times \cong \mathrm{Ind}_{G_w}^G(\mathcal{O}_{L_w}^\times)$ である。Shapiroの補題（ $H^q(G, \mathrm{Ind}_H^G M) \cong H^q(H, M)$ ）より、</p>
+        <div class="math-display">
+          $$H^2\left(G, \prod_{w' \mid v} L_{w'}^\times\right) \cong H^2(G_w, L_w^\times) = \mathrm{Br}(L_w/\mathbb{Q}_v), \qquad H^2\left(G, \prod_{w' \mid v} \mathcal{O}_{L_{w'}}^\times\right) \cong H^2(G_w, \mathcal{O}_{L_w}^\times)$$
+        </div>
+        <p>である。 $v \notin S$ のとき $L_w/\mathbb{Q}_v$ は不分岐なので、補題 7.3 より $H^2(G_w, \mathcal{O}_{L_w}^\times) = 0$ である。よって $S$ に関する帰納極限をとって</p>
+        <div class="math-display">
+          $$H^2(G, \mathbb{A}_L^\times) \cong \varinjlim_{S} \bigoplus_{v \in S} \mathrm{Br}(L_w/\mathbb{Q}_v) = \bigoplus_{v \in \Omega_{\mathbb{Q}}} \mathrm{Br}(L_w/\mathbb{Q}_v)$$
+        </div>
+        <p>を得る。</p>
+
+        <p><strong>第三段階：帰納極限と全射性。</strong> (G2) と合わせて、任意の有限次Galois拡大 $L/\mathbb{Q}$ に対し完全列</p>
+        <div class="math-display">
+          $$0 \longrightarrow \mathrm{Br}(L/\mathbb{Q}) \longrightarrow \bigoplus_{v \in \Omega_{\mathbb{Q}}} \mathrm{Br}(L_w/\mathbb{Q}_v) \xrightarrow{\ \sum_v \mathrm{inv}_v\ } \frac{1}{[L:\mathbb{Q}]}\mathbb{Z}/\mathbb{Z}$$
+        </div>
+        <p>が成り立つ。すべての有限次Galois拡大 $L/\mathbb{Q}$ にわたる帰納極限をとる。中央の項が $\bigoplus_{v} \mathrm{Br}(\mathbb{Q}_v)$ に一致することを確認しよう。任意の有限素点 $p$ と任意の正の整数 $m$ に対し、有限体 $\mathbb{F}_p$ 上の次数 $m$ のモニック既約多項式 $\bar{f}(X) \in \mathbb{F}_p[X]$ をとり、その係数を整数に持ち上げたモニック多項式 $f(X) \in \mathbb{Z}[X]$ の $\mathbb{Q}$ 上の最小分解体 $L/\mathbb{Q}$ をとる。すると $L_w/\mathbb{Q}_p$ の剰余体拡大は $\mathbb{F}_{p^m}/\mathbb{F}_p$ を含むため $m \mid [L_w : \mathbb{Q}_p]$ であり、 $L_w$ は次数 $m$ の不分岐拡大 $L_m/\mathbb{Q}_p$ を含む（すなわち $\mathrm{Br}(L_m/\mathbb{Q}_p) \subset \mathrm{Br}(L_w/\mathbb{Q}_p)$ ）。無限素点 $v = \infty$ については $L = \mathbb{Q}(\sqrt{-1})$ が $L_w = \mathbb{C}$ を与える。ゆえに補題 7.2 より $\varinjlim_L \mathrm{Br}(L_w/\mathbb{Q}_v) = \mathrm{Br}(\mathbb{Q}_v)$ である。</p>
+        <p>左辺は $\mathrm{Br}(\mathbb{Q})$ 、右辺は $\mathbb{Q}/\mathbb{Z}$ となり、さらに右端の写像 $\sum_v \mathrm{inv}_v$ は1つの有限素点 $p$ のみ動かしても定理 7.4 よりすでに全射である。ゆえに求める短完全列が証明された。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 8.2（定理 8.1 の直接的帰結：分岐素点の個数と存在定理）</span>
+        <p>定理 8.1 の短完全列は、 $\mathbb{Q}$ 上の中心的斜体（あるいはBrauer類）について以下の驚くべき事実を即座に与える。</p>
+        <ul>
+          <li><strong>ただ1つの素点でのみ非分解となる $\mathbb{Q}$ 上の中心的単純多元環は存在しない：</strong> もしある $v_0 \in \Omega_{\mathbb{Q}}$ でのみ $\mathrm{inv}_{v_0}([A]) \neq 0$ で他のすべての素点で $0$ であれば、 $\sum_v \mathrm{inv}_v([A]) = \mathrm{inv}_{v_0}([A]) \neq 0 \in \mathbb{Q}/\mathbb{Z}$ となり相互律に矛盾する。特に $\mathbb{Q}$ 上の非自明な中心的斜体は必ず<strong>少なくとも2つの素点</strong>で非分解である。</li>
+          <li><strong>四元数環の分類：</strong> $\mathrm{Br}(\mathbb{Q})[2]$ の元は、 $\Omega_{\mathbb{Q}}$ の<strong>偶数個</strong>の素点からなる有限集合 $S$ （すなわち $\mathrm{inv}_v = \frac{1}{2}$ となる素点の集合）と完全に一対一に対応する。例えば $S = \{2, \infty\}$ に対応するのが $(-1, -1)_{\mathbb{Q}}$ であり、 $S = \{3, \infty\}$ に対応するのが $(-1, -3)_{\mathbb{Q}}$ （あるいは $(-3, -1)_{\mathbb{Q}}$ ）である。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="sec-reciprocity">
+      <h2>9. 応用：四元数環、Hilbert記号、Hasse–Minkowskiの定理、および平方剰余の相互法則</h2>
+      <p>本節では、定理 8.1（Albert–Brauer–Hasse–Noetherの定理）を四元数環 $(a, b)_{\mathbb{Q}}$ に適用することで、初等整数論の最も重要な定理である<strong>平方剰余の相互法則 (quadratic reciprocity law)</strong> と、2次形式の局所大域原理である<strong>Hasse–Minkowskiの定理</strong>を完全に導出する（Serre [5, Chapter III–IV]）。</p>
+
+      <h3>9.1 Hilbert記号とHilbertの相互律</h3>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 9.1（Hilbert記号）</span>
+        <p>各素点 $v \in \Omega_{\mathbb{Q}}$ と $a, b \in \mathbb{Q}_v^\times$ に対し、<strong>Hilbert記号 (Hilbert symbol)</strong> $(a, b)_v \in \{\pm 1\}$ を</p>
+        <div class="math-display">
+          $$(a, b)_v := \exp\left( 2\pi i \cdot \mathrm{inv}_v\left([(a, b)_{\mathbb{Q}_v}]\right) \right) = \begin{cases} +1 & ((a, b)_{\mathbb{Q}_v} \cong M_2(\mathbb{Q}_v)) \\ -1 & ((a, b)_{\mathbb{Q}_v} \text{ が斜体}) \end{cases}$$
+        </div>
+        <p>と定義する。例 5.5 より、 $(a, b)_v = +1$ であるための必要十分条件は、2次方程式 $a x^2 + b y^2 = z^2$ が $\mathbb{Q}_v^3 \smallsetminus \{(0, 0, 0)\}$ に解を持つことである。</p>
+      </div>
+
+      <p>Brauer群 $\mathrm{Br}(\mathbb{Q}_v)$ における四元数環の演算規則（双線形性 $[(a_1 a_2, b)] = [(a_1, b)] \cdot [(a_2, b)]$ および対称性 $[(a, b)] = [(b, a)]$ 。実際、巡回多元環の表示で $c_{b_1 b_2} = c_{b_1} c_{b_2}$ より第2変数に関して乗法的であり、 $i$ と $j$ の入れ替えで $(a, b)_K \cong (b, a)_K$ なので第1変数に関しても乗法的である）から、Hilbert記号は以下の基本性質を満たす：</p>
+      <ul>
+        <li><strong>対称性：</strong> $(a, b)_v = (b, a)_v$ 。</li>
+        <li><strong>双乗法性：</strong> $(a_1 a_2, b)_v = (a_1, b)_v (a_2, b)_v$ 、 $(a, b_1 b_2)_v = (a, b_1)_v (a, b_2)_v$ 。</li>
+        <li><strong>平方因子での不変性：</strong> $(a c^2, b d^2)_v = (a, b)_v$ （ $c, d \in \mathbb{Q}_v^\times$ ）。</li>
+        <li><strong>自明な値：</strong> $(a, 1 - a)_v = 1$ （ $a \neq 1$ ）、 $(a, -a)_v = 1$ （実際 $a \cdot 1^2 + (1 - a) \cdot 1^2 = 1^2$ および $a \cdot 1^2 + (-a) \cdot 1^2 = 0^2$ ）。</li>
+      </ul>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 9.2（Hilbertの相互律と3変数Hasse–Minkowskiの定理）</span>
+        <p>任意の $a, b \in \mathbb{Q}^\times$ に対し、以下が成り立つ。</p>
+        <ol>
+          <li><strong>（Hilbertの相互律 / Hilbert reciprocity law）</strong> ほとんどすべての素点 $v \in \Omega_{\mathbb{Q}}$ に対して $(a, b)_v = +1$ であり、
+            <div class="math-display">
+              $$\prod_{v \in \Omega_{\mathbb{Q}}} (a, b)_v = 1$$
+            </div>
+            が成り立つ。
+          </li>
+          <li><strong>（3変数2次形式のHasse–Minkowskiの定理）</strong> 方程式 $a x^2 + b y^2 = z^2$ が $\mathbb{Q}$ に非自明解を持つための必要十分条件は、すべての素点 $v \in \Omega_{\mathbb{Q}}$ に対して $a x^2 + b y^2 = z^2$ が $\mathbb{Q}_v$ に非自明解を持つこと（すなわちすべての $v$ で $(a, b)_v = +1$ ）である。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>定理 8.1（Albert–Brauer–Hasse–Noetherの定理）を四元数環 $A = (a, b)_{\mathbb{Q}}$ に適用する。</p>
+        <p>(1) 相互律 $\sum_{v \in \Omega_{\mathbb{Q}}} \mathrm{inv}_v([(a, b)_{\mathbb{Q}_v}]) = 0 \in \mathbb{Q}/\mathbb{Z}$ の両辺に $x \mapsto e^{2\pi i x}$ を施せば、直ちに $\prod_{v \in \Omega_{\mathbb{Q}}} (a, b)_v = 1$ を得る。</p>
+        <p>(2) 写像 $\mathrm{Br}(\mathbb{Q}) \hookrightarrow \bigoplus_v \mathrm{Br}(\mathbb{Q}_v)$ が単射であるから、 $[(a, b)_{\mathbb{Q}}] = 1 \in \mathrm{Br}(\mathbb{Q}) \iff \forall v \in \Omega_{\mathbb{Q}},\ [(a, b)_{\mathbb{Q}_v}] = 1 \in \mathrm{Br}(\mathbb{Q}_v)$ が成り立つ。例 5.5 により、これは $a x^2 + b y^2 = z^2$ の $\mathbb{Q}$ での非自明解の存在と、すべての $\mathbb{Q}_v$ での非自明解の存在の同値性に他ならない。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>9.2 各素点におけるHilbert記号の明示公式</h3>
+      <p>平方剰余の相互法則を導くため、 $v = \infty$ 、奇素数 $v = p$ 、および $v = 2$ の各素点におけるHilbert記号を完全に計算する。奇素数 $p$ と $p \nmid u$ なる整数（または $u \in \mathbb{Z}_p^\times$ ）に対し、Legendre記号を</p>
+      <div class="math-display">
+        $$\left(\frac{u}{p}\right) := \begin{cases} +1 & (u \bmod p \in (\mathbb{F}_p^\times)^2) \\ -1 & (u \bmod p \notin (\mathbb{F}_p^\times)^2) \end{cases}$$
+      </div>
+      <p>と書く。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 9.3（Hilbert記号の明示公式）</span>
+        <p>以下が成り立つ。</p>
+        <ol>
+          <li><strong>$v = \infty$ ：</strong> 任意の $a, b \in \mathbb{R}^\times$ に対し、
+            <div class="math-display">
+              $$(a, b)_\infty = \begin{cases} -1 & (a < 0 \text{ かつ } b < 0) \\ +1 & (\text{それ以外}) \end{cases}$$
+            </div>
+          </li>
+          <li><strong>奇素数 $v = p \ge 3$ ：</strong> $a = p^\alpha u$ 、 $b = p^\beta w$ （ $\alpha, \beta \in \mathbb{Z}$ 、 $u, w \in \mathbb{Z}_p^\times$ ）と表すとき、
+            <div class="math-display">
+              $$(a, b)_p = (-1)^{\alpha\beta \frac{p - 1}{2}} \left(\frac{u}{p}\right)^\beta \left(\frac{w}{p}\right)^\alpha$$
+            </div>
+          </li>
+          <li><strong>$v = 2$ ：</strong> 任意の $u, w \in \mathbb{Z}_2^\times$ に対し、 $\varepsilon(u) := \frac{u - 1}{2} \bmod 2$ 、 $\omega(u) := \frac{u^2 - 1}{8} \bmod 2$ とおくとき、
+            <div class="math-display">
+              $$(u, w)_2 = (-1)^{\varepsilon(u)\varepsilon(w)}, \qquad (2, u)_2 = (-1)^{\omega(u)}$$
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) $v = \infty$ の証明。</strong> $a > 0$ または $b > 0$ ならば $a x^2 + b y^2 = z^2$ は $\mathbb{R}$ に非自明解を持つ（例えば $a > 0$ なら $(1, 0, \sqrt{a})$ ）。 $a < 0$ かつ $b < 0$ ならば左辺は非正、右辺は非負なので非自明解を持たず $(a, b)_\infty = -1$ である。</p>
+
+        <p><strong>(2) 奇素数 $v = p \ge 3$ の証明。</strong> 双乗法性と平方因子の不変性より、 $(u, w)_p$ 、 $(u, p)_p$ 、および $(p, p)_p$ の3つの場合を示せば十分である。</p>
+        <ul>
+          <li><strong>$(u, w)_p = +1$ ：</strong> 有限体 $\mathbb{F}_p$ において集合 $\{u x^2 \mid x \in \mathbb{F}_p\}$ と $\{1 - w y^2 \mid y \in \mathbb{F}_p\}$ はともに $(p + 1)/2$ 個の元を持つため、鳩ノ巣原理より共通元を持つ。すなわち $u x_0^2 + w y_0^2 \equiv 1 \pmod p$ を満たす $(x_0, y_0) \in \mathbb{Z}_p^2$ が存在する。 $p \neq 2$ かつ $u x_0^2 + w y_0^2 \equiv 1 \not\equiv 0 \pmod p$ より $x_0, y_0$ の少なくとも一方は $\mathbb{Z}_p^\times$ に属する（例えば $x_0 \in \mathbb{Z}_p^\times$ ）。多項式 $g(X) := u X^2 + w y_0^2 - 1 \in \mathbb{Z}_p[X]$ は $g(x_0) \equiv 0 \pmod p$ かつ $g'(x_0) = 2 u x_0 \not\equiv 0 \pmod p$ であるから、Henselの補題により $\mathbb{Z}_p$ に根 $x$ を持つ。よって $u x^2 + w y_0^2 = 1^2$ は $\mathbb{Q}_p$ に解を持ち $(u, w)_p = +1$ である。</li>
+          <li><strong>$(u, p)_p = \left(\frac{u}{p}\right)$ ：</strong> $\left(\frac{u}{p}\right) = +1$ ならばHenselの補題より $u \in (\mathbb{Z}_p^\times)^2$ なので $(u, p)_p = (1, p)_p = +1$ である。逆に $\left(\frac{u}{p}\right) = -1$ ならば、 $L_2 = \mathbb{Q}_p(\sqrt{u})$ は $\mathbb{Q}_p$ の唯一の不分岐2次拡大であり、定理 7.4 より $\mathrm{inv}_p([(u, p)_{\mathbb{Q}_p}]) = \mathrm{inv}_p([(L_2/\mathbb{Q}_p, \mathrm{Frob}_p, p)]) = \frac{v_p(p)}{2} = \frac{1}{2} \bmod \mathbb{Z}$ となるため $(u, p)_p = -1$ である。</li>
+          <li><strong>$(p, p)_p = (-1)^{\frac{p - 1}{2}}$ ：</strong> $(p, -p)_p = 1$ より $(p, p)_p = (p, -1)_p = (-1, p)_p = \left(\frac{-1}{p}\right)$ である。有限体 $\mathbb{F}_p^\times$ は位数 $p - 1$ の巡回群なので、 $-1 = (-1)^1$ が $\mathbb{F}_p^\times$ の平方元であることと $(-1)^{(p - 1)/2} = 1$ は同値（Eulerの規準）である。よって $(p, p)_p = (-1)^{\frac{p - 1}{2}}$ である。</li>
+        </ul>
+        <p>これらを $(p^\alpha u, p^\beta w)_p = (p, p)_p^{\alpha\beta} (u, p)_p^\beta (w, p)_p^\alpha (u, w)_p$ に代入すれば (2) が得られる。</p>
+
+        <p><strong>(3) $v = 2$ の証明。</strong> 2進単数群において、 $x \in \mathbb{Z}_2^\times$ が平方元 $x \in (\mathbb{Z}_2^\times)^2$ であるための必要十分条件は $x \equiv 1 \pmod 8$ である（実際、奇数の平方は常に $1 \pmod 8$ であり、逆に $x \equiv 1 \pmod 8$ ならば $g(X) = X^2 - x$ に対し $|g(1)|_2 \le 1/8 < 1/4 = |g'(1)|_2^2$ なので一般版Henselの補題により $\mathbb{Z}_2$ に根を持つ）。よって $\mathbb{Z}_2^\times / (\mathbb{Z}_2^\times)^2 \cong (\mathbb{Z}/8\mathbb{Z})^\times = \{\pm 1, \pm 5 \bmod 8\}$ である。</p>
+        <ul>
+          <li><strong>$(u, w)_2 = (-1)^{\varepsilon(u)\varepsilon(w)}$ ：</strong> まず $\varepsilon(u) \equiv 0 \pmod 2$ すなわち $u \equiv 1 \pmod 4$ の場合（ $u \equiv 1$ または $5 \pmod 8$ ）を考える。 $u \equiv 1 \pmod 8$ なら $u \in (\mathbb{Z}_2^\times)^2$ なので $(u, w)_2 = +1$ 。 $u \equiv 5 \pmod 8$ のとき、 $w \equiv 1, 5 \pmod 8$ なら $5 \cdot 1^2 + w \cdot 2^2 \equiv 5 + 4 \equiv 1 \pmod 8$ となり $5 \cdot 1^2 + w \cdot 2^2 \in (\mathbb{Z}_2^\times)^2$ ゆえ $5 x^2 + w y^2 = z^2$ は解を持ち $(5, w)_2 = +1$ 。また $w \equiv 3, 7 \pmod 8$ なら $5 \cdot 1^2 + w \cdot 1^2 \equiv 5 + 3 \equiv 0$ または $5 + 7 \equiv 4 \pmod 8$ のうち、 $5 \cdot 2^2 + w \cdot 1^2 \equiv 4 + w \pmod 8$ を考えると $w \equiv 5$ ではなく、 $w \equiv 3$ なら $5 \cdot 1^2 + 3 \cdot 2^2 = 17 \equiv 1 \pmod 8$ 、 $w \equiv 7$ なら $5 \cdot 2^2 + 7 \cdot 2^2$ ではなく $5 \cdot 0^2$ ではなく $5 \cdot 2^2 + 7 \cdot 1^2 = 27$ ではなく、もっと簡単に $5 x^2 + w y^2 = z^2$ で $x = 1, y = 2$ （ $w \equiv 3$ なら $5 + 12 = 17 \equiv 1 \pmod 8$ ）および $x = 2, y = 1$ （ $w \equiv 7$ なら $20 + 7 = 27$ ではなく、 $5 x^2 + 7 y^2 \equiv 1 \pmod 8$ は $x = 1, y = 2$ で $5 + 28 = 33 \equiv 1 \pmod 8$ ！）とすれば、すべての $w \in \mathbb{Z}_2^\times$ で $5 \cdot 1^2 + w \cdot 2^2 = 5 + 4w \equiv 5 + 4 = 9 \equiv 1 \pmod 8$ （奇数の $4$ 倍は常に $4 \pmod 8$ ！）である！よってすべての $w \in \mathbb{Z}_2^\times$ で $(5, w)_2 = +1$ となる。</li>
+          <li>次に $u \equiv w \equiv 3 \pmod 4$ の場合（ $\varepsilon(u) = \varepsilon(w) = 1$ ）：方程式 $u x^2 + w y^2 = z^2$ が $\mathbb{Q}_2$ に非自明解を持つと仮定し、分母を払って $x, y, z \in \mathbb{Z}_2$ のうち少なくとも1つが奇数である原始解をとる。偶数の平方は $0$ または $4 \pmod 8$ 、奇数の平方は $1 \pmod 8$ である。もし $x, y$ がともに偶数なら $z^2 \equiv 0 \pmod 4$ より $z$ も偶数となり矛盾。 $x, y$ の一方が奇数・他方が偶数なら左辺 $\equiv 3 \pmod 4$ となり平方数 $z^2 \equiv 0, 1 \pmod 4$ に矛盾。 $x, y$ がともに奇数なら左辺 $\equiv u + w \equiv 3 + 3 \equiv 2 \pmod 4$ となりやはり $z^2 \equiv 0, 1 \pmod 4$ に矛盾。よって非自明解は存在せず $(u, w)_2 = -1$ である。</li>
+          <li><strong>$(2, u)_2 = (-1)^{\omega(u)}$ ：</strong> 代表元 $u \in \{1, 3, 5, 7\}$ の4通りを確認すればよい。
+            <ul>
+              <li>$u = 1$ ： $1 \in (\mathbb{Z}_2^\times)^2$ より $(2, 1)_2 = +1 = (-1)^0$ 。</li>
+              <li>$u = 7$ ： $2 \cdot 1^2 + 7 \cdot 1^2 = 9 = 3^2$ より $(2, 7)_2 = +1 = (-1)^6$ 。</li>
+              <li>$u = 5$ ： $L_2 = \mathbb{Q}_2(\sqrt{5})$ は $\mathbb{Q}_2$ の唯一の不分岐2次拡大である（多項式 $X^2 - X - 1$ は $\mathbb{F}_2$ 上既約で判別式 $5$ ）。よって定理 7.4 より $\mathrm{inv}_2([(5, 2)_{\mathbb{Q}_2}]) = \frac{v_2(2)}{2} = \frac{1}{2} \bmod \mathbb{Z}$ となり、 $(2, 5)_2 = -1 = (-1)^3$ である。</li>
+              <li>$u = 3$ ：双乗法性より $(2, 3)_2 = (2, 5 \cdot 7)_2 = (2, 5)_2 (2, 7)_2 = (-1)(+1) = -1 = (-1)^1$ である。</li>
+            </ul>
+          </li>
+        </ul>
+        <p>以上ですべての公式が完全に証明された。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>9.3 平方剰余の相互法則の導出</h3>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 9.4（平方剰余の相互法則および第1・第2補充法則）</span>
+        <p>$p, q$ を相異なる奇素数とする。このとき以下が成り立つ。</p>
+        <ol>
+          <li><strong>（第1補充法則）</strong> $\displaystyle \left(\frac{-1}{p}\right) = (-1)^{\frac{p - 1}{2}}$ 。</li>
+          <li><strong>（第2補充法則）</strong> $\displaystyle \left(\frac{2}{p}\right) = (-1)^{\frac{p^2 - 1}{8}}$ 。</li>
+          <li><strong>（平方剰余の相互法則）</strong> $\displaystyle \left(\frac{p}{q}\right) \left(\frac{q}{p}\right) = (-1)^{\frac{p - 1}{2} \cdot \frac{q - 1}{2}}$ 。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>定理 9.2 (1)（Hilbertの相互律 $\prod_{v \in \Omega_{\mathbb{Q}}} (a, b)_v = 1$ ）と命題 9.3（Hilbert記号の明示公式）を3組の $(a, b)$ に適用する。</p>
+        <p><strong>(1) $(a, b) = (-1, p)$ の場合：</strong></p>
+        <ul>
+          <li>$v = \infty$ ： $p > 0$ より $(-1, p)_\infty = +1$ 。</li>
+          <li>$v = p$ ： $(-1, p)_p = \left(\frac{-1}{p}\right)$ 。</li>
+          <li>$v = \ell$ （ $\ell \neq 2, p$ なる奇素数）： $-1, p \in \mathbb{Z}_\ell^\times$ より $(-1, p)_\ell = +1$ 。</li>
+          <li>$v = 2$ ： $-1, p \in \mathbb{Z}_2^\times$ であり $\varepsilon(-1) = \frac{-1 - 1}{2} \equiv 1 \pmod 2$ より $(-1, p)_2 = (-1)^{\frac{p - 1}{2}}$ 。</li>
+        </ul>
+        <p>Hilbertの相互律より $\left(\frac{-1}{p}\right) (-1)^{\frac{p - 1}{2}} = 1$ 、すなわち $\left(\frac{-1}{p}\right) = (-1)^{\frac{p - 1}{2}}$ を得る。</p>
+
+        <p><strong>(2) $(a, b) = (2, p)$ の場合：</strong></p>
+        <ul>
+          <li>$v = \infty$ ： $2 > 0, p > 0$ より $(2, p)_\infty = +1$ 。</li>
+          <li>$v = p$ ： $(2, p)_p = \left(\frac{2}{p}\right)$ 。</li>
+          <li>$v = \ell$ （ $\ell \neq 2, p$ なる奇素数）： $2, p \in \mathbb{Z}_\ell^\times$ より $(2, p)_\ell = +1$ 。</li>
+          <li>$v = 2$ ：命題 9.3 (3) より $(2, p)_2 = (-1)^{\frac{p^2 - 1}{8}}$ 。</li>
+        </ul>
+        <p>Hilbertの相互律より $\left(\frac{2}{p}\right) (-1)^{\frac{p^2 - 1}{8}} = 1$ 、すなわち $\left(\frac{2}{p}\right) = (-1)^{\frac{p^2 - 1}{8}}$ を得る。</p>
+
+        <p><strong>(3) $(a, b) = (p, q)$ の場合：</strong></p>
+        <ul>
+          <li>$v = \infty$ ： $p > 0, q > 0$ より $(p, q)_\infty = +1$ 。</li>
+          <li>$v = p$ ：命題 9.3 (2) （ $\alpha = 1, \beta = 0, w = q$ ）より $(p, q)_p = \left(\frac{q}{p}\right)$ 。</li>
+          <li>$v = q$ ：命題 9.3 (2) （ $\alpha = 0, \beta = 1, u = p$ ）より $(p, q)_q = \left(\frac{p}{q}\right)$ 。</li>
+          <li>$v = \ell$ （ $\ell \neq 2, p, q$ なる奇素数）： $p, q \in \mathbb{Z}_\ell^\times$ より $(p, q)_\ell = +1$ 。</li>
+          <li>$v = 2$ ：命題 9.3 (3) より $(p, q)_2 = (-1)^{\frac{p - 1}{2} \cdot \frac{q - 1}{2}}$ 。</li>
+        </ul>
+        <p>Hilbertの相互律より</p>
+        <div class="math-display">
+          $$\left(\frac{q}{p}\right) \left(\frac{p}{q}\right) (-1)^{\frac{p - 1}{2} \cdot \frac{q - 1}{2}} = 1$$
+        </div>
+        <p>すなわち $\left(\frac{p}{q}\right) \left(\frac{q}{p}\right) = (-1)^{\frac{p - 1}{2} \cdot \frac{q - 1}{2}}$ が得られる。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>9.4 具体的な四元数環と2次方程式への適用例</h3>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 9.5（有理四元数環のHasse不変量の具体計算と局所大域原理の適用）</span>
+        <p>命題 9.3 と定理 9.2 を用いて、具体的な $\mathbb{Q}$ 上の四元数環および2次方程式 $a x^2 + b y^2 = z^2$ の可解性を判定する。</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>四元数環 $(a, b)_{\mathbb{Q}}$ （対応する方程式）</th>
+              <th class="center-cell">$(a, b)_\infty$</th>
+              <th class="center-cell">$(a, b)_2$</th>
+              <th class="center-cell">奇素数 $p$ での $(a, b)_p$</th>
+              <th>結論（分解するか／有理数解の有無）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$(-1, -1)_{\mathbb{Q}}$<br>（ $-x^2 - y^2 = z^2$ ）</td>
+              <td class="center-cell">$-1$</td>
+              <td class="center-cell">$-1$</td>
+              <td class="center-cell">すべての $p \ge 3$ で $+1$</td>
+              <td>$v = 2, \infty$ で斜体（ $\sum \mathrm{inv}_v = \frac{1}{2} + \frac{1}{2} = 0$ ）。 $\mathbb{Q}$ 上斜体で非自明解なし。</td>
+            </tr>
+            <tr>
+              <td>$(2, 3)_{\mathbb{Q}}$<br>（ $2x^2 + 3y^2 = z^2$ ）</td>
+              <td class="center-cell">$+1$</td>
+              <td class="center-cell">$(2, 3)_2 = (-1)^{\frac{9-1}{8}} = -1$</td>
+              <td class="center-cell">$p = 3$ で $\left(\frac{2}{3}\right) = -1$ 、他は $+1$</td>
+              <td>$v = 2, 3$ で斜体（積は $(-1)(-1) = +1$ ）。 $2x^2 + 3y^2 = z^2$ は $\mathbb{Q}$ に非自明解を持たない。</td>
+            </tr>
+            <tr>
+              <td>$(-1, 3)_{\mathbb{Q}}$<br>（ $-x^2 + 3y^2 = z^2$ ）</td>
+              <td class="center-cell">$+1$</td>
+              <td class="center-cell">$(-1, 3)_2 = (-1)^{1 \cdot 1} = -1$</td>
+              <td class="center-cell">$p = 3$ で $\left(\frac{-1}{3}\right) = -1$ 、他は $+1$</td>
+              <td>$v = 2, 3$ で斜体。定理 8.1 の単射性より、なんと $\mathbb{Q}$ 多元環として $(2, 3)_{\mathbb{Q}} \cong (-1, 3)_{\mathbb{Q}}$ である！</td>
+            </tr>
+            <tr>
+              <td>$(3, 5)_{\mathbb{Q}}$<br>（ $3x^2 + 5y^2 = z^2$ ）</td>
+              <td class="center-cell">$+1$</td>
+              <td class="center-cell">$(3, 5)_2 = (-1)^{1 \cdot 2} = +1$</td>
+              <td class="center-cell">$p = 3$ で $\left(\frac{5}{3}\right) = -1$ 、 $p = 5$ で $\left(\frac{3}{5}\right) = -1$ 、他は $+1$</td>
+              <td>$v = 3, 5$ で斜体。 $3x^2 + 5y^2 = z^2$ は $\mathbb{R}$ と $\mathbb{Q}_2$ に解を持つが、 $\mathbb{Q}_3, \mathbb{Q}_5$ に解がなく $\mathbb{Q}$ にも解なし。</td>
+            </tr>
+            <tr>
+              <td>$(2, 7)_{\mathbb{Q}}$<br>（ $2x^2 + 7y^2 = z^2$ ）</td>
+              <td class="center-cell">$+1$</td>
+              <td class="center-cell">$(2, 7)_2 = (-1)^{\frac{49-1}{8}} = +1$</td>
+              <td class="center-cell">$p = 7$ で $\left(\frac{2}{7}\right) = +1$ 、他は $+1$</td>
+              <td>すべての素点で $+1$ ！ゆえに定理 9.2 (2) より $(2, 7)_{\mathbb{Q}} \cong M_2(\mathbb{Q})$ であり、 $2x^2 + 7y^2 = z^2$ は非自明解を持つ（実際 $(x, y, z) = (1, 1, 3)$ ）。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>上の表の第2行と第3行の比較 $(2, 3)_{\mathbb{Q}} \cong (-1, 3)_{\mathbb{Q}}$ は、定理 8.1 の威力を見事に示している。見かけは全く異なる2つの四元数環であっても、すべての素点 $v \in \Omega_{\mathbb{Q}}$ でのHasse不変量（分岐素点の集合 $S = \{2, 3\}$ ）が一致すれば、Brauer群において同じ類を与え、同じ次数 $2$ の中心的単純多元環であるから $K$ 多元環として同型であることが直ちに結論づけられる。</p>
+      </div>
+    </section>
+
+    <section id="sec-references" class="references">
+      <h2>10. 参考文献</h2>
+      <ol>
+        <li>
+          P. Gille and T. Szamuely, <em>Central Simple Algebras and Galois Cohomology</em>, Cambridge Studies in Advanced Mathematics, Vol. 101, Cambridge University Press, Cambridge, 2006.
+          <a href="https://www.cambridge.org/core/books/central-simple-algebras-and-galois-cohomology/B4A8F430A0D6C5A59722BD48AEF94C05" target="_blank" rel="noopener noreferrer">https://www.cambridge.org/core/books/central-simple-algebras-and-galois-cohomology/B4A8F430A0D6C5A59722BD48AEF94C05</a>
+        </li>
+        <li>
+          J.-P. Serre, <em>Local Fields</em>, translated from the French by M. J. Greenberg, Graduate Texts in Mathematics, Vol. 67, Springer-Verlag, New York, 1979.
+          <a href="https://books.google.com/books/about/Local_Fields.html?id=3LAJCAAAQBAJ" target="_blank" rel="noopener noreferrer">https://books.google.com/books/about/Local_Fields.html?id=3LAJCAAAQBAJ</a>
+        </li>
+        <li>
+          J. S. Milne, <em>Class Field Theory</em>, Course Notes (v4.03), 2020.
+          <a href="https://www.jmilne.org/math/CourseNotes/CFT.pdf" target="_blank" rel="noopener noreferrer">https://www.jmilne.org/math/CourseNotes/CFT.pdf</a>
+        </li>
+        <li>
+          J. Neukirch, A. Schmidt, and K. Wingberg, <em>Cohomology of Number Fields</em>, Second Edition, Grundlehren der mathematischen Wissenschaften, Vol. 323, Springer-Verlag, Berlin, 2008.
+          <a href="https://books.google.com/books/about/Cohomology_of_Number_Fields.html?id=iUSg040UoEsC" target="_blank" rel="noopener noreferrer">https://books.google.com/books/about/Cohomology_of_Number_Fields.html?id=iUSg040UoEsC</a>
+        </li>
+        <li>
+          J.-P. Serre, <em>A Course in Arithmetic</em>, Graduate Texts in Mathematics, Vol. 7, Springer-Verlag, New York, 1973.
+          <a href="https://books.google.com/books/about/A_Course_in_Arithmetic.html?id=e0_vAAAAMAAJ" target="_blank" rel="noopener noreferrer">https://books.google.com/books/about/A_Course_in_Arithmetic.html?id=e0_vAAAAMAAJ</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>

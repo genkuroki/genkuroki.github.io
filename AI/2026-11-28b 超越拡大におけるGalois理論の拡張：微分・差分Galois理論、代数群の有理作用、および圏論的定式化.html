@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>超越拡大におけるGalois理論の拡張：微分・差分Galois理論、代数群の有理作用、および圏論的定式化</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --bg-color: #fcfcfd;
+      --text-color: #1f2328;
+      --muted-color: #57606a;
+      --accent-color: #1b4f72;
+      --accent-light: #ebf3fa;
+      --border-color: #d0d7de;
+      --def-bg: #f4f8fb;
+      --def-border: #2b6cb0;
+      --thm-bg: #fdf8f2;
+      --thm-border: #b7791f;
+      --ex-bg: #f3faf6;
+      --ex-border: #2f855a;
+      --proof-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+      line-height: 1.85;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.75rem 4.5rem;
+      background-color: #ffffff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    header.doc-header {
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    header.doc-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.4;
+      color: var(--accent-color);
+      margin: 0 0 0.75rem 0;
+    }
+
+    header.doc-header p.subtitle {
+      font-size: 1rem;
+      color: var(--muted-color);
+      margin: 0;
+    }
+
+    nav.toc {
+      background-color: #f6f8fa;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 0.94rem;
+    }
+
+    nav.toc h2 {
+      font-size: 1.05rem;
+      margin: 0 0 0.75rem 0;
+      color: var(--accent-color);
+      border: none;
+      padding: 0;
+    }
+
+    nav.toc ol {
+      margin: 0;
+      padding-left: 1.4rem;
+    }
+
+    nav.toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    nav.toc a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    nav.toc a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--accent-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    h3 {
+      font-size: 1.18rem;
+      color: #24292f;
+      margin-top: 2rem;
+      margin-bottom: 0.85rem;
+    }
+
+    h4 {
+      font-size: 1.04rem;
+      color: #24292f;
+      margin-top: 1.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 1.1rem;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-top: 0.4rem;
+      margin-bottom: 1.2rem;
+      padding-left: 1.6rem;
+    }
+
+    li {
+      margin-bottom: 0.45rem;
+    }
+
+    .env-box {
+      border-left: 4px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .env-def {
+      background-color: var(--def-bg);
+      border-left-color: var(--def-border);
+    }
+
+    .env-thm {
+      background-color: var(--thm-bg);
+      border-left-color: var(--thm-border);
+    }
+
+    .env-ex {
+      background-color: var(--ex-bg);
+      border-left-color: var(--ex-border);
+    }
+
+    .env-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #1a202c;
+    }
+
+    .proof-box {
+      background-color: var(--proof-bg);
+      border: 1px solid #e1e4e8;
+      border-left: 4px solid #6e7781;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.75rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .proof-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.6rem;
+      display: block;
+      color: #32383f;
+    }
+
+    .qed {
+      text-align: right;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .math-display {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--accent-light);
+      color: #1a365d;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fafbfc;
+    }
+
+    .center-cell {
+      text-align: center;
+    }
+
+    .references ol {
+      padding-left: 1.6rem;
+      font-size: 0.95rem;
+    }
+
+    .references li {
+      margin-bottom: 0.75rem;
+    }
+
+    .references a {
+      color: var(--accent-color);
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="doc-header">
+      <h1>超越拡大におけるGalois理論の拡張：微分・差分Galois理論、代数群の有理作用、および圏論的定式化</h1>
+      <p class="subtitle">素朴な固定体条件 $L^G = K$ の限界から、Picard–Vessiot理論と具体的な積分・求積不可能性、Białynicki-Birulaの理論と観測可能部分群、GrothendieckのGalois理論・Tannaka双対性までの体系的解説</p>
+    </header>
+
+    <nav class="toc">
+      <h2>目次</h2>
+      <ol>
+        <li><a href="#sec-intro">序論：問題設定と拡張の全体像</a></li>
+        <li><a href="#sec-pure-field">純粋な体論の枠内での限界と特異な現象</a></li>
+        <li><a href="#sec-diff-galois">微分Galois理論（Picard–Vessiot理論）の定式化と基本定理</a></li>
+        <li><a href="#sec-diff-examples">微分Galois理論の具体的な計算例と初等積分・求積不可能性</a></li>
+        <li><a href="#sec-difference-galois">差分Galois理論とその具体的な計算例</a></li>
+        <li><a href="#sec-algebraic-group-action">代数群の有理作用、観測可能部分群、およびBiałynicki-Birulaの理論</a></li>
+        <li><a href="#sec-categorical-galois">圏論的定式化：GrothendieckのGalois理論とTannaka双対性</a></li>
+        <li><a href="#sec-references">参考文献</a></li>
+      </ol>
+    </nav>
+
+    <section id="sec-intro">
+      <h2>1. 序論：問題設定と拡張の全体像</h2>
+      <p>体の拡大 $L/K$ に対し、 $L$ の $K$ 上の体自己同型群を $G = \mathrm{Aut}(L/K)$ と書き、固定体を $L^G := \{x \in L \mid \forall \sigma \in G,\ \sigma(x) = x\}$ とする。代数拡大においては、Artin流の条件 $L^G = K$ は正規分離拡大であることと同値であり、有限次拡大では中間体全体と部分群全体の一対一対応（有限次Galois理論の基本定理）が、無限次代数拡大では $G$ にKrull位相を導入することで中間体全体と閉部分群全体の一対一対応（Krullの定理）が成立する。</p>
+      <p>では、<strong>代数的でない体の拡大（超越拡大）</strong>に対して、Galois拡大の定義を非自明に拡張し、適切なGalois対応を確立することはできるだろうか。結論から述べると、純粋な体の拡大のまま素朴に $L^G = K$ を超越拡大へ適用するだけではGalois対応は破綻する。しかし、現代数学では以下の相互に関連する3つの方向性によって、超越拡大を包含する非自明かつ豊かなGalois理論が構築されている。</p>
+      <ol>
+        <li><strong>微分・差分などの作用素を導入する方向（微分・差分Galois理論）</strong>：体に微分作用素 $\partial$ や自己同型写像 $\sigma$ を付加し、多項式の代わりに線形微分方程式や線形差分方程式の分解体（Picard–Vessiot拡大）を考えることで、Galois群を線形代数群として捉え、微分・差分中間体とZariski閉部分群の完全なGalois対応を得る。さらにKolchinの強正規拡大により非線形方程式と一般の代数群へも拡張される。</li>
+        <li><strong>代数群の有理作用と不変式論の方向（Białynicki-Birulaの理論と観測可能部分群）</strong>：代数群 $G$ が体 $L$ に有理的に作用している状況で、関数体レベル $k(G)$ と座標環レベル $k[G]$ のGalois接続を精密に解析し、観測可能部分群 (observable subgroup) や作用素付き体のGalois理論を定式化する。</li>
+        <li><strong>圏論的・抽象的定式化の方向（GrothendieckのGalois理論とTannaka双対性）</strong>：拡大体そのものではなく「良い対象の圏 $\mathcal{C}$ 」と「ファイバー関手 $\omega$ 」の自己同型群 $\mathrm{Aut}(\omega)$ としてGalois群を定義し、古典的Galois理論、被覆空間の理論、微分・差分Galois理論をすべて統一的な枠組みに統合する。</li>
+      </ol>
+      <p>本稿では、まず純粋な体論の枠内で何が起こるかを厳密な反例と証明によって確認したのち、上記3つの理論を定義・定理・完全な証明および豊富な具体例とともに体系的に解説する。</p>
+    </section>
+
+    <section id="sec-pure-field">
+      <h2>2. 純粋な体論の枠内での限界と特異な現象</h2>
+
+      <h3>2.1 なぜ素朴な $L^G = K$ ではGalois対応が破綻するのか</h3>
+      <p>任意の体の拡大 $L/K$ と $G = \mathrm{Aut}(L/K)$ に対し、中間体全体の集合を $\mathcal{M}$ 、 $G$ の部分群全体の集合を $\mathcal{H}$ とおくと、2つの写像</p>
+      <div class="math-display">
+        $$\Phi : \mathcal{M} \longrightarrow \mathcal{H}, \qquad M \longmapsto \mathrm{Aut}(L/M)$$
+      </div>
+      <div class="math-display">
+        $$\Psi : \mathcal{H} \longrightarrow \mathcal{M}, \qquad H \longmapsto L^H$$
+      </div>
+      <p>は常に包含関係を逆転させ、かつ任意の $M \in \mathcal{M}$ に対して $M \subset \Psi(\Phi(M))$ 、任意の $H \in \mathcal{H}$ に対して $H \subset \Phi(\Psi(H))$ を満たす（これを順序集合間の<strong>Galois接続 (Galois connection)</strong> という）。したがって、 $\Psi(\Phi(M)) = M$ を満たす「閉中間体」と $\Phi(\Psi(H)) = H$ を満たす「閉部分群」の間には形式的な一対一対応が常に存在する。</p>
+      <p>しかし、超越拡大において素朴に $L^G = K$ を仮定しただけでは、以下の2つの致命的な破綻が生じる。</p>
+      <ul>
+        <li><strong>中間体が固定体として復元できない（ $\Psi(\Phi(M)) \neq M$ ）</strong>：有限次あるいは無限次代数Galois拡大ではすべての中間体 $M$ が $L^{\mathrm{Aut}(L/M)} = M$ を満たすが、超越拡大では $L^G = K$ であってもこれが成り立たない。</li>
+        <li><strong>群の位相的制御の喪失</strong>：無限次代数Galois拡大では $G$ が射有限群（コンパクト・Hausdorff・完全不連結）となるため、Krull位相における閉部分群という純粋に位相群論的な条件で $\Phi(\mathcal{M})$ を完全に特徴づけられる。一方、超越拡大では $G$ がコンパクトにならず、部分群の閉性だけで固定体との対応を制御できない。</li>
+      </ul>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 2.1（$L^G = K$ を満たすが中間体が復元できない超越拡大）</span>
+        <p>$K$ を標数 $0$ の体（したがって無限体）とし、 $L = K(t)$ を $K$ 上の $1$ 変数有理関数体、 $G = \mathrm{Aut}(K(t)/K)$ とする。このとき以下が成り立つ。</p>
+        <ol>
+          <li>$L^G = K$ である。</li>
+          <li>中間体 $M = K(t^3 + t)$ に対して $[L : M] = 3$ であるが、 $\mathrm{Aut}(L/M) = \{\mathrm{id}_L\}$ であり、したがって $L^{\mathrm{Aut}(L/M)} = L \neq M$ である。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) の証明。</strong> 任意の $a \in K$ に対し、多項式環の $K$ 自己同型 $K[t] \xrightarrow{\sim} K[t]$ （ $P(t) \mapsto P(t + a)$ ）を商体 $K(t)$ に延長することで、 $\sigma_a(t) = t + a$ を満たす $\sigma_a \in G$ を得る。任意の $f(t) \in L^G$ を互いに素な多項式 $P(t), Q(t) \in K[t]$ （ $Q(t)$ はモニック）により $f(t) = P(t)/Q(t)$ と表す。すべての $a \in K$ に対して $\sigma_a(f(t)) = f(t)$ すなわち $P(t + a) Q(t) = P(t) Q(t + a)$ が成り立つ。</p>
+        <p>$K[t]$ は一意分解整域であり $P(t)$ と $Q(t)$ は互いに素なので、 $Q(t)$ は $Q(t + a)$ を割り切る。両者は同じ次数のモニック多項式であるから $Q(t + a) = Q(t)$ であり、同様に $P(t + a) = P(t)$ である。多項式 $Q(X) - Q(0) \in K[X]$ はすべての $a \in K$ を根に持つが、 $K$ は無限体なので零多項式であり $Q(t) = Q(0) \in K$ を得る。同様に $P(t) = P(0) \in K$ であるから $f(t) \in K$ となり、 $L^G = K$ が示された。</p>
+
+        <p><strong>(2) の証明。</strong> $u := t^3 + t \in M$ とおき、多項式 $F(X) := X^3 + X - u \in M[X]$ を考える。 $F(t) = 0$ であるから、 $L[X]$ において因数分解すると</p>
+        <div class="math-display">
+          $$F(X) = X^3 + X - (t^3 + t) = (X - t)(X^2 + tX + t^2 + 1)$$
+        </div>
+        <p>となる。まず $[L : M] = 3$ であることを確認する。 $t$ は $M$ 上の $3$ 次多項式 $F(X)$ の根であるから $[L : M] = [M(t) : M] \le 3$ である。一方、 $M = K(u)$ において $u = t^3 + t$ は $K$ 上超越的であり、 $t$ の $K[u]$ 上の多項式 $X^3 + X - u \in K[u][X]$ は $u$ の $1$ 次式なので $K[X][u]$ において既約である。Gaussの補題より $F(X)$ は $K(u)[X] = M[X]$ において既約であり、ゆえに $[L : M] = 3$ である。</p>
+        <p>次に、任意の $\sigma \in \mathrm{Aut}(L/M)$ をとる。 $\sigma(u) = u$ であるから $F(\sigma(t)) = \sigma(F(t)) = 0$ となり、 $\sigma(t) \in L$ は $X - t = 0$ または $X^2 + tX + t^2 + 1 = 0$ の根である。もし $X^2 + tX + t^2 + 1 = 0$ が $L = K(t)$ に根 $w \in K(t)$ を持つと仮定する。標数 $0$ なので平方完成して $(2w + t)^2 = -3t^2 - 4$ を得る。 $2w + t \in K(t)$ を互いに素な多項式 $A(t), B(t) \in K[t]$ （ $B(t) \neq 0$ ）によって $2w + t = A(t)/B(t)$ と表すと、 $K[t]$ において</p>
+        <div class="math-display">
+          $$A(t)^2 = (-3t^2 - 4) B(t)^2$$
+        </div>
+        <p>が成り立つ。 $K$ の代数閉包 $\overline{K}$ において多項式 $-3t^2 - 4$ の形式微分は $-6t$ であり、 $\mathrm{char}(K) = 0$ より $\gcd(-3t^2 - 4, -6t) = 1$ であるから、 $-3t^2 - 4$ は $\overline{K}$ に相異なる $2$ 根 $\alpha_1, \alpha_2 \in \overline{K}$ を持つ。しかし上の等式の両辺を $\overline{K}[t]$ で一次式に分解したとき、左辺における $(t - \alpha_1)$ の指数は偶数であるのに対し、右辺における指数は $1 + 2m$ （奇数）となり、一意分解性に矛盾する。</p>
+        <p>したがって $X^2 + tX + t^2 + 1$ は $L = K(t)$ に根を持たない。ゆえに $\sigma(t) = t$ でなければならず、 $L = K(t)$ は $K$ 上 $t$ で生成されるから $\sigma = \mathrm{id}_L$ である。よって $\mathrm{Aut}(L/M) = \{\mathrm{id}_L\}$ であり、 $L^{\mathrm{Aut}(L/M)} = L \neq M$ を得る。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p>なお、 $\mathrm{Aut}(K(t)/K)$ は分数一次変換 $t \mapsto (at + b)/(ct + d)$ （ $ad - bc \neq 0$ ）全体のなす射影一般線形群 $\mathrm{PGL}_2(K)$ に同型である。</p>
+
+      <h3>2.2 代数閉体の拡大における特異な現象（例：$\mathbb{C}/\mathbb{Q}$ ）</h3>
+      <p>純粋な体論の枠内でも、拡大体 $L$ 自体が極めて大きい場合（特に標数 $0$ の代数閉体である場合）には、すべての（超越的なものを含む）中間体が固定体として復元できるという特異な現象が起きる。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 2.2（標数 $0$ の代数閉体における中間体の復元性）</span>
+        <p>$L$ を標数 $0$ の代数閉体、 $K$ を $L$ の任意の部分体とする（例えば $L = \mathbb{C}$ 、 $K = \mathbb{Q}$ ）。このとき、 $L/K$ の任意の中間体 $M$ に対して</p>
+        <div class="math-display">
+          $$L^{\mathrm{Aut}(L/M)} = M$$
+        </div>
+        <p>が成り立つ。すなわち、写像 $\Phi : \mathcal{M} \to \mathcal{H}$ （ $M \mapsto \mathrm{Aut}(L/M)$ ）は単射である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>$M \subset L^{\mathrm{Aut}(L/M)}$ は明らかである。逆の包含関係を示すため、任意の $\alpha \in L \smallsetminus M$ をとり、 $\sigma(\alpha) \neq \alpha$ を満たす $\sigma \in \mathrm{Aut}(L/M)$ を構成する。 $M$ の $L$ における代数閉包を $\overline{M} \subset L$ とおく。 $\alpha$ が $M$ 上代数的であるか超越的であるかによって場合分けを行う。</p>
+        <p><strong>場合 1：$\alpha$ が $M$ 上代数的である場合。</strong> $\alpha$ の $M$ 上の最小多項式 $f(X) \in M[X]$ は $\alpha \notin M$ より次数 $2$ 以上である。 $\mathrm{char}(M) = 0$ より $f(X)$ は分離多項式であり、 $\overline{M}$ に $\alpha$ とは異なる根 $\beta \neq \alpha$ を持つ。したがって $\tau_0(\alpha) = \beta$ を満たす $M$ 同型 $\tau_0 : M(\alpha) \xrightarrow{\sim} M(\beta)$ が存在する。Zornの補題による代数閉包への同型延長定理（通常の代数拡大に対する延長論法）により、 $\tau_0$ は $M$ 自己同型 $\tau \in \mathrm{Aut}(\overline{M}/M)$ に延長できる。</p>
+        <p>次に、 $L/\overline{M}$ の超越基底 (transcendence basis) $B \subset L$ を1つ選ぶ。すると $L$ は純超越拡大 $\overline{M}(B)$ の代数閉包である。 $\tau \in \mathrm{Aut}(\overline{M}/M)$ は $B$ の各元を固定することで $\overline{M}(B)$ の $M$ 自己同型 $\tilde{\tau}$ に一意に延長でき、さらに代数閉包の同型の一意性（Zornの補題）により $\tilde{\tau}$ は $L$ 全体の $M$ 自己同型 $\sigma \in \mathrm{Aut}(L/M)$ に延長できる。構成より $\sigma(\alpha) = \beta \neq \alpha$ である。</p>
+        <p><strong>場合 2：$\alpha$ が $M$ 上超越的である場合。</strong> $M$ 上代数的に独立な単元集合 $\{\alpha\}$ を、Zornの補題により $L/M$ の超越基底 $B$ に拡大する（ $\alpha \in B$ ）。純超越拡大 $M(B)$ 上の $M$ 自己同型 $\tau : M(B) \xrightarrow{\sim} M(B)$ を、 $\tau(\alpha) := \alpha + 1$ および $\tau(b) := b$ （ $b \in B \smallsetminus \{\alpha\}$ ）によって定める（逆写像は $\alpha \mapsto \alpha - 1$ なので同型である）。 $L$ は $M(B)$ の代数閉包であるから、代数閉包の同型延長により $\tau$ は $\sigma \in \mathrm{Aut}(L/M)$ に延長でき、 $\sigma(\alpha) = \alpha + 1 \neq \alpha$ を満たす。</p>
+        <p>いずれの場合も $\alpha \notin L^{\mathrm{Aut}(L/M)}$ であるから、 $L^{\mathrm{Aut}(L/M)} = M$ が成り立つ。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p>命題 2.2 により、 $L = \mathbb{C}$ 、 $K = \mathbb{Q}$ のような拡大ではすべての中間体が閉中間体となる。しかし部分群の側（ $\Psi : H \mapsto L^H$ ）では、 $G = \mathrm{Aut}(L/K)$ に各点収束位相（すなわち有限部分集合 $S \subset L$ の固定化部分群 $\mathrm{Aut}(L/K(S))$ を単位元の基本近傍系とする、Krull位相の自然な一般化）を入れても、閉部分群であって $\mathrm{Aut}(L/M)$ の形にならないものが大量に存在する（例えば、 $\mathbb{C}/\mathbb{Q}$ において超越基底の置換のみからなる部分群や、複素共役と特定の超越元の平行移動で生成される閉部分群などは、一般にその固定体の自己同型群より真に小さい）。したがって、純粋な体論の枠内だけで完全なGalois対応を得ることは困難であり、以下の節で述べる構造の付加や視点の転換が不可欠となる。</p>
+    </section>
+
+    <section id="sec-diff-galois">
+      <h2>3. 微分Galois理論（Picard–Vessiot理論）の定式化と基本定理</h2>
+      <p>超越拡大を含む体の拡大に対して最も自然かつ完全なGalois対応を実現する王道が、体に<strong>微分作用素</strong>を付加し、多項式の代わりに<strong>線形微分方程式</strong>を考える<strong>微分Galois理論 (differential Galois theory)</strong>、すなわち<strong>Picard–Vessiot理論 (Picard–Vessiot theory)</strong> である（van der Put–Singer [1]）。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 3.1（微分環・微分体・定数体）</span>
+        <p>単位元を持つ可換環 $R$ と、加法群としての準同型 $\partial : R \to R$ の組 $(R, \partial)$ がLeibniz則</p>
+        <div class="math-display">
+          $$\partial(ab) = \partial(a) b + a \partial(b) \qquad (\forall a, b \in R)$$
+        </div>
+        <p>を満たすとき、 $(R, \partial)$ を<strong>微分環 (differential ring)</strong> という。 $R$ が体であるとき、 $(R, \partial)$ を<strong>微分体 (differential field)</strong> という。しばしば $\partial(a)$ を $a'$ 、 $k$ 回反復したものを $a^{(k)}$ と書く。</p>
+        <p>微分体 $(K, \partial)$ において、</p>
+        <div class="math-display">
+          $$C_K := \{c \in K \mid \partial(c) = 0\}$$
+        </div>
+        <p>は $K$ の部分体をなす（実際、 $\partial(1) = \partial(1 \cdot 1) = 2\partial(1)$ より $\partial(1) = 0$ であり、 $c \neq 0$ に対し $0 = \partial(c c^{-1}) = c \partial(c^{-1})$ より $\partial(c^{-1}) = 0$ ）。 $C_K$ を $K$ の<strong>定数体 (field of constants)</strong> という。</p>
+        <p>微分体 $(L, \partial_L)$ が微分体 $(K, \partial_K)$ を部分体として含み、 $\partial_L|_K = \partial_K$ を満たすとき、 $(L, \partial_L)/(K, \partial_K)$ （略して $L/K$ ）を<strong>微分体の拡大 (differential field extension)</strong> という。また、 $L/K$ の中間体 $M$ が $\partial(M) \subset M$ を満たすとき、 $M$ を<strong>微分中間体 (intermediate differential field)</strong> という。</p>
+      </div>
+
+      <p>以下、本節および第 4 節では、基礎となる微分体 $(K, \partial)$ の定数体 $C := C_K$ は<strong>標数 $0$ の代数閉体</strong>（典型例は $K = (\mathbb{C}(x), \frac{d}{dx})$ 、 $C = \mathbb{C}$ ）であると仮定する。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 3.2（Picard–Vessiot拡大と微分Galois群）</span>
+        <p>$K$ 上の $n$ 階斉次線形微分方程式</p>
+        <div class="math-display">
+          $$\mathcal{L}(y) := y^{(n)} + a_{n-1} y^{(n-1)} + \dots + a_1 y' + a_0 y = 0 \qquad (a_0, \dots, a_{n-1} \in K)$$
+        </div>
+        <p>（あるいは同値な $1$ 階連立線形微分方程式 $Y' = A Y$ 、 $A \in M_n(K)$ ）を考える。微分体の拡大 $L/K$ が次の3条件を満たすとき、 $L$ を $\mathcal{L}(y) = 0$ の $K$ 上の<strong>Picard–Vessiot拡大 (Picard–Vessiot extension)</strong> という。</p>
+        <ol>
+          <li>$L$ における解空間 $V := \{y \in L \mid \mathcal{L}(y) = 0\}$ は定数体 $C$ 上 $n$ 次元ベクトル空間である（すなわち $C$ 上線形独立な $n$ 個の解 $y_1, \dots, y_n \in L$ —<strong>基本解系 (fundamental system of solutions)</strong>—が存在する）。</li>
+          <li>$L$ は $K$ 上で解とその導関数によって微分体として生成される： $L = K\langle y_1, \dots, y_n \rangle := K(\{y_i^{(j)} \mid 1 \le i \le n,\ 0 \le j \le n - 1\})$ 。</li>
+          <li>定数体が拡大されない： $C_L = C_K = C$ 。</li>
+        </ol>
+        <p>また、微分と可換な $L$ の $K$ 自己同型全体のなす群</p>
+        <div class="math-display">
+          $$\mathrm{Aut}_\partial(L/K) := \{\sigma \in \mathrm{Aut}(L/K) \mid \sigma \circ \partial = \partial \circ \sigma\}$$
+        </div>
+        <p>を $L/K$ の<strong>微分Galois群 (differential Galois group)</strong> という。</p>
+      </div>
+
+      <p>なお、 $L$ における $n$ 個の元 $y_1, \dots, y_n \in L$ が定数体 $C$ 上線形独立であることは、その<strong>Wronskian (Wronskian)</strong></p>
+      <div class="math-display">
+        $$W(y_1, \dots, y_n) := \det \begin{pmatrix} y_1 & y_2 & \dots & y_n \\ y_1' & y_2' & \dots & y_n' \\ \vdots & \vdots & \ddots & \vdots \\ y_1^{(n-1)} & y_2^{(n-1)} & \dots & y_n^{(n-1)} \end{pmatrix}$$
+      </div>
+      <p>が $0$ でないことと同値である。さらに基本解系 $y_1, \dots, y_n$ に対して微分方程式 $\mathcal{L}(y) = 0$ を用いると、行列式の微分の公式から $W' = -a_{n-1} W$ （1階連立系 $Y' = A Y$ に対しては基本解行列 $\Phi \in \mathrm{GL}_n(L)$ の行列式 $W = \det \Phi$ が $W' = \mathrm{tr}(A) W$ ）を満たす。</p>
+
+      <p>任意の $\sigma \in G = \mathrm{Aut}_\partial(L/K)$ は微分と可換であり $K$ の元を固定するため、解空間 $V = \{y \in L \mid \mathcal{L}(y) = 0\}$ をそれ自身に写す $C$ 線形同型を誘導する。基本解系 $y_1, \dots, y_n$ を $V$ の $C$ 基底として固定すると、各 $\sigma \in G$ は行列 $M_\sigma \in \mathrm{GL}_n(C)$ を一意に定め、単射群準同型</p>
+      <div class="math-display">
+        $$\rho : G \hookrightarrow \mathrm{GL}_n(C), \qquad \sigma \longmapsto M_\sigma$$
+      </div>
+      <p>を与える。実際、 $\rho(G)$ は $\mathrm{GL}_n(C)$ の<strong>Zariski閉部分群</strong>（すなわち行列成分に関する多項式方程式系の零点集合として定まる部分群）、つまり $C$ 上の<strong>線形代数群 (linear algebraic group)</strong> となる。この構造のもとで、古典的Galois理論と完全に並行する基本定理が成立する。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 3.3（Picard–Vessiot理論の基本定理）</span>
+        <p>$L/K$ を定数体 $C$ （標数 $0$ の代数閉体）上のPicard–Vessiot拡大とし、 $G = \mathrm{Aut}_\partial(L/K)$ をその微分Galois群とする。このとき、 $G$ は $C$ 上の線形代数群の構造を持ち、以下が成り立つ。</p>
+        <ol>
+          <li>$L^G = K$ が成り立つ。</li>
+          <li>$L/K$ のすべての<strong>微分中間体</strong> $M$ の集合と、 $G$ のすべての<strong>Zariski閉部分群</strong> $H$ の集合の間に、写像 $M \mapsto \mathrm{Aut}_\partial(L/M)$ および $H \mapsto L^H$ による包含関係を逆転させる一対一対応が成り立つ。</li>
+          <li>微分中間体 $M$ と対応するZariski閉部分群 $H = \mathrm{Aut}_\partial(L/M)$ について、 $M/K$ がPicard–Vessiot拡大であるための必要十分条件は、 $H$ が $G$ の正規部分群（ $H \triangleleft G$ ）であることである。このとき $G/H \cong \mathrm{Aut}_\partial(M/K)$ が線形代数群として成り立つ。</li>
+          <li>拡大 $L/K$ の超越次数は線形代数群 $G$ の次元に等しい： $\mathrm{tr.deg}_K(L) = \dim G$ 。特に $L/K$ が有限次代数拡大であることと $G$ が有限群であることは同値である。</li>
+        </ol>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>通常の有限次Galois理論</th>
+            <th>微分Galois理論（Picard–Vessiot理論）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>対象となる拡大</td>
+            <td>分離多項式の最小分解体 $L/K$</td>
+            <td>線形微分方程式のPicard–Vessiot拡大 $L/K$</td>
+          </tr>
+          <tr>
+            <td>Galois群 $G$</td>
+            <td>有限群 $G = \mathrm{Aut}(L/K) \subset S_n$</td>
+            <td>線形代数群 $G = \mathrm{Aut}_\partial(L/K) \subset \mathrm{GL}_n(C)$</td>
+          </tr>
+          <tr>
+            <td>対応する中間体</td>
+            <td>すべての中間体 $K \subset M \subset L$</td>
+            <td>すべての<strong>微分中間体</strong> $K \subset M \subset L$</td>
+          </tr>
+          <tr>
+            <td>対応する部分群</td>
+            <td>$G$ のすべての部分群 $H$</td>
+            <td>$G$ のすべての<strong>Zariski閉部分群</strong> $H$</td>
+          </tr>
+          <tr>
+            <td>正規部分群 $H \triangleleft G$</td>
+            <td>$M/K$ がGalois拡大</td>
+            <td>$M/K$ がPicard–Vessiot拡大</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>非線形微分方程式への拡張（Kolchinの強正規拡大）：</strong> E. R. Kolchin はPicard–Vessiot理論をさらに非線形微分方程式へ拡張し、<strong>強正規拡大 (strongly normal extension)</strong> の理論を構築した（Kolchin [3]）。この理論では、線形代数群に限らず楕円曲線やアーベル多様体を含む一般の代数群（例えばWeierstrassの $\wp$ 関数が満たす非線形微分方程式 $(\wp')^2 = 4\wp^3 - g_2 \wp - g_3$ のGalois群は楕円曲線そのものになる）に対して完全なGalois対応が成り立つ。</p>
+    </section>
+
+    <section id="sec-diff-examples">
+      <h2>4. 微分Galois理論の具体的な計算例と初等積分・求積不可能性</h2>
+      <p>本節では、基礎となる微分体を $K = (\mathbb{C}(x), \partial)$ （ただし $\partial = \frac{d}{dx}$ 、定数体は $C = \mathbb{C}$ ）として、具体的な微分方程式のGalois群の計算と、初等関数による積分不可能性および求積不可能性の証明を行う。</p>
+
+      <h3>4.1 基本的な1階微分方程式：$e^x$ と $\log x$</h3>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 4.1（指数関数 $y' = y$ と乗法群 $\mathbb{G}_m$ ）</span>
+        <p>$K = \mathbb{C}(x)$ 上の線形微分方程式 $y' - y = 0$ の解 $y = e^x$ を添加した拡大 $L = \mathbb{C}(x, e^x)$ を考える。 $L/K$ はPicard–Vessiot拡大であり、その微分Galois群は乗法群</p>
+        <div class="math-display">
+          $$G = \mathrm{Aut}_\partial(\mathbb{C}(x, e^x)/\mathbb{C}(x)) \cong \mathbb{G}_m(\mathbb{C}) = \mathrm{GL}_1(\mathbb{C}) = \mathbb{C}^\times$$
+        </div>
+        <p>に同型である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>まず、 $e^x$ が $\mathbb{C}(x)$ 上超越的であることを確認する。背理法により、 $e^x$ が $\mathbb{C}(x)$ 上代数的であると仮定し、その最小多項式を</p>
+        <div class="math-display">
+          $$P(Y) = Y^d + a_{d-1}(x) Y^{d-1} + \dots + a_1(x) Y + a_0(x) \in \mathbb{C}(x)[Y] \qquad (d \ge 1)$$
+        </div>
+        <p>とおく（ $e^x \neq 0$ より $a_0(x) \neq 0$ ）。 $P(e^x) = 0$ の両辺を $\partial = \frac{d}{dx}$ で微分すると、 $(e^x)' = e^x$ を用いて</p>
+        <div class="math-display">
+          $$d (e^x)^d + \sum_{k=0}^{d-1} (a_k'(x) + k a_k(x)) (e^x)^k = 0$$
+        </div>
+        <p>を得る。これから $d P(e^x) = 0$ を辺々引くと、次数が $d - 1$ 以下の関係式</p>
+        <div class="math-display">
+          $$\sum_{k=0}^{d-1} \left( a_k'(x) + (k - d) a_k(x) \right) (e^x)^k = 0$$
+        </div>
+        <p>が得られる。最小多項式の次数の最小性より、すべての $k = 0, \dots, d - 1$ に対して $a_k'(x) + (k - d) a_k(x) = 0$ でなければならない。特に $k = 0$ に対して $a_0'(x) = d a_0(x)$ が成り立つ。非零有理関数 $a_0(x) \in \mathbb{C}(x)^\times$ を既約分数 $U(x)/V(x)$ （ $U, V \in \mathbb{C}[x]$ は互いに素、 $V$ はモニック）と表すと、 $U' V - U V' = d U V$ となる。両辺の次数を比較すると、左辺の次数は高々 $\deg U + \deg V - 1$ であるのに対し、 $d \ge 1$ より右辺の次数は $\deg U + \deg V$ であり矛盾する。よって $e^x$ は $\mathbb{C}(x)$ 上超越的である。</p>
+        <p>次に、 $G = \mathrm{Aut}_\partial(L/K)$ を決定する。任意の $\sigma \in G$ に対して</p>
+        <div class="math-display">
+          $$\partial\left(\frac{\sigma(e^x)}{e^x}\right) = \frac{\sigma(e^x)' e^x - \sigma(e^x)(e^x)'}{(e^x)^2} = \frac{\sigma(e^x) e^x - \sigma(e^x) e^x}{(e^x)^2} = 0$$
+        </div>
+        <p>が成り立つ。微分が $0$ の元は定数体 $\mathbb{C}$ に属するから、ある $c_\sigma \in \mathbb{C}^\times$ が存在して $\sigma(e^x) = c_\sigma e^x$ となる。写像 $\sigma \mapsto c_\sigma$ は単射群準同型 $G \hookrightarrow \mathbb{C}^\times = \mathbb{G}_m(\mathbb{C})$ を与える。</p>
+        <p>逆に、 $e^x$ は $\mathbb{C}(x)$ 上超越的であるから、任意の $c \in \mathbb{C}^\times$ に対して $K$ 自己同型 $\sigma_c : \mathbb{C}(x, e^x) \xrightarrow{\sim} \mathbb{C}(x, e^x)$ を $\sigma_c(e^x) := c e^x$ によりwell-definedに定めることができる。このとき $\partial(\sigma_c(e^x)) = \partial(c e^x) = c e^x = \sigma_c(e^x) = \sigma_c(\partial(e^x))$ であり、生成元上で微分と可換なので $\sigma_c \in G$ である。ゆえに $G \cong \mathbb{G}_m(\mathbb{C})$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p><strong>Galois対応の検証：</strong> $\mathbb{G}_m(\mathbb{C}) = \mathbb{C}^\times$ のZariski閉部分群は、有限巡回群 $\mu_n := \{\zeta \in \mathbb{C}^\times \mid \zeta^n = 1\}$ （ $n \ge 1$ ）および $\mathbb{G}_m(\mathbb{C})$ 自身に限られる。定理 3.3 により、これらは $L/K$ のすべての微分中間体と一対一に対応する。実際、 $\mu_n$ に対応する固定体は $L^{\mu_n} = \mathbb{C}(x, e^{nx})$ であり、 $\mathbb{G}_m(\mathbb{C})$ に対応する固定体は $\mathbb{C}(x)$ である。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 4.2（対数関数 $y' = \frac{1}{x}$ と加法群 $\mathbb{G}_a$ ）</span>
+        <p>$K = \mathbb{C}(x)$ 上の非斉次微分方程式 $y' = \frac{1}{x}$ （同値な2階斉次線形微分方程式は $x y'' + y' = 0$ 、基本解系は $1, \log x$ ）の解 $y = \log x$ を添加した拡大 $L = \mathbb{C}(x, \log x)$ を考える。 $L/K$ はPicard–Vessiot拡大であり、その微分Galois群は加法群</p>
+        <div class="math-display">
+          $$G = \mathrm{Aut}_\partial(\mathbb{C}(x, \log x)/\mathbb{C}(x)) \cong \mathbb{G}_a(\mathbb{C}) = (\mathbb{C}, +) \cong \left\{ \begin{pmatrix} 1 & a \\ 0 & 1 \end{pmatrix} \ \middle|\ a \in \mathbb{C} \right\}$$
+        </div>
+        <p>に同型である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>まず、 $\log x$ が $\mathbb{C}(x)$ 上超越的であることを確認する。背理法により最小多項式 $P(Y) = Y^d + a_{d-1}(x) Y^{d-1} + \dots + a_0(x) \in \mathbb{C}(x)[Y]$ （ $d \ge 1$ ）が存在すると仮定する。 $P(\log x) = 0$ の両辺を微分すると、 $(\log x)' = 1/x$ より</p>
+        <div class="math-display">
+          $$\left( a_{d-1}'(x) + \frac{d}{x} \right) (\log x)^{d-1} + \sum_{k=0}^{d-2} \left( a_k'(x) + \frac{(k + 1) a_{k+1}(x)}{x} \right) (\log x)^k = 0$$
+        </div>
+        <p>を得る。最小多項式の次数の最小性より、最高次（ $d - 1$ 次）の係数は $0$ でなければならず、 $a_{d-1}'(x) = -d/x$ が成り立つ。有理関数 $a_{d-1}(x) \in \mathbb{C}(x)$ を部分分数分解すると、 $x = 0$ における留数（ $1/x$ の係数）は導関数をとることで必ず $0$ になる（実際、 $(x - 0)^{-m}$ （ $m \ge 1$ ）の導関数は $-m x^{-m-1}$ であり $x^{-1}$ の項は現れない）。これは $a_{d-1}'(x) = -d/x$ （ $d \ge 1$ ）に矛盾する。よって $\log x$ は $\mathbb{C}(x)$ 上超越的である。</p>
+        <p>任意の $\sigma \in G$ に対して、 $\partial(\sigma(\log x) - \log x) = \sigma(1/x) - 1/x = 0$ であるから、ある $a_\sigma \in \mathbb{C}$ が存在して $\sigma(\log x) = \log x + a_\sigma$ となる。 $\log x$ は $\mathbb{C}(x)$ 上超越的であるから、逆に任意の $a \in \mathbb{C}$ に対して $\sigma_a(\log x) := \log x + a$ はwell-definedな微分自己同型 $\sigma_a \in G$ を定める。よって写像 $\sigma \mapsto a_\sigma$ は同型 $G \cong \mathbb{G}_a(\mathbb{C})$ を与える。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p><strong>Galois対応の検証：</strong> 標数 $0$ において $\mathbb{G}_a(\mathbb{C}) = (\mathbb{C}, +)$ の真のZariski閉部分群は自明な部分群 $\{0\}$ のみである（ $0$ でない元 $a$ を含む部分群は無限集合 $\{na \mid n \in \mathbb{Z}\}$ を含むため、1次元既約曲線 $\mathbb{A}^1_{\mathbb{C}}$ においてZariski稠密になる）。したがって定理 3.3 より、 $\mathbb{C}(x, \log x)/\mathbb{C}(x)$ には<strong>非自明な微分中間体が一切存在しない</strong>ことが直ちに従う。</p>
+
+      <h3>4.2 Liouville拡大、Kolchinの定理、および初等積分・求積不可能性</h3>
+      <p>通常のGalois理論における「代数方程式の冪根による可解性 $\iff$ Galois群が可解群」に対応するものが、微分Galois理論におけるKolchinの定理である。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 4.3（Liouville拡大と初等拡大）</span>
+        <p>微分体の拡大 $L/K$ に対し、定数体が拡大されない微分体の塔</p>
+        <div class="math-display">
+          $$K = K_0 \subset K_1 \subset \dots \subset K_m = L$$
+        </div>
+        <p>が存在し、各段階 $K_i = K_{i-1}(t_i)$ が次の3種類のいずれかであるとき、 $L/K$ を<strong>Liouville拡大 (Liouvillian extension)</strong> という。</p>
+        <ol>
+          <li>$t_i$ は $K_{i-1}$ 上代数的である。</li>
+          <li><strong>積分（原始関数）の添加：</strong> $t_i' \in K_{i-1}$ 。</li>
+          <li><strong>積分の指数の添加：</strong> $t_i \neq 0$ かつ $t_i'/t_i \in K_{i-1}$ 。</li>
+        </ol>
+        <p>特に、条件 (2) を「対数の添加：ある $u_i \in K_{i-1}^\times$ が存在して $t_i' = u_i'/u_i$ 」に、条件 (3) を「指数の添加：ある $u_i \in K_{i-1}$ が存在して $t_i'/t_i = u_i'$ 」にそれぞれ制限した塔によって得られる拡大を<strong>初等拡大 (elementary extension)</strong> という。</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 4.4（Kolchinの定理）</span>
+        <p>$L/K$ をPicard–Vessiot拡大とし、 $G = \mathrm{Aut}_\partial(L/K)$ をその微分Galois群とする。 $L$ が $K$ のあるLiouville拡大に含まれるための必要十分条件は、 $G$ の単位連結成分 $G^\circ$ が<strong>可解代数群 (solvable algebraic group)</strong> であることである。</p>
+      </div>
+
+      <p>ここで「初等関数で表せるか（初等拡大に含まれるか）」と「求積法で解けるか（Liouville拡大に含まれるか）」は異なる概念であることに注意し、両者の違いを鮮明に示す2つの代表的計算例を検証する。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 4.5（誤差関数 $\int e^{-x^2}\,dx$ ：Liouvilleだが初等関数ではない）</span>
+        <p>$y = \int e^{-x^2}\,dx$ は $2$ 階斉次線形微分方程式 $y'' + 2x y' = 0$ の解である（基本解系は $1, y$ ）。基礎体 $K = \mathbb{C}(x)$ 上のPicard–Vessiot拡大は $L = \mathbb{C}(x, e^{-x^2}, y)$ である。以下が成り立つ。</p>
+        <ol>
+          <li>微分Galois群は上三角行列の群 $G \cong \mathbb{G}_m \ltimes \mathbb{G}_a$ であり可解である（したがって $L/K$ はLiouville拡大である）。</li>
+          <li>一方、 $\int e^{-x^2}\,dx$ は初等関数（ $\mathbb{C}(x)$ の初等拡大の元）としては表せない。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) の証明。</strong> $u := e^{-x^2}$ とおくと $u' = -2x u$ かつ $y' = u$ である。例 4.1 と同様の議論により、任意の $\sigma \in G$ に対してある $c_\sigma \in \mathbb{C}^\times$ が存在して $\sigma(u) = c_\sigma u$ となる。このとき</p>
+        <div class="math-display">
+          $$\partial(\sigma(y) - c_\sigma y) = \sigma(y') - c_\sigma y' = \sigma(u) - c_\sigma u = 0$$
+        </div>
+        <p>であるから、ある $a_\sigma \in \mathbb{C}$ が存在して $\sigma(y) = c_\sigma y + a_\sigma$ となる。したがって、基底 $(y, 1)$ に関して $\sigma$ は行列</p>
+        <div class="math-display">
+          $$\begin{pmatrix} c_\sigma & a_\sigma \\ 0 & 1 \end{pmatrix} \in \mathrm{GL}_2(\mathbb{C})$$
+        </div>
+        <p>で表される。後述の (2) の証明から $y \notin \mathbb{C}(x, e^{-x^2})$ （さらに $\mathbb{C}(x, e^{-x^2})$ 上超越的）が従うため、すべての $(c, a) \in \mathbb{C}^\times \times \mathbb{C}$ が実現され、</p>
+        <div class="math-display">
+          $$G \cong \left\{ \begin{pmatrix} c & a \\ 0 & 1 \end{pmatrix} \ \middle|\ c \in \mathbb{C}^\times,\ a \in \mathbb{C} \right\} \cong \mathbb{G}_m \ltimes \mathbb{G}_a$$
+        </div>
+        <p>を得る。これは連結な可解代数群であり、実際 $L = \mathbb{C}(x)(e^{-x^2})(y)$ は定義からLiouville拡大である。</p>
+
+        <p><strong>(2) の証明。</strong> <strong>Liouvilleの定理 (Liouville's theorem on elementary integration)</strong> の系として、次の判定法が知られている：$f, g \in \mathbb{C}(x)$ （ $g$ は定数でない）に対し、 $\int f(x) e^{g(x)}\,dx$ が初等関数で表せるための必要十分条件は、ある有理関数 $R(x) \in \mathbb{C}(x)$ が存在して</p>
+        <div class="math-display">
+          $$f(x) = R'(x) + R(x) g'(x)$$
+        </div>
+        <p>を満たすことである（実際、 $\frac{d}{dx}(R(x) e^{g(x)}) = (R'(x) + R(x) g'(x)) e^{g(x)}$ である）。</p>
+        <p>$f(x) = 1$ 、 $g(x) = -x^2$ を代入すると、方程式は</p>
+        <div class="math-display">
+          $$1 = R'(x) - 2x R(x)$$
+        </div>
+        <p>となる。有理関数解 $R(x) \in \mathbb{C}(x)$ が存在すると仮定して矛盾を導く。</p>
+        <p>第一に、 $R(x)$ が有限点 $a \in \mathbb{C}$ に位数 $m \ge 1$ の極を持つと仮定する。すると $R(x) = \frac{c}{(x - a)^m} + (\text{低位の極})$ （ $c \neq 0$ ）と書けるため、 $R'(x)$ は $a$ に位数 $m + 1$ の極を持つのに対し、 $-2x R(x)$ の $a$ における極の位数は高々 $m$ である。したがって右辺 $R'(x) - 2x R(x)$ は $a$ に位数 $m + 1 \ge 2$ の極を持ち、左辺の定数 $1$ と矛盾する。よって $R(x)$ は極を持たず、多項式 $R(x) \in \mathbb{C}[x]$ でなければならない。</p>
+        <p>第二に、 $R(x)$ は $0$ ではないから次数 $d := \deg R \ge 0$ の多項式である。このとき $\deg(R') \le d - 1$ かつ $\deg(-2x R) = d + 1 \ge 1$ であるから、右辺 $R'(x) - 2x R(x)$ の次数は $d + 1 \ge 1$ となる。これは左辺の次数 $0$ と矛盾する。</p>
+        <p>以上より有理関数解 $R(x)$ は存在せず、 $\int e^{-x^2}\,dx$ は初等関数で表せない。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 4.6（Airy方程式 $y'' - x y = 0$ ：求積法ですら解けない例）</span>
+        <p>$K = \mathbb{C}(x)$ 上の $2$ 階斉次線形微分方程式（Airy方程式） $y'' - x y = 0$ のPicard–Vessiot拡大 $L/K$ に対し、その微分Galois群は</p>
+        <div class="math-display">
+          $$G = \mathrm{Aut}_\partial(L/\mathbb{C}(x)) \cong \mathrm{SL}_2(\mathbb{C})$$
+        </div>
+        <p>である。 $\mathrm{SL}_2(\mathbb{C})$ は連結かつ単純代数群であって可解ではないため、定理 4.4（Kolchinの定理）により、Airy方程式の非零解はいかなるLiouville拡大にも含まれない（初等関数と不定積分の組み合わせでは一切表せない）。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明（Galois群の決定の仕組みとRiccati方程式の解析）</span>
+        <p>Airy方程式 $y'' - x y = 0$ を $1$ 階連立系に書き直すと</p>
+        <div class="math-display">
+          $$\begin{pmatrix} y \\ y' \end{pmatrix}' = A \begin{pmatrix} y \\ y' \end{pmatrix}, \qquad A := \begin{pmatrix} 0 & 1 \\ x & 0 \end{pmatrix}$$
+        </div>
+        <p>となる。係数行列のトレースは $\mathrm{tr}(A) = 0$ であるから、基本解系 $y_1, y_2$ のWronskian $W = y_1 y_2' - y_1' y_2$ は $W' = \mathrm{tr}(A) W = 0$ より定数 $W \in \mathbb{C}^\times$ である。任意の $\sigma \in G$ は行列 $M_\sigma \in \mathrm{GL}_2(\mathbb{C})$ によって作用し、 $\sigma(W) = \det(M_\sigma) W$ かつ $\sigma(W) = W$ となるため、 $\det(M_\sigma) = 1$ を得る。ゆえに $G \subset \mathrm{SL}_2(\mathbb{C})$ である。</p>
+        <p>$\mathrm{SL}_2(\mathbb{C})$ のZariski閉部分群の分類（Kovacicのアルゴリズムの基礎）によれば、 $\mathrm{SL}_2(\mathbb{C})$ の真のZariski閉部分群は次の3類のいずれかに限られる：</p>
+        <ol>
+          <li><strong>可約（上三角化可能）な部分群</strong>（ある $1$ 次元部分空間を不変にする場合）。</li>
+          <li><strong>無限二面体群 $D_\infty$ の部分群に共役な部分群</strong>（直和分解 $V = V_1 \oplus V_2$ の2つの $1$ 次元空間を保つまたは入れ替える場合）。</li>
+          <li><strong>有限部分群</strong>（四面体群・八面体群・二十面体群の二重被覆など）。</li>
+        </ol>
+        <p>これら3つの可能性を順に排除する。</p>
+        <p><strong>場合 1 の排除：</strong> $G$ が可約であれば、ある非零解 $y \in L$ が $G$ の共通固有ベクトルとなる。すなわち任意の $\sigma \in G$ に対し $\sigma(y) = c_\sigma y$ （ $c_\sigma \in \mathbb{C}^\times$ ）である。このとき対数微分 $u := y'/y \in L$ は $\sigma(u) = \sigma(y')/\sigma(y) = (c_\sigma y')/(c_\sigma y) = u$ を満たすので、定理 3.3 (1) より $u \in L^G = \mathbb{C}(x)$ である。 $y'' = xy$ より $u$ は<strong>Riccati方程式 (Riccati equation)</strong></p>
+        <div class="math-display">
+          $$u' + u^2 = x$$
+        </div>
+        <p>を満たす。これが有理関数解 $u \in \mathbb{C}(x)$ を持たないことを示す。まず有限点 $a \in \mathbb{C}$ に $u$ が位数 $m \ge 1$ の極を持つとすると、 $u^2$ は位数 $2m$ の極、 $u'$ は位数 $m + 1$ の極を持つ。右辺 $x$ は $a$ で正則なので極が相殺されねばならず、 $2m = m + 1$ より $m = 1$ である。しかし $u = \frac{c}{x - a} + \dots$ （ $c \neq 0$ ）とすると $u' + u^2 = \frac{c^2 - c}{(x - a)^2} + \dots$ より $c = 1$ となる。このとき $u = \sum_{i=1}^r \frac{1}{x - a_i} + P(x)$ （ $P \in \mathbb{C}[x]$ ）と書け、 $x \to \infty$ での漸近挙動を見ると $u(x) = P(x) + O(x^{-1})$ である。もし $\deg P = d \ge 0$ ならば $u' + u^2$ の $x \to \infty$ での主要項の次数は $2d$ （偶数）となるのに対し、右辺 $x$ の次数は $1$ （奇数）であり矛盾する（また $P = 0$ のときは $u' + u^2 = O(x^{-2})$ となり矛盾する）。よって有理関数解は存在しない。</p>
+        <p><strong>場合 2 の排除：</strong> $G$ が $D_\infty$ の部分群であれば、指数 $2$ の正規部分群 $H \triangleleft G$ が可約となるため、 $u = y'/y$ は $\mathbb{C}(x)$ 上の $2$ 次拡大体に属し、 $u$ の $\mathbb{C}(x)$ 上の最小多項式は $2$ 次式となる。しかし $x = \infty$ におけるRiccati方程式の局所Puiseux展開を調べると $u \sim \pm x^{1/2} - \frac{1}{4} x^{-1} + \dots$ となり、対称式 $u_1 + u_2 = -\frac{1}{2} x^{-1} + \dots$ が有理関数になるための条件（整数残余条件）が破綻し、 $2$ 次拡大解も存在しない（詳細はvan der Put–Singer [1, Chapter 4] を参照）。</p>
+        <p><strong>場合 3 の排除：</strong> もし $G$ が有限群であれば、定理 3.3 (4) より $L/\mathbb{C}(x)$ は有限次代数拡大となり、すべての解 $y$ は $\mathbb{C}(x)$ 上代数的（したがって $x = \infty$ は確定特異点であり多項式程度の増大度しか持たない）でなければならない。しかしAiry方程式は $x = \infty$ に不確定特異点 (irregular singular point) を持ち、解は指数関数的な漸近挙動 $\exp(\pm \frac{2}{3} x^{3/2})$ とStokes現象 (Stokes phenomenon) を示すため代数的ではありえない。</p>
+        <p>以上より真の部分群はすべて排除され、 $G = \mathrm{SL}_2(\mathbb{C})$ が確定する。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-difference-galois">
+      <h2>5. 差分Galois理論とその具体的な計算例</h2>
+      <p>微分体における微分作用素 $\partial$ を体の自己同型写像（シフト作用素） $\sigma$ に置き換えた理論が、<strong>差分Galois理論 (difference Galois theory)</strong> である（van der Put–Singer [2]）。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 5.1（差分体と差分Galois群）</span>
+        <p>体 $K$ とその自己同型写像 $\sigma : K \xrightarrow{\sim} K$ の組 $(K, \sigma)$ を<strong>差分体 (difference field)</strong> といい、固定体 $C_K := \{c \in K \mid \sigma(c) = c\}$ をその<strong>定数体 (field of constants)</strong> という。</p>
+        <p>線形差分方程式系 $\sigma(Y) = A Y$ （ $A \in \mathrm{GL}_n(K)$ ）に対して定数体を拡大せずに基本解行列を添加して得られる最小の差分環（Picard–Vessiot環；体とは限らず有限個の体の直積になりうる点に注意）の差分自己同型群 $G = \mathrm{Aut}_\sigma(R/K)$ が $C_K$ 上の線形代数群として定まり、微分の場合と並行するGalois対応が成り立つ。</p>
+      </div>
+
+      <p>以下では、基礎となる差分体を $K = (\mathbb{C}(x), \sigma)$ （ただしシフト作用素を $\sigma(f(x)) := f(x + 1)$ と定める）とする。定数体 $C_K = \{f \in \mathbb{C}(x) \mid f(x + 1) = f(x)\}$ は $\mathbb{C}$ である（実際、非定数有理関数 $f$ は複素平面 $\mathbb{C}$ に少なくとも1つの極または零点を持つが、 $f(x + 1) = f(x)$ ならば無限個の極または零点を持つことになり矛盾する）。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.2（調和数・ディガンマ関数 $\sigma(y) - y = \frac{1}{x}$ と加法群 $\mathbb{G}_a$ ）</span>
+        <p>和分 $\sum \frac{1}{x}$ に相当する差分方程式</p>
+        <div class="math-display">
+          $$\sigma(y) - y = \frac{1}{x} \qquad \text{すなわち} \qquad y(x + 1) - y(x) = \frac{1}{x}$$
+        </div>
+        <p>を考える（解析的解の1つがディガンマ関数 $\psi(x) = \Gamma'(x)/\Gamma(x)$ である）。対応するPicard–Vessiot拡大 $L = \mathbb{C}(x, y)$ の差分Galois群は</p>
+        <div class="math-display">
+          $$G = \mathrm{Aut}_\sigma(L/\mathbb{C}(x)) \cong \mathbb{G}_a(\mathbb{C})$$
+        </div>
+        <p>である。特に、和 $\sum_{k=1}^n \frac{1}{k}$ は $n$ の有理関数（閉形式）では表せない。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>任意の差分自己同型 $\tau \in G = \mathrm{Aut}_\sigma(L/K)$ に対し、 $\sigma(\tau(y) - y) = \tau(\sigma(y)) - \sigma(y) = \tau(y + 1/x) - (y + 1/x) = \tau(y) - y$ であるから、 $\tau(y) - y \in C_L = \mathbb{C}$ となる。よってある $a_\tau \in \mathbb{C}$ が存在して $\tau(y) = y + a_\tau$ と書け、単射準同型 $G \hookrightarrow \mathbb{G}_a(\mathbb{C})$ が得られる。</p>
+        <p>$\mathbb{G}_a(\mathbb{C})$ のZariski閉部分群は $\{0\}$ と $\mathbb{G}_a(\mathbb{C})$ 自身のみであるから、 $G = \{0\}$ （すなわち有理関数解 $y \in \mathbb{C}(x)$ が存在すること）を否定すれば $G \cong \mathbb{G}_a(\mathbb{C})$ が確定する。</p>
+        <p>背理法により、有理関数解 $y(x) \in \mathbb{C}(x)$ が存在すると仮定する。 $y(x)$ は定数ではない（定数ならば $y(x + 1) - y(x) = 0 \neq 1/x$ ）ので、複素平面 $\mathbb{C}$ に少なくとも1つの極を持つ。 $y(x)$ の極の有限集合を $P \subset \mathbb{C}$ とおき、実部が最小の極 $a_0 \in P$ と実部が最大の極 $a_1 \in P$ をとる（ $a_0 = a_1$ でもよい）。</p>
+        <ul>
+          <li>$y(x + 1)$ の極の集合は $P - 1 = \{p - 1 \mid p \in P\}$ である。点 $a_0 - 1 \in P - 1$ の実部は $\mathrm{Re}(a_0) - 1 < \mathrm{Re}(a_0)$ なので $a_0 - 1 \notin P$ である。したがって $y(x + 1) - y(x)$ は $a_0 - 1$ に極を持つ。</li>
+          <li>点 $a_1 \in P$ の実部は $\mathrm{Re}(a_1) > \mathrm{Re}(p) - 1$ （すべての $p \in P$ に対して）なので $a_1 \notin P - 1$ である。したがって $y(x + 1) - y(x)$ は $a_1$ にも極を持つ。</li>
+        </ul>
+        <p>ここで $\mathrm{Re}(a_0 - 1) = \mathrm{Re}(a_0) - 1 < \mathrm{Re}(a_1)$ より $a_0 - 1 \neq a_1$ であるから、 $y(x + 1) - y(x)$ は<strong>少なくとも2つの異なる極</strong>を持たなければならない。しかし右辺の $\frac{1}{x}$ は $x = 0$ の1点にしか極を持たず矛盾である。ゆえに有理関数解は存在せず、 $G \cong \mathbb{G}_a(\mathbb{C})$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.3（ガンマ関数 $\sigma(y) = x y$ と乗法群 $\mathbb{G}_m$ ）</span>
+        <p>ガンマ関数 $\Gamma(x)$ が満たす $1$ 階線形差分方程式</p>
+        <div class="math-display">
+          $$\sigma(y) = x y \qquad \text{すなわち} \qquad y(x + 1) = x y(x)$$
+        </div>
+        <p>に対応するPicard–Vessiot拡大 $L = \mathbb{C}(x, \Gamma(x))$ の差分Galois群は</p>
+        <div class="math-display">
+          $$G = \mathrm{Aut}_\sigma(L/\mathbb{C}(x)) \cong \mathbb{G}_m(\mathbb{C})$$
+        </div>
+        <p>である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>任意の $\tau \in G$ に対し、 $\sigma(\tau(y)/y) = \tau(xy)/(xy) = \tau(y)/y$ であるから、ある $c_\tau \in \mathbb{C}^\times$ が存在して $\tau(y) = c_\tau y$ となり、単射準同型 $G \hookrightarrow \mathbb{G}_m(\mathbb{C})$ を得る。</p>
+        <p>$\mathbb{G}_m(\mathbb{C})$ の真のZariski閉部分群は有限巡回群 $\mu_n$ （ $n \ge 1$ ）のみである。もし $G = \mu_n$ であれば、 $r := y^n$ はすべての $\tau \in G$ で固定されるので $r(x) \in L^G = \mathbb{C}(x)^\times$ であり、</p>
+        <div class="math-display">
+          $$\frac{r(x + 1)}{r(x)} = x^n$$
+        </div>
+        <p>を満たすはずである。しかし任意の非零有理関数 $r(x) \in \mathbb{C}(x)^\times$ に対して、 $x \to \infty$ の極限をとると $r(x + 1)/r(x) \to 1$ （実際、 $r(x) = c x^k (1 + O(x^{-1}))$ と書けば $r(x + 1)/r(x) = (1 + x^{-1})^k (1 + O(x^{-1})) \to 1$ ）であるのに対し、 $n \ge 1$ より右辺 $x^n$ は $x \to \infty$ で発散し矛盾する。</p>
+        <p>（なお、例 5.2 と同様の零点・極の平行移動の議論からも、 $r(x)$ が定数でなければ $r(x + 1)/r(x)$ は少なくとも2つの異なる零点または極を持つことが分かり、 $x = 0$ のみに零点を持つ $x^n$ とは一致しえないことも直ちに確かめられる。）以上より $G \cong \mathbb{G}_m(\mathbb{C})$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p><strong>発展（Hölderの定理との関連）：</strong> 例 5.3 では $\Gamma(x)$ が差分体 $\mathbb{C}(x)$ 上超越的であることを示した。さらに微分と差分を同時に扱う<strong>パラメトリック差分Galois理論 (parameterized difference Galois theory)</strong> を用いると、「 $\Gamma(x)$ はいかなる代数的微分方程式 $F(x, y, y', \dots, y^{(n)}) = 0$ も満たさない（超超越的である）」という有名な<strong>Hölderの定理 (Hölder's theorem)</strong> も、Galois群の計算として統一的に証明することができる。</p>
+    </section>
+
+    <section id="sec-algebraic-group-action">
+      <h2>6. 代数群の有理作用、観測可能部分群、およびBiałynicki-Birulaの理論</h2>
+      <p>前節までの微分・差分Galois理論を、不変式論や代数幾何学における<strong>「代数群 $G$ が体 $L$ に有理的に作用している状況」</strong>として捉え直すと、<strong>関数体レベル</strong>と<strong>座標環レベル</strong>の決定的な違い、および作用素付き体の抽象的Galois理論が姿を現す。</p>
+
+      <h3>6.1 設定とモデルケース $X = G$</h3>
+      <p>標数 $0$ の代数閉体 $k$ 上の連結線形代数群 $G$ が、既約代数多様体 $X$ に正則に作用しているとする。このとき $G$ は $X$ の関数体 $L = k(X)$ に体自己同型として<strong>有理的に作用</strong>し、有理不変式全体のなす不変体 $K = L^G = k(X)^G$ が定まる。 $G$ のZariski閉部分群 $H$ と中間体 $K \subset M \subset L$ の間のGalois接続を</p>
+      <div class="math-display">
+        $$H \longmapsto L^H, \qquad M \longmapsto \mathrm{Stab}_G(M) := \{g \in G \mid \forall f \in M,\ g \cdot f = f\}$$
+      </div>
+      <p>とする。最も基本的なモデルケースは、 $X = G$ 自身への右移動による作用（ $L = k(G)$ 、 $K = L^G = k$ ）である。</p>
+
+      <h3>6.2 関数体レベル $k(G)$ vs 座標環レベル $k[G]$ ：観測可能部分群</h3>
+      <p><strong>(1) 関数体 $k(G)$ のレベル（すべての閉部分群が復元できる）：</strong> Chevalleyの定理により、任意のZariski閉部分群 $H \subset G$ に対して商多様体 $G/H$ が準射影多様体として存在し、その関数体は $k(G/H) \cong k(G)^H$ となる。標数 $0$ では自然な商射 $G \to G/H$ は分離的であるから、任意の閉部分群 $H \subset G$ に対して</p>
+      <div class="math-display">
+        $$\mathrm{Stab}_G(k(G)^H) = H$$
+      </div>
+      <p>が成り立つ。すなわち、閉部分群の側ではすべての $H$ が固定体 $k(G)^H$ によって一意に区別・復元される。一方で、中間体 $k \subset M \subset k(G)$ の側では、 $M = k(G)^H$ の形になるのは $G$ の左移動の作用と両立する特別な中間体に限られ、一般の中間体 $M$ に対しては $k(G)^{\mathrm{Stab}_G(M)} \neq M$ である。</p>
+
+      <p><strong>(2) 座標環 $k[G]$ のレベル（観測可能部分群）：</strong> 関数体 $k(G)$ の代わりに、正則関数のなす座標環 $A = k[G]$ に対して同様のGalois接続 $H \mapsto k[G]^H$ 、 $R \mapsto \mathrm{Stab}_G(R)$ を考えると、事態は劇的に変化する。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 6.1（観測可能部分群）</span>
+        <p>線形代数群 $G$ のZariski閉部分群 $H$ が、座標環 $k[G]$ 上のGalois接続に関して閉じているとき、すなわち</p>
+        <div class="math-display">
+          $$\mathrm{Stab}_G(k[G]^H) = H$$
+        </div>
+        <p>を満たすとき、 $H$ を $G$ の<strong>観測可能部分群 (observable subgroup)</strong> という。</p>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 6.2（Białynicki-Birula–Hochschild–Mostow, 1963）</span>
+        <p>線形代数群 $G$ のZariski閉部分群 $H$ について、以下の3条件はすべて同値である（Białynicki-Birula–Hochschild–Mostow [5]）。</p>
+        <ol>
+          <li><strong>（Galois理論的条件）</strong> $H$ は $G$ の観測可能部分群である（すなわち $\mathrm{Stab}_G(k[G]^H) = H$ ）。</li>
+          <li><strong>（幾何学的条件）</strong> 商多様体 $G/H$ は<strong>準アフィン多様体 (quasi-affine variety)</strong>（アフィン多様体のZariski開部分多様体）である。</li>
+          <li><strong>（表現論的条件）</strong> $H$ の任意の有限次元有理表現は、 $G$ のある有限次元有理表現の部分表現として拡張できる。</li>
+        </ol>
+      </div>
+
+      <p>さらに、任意の閉部分群 $H \subset G$ に対して $H^{\mathrm{obs}} := \mathrm{Stab}_G(k[G]^H)$ は $H$ を含む最小の観測可能部分群（<strong>観測可能閉包 (observable hull)</strong>）となり、任意の可換な有理 $G$ 多元環 $A$ に対して $A^H = A^{H^{\mathrm{obs}}}$ が成り立つ。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 6.3（$G = \mathrm{SL}_2(k)$ とBorel部分群 $B$ ）</span>
+        <p>$G = \mathrm{SL}_2(k)$ の上三角行列全体のなすBorel部分群</p>
+        <div class="math-display">
+          $$B := \left\{ \begin{pmatrix} a & b \\ 0 & a^{-1} \end{pmatrix} \ \middle|\ a \in k^\times,\ b \in k \right\}$$
+        </div>
+        <p>を考える。商多様体は射影直線 $G/B \cong \mathbb{P}^1_k$ である。</p>
+        <ul>
+          <li><strong>座標環レベル（観測不能）：</strong> 完備多様体 $\mathbb{P}^1_k$ 上の大域的正則関数は定数しか存在しないため、 $k[G]^B = \mathcal{O}(\mathbb{P}^1_k) = k$ である。したがって $\mathrm{Stab}_G(k[G]^B) = \mathrm{Stab}_G(k) = G \neq B$ となり、 $B$ は観測可能部分群ではない（多項式不変式だけでは $B$ を検出できない）。</li>
+          <li><strong>関数体レベル（復元可能）：</strong> 一方、 $\mathbb{P}^1_k$ 上の有理関数体 $k(G)^B = k(\mathbb{P}^1_k) = k(t)$ は非自明であり、その安定化群は正確に $\mathrm{Stab}_G(k(G)^B) = B$ に一致する。</li>
+        </ul>
+      </div>
+
+      <h3>6.3 Białynicki-Birula (1962) の「作用素付き体のGalois理論」</h3>
+      <p>純粋な関数体 $k(G)/k$ ではすべての中間体を閉部分群と対応させることはできない。そこで A. Białynicki-Birula は、体に微分や差分などの<strong>作用素 (operators)</strong> を付加し、中間体を「作用素で閉じた部分体」に制限することで、個別の構造に依存しない抽象的なGalois理論を構築した（Białynicki-Birula [4]）。その理論構成の核心は次の3点にある。</p>
+      <ol>
+        <li><strong>テンソル積からの代数群の構成：</strong> 作用素付き体の拡大 $L/K$ に対し、テンソル積 $L \otimes_K L$ の全商環における定数環からGalois群の関数体に相当する体を取り出し、<strong>Weilの有理群 (group chunk) の定理</strong>を用いて自己同型群 $G$ に代数群の構造を付与する。</li>
+        <li><strong>主等質空間 (torsor) としての $L/K$ ：</strong> 拡大 $L/K$ が適切な正規性（Kolchinの強正規拡大の一般化）を満たすとき、 $L$ は代数群 $G$ が有理的に作用する主等質空間のように振る舞う。</li>
+        <li><strong>完全なGalois対応：</strong> この設定のもとで、 $L/K$ のすべての<strong>作用素で閉じた中間体</strong> $M$ と $G$ のすべての<strong>Zariski閉部分群</strong> $H$ の間に一対一のGalois対応が成り立つ。</li>
+      </ol>
+      <p>さらに現代の研究では、作用素付き体のGalois対応と観測可能部分群が直接結びついている。例えば微分Galois理論において、Picard–Vessiot拡大 $L/K$ の微分中間体 $M$ が「 $K$ 上の有限生成微分環の商体として整な性質を保って書けるか」といった問題は、対応するZariski閉部分群 $H = \mathrm{Aut}_\partial(L/M) \subset G$ が<strong>観測可能部分群であること</strong>と完全に同値になることが知られている。</p>
+    </section>
+
+    <section id="sec-categorical-galois">
+      <h2>7. 圏論的定式化：GrothendieckのGalois理論とTannaka双対性</h2>
+      <p>Galois理論を「体の拡大」という具体的な対象から完全に解放し、<strong>「圏（対象と射の集まり）」と「ファイバー関手 (fiber functor)」の自己同型群</strong>として再構築するのが、<strong>GrothendieckのGalois理論</strong>と<strong>Tannaka双対性 (Tannakian formalism)</strong> である。この発想の転換により、古典的な体のGalois理論、位相空間の被覆空間の理論、そして超越拡大を含む微分・差分Galois理論がすべて単一の設計図の上に統合される。</p>
+
+      <h3>7.1 発想の転換：「拡大体」から「表現の圏」へ</h3>
+      <p>古典的Galois理論では、まず固定された拡大体 $L/K$ があり、その自己同型群 $G = \mathrm{Aut}(L/K)$ を考えた。圏論的アプローチではこの視点を逆転させ、次の3段階をとる。</p>
+      <ol>
+        <li>基礎となる対象（体 $K$ 、位相空間 $X$ 、微分体 $(K, \partial)$ など）の上に乗る<strong>良い対象たちの圏 $\mathcal{C}$</strong> を考える。</li>
+        <li>$\mathcal{C}$ の各対象を、より単純な圏（有限集合の圏 $\mathrm{FinSet}$ や有限次元ベクトル空間の圏 $\mathrm{Vec}_k$ ）へ送る<strong>ファイバー関手 $\omega$</strong> をとる。</li>
+        <li>ファイバー関手 $\omega$ の自己同型群 $\mathrm{Aut}(\omega)$ を<strong>Galois群 $G$</strong> と定義し、元の圏 $\mathcal{C}$ が<strong> $G$ の作用（表現）の圏と圏同値になる</strong>ことを示す。</li>
+      </ol>
+      <p>この枠組みでは、中間体と部分群の一対一対応（Galois対応）は、圏 $\mathcal{C}$ と $G$ の作用の圏の完全な同値性の系として自動的に導かれる。</p>
+
+      <h3>7.2 GrothendieckのGalois理論（集合レベル・射有限群）</h3>
+      <p>A. Grothendieck（SGA 1 [6]）は、体の有限次分離拡大の理論と位相空間の有限被覆空間の理論を次の枠組みで完全に統合した。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 7.1（Galois圏）</span>
+        <p>圏 $\mathcal{C}$ と関手 $F : \mathcal{C} \to \mathrm{FinSet}$ の組 $(\mathcal{C}, F)$ が以下の6条件を満たすとき、 $(\mathcal{C}, F)$ を<strong>Galois圏 (Galois category)</strong> といい、 $F$ を<strong>ファイバー関手 (fiber functor)</strong> という。</p>
+        <ol>
+          <li>$\mathcal{C}$ は終対象とファイバー積（したがってすべての有限極限）を持つ。</li>
+          <li>$\mathcal{C}$ は始対象、有限余積、および有限群の作用による商（したがってすべての有限余極限）を持つ。</li>
+          <li>$\mathcal{C}$ の任意の射 $u : X \to Y$ は、有効エピ射 $X \to X'$ とモノ射（かつ直和因子への埋め込み） $X' \to Y$ の合成に分解される。</li>
+          <li>$F$ は終対象とファイバー積（すべての有限極限）を保つ。</li>
+          <li>$F$ は始対象、有限余積、有効エピ射、および有限群による商を保つ。</li>
+          <li>$F$ は同型を反映する（すなわち $F(u)$ が全単射ならば $u$ は $\mathcal{C}$ における同型射である）。</li>
+        </ol>
+      </div>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 7.2（GrothendieckのGalois理論の主定理）</span>
+        <p>Galois圏 $(\mathcal{C}, F)$ に対し、関手 $F$ の自然自己同型群 $G := \mathrm{Aut}(F)$ は自然に<strong>射有限群 (profinite group)</strong> の構造を持ち、 $F$ は圏同値</p>
+        <div class="math-display">
+          $$\mathcal{C} \;\xrightarrow{\;\sim\;}\; G\text{-}\mathrm{FinSet}$$
+        </div>
+        <p>（右辺は射有限群 $G$ が離散位相に関して連続に作用する有限集合の圏）を誘導する。</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 7.3（GrothendieckのGalois理論の2大適用例）</span>
+        <ul>
+          <li><strong>古典的Galois理論：</strong> 体 $K$ に対し、 $\mathcal{C}$ を「 $K$ 上の有限エタール代数（有限個の有限次分離拡大体の直積）」の反対圏 $\mathrm{FEt}_K^{\mathrm{op}}$ とし、分離閉包 $K^{\mathrm{sep}}$ を固定してファイバー関手を
+            <div class="math-display">
+              $$F(A) := \mathrm{Hom}_{K\text{-alg}}(A, K^{\mathrm{sep}})$$
+            </div>
+            と定める。すると $\mathrm{Aut}(F) \cong \mathrm{Gal}(K^{\mathrm{sep}}/K)$ となり、「連結な対象（すなわち有限次分離拡大体 $L/K$ ）」が「推移的 $G$ 集合（すなわち開部分群 $H \subset G$ による剰余類 $G/H$ ）」と一対一に対応する。これが古典的なGalois対応（およびKrullの定理）である。
+          </li>
+          <li><strong>被覆空間の理論：</strong> 連結かつ局所単連結な位相空間 $X$ 上の有限被覆空間の圏 $\mathcal{C}$ に対し、基点 $x_0 \in X$ 上のファイバーをとる関手 $F(Y) := Y_{x_0}$ をとると、 $\mathrm{Aut}(F) \cong \widehat{\pi_1(X, x_0)}$ （位相幾何学的基点基本群の射有限完備化）が得られる。</li>
+        </ul>
+      </div>
+
+      <p>Grothendieckの理論は「有限集合（離散的な対称性）」を扱うため、得られる群は必ず射有限群（ $0$ 次元の代数群の射影極限）となり、超越拡大に伴う正次元の代数群（ $\mathbb{G}_a, \mathbb{G}_m, \mathrm{SL}_2$ など）は捉えきれない。これを解決するのが次のTannaka双対性である。</p>
+
+      <h3>7.3 Tannaka双対性（線形レベル・アフィン群スキーム）</h3>
+      <p>GrothendieckのGalois理論における「有限集合の圏 $\mathrm{FinSet}$ 」を、<strong>「体 $k$ 上の有限次元ベクトル空間の圏 $\mathrm{Vec}_k$ 」</strong>に置き換えたものが、N. Saavedra Rivano および P. Deligne と J. S. Milne によって定式化された<strong>Tannaka圏 (Tannakian category)</strong> の理論である（Deligne–Milne [7]）。</p>
+
+      <div class="env-box env-def">
+        <span class="env-title">定義 7.4（中性Tannaka圏）</span>
+        <p>体 $k$ 上の $k$ 線形アーベル圏 $\mathcal{T}$ が、対称モノイダル構造（テンソル積 $\otimes$ 、単位対象 $\mathbf{1}$ ）、すべての対象に対する双対対象（剛性、rigidity）、および $\mathrm{End}_{\mathcal{T}}(\mathbf{1}) = k$ を満たすとする。さらに、テンソル積を保つ完全忠実な $k$ 線形関手（ファイバー関手）</p>
+        <div class="math-display">
+          $$\omega : \mathcal{T} \longrightarrow \mathrm{Vec}_k$$
+        </div>
+        <p>が存在するとき、 $(\mathcal{T}, \otimes, \omega)$ を<strong>中性Tannaka圏 (neutral Tannakian category)</strong> という。</p>
+      </div>
+
+      <p>中性Tannaka圏 $(\mathcal{T}, \otimes, \omega)$ に対し、任意の可換 $k$ 代数 $R$ について係数拡大 $\omega_R(-) := \omega(-) \otimes_k R$ のテンソル積を保つ自然自己同型群 $\mathrm{Aut}^\otimes(\omega_R)$ を考えることで、可換 $k$ 代数の圏から群の圏への関手 $\underline{\mathrm{Aut}}^\otimes(\omega) : R \mapsto \mathrm{Aut}^\otimes(\omega_R)$ が定まる。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 7.5（Tannaka双対定理 / Deligne–Milne）</span>
+        <p>中性Tannaka圏 $(\mathcal{T}, \otimes, \omega)$ に対し、関手 $G := \underline{\mathrm{Aut}}^\otimes(\omega)$ は $k$ 上の<strong>アフィン群スキーム (affine group scheme)</strong>（線形代数群の射影極限）によって表現され、 $\omega$ は対称モノイダル圏の同値</p>
+        <div class="math-display">
+          $$\mathcal{T} \;\xrightarrow{\;\sim\;}\; \mathrm{Rep}_k(G)$$
+        </div>
+        <p>（右辺は $G$ の有限次元 $k$ 線形有理表現の圏）を誘導する。</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 7.6（Tannaka双対性による微分Galois理論の再構成）</span>
+        <p>定数体 $C$ が標数 $0$ の代数閉体である微分体 $(K, \partial)$ を考える。</p>
+        <ol>
+          <li><strong>微分加群の圏 $\mathrm{Diff}_K$ ：</strong> $K$ 上の有限次元ベクトル空間 $M$ に、Leibniz則 $\partial(a m) = a' m + a \partial(m)$ （ $a \in K,\ m \in M$ ）を満たす加法写像 $\partial : M \to M$ を備えたものを<strong>微分加群 (differential module)</strong> という（線形微分方程式系 $Y' = A Y$ の座標に依らない定式化である）。 $2$ つの微分加群のテンソル積は積の微分法則 $\partial(v \otimes w) := \partial(v) \otimes w + v \otimes \partial(w)$ によって定まり、 $\mathrm{Diff}_K$ は $C$ 線形剛性アーベル対称モノイダル圏をなす。</li>
+          <li><strong>ファイバー関手 $\omega$ ：</strong> 個別の微分加群 $M \in \mathrm{Diff}_K$ が直和・テンソル積・双対・部分商によって生成する部分圏 $\langle M \rangle_\otimes \subset \mathrm{Diff}_K$ を考える。 $M$ に対応するPicard–Vessiot拡大 $L/K$ をとると、解空間をとる関手
+            <div class="math-display">
+              $$\omega(N) := (N \otimes_K L)^\partial = \{z \in N \otimes_K L \mid \partial(z) = 0\} \in \mathrm{Vec}_C$$
+            </div>
+            が中性Tannaka圏のファイバー関手を与える。
+          </li>
+          <li><strong>Galois群とHopf代数の再構成：</strong> 定理 7.5 より $G = \underline{\mathrm{Aut}}^\otimes(\omega)$ は $C$ 上の線形代数群となり、これがまさに $M$ の<strong>微分Galois群</strong> $\mathrm{Aut}_\partial(L/K)$ に一致する。さらに $G$ の座標環 $C[G]$ （Hopf代数）は、テンソル積の定数環 $(L \otimes_K L)^\partial$ （より正確にはPicard–Vessiot環 $R$ に対する $(R \otimes_K R)^\partial$ ）として直接取り出される。また $\mathrm{Diff}_K$ 全体を考えれば、すべての線形微分方程式を統括する巨大なアフィン群スキーム（<strong>普遍微分Galois群</strong>）が構成される。</li>
+        </ol>
+      </div>
+
+      <h3>7.4 GrothendieckのGalois理論とTannaka双対性の統一的比較</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>GrothendieckのGalois理論</th>
+            <th>Tannaka双対性（中性Tannaka圏）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>対象となる圏 $\mathcal{C}$</td>
+            <td>Galois圏（有限エタール代数、有限被覆など）</td>
+            <td>$k$ 線形剛性アーベル対称モノイダル圏（微分加群、局所系など）</td>
+          </tr>
+          <tr>
+            <td>ファイバー関手の行き先</td>
+            <td>有限集合の圏 $\mathrm{FinSet}$</td>
+            <td>有限次元ベクトル空間の圏 $\mathrm{Vec}_k$</td>
+          </tr>
+          <tr>
+            <td>得られるGalois群 $G$</td>
+            <td>射有限群 $\mathrm{Aut}(F)$</td>
+            <td>アフィン群スキーム $\underline{\mathrm{Aut}}^\otimes(\omega)$</td>
+          </tr>
+          <tr>
+            <td>圏同値の形</td>
+            <td>$\mathcal{C} \simeq G\text{-}\mathrm{FinSet}$</td>
+            <td>$\mathcal{T} \simeq \mathrm{Rep}_k(G)$</td>
+          </tr>
+          <tr>
+            <td>捉えられる拡大の性質</td>
+            <td>代数拡大（分離拡大）</td>
+            <td>超越拡大を含む（微分・差分・Hodge構造・モチーフなど）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>7.5 さらなる抽象化：非中性Tannaka圏とJanelidzeの圏論的Galois理論</h3>
+      <p>現代の圏論的Galois理論は、上記2つの枠組みからさらに拡張されている。</p>
+      <ul>
+        <li><strong>非中性Tannaka圏 (non-neutral Tannakian category)：</strong> ファイバー関手が基礎体 $k$ 上には存在せず、ある拡大体 $K/k$ 上にのみファイバー関手 $\omega : \mathcal{T} \to \mathrm{Vec}_K$ が存在する場合（例えば定数体が代数閉体でない微分体など）、 $\underline{\mathrm{Aut}}^\otimes(\omega)$ は群ではなく<strong>アフィン群oidスキーム (affine groupoid scheme)</strong> や<strong>gerbe (gerbe)</strong> として定式化される（Deligne [8]）。</li>
+        <li><strong>Janelidzeの圏論的Galois理論 (categorical Galois theory)：</strong> 2つの圏の間の随伴関手 $I \dashv H$ （体の拡大と制限の抽象化）だけから出発し、GrothendieckのGalois理論だけでなく、群の中心拡大の理論（群のコホモロジー）やHopf代数によるGalois拡大（Hopf–Galois理論）までを統一的に扱う枠組みも確立されている。</li>
+      </ul>
+      <p>このように、現代数学における「超越拡大を含むGalois理論の非自明な拡張」とは、単なる体の自己同型群の計算を超えて、<strong>「どのような構造（集合か、線形空間か、あるいは非線形な代数多様体か）を保つ関手の自己同型群として対称性を取り出すか」</strong>という極めて普遍的な問題へと昇華されている。</p>
+    </section>
+
+    <section id="sec-references" class="references">
+      <h2>8. 参考文献</h2>
+      <ol>
+        <li>
+          M. van der Put and M. F. Singer, <em>Galois Theory of Linear Differential Equations</em>, Grundlehren der mathematischen Wissenschaften, Vol. 328, Springer-Verlag, Berlin, 2003.
+          <a href="https://link.springer.com/book/10.1007/978-3-642-55750-7" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-3-642-55750-7</a>
+        </li>
+        <li>
+          M. van der Put and M. F. Singer, <em>Galois Theory of Difference Equations</em>, Lecture Notes in Mathematics, Vol. 1666, Springer-Verlag, Berlin, 1997.
+          <a href="https://link.springer.com/book/10.1007/BFb0096118" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/BFb0096118</a>
+        </li>
+        <li>
+          E. R. Kolchin, <em>Differential Algebra and Algebraic Groups</em>, Pure and Applied Mathematics, Vol. 54, Academic Press, New York, 1973.
+        </li>
+        <li>
+          A. Białynicki-Birula, "On Galois theory of fields with operators", <em>American Journal of Mathematics</em>, Vol. 84, No. 1 (1962), pp. 89–109.
+        </li>
+        <li>
+          A. Białynicki-Birula, G. Hochschild, and G. D. Mostow, "Extensions of representations of algebraic linear groups", <em>American Journal of Mathematics</em>, Vol. 85, No. 1 (1963), pp. 131–144.
+        </li>
+        <li>
+          A. Grothendieck, <em>Revêtements Étales et Groupe Fondamental (SGA 1)</em>, Lecture Notes in Mathematics, Vol. 224, Springer-Verlag, Berlin, 1971.
+          <a href="https://link.springer.com/book/10.1007/BFb0058656" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/BFb0058656</a>
+        </li>
+        <li>
+          P. Deligne and J. S. Milne, "Tannakian Categories", in <em>Hodge Cycles, Motives, and Shimura Varieties</em>, Lecture Notes in Mathematics, Vol. 900, Springer-Verlag, Berlin, 1982, pp. 101–228. (Revised web edition by J. S. Milne)
+          <a href="https://www.jmilne.org/math/xnotes/tc.html" target="_blank" rel="noopener noreferrer">https://www.jmilne.org/math/xnotes/tc.html</a>
+        </li>
+        <li>
+          P. Deligne, "Catégories tannakiennes", in <em>The Grothendieck Festschrift</em>, Vol. II, Progress in Mathematics, Vol. 87, Birkhäuser, Boston, 1990, pp. 111–195.
+        </li>
+        <li>
+          E. Artin, <em>Galois Theory: Lectures Delivered at the University of Notre Dame</em>, edited by A. N. Milgram, Notre Dame Mathematical Lectures, Vol. 2, University of Notre Dame Press, Notre Dame, IN, 1942.
+          <a href="https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197001" target="_blank" rel="noopener noreferrer">https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197001</a>
+        </li>
+        <li>
+          J. S. Milne, <em>Fields and Galois Theory</em>, Course Notes.
+          <a href="https://www.jmilne.org/math/CourseNotes/ft.html" target="_blank" rel="noopener noreferrer">https://www.jmilne.org/math/CourseNotes/ft.html</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>

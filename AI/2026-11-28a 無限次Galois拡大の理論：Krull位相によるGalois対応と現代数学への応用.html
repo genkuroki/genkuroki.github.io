@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>無限次Galois拡大の理論：Krull位相によるGalois対応と現代数学への応用</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --bg-color: #fcfcfd;
+      --text-color: #1f2328;
+      --muted-color: #57606a;
+      --accent-color: #1b4f72;
+      --accent-light: #ebf3fa;
+      --border-color: #d0d7de;
+      --def-bg: #f4f8fb;
+      --def-border: #2b6cb0;
+      --thm-bg: #fdf8f2;
+      --thm-border: #b7791f;
+      --ex-bg: #f3faf6;
+      --ex-border: #2f855a;
+      --proof-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+      line-height: 1.85;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.75rem 4.5rem;
+      background-color: #ffffff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    header.doc-header {
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    header.doc-header h1 {
+      font-size: 1.9rem;
+      line-height: 1.4;
+      color: var(--accent-color);
+      margin: 0 0 0.75rem 0;
+    }
+
+    header.doc-header p.subtitle {
+      font-size: 1rem;
+      color: var(--muted-color);
+      margin: 0;
+    }
+
+    nav.toc {
+      background-color: #f6f8fa;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 0.94rem;
+    }
+
+    nav.toc h2 {
+      font-size: 1.05rem;
+      margin: 0 0 0.75rem 0;
+      color: var(--accent-color);
+      border: none;
+      padding: 0;
+    }
+
+    nav.toc ol {
+      margin: 0;
+      padding-left: 1.4rem;
+    }
+
+    nav.toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    nav.toc a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    nav.toc a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: var(--accent-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    h3 {
+      font-size: 1.18rem;
+      color: #24292f;
+      margin-top: 2rem;
+      margin-bottom: 0.85rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 1.1rem;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-top: 0.4rem;
+      margin-bottom: 1.2rem;
+      padding-left: 1.6rem;
+    }
+
+    li {
+      margin-bottom: 0.45rem;
+    }
+
+    .env-box {
+      border-left: 4px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .env-def {
+      background-color: var(--def-bg);
+      border-left-color: var(--def-border);
+    }
+
+    .env-thm {
+      background-color: var(--thm-bg);
+      border-left-color: var(--thm-border);
+    }
+
+    .env-ex {
+      background-color: var(--ex-bg);
+      border-left-color: var(--ex-border);
+    }
+
+    .env-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #1a202c;
+    }
+
+    .proof-box {
+      background-color: var(--proof-bg);
+      border: 1px solid #e1e4e8;
+      border-left: 4px solid #6e7781;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.75rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .proof-title {
+      font-weight: bold;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      margin-bottom: 0.6rem;
+      display: block;
+      color: #32383f;
+    }
+
+    .qed {
+      text-align: right;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .math-display {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--accent-light);
+      color: #1a365d;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fafbfc;
+    }
+
+    .center-cell {
+      text-align: center;
+    }
+
+    .references ol {
+      padding-left: 1.6rem;
+      font-size: 0.95rem;
+    }
+
+    .references li {
+      margin-bottom: 0.75rem;
+    }
+
+    .references a {
+      color: var(--accent-color);
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="doc-header">
+      <h1>無限次Galois拡大の理論：Krull位相によるGalois対応と現代数学への応用</h1>
+      <p class="subtitle">固定体 $L^G = K$ からの無限次Galois理論の定式化、Krull位相と射有限群の構造、基本定理の完全証明、および絶対Galois群・類体論・Iwasawa理論・代数幾何学への応用</p>
+    </header>
+
+    <nav class="toc">
+      <h2>目次</h2>
+      <ol>
+        <li><a href="#sec-intro">序論：問題設定と結論</a></li>
+        <li><a href="#sec-necessity">なぜ「代数拡大」と「閉部分群」が必要か：反例による検証</a></li>
+        <li><a href="#sec-krull-topology">無限次代数Galois拡大の構造とKrull位相</a></li>
+        <li><a href="#sec-krull-theorem">無限次Galois理論の基本定理（Krullの定理）とその完全証明</a></li>
+        <li><a href="#sec-applications">無限次Galois拡大の現代数学における応用</a></li>
+        <li><a href="#sec-references">参考文献</a></li>
+      </ol>
+    </nav>
+
+    <section id="sec-intro">
+      <h2>1. 序論：問題設定と結論</h2>
+      <p>体 $L$ は体 $K$ の拡大体であるとし、 $G = \mathrm{Aut}(L/K)$ を $L$ の $K$ 上の体自己同型群、 $L^G := \{x \in L \mid \forall \sigma \in G,\ \sigma(x) = x\}$ を $G$ の固定体とする。有限次拡大 $L/K$ においては、Artin流に</p>
+      <div class="math-display">
+        $$L^G = K$$
+      </div>
+      <p>によってGalois拡大を定義することで、中間体全体の集合と $G$ の部分群全体の集合の間に包含関係を逆転させる一対一対応（有限次Galois理論の基本定理）が成立する（Artin [1]）。</p>
+      <p>では、 $L$ が $K$ の<strong>無限次拡大</strong>であるときにも、 $L^G = K$ のスタイルでGalois拡大を定義して適切なGalois対応を証明できるだろうか。結論は次の2点に要約される。</p>
+      <ol>
+        <li>$L/K$ が<strong>代数拡大</strong>であるという前提を置けば、 $L^G = K$ という定義から出発して、無限次拡大であっても適切なGalois対応（<strong>KrullのGalois理論の基本定理</strong>）を完全に証明できる。ただし、有限次拡大の場合とは異なり、 $G = \mathrm{Aut}(L/K)$ に<strong>Krull位相 (Krull topology)</strong> と呼ばれる位相を導入し、対応する部分群を<strong>閉部分群 (closed subgroup)</strong> に制限する必要がある。</li>
+        <li>一方で、 $L/K$ が<strong>超越拡大</strong>を許す場合には、 $L^G = K$ を満たしていても通常の意味でのGalois対応は成り立たない。</li>
+      </ol>
+      <p>本稿ではまず、なぜ「代数拡大の仮定」と「閉部分群への制限」の双方が不可欠であるかを具体的な反例によって厳密に示す。続いて、Krull位相と射有限群 (profinite group) の構造をself-containedに構築したうえで、KrullのGalois理論の基本定理をギャップなく完全に証明する。最後に、無限次Galois拡大の概念が現代の整数論および代数幾何学（絶対Galois群とGalois表現、類体論、Iwasawa理論、エタール基本群とGaloisコホモロジー）においてどのように応用されているかを、具体的な対象と計算を通じて詳説する。</p>
+    </section>
+
+    <section id="sec-necessity">
+      <h2>2. なぜ「代数拡大」と「閉部分群」が必要か：反例による検証</h2>
+
+      <h3>2.1 代数拡大の必要性：超越拡大におけるGalois対応の破綻</h3>
+      <p>$L/K$ が（無限次を含む）代数拡大であれば、条件 $L^G = K$ は「 $L/K$ が正規拡大かつ分離拡大であること」と完全に同値である（後述の定理 3.1）。この性質により、 $L$ の任意の元は $K$ 上の有限次Galois中間体に含まれるため、無限次拡大を「有限次Galois拡大の合併（帰納極限）」として扱うことができる。</p>
+      <p>これに対し、超越拡大を許す場合にはこの分解が成り立たず、 $L^G = K$ を満たす拡大であっても中間体と部分群の自然な対応が破綻する。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 2.1（$L^G = K$ を満たすがGalois対応が破綻する超越拡大）</span>
+        <p>$K = \mathbb{Q}$ とし、 $L = \mathbb{Q}(t)$ を $\mathbb{Q}$ 上の $1$ 変数有理関数体とする。 $G = \mathrm{Aut}(\mathbb{Q}(t)/\mathbb{Q})$ とおくとき、以下が成り立つ。</p>
+        <ol>
+          <li>$L^G = \mathbb{Q}$ である。</li>
+          <li>中間体 $M = \mathbb{Q}(t^3)$ に対して $\mathrm{Aut}(L/M) = \{\mathrm{id}_L\}$ であり、したがって $L^{\mathrm{Aut}(L/M)} = \mathbb{Q}(t) \neq M$ である。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) の証明。</strong> 任意の $a \in \mathbb{Q}$ に対し、多項式環の $\mathbb{Q}$ 自己同型 $\mathbb{Q}[t] \xrightarrow{\sim} \mathbb{Q}[t]$ （ $P(t) \mapsto P(t + a)$ ）を商体 $\mathbb{Q}(t)$ に一意に延長することで、 $\sigma_a(t) = t + a$ を満たす自己同型 $\sigma_a \in G$ が得られる（逆写像は $\sigma_{-a}$ である）。</p>
+        <p>$f(t) \in L^G$ を任意にとる。 $f(t)$ は互いに素な多項式 $P(t), Q(t) \in \mathbb{Q}[t]$ （ただし $Q(t)$ はモニック）を用いて既約分数表示 $f(t) = P(t)/Q(t)$ と表せる。任意の $a \in \mathbb{Q}$ に対して $\sigma_a(f(t)) = f(t)$ であるから、</p>
+        <div class="math-display">
+          $$\frac{P(t + a)}{Q(t + a)} = \frac{P(t)}{Q(t)}$$
+        </div>
+        <p>すなわち $\mathbb{Q}[t]$ において $P(t + a) Q(t) = P(t) Q(t + a)$ が成り立つ。一意分解整域 $\mathbb{Q}[t]$ において $P(t)$ と $Q(t)$ は互いに素であるから、 $Q(t)$ は $Q(t + a)$ を割り切る。両者の次数は等しく、かつともにモニックであるから、すべての $a \in \mathbb{Q}$ に対して $Q(t + a) = Q(t)$ が成り立ち、したがって $P(t + a) = P(t)$ も成り立つ。</p>
+        <p>多項式 $R(X) := Q(X) - Q(0) \in \mathbb{Q}[X]$ を考えると、任意の $a \in \mathbb{Q}$ に対して $R(a) = Q(a) - Q(0) = Q(0 + a) - Q(0) = 0$ である。 $\mathbb{Q}$ は無限体であるから、 $R(X)$ は無限個の根を持ち、零多項式でなければならない。よって $Q(t) = Q(0) \in \mathbb{Q}$ である。同様に $P(t) = P(0) \in \mathbb{Q}$ を得るので、 $f(t) = P(t)/Q(t) \in \mathbb{Q}$ であり、 $L^G = \mathbb{Q}$ である。</p>
+
+        <p><strong>(2) の証明。</strong> 任意の $\sigma \in \mathrm{Aut}(\mathbb{Q}(t)/\mathbb{Q}(t^3))$ をとる。 $\sigma$ は $t^3 \in \mathbb{Q}(t^3)$ を固定するので、</p>
+        <div class="math-display">
+          $$\sigma(t)^3 = \sigma(t^3) = t^3$$
+        </div>
+        <p>を満たす。すなわち $\sigma(t) \in \mathbb{Q}(t)$ は多項式 $X^3 - t^3 = (X - t)(X^2 + tX + t^2) \in \mathbb{Q}(t)[X]$ の根である。</p>
+        <p>ここで、もし $u \in \mathbb{Q}(t)$ が $u^2 + tu + t^2 = 0$ を満たすと仮定する。 $t \neq 0$ であるから両辺を $t^2$ で割り、 $v := u/t \in \mathbb{Q}(t)$ とおくと $v^2 + v + 1 = 0$ 、すなわち $(2v + 1)^2 = -3$ を得る。 $w := 2v + 1 \in \mathbb{Q}(t)$ を既約分数 $w = A(t)/B(t)$ （ $A(t), B(t) \in \mathbb{Q}[t]$ は互いに素、 $B(t) \neq 0$ ）と表すと、 $\mathbb{Q}[t]$ において</p>
+        <div class="math-display">
+          $$A(t)^2 = -3 B(t)^2$$
+        </div>
+        <p>が成り立つ。 $A(t)$ と $B(t)$ の最高次係数をそれぞれ $a_0 \neq 0$ 、 $b_0 \neq 0$ とすると、両辺の最高次係数を比較して $a_0^2 = -3 b_0^2$ を得る。しかし $a_0, b_0 \in \mathbb{Q} \subset \mathbb{R}$ より $a_0^2 > 0$ かつ $-3 b_0^2 < 0$ であり矛盾である。</p>
+        <p>したがって $\sigma(t) = t$ でなければならず、 $\mathbb{Q}(t)$ は $\mathbb{Q}$ 上 $t$ で生成されるため $\sigma = \mathrm{id}_L$ である。ゆえに $\mathrm{Aut}(L/M) = \{\mathrm{id}_L\}$ であり、 $L^{\mathrm{Aut}(L/M)} = \mathbb{Q}(t) \neq \mathbb{Q}(t^3) = M$ となる。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p>なお、 $\mathrm{Aut}(\mathbb{Q}(t)/\mathbb{Q})$ は分数一次変換 $t \mapsto (at + b)/(ct + d)$ （ $ad - bc \neq 0$ ）全体のなす射影一般線形群 $\mathrm{PGL}_2(\mathbb{Q})$ に同型であることが知られている。例 2.1 が示す通り、超越拡大では $L^G = K$ が成り立っていても $M \mapsto \mathrm{Aut}(L/M)$ と $H \mapsto L^H$ は互いに逆写像にならない。</p>
+
+      <h3>2.2 閉部分群への制限の必要性：稠密な真部分群の存在</h3>
+      <p>次に、 $L/K$ が無限次代数拡大であり $L^G = K$ を満たす場合であっても、 $G$ の<strong>すべての</strong>部分群を対象とすると写像 $H \mapsto L^H$ が単射にならないことを具体例によって示す。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 2.2（有限体の代数閉包 $\overline{\mathbb{F}_p}/\mathbb{F}_p$ における非単射性）</span>
+        <p>$p$ を素数とし、 $K = \mathbb{F}_p$ 、 $L = \overline{\mathbb{F}_p}$ を $\mathbb{F}_p$ の代数閉包とする。 $G = \mathrm{Aut}(\overline{\mathbb{F}_p}/\mathbb{F}_p)$ とおき、Frobenius自己同型 $\varphi \in G$ を $\varphi(x) := x^p$ で定める。このとき、 $H := \langle \varphi \rangle \subset G$ は可算無限部分群であり、以下が成り立つ。</p>
+        <ol>
+          <li>$H$ は $G$ の真部分群である（ $H \subsetneq G$ ）。</li>
+          <li>$L^H = \mathbb{F}_p = L^G$ が成り立つ。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>準備：</strong> 各正の整数 $n \ge 1$ に対し、 $\overline{\mathbb{F}_p}$ の中で $X^{p^n} - X = 0$ の根全体は位数 $p^n$ の唯一の部分体 $\mathbb{F}_{p^n}$ をなし、 $\overline{\mathbb{F}_p} = \bigcup_{n=1}^\infty \mathbb{F}_{p^n}$ である。また $\mathbb{F}_{p^n}/\mathbb{F}_p$ は拡大次数 $n$ のGalois拡大であり、 $\mathrm{Aut}(\mathbb{F}_{p^n}/\mathbb{F}_p) = \langle \varphi|_{\mathbb{F}_{p^n}} \rangle \cong \mathbb{Z}/n\mathbb{Z}$ である。さらに $m \mid n$ のとき $\mathbb{F}_{p^m} \subset \mathbb{F}_{p^n}$ であり、制限写像 $\mathrm{Aut}(\mathbb{F}_{p^n}/\mathbb{F}_p) \to \mathrm{Aut}(\mathbb{F}_{p^m}/\mathbb{F}_p)$ は自然な剰余環準同型 $\mathbb{Z}/n\mathbb{Z} \to \mathbb{Z}/m\mathbb{Z}$ に対応する。</p>
+
+        <p><strong>(1) の証明。</strong> 任意の正の整数 $k \ge 1$ に対し $\varphi^k|_{\mathbb{F}_{p^{k+1}}} \neq \mathrm{id}_{\mathbb{F}_{p^{k+1}}}$ であるから、 $\varphi$ の位数は無限大であり $H = \langle \varphi \rangle \cong \mathbb{Z}$ は可算集合である。</p>
+        <p>一方、 $G$ の元 $\sigma$ は各 $n \ge 1$ に対する制限 $\sigma|_{\mathbb{F}_{p^n}} = (\varphi|_{\mathbb{F}_{p^n}})^{a_n}$ （ $a_n \in \mathbb{Z}/n\mathbb{Z}$ ）の整合的な族 $(a_n)_{n \ge 1}$ （すなわち $m \mid n$ ならば $a_n \equiv a_m \pmod m$ ）と一対一に対応する。すなわち $G$ は射有限整数環 (profinite integers) $\widehat{\mathbb{Z}} := \varprojlim_{n} \mathbb{Z}/n\mathbb{Z}$ の加法群に同型である。特に、相異なる素数 $q$ に対する $q$ 進整数環の直積 $\prod_{q} \mathbb{Z}_q \cong \widehat{\mathbb{Z}}$ の濃度を考えると（あるいは各素数 $q$ に対して $a_q \in \{0, 1\}$ を独立に選ぶだけでも $2^{\aleph_0}$ 通りの整合的な族を構成できるため）、 $G$ は非可算無限群である。したがって可算部分群 $H$ は $G$ の真部分群である（ $H \subsetneq G$ ）。</p>
+
+        <p><strong>(2) の証明。</strong> $H$ は $\varphi$ で生成されるので、</p>
+        <div class="math-display">
+          $$L^H = \{x \in \overline{\mathbb{F}_p} \mid \varphi(x) = x\} = \{x \in \overline{\mathbb{F}_p} \mid x^p - x = 0\} = \mathbb{F}_p$$
+        </div>
+        <p>である。また $\mathbb{F}_p \subset L^G \subset L^H = \mathbb{F}_p$ より $L^G = \mathbb{F}_p = L^H$ を得る。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p>例 2.2 では、真部分群 $H \subsetneq G$ が $G$ と同じ固定体 $\mathbb{F}_p$ を与えている。後述するKrull位相の観点からは、 $H$ は $G$ において稠密な部分群（ $\overline{H} = G$ ）である。このような稠密な真部分群を排除し、固定体と一対一に対応する部分群を正確に取り出すために、 $G$ に位相を導入して<strong>閉部分群</strong>のみを考える必要がある。</p>
+    </section>
+
+    <section id="sec-krull-topology">
+      <h2>3. 無限次代数Galois拡大の構造とKrull位相</h2>
+      <p>以下、本節および第 4 節では、 $L/K$ は<strong>代数拡大</strong>であり、 $G = \mathrm{Aut}(L/K)$ に対して</p>
+      <div class="math-display">
+        $$L^G = K$$
+      </div>
+      <p>が成り立つと仮定する（このような代数拡大を<strong>Galois拡大 (Galois extension)</strong> という）。まず、無限次を含む一般の代数拡大において $L^G = K$ が正規分離拡大と同値であることを確認しておく。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 3.1（一般の代数拡大における $L^G = K$ と正規分離拡大の同値性）</span>
+        <p>$L/K$ を一般の（無限次を含む）代数拡大とし、 $G = \mathrm{Aut}(L/K)$ とおく。このとき、以下の2条件は同値である。</p>
+        <ol>
+          <li>$L^G = K$ である。</li>
+          <li>$L/K$ は正規拡大かつ分離拡大である（すなわち、 $L$ に少なくとも1つの根を持つ任意の既約多項式 $f(X) \in K[X]$ は、 $L[X]$ において相異なる一次式の積に分解する）。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>(1) $\Rightarrow$ (2) の証明。</strong> 任意の $\alpha \in L$ をとり、 $\alpha$ の $K$ 上の最小多項式を $f(X) \in K[X]$ とする。任意の $\sigma \in G$ に対し $f(\sigma(\alpha)) = \sigma(f(\alpha)) = 0$ であるから、軌道 $O(\alpha) := \{\sigma(\alpha) \mid \sigma \in G\}$ は $f(X)$ の $L$ における根の集合に含まれ、特に有限集合である。 $O(\alpha) = \{\alpha_1, \dots, \alpha_r\}$ （相異なる元）とおき、 $g(X) := \prod_{i=1}^r (X - \alpha_i) \in L[X]$ と定める。任意の $\sigma \in G$ は $O(\alpha)$ の置換を誘導するので $\sigma(g)(X) = g(X)$ となり、 $g(X)$ の係数はすべて $L^G = K$ に属する。</p>
+        <p>$\alpha \in O(\alpha)$ より $g(\alpha) = 0$ なので $K[X]$ において $f(X) \mid g(X)$ であり、逆に $g(X)$ の各根は相異なりすべて $f(X)$ の根なので $L[X]$ において $g(X) \mid f(X)$ である。両者はモニックゆえ $f(X) = g(X) = \prod_{i=1}^r (X - \alpha_i)$ を得る。よって $L/K$ は正規拡大かつ分離拡大である。</p>
+
+        <p><strong>(2) $\Rightarrow$ (1) の証明。</strong> 任意の $\alpha \in L \smallsetminus K$ をとり、 $\sigma(\alpha) \neq \alpha$ となる $\sigma \in G$ を構成する。 $\alpha$ の $K$ 上の最小多項式 $f(X) \in K[X]$ は $\deg f \ge 2$ であり、正規性と分離性より $L$ に $\alpha$ とは異なる根 $\beta \neq \alpha$ を持つ。したがって $\tau(\alpha) = \beta$ を満たす $K$ 準同型 $\tau : K(\alpha) \to L$ が存在する。</p>
+        <p>$K(\alpha) \subset M \subset L$ なる中間体 $M$ と $\varphi|_{K(\alpha)} = \tau$ を満たす $K$ 準同型 $\varphi : M \to L$ の組 $(M, \varphi)$ 全体の集合 $\mathcal{P}$ に、延長による半順序を入れてZornの補題を適用すると、極大元 $(M_0, \varphi_0)$ が存在する。もし $M_0 \neq L$ ならば $\gamma \in L \smallsetminus M_0$ がとれる。 $\gamma$ の $M_0$ 上の最小多項式 $h(X)$ は $K$ 上の最小多項式 $p(X)$ を割り切り、正規性より $p(X)$ は $L[X]$ で一次式の積に分解するから、 $\varphi_0(h)(X) \mid \varphi_0(p)(X) = p(X)$ も $L$ に根 $\delta$ を持つ。よって $\varphi_0$ は $M_0(\gamma) \to L$ （ $\gamma \mapsto \delta$ ）に延長でき、極大性に矛盾する。ゆえに $M_0 = L$ である。</p>
+        <p>最後に $\sigma := \varphi_0 : L \to L$ が全射であることを示す。任意の $x \in L$ に対し、その $K$ 上の最小多項式 $q(X)$ の $L$ における根の集合 $R$ は有限集合であり、単射 $\sigma$ は $\sigma(R) \subset R$ を満たすので全単射 $R \xrightarrow{\sim} R$ を誘導する。特に $x \in R = \sigma(R) \subset \sigma(L)$ である。よって $\sigma \in G$ かつ $\sigma(\alpha) = \beta \neq \alpha$ となり、 $\alpha \notin L^G$ が従う。ゆえに $L^G = K$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <p>定理 3.1 の証明で用いたZornの補題による延長論法は、以下の重要な補題を直ちに与える。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">補題 3.2（$K$ 準同型の延長補題）</span>
+        <p>$L/K$ を代数Galois拡大、 $M$ を $L/K$ の任意の中間体とする。このとき、任意の $K$ 準同型 $\tau : M \to L$ はある $\sigma \in G = \mathrm{Aut}(L/K)$ に延長できる（すなわち $\sigma|_M = \tau$ ）。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>定理 3.1 の (2) $\Rightarrow$ (1) の証明において、出発点 $(K(\alpha), \tau)$ を $(M, \tau)$ に置き換えて全く同じZornの補題の議論を適用すればよい。極大元 $(M_0, \varphi_0)$ は $M_0 = L$ を満たし、さらに任意の $x \in L$ の最小多項式の根の集合上での単射性から $\sigma := \varphi_0 : L \to L$ は全射となる。ゆえに $\sigma \in G$ かつ $\sigma|_M = \tau$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>3.1 有限次Galois中間体の有向族による被覆</h3>
+      <p>$L/K$ の有限次Galois中間体全体の集合を</p>
+      <div class="math-display">
+        $$\mathcal{F} := \{F \mid K \subset F \subset L,\ [F : K] < \infty,\ F/K \text{ はGalois拡大}\}$$
+      </div>
+      <p>とおく。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">命題 3.3（$\mathcal{F}$ の基本性質）</span>
+        <p>代数Galois拡大 $L/K$ に対し、族 $\mathcal{F}$ は以下を満たす。</p>
+        <ol>
+          <li>任意の有限個の元 $\alpha_1, \dots, \alpha_n \in L$ に対して、 $\alpha_1, \dots, \alpha_n \in F$ を満たす $F \in \mathcal{F}$ が存在する。特に、 $L = \bigcup_{F \in \mathcal{F}} F$ である。</li>
+          <li>任意の $F_1, F_2 \in \mathcal{F}$ に対し、合成体 $F_1 F_2 \subset L$ も $\mathcal{F}$ に属する。したがって $(\mathcal{F}, \subset)$ は有向集合 (directed set) である。</li>
+          <li>任意の $F \in \mathcal{F}$ と任意の $\sigma \in G$ に対して $\sigma(F) = F$ である。よって制限写像 $\mathrm{res}_F : G \to \mathrm{Aut}(F/K)$ （ $\sigma \mapsto \sigma|_F$ ）は全射群準同型であり、その核 $N_F := \mathrm{Aut}(L/F)$ は $G$ の有限指数正規部分群である。</li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>(1) 各 $\alpha_i$ の $K$ 上の最小多項式を $f_i(X) \in K[X]$ とする。定理 3.1 より $L/K$ は正規分離拡大であるから、各 $f_i(X)$ は $L[X]$ において相異なる一次式の積に分解する。多項式 $f(X) := \prod_{i=1}^n f_i(X)$ の $L$ におけるすべての根を $K$ に添加して得られる中間体を $F \subset L$ とおく。 $f(X)$ の相異なる既約因子の積 $f_{\mathrm{red}}(X)$ は重根を持たず、 $F$ は $f_{\mathrm{red}}(X)$ の $K$ 上の最小分解体である。よって $F/K$ は有限次Galois拡大であり、 $F \in \mathcal{F}$ かつ $\alpha_1, \dots, \alpha_n \in F$ である。</p>
+        <p>(2) $F_1, F_2 \in \mathcal{F}$ とする。 $F_1/K$ および $F_2/K$ は有限次Galois拡大であるから、それぞれ $K$ 上重根を持たない多項式 $g_1(X), g_2(X) \in K[X]$ の最小分解体である。 $g_1(X) g_2(X)$ の相異なる既約因子の積 $g(X)$ は重根を持たず、合成体 $F_1 F_2$ は $g(X)$ の $K$ 上の最小分解体である。したがって $F_1 F_2$ は有限次Galois拡大であり、 $F_1 F_2 \in \mathcal{F}$ である。</p>
+        <p>(3) $F \in \mathcal{F}$ は正規拡大であるから、任意の $\alpha \in F$ と任意の $\sigma \in G$ に対し、 $\sigma(\alpha)$ は $\alpha$ の $K$ 上の最小多項式の根であって $F$ に属する。よって $\sigma(F) \subset F$ である。同様の議論を $\sigma^{-1}$ に適用して $\sigma^{-1}(F) \subset F$ すなわち $F \subset \sigma(F)$ を得るので、 $\sigma(F) = F$ である。したがって $\mathrm{res}_F : G \to \mathrm{Aut}(F/K)$ はwell-definedな群準同型である。さらに任意の $\tau \in \mathrm{Aut}(F/K)$ は補題 3.2 により $\sigma \in G$ に延長できるので $\mathrm{res}_F$ は全射である。核は $\ker(\mathrm{res}_F) = \{\sigma \in G \mid \sigma|_F = \mathrm{id}_F\} = \mathrm{Aut}(L/F) = N_F$ であり、準同型定理より $G / N_F \cong \mathrm{Aut}(F/K)$ は有限群なので $[G : N_F] = [F : K] < \infty$ である。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+
+      <h3>3.2 Krull位相の定義と射有限群としての構造</h3>
+      <div class="env-box env-def">
+        <span class="env-title">定義 3.4（Krull位相）</span>
+        <p>代数Galois拡大 $L/K$ のGalois群 $G = \mathrm{Aut}(L/K)$ に対し、各元 $\sigma \in G$ における基本近傍系を左剰余類の族</p>
+        <div class="math-display">
+          $$\{\sigma N_F \mid F \in \mathcal{F}\} \qquad (\text{ここで } N_F = \mathrm{Aut}(L/F))$$
+        </div>
+        <p>として $G$ に位相を定める。すなわち、部分集合 $U \subset G$ が開集合であることを、「任意の $\sigma \in U$ に対してある $F \in \mathcal{F}$ が存在し $\sigma N_F \subset U$ が成り立つこと」と定義する。この位相を $G$ の<strong>Krull位相 (Krull topology)</strong> という。</p>
+      </div>
+
+      <p>まず、この定義が実際に位相を定め、しかも $G$ を位相群 (topological group) にすることを確認する。任意の $F_1, F_2 \in \mathcal{F}$ に対して $F := F_1 F_2 \in \mathcal{F}$ をとると $N_F = \mathrm{Aut}(L/F_1 F_2) = N_{F_1} \cap N_{F_2}$ であるため、任意の $\tau \in \sigma_1 N_{F_1} \cap \sigma_2 N_{F_2}$ に対して $\tau N_F \subset \sigma_1 N_{F_1} \cap \sigma_2 N_{F_2}$ が成り立ち、開集合の有限交叉が再び開集合となる。よってこれは $G$ 上の位相を定める。</p>
+      <p>また、任意の $\sigma, \tau \in G$ と $F \in \mathcal{F}$ に対し、 $N_F$ は $G$ の正規部分群であるから</p>
+      <div class="math-display">
+        $$(\sigma N_F)(\tau N_F) = \sigma \tau (\tau^{-1} N_F \tau) N_F = \sigma \tau N_F, \qquad (\sigma N_F)^{-1} = N_F \sigma^{-1} = \sigma^{-1} N_F$$
+      </div>
+      <p>が成り立つ。これにより群の乗法 $G \times G \to G$ および逆元写像 $G \to G$ はともに連続であり、 $G$ は位相群となる。さらに、任意の開部分群 $U \subset G$ に対して補集合 $G \smallsetminus U = \bigcup_{\sigma \notin U} \sigma U$ は開集合の和集合として開集合であるから、<strong>位相群の開部分群は常に閉部分群（すなわちclopen）</strong>である。特に、各 $N_F$ は $G$ のclopenな正規部分群である。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 3.5（射影極限としての表示と射有限性）</span>
+        <p>各 $F \in \mathcal{F}$ に対し、有限群 $\mathrm{Aut}(F/K)$ に離散位相を入れる。包含関係 $F_1 \subset F_2$ （ $F_1, F_2 \in \mathcal{F}$ ）に対する自然な制限写像 $\pi_{F_2, F_1} : \mathrm{Aut}(F_2/K) \to \mathrm{Aut}(F_1/K)$ のなす射影系 (projective system) の射影極限 (projective limit)</p>
+        <div class="math-display">
+          $$\varprojlim_{F \in \mathcal{F}} \mathrm{Aut}(F/K) := \left\{ (\sigma_F)_{F \in \mathcal{F}} \in \prod_{F \in \mathcal{F}} \mathrm{Aut}(F/K) \ \middle|\ \forall F_1 \subset F_2,\ \sigma_{F_2}|_{F_1} = \sigma_{F_1} \right\}$$
+        </div>
+        <p>に直積位相から誘導される部分空間位相を入れる。このとき、自然な写像</p>
+        <div class="math-display">
+          $$\iota : G \longrightarrow \varprojlim_{F \in \mathcal{F}} \mathrm{Aut}(F/K), \qquad \sigma \longmapsto (\sigma|_F)_{F \in \mathcal{F}}$$
+        </div>
+        <p>は位相群の同型である。したがって、Krull位相を備えた $G$ はコンパクト・Hausdorff・完全不連結な位相群、すなわち<strong>射有限群 (profinite group)</strong> である。</p>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p><strong>群準同型であることと単射性：</strong> 各成分の制限写像 $\mathrm{res}_F$ が群準同型なので $\iota$ は群準同型である。 $\iota(\sigma) = \iota(\tau)$ とするとすべての $F \in \mathcal{F}$ に対して $\sigma|_F = \tau|_F$ であり、命題 3.3 (1) の $L = \bigcup_{F \in \mathcal{F}} F$ より $\sigma = \tau$ を得る。よって $\iota$ は単射である。</p>
+
+        <p><strong>全射性：</strong> 整合的な族 $(\sigma_F)_{F \in \mathcal{F}} \in \varprojlim_{F \in \mathcal{F}} \mathrm{Aut}(F/K)$ を任意にとる。任意の $x \in L$ に対し、命題 3.3 (1) より $x \in F$ となる $F \in \mathcal{F}$ が存在するので、 $\sigma(x) := \sigma_F(x)$ と定める。もし $x \in F_1$ かつ $x \in F_2$ （ $F_1, F_2 \in \mathcal{F}$ ）ならば、命題 3.3 (2) より $F_1 F_2 \in \mathcal{F}$ であり、整合性から $\sigma_{F_1}(x) = \sigma_{F_1 F_2}(x) = \sigma_{F_2}(x)$ となるため、 $\sigma : L \to L$ はwell-definedである。</p>
+        <p>任意の $x, y \in L$ に対し $x, y \in F$ となる $F \in \mathcal{F}$ をとれば $\sigma_F$ が $K$ 同型であることから $\sigma(x + y) = \sigma(x) + \sigma(y)$ 、 $\sigma(xy) = \sigma(x)\sigma(y)$ 、および $K$ の固定が従う。また任意の $y \in L$ に対し $y \in F$ なる $F \in \mathcal{F}$ をとれば $\sigma_F$ の全射性より $x \in F$ が存在して $\sigma(x) = \sigma_F(x) = y$ となるため、 $\sigma$ は全射である。よって $\sigma \in G$ かつ $\iota(\sigma) = (\sigma_F)_{F \in \mathcal{F}}$ であり、 $\iota$ は全射である。</p>
+
+        <p><strong>同相性：</strong> 射影極限位相における点 $(\sigma|_F)_{F \in \mathcal{F}}$ の基本近傍は、有限個の $F_1, \dots, F_r \in \mathcal{F}$ を固定して</p>
+        <div class="math-display">
+          $$W(\sigma; F_1, \dots, F_r) := \left\{ (\tau_F)_{F \in \mathcal{F}} \in \varprojlim_{F \in \mathcal{F}} \mathrm{Aut}(F/K) \ \middle|\ \forall i = 1, \dots, r,\ \tau_{F_i} = \sigma|_{F_i} \right\}$$
+        </div>
+        <p>の形で与えられる。合成体 $F_0 := F_1 \cdots F_r \in \mathcal{F}$ をとると、 $\tau \in G$ に対して「すべての $i = 1, \dots, r$ で $\tau|_{F_i} = \sigma|_{F_i}$ 」であることと「 $\tau|_{F_0} = \sigma|_{F_0}$ 」（すなわち $\tau \in \sigma N_{F_0}$ ）は同値である。よって $\iota^{-1}(W(\sigma; F_1, \dots, F_r)) = \sigma N_{F_0}$ かつ $\iota(\sigma N_{F_0}) = W(\sigma; F_0)$ が成り立ち、 $\iota$ は連続かつ開写像、すなわち同相写像である。</p>
+
+        <p><strong>コンパクト性・Hausdorff性・完全不連結性：</strong> 各 $\mathrm{Aut}(F/K)$ は有限離散空間なのでコンパクト・Hausdorff・完全不連結である。Tychonoffの定理より直積空間 $P := \prod_{F \in \mathcal{F}} \mathrm{Aut}(F/K)$ もコンパクト・Hausdorff・完全不連結である。</p>
+        <p>射影極限 $X := \varprojlim_{F \in \mathcal{F}} \mathrm{Aut}(F/K)$ が $P$ の閉部分集合であることを示す。各対 $F_1 \subset F_2$ に対して集合 $X_{F_1, F_2} := \{(\sigma_F) \in P \mid \sigma_{F_2}|_{F_1} = \sigma_{F_1}\}$ を考える。これは2つの連続写像 $(\sigma_F) \mapsto \sigma_{F_2}|_{F_1}$ と $(\sigma_F) \mapsto \sigma_{F_1}$ （ともに値域はHausdorff空間 $\mathrm{Aut}(F_1/K)$ ）が一致する点の集合であるから、 $P$ の閉集合である。したがって $X = \bigcap_{F_1 \subset F_2} X_{F_1, F_2}$ は $P$ の閉部分空間である。コンパクト・Hausdorff・完全不連結空間の閉部分空間は再びコンパクト・Hausdorff・完全不連結であるから、 $G \cong X$ もこれらの性質をすべて満たす。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-krull-theorem">
+      <h2>4. 無限次Galois理論の基本定理（Krullの定理）とその完全証明</h2>
+      <p>以上の準備のもと、無限次代数Galois拡大におけるGalois対応の主定理を定式化し、完全に証明する。</p>
+
+      <div class="env-box env-thm">
+        <span class="env-title">定理 4.1（KrullのGalois理論の基本定理）</span>
+        <p>$L/K$ を代数拡大とし、 $G = \mathrm{Aut}(L/K)$ が $L^G = K$ を満たすとする。 $G$ にKrull位相を入れたとき、 $L/K$ の中間体全体の集合 $\mathcal{M}$ と $G$ の<strong>閉部分群</strong>全体の集合 $\mathcal{H}_{\mathrm{cl}}$ の間に、2つの写像</p>
+        <div class="math-display">
+          $$\Phi : \mathcal{M} \longrightarrow \mathcal{H}_{\mathrm{cl}}, \qquad M \longmapsto \mathrm{Aut}(L/M)$$
+        </div>
+        <div class="math-display">
+          $$\Psi : \mathcal{H}_{\mathrm{cl}} \longrightarrow \mathcal{M}, \qquad H \longmapsto L^H$$
+        </div>
+        <p>は互いに逆写像であり、包含関係を逆転させる全単射を与える。さらに以下が成り立つ。</p>
+        <ol>
+          <li>中間体 $M \in \mathcal{M}$ に対し、 $M/K$ が有限次拡大であるための必要十分条件は、 $\mathrm{Aut}(L/M)$ が $G$ の<strong>開部分群</strong>であることである。このとき $[M : K] = [G : \mathrm{Aut}(L/M)]$ が成り立つ。</li>
+          <li>中間体 $M \in \mathcal{M}$ と対応する閉部分群 $H = \mathrm{Aut}(L/M)$ に対し、 $M/K$ がGalois拡大（すなわち $M^{\mathrm{Aut}(M/K)} = K$ ）であるための必要十分条件は、 $H$ が $G$ の正規部分群（ $H \triangleleft G$ ）であることである。このとき制限写像 $\mathrm{res}_M : G \to \mathrm{Aut}(M/K)$ は連続かつ全射な群準同型であり、位相群の同型
+            <div class="math-display">
+              $$G / H \cong \mathrm{Aut}(M/K)$$
+            </div>
+            を誘導する（ここで $G/H$ には商位相、 $\mathrm{Aut}(M/K)$ にはKrull位相を入れる）。
+          </li>
+        </ol>
+      </div>
+
+      <div class="proof-box">
+        <span class="proof-title">証明</span>
+        <p>証明を4つの段階に分けて行う。包含関係の逆転（ $M_1 \subset M_2 \Rightarrow \Phi(M_2) \subset \Phi(M_1)$ および $H_1 \subset H_2 \Rightarrow \Psi(H_2) \subset \Psi(H_1)$ ）は定義より直ちに従う。</p>
+
+        <p><strong>ステップ 1：$\Phi(M) \in \mathcal{H}_{\mathrm{cl}}$ かつ $\Psi(\Phi(M)) = M$ の証明。</strong></p>
+        <p>任意の中間体 $M \in \mathcal{M}$ をとる。まず $\Phi(M) = \mathrm{Aut}(L/M)$ が $G$ の閉部分群であることを示す。任意の $\alpha \in M$ に対し、命題 3.3 (1) より $\alpha \in F_\alpha$ を満たす $F_\alpha \in \mathcal{F}$ が存在する。すると $K(\alpha) \subset F_\alpha$ より</p>
+        <div class="math-display">
+          $$N_{F_\alpha} = \mathrm{Aut}(L/F_\alpha) \subset \mathrm{Aut}(L/K(\alpha))$$
+        </div>
+        <p>である。部分群 $\mathrm{Aut}(L/K(\alpha))$ は開部分群 $N_{F_\alpha}$ を含むため、任意の $\sigma \in \mathrm{Aut}(L/K(\alpha))$ に対して $\sigma N_{F_\alpha} \subset \mathrm{Aut}(L/K(\alpha))$ となり開部分群である。位相群の開部分群は常に閉部分群であるから、 $\mathrm{Aut}(L/K(\alpha))$ は $G$ の閉部分群である。したがって</p>
+        <div class="math-display">
+          $$\mathrm{Aut}(L/M) = \bigcap_{\alpha \in M} \mathrm{Aut}(L/K(\alpha))$$
+        </div>
+        <p>は閉集合の共通部分として $G$ の閉部分群であり、 $\Phi$ はwell-definedである。</p>
+        <p>次に $\Psi(\Phi(M)) = L^{\mathrm{Aut}(L/M)} = M$ を示す。定理 3.1 より $L/K$ は正規分離拡大である。任意の $\alpha \in L$ に対し、 $\alpha$ の $M$ 上の最小多項式は $K$ 上の最小多項式を $M[X]$ において割り切るため、 $L[X]$ において相異なる一次式の積に分解する。よって代数拡大 $L/M$ も正規分離拡大である。したがって定理 3.1 を拡大 $L/M$ に適用することで、直ちに $L^{\mathrm{Aut}(L/M)} = M$ を得る。</p>
+
+        <p><strong>ステップ 2：任意の $H \in \mathcal{H}_{\mathrm{cl}}$ に対する $\Phi(\Psi(H)) = H$ の証明。</strong></p>
+        <p>包含関係 $H \subset \mathrm{Aut}(L/L^H)$ は固定体の定義より明らかである。逆の包含関係 $\mathrm{Aut}(L/L^H) \subset H$ を示すため、任意の $\sigma \in \mathrm{Aut}(L/L^H)$ をとる。 $H$ は $G$ の閉集合なので、 $\sigma$ の任意の基本近傍 $\sigma N_F$ （ $F \in \mathcal{F}$ ）が $H$ と交わることを示せば、 $\sigma \in \overline{H} = H$ が結論づけられる。</p>
+        <p>任意の $F \in \mathcal{F}$ を固定し、制限写像 $\mathrm{res}_F : G \to \mathrm{Aut}(F/K)$ による $H$ の像を $H_F := \mathrm{res}_F(H) \subset \mathrm{Aut}(F/K)$ とおく。 $F$ における $H_F$ の固定体は</p>
+        <div class="math-display">
+          $$F^{H_F} = \{x \in F \mid \forall \tau \in H,\ \tau(x) = x\} = F \cap L^H$$
+        </div>
+        <p>である。いま $\sigma \in \mathrm{Aut}(L/L^H)$ であるから、その制限 $\sigma|_F \in \mathrm{Aut}(F/K)$ は $F \cap L^H = F^{H_F}$ のすべての元を固定する。すなわち $\sigma|_F \in \mathrm{Aut}(F/F^{H_F})$ である。</p>
+        <p>ここで $F/K$ は<strong>有限次Galois拡大</strong>であるから、有限次Galois理論の基本定理を拡大 $F/K$ と部分群 $H_F \subset \mathrm{Aut}(F/K)$ に適用すると、</p>
+        <div class="math-display">
+          $$\mathrm{Aut}(F/F^{H_F}) = H_F = \mathrm{res}_F(H)$$
+        </div>
+        <p>が成り立つ。したがって、ある $\tau \in H$ が存在して $\tau|_F = \sigma|_F$ となる。これは $(\sigma^{-1}\tau)|_F = \mathrm{id}_F$ 、すなわち $\sigma^{-1}\tau \in N_F$ （ゆえに $\tau \in \sigma N_F \cap H$ ）を意味する。 $F \in \mathcal{F}$ の任意性より $\sigma \in \overline{H} = H$ が示され、 $\Phi(\Psi(H)) = H$ が成り立つ。</p>
+
+        <p><strong>ステップ 3：開部分群と有限次拡大の対応（主張 1）の証明。</strong></p>
+        <p>($\Rightarrow$) $[M : K] < \infty$ とする。 $M$ の $K$ 上の有限個の基底元 $\alpha_1, \dots, \alpha_n$ をとると、命題 3.3 (1) より $\alpha_1, \dots, \alpha_n \in F$ を満たす $F \in \mathcal{F}$ が存在する。すると $M \subset F$ より $N_F = \mathrm{Aut}(L/F) \subset \mathrm{Aut}(L/M)$ である。開部分群 $N_F$ を含む部分群なので $\mathrm{Aut}(L/M)$ は $G$ の開部分群である。</p>
+        <p>($\Leftarrow$) $H := \mathrm{Aut}(L/M)$ が $G$ の開部分群であると仮定する。単位元 $\mathrm{id}_L \in H$ の近傍であるから、ある $F \in \mathcal{F}$ が存在して $N_F \subset H$ となる。両辺の固定体をとると、ステップ 1 より $M = L^H \subset L^{N_F} = F$ となり、 $[M : K] \le [F : K] < \infty$ を得る。</p>
+        <p>さらに $[M : K] < \infty$ のとき、 $M \subset F$ となる $F \in \mathcal{F}$ をとる。命題 3.3 (3) より制限写像 $\mathrm{res}_F : G \to \mathrm{Aut}(F/K)$ は核 $N_F \subset \mathrm{Aut}(L/M)$ を持つ全射群準同型であり、 $\mathrm{res}_F(\mathrm{Aut}(L/M)) = \mathrm{Aut}(F/M)$ である（実際、 $\mathrm{res}_F(\mathrm{Aut}(L/M)) \subset \mathrm{Aut}(F/M)$ は明らかであり、逆の包含は補題 3.2 より任意の $\tau \in \mathrm{Aut}(F/M)$ が $M$ 上恒等的な自己同型 $\sigma \in \mathrm{Aut}(L/M)$ に延長できることから従う）。したがって群の対応定理と有限次Galois理論の基本定理より、</p>
+        <div class="math-display">
+          $$[G : \mathrm{Aut}(L/M)] = [\mathrm{Aut}(F/K) : \mathrm{Aut}(F/M)] = [M : K]$$
+        </div>
+        <p>が成り立つ。</p>
+
+        <p><strong>ステップ 4：正規部分群とGalois性の対応（主張 2）の証明。</strong></p>
+        <p>任意の $\sigma \in G$ と $M \in \mathcal{M}$ に対して $\mathrm{Aut}(L/\sigma(M)) = \sigma \mathrm{Aut}(L/M) \sigma^{-1}$ が成り立つ（実際、 $\tau \in \mathrm{Aut}(L/\sigma(M)) \iff \forall x \in M,\ \tau(\sigma(x)) = \sigma(x) \iff \sigma^{-1}\tau\sigma \in \mathrm{Aut}(L/M)$ ）。 $\Phi$ が全単射であることから、 $H = \mathrm{Aut}(L/M)$ について</p>
+        <div class="math-display">
+          $$H \triangleleft G \iff \forall \sigma \in G,\ \sigma H \sigma^{-1} = H \iff \forall \sigma \in G,\ \sigma(M) = M$$
+        </div>
+        <p>が成り立つ。</p>
+        <p>($\Rightarrow$) $M/K$ がGalois拡大であると仮定する。定理 3.1 より $M/K$ は正規拡大である。任意の $\alpha \in M$ と任意の $\sigma \in G$ に対し、 $\sigma(\alpha)$ は $\alpha$ の $K$ 上の最小多項式の根なので正規性より $\sigma(\alpha) \in M$ である。よって $\sigma(M) \subset M$ であり、 $\sigma^{-1}$ についても同様に $\sigma^{-1}(M) \subset M$ なので $\sigma(M) = M$ となる。したがって $H \triangleleft G$ である。</p>
+        <p>($\Leftarrow$) $H \triangleleft G$ と仮定すると、すべての $\sigma \in G$ に対して $\sigma(M) = M$ である。よって制限写像 $\mathrm{res}_M : G \to \mathrm{Aut}(M/K)$ （ $\sigma \mapsto \sigma|_M$ ）がwell-definedな群準同型として定まる。任意の $x \in M^{\mathrm{Aut}(M/K)}$ と任意の $\sigma \in G$ に対し $\sigma(x) = \sigma|_M(x) = x$ であるから $x \in L^G = K$ を得る。よって $M^{\mathrm{Aut}(M/K)} = K$ であり、 $M/K$ はGalois拡大である。</p>
+        <p>最後に位相群の同型 $G/H \cong \mathrm{Aut}(M/K)$ を示す。補題 3.2 により任意の $\tau \in \mathrm{Aut}(M/K)$ は $\sigma \in G$ に延長できるので $\mathrm{res}_M$ は全射であり、核は $\ker(\mathrm{res}_M) = \mathrm{Aut}(L/M) = H$ である。連続性を示すため、 $M/K$ の任意の有限次Galois中間体 $E$ をとる。 $E$ は $L/K$ の有限次Galois中間体でもあるから $E \in \mathcal{F}$ であり、 $\mathrm{Aut}(M/K)$ における基本開集合 $\tau \mathrm{Aut}(M/E)$ （ $\tau = \sigma|_M$ ）の逆像は</p>
+        <div class="math-display">
+          $$\mathrm{res}_M^{-1}(\tau \mathrm{Aut}(M/E)) = \sigma \mathrm{Aut}(L/E) = \sigma N_E$$
+        </div>
+        <p>となり $G$ の開集合である。よって $\mathrm{res}_M$ は連続である。</p>
+        <p>商位相の普遍性により、 $\mathrm{res}_M$ は連続な全単射群準同型 $\overline{\mathrm{res}}_M : G/H \to \mathrm{Aut}(M/K)$ を誘導する。ここで定理 3.5 より $G$ はコンパクト空間であるからその連続像 $G/H$ もコンパクト空間であり、また定理 3.5 を拡大 $M/K$ に適用して $\mathrm{Aut}(M/K)$ はHausdorff空間である。コンパクト空間からHausdorff空間への連続全単射は常に閉写像、したがって同相写像である（実際、 $G/H$ の任意の閉集合 $C$ はコンパクトなので、その連続像 $\overline{\mathrm{res}}_M(C)$ はHausdorff空間 $\mathrm{Aut}(M/K)$ のコンパクト部分集合として閉集合である）。ゆえに $\overline{\mathrm{res}}_M$ は位相群の同型 $G/H \cong \mathrm{Aut}(M/K)$ を与える。</p>
+        <p class="qed">$\blacksquare$</p>
+      </div>
+    </section>
+
+    <section id="sec-applications">
+      <h2>5. 無限次Galois拡大の現代数学における応用</h2>
+      <p>無限次Galois拡大とKrull位相の理論は、単に有限次理論の一般化にとどまらず、現代の整数論や代数幾何学において<strong>「無数の有限次拡大に現れる現象を、単一の位相群の作用として統一的・大域的に捉えるための基盤」</strong>として不可欠な役割を果たしている。以下では代表的な4つの分野を取り上げ、具体的な対象と計算を通じてその仕組みを詳説する。</p>
+
+      <h3>5.1 絶対Galois群とGalois表現：方程式の解の個数を行列に変換する</h3>
+      <p>有理数体 $\mathbb{Q}$ の代数閉包 $\overline{\mathbb{Q}}$ は $\mathbb{Q}$ の無限次代数Galois拡大であり、そのGalois群</p>
+      <div class="math-display">
+        $$G_{\mathbb{Q}} := \mathrm{Gal}(\overline{\mathbb{Q}}/\mathbb{Q}) = \mathrm{Aut}(\overline{\mathbb{Q}}/\mathbb{Q})$$
+      </div>
+      <p>を $\mathbb{Q}$ の<strong>絶対Galois群 (absolute Galois group)</strong> という。 $\mathbb{Q}$ 上のすべての有限次Galois拡大の情報は、定理 4.1 によりこの単一の射有限群 $G_{\mathbb{Q}}$ の開正規部分群による商群の中にすべて収まっている。</p>
+      <p>現代整数論の中心的な研究対象は、 $G_{\mathbb{Q}}$ から行列群へのKrull位相に関する<strong>連続準同型</strong>である<strong>Galois表現 (Galois representation)</strong></p>
+      <div class="math-display">
+        $$\rho : G_{\mathbb{Q}} \longrightarrow \mathrm{GL}_n(\mathbb{Q}_\ell)$$
+      </div>
+      <p>（ここで $\ell$ は素数、 $\mathbb{Q}_\ell$ は $\ell$ 進数体）である。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.1（1次元表現：$\ell$ 進円分指標）</span>
+        <p>素数 $\ell$ を固定し、 $1$ の $\ell^n$ 乗根 $\zeta_{\ell^n} := e^{2\pi i / \ell^n} \in \overline{\mathbb{Q}}$ をすべての $n \ge 1$ にわたって添加した無限次拡大 $\mathbb{Q}(\mu_{\ell^\infty}) := \bigcup_{n=1}^\infty \mathbb{Q}(\zeta_{\ell^n})$ を考える。</p>
+        <p>任意の $\sigma \in G_{\mathbb{Q}}$ は各 $n \ge 1$ に対して $\zeta_{\ell^n}$ を別の $1$ の原始 $\ell^n$ 乗根に移すから、 $\ell$ と互いに素な剰余類 $a_n \in (\mathbb{Z}/\ell^n\mathbb{Z})^\times$ が一意に存在して</p>
+        <div class="math-display">
+          $$\sigma(\zeta_{\ell^n}) = \zeta_{\ell^n}^{a_n}$$
+        </div>
+        <p>と書ける。さらに関係式 $(\zeta_{\ell^{n+1}})^\ell = \zeta_{\ell^n}$ に $\sigma$ を作用させることで</p>
+        <div class="math-display">
+          $$\zeta_{\ell^n}^{a_{n+1}} = (\zeta_{\ell^{n+1}}^{a_{n+1}})^\ell = \sigma(\zeta_{\ell^{n+1}})^\ell = \sigma(\zeta_{\ell^n}) = \zeta_{\ell^n}^{a_n}$$
+        </div>
+        <p>すなわち整合性条件 $a_{n+1} \equiv a_n \pmod{\ell^n}$ が従う。よって列 $(a_n)_{n \ge 1}$ は $\ell$ 進整数環の単数群の元 $a \in \mathbb{Z}_\ell^\times = \varprojlim_{n} (\mathbb{Z}/\ell^n\mathbb{Z})^\times$ を一意に定める。こうして得られる連続群準同型</p>
+        <div class="math-display">
+          $$\chi_\ell : G_{\mathbb{Q}} \longrightarrow \mathbb{Z}_\ell^\times = \mathrm{GL}_1(\mathbb{Z}_\ell), \qquad \sigma \longmapsto a$$
+        </div>
+        <p>を<strong>$\ell$ 進円分指標 ($\ell$-adic cyclotomic character)</strong> という。 $\mathbb{Z}_\ell^\times$ の基本開部分群 $1 + \ell^n \mathbb{Z}_\ell$ の逆像は開正規部分群 $\mathrm{Gal}(\overline{\mathbb{Q}}/\mathbb{Q}(\zeta_{\ell^n}))$ に一致するため、 $\chi_\ell$ はKrull位相に関して連続である。このようにKrull位相によって、無限個の有限次拡大 $\mathbb{Q}(\zeta_{\ell^n})$ 上の作用が1つの連続な1次元表現に束ねられる。</p>
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.2（2次元表現：楕円曲線のTate加群とFermatの最終定理）</span>
+        <p>$\mathbb{Q}$ 上定義された楕円曲線 $E : y^2 = x^3 - x$ を考える。 $E(\overline{\mathbb{Q}})$ は無限遠点 $O$ を単位元とするアーベル群をなし、 $\ell^n$ 倍すると $O$ になる点（ $\ell^n$ 等分点）の集合 $E[\ell^n] := \{P \in E(\overline{\mathbb{Q}}) \mid \ell^n P = O\}$ は、複素数体上では複素トーラス $\mathbb{C}/\Lambda$ の $\ell^n$ 等分点とみなせるため、抽象群として</p>
+        <div class="math-display">
+          $$E[\ell^n] \cong (\mathbb{Z}/\ell^n\mathbb{Z})^2$$
+        </div>
+        <p>と同型である。 $E[\ell^n]$ の点の座標はすべて代数的数（ $\overline{\mathbb{Q}}$ の元）であり、 $G_{\mathbb{Q}}$ の元は $E$ の群演算を保つため、 $E[\ell^n]$ に $\mathbb{Z}/\ell^n\mathbb{Z}$ 線形変換（すなわち $\mathrm{GL}_2(\mathbb{Z}/\ell^n\mathbb{Z})$ の元）として作用する。</p>
+        <p>すべての $n \ge 1$ にわたり $\ell$ 倍写像 $E[\ell^{n+1}] \to E[\ell^n]$ に関する射影極限をとることで、 $E$ の<strong>$\ell$ 進Tate加群 ($\ell$-adic Tate module)</strong></p>
+        <div class="math-display">
+          $$T_\ell(E) := \varprojlim_{n} E[\ell^n] \cong \mathbb{Z}_\ell^2$$
+        </div>
+        <p>が得られ、 $G_{\mathbb{Q}}$ の連続な2次元Galois表現</p>
+        <div class="math-display">
+          $$\rho_{E, \ell} : G_{\mathbb{Q}} \longrightarrow \mathrm{Aut}_{\mathbb{Z}_\ell}(T_\ell(E)) \cong \mathrm{GL}_2(\mathbb{Z}_\ell)$$
+        </div>
+        <p>が誘導される。この表現の驚くべき性質として、素数 $p \neq 2, \ell$ に対応するFrobenius元 $\mathrm{Frob}_p \in G_{\mathbb{Q}}$ （ $\mathbb{F}_p$ 上の $p$ 乗写像を持ち上げた元）の像 $\rho_{E, \ell}(\mathrm{Frob}_p)$ のトレース（対角成分の和）を計算すると、</p>
+        <div class="math-display">
+          $$\mathrm{Tr}(\rho_{E, \ell}(\mathrm{Frob}_p)) = p + 1 - \#E(\mathbb{F}_p)$$
+        </div>
+        <p>が成り立つ（ここで $\#E(\mathbb{F}_p)$ は合同式 $y^2 \equiv x^3 - x \pmod p$ の解の個数に無限遠点 $1$ 個を加えた値である）。すなわち、<strong>合同式の解の個数を数えるという困難な数論の問題が、無限次Galois群の行列表現のトレースを調べる線形代数の問題へと変換される</strong>。</p>
+      </div>
+
+      <p>WilesによるFermatの最終定理の証明の核心は、楕円曲線から生じるこの無限次Galois群の2次元連続表現 $\rho_{E, \ell}$ が、解析的対象である保型形式から構成されるGalois表現と一致すること（谷山–志村予想／モジュラー性定理）を示す点にあった。さらに一般の $n$ 次元Galois表現と保型表現の間の深い対応を予想する現代数学最大の枠組みである<strong>Langlands計画 (Langlands program)</strong> も、無限次絶対Galois群の連続表現なしには定式化できない。</p>
+
+      <h3>5.2 類体論：最大アーベル拡大の統一的記述</h3>
+      <p>代数体 $K$ のすべての有限次アーベル拡大（Galois群がアーベル群である有限次Galois拡大）を $\overline{K}$ 内で合成して得られる無限次Galois拡大を、 $K$ の<strong>最大アーベル拡大 (maximal abelian extension)</strong> といい、 $K^{\mathrm{ab}}$ と書く。定理 4.1 により、 $\mathrm{Gal}(K^{\mathrm{ab}}/K)$ は絶対Galois群 $G_K$ の閉交換子部分群 $\overline{[G_K, G_K]}$ による商群 $G_K / \overline{[G_K, G_K]}$ に位相群として同型である。</p>
+      <p>無限次Galois理論とKrull位相を用いることで、個別の有限次アーベル拡大ごとに複雑に記述されていた法則を、1つの位相群の同型または準同型として統一的に記述できる。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.3（Kronecker–Weberの定理と2次体の埋め込み）</span>
+        <p>$K = \mathbb{Q}$ のとき、<strong>Kronecker–Weberの定理 (Kronecker–Weber theorem)</strong> により、 $\mathbb{Q}$ のすべての有限次アーベル拡大は、 $1$ のすべてのべき根を添加した単一の無限次拡大 $\mathbb{Q}(\mu_\infty) := \bigcup_{N=1}^\infty \mathbb{Q}(\zeta_N)$ の中に含まれる。すなわち $\mathbb{Q}^{\mathrm{ab}} = \mathbb{Q}(\mu_\infty)$ である。</p>
+        <p>例えば、具体的な2次体は次のように円分体の中間体として実現される。</p>
+        <ul>
+          <li>$\mathbb{Q}(\sqrt{-1}) = \mathbb{Q}(\zeta_4)$ （ $\zeta_4 = i$ ）。</li>
+          <li>$\mathbb{Q}(\sqrt{2}) \subset \mathbb{Q}(\zeta_8)$ ：実際、 $\zeta_8 = e^{2\pi i / 8} = \frac{\sqrt{2} + i\sqrt{2}}{2}$ より $\zeta_8 + \zeta_8^{-1} = \sqrt{2}$ である。</li>
+          <li>$\mathbb{Q}(\sqrt{5}) \subset \mathbb{Q}(\zeta_5)$ ：Gauss和 $g := \zeta_5 + \zeta_5^4 - \zeta_5^2 - \zeta_5^3 \in \mathbb{Q}(\zeta_5)$ をとると、 $1 + \zeta_5 + \zeta_5^2 + \zeta_5^3 + \zeta_5^4 = 0$ を用いて
+            <div class="math-display">
+              $$g^2 = (\zeta_5^2 + \zeta_5^3 + 2) + (\zeta_5^4 + \zeta_5 + 2) - 2(\zeta_5^3 + \zeta_5^4 + \zeta_5 + \zeta_5^2) = 4 - (\zeta_5 + \zeta_5^2 + \zeta_5^3 + \zeta_5^4) = 5$$
+            </div>
+            となるため、 $\sqrt{5} \in \mathbb{Q}(\zeta_5)$ である。
+          </li>
+        </ul>
+        <p>各有限レベルのGalois群は $\mathrm{Gal}(\mathbb{Q}(\zeta_N)/\mathbb{Q}) \cong (\mathbb{Z}/N\mathbb{Z})^\times$ であるから、定理 3.5 と中国剰余定理により、最大アーベル拡大のGalois群は位相群として</p>
+        <div class="math-display">
+          $$\mathrm{Gal}(\mathbb{Q}^{\mathrm{ab}}/\mathbb{Q}) = \mathrm{Gal}(\mathbb{Q}(\mu_\infty)/\mathbb{Q}) \cong \varprojlim_{N} (\mathbb{Z}/N\mathbb{Z})^\times = \widehat{\mathbb{Z}}^\times \cong \prod_{p} \mathbb{Z}_p^\times$$
+        </div>
+        <p>と計算される。定理 4.1 により、「 $\mathbb{Q}$ の有限次アーベル拡大を分類すること」は「射有限群 $\widehat{\mathbb{Z}}^\times$ の<strong>開部分群</strong>を分類すること」と完全に同値である。例えば、素数 $p \neq 5$ が $\mathbb{Q}(\sqrt{5})$ で2つの素イデアルに分解するための条件（ $p \equiv \pm 1 \pmod 5$ ）も、 $\mathbb{Q}(\sqrt{5})$ に対応する開部分群（ $(\mathbb{Z}/5\mathbb{Z})^\times$ の平方剰余部分群 $\{\pm 1 \bmod 5\}$ の逆像）に $p$ のFrobenius元が属する条件として統一的に読み取れる。</p>
+      </div>
+
+      <p>一般の代数体 $K$ に対しても、<strong>大域類体論 (global class field theory)</strong> の主定理である<strong>Artin相互律 (Artin reciprocity law)</strong> により、 $K$ のイデール類群 (idèle class group) $C_K := \mathbb{A}_K^\times / K^\times$ から無限次Galois群 $\mathrm{Gal}(K^{\mathrm{ab}}/K)$ への連続な全射群準同型（Artin写像）が構成され、 $K$ のすべての有限次アーベル拡大が $C_K$ の有限指数開部分群と一対一に対応することが示される（Milne [5]）。</p>
+
+      <h3>5.3 Iwasawa理論：$\mathbb{Z}_p$ 拡大と類数の漸近挙動</h3>
+      <p>個別の代数体 $K_n$ の算術的不変量（特にイデアル類群の位数である類数）は不規則であり、拡大次数が大きくなると直接計算することは極めて困難である。しかし、それらを無限の塔として束ねて無限次Galois群の作用を解析することで、劇的に見通しの良い法則が現れる。これが<strong>Iwasawa理論 (Iwasawa theory)</strong> である。</p>
+      <p>素数 $p$ に対し、Galois群が $p$ 進整数環の加法群 $\mathbb{Z}_p$ と位相群として同型になる無限次Galois拡大 $K_\infty/K$ を<strong>$\mathbb{Z}_p$ 拡大 ($\mathbb{Z}_p$-extension)</strong> という。 $\mathbb{Z}_p$ の自明でない閉部分群はすべて開部分群 $p^n \mathbb{Z}_p$ （ $n = 0, 1, 2, \dots$ ）に限られるため、定理 4.1（Krullの定理）により、 $K_\infty/K$ の中間体は次のような一列の無限の塔しか存在しない：</p>
+      <div class="math-display">
+        $$K = K_0 \subset K_1 \subset K_2 \subset \cdots \subset K_\infty, \qquad \mathrm{Gal}(K_n/K) \cong \mathbb{Z}/p^n\mathbb{Z}$$
+      </div>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.4（円分 $\mathbb{Z}_p$ 拡大の構成とIwasawaの類数公式）</span>
+        <p>奇素数 $p$ を1つ固定する。各 $n \ge 0$ に対し、円分体 $\mathbb{Q}(\zeta_{p^{n+1}})/\mathbb{Q}$ のGalois群は</p>
+        <div class="math-display">
+          $$\mathrm{Gal}(\mathbb{Q}(\zeta_{p^{n+1}})/\mathbb{Q}) \cong (\mathbb{Z}/p^{n+1}\mathbb{Z})^\times \cong \mathbb{Z}/(p - 1)\mathbb{Z} \times \mathbb{Z}/p^n\mathbb{Z}$$
+        </div>
+        <p>と同型である。すべての $n \ge 0$ にわたって合併をとった無限次拡大 $\mathbb{Q}(\zeta_{p^\infty})/\mathbb{Q}$ のGalois群は、射影極限をとることで</p>
+        <div class="math-display">
+          $$\mathrm{Gal}(\mathbb{Q}(\zeta_{p^\infty})/\mathbb{Q}) \cong \mathbb{Z}_p^\times \cong \mathbb{Z}/(p - 1)\mathbb{Z} \times \mathbb{Z}_p$$
+        </div>
+        <p>となる。ここで有限部分群 $\Delta := \mathbb{Z}/(p - 1)\mathbb{Z}$ はHausdorff空間における有限集合なので閉部分群であり、その固定体 $\mathbb{Q}_\infty := \mathbb{Q}(\zeta_{p^\infty})^\Delta$ をとると、定理 4.1 により</p>
+        <div class="math-display">
+          $$\mathrm{Gal}(\mathbb{Q}_\infty/\mathbb{Q}) \cong \mathbb{Z}_p^\times / \Delta \cong \mathbb{Z}_p$$
+        </div>
+        <p>を満たす $\mathbb{Z}_p$ 拡大（<strong>円分 $\mathbb{Z}_p$ 拡大 (cyclotomic $\mathbb{Z}_p$-extension)</strong>）が得られる。</p>
+        <p>同様に、 $K_0 := \mathbb{Q}(\zeta_p)$ から出発して $K_n := \mathbb{Q}(\zeta_{p^{n+1}})$ とおくと、 $K_\infty := \bigcup_{n=0}^\infty K_n$ は $K_0$ の円分 $\mathbb{Z}_p$ 拡大である。例えば $p = 37$ は最小の非正則素数であり、 $K_0 = \mathbb{Q}(\zeta_{37})$ のイデアル類群の位数は $37$ で割り切れる。拡大次数が $37^n$ 倍と爆発する塔 $K_1 = \mathbb{Q}(\zeta_{37^2})$ 、 $K_2 = \mathbb{Q}(\zeta_{37^3})$ 、 $\dots$ において、各 $K_n$ の類数が $37$ で何回割り切れるか（すなわちイデアル類群の $p$ シロー部分群の位数 $p^{e_n}$ ）を個別に計算することは不可能である。</p>
+        <p>Kenkichi Iwasawaは、各 $K_n$ のイデアル類群の $p$ 部分 $\mathrm{Cl}(K_n)[p^\infty]$ のノルム写像に関する射影極限 $X := \varprojlim_{n} \mathrm{Cl}(K_n)[p^\infty]$ を考えることで、 $X$ に無限次Galois群 $\Gamma := \mathrm{Gal}(K_\infty/K_0) \cong \mathbb{Z}_p$ が連続に作用することを見抜いた。 $\Gamma$ の完備群環 $\Lambda := \varprojlim_{n} \mathbb{Z}_p[\Gamma / \Gamma^{p^n}]$ は位相環として $1$ 変数べき級数環 $\mathbb{Z}_p[[T]]$ （<strong>Iwasawa代数 (Iwasawa algebra)</strong>）に同型であり、 $\mathbb{Z}_p[[T]]$ 上の有限生成ねじれ加群の構造定理を $X$ に適用することで、十分大きいすべての $n$ に対して</p>
+        <div class="math-display">
+          $$e_n = \mu p^n + \lambda n + \nu$$
+        </div>
+        <p>という驚くほど規則的な漸近公式（<strong>Iwasawaの類数公式 (Iwasawa's class number formula)</strong>；ここで $\mu, \lambda \in \mathbb{Z}_{\ge 0}$ 、 $\nu \in \mathbb{Z}$ は $n$ に依らない定数）を証明した。実際、 $p = 37$ の場合には $\mu = 0$ 、 $\lambda = 1$ となり、 $e_n$ は $n$ とともにちょうど $1$ ずつ増加する。</p>
+      </div>
+
+      <h3>5.4 代数幾何学：エタール基本群とGaloisコホモロジー</h3>
+      <p>無限次Galois群の概念は体論の枠を超え、現代の代数幾何学における空間の「基本群」や「コホモロジー」の定義そのものに直接組み込まれている。</p>
+
+      <h4>エタール基本群 (étale fundamental group)</h4>
+      <p>位相幾何学における基本群 $\pi_1(X, x)$ は、空間 $X$ の被覆空間の自己同型群として捉えることができる。しかし代数幾何学で扱う多様体（スキーム） $X$ のZariski位相は粗すぎるため、通常の位相空間としての被覆空間の理論は機能しない。そこでGrothendieckは、スキーム $X$ の「有限エタール被覆」すべての圏を考え、その自己同型群の射影極限をとることで射有限群としての<strong>エタール基本群 $\pi_1^{\mathrm{et}}(X, \bar{x})$</strong> を定義した。体 $K$ のスペクトル $X = \mathrm{Spec}(K)$ （1点）の場合、有限エタール被覆は分離拡大に対応し、 $\pi_1^{\mathrm{et}}(\mathrm{Spec}(K), \bar{x})$ はちょうど絶対Galois群 $\mathrm{Gal}(K^{\mathrm{sep}}/K)$ に一致する。すなわち無限次Galois理論は「点の幾何学」として基本群の理論に統合される（Milne [6]）。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.5（原点を取り除いた複素平面 $\mathbb{C}^\times$ のエタール基本群）</span>
+        <p>位相幾何学において、 $X = \mathbb{C}^\times = \mathbb{C} \smallsetminus \{0\}$ の基本群は $\pi_1(\mathbb{C}^\times) \cong \mathbb{Z}$ である（原点の周りを何周するかに対応する）。 $X$ の有限連結被覆空間はすべて $n$ 乗写像</p>
+        <div class="math-display">
+          $$f_n : \mathbb{C}^\times \longrightarrow \mathbb{C}^\times, \qquad z \longmapsto z^n \qquad (n = 1, 2, 3, \dots)$$
+        </div>
+        <p>で与えられ、その被覆変換群は $\mathbb{Z}/n\mathbb{Z}$ である。これを代数的に（座標環 $\mathbb{C}[t, t^{-1}]$ の商体である関数体 $\mathbb{C}(t)$ の拡大として）書き直すと、 $f_n$ は有限次Galois拡大</p>
+        <div class="math-display">
+          $$\mathbb{C}(t^{1/n})/\mathbb{C}(t), \qquad \mathrm{Gal}(\mathbb{C}(t^{1/n})/\mathbb{C}(t)) \cong \mathbb{Z}/n\mathbb{Z}$$
+        </div>
+        <p>と完全に一致する。すべての $n \ge 1$ にわたってこれらを束ねた無限次拡大 $\bigcup_{n=1}^\infty \mathbb{C}(t^{1/n})/\mathbb{C}(t)$ のGalois群（射影極限）をとると、</p>
+        <div class="math-display">
+          $$\pi_1^{\mathrm{et}}(\mathbb{C}^\times) \cong \varprojlim_{n} \mathbb{Z}/n\mathbb{Z} = \widehat{\mathbb{Z}}$$
+        </div>
+        <p>が得られ、これは位相幾何学の基本群 $\mathbb{Z}$ の射有限完備化に一致する。この構成は複素数の位相を一切用いず純粋に代数的に定義されるため、有限体 $\mathbb{F}_p$ 上の曲線や有理数体 $\mathbb{Q}$ 上の多様体 $X$ に対してもエタール基本群を定義できる。特に $\mathbb{Q}$ 上の幾何学的に連結な多様体 $X$ に対しては、完全列</p>
+        <div class="math-display">
+          $$1 \longrightarrow \pi_1^{\mathrm{et}}(X_{\overline{\mathbb{Q}}}) \longrightarrow \pi_1^{\mathrm{et}}(X) \longrightarrow G_{\mathbb{Q}} \longrightarrow 1$$
+        </div>
+        <p>が成り立ち、幾何学的な被覆の対称性と数論的な絶対Galois群が1つの構造の中に統合される。</p>
+      </div>
+
+      <h4>Galoisコホモロジー (Galois cohomology)</h4>
+      <p>無限次Galois群 $G = \mathrm{Gal}(L/K)$ と、 $G$ が離散位相に関して連続に作用するアーベル群 $A$ （連続離散 $G$ 加群）に対し、有限次Galois中間体 $F \in \mathcal{F}$ にわたる群コホモロジーの帰納極限として<strong>連続コホモロジー群（Galoisコホモロジー）</strong></p>
+      <div class="math-display">
+        $$H^n(G, A) := \varinjlim_{F \in \mathcal{F}} H^n(\mathrm{Gal}(F/K), A^{\mathrm{Gal}(L/F)})$$
+      </div>
+      <p>が定義される。Galoisコホモロジーは、楕円曲線の有理点群 $E(\mathbb{Q})$ の有限生成性（Mordell–Weilの定理）の証明における降下法 (descent) や、体 $K$ 上の中心的単純多元環を分類する<strong>Brauer群 (Brauer group)</strong> の同型</p>
+      <div class="math-display">
+        $$\mathrm{Br}(K) \cong H^2(G_K, (K^{\mathrm{sep}})^\times)$$
+      </div>
+      <p>など、数論幾何学のあらゆる場面で標準的な道具として用いられる。</p>
+
+      <div class="env-box env-ex">
+        <span class="env-title">例 5.6（実数体 $\mathbb{R}$ のBrauer群とFrobeniusの定理、および局所大域原理）</span>
+        <p>$K = \mathbb{R}$ のとき、 $G_{\mathbb{R}} = \mathrm{Gal}(\mathbb{C}/\mathbb{R}) \cong \mathbb{Z}/2\mathbb{Z}$ であり、2次コホモロジー群を計算すると</p>
+        <div class="math-display">
+          $$\mathrm{Br}(\mathbb{R}) \cong H^2(\mathrm{Gal}(\mathbb{C}/\mathbb{R}), \mathbb{C}^\times) \cong \mathbb{R}^\times / N_{\mathbb{C}/\mathbb{R}}(\mathbb{C}^\times) = \mathbb{R}^\times / \mathbb{R}_{ > 0}^\times \cong \mathbb{Z}/2\mathbb{Z}$$
+        </div>
+        <p>となる。この2つの元が、 $\mathbb{R}$ 上の有限次元中心的斜体が「実数体 $\mathbb{R}$ 」と「Hamiltonの四元数体 $\mathbb{H}$ 」の2種類しか存在しないこと（Frobeniusの定理）に正確に対応している。</p>
+        <p>同じ枠組みを $K = \mathbb{Q}$ や $p$ 進数体 $\mathbb{Q}_p$ のような無限次絶対Galois群を持つ体に適用すると、類体論と結びついてAlbert–Brauer–Hasse–Noetherの定理（完全列 $0 \to \mathrm{Br}(\mathbb{Q}) \to \mathrm{Br}(\mathbb{R}) \oplus \bigoplus_p \mathrm{Br}(\mathbb{Q}_p) \to \mathbb{Q}/\mathbb{Z} \to 0$ ）が得られ、2次形式の分類や<strong>Hasseの局所大域原理 (Hasse local–global principle)</strong>（有理数解の存在を $\mathbb{R}$ とすべての $\mathbb{Q}_p$ での解の存在に帰着させる理論）がコホモロジーの言葉で統一的に記述される。</p>
+      </div>
+    </section>
+
+    <section id="sec-references" class="references">
+      <h2>6. 参考文献</h2>
+      <ol>
+        <li>
+          E. Artin, <em>Galois Theory: Lectures Delivered at the University of Notre Dame</em>, edited by A. N. Milgram, Notre Dame Mathematical Lectures, Vol. 2, University of Notre Dame Press, Notre Dame, IN, 1942.
+          <a href="https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197001" target="_blank" rel="noopener noreferrer">https://projecteuclid.org/ebooks/notre-dame-mathematical-lectures/Galois-Theory/toc/ndml/1175197001</a>
+        </li>
+        <li>
+          S. Lang, <em>Algebra</em>, Revised Third Edition, Graduate Texts in Mathematics, Vol. 211, Springer-Verlag, New York, 2002.
+          <a href="https://link.springer.com/book/10.1007/978-1-4613-0041-0" target="_blank" rel="noopener noreferrer">https://link.springer.com/book/10.1007/978-1-4613-0041-0</a>
+        </li>
+        <li>
+          D. S. Dummit and R. M. Foote, <em>Abstract Algebra</em>, Third Edition, John Wiley &amp; Sons, Inc., Hoboken, NJ, 2004.
+          <a href="https://www.wiley.com/en-us/shop/general-introductory-mathematics/abstract-algebra-3rd-edition-p-9780471433347" target="_blank" rel="noopener noreferrer">https://www.wiley.com/en-us/shop/general-introductory-mathematics/abstract-algebra-3rd-edition-p-9780471433347</a>
+        </li>
+        <li>
+          J. S. Milne, <em>Fields and Galois Theory</em>, Course Notes.
+          <a href="https://www.jmilne.org/math/CourseNotes/ft.html" target="_blank" rel="noopener noreferrer">https://www.jmilne.org/math/CourseNotes/ft.html</a>
+        </li>
+        <li>
+          J. S. Milne, <em>Class Field Theory</em>, Course Notes.
+          <a href="https://www.jmilne.org/math/CourseNotes/cft.html" target="_blank" rel="noopener noreferrer">https://www.jmilne.org/math/CourseNotes/cft.html</a>
+        </li>
+        <li>
+          J. S. Milne, <em>Lectures on Étale Cohomology</em>, Course Notes.
+          <a href="https://www.jmilne.org/math/CourseNotes/lec.html" target="_blank" rel="noopener noreferrer">https://www.jmilne.org/math/CourseNotes/lec.html</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>無限次Galois理論（Krullの定理）の極限からの導出とGrothendieckによる圏論的一般化【完全版】</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root {
+      --bg-color: #fafafa;
+      --text-color: #222222;
+      --heading-color: #1a365d;
+      --accent-color: #2b6cb0;
+      --border-color: #cbd5e0;
+      --box-bg: #ffffff;
+      --def-bg: #f0f7ff;
+      --def-border: #3182ce;
+      --thm-bg: #fdf6ec;
+      --thm-border: #dd6b20;
+      --ex-bg: #f0fff4;
+      --ex-border: #38a169;
+      --proof-bg: #f7fafc;
+      --proof-border: #718096;
+      --rem-bg: #faf5ff;
+      --rem-border: #805ad5;
+    }
+
+    body {
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+      line-height: 1.85;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 2.2rem 4.5rem;
+      background-color: #ffffff;
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+    }
+
+    header {
+      border-bottom: 2px solid var(--heading-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.2rem;
+    }
+
+    h1 {
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 1.85rem;
+      color: var(--heading-color);
+      line-height: 1.4;
+      margin: 0 0 0.6rem 0;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #4a5568;
+      margin: 0;
+    }
+
+    h2 {
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 1.45rem;
+      color: var(--heading-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+      margin-top: 3.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    h3 {
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 1.18rem;
+      color: #2c5282;
+      margin-top: 2.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    h4 {
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-size: 1.05rem;
+      color: #2d3748;
+      margin-top: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin: 0.9rem 0;
+      text-align: justify;
+    }
+
+    nav.toc {
+      background-color: #f7fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.2rem 1.6rem;
+      margin: 1.8rem 0 2.5rem;
+    }
+
+    nav.toc h2 {
+      font-size: 1.1rem;
+      margin-top: 0;
+      margin-bottom: 0.7rem;
+      border-bottom: none;
+    }
+
+    nav.toc ul {
+      margin: 0;
+      padding-left: 1.3rem;
+    }
+
+    nav.toc li {
+      margin: 0.3rem 0;
+    }
+
+    nav.toc a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    nav.toc a:hover {
+      text-decoration: underline;
+    }
+
+    .box {
+      padding: 1.15rem 1.45rem;
+      margin: 1.45rem 0;
+      border-radius: 4px;
+      border-left: 4px solid;
+    }
+
+    .definition {
+      background-color: var(--def-bg);
+      border-left-color: var(--def-border);
+    }
+
+    .theorem {
+      background-color: var(--thm-bg);
+      border-left-color: var(--thm-border);
+    }
+
+    .example {
+      background-color: var(--ex-bg);
+      border-left-color: var(--ex-border);
+    }
+
+    .proof {
+      background-color: var(--proof-bg);
+      border-left-color: var(--proof-border);
+    }
+
+    .remark {
+      background-color: var(--rem-bg);
+      border-left-color: var(--rem-border);
+    }
+
+    .box-title {
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      font-weight: bold;
+      margin-bottom: 0.55rem;
+      display: block;
+    }
+
+    .qed {
+      text-align: right;
+      font-family: serif;
+      margin-top: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 0.9rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #edf2f7;
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      color: var(--heading-color);
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f9fbfd;
+    }
+
+    ul, ol {
+      padding-left: 1.6rem;
+      margin: 0.8rem 0;
+    }
+
+    li {
+      margin: 0.45rem 0;
+    }
+
+    blockquote {
+      border-left: 4px solid var(--accent-color);
+      background-color: #f7fafc;
+      margin: 1.4rem 0;
+      padding: 0.9rem 1.3rem;
+    }
+
+    a {
+      color: var(--accent-color);
+    }
+
+    .references ol {
+      padding-left: 1.8rem;
+      font-size: 0.94rem;
+    }
+
+    .references li {
+      margin-bottom: 0.75rem;
+    }
+
+    .mjx-chtml {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>無限次Galois理論（Krullの定理）の極限からの導出とGrothendieckによる圏論的一般化</h1>
+      <p class="subtitle">有限次Galois拡大の帰納極限・射影極限としてのKrull位相の構成から、Galois圏・ファイバー関手のプロ表現・エタール基本群へ（自己完結・具体例拡充版）</p>
+    </header>
+
+    <section id="overview">
+      <p>
+        本稿では、以下の2つの中心的な問いに対して、必要な前提定義・補題・丁寧な証明・豊富な具体例をすべて備えた自己完結的（self-contained）な解説を行う。
+      </p>
+      <ol>
+        <li><strong>無限次代数拡大のGalois理論（Krullの定理）は、有限次Galois拡大の極限として導出できるか？</strong> —— 答えは「<strong>できる</strong>」。体 $L$ を有限次Galois中間体の帰納極限（順極限）として表し、Galois群 $\mathrm{Gal}(L/K)$ を有限Galois群の射影極限（逆極限）として捉えることで、Krull位相の導入理由から「中間体 $\leftrightarrow$ 閉部分群」のGalois対応までを完全に導出できる。</li>
+        <li><strong>圏論的な視点（GrothendieckのGalois理論）は、「有限次拡大の極限として無限次Galois群を構成する」という発想を具体的にどのように一般化しているか？</strong> —— 巨大な極限対象（分離閉包 $K^{\mathrm{sep}}$ や普遍被覆など）の存在を仮定する代わりに、有限な対象のみからなる圏（Galois圏）上の<strong>ファイバー関手</strong>を考え、その<strong>プロ表現可能性</strong>を通じて射有限基本群 $\pi_1(\mathcal{C}, F) := \mathrm{Aut}(F)$ と圏同値定理を導く。</li>
+      </ol>
+    </section>
+
+    <nav class="toc">
+      <h2>目次</h2>
+      <ul>
+        <li><a href="#part1">第1部：古典的な無限次Galois理論（Krullの定理）の極限からの導出</a>
+          <ul>
+            <li><a href="#sec1-0">1.0 準備：基本概念と前提定理（体論・極限・位相群・射有限群）</a></li>
+            <li><a href="#sec1-1">1.1 体の帰納極限とGalois群の射影極限</a></li>
+            <li><a href="#sec1-2">1.2 「極限の位相」としてのKrull位相の出現</a></li>
+            <li><a href="#sec1-3">1.3 Galois対応（Krullの定理）の極限からの導出</a></li>
+            <li><a href="#sec1-4">1.4 理解を深める豊富な具体例（$\overline{\mathbb{F}}_p$・無限2次拡大・円分拡大）</a></li>
+          </ul>
+        </li>
+        <li><a href="#part2">第2部：圏論的な視点からの一般化（GrothendieckのGalois理論）</a>
+          <ul>
+            <li><a href="#sec2-0">2.0 準備：圏論の基礎・有限エタール代数・連続 $G$-集合・Galois圏の公理</a></li>
+            <li><a href="#sec2-1">2.1 古典論と圏論的視点の対応</a></li>
+            <li><a href="#sec2-2">2.2 「極限の構成」の具体的な一般化メカニズム（ファイバー関手とプロ表現）</a></li>
+            <li><a href="#sec2-3">2.3 Galois対応の一般化：Grothendieckの主定理（圏同値定理）</a></li>
+            <li><a href="#sec2-4">2.4 この一般化がもたらした本質的な拡張と豊富な具体例</a></li>
+          </ul>
+        </li>
+        <li><a href="#references">参考文献</a></li>
+      </ul>
+    </nav>
+
+    <!-- ==================== PART 1 ==================== -->
+    <section id="part1">
+      <h2>第1部：古典的な無限次Galois理論（Krullの定理）の極限からの導出</h2>
+
+      <p>
+        1928年にWolfgang Krullによって確立された無限次代数拡大のGalois理論 <a href="#ref-krull">[1]</a> は、有限次Galois拡大の族に対する<strong>帰納極限（順極限）</strong>と<strong>射影極限（逆極限）</strong>をとることによって、Krull位相の導入理由も含めて自然に導出できる。以下、必要な基本概念と前提定理をすべて確認した上で、導出の3段階を詳細に示す。
+      </p>
+
+      <h3 id="sec1-0">1.0 準備：基本概念と前提定理</h3>
+
+      <div class="box definition">
+        <span class="box-title">定義 1.1（代数拡大・正規拡大・分離拡大・Galois拡大・分離閉包）</span>
+        <p>体の拡大 $L/K$（$K$ は $L$ の部分体）に対して、以下を定義する。</p>
+        <ul>
+          <li><strong>拡大次数</strong>：$L$ を $K$ 上のベクトル空間とみなしたときの次元を $[L:K]$ と書き、$L/K$ の拡大次数という。$[L:K] < \infty$ のとき<strong>有限次拡大</strong>、そうでないとき<strong>無限次拡大</strong>という。</li>
+          <li><strong>代数拡大</strong>：$L$ のすべての元 $x$ が、$K$ 係数の非零多項式の根となるとき（すなわち $x$ を根にもつモニック既約多項式である<strong>最小多項式</strong> $m_{x,K}(T) \in K[T]$ をもつとき）、$L/K$ を代数拡大という。</li>
+          <li><strong>正規拡大</strong>：代数拡大 $L/K$ において、$K[T]$ の既約多項式が $L$ に1つでも根をもてば、$L[T]$ 内で1次式の積に分解するとき、$L/K$ を正規拡大という。これは、$L$ を含む代数的閉包 $\overline{K}$ への任意の $K$-埋め込み $\tau : L \hookrightarrow \overline{K}$ に対して $\tau(L) = L$ が成り立つことと同値である。</li>
+          <li><strong>分離拡大</strong>：代数拡大 $L/K$ において、すべての $x \in L$ の最小多項式 $m_{x,K}(T)$ が重根をもたない（分解体において相異なる根のみをもつ）とき、$L/K$ を分離拡大という。標数 $0$ の体（$\mathbb{Q}, \mathbb{R}, \mathbb{C}$ など）や有限体上の代数拡大は常に分離拡大である。</li>
+          <li><strong>Galois拡大</strong>：代数拡大 $L/K$ が<strong>正規かつ分離</strong>であるとき、$L/K$ をGalois拡大という。このとき、$L$ の $K$-自己同型（$K$ の元をすべて固定する体の自己同型）全体のなす群を $\mathrm{Gal}(L/K) := \mathrm{Aut}_K(L)$ と書き、$L/K$ の<strong>Galois群</strong>と呼ぶ。</li>
+          <li><strong>分離閉包</strong>：体 $K$ の代数的閉包 $\overline{K}$ の中で、$K$ 上分離的な元全体のなす部分体を $K^{\mathrm{sep}}$ と書き、$K$ の<strong>分離閉包</strong>という。$K^{\mathrm{sep}}/K$ は極大なGalois拡大であり、$\mathrm{Gal}(K^{\mathrm{sep}}/K)$ を $K$ の<strong>絶対Galois群</strong>という。</li>
+        </ul>
+      </div>
+
+      <div class="box theorem">
+        <span class="box-title">定理 1.2（第1部で用いる有限次Galois理論・体論の前提事実）</span>
+        <p>以下の標準的な体論の事実を既知として用いる <a href="#ref-milne">[5]</a>, <a href="#ref-lang">[6]</a>。</p>
+        <ol>
+          <li><strong>有限次Galois理論の基本定理</strong>：$E/K$ が有限次Galois拡大のとき、$|\mathrm{Gal}(E/K)| = [E:K]$ であり、中間体 $M$ に $\mathrm{Gal}(E/M)$ を対応させ、部分群 $H \subset \mathrm{Gal}(E/K)$ に固定体 $E^H := \{x \in E \mid \forall \sigma \in H,\; \sigma(x) = x\}$ を対応させる写像は、包含関係を逆転させる一対一対応を与える。特に $E^{\mathrm{Gal}(E/M)} = M$ かつ $\mathrm{Gal}(E/E^H) = H$（Artinの補題の帰結）。</li>
+          <li><strong>平行移動の定理（Theorem of Natural Irrationalities）</strong>：$E/K$ が有限次Galois拡大であり、$M/K$ が任意の拡大（ともに共通の大きな体 $L$ に含まれるとする）のとき、合成体 $EM$ は $M$ 上有限次Galois拡大であり、制限写像 $\mathrm{Gal}(EM/M) \to \mathrm{Gal}(E/(E \cap M)),\; \sigma \mapsto \sigma|_E$ は群同型である。</li>
+          <li><strong>同型延長定理</strong>：$L/K$ が正規拡大、$K \subset M \subset L$ が中間体のとき、任意の $K$-埋め込み $\tau : M \hookrightarrow L$ は $L$ の $K$-自己同型 $\sigma \in \mathrm{Aut}_K(L)$ に延長できる（一般の無限次拡大ではZornの補題により証明される）。</li>
+        </ol>
+      </div>
+
+      <div class="box definition">
+        <span class="box-title">定義 1.3（有向集合・帰納極限・射影極限）</span>
+        <ul>
+          <li>反射律（$i \le i$）と推移律（$i \le j, j \le k \implies i \le k$）を満たす前順序集合 $(I, \le)$ において、任意の $i, j \in I$ に対して $i \le k$ かつ $j \le k$ を満たす $k \in I$ が存在するとき、$(I, \le)$ を<strong>有向集合</strong>（directed set）という。</li>
+          <li>有向集合 $I$ で添字付けられた集合（または環・体など）の族 $\{A_i\}_{i \in I}$ と、$i \le j$ ごとに与えられた写像（準同型）$f_{ij} : A_i \to A_j$ の組が、$f_{ii} = \mathrm{id}_{A_i}$ および $f_{jk} \circ f_{ij} = f_{ik}$（$i \le j \le k$）を満たすとき、これを<strong>帰納系</strong>（順系、direct system）という。その<strong>帰納極限</strong>（順極限、direct limit）$\varinjlim_{i \in I} A_i$ は、直和 $\bigsqcup_{i \in I} A_i$ を「ある $k \ge i, j$ で $f_{ik}(a_i) = f_{jk}(a_j)$ となる $a_i \in A_i$ と $a_j \in A_j$ を同一視する」同値関係で割った集合として構成される。特にすべての $A_i$ が1つの大きな集合 $A$ の部分集合であり $f_{ij}$ が包含写像である場合、$\varinjlim_{i \in I} A_i = \bigcup_{i \in I} A_i$ である。</li>
+          <li>有向集合 $I$ で添字付けられた群（または位相群）の族 $\{G_i\}_{i \in I}$ と、$i \le j$ ごとに与えられた準同型 $\pi_{ji} : G_j \to G_i$ の組が、$\pi_{ii} = \mathrm{id}_{G_i}$ および $\pi_{ji} \circ \pi_{kj} = \pi_{ki}$（$i \le j \le k$）を満たすとき、これを<strong>逆系</strong>（射影系、inverse system）という。その<strong>射影極限</strong>（逆極限、inverse limit）は、直積群の部分群として次で定義される。
+          $$\varprojlim_{i \in I} G_i := \left\{ (g_i)_{i \in I} \in \prod_{i \in I} G_i \;\middle|\; \forall i \le j,\; \pi_{ji}(g_j) = g_i \right\}$$
+          </li>
+        </ul>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 1.4（帰納極限と射影極限の初等的具体例）</span>
+        <p>Galois群に入る前に、帰納極限と射影極限の直感を2つの代表的な例で確認しておこう。</p>
+        <ul>
+          <li><strong>帰納極限の例（有理数体 $\mathbb{Q}$）</strong>：有向集合 $I = (\mathbb{Z}_{\ge 1}, \mid)$（整除関係 $m \mid n$ による順序）に対し、$A_n := \frac{1}{n}\mathbb{Z} \subset \mathbb{Q}$ とおき、$m \mid n$ のとき包含写像 $f_{mn} : \frac{1}{m}\mathbb{Z} \hookrightarrow \frac{1}{n}\mathbb{Z}$ をとる。すると $\varinjlim_{n} \frac{1}{n}\mathbb{Z} = \bigcup_{n \ge 1} \frac{1}{n}\mathbb{Z} = \mathbb{Q}$ となる。帰納極限は「小さな対象をどんどん張り合わせて（合併して）大きくする操作」である。</li>
+          <li><strong>射影極限の例（$p$ 進整数環 $\mathbb{Z}_p$）</strong>：素数 $p$ を固定し、$I = (\mathbb{Z}_{\ge 1}, \le)$ に対し $G_n := \mathbb{Z}/p^n\mathbb{Z}$、$m \le n$ に対し自然な還元写像 $\pi_{nm} : \mathbb{Z}/p^n\mathbb{Z} \to \mathbb{Z}/p^m\mathbb{Z},\; a \bmod p^n \mapsto a \bmod p^m$ をとる。その射影極限
+          $$\mathbb{Z}_p := \varprojlim_{n \ge 1} \mathbb{Z}/p^n\mathbb{Z}$$
+          の元は「整合的な剰余の無限列 $(a_1 \bmod p,\; a_2 \bmod p^2,\; a_3 \bmod p^3,\; \dots)$（ただし $a_{n+1} \equiv a_n \pmod{p^n}$）」である。例えば $p=5$ のとき、$-1 = (\dots, 4, 24, 124, 624, \dots)$ や、$\sqrt{-1} \in \mathbb{Z}_5$ の1つである $(2, 7, 57, 182, \dots)$（各桁で2乗すると $-1 \bmod 5^n$ になる）などが $\mathbb{Z}_5$ の元である。射影極限は「有限精度の近似データをすべて整合的に束ねた無限精度のデータを作る操作」である。</li>
+        </ul>
+      </div>
+
+      <div class="box definition">
+        <span class="box-title">定義 1.5（位相群・直積位相・基本近傍系・射有限群）</span>
+        <ul>
+          <li><strong>位相群</strong>：群 $G$ に位相が入っており、積写像 $G \times G \to G,\; (g, h) \mapsto gh$ および逆元写像 $G \to G,\; g \mapsto g^{-1}$ がともに連続であるとき、$G$ を位相群という。</li>
+          <li><strong>基本近傍系</strong>：位相空間 $X$ の点 $x$ の近傍の族 $\mathcal{B}_x$ が、$x$ の任意の開近傍 $U$ に対して $B \subset U$ となる $B \in \mathcal{B}_x$ を含むとき、$\mathcal{B}_x$ を $x$ の基本近傍系という。位相群では左移動 $g \mapsto xg$ が同相写像なので、単位元 $e$ の基本近傍系 $\mathcal{B}_e$ が決まれば、任意の点 $x$ の基本近傍系は $\{x B \mid B \in \mathcal{B}_e\}$ として完全に定まる。</li>
+          <li><strong>直積位相（Tychonoff位相）とTychonoffの定理</strong>：位相空間の族 $\{X_i\}_{i \in I}$ の直積 $P = \prod_{i \in I} X_i$ に対し、すべての射影 $\mathrm{pr}_i : P \to X_i$ を連続にする最弱の位相を直積位相という。その開基は「有限個の添字 $i_1, \dots, i_n$ についてのみ開集合 $U_{i_k} \subset X_{i_k}$ で制限し、残りの添字では $X_i$ 全体をとる」形の集合 $\prod_{i \in I} U_i$ である。<strong>Tychonoffの定理</strong>によれば、コンパクト空間の任意の直積（非可算積を含む）は直積位相に関してコンパクトである。</li>
+          <li><strong>完全不連結</strong>：位相空間 $X$ の任意の連結部分集合が高々1点からなるとき（あるいはコンパクトHausdorff空間では同値だが、任意の異なる2点が互いに素な開かつ閉な集合で分離されるとき）、$X$ を完全不連結（totally disconnected）という。</li>
+          <li><strong>射有限群</strong>：有限離散群の逆系の射影極限 $\varprojlim_{i \in I} G_i$（直積位相の部分空間位相を入れた位相群）と同型な位相群を<strong>射有限群</strong>（profinite group）という。位相群論の標準的な特徴づけによれば、位相群 $G$ が射有限群であることは、$G$ が<strong>コンパクト・Hausdorff・完全不連結</strong>であることと同値である <a href="#ref-rz">[7]</a>。</li>
+        </ul>
+      </div>
+
+      <h3 id="sec1-1">1.1 体の帰納極限とGalois群の射影極限</h3>
+
+      <p>
+        以下、$L/K$ を（必ずしも有限次とは限らない）Galois拡大とし、$L/K$ の<strong>有限次Galois中間体</strong>全体の集合を $\mathcal{F}$ とおく。すなわち、
+      </p>
+      $$\mathcal{F} := \{ E \mid K \subset E \subset L,\; [E:K] < \infty,\; E/K \text{ はGalois拡大} \}$$
+      <p>
+        である。
+      </p>
+
+      <div class="box theorem">
+        <span class="box-title">補題 1.6（有限次Galois中間体の有向性と体の帰納極限）</span>
+        <p>
+          集合 $\mathcal{F}$ は包含関係 $\subset$ に関して有向集合をなし、体 $L$ は $\mathcal{F}$ の元の帰納極限（合併）として表される。
+        </p>
+        $$L = \bigcup_{E \in \mathcal{F}} E = \varinjlim_{E \in \mathcal{F}} E$$
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明</span>
+        <p>
+          <strong>有向性：</strong>任意の $E_1, E_2 \in \mathcal{F}$ に対し、$L$ 内で生成される合成体 $E_1 E_2$ を考える。有限次拡大の合成体は有限次拡大であり（$[E_1 E_2 : K] \le [E_1 : K][E_2 : K] < \infty$）、$E_1 E_2 \subset L$ より $E_1 E_2 / K$ は分離拡大である。また、$E_1, E_2$ はそれぞれ $K$ 上のある多項式 $f_1, f_2$ の分解体なので、$E_1 E_2$ は積 $f_1 f_2$ の分解体となり正規拡大である。よって $E_1 E_2 \in \mathcal{F}$ であり、$E_1 \subset E_1 E_2$ かつ $E_2 \subset E_1 E_2$ が成り立つ。
+        </p>
+        <p>
+          <strong>帰納極限による表示：</strong>$\bigcup_{E \in \mathcal{F}} E \subset L$ は明らかである。逆に任意の $x \in L$ をとる。$L/K$ は代数拡大なので $x$ の $K$ 上の最小多項式 $m_{x,K}(T) \in K[T]$ が存在する。$L/K$ の正規性により $m_{x,K}(T)$ は $L[T]$ で1次式の積に分解し、$L/K$ の分離性により重根をもたない。したがって、$m_{x,K}(T)$ の $L$ におけるすべての根 $\alpha_1, \dots, \alpha_d$（ただし $\alpha_1 = x$）を $K$ に添加した体 $E := K(\alpha_1, \dots, \alpha_d) \subset L$ は $m_{x,K}(T)$ の分解体であり、有限次・正規・分離拡大、すなわち $E \in \mathcal{F}$ である。$x \in E$ なので $L \subset \bigcup_{E \in \mathcal{F}} E$ が従う。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <p>
+        次に、$E \subset E'$ を満たす $E, E' \in \mathcal{F}$ に対して、自己同型の制限写像
+      </p>
+      $$\pi_{E', E} : \mathrm{Gal}(E'/K) \longrightarrow \mathrm{Gal}(E/K), \qquad \sigma \longmapsto \sigma|_E$$
+      <p>
+        を考える。$E/K$ は正規拡大なので、任意の $\sigma \in \mathrm{Gal}(E'/K)$ に対して $\sigma(E) = E$ となり、$\pi_{E', E}$ はwell-definedな群準同型である。さらに、同型延長定理（定理1.2(3)）により、$E$ の任意の $K$-自己同型は $E'$ の $K$-自己同型に延長できるため、$\pi_{E', E}$ は全射である。
+      </p>
+      <p>
+        明らかに $\pi_{E,E} = \mathrm{id}$ および $\pi_{E', E} \circ \pi_{E'', E'} = \pi_{E'', E}$（$E \subset E' \subset E''$）が成り立つため、$\{\mathrm{Gal}(E/K), \pi_{E', E}\}_{E \in \mathcal{F}}$ は有限群の逆系（射影系）をなす。さらに各 $E \in \mathcal{F}$ について制限写像 $\pi_E : \mathrm{Gal}(L/K) \to \mathrm{Gal}(E/K),\; \sigma \mapsto \sigma|_E$ は $\pi_{E', E} \circ \pi_{E'} = \pi_E$ を満たすため、射影極限の普遍性により自然な群準同型
+      </p>
+      $$\Phi : \mathrm{Gal}(L/K) \longrightarrow \varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K), \qquad \sigma \longmapsto (\sigma|_E)_{E \in \mathcal{F}}$$
+      <p>
+        が誘導される。
+      </p>
+
+      <div class="box theorem">
+        <span class="box-title">定理 1.7（Galois群の射影極限表示）</span>
+        <p>
+          上の自然な群準同型 $\Phi : \mathrm{Gal}(L/K) \to \varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$ は群の同型写像である。
+        </p>
+        $$\mathrm{Gal}(L/K) \cong \varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$$
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明</span>
+        <p>
+          <strong>単射性：</strong>$\sigma \in \ker(\Phi)$ とすると、すべての $E \in \mathcal{F}$ に対して $\sigma|_E = \mathrm{id}_E$ である。補題1.6より $L = \bigcup_{E \in \mathcal{F}} E$ であるため、任意の $x \in L$ について $x \in E$ なる $E \in \mathcal{F}$ を選べば $\sigma(x) = \sigma|_E(x) = x$ となり、$\sigma = \mathrm{id}_L$ が従う。
+        </p>
+        <p>
+          <strong>全射性：</strong>整合的な族 $(\sigma_E)_{E \in \mathcal{F}} \in \varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$（すなわち $E \subset E'$ なら $\sigma_{E'}|_E = \sigma_E$）を任意にとる。任意の $x \in L$ に対して $x \in E$ となる $E \in \mathcal{F}$ を1つ選び、$\sigma(x) := \sigma_E(x)$ と定める。
+        </p>
+        <ul>
+          <li><strong>Well-defined性：</strong>$x \in E_1$ かつ $x \in E_2$（$E_1, E_2 \in \mathcal{F}$）ならば、合成体 $E' := E_1 E_2 \in \mathcal{F}$ について、族の整合性より $\sigma_{E_1}(x) = \sigma_{E'}(x) = \sigma_{E_2}(x)$ となり、$E$ の選び方に依らない。</li>
+          <li><strong>$K$-準同型性：</strong>任意の $x, y \in L$ に対し、$x \in E_1,\; y \in E_2$ なる $E_1, E_2 \in \mathcal{F}$ をとれば $x, y \in E' := E_1 E_2 \in \mathcal{F}$ である。$\sigma_{E'}$ は $K$-自己同型なので、$\sigma(x + y) = \sigma_{E'}(x + y) = \sigma(x) + \sigma(y)$、$\sigma(xy) = \sigma(x)\sigma(y)$、および $c \in K$ に対し $\sigma(c) = c$ が成り立つ。</li>
+          <li><strong>全単射性：</strong>$\sigma$ は体の準同型なので自動的に単射である。また任意の $y \in L$ に対して $y \in E$ なる $E \in \mathcal{F}$ をとれば、$\sigma_E \in \mathrm{Gal}(E/K)$ の全射性より $\sigma_E(x) = y$ なる $x \in E \subset L$ が存在し、$\sigma(x) = y$ となるので全射である。</li>
+        </ul>
+        <p>
+          以上より $\sigma \in \mathrm{Gal}(L/K)$ であり、定義から明らかに $\Phi(\sigma) = (\sigma_E)_{E \in \mathcal{F}}$ を満たす。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 1.8（退化例：$L/K$ が有限次Galois拡大のとき）</span>
+        <p>
+          $[L:K] < \infty$ のとき、$L$ 自身が有向集合 $\mathcal{F}$ の最大元である。したがって射影極限は最大元の成分 $\mathrm{Gal}(L/K)$ に潰れ、Krull位相は $\mathrm{Gal}(L/K)$ 上の<strong>離散位相</strong>に一致する。離散空間ではすべての部分集合が開かつ閉であるため、「閉部分群」という条件は自動的に満たされ、通常の有限次Galois理論に完全に帰着する。
+        </p>
+      </div>
+
+      <h3 id="sec1-2">1.2 「極限の位相」としてのKrull位相の出現</h3>
+
+      <p>
+        無限次Galois拡大では、定理1.7の射影極限表示から<strong>位相構造が必然的に現れる</strong>。各有限群 $\mathrm{Gal}(E/K)$（$E \in \mathcal{F}$）に<strong>離散位相</strong>を入れ、直積空間
+      </p>
+      $$P := \prod_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$$
+      <p>
+        に<strong>直積位相</strong>（Tychonoff位相）を入れる。このとき、射影極限 $\varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$ は $P$ の部分空間として位相を誘導される。同型 $\Phi$ を通じて $\mathrm{Gal}(L/K)$ に移されたこの位相こそが<strong>Krull位相</strong>（Krull topology）である。
+      </p>
+
+      <div class="box theorem">
+        <span class="box-title">命題 1.9（Krull位相の基本性質）</span>
+        <ol>
+          <li>$\varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$ は直積空間 $P = \prod_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$ の<strong>閉部分集合</strong>である。</li>
+          <li>$\mathrm{Gal}(L/K)$ はKrull位相に関して<strong>コンパクト・Hausdorff・完全不連結な位相群</strong>（すなわち射有限群）である。</li>
+          <li>自然な射影 $\pi_E : \mathrm{Gal}(L/K) \to \mathrm{Gal}(E/K)$ の核 $\mathrm{Gal}(L/E) = \ker(\pi_E)$ の族 $\{\mathrm{Gal}(L/E)\}_{E \in \mathcal{F}}$ は、単位元 $\mathrm{id}_L \in \mathrm{Gal}(L/K)$ の<strong>基本近傍系</strong>（開かつ閉な正規部分群の族）をなす。</li>
+        </ol>
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明</span>
+        <p>
+          <strong>1. 閉部分集合であること：</strong>$E \subset E'$（$E, E' \in \mathcal{F}$）に対して、集合
+        </p>
+        $$C_{E', E} := \{ (\sigma_F)_{F \in \mathcal{F}} \in P \mid \pi_{E', E}(\sigma_{E'}) = \sigma_E \}$$
+        <p>
+          を考える。直積の射影 $\mathrm{pr}_E : P \to \mathrm{Gal}(E/K)$ は連続であり、$\mathrm{Gal}(E/K)$ は離散空間なので対角集合 $\Delta_E \subset \mathrm{Gal}(E/K) \times \mathrm{Gal}(E/K)$ は閉集合である。写像 $P \to \mathrm{Gal}(E/K) \times \mathrm{Gal}(E/K),\; (\sigma_F) \mapsto (\pi_{E', E}(\sigma_{E'}), \sigma_E)$ は連続なので、$C_{E', E}$ は閉集合 $\Delta_E$ の逆像として $P$ の閉集合となる。よって
+        </p>
+        $$\varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K) = \bigcap_{E \subset E'} C_{E', E}$$
+        <p>
+          は閉集合の共通部分であり、$P$ の閉部分集合である。
+        </p>
+        <p>
+          <strong>2. 位相的性質：</strong>各 $\mathrm{Gal}(E/K)$ は有限離散空間なのでコンパクト・Hausdorff・完全不連結な位相群である。Tychonoffの定理により直積 $P$ もコンパクト・Hausdorff・完全不連結な位相群となる。その閉部分群である $\varprojlim \mathrm{Gal}(E/K) \cong \mathrm{Gal}(L/K)$ はこれらの性質をすべて継承する。
+        </p>
+        <p>
+          <strong>3. 単位元の基本近傍系：</strong>直積位相の定義から、$\mathrm{id}_L \in \mathrm{Gal}(L/K)$ の開近傍の基本系は、有限個の $E_1, \dots, E_n \in \mathcal{F}$ に対する
+        </p>
+        $$U(E_1, \dots, E_n) := \{ \sigma \in \mathrm{Gal}(L/K) \mid \sigma|_{E_k} = \mathrm{id}_{E_k}\; (k = 1, \dots, n) \} = \bigcap_{k=1}^n \mathrm{Gal}(L/E_k)$$
+        <p>
+          の形の集合全体である。ここで合成体 $E := E_1 E_2 \cdots E_n \in \mathcal{F}$ をとれば、$\sigma|_{E_k} = \mathrm{id}_{E_k}\; (\forall k)$ と $\sigma|_E = \mathrm{id}_E$ は同値なので、
+        </p>
+        $$U(E_1, \dots, E_n) = \mathrm{Gal}(L/E) = \ker(\pi_E)$$
+        <p>
+          が成り立つ。各 $\mathrm{Gal}(L/E)$ は連続準同型 $\pi_E$ による離散群の単位元の逆像なので開正規部分群であり、さらにその補集合は他の剰余類（開集合）の合併であるため閉集合でもある。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <div class="box theorem">
+        <span class="box-title">補題 1.10（射有限群における開部分群・閉部分群の重要な性質）</span>
+        <p>コンパクト位相群（特に射有限群）$G$ において、次が成り立つ。</p>
+        <ol>
+          <li>任意の<strong>開部分群</strong> $U \subset G$ は自動的に<strong>閉部分群</strong>であり、かつ<strong>有限指数</strong>（$[G:U] < \infty$）をもつ。（証明：剰余類分解 $G = \bigsqcup gU$ は $G$ の開被覆なので、コンパクト性より有限個で覆われる。また $U = G \setminus \bigsqcup_{g \notin U} gU$ は開集合の補集合なので閉。）</li>
+          <li>逆に、<strong>閉部分群</strong> $H \subset G$ が有限指数をもつならば $H$ は開部分群である。（証明：$G \setminus H$ は有限個の閉集合 $gH$ の合併なので閉、よって $H$ は開。）</li>
+        </ol>
+      </div>
+
+      <h3 id="sec1-3">1.3 Galois対応（Krullの定理）の極限からの導出</h3>
+
+      <p>
+        有限次Galois理論の基本定理から、無限次における「中間体 $\leftrightarrow$ <strong>閉部分群</strong>」の一対一対応を導く鍵は、射有限群 $G = \mathrm{Gal}(L/K)$ の任意の部分群 $H$ の<strong>閉包</strong> $\overline{H}$ が、各有限レベルへの射影 $\pi_E(H) \subset \mathrm{Gal}(E/K)$ の射影極限として特徴づけられる点にある。
+      </p>
+
+      <div class="box theorem">
+        <span class="box-title">補題 1.11（部分群の閉包と射影極限）</span>
+        <p>
+          $G = \mathrm{Gal}(L/K)$ の任意の部分群 $H \subset G$ に対し、Krull位相における $H$ の閉包 $\overline{H}$ は次で与えられる。
+        </p>
+        $$\overline{H} = \bigcap_{E \in \mathcal{F}} H \cdot \mathrm{Gal}(L/E) = \bigcap_{E \in \mathcal{F}} \pi_E^{-1}(\pi_E(H)) \cong \varprojlim_{E \in \mathcal{F}} \pi_E(H)$$
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明</span>
+        <p>
+          $\sigma \in G$ に対し、命題1.9(3)より $\{\sigma \cdot \mathrm{Gal}(L/E)\}_{E \in \mathcal{F}}$ は $\sigma$ の基本近傍系である。したがって、
+        </p>
+        $$\sigma \in \overline{H} \iff \forall E \in \mathcal{F},\; \sigma \cdot \mathrm{Gal}(L/E) \cap H \neq \emptyset$$
+        <p>
+          が成り立つ。ここで $\sigma \cdot \mathrm{Gal}(L/E) \cap H \neq \emptyset$ であることは、ある $h \in H$ と $\tau \in \mathrm{Gal}(L/E) = \ker(\pi_E)$ が存在して $\sigma \tau = h$ となること、すなわち $\pi_E(\sigma) = \pi_E(h) \in \pi_E(H)$ であること（また $\sigma = h \tau^{-1} \in H \cdot \mathrm{Gal}(L/E)$ であること）と同値である。よって
+        </p>
+        $$\overline{H} = \bigcap_{E \in \mathcal{F}} H \cdot \mathrm{Gal}(L/E) = \bigcap_{E \in \mathcal{F}} \pi_E^{-1}(\pi_E(H))$$
+        <p>
+          を得る。さらに定理1.7の同型 $\Phi : G \xrightarrow{\sim} \varprojlim_{E \in \mathcal{F}} \mathrm{Gal}(E/K)$ のもとで、すべての $E \in \mathcal{F}$ について $\pi_E(\sigma) \in \pi_E(H)$ である元 $\sigma \in G$ 全体のなす集合は、ちょうど $\varprojlim_{E \in \mathcal{F}} \pi_E(H)$ に対応する。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <div class="box theorem">
+        <span class="box-title">補題 1.12（有限レベルへの制限）</span>
+        <p>
+          任意の中間体 $K \subset M \subset L$ および任意の $E \in \mathcal{F}$ に対し、$E / (E \cap M)$ は有限次Galois拡大であり、
+        </p>
+        $$\pi_E(\mathrm{Gal}(L/M)) = \mathrm{Gal}(E / (E \cap M))$$
+        <p>
+          が成り立つ。
+        </p>
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明</span>
+        <p>
+          $E/K$ は有限次Galois拡大であり $K \subset E \cap M \subset E$ なので、$E / (E \cap M)$ は有限次Galois拡大である。明らかに $\pi_E(\mathrm{Gal}(L/M)) \subset \mathrm{Gal}(E / (E \cap M))$ が成り立つ。
+        </p>
+        <p>
+          逆の包含を示すため、$E$ と $M$ の合成体 $EM \subset L$ を考える。平行移動の定理（定理1.2(2)）より、制限写像 $\mathrm{Gal}(EM/M) \to \mathrm{Gal}(E / (E \cap M))$ は同型写像である。すなわち任意の $\tau \in \mathrm{Gal}(E / (E \cap M))$ は $EM$ の $M$-自己同型 $\tilde{\tau} \in \mathrm{Gal}(EM/M)$ に延長できる。さらに $L/M$ は正規拡大なので、同型延長定理（定理1.2(3)）により、$\tilde{\tau}$ は $L$ の $M$-自己同型 $\sigma \in \mathrm{Gal}(L/M)$ に延長できる。このとき $\pi_E(\sigma) = \tau$ である。よって $\pi_E(\mathrm{Gal}(L/M)) = \mathrm{Gal}(E / (E \cap M))$ が成り立つ。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <div class="box theorem">
+        <span class="box-title">定理 1.13（Krullの定理：無限次Galois理論の基本定理）</span>
+        <p>
+          $L/K$ をGalois拡大とし、$G = \mathrm{Gal}(L/K)$ にKrull位相を入れる。このとき、写像
+        </p>
+        $$M \longmapsto \mathrm{Gal}(L/M), \qquad H \longmapsto L^H := \{ x \in L \mid \forall \sigma \in H,\; \sigma(x) = x \}$$
+        <p>
+          は、$L/K$ の<strong>すべての中間体 $M$</strong> と、$G$ の<strong>すべての閉部分群 $H$</strong> の間の包含関係を逆転させる一対一対応を与える。さらに次が成り立つ。
+        </p>
+        <ol>
+          <li>任意の中間体 $M$ に対し、$L^{\mathrm{Gal}(L/M)} = M$。</li>
+          <li>$G$ の任意の部分群 $H$（閉とは限らない）に対し、$\mathrm{Gal}(L/L^H) = \overline{H}$。</li>
+          <li>中間体 $M$ が $K$ 上<strong>有限次拡大</strong>であることは、$\mathrm{Gal}(L/M)$ が $G$ の<strong>開部分群</strong>であることと同値であり、このとき $[M:K] = [G : \mathrm{Gal}(L/M)]$ である。</li>
+          <li>中間体 $M$ が $K$ 上<strong>Galois拡大</strong>であることは、$\mathrm{Gal}(L/M)$ が $G$ の<strong>閉正規部分群</strong>であることと同値であり、このとき位相群として $\mathrm{Gal}(M/K) \cong G / \mathrm{Gal}(L/M)$ である。</li>
+        </ol>
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明（有限次Galois理論の極限からの導出）</span>
+        <p>
+          <strong>0. $\mathrm{Gal}(L/M)$ が閉部分群であること：</strong>任意の $x \in L$ に対し、$x \in E$ なる $E \in \mathcal{F}$ を選べば、固定部分群 $\mathrm{Stab}_G(x) := \{ \sigma \in G \mid \sigma(x) = x \}$ は開部分群 $\mathrm{Gal}(L/E)$ を含む。したがって $\mathrm{Stab}_G(x)$ は $\mathrm{Gal}(L/E)$ の剰余類の合併であり開部分群、補題1.10(1)より閉部分群でもある。ゆえに
+        </p>
+        $$\mathrm{Gal}(L/M) = \bigcap_{x \in M} \mathrm{Stab}_G(x)$$
+        <p>
+          は閉部分群の共通部分として $G$ の閉部分群である。
+        </p>
+        <p>
+          <strong>1. 中間体の復元（$L^{\mathrm{Gal}(L/M)} = M$）：</strong>任意の中間体 $K \subset M \subset L$ に対し、$H := \mathrm{Gal}(L/M)$ とおく。補題1.12より、各 $E \in \mathcal{F}$ について $E / (E \cap M)$ は有限次Galois拡大であり $\pi_E(H) = \mathrm{Gal}(E / (E \cap M))$ である。有限次Galois理論の基本定理（定理1.2(1)）より $E^{\pi_E(H)} = E \cap M$ であるから、補題1.6（$L = \bigcup_{E \in \mathcal{F}} E$）を用いて $E \in \mathcal{F}$ にわたって帰納極限（合併）をとれば、
+        </p>
+        $$L^H = \bigcup_{E \in \mathcal{F}} (E \cap L^H) = \bigcup_{E \in \mathcal{F}} E^{\pi_E(H)} = \bigcup_{E \in \mathcal{F}} (E \cap M) = M$$
+        <p>
+          を得る。
+        </p>
+        <p>
+          <strong>2. 閉部分群の復元（$\mathrm{Gal}(L/L^H) = \overline{H}$）：</strong>$G$ の任意の部分群 $H$ に対し、$M := L^H$ とおく。各 $E \in \mathcal{F}$ について、$x \in E$ がすべての $\sigma \in H$ で固定されることはすべての $\pi_E(\sigma) \in \pi_E(H)$ で固定されることと同値なので、$E \cap M = E \cap L^H = E^{\pi_E(H)}$ である。ここで有限群 $\pi_E(H) \subset \mathrm{Gal}(E/K)$ に有限次Galois理論（定理1.2(1)）を適用し、さらに補題1.12を用いると、
+        </p>
+        $$\pi_E(\mathrm{Gal}(L/M)) = \mathrm{Gal}(E / (E \cap M)) = \mathrm{Gal}(E / E^{\pi_E(H)}) = \pi_E(H)$$
+        <p>
+          がすべての $E \in \mathcal{F}$ について成り立つ。両辺の射影極限をとり、補題1.11および「$\mathrm{Gal}(L/M)$ は閉部分群（$\overline{\mathrm{Gal}(L/M)} = \mathrm{Gal}(L/M)$）」という事実を適用すると、
+        </p>
+        $$\mathrm{Gal}(L/L^H) = \overline{\mathrm{Gal}(L/M)} = \varprojlim_{E \in \mathcal{F}} \pi_E(\mathrm{Gal}(L/M)) = \varprojlim_{E \in \mathcal{F}} \pi_E(H) = \overline{H}$$
+        <p>
+          が従う。
+        </p>
+        <p>
+          <strong>3. 有限次中間体と開部分群の対応：</strong>$[M:K] < \infty$ ならば、$M$ の生成元をすべて含む $E \in \mathcal{F}$ をとることで $M \subset E$ となり、$\mathrm{Gal}(L/E) \subset \mathrm{Gal}(L/M)$ である。開部分群 $\mathrm{Gal}(L/E)$ を含む部分群は開である。逆に $\mathrm{Gal}(L/M)$ が開部分群ならば、命題1.9(3)よりある $E \in \mathcal{F}$ に対して $\mathrm{Gal}(L/E) \subset \mathrm{Gal}(L/M)$ となり、ガロア対応の包含関係逆転により $M \subset E$ なので $[M:K] \le [E:K] < \infty$ である。また $G/\mathrm{Gal}(L/M) \cong \mathrm{Gal}(E/K)/\mathrm{Gal}(E/M)$ より $[M:K] = [G : \mathrm{Gal}(L/M)]$ が従う。
+        </p>
+        <p>
+          <strong>4. 正規拡大と閉正規部分群：</strong>任意の $\sigma \in G$ に対して $\mathrm{Gal}(L/\sigma(M)) = \sigma \mathrm{Gal}(L/M) \sigma^{-1}$ であるから、$M/K$ が正規（任意の $\sigma \in G$ で $\sigma(M) = M$）であることと $\mathrm{Gal}(L/M) \triangleleft G$ は同値である。制限写像 $G \to \mathrm{Gal}(M/K)$ は連続かつ全射（同型延長定理）であり、核は $\mathrm{Gal}(L/M)$ である。$G$ はコンパクト、$\mathrm{Gal}(M/K)$ はHausdorffなので、誘導される連続全単射 $G/\mathrm{Gal}(L/M) \to \mathrm{Gal}(M/K)$ は位相同型（閉写像）となる。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <blockquote>
+        <strong>なぜ「閉部分群」のみが対応するのか：</strong>有限次Galois対応をそのまま射影極限へ持ち上げると、部分群 $H$ は各有限レベルでの像の射影極限 $\varprojlim \pi_E(H) = \overline{H}$ に自動的に置き換わってしまう。これが、無限次Galois理論において「すべての部分群」ではなく「<strong>閉部分群</strong>（$H = \overline{H}$）」のみが中間体と一対一に対応する本質的な理由である。
+      </blockquote>
+
+      <h3 id="sec1-4">1.4 理解を深める豊富な具体例</h3>
+
+      <div class="box example">
+        <span class="box-title">例 1.14（有限体の代数的閉包 $\overline{\mathbb{F}}_p / \mathbb{F}_p$ と非閉部分群の罠）</span>
+        <p>
+          素数 $p$ に対して、有限体 $\mathbb{F}_p$ の代数的閉包 $L = \overline{\mathbb{F}}_p$ を考える。任意の正の整数 $n \ge 1$ に対して $n$ 次拡大 $\mathbb{F}_{p^n}/\mathbb{F}_p$ が一意に存在し、すべて有限次Galois拡大である。包含関係は $\mathbb{F}_{p^m} \subset \mathbb{F}_{p^n} \iff m \mid n$ で与えられる。
+        </p>
+        <p>
+          各有限レベルでは、Frobenius自己同型 $\mathrm{Frob}_p : x \mapsto x^p$ が巡回群 $\mathrm{Gal}(\mathbb{F}_{p^n}/\mathbb{F}_p) \cong \mathbb{Z}/n\mathbb{Z}$ を生成する。$m \mid n$ のときの制限写像は自然な還元写像 $\mathbb{Z}/n\mathbb{Z} \to \mathbb{Z}/m\mathbb{Z}$ に一致するため、定理1.7より
+        </p>
+        $$\mathrm{Gal}(\overline{\mathbb{F}}_p / \mathbb{F}_p) \cong \varprojlim_{n \ge 1} \mathbb{Z}/n\mathbb{Z} =: \widehat{\mathbb{Z}}$$
+        <p>
+          を得る（$\widehat{\mathbb{Z}}$ は<strong>射有限整数環</strong>と呼ばれ、中国剰余定理より $\widehat{\mathbb{Z}} \cong \prod_{\ell : \text{素数}} \mathbb{Z}_\ell$ が成り立つ）。
+        </p>
+        <ul>
+          <li><strong>開部分群と有限次拡大</strong>：$\widehat{\mathbb{Z}}$ の開部分群はすべて $n\widehat{\mathbb{Z}}$（$n \ge 1$）の形をしており、ちょうど有限次拡大 $\mathbb{F}_{p^n}$ に対応する（$[\widehat{\mathbb{Z}} : n\widehat{\mathbb{Z}}] = n = [\mathbb{F}_{p^n} : \mathbb{F}_p]$）。</li>
+          <li><strong>非閉部分群の罠</strong>：$\mathrm{Frob}_p \in \mathrm{Gal}(\overline{\mathbb{F}}_p / \mathbb{F}_p)$ が生成する巡回部分群 $H := \langle \mathrm{Frob}_p \rangle \cong \mathbb{Z}$ を考える。任意の $n \ge 1$ に対して $\pi_{\mathbb{F}_{p^n}}(H) = \mathrm{Gal}(\mathbb{F}_{p^n}/\mathbb{F}_p)$ であるため、補題1.11より
+          $$\overline{H} = \varprojlim_{n \ge 1} \mathrm{Gal}(\mathbb{F}_{p^n}/\mathbb{F}_p) = \mathrm{Gal}(\overline{\mathbb{F}}_p / \mathbb{F}_p) \cong \widehat{\mathbb{Z}}$$
+          となる。つまり $H \cong \mathbb{Z}$ は $\widehat{\mathbb{Z}}$ の中で<strong>稠密な真の部分群</strong>（$H$ は可算だが $\widehat{\mathbb{Z}}$ は非可算！）であり、閉部分群ではない。実際、$H$ の固定体は $L^H = \{ x \in \overline{\mathbb{F}}_p \mid x^p = x \} = \mathbb{F}_p = L^{\widehat{\mathbb{Z}}}$ となり、異なる部分群 $H \subsetneq \widehat{\mathbb{Z}}$ が同じ中間体 $\mathbb{F}_p$ を定めてしまう。</li>
+        </ul>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 1.15（2次拡大の無限合成 $\mathbb{Q}(\sqrt{2}, \sqrt{3}, \sqrt{5}, \dots)/\mathbb{Q}$ とCantor集合）</span>
+        <p>
+          すべての素数を $p_1 = 2, p_2 = 3, p_3 = 5, \dots$ と並べ、すべての素数の平方根を添加した体
+        </p>
+        $$L := \mathbb{Q}(\sqrt{p_1}, \sqrt{p_2}, \sqrt{p_3}, \dots) = \bigcup_{n=1}^\infty E_n, \qquad E_n := \mathbb{Q}(\sqrt{p_1}, \dots, \sqrt{p_n})$$
+        <p>
+          を考える。各 $E_n/\mathbb{Q}$ は次数 $2^n$ の有限次Galois拡大であり、$\mathrm{Gal}(E_n/\mathbb{Q}) \cong (\mathbb{Z}/2\mathbb{Z})^n$ である（各 $\sqrt{p_k}$ の符号を独立に $\pm 1$ 倍できる）。したがって定理1.7より、
+        </p>
+        $$G := \mathrm{Gal}(L/\mathbb{Q}) \cong \varprojlim_{n \ge 1} (\mathbb{Z}/2\mathbb{Z})^n \cong \prod_{k=1}^\infty \mathbb{Z}/2\mathbb{Z}$$
+        <p>
+          となる。この位相空間はトポロジーで有名な<strong>Cantor集合</strong>と同相であり、コンパクト・Hausdorff・完全不連結な空間の最も視覚的な具体例である。
+        </p>
+        <p>
+          ここでも非閉部分群が極めて明確に見える。$G = \prod_{k=1}^\infty \mathbb{Z}/2\mathbb{Z}$ の中で、「有限個の成分だけが $1$ で残りはすべて $0$ である元」全体のなす直和部分群
+        </p>
+        $$H := \bigoplus_{k=1}^\infty \mathbb{Z}/2\mathbb{Z} \subsetneq \prod_{k=1}^\infty \mathbb{Z}/2\mathbb{Z} = G$$
+        <p>
+          を考える。任意の $n$ に対して射影 $\pi_{E_n}(H) = (\mathbb{Z}/2\mathbb{Z})^n$ は全射なので、$H$ は $G$ で稠密（$\overline{H} = G$）な非閉部分群であり、$L^H = \mathbb{Q} = L^G$ となってしまう。
+        </p>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 1.16（$p$ 進円分拡大 $\mathbb{Q}(\mu_{p^\infty})/\mathbb{Q}$ と全円分拡大 $\mathbb{Q}(\mu_\infty)/\mathbb{Q}$）</span>
+        <p>
+          素数 $p$ に対し、1の $p^n$ 乗根全体のなす群を $\mu_{p^n}$ とし、$L = \mathbb{Q}(\mu_{p^\infty}) := \bigcup_{n=1}^\infty \mathbb{Q}(\mu_{p^n})$ とおく。各レベルで $\mathrm{Gal}(\mathbb{Q}(\mu_{p^n})/\mathbb{Q}) \cong (\mathbb{Z}/p^n\mathbb{Z})^\times$ であり、制限写像は自然な還元 $(\mathbb{Z}/p^{n+1}\mathbb{Z})^\times \to (\mathbb{Z}/p^n\mathbb{Z})^\times$ である。したがって、
+        </p>
+        $$\mathrm{Gal}(\mathbb{Q}(\mu_{p^\infty})/\mathbb{Q}) \cong \varprojlim_{n \ge 1} (\mathbb{Z}/p^n\mathbb{Z})^\times \cong \mathbb{Z}_p^\times$$
+        <p>
+          （$p$ 進整数環の単数群）がKrull位相込みの位相群同型として得られる。
+        </p>
+        <p>
+          さらに、すべての正の整数 $n$ に対する1の $n$ 乗根をすべて添加した<strong>全円分拡大</strong> $\mathbb{Q}^{\mathrm{cyc}} := \bigcup_{n \ge 1} \mathbb{Q}(\mu_n)$ を考えると、
+        </p>
+        $$\mathrm{Gal}(\mathbb{Q}^{\mathrm{cyc}}/\mathbb{Q}) \cong \varprojlim_{n \ge 1} (\mathbb{Z}/n\mathbb{Z})^\times \cong \widehat{\mathbb{Z}}^\times \cong \prod_{p : \text{素数}} \mathbb{Z}_p^\times$$
+        <p>
+          となる。類体論の金字塔である<strong>Kronecker–Weberの定理</strong>によれば、$\mathbb{Q}^{\mathrm{cyc}}$ は $\mathbb{Q}$ の最大アーベル拡大 $\mathbb{Q}^{\mathrm{ab}}$ に一致する。
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== PART 2 ==================== -->
+    <section id="part2">
+      <h2>第2部：圏論的な視点からの一般化（GrothendieckのGalois理論）</h2>
+
+      <p>
+        第1部で見た「有限次拡大の帰納極限（$L = \varinjlim E$）を作り、その自己同型群を射影極限（$\varprojlim \mathrm{Gal}(E/K)$）として構成する」という古典論の発想を、極限まで純化・抽象化したものがAlexander GrothendieckのGalois理論（SGA 1, Exposé V <a href="#ref-sga1">[2]</a>）である。
+      </p>
+      <p>
+        Grothendieckの革新の核心は、<strong>「巨大な極限対象（$K^{\mathrm{sep}}$ や普遍被覆）の存在を仮定せず、有限な対象のみからなる圏上の『ファイバー関手』をプロ表現する」</strong>という点にある。この抽象化によって、体のGalois理論と位相空間の被覆空間論が完全に同一の定理の特殊例となり、さらに代数幾何学におけるエタール基本群へと拡張された。
+      </p>
+
+      <h3 id="sec2-0">2.0 準備：圏論の基礎・有限エタール代数・連続 $G$-集合・Galois圏の公理</h3>
+
+      <div class="box definition">
+        <span class="box-title">定義 2.1（圏・関手・自然変換・反対圏・圏同値）</span>
+        <ul>
+          <li><strong>圏（category）</strong> $\mathcal{C}$ は、対象の集まりと、任意の2つの対象 $X, Y$ の間の射の集合 $\mathrm{Hom}_{\mathcal{C}}(X, Y)$、および結合律と恒等射 $\mathrm{id}_X$ を満たす射の合成からなる構造である。すべての射の向きを逆転させた圏を<strong>反対圏（双対圏）</strong> $\mathcal{C}^{\mathrm{op}}$ という（$\mathrm{Hom}_{\mathcal{C}^{\mathrm{op}}}(X, Y) := \mathrm{Hom}_{\mathcal{C}}(Y, X)$）。</li>
+          <li><strong>共変関手</strong> $F : \mathcal{C} \to \mathcal{D}$ は、対象 $X \mapsto F(X)$ と射 $(f : X \to Y) \mapsto (F(f) : F(X) \to F(Y))$ の対応であって、$F(\mathrm{id}_X) = \mathrm{id}_{F(X)}$ と $F(g \circ f) = F(g) \circ F(f)$ を満たすものである。</li>
+          <li><strong>自然変換・自然同型</strong>：2つの関手 $F, G : \mathcal{C} \to \mathcal{D}$ の間の自然変換 $\eta : F \Rightarrow G$ は、各対象 $X \in \mathcal{C}$ に対する射 $\eta_X : F(X) \to G(X)$ の族であって、任意の射 $f : X \to Y$ に対して $G(f) \circ \eta_X = \eta_Y \circ F(f)$（可換図式）を満たすものである。すべての $\eta_X$ が同型射のとき<strong>自然同型</strong>といい、$F$ から $F$ 自身への自然同型全体のなす群を $\mathrm{Aut}(F)$ と書く。</li>
+          <li><strong>圏同値</strong>：関手 $F : \mathcal{C} \to \mathcal{D}$ が圏同値であるとは、$F$ が<strong>充満忠実</strong>（任意の $X, Y$ に対し $\mathrm{Hom}_{\mathcal{C}}(X, Y) \to \mathrm{Hom}_{\mathcal{D}}(F(X), F(Y))$ が全単射）かつ<strong>本質的全射</strong>（任意の $D \in \mathcal{D}$ に対し $F(X) \cong D$ となる $X \in \mathcal{C}$ が存在する）であることと同値である。</li>
+        </ul>
+      </div>
+
+      <div class="box definition">
+        <span class="box-title">定義 2.2（極限・ファイバー積・イコライザー・直和・商対象・モノ射・厳密エピ射）</span>
+        <p>Galois圏の公理で現れる圏論的構成を定義する。</p>
+        <ul>
+          <li><strong>終対象</strong> $1$（任意の $X$ から $1$ への射が唯一存在）、<strong>始対象</strong> $\emptyset$（$\emptyset$ から任意の $X$ への射が唯一存在）。</li>
+          <li><strong>ファイバー積</strong> $X \times_Z Y$：射 $X \to Z, Y \to Z$ に対し、2つの射影 $p_1 : X \times_Z Y \to X,\; p_2 : X \times_Z Y \to Y$ をもち、$Z$ への合成が一致する任意の射の組 $W \to X, W \to Y$ が $W \to X \times_Z Y$ を一意に経由する対象（集合の圏では $\{(x, y) \in X \times Y \mid f(x) = g(y)\}$）。$Z = 1$ のとき通常の直積 $X \times Y$ である。</li>
+          <li><strong>イコライザー</strong> $\mathrm{Eq}(f, g)$：2つの射 $f, g : X \to Y$ に対し、$f \circ e = g \circ e$ を満たす普遍的な射 $e : \mathrm{Eq}(f, g) \to X$（集合の圏では $\{x \in X \mid f(x) = g(x)\}$）。</li>
+          <li><strong>有限余積（直和）</strong> $X \amalg Y$：入射 $X \to X \amalg Y, Y \to X \amalg Y$ をもち、任意の $X \to W, Y \to W$ が一意に $X \amalg Y \to W$ を経由する対象。</li>
+          <li><strong>有限群 $G \subset \mathrm{Aut}_{\mathcal{C}}(X)$ による商対象</strong> $X/G$：すべての $g \in G$ で $q \circ g = q$ を満たす普遍的な射 $q : X \to X/G$。</li>
+          <li><strong>モノ射</strong>（単射の一般化：$u \circ f = u \circ g \implies f = g$）、<strong>厳密エピ射</strong>（全射の一般化：射 $u : X \to Y$ が「$u$ と合成して等しくなる任意の平行射 $v, w : Y \to Z$ のイコライザー的性質」あるいはGalois圏では「ある射の組の余イコライザーとなる射」）。</li>
+        </ul>
+      </div>
+
+      <div class="box theorem">
+        <span class="box-title">定理 2.3（表現可能関手と米田の補題）</span>
+        <p>
+          圏 $\mathcal{C}$ の対象 $P$ に対し、共変関手 $h^P := \mathrm{Hom}_{\mathcal{C}}(P, -) : \mathcal{C} \to \mathbf{Set}$ を $P$ によって<strong>表現される関手</strong>という。任意の共変関手 $F : \mathcal{C} \to \mathbf{Set}$ に対し、自然変換の集合 $\mathrm{Nat}(h^P, F)$ と集合 $F(P)$ の間には自然な全単射
+        </p>
+        $$\mathrm{Nat}(h^P, F) \xrightarrow{\;\sim\;} F(P), \qquad \eta \longmapsto \eta_P(\mathrm{id}_P)$$
+        <p>
+          が存在する（<strong>米田の補題</strong>）。逆写像は $p \in F(P)$ に対して、各 $X$ で $(f : P \to X) \mapsto F(f)(p)$ と定める自然変換を与える。
+        </p>
+      </div>
+
+      <p>
+        体 $K$ の有限次分離拡大体のみをそのまま対象として集めると、2つの体の直積（幾何学的には非連結な被覆）やテンソル積（$E_1 \otimes_K E_2$ は一般に体ではなく有限次分離拡大の直積になる）で閉じていないため、圏論的な極限・余極限の操作が行えない。そこで次のように対象を広げる。
+      </p>
+
+      <div class="box definition">
+        <span class="box-title">定義 2.4（有限エタール $K$-代数）</span>
+        <p>
+          体 $K$ 上の有限次元可換代数 $A$ が、有限個の有限次分離拡大体 $E_1, \dots, E_r$ の直積環と同型であるとき、すなわち
+        </p>
+        $$A \cong E_1 \times E_2 \times \cdots \times E_r \qquad ([E_k : K] < \infty,\; E_k/K \text{ は分離拡大})$$
+        <p>
+          （$r = 0$ のときは零環 $0$）となるとき、$A$ を<strong>有限エタール $K$-代数</strong>（finite étale $K$-algebra）という。有限エタール $K$-代数と $K$-代数準同型のなす圏を $\mathbf{FEt}_K$ と書く。
+        </p>
+        <p>
+          幾何学的な被覆空間の圏と射の向きを揃えるため、その反対圏
+        </p>
+        $$\mathcal{C} := (\mathbf{FEt}_K)^{\mathrm{op}}$$
+        <p>
+          を考える。代数幾何学の言葉では、これは $\mathrm{Spec}(K)$ 上の有限エタール被覆の圏である（$A \mapsto \mathrm{Spec}(A)$ が反変圏同値を与える）。
+        </p>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 2.5（有限エタール $K$-代数の具体例と反例）</span>
+        <ul>
+          <li><strong>$K = \mathbb{R}$ のとき</strong>：$\mathbb{R}$ の有限次分離拡大は $\mathbb{R}$ と $\mathbb{C}$ のみなので、有限エタール $\mathbb{R}$-代数はすべて $\mathbb{R}^a \times \mathbb{C}^b$（$a, b \ge 0$）の形をしている。</li>
+          <li><strong>テンソル積による分解（ファイバー積）</strong>：$K = \mathbb{Q}$、$E = \mathbb{Q}(\sqrt[3]{2}) \cong \mathbb{Q}[T]/(T^3 - 2)$ とする。$\mathcal{C} = (\mathbf{FEt}_{\mathbb{Q}})^{\mathrm{op}}$ における直積 $E \times E$ は、環の圏でのテンソル積 $E \otimes_{\mathbb{Q}} E$ に対応する。実際に計算すると、$T^3 - 2 = (T - \sqrt[3]{2})(T^2 + \sqrt[3]{2}T + \sqrt[3]{4})$ より
+          $$E \otimes_{\mathbb{Q}} E \cong E[T]/(T^3 - 2) \cong E \times E[T]/(T^2 + \sqrt[3]{2}T + \sqrt[3]{4}) \cong \mathbb{Q}(\sqrt[3]{2}) \times \mathbb{Q}(\sqrt[3]{2}, \omega)$$
+          （$\omega = e^{2\pi i/3}$）となり、1つの体ではなく<strong>2つの体の直積</strong>に分解する！このように直積環を許すことで初めて圏がファイバー積で閉じる。</li>
+          <li><strong>反例（有限エタールでない代数）</strong>：$\mathbb{Q}[T]/(T^2)$ は非零の冪零元 $T$ をもつため体の直積にならず、有限エタールではない（幾何学的には「2重の点」＝分岐・特異点をもつ）。また標数 $p > 0$ の体 $K = \mathbb{F}_p(t)$ に対する非分離拡大 $K[T]/(T^p - t)$ も有限エタールではない。</li>
+        </ul>
+      </div>
+
+      <div class="box definition">
+        <span class="box-title">定義 2.6（射有限群の連続作用と圏 $G\text{-}\mathbf{FinSet}$）</span>
+        <p>
+          射有限群 $G$ が有限集合 $S$（離散位相を入れる）に左から作用するとき、作用写像 $G \times S \to S$ が<strong>連続</strong>であることは、次の互いに同値な条件のいずれか（したがってすべて）で特徴づけられる。
+        </p>
+        <ol>
+          <li>各点 $s \in S$ の固定部分群 $\mathrm{Stab}_G(s) := \{g \in G \mid g \cdot s = s\}$ が $G$ の<strong>開部分群</strong>である。</li>
+          <li>$G$ のある開正規部分群 $N \triangleleft G$ が $S$ に自明に作用する（すなわち作用が有限商群 $G/N$ を経由する）。</li>
+        </ol>
+        <p>
+          $G$ が連続に作用する有限集合を対象とし、$G$-同変写像（$\psi(g \cdot s) = g \cdot \psi(s)$ を満たす写像）を射とする圏を $G\text{-}\mathbf{FinSet}$ と書く。
+        </p>
+      </div>
+
+      <div class="box definition">
+        <span class="box-title">定義 2.7（Galois圏とファイバー関手：Grothendieckの公理）</span>
+        <p>
+          本質的に小さい圏 $\mathcal{C}$ と、有限集合の圏への共変関手 $F : \mathcal{C} \to \mathbf{FinSet}$ の組 $(\mathcal{C}, F)$ が以下の6つの公理 (G1)–(G6) を満たすとき、$(\mathcal{C}, F)$ を<strong>Galois圏</strong>（Galois category）、$F$ を<strong>ファイバー関手</strong>（fiber functor）と呼ぶ <a href="#ref-sga1">[2]</a>, <a href="#ref-szamuely">[3]</a>。
+        </p>
+        <ul>
+          <li><strong>(G1)</strong> $\mathcal{C}$ は終対象をもち、任意の2つの射 $X \to Z,\; Y \to Z$ に対してファイバー積 $X \times_Z Y$ が存在する（すなわち $\mathcal{C}$ はすべての有限極限、特にイコライザーをもつ）。</li>
+          <li><strong>(G2)</strong> $\mathcal{C}$ は有限余積（特に始対象 $\emptyset$）をもち、任意の対象 $X$ と有限群 $G \subset \mathrm{Aut}_{\mathcal{C}}(X)$ の作用に対する商対象 $X/G$ が存在する。</li>
+          <li><strong>(G3)</strong> $\mathcal{C}$ の任意の射 $u : X \to Y$ は、$u = u'' \circ u'$ と分解できる。ここで $u'$ は厳密エピ射、$u''$ はモノ射かつ直和因子への入射（$Y \cong Y' \amalg Y''$ となる $u'' : Y' \to Y$）である。</li>
+          <li><strong>(G4)</strong> 関手 $F$ は左完全である（終対象とファイバー積、すなわちすべての有限極限を保存する）。</li>
+          <li><strong>(G5)</strong> 関手 $F$ は有限余積、有限群による商、および厳密エピ射を保存する。</li>
+          <li><strong>(G6)</strong> $u : X \to Y$ が $\mathcal{C}$ の射であって $F(u) : F(X) \to F(Y)$ が集合の全単射ならば、$u$ は $\mathcal{C}$ の同型射である（$F$ は同型を反射する）。</li>
+        </ul>
+      </div>
+
+      <div class="box definition">
+        <span class="box-title">定義 2.8（連結対象・Galois対象・プロ対象）</span>
+        <ul>
+          <li><strong>連結対象</strong>：Galois圏 $(\mathcal{C}, F)$ において、対象 $X \in \mathcal{C}$ が始対象 $\emptyset$ でなく、非自明な直和 $X \cong X_1 \amalg X_2$（$X_1, X_2 \not\cong \emptyset$）に分解できないとき、$X$ を連結対象という。公理より、任意の $X \in \mathcal{C}$ は有限個の連結対象の直和に一意に分解される。</li>
+          <li><strong>Galois対象</strong>：連結対象 $P \in \mathcal{C}$ が、その自己同型群 $\mathrm{Aut}_{\mathcal{C}}(P)$ の有限集合 $F(P)$ への自然な作用に関して<strong>単純推移的</strong>（任意の $x, y \in F(P)$ に対し $F(\alpha)(x) = y$ なる $\alpha \in \mathrm{Aut}_{\mathcal{C}}(P)$ が一意に存在する、特に $|\mathrm{Aut}_{\mathcal{C}}(P)| = |F(P)|$）であるとき、$P$ をGalois対象という。</li>
+          <li><strong>プロ対象</strong>：圏 $\mathcal{C}$ の対象からなる、有向集合 $I$ で添字付けられた逆系（射影系）$(P_i, \varphi_{ji} : P_j \to P_i)_{i \in I}$ を $\mathcal{C}$ のプロ対象（pro-object）という。</li>
+        </ul>
+      </div>
+
+      <h3 id="sec2-1">2.1 古典論と圏論的視点の対応</h3>
+
+      <p>
+        古典的な無限次Galois理論の各構成要素は、GrothendieckのGalois圏の枠組みにおいて次のように翻訳・一般化される。
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>古典的な無限次Galois理論（体 $K$）</th>
+            <th>GrothendieckのGalois理論（Galois圏 $(\mathcal{C}, F)$）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>有限次分離拡大 $E/K$</td>
+            <td>$\mathcal{C}$ の<strong>連結対象</strong>（非自明な直和に分解しない対象）</td>
+          </tr>
+          <tr>
+            <td>有限エタール $K$-代数 $A = \prod_{k=1}^r E_k$</td>
+            <td>$\mathcal{C}$ の一般の対象 $X$</td>
+          </tr>
+          <tr>
+            <td>有限次Galois拡大 $E/K$</td>
+            <td><strong>Galois対象</strong> $P$（$\mathrm{Aut}_{\mathcal{C}}(P)$ が $F(P)$ に単純推移的に作用する連結対象）</td>
+          </tr>
+          <tr>
+            <td>分離閉包 $K^{\mathrm{sep}} = \varinjlim E_i$</td>
+            <td>ファイバー関手 $F$ を表現する<strong>プロ対象（射影系）</strong> $(P_i)_{i \in I}$</td>
+          </tr>
+          <tr>
+            <td>Galois群 $\mathrm{Gal}(K^{\mathrm{sep}}/K) \cong \varprojlim \mathrm{Gal}(E_i/K)$</td>
+            <td>関手の自己同型群 $\pi_1(\mathcal{C}, F) := \mathrm{Aut}(F) \cong \varprojlim \mathrm{Aut}_{\mathcal{C}}(P_i)^{\mathrm{op}}$</td>
+          </tr>
+          <tr>
+            <td>中間体 $\leftrightarrow$ 閉部分群の対応</td>
+            <td>圏同値 $F : \mathcal{C} \xrightarrow{\;\sim\;} \mathrm{Aut}(F)\text{-}\mathbf{FinSet}$</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 id="sec2-2">2.2 「極限の構成」の具体的な一般化メカニズム</h3>
+
+      <p>
+        第1部の古典論では、「有限次拡大 $E_i$ の合併 $K^{\mathrm{sep}} = \bigcup E_i$」という<strong>具体的な巨大な対象</strong>をまず作り、その自己同型群を考えた。しかし、一般の位相空間やスキームでは、そのような「普遍的な極限対象（普遍被覆など）」が存在するとは限らない。Grothendieckはこの障害を、<strong>ファイバー関手</strong>と<strong>プロ表現可能性（pro-representability）</strong>という2つの概念によって突破した。
+      </p>
+
+      <h4>ステップ 1：Galois圏とファイバー関手 $F$</h4>
+      <p>
+        具体的な2つの基本例において、Galois圏とファイバー関手 $F : \mathcal{C} \to \mathbf{FinSet}$ は次のように与えられる。
+      </p>
+      <ul>
+        <li>
+          <strong>体の例：</strong>$\mathcal{C} = (\mathbf{FEt}_K)^{\mathrm{op}}$ に対し、$K$ の分離閉包 $K^{\mathrm{sep}}$ を1つ固定して、
+          $$F(A) := \mathrm{Hom}_{K\text{-alg}}(A, K^{\mathrm{sep}})$$
+          とおく。$A = E$（有限次分離拡大）のとき、$F(E)$ は $E$ の $K^{\mathrm{sep}}$ への $K$-埋め込み全体であり、要素数が $[E:K]$ の有限集合である。また $A = \prod_{k=1}^r E_k$ に対しては $F(A) \cong \bigsqcup_{k=1}^r F(E_k)$ となり、直積が集合の直和（余積）に写る。
+        </li>
+        <li>
+          <strong>位相空間の例：</strong>連結かつ局所弧状連結な位相空間 $X$ 上の<strong>有限被覆</strong>（連続全射 $p : Y \to X$ であって、各点 $x \in X$ の開近傍 $U$ 上で $p^{-1}(U) \cong U \times D$（$D$ は有限離散集合）となるもの）と被覆写像（$p' \circ f = p$ を満たす連続写像）のなす圏を $\mathcal{C} = \mathbf{FCov}_X$ とする。基点 $x_0 \in X$ を1つ固定し、$x_0$ 上のファイバーをとる関手
+          $$F(Y \xrightarrow{p} X) := p^{-1}(x_0)$$
+          を考えると、$(\mathbf{FCov}_X, F)$ はGalois圏となる。このとき、Galois対象はちょうど<strong>正規（ガロア）有限被覆</strong>に対応し、その自己同型群 $\mathrm{Aut}_{\mathcal{C}}(P)$ は<strong>被覆変換群</strong>である。
+        </li>
+      </ul>
+
+      <h4>ステップ 2：「極限対象」の置き換え —— $F$ のプロ表現可能性</h4>
+      <p>
+        圏 $\mathcal{C}$ の対象はすべて「有限」であるため、一般にはファイバー関手 $F$ を $\mathcal{C}$ の単一の対象 $P$ で表現する（$F(-) \cong \mathrm{Hom}_{\mathcal{C}}(P, -)$ と書く）ことはできない（もし表現できたら、$P$ はすべての有限拡大・有限被覆を支配する最大の有限対象になってしまう）。代わりに、Galois圏の公理から次の<strong>プロ表現可能性定理</strong>が証明される <a href="#ref-sga1">[2]</a>, <a href="#ref-szamuely">[3]</a>。
+      </p>
+
+      <div class="box theorem">
+        <span class="box-title">定理 2.9（ファイバー関手のプロ表現可能性）</span>
+        <p>
+          Galois圏 $(\mathcal{C}, F)$ において、有向集合 $I$ で添字付けられた<strong>Galois対象の射影系（プロ対象）</strong> $(P_i, \varphi_{ji} : P_j \to P_i)_{i \in I}$ と、各 $P_i$ のファイバー内の整合的な基点 $p_i \in F(P_i)$（$F(\varphi_{ji})(p_j) = p_i$）が存在し、すべての対象 $X \in \mathcal{C}$ に対して自然な全単射
+        </p>
+        $$\varinjlim_{i \in I} \mathrm{Hom}_{\mathcal{C}}(P_i, X) \xrightarrow{\;\sim\;} F(X), \qquad [f : P_i \to X] \longmapsto F(f)(p_i)$$
+        <p>
+          を誘導する。すなわち、$F$ はGalois対象のプロ対象 $(P_i)_{i \in I}$ によって<strong>プロ表現（pro-represent）</strong>される。
+        </p>
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明</span>
+        <p>
+          <strong>Step 1（連結対象上の射の一意性）：</strong>$Y$ が連結対象、$f, g : Y \to X$ が2つの射であって、ある $y \in F(Y)$ で $F(f)(y) = F(g)(y)$ を満たすとする。イコライザー $e : \mathrm{Eq}(f, g) \to Y$ をとると、公理 (G4) より $F(\mathrm{Eq}(f, g)) = \mathrm{Eq}(F(f), F(g)) \ni y$ なので $\mathrm{Eq}(f, g) \neq \emptyset$ である。また公理 (G3) よりモノ射 $e$ は直和因子への入射であるから、$Y$ の連結性より $e$ は同型射であり、したがって $f = g$ が従う。
+        </p>
+        <p>
+          <strong>Step 2（任意の連結対象に対するGalois閉包の構成）：</strong>任意の連結対象 $X \in \mathcal{C}$ と基点 $x \in F(X)$ をとる。$n := |F(X)|$ とおき、$n$ 重直積 $X^n = X \times \dots \times X$ を考える。公理 (G4) より $F(X^n) \cong F(X)^n$ である。$F(X)$ のすべての元を1回ずつ並べた組 $\tilde{x} = (x_1, \dots, x_n) \in F(X)^n$（$x_1 = x$）を含む $X^n$ の連結成分 $P \hookrightarrow X^n$ をとる。
+        </p>
+        <p>
+          $P$ がGalois対象であることを示そう。対称群 $S_n$ は成分の入れ替えにより $X^n$ に作用する。$P$ の像 $F(P) \subset F(X)^n$ に属する任意の2点 $y, z \in F(P)$ は、いずれも成分が相異なる $n$ 個の元（すなわち $F(X)$ の全単射的並べ替え）であるため、ある置換 $\sigma \in S_n$ が存在して $\sigma(y) = z$ となる。このとき $\sigma(P)$ は $z$ を含む $X^n$ の連結成分なので $\sigma(P) = P$ となり、$\sigma|_P \in \mathrm{Aut}_{\mathcal{C}}(P)$ は $y$ を $z$ に写す。一意性はStep 1から従う。よって $P$ はGalois対象であり、第1射影の制限 $P \to X$ は $\tilde{x} \in F(P)$ を $x \in F(X)$ に写す。
+        </p>
+        <p>
+          <strong>Step 3（添字集合 $I$ の構成と有向性）：</strong>すべての（同型類で代表させた）Galois対象と基点の組 $(P_i, p_i)$ の集合を $I$ とする。$i \le j$ を「$F(\varphi)(p_j) = p_i$ を満たす射 $\varphi : P_j \to P_i$ が存在する」ことと定義する。Step 1により、そのような射 $\varphi_{ji}$ は存在すれば一意である。任意の $(P_i, p_i), (P_j, p_j) \in I$ に対し、直積 $P_i \times P_j$ の点 $(p_i, p_j)$ を含む連結成分 $Z$ をとり、さらにStep 2で $Z$ のGalois閉包 $(P_k, p_k)$ をとれば、射影 $P_k \to Z \to P_i$ および $P_k \to Z \to P_j$ が存在するため $i \le k$ かつ $j \le k$ となり、$I$ は有向集合である。
+        </p>
+        <p>
+          <strong>Step 4（$\varinjlim_{i \in I} \mathrm{Hom}_{\mathcal{C}}(P_i, X) \xrightarrow{\sim} F(X)$ の全単射性）：</strong>任意の $x \in F(X)$ に対し、$x$ を含む $X$ の連結成分 $X_0 \hookrightarrow X$ をとり、Step 2により $P_i \to X_0 \hookrightarrow X$ が $p_i \mapsto x$ となる $(P_i, p_i) \in I$ をとれるので全射である。単射性については、$[f : P_i \to X]$ と $[g : P_j \to X]$ が同じ像 $F(f)(p_i) = F(g)(p_j)$ をもつとき、共通の上界 $k \ge i, j$ をとれば $f \circ \varphi_{ki}, g \circ \varphi_{kj} : P_k \to X$ が $p_k$ で同じ値をもつため、Step 1より $f \circ \varphi_{ki} = g \circ \varphi_{kj}$、すなわち帰納極限の中で $[f] = [g]$ となる。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 2.10（Galois対象・非Galois対象と圏論的Galois閉包の具体的計算）</span>
+        <p>
+          $K = \mathbb{Q}$ における $E = \mathbb{Q}(\sqrt[3]{2}) \in \mathcal{C} = (\mathbf{FEt}_{\mathbb{Q}})^{\mathrm{op}}$ を考える。$E$ は体なので<strong>連結対象</strong>であり、$|F(E)| = [E:\mathbb{Q}] = 3$ である。しかし $E$ の $\mathbb{Q}$-自己同型は恒等写像のみ（$|\mathrm{Aut}_{\mathcal{C}}(E)| = 1 \neq 3$）なので、$E$ は<strong>Galois対象ではない</strong>。
+        </p>
+        <p>
+          定理2.9の証明Step 2のレシピ通りに、$E$ のGalois閉包を圏論的に構成してみよう。$n = 3$ 重直積 $E^3$ は環の圏では $E \otimes_{\mathbb{Q}} E \otimes_{\mathbb{Q}} E$ である。例2.5の計算から、
+        </p>
+        $$E \otimes_{\mathbb{Q}} E \otimes_{\mathbb{Q}} E \cong \big(E \times \mathbb{Q}(\sqrt[3]{2}, \omega)\big) \otimes_{\mathbb{Q}} E \cong E \times \mathbb{Q}(\sqrt[3]{2}, \omega) \times \mathbb{Q}(\sqrt[3]{2}, \omega) \times \mathbb{Q}(\sqrt[3]{2}, \omega) \times \mathbb{Q}(\sqrt[3]{2}, \omega)$$
+        <p>
+          （次元チェック：$3^3 = 27 = 3 + 6 + 6 + 6 + 6$）となる。ここで「3つの成分がすべて異なる点 $(\sqrt[3]{2}, \omega\sqrt[3]{2}, \omega^2\sqrt[3]{2}) \in F(E)^3$」を含む連結成分 $P$ は、ちょうど 6次体 $\mathbb{Q}(\sqrt[3]{2}, \omega)$ の1つのコピーに対応する！実際 $\mathrm{Gal}(\mathbb{Q}(\sqrt[3]{2}, \omega)/\mathbb{Q}) \cong S_3$（位数6）が $F(P)$ に単純推移的に作用し、まさに $E$ のGalois閉包が得られた。
+        </p>
+      </div>
+
+      <h4>ステップ 3：射影極限としてのGalois群 $\mathrm{Aut}(F)$ とKrull位相の出現</h4>
+      <p>
+        ファイバー関手 $F$ の自然同型全体のなす群を $\pi_1(\mathcal{C}, F) := \mathrm{Aut}(F)$ と定義し、Galois圏 $(\mathcal{C}, F)$ の<strong>基本群</strong>と呼ぶ。
+      </p>
+
+      <div class="box theorem">
+        <span class="box-title">定理 2.11（$\mathrm{Aut}(F)$ の射影極限表示と作用の自動的連続性）</span>
+        <p>
+          定理2.9のGalois対象の射影系 $(P_i, p_i)_{i \in I}$ に対し、次の群同型が成り立つ。
+        </p>
+        $$\pi_1(\mathcal{C}, F) = \mathrm{Aut}(F) \cong \varprojlim_{i \in I} \mathrm{Aut}_{\mathcal{C}}(P_i)^{\mathrm{op}}$$
+        <p>
+          これにより $\pi_1(\mathcal{C}, F)$ には有限離散群 $\mathrm{Aut}_{\mathcal{C}}(P_i)^{\mathrm{op}}$ の射影極限としての位相（<strong>Krull位相</strong>）が自然に備わり、射有限群となる。さらに、任意の対象 $X \in \mathcal{C}$ に対する $\pi_1(\mathcal{C}, F)$ の有限離散集合 $F(X)$ への自然な作用（$\gamma \cdot x := \gamma_X(x)$）は<strong>自動的に連続</strong>である。
+        </p>
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明（米田の補題による導出）</span>
+        <p>
+          定理2.9のプロ表現 $F \cong \varinjlim_{i \in I} h^{P_i}$ を用いる。自然変換の集合に対して、帰納極限は第1引数から外に出ると射影極限になり、さらに米田の補題（定理2.3：$\mathrm{Nat}(h^{P_i}, F) \cong F(P_i)$）が適用できるため、
+        </p>
+        $$\mathrm{End}(F) = \mathrm{Nat}\left(\varinjlim_{i \in I} h^{P_i},\; F\right) \cong \varprojlim_{i \in I} \mathrm{Nat}(h^{P_i}, F) \cong \varprojlim_{i \in I} F(P_i)$$
+        <p>
+          を得る。具体的には、$\gamma \in \mathrm{End}(F)$ に対し各 $i \in I$ で $\gamma_{P_i}(p_i) \in F(P_i)$ を対応させる写像が全単射である。
+        </p>
+        <p>
+          各 $P_i$ はGalois対象なので、$\alpha_i \in \mathrm{Aut}_{\mathcal{C}}(P_i)$ に対して $F(\alpha_i)(p_i) \in F(P_i)$ を対応させる写像 $\mathrm{Aut}_{\mathcal{C}}(P_i) \to F(P_i)$ は全単射である。したがって、各 $\gamma \in \mathrm{End}(F)$ に対して $\gamma_{P_i}(p_i) = F(\alpha_i)(p_i)$ となる $\alpha_i \in \mathrm{Aut}_{\mathcal{C}}(P_i)$ が一意に定まる。
+        </p>
+        <p>
+          合成の順序を確認すると、$\gamma, \delta \in \mathrm{End}(F)$ にそれぞれ $\alpha_i, \beta_i \in \mathrm{Aut}_{\mathcal{C}}(P_i)$ が対応しているとき、$\gamma$ の自然性より
+        </p>
+        $$(\gamma \circ \delta)_{P_i}(p_i) = \gamma_{P_i}(F(\beta_i)(p_i)) = F(\beta_i)(\gamma_{P_i}(p_i)) = F(\beta_i)(F(\alpha_i)(p_i)) = F(\beta_i \circ \alpha_i)(p_i)$$
+        <p>
+          となる。積の順序が逆転するため、$\gamma \mapsto (\alpha_i)_{i \in I}$ はモノイド同型 $\mathrm{End}(F) \cong \varprojlim_{i \in I} \mathrm{Aut}_{\mathcal{C}}(P_i)^{\mathrm{op}}$ を与える。右辺は群なので $\mathrm{End}(F) = \mathrm{Aut}(F)$ であり、群同型が確立される。なお、体の例では $\mathcal{C} = (\mathbf{FEt}_K)^{\mathrm{op}}$ と射の向きを逆転させているため、$\mathrm{Aut}_{\mathcal{C}}(E_i)^{\mathrm{op}} = (\mathrm{Gal}(E_i/K)^{\mathrm{op}})^{\mathrm{op}} = \mathrm{Gal}(E_i/K)$ となり、古典論の $\mathrm{Gal}(K^{\mathrm{sep}}/K) \cong \varprojlim \mathrm{Gal}(E_i/K)$ と完全に一致する。
+        </p>
+        <p>
+          <strong>作用の連続性：</strong>任意の対象 $X \in \mathcal{C}$ と $x \in F(X)$ をとる。プロ表現より、ある $i \in I$ と射 $f : P_i \to X$ が存在して $x = F(f)(p_i)$ と表される。射影 $\pi_i : \mathrm{Aut}(F) \to \mathrm{Aut}_{\mathcal{C}}(P_i)^{\mathrm{op}}$ の核 $\ker(\pi_i)$ に属する任意の $\gamma$ は $\gamma_{P_i}(p_i) = p_i$ を満たすので、自然性より
+        </p>
+        $$\gamma_X(x) = \gamma_X(F(f)(p_i)) = F(f)(\gamma_{P_i}(p_i)) = F(f)(p_i) = x$$
+        <p>
+          となる。つまり $\mathrm{Stab}_{\mathrm{Aut}(F)}(x)$ は開正規部分群 $\ker(\pi_i)$ を含むため開部分群であり、定義2.6より作用は連続である。
+        </p>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <h3 id="sec2-3">2.3 Galois対応の一般化：Grothendieckの主定理（圏同値定理）</h3>
+
+      <p>
+        定理2.11により、ファイバー関手 $F$ は $G := \pi_1(\mathcal{C}, F)$ が連続に作用する有限集合の圏 $G\text{-}\mathbf{FinSet}$ への関手へと持ち上がる。
+      </p>
+
+      <div class="box theorem">
+        <span class="box-title">定理 2.12（GrothendieckのGalois理論の主定理 <a href="#ref-sga1">[2]</a>）</span>
+        <p>
+          任意のGalois圏 $(\mathcal{C}, F)$ に対し、$G := \pi_1(\mathcal{C}, F) = \mathrm{Aut}(F)$ とおくと、ファイバー関手 $F$ は圏同値
+        </p>
+        $$F : \mathcal{C} \xrightarrow{\;\sim\;} G\text{-}\mathbf{FinSet}$$
+        <p>
+          を誘導する。
+        </p>
+      </div>
+
+      <div class="box proof">
+        <span class="box-title">証明</span>
+        <p>
+          $F$ が<strong>本質的全射</strong>かつ<strong>充満忠実</strong>であることを示す。
+        </p>
+        <ol>
+          <li><strong>本質的全射性：</strong>任意の連続有限 $G$-集合 $S$ は有限個の軌道（推移的 $G$-集合）の直和に分解する。公理 (G2), (G5) より $F$ は有限余積を保存するため、$S$ が推移的な場合、すなわちある開部分群 $U \subset G$ に対して $S \cong G/U$ の場合を示せばよい。$U$ は開なので、ある $i \in I$ に対して $\ker(\pi_i) \subset U$ となる。このとき $H := \pi_i(U) \subset \mathrm{Aut}_{\mathcal{C}}(P_i)^{\mathrm{op}}$ は有限群であり、$P_i$ に右（すなわち $\mathrm{Aut}_{\mathcal{C}}(P_i)$ として左）から作用する。公理 (G2) より商対象 $X := P_i / H \in \mathcal{C}$ が存在し、公理 (G5)（$F$ が有限群による商を保存すること）から、$F(X) \cong F(P_i)/H \cong (G/\ker(\pi_i)) / (U/\ker(\pi_i)) \cong G/U \cong S$ を得る。</li>
+          <li><strong>忠実性：</strong>2つの射 $f, g : X \to Y$ が $F(f) = F(g)$ を満たすとする。イコライザー $e : \mathrm{Eq}(f, g) \to X$ をとると、公理 (G4) より $F(e)$ は集合のイコライザー $\mathrm{Eq}(F(f), F(g)) = F(X)$ への全単射となる。公理 (G6)（$F$ は同型を反射する）より $e$ は同型射であり、したがって $f = g$ である。</li>
+          <li><strong>充満性：</strong>$G$-同変写像 $\psi : F(X) \to F(Y)$ が与えられたとする。直積 $X \times Y$ のファイバー $F(X \times Y) \cong F(X) \times F(Y)$ の中で、$\psi$ のグラフ $\Gamma_\psi := \{ (x, \psi(x)) \mid x \in F(X) \}$ は $G$-不変な部分集合である。ここで、任意の連結対象 $W$ に対して $F(W)$ は $G$ の単一軌道である（実際、$x \in F(W)$ をとればある $P_i \to W$ で $p_i \mapsto x$ となり、公理 (G3), (G5) より $F(P_i) \to F(W)$ は全射かつ $G$-同変なので、$G$ が $F(P_i)$ に推移的に作用することから $F(W)$ にも推移的に作用する）。したがって $X \times Y$ の連結成分分解は $F(X \times Y)$ の $G$-軌道分解と完全に一致する。よって $X \times Y$ のある直和因子（連結成分の和）$Z \hookrightarrow X \times Y$ が存在して $F(Z) = \Gamma_\psi$ となる。第1射影 $p_1|_Z : Z \to X$ に $F$ を適用すると全単射 $\Gamma_\psi \xrightarrow{\sim} F(X)$ となるため、公理 (G6) より $p_1|_Z$ は同型射である。よって $f := p_2|_Z \circ (p_1|_Z)^{-1} : X \to Y$ は $F(f) = \psi$ を満たす $\mathcal{C}$ の射である。</li>
+        </ol>
+        <div class="qed">$\square$</div>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 2.13（実数体 $K = \mathbb{R}$ における圏同値の完全な具体化）</span>
+        <p>
+          $K = \mathbb{R}$、$\mathbb{R}^{\mathrm{sep}} = \mathbb{C}$ とすると、$G = \mathrm{Gal}(\mathbb{C}/\mathbb{R}) = \{\mathrm{id}, c\} \cong \mathbb{Z}/2\mathbb{Z}$（$c$ は複素共役）である。例2.5より有限エタール $\mathbb{R}$-代数は $A = \mathbb{R}^a \times \mathbb{C}^b$ の形をしており、ファイバー関手 $F(A) = \mathrm{Hom}_{\mathbb{R}\text{-alg}}(A, \mathbb{C})$ を計算すると、
+        </p>
+        <ul>
+          <li>$F(\mathbb{R}) = \{ \text{包含写像} \}$ は <strong>$c$ で固定される1点集合</strong>（固定点1個）。</li>
+          <li>$F(\mathbb{C}) = \{ \mathrm{id}_{\mathbb{C}}, c \}$ は <strong>$c$ で互いに交換される2点集合</strong>（自由な2点軌道1個）。</li>
+          <li>したがって $F(\mathbb{R}^a \times \mathbb{C}^b)$ は、「固定点が $a$ 個、自由な2点軌道が $b$ 個」からなる有限 $\mathbb{Z}/2\mathbb{Z}$-集合である。</li>
+        </ul>
+        <p>
+          逆に、任意の有限 $\mathbb{Z}/2\mathbb{Z}$-集合は必ず「$a$ 個の固定点と $b$ 個の2点軌道」に分解されるため、$(\mathbf{FEt}_{\mathbb{R}})^{\mathrm{op}} \simeq (\mathbb{Z}/2\mathbb{Z})\text{-}\mathbf{FinSet}$ という圏同値が手に取るように確認できる。
+        </p>
+      </div>
+
+      <h4>古典的な「中間体 $\leftrightarrow$ 閉部分群」の対応の復元</h4>
+      <p>
+        第1部のKrullの定理（定理1.13）は、Grothendieckの圏同値定理（定理2.12）から次の2段階で完全に復元される。
+      </p>
+      <ol>
+        <li>
+          <strong>有限次分離拡大 $\leftrightarrow$ 開部分群：</strong>
+          圏 $\mathcal{C} = (\mathbf{FEt}_K)^{\mathrm{op}}$ の<strong>連結対象</strong>（有限次分離拡大 $E/K$）は、圏同値 $F$ によって<strong>推移的な有限 $G$-集合</strong> $S \cong G/U$（$U = \mathrm{Stab}_G(x)$ は開部分群）に対応する。基点 $x \in F(E) = \mathrm{Hom}_{K\text{-alg}}(E, K^{\mathrm{sep}})$ を選ぶことは $E$ を $K^{\mathrm{sep}}$ の中間体として実現することに相当し、$U = \mathrm{Gal}(K^{\mathrm{sep}}/x(E))$ となる。
+        </li>
+        <li>
+          <strong>無限次拡大 $\leftrightarrow$ 閉部分群（Krullの定理）：</strong>
+          一般の中間体 $K \subset M \subset K^{\mathrm{sep}}$ は、$M$ に含まれるすべての有限次分離拡大 $E_\alpha$ の帰納極限 $M = \bigcup_\alpha E_\alpha$ である。各 $E_\alpha$ に対応する開部分群を $U_\alpha = \mathrm{Gal}(K^{\mathrm{sep}}/E_\alpha)$ とすると、$M$ に対応する部分群は $H = \bigcap_\alpha U_\alpha$ となる。補題1.11より、射有限群 $G$ において開部分群の共通部分として表される部分群はちょうど<strong>閉部分群</strong>に一致する。
+        </li>
+      </ol>
+
+      <h3 id="sec2-4">2.4 この一般化がもたらした本質的な拡張と豊富な具体例</h3>
+
+      <p>
+        「体の拡大の極限」を「Galois圏とファイバー関手のプロ表現」に置き換えたことで、一見まったく異なる次の3つの数学的領域が、完全に同一の定理（定理2.12）の適用範囲に入った。
+      </p>
+
+      <ol>
+        <li>
+          <strong>体のGalois理論：</strong>
+          $\mathcal{C} = (\mathbf{FEt}_K)^{\mathrm{op}}$、$F(A) = \mathrm{Hom}_{K\text{-alg}}(A, K^{\mathrm{sep}})$ とすれば、$\pi_1(\mathcal{C}, F) \cong \mathrm{Gal}(K^{\mathrm{sep}}/K)$ となり、有限次Galois理論およびKrullの定理そのものが得られる。
+        </li>
+        <li>
+          <strong>位相空間の被覆空間論：</strong>
+          連結・局所弧状連結な空間 $X$ 上の有限被覆の圏 $\mathbf{FCov}_X$ と基点 $x_0$ 上のファイバー関手 $F$ に適用すると、
+          $$\pi_1(\mathbf{FCov}_X, F) \cong \widehat{\pi_1(X, x_0)} := \varprojlim_{N} \pi_1(X, x_0) / N$$
+          （位相的基本群 $\pi_1(X, x_0)$ のすべての有限指数正規部分群 $N$ にわたる射影極限、すなわち<strong>射有限完備化</strong>）が得られる。
+        </li>
+        <li>
+          <strong>スキームのエタール基本群：</strong>
+          連結スキーム $S$ 上の<strong>有限エタール被覆</strong>（有限かつ平坦かつ不分岐な射 $Y \to S$；微分幾何学における局所微分同相な有限被覆の代数幾何学的類似）の圏 $\mathbf{FEt}_S$ と、代数的閉体 $\Omega$ からの<strong>幾何的点</strong> $\bar{s} : \mathrm{Spec}(\Omega) \to S$ が定めるファイバー関手 $F_{\bar{s}}(Y \to S) := \mathrm{Hom}_S(\mathrm{Spec}(\Omega), Y)$ に適用することで、<strong>エタール基本群</strong>
+          $$\pi_1^{\mathrm{et}}(S, \bar{s}) := \mathrm{Aut}(F_{\bar{s}})$$
+          が定義される <a href="#ref-sga1">[2]</a>, <a href="#ref-szamuely">[3]</a>。$S = \mathrm{Spec}(K)$ のとき絶対Galois群 $\mathrm{Gal}(K^{\mathrm{sep}}/K)$ に一致し、$S$ が $\mathbb{C}$ 上の連結・滑らかな代数多様体のときはRiemannの存在定理により $\widehat{\pi_1^{\mathrm{top}}(S(\mathbb{C}), \bar{s})}$ に一致する。
+        </li>
+      </ol>
+
+      <div class="box example">
+        <span class="box-title">例 2.14（円周 $S^1$ と有限体 $\mathrm{Spec}(\mathbb{F}_p)$ の驚くべき並行性）</span>
+        <p>
+          単位円周 $S^1 = \{ z \in \mathbb{C} \mid |z| = 1 \}$ 上の連結な $n$ 重有限被覆は、同型を除いて $p_n : S^1 \to S^1,\; z \mapsto z^n$ のただ1つである。これらの被覆変換群は $\mathbb{Z}/n\mathbb{Z}$ であり、$m \mid n$ のときに被覆の射 $p_{n/m} : (S^1, p_n) \to (S^1, p_m)$ が存在する。したがって、円周の有限被覆の圏 $\mathbf{FCov}_{S^1}$ の基本群は
+        </p>
+        $$\pi_1(\mathbf{FCov}_{S^1}, F) \cong \widehat{\pi_1(S^1, 1)} \cong \widehat{\mathbb{Z}} = \varprojlim_{n \ge 1} \mathbb{Z}/n\mathbb{Z}$$
+        <p>
+          となる。これは例1.14で計算した $\pi_1^{\mathrm{et}}(\mathrm{Spec}(\mathbb{F}_p), \bar{s}) \cong \mathrm{Gal}(\overline{\mathbb{F}}_p / \mathbb{F}_p) \cong \widehat{\mathbb{Z}}$ と完全に同型である。すなわち、「有限体 $\mathrm{Spec}(\mathbb{F}_p)$ は幾何学的に円周 $S^1$ と同じ基本群をもつ対象である」という数論幾何学の深い直観（さらには結び目と素数の類比）が精密に定式化される。
+        </p>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 2.15（穴あき複素平面 $\mathbb{C}^\times$ と形式ローラン級数体 $\mathbb{C}((t))$）</span>
+        <p>
+          穴あき複素平面 $\mathbb{C}^\times = \mathbb{C} \setminus \{0\}$ は $S^1$ にホモトピー同値なので $\pi_1^{\mathrm{top}}(\mathbb{C}^\times) \cong \mathbb{Z}$ であり、その有限被覆は $z \mapsto z^n$ のみである。一方、複素数係数形式ローラン級数体 $K = \mathbb{C}((t))$（幾何学的には原点 $t=0$ の周りの「微小な穴あき円板」の関数体）の有限次拡大は、Puiseuxの定理によりすべて $\mathbb{C}((t^{1/n}))$ の形をしている。したがって
+        </p>
+        $$\mathrm{Gal}(\overline{\mathbb{C}((t))} / \mathbb{C}((t))) \cong \varprojlim_{n \ge 1} \mathbb{Z}/n\mathbb{Z} = \widehat{\mathbb{Z}} \cong \widehat{\pi_1^{\mathrm{top}}(\mathbb{C}^\times)}$$
+        <p>
+          となり、複素解析の被覆空間論と局所体のGalois理論が完全に一致する。
+        </p>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 2.16（普遍被覆が存在しない空間：ハワイアン・イヤリング空間）</span>
+        <p>
+          平面 $\mathbb{R}^2$ 内で、中心 $(1/n, 0)$・半径 $1/n$（$n = 1, 2, 3, \dots$）の円周を無限個集めた空間（<strong>ハワイアン・イヤリング空間</strong>）$X$ は、原点で半局所単連結ではないため、古典的な意味での<strong>普遍被覆空間が存在しない</strong>。しかし $X$ は連結かつ局所弧状連結であるため、有限被覆の圏 $\mathbf{FCov}_X$ は依然としてGrothendieckのGalois圏の公理をすべて満たし、基本群 $\pi_1(\mathbf{FCov}_X, F)$ と圏同値定理が何の障害もなく成立する。これこそ「巨大な極限対象の存在を仮定せず、ファイバー関手をプロ表現する」ことの圧倒的な威力である。
+        </p>
+      </div>
+
+      <div class="box example">
+        <span class="box-title">例 2.17（整数環のスペクトル $\mathrm{Spec}(\mathbb{Z})$ のエタール基本群）</span>
+        <p>
+          整数環のスペクトル $S = \mathrm{Spec}(\mathbb{Z})$ 上の連結な有限エタール被覆は、代数的整数論の言葉では「有理数体 $\mathbb{Q}$ のすべての素数 $p$ で不分岐な有限次拡大 $K/\mathbb{Q}$ の整数環 $\mathcal{O}_K$」に対応する。ところが、<strong>Minkowskiの定理</strong>によれば、$\mathbb{Q}$ 以外の任意の代数体 $K$ の判別式は $|D_K| > 1$ を満たすため、必ず少なくとも1つの素数 $p$ が分岐する。したがって $\mathrm{Spec}(\mathbb{Z})$ には非自明な連結有限エタール被覆が存在せず、
+        </p>
+        $$\pi_1^{\mathrm{et}}(\mathrm{Spec}(\mathbb{Z}), \bar{s}) = \{1\}$$
+        <p>
+          （すなわち $\mathrm{Spec}(\mathbb{Z})$ は幾何学的に「単連結」である！）という驚くべき事実が導かれる。
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== REFERENCES ==================== -->
+    <section id="references" class="references">
+      <h2>参考文献</h2>
+      <ol>
+        <li id="ref-krull">
+          W. Krull, <em>Galoissche Theorie der unendlichen algebraischen Erweiterungen</em>, Mathematische Annalen <strong>100</strong> (1928), 687–698.
+          <a href="https://doi.org/10.1007/BF01448872" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/BF01448872</a>
+        </li>
+        <li id="ref-sga1">
+          A. Grothendieck, <em>Revêtements étales et groupe fondamental (SGA 1)</em>, Séminaire de Géométrie Algébrique du Bois Marie 1960–1961, Lecture Notes in Mathematics <strong>224</strong>, Springer-Verlag, Berlin–New York, 1971.
+          <a href="https://doi.org/10.1007/BFb0058656" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/BFb0058656</a>
+          （更新版：<a href="https://arxiv.org/abs/math/0206203" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/math/0206203</a>）
+        </li>
+        <li id="ref-szamuely">
+          T. Szamuely, <em>Galois Groups and Fundamental Groups</em>, Cambridge Studies in Advanced Mathematics <strong>117</strong>, Cambridge University Press, Cambridge, 2009.
+          <a href="https://doi.org/10.1017/CBO9780511627064" target="_blank" rel="noopener noreferrer">https://doi.org/10.1017/CBO9780511627064</a>
+        </li>
+        <li id="ref-neukirch">
+          J. Neukirch, <em>Algebraic Number Theory</em> (translated by N. Schappacher), Grundlehren der mathematischen Wissenschaften <strong>322</strong>, Springer-Verlag, Berlin, 1999.
+          <a href="https://doi.org/10.1007/978-3-662-03983-0" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/978-3-662-03983-0</a>
+        </li>
+        <li id="ref-milne">
+          J. S. Milne, <em>Fields and Galois Theory</em>, Course Notes.
+          <a href="https://www.jmilne.org/math/CourseNotes/ft.html" target="_blank" rel="noopener noreferrer">https://www.jmilne.org/math/CourseNotes/ft.html</a>
+        </li>
+        <li id="ref-lang">
+          S. Lang, <em>Algebra</em>, Revised 3rd edition, Graduate Texts in Mathematics <strong>211</strong>, Springer-Verlag, New York, 2002.
+          <a href="https://doi.org/10.1007/978-1-4613-0041-0" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/978-1-4613-0041-0</a>
+        </li>
+        <li id="ref-rz">
+          L. Ribes and P. Zalesskii, <em>Profinite Groups</em>, 2nd edition, Ergebnisse der Mathematik und ihrer Grenzgebiete. 3. Folge <strong>40</strong>, Springer-Verlag, Berlin, 2010.
+          <a href="https://doi.org/10.1007/978-3-642-01642-4" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/978-3-642-01642-4</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>
